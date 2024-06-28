@@ -41,6 +41,7 @@ define Device/Default
   KERNEL := kernel-bin
   KERNEL_NAME := zImage
   KERNEL_IMG := zImage
+  DEVICE_DTS_DIR:= $(DTS_DIR)/st
   ENV_SIZE := 0x200000
   DEVICE_PACKAGES := $(WIFI_PACKAGES) $(USB_PACKAGES) -mtd
 endef
@@ -57,10 +58,20 @@ define Device/stm32mp135f-dk
   SUPPORTED_DEVICES := st,stm32mp135f-dk
 endef
 
+define Device/stm32mp257f-ev1
+  DEVICE_MODEL := STM32MP257F-EV1
+  DEVICE_DTS := stm32mp257f-ev1
+  SUPPORTED_DEVICES := st,stm32mp257f-ev1
+endef
+
 ifeq ($(SUBTARGET),stm32mp1)
   TARGET_DEVICES += \
 		    stm32mp157f-dk2 \
 		    stm32mp135f-dk
+endif
+
+ifeq ($(SUBTARGET),stm32mp2)
+  TARGET_DEVICES += stm32mp257f-ev1
 endif
 
 include demo.mk
