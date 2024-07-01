@@ -1,0 +1,39 @@
+Index: firmware-utils-2024.03.23~6b242991/src/ptgen.c
+===================================================================
+--- firmware-utils-2024.03.23~6b242991.orig/src/ptgen.c
++++ firmware-utils-2024.03.23~6b242991/src/ptgen.c
+@@ -90,6 +90,10 @@ typedef struct {
+ 	GUID_INIT( 0x2e54b353, 0x1271, 0x4842, \
+ 			0x80, 0x6f, 0xe4, 0x36, 0xd6, 0xaf, 0x69, 0x85)
+ 
++#define GUID_PARTITION_NULL \
++	GUID_INIT( 0x8a7a84a0, 0x8387, 0x40f6, \
++			0xab, 0x41, 0xa8, 0xb9, 0xa5, 0xa6, 0x0d, 0x23)
++
+ #define GPT_HEADER_SIZE         92
+ #define GPT_ENTRY_SIZE          128
+ #define GPT_ENTRY_MAX           128
+@@ -297,6 +301,13 @@ static inline bool parse_gpt_parttype(co
+ 		return true;
+ 	}
+ 
++	if (!strcmp(type, "metadata1") ||
++	    !strcmp(type, "metadata2")) {
++		part->has_guid = true;
++		part->guid = GUID_PARTITION_NULL;
++		return true;
++	}
++
+ 	return false;
+ }
+ 
+@@ -590,6 +601,9 @@ static guid_t type_to_guid_and_name(unsi
+ 		case 0x2e:
+ 			guid = GUID_PARTITION_LINUX_FIT_GUID;
+ 			break;
++		case 0x00:
++			guid = GUID_PARTITION_NULL;
++			break;
+ 	}
+ 
+ 	return guid;
