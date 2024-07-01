@@ -8,6 +8,6 @@ ARCH:=aarch64
 CPU_TYPE:=cortex-a35
 CPU_SUBTYPE=fp-armv8
 FEATURES+=fpu
-KERNEL_IMAGES:=zImage
+KERNEL_IMAGES:=Image.gz
 
 DEFAULT_PACKAGES += blockdev kmod-gpio-button-hotplug
