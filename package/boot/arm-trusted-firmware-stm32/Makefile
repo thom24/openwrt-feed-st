@@ -24,7 +24,7 @@ define Trusted-Firmware-A/Default
   BUILD_TARGET:=stm32
   BUILD_DEVICES:=$(1) $(1)-demo
   DEPENDS:=+u-boot-$(1) +optee-os-$(1)
-  TFA_IMAGE:=*.stm32
+  TFA_IMAGE:=*.stm32 *.bin
 endef
 
 define Trusted-Firmware-A/stm32mp1
@@ -39,6 +39,7 @@ endef
 define Trusted-Firmware-A/stm32mp2
   BUILD_SUBTARGET:=stm32mp2
   PLAT:=stm32mp2
+  METADATA:=1
   MAKE_ARGS = STM32MP_DDR4_TYPE=1 \
 	      PSA_FWU_SUPPORT=1 \
 	      ARM_ARCH_MAJOR=8
@@ -78,6 +79,7 @@ TFA_MAKE_FLAGS += \
 		STM32MP_SDMMC=1 \
 		TARGET_BOARD="" \
 		$(MAKE_ARGS) \
+		$(if $(METADATA), metadata) \
 		all fip 
 
 define Build/InstallDev
@@ -86,6 +88,7 @@ define Build/InstallDev
 		$(STAGING_DIR_IMAGE)/tf-a-$(BUILD_VARIANT).stm32
 	$(CP) $(PKG_BUILD_DIR)/build/$(PLAT)/release/fip.bin \
 		$(STAGING_DIR_IMAGE)/fip-$(BUILD_VARIANT).bin
+	$(if $(METADATA), $(CP) $(PKG_BUILD_DIR)/build/$(PLAT)/release/metadata.bin $(STAGING_DIR_IMAGE)/metadata-$(BUILD_VARIANT).bin)
 endef
 
 define Package/trusted-firmare-a/install/default
