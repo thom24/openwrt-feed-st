@@ -40,8 +40,7 @@ define Trusted-Firmware-A/stm32mp2
   PLAT:=stm32mp2
   METADATA:=1
   MAKE_ARGS = STM32MP_DDR4_TYPE=1 \
-	      ARM_ARCH_MAJOR=8 \
-	      DEBUG=1
+	      ARM_ARCH_MAJOR=8
 endef
 
 define Trusted-Firmware-A/stm32mp157f-dk2
@@ -81,9 +80,9 @@ TFA_MAKE_FLAGS += \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(STAGING_DIR_IMAGE)
-	$(CP) $(PKG_BUILD_DIR)/build/$(PLAT)/debug/tf-a-$(BUILD_VARIANT).stm32 \
+	$(CP) $(PKG_BUILD_DIR)/build/$(PLAT)/release/tf-a-$(BUILD_VARIANT).stm32 \
 		$(STAGING_DIR_IMAGE)/tf-a-$(BUILD_VARIANT).stm32
-	$(CP) $(PKG_BUILD_DIR)/build/$(PLAT)/debug/fip.bin \
+	$(CP) $(PKG_BUILD_DIR)/build/$(PLAT)/release/fip.bin \
 		$(STAGING_DIR_IMAGE)/fip-$(BUILD_VARIANT).bin
 endef
 
