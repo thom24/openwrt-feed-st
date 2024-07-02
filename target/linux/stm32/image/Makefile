@@ -6,7 +6,6 @@
 include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/image.mk
 
-WIFI_PACKAGES := kmod-brcmfmac murata-firmware-43430-sdio murata-nvram-43430-sdio kmod-mac80211 wpad-basic-mbedtls
 USB_PACKAGES := kmod-usb2 kmod-usb-storage kmod-usb-ledtrig-usbport
 
 define Build/boot-img-ext4
@@ -42,7 +41,7 @@ define Device/Default
   KERNEL := kernel-bin
   DEVICE_DTS_DIR:= $(DTS_DIR)/st
   ENV_SIZE := 0x200000
-  DEVICE_PACKAGES := $(WIFI_PACKAGES) $(USB_PACKAGES) -mtd
+  DEVICE_PACKAGES := $(USB_PACKAGES) -mtd -ppp
 endef
 
 define Device/stm32mp1
