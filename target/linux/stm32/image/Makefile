@@ -29,7 +29,6 @@ endef
 define Build/sdcard-img
 	GUID=$(IMG_PART_DISKGUID) ./gen_stm32_sdcard_img.sh \
 	     $@ $(STAGING_DIR_IMAGE)/tf-a-$(DEVICE_NAME).stm32 \
-	     $(STAGING_DIR_IMAGE)/metadata-$(DEVICE_NAME).bin \
 	     $(STAGING_DIR_IMAGE)/fip-$(DEVICE_NAME).bin $@.bootimg $(IMAGE_ROOTFS) \
 	     $(ENV_SIZE) $(CONFIG_TARGET_KERNEL_PARTSIZE) $(CONFIG_TARGET_ROOTFS_PARTSIZE)
 endef
