@@ -1,0 +1,47 @@
+To build for the STM32MP257F-EV1 board, follow the README.md until "Configure
+and build", but change st feed to use this feed and this branch.
+Then follow this README.
+
+For now an external kernel tree shall be used. So fetch it
+```bash
+$ git clone https://github.com/STMicroelectronics/linux.git linux-st
+$ cd linux-st
+$ git checkout v6.1-stm32mp-r2
+```
+
+Then some patches (available in openwrt-feed-st) shall be applied
+```
+$ patch -p1 < ../feeds/st/target/linux/stm32/patches-6.1/960-fix-compile-issue-gpu-drm-bridge-sii902x.patch
+patching file drivers/gpu/drm/bridge/sii902x.c
+$ patch -p1 < ../feeds/st/target/linux/stm32/patches-6.1/961-fix-compile-issue-rtc-stm32.patch
+patching file drivers/rtc/rtc-stm32.c
+$ patch -p1 < ../feeds/st/target/linux/stm32/patches-6.1/962-fix-compile-issue-iio-adc-stm32-mdf.patch
+patching file drivers/iio/adc/stm32-mdf-core.c
+patching file drivers/iio/adc/stm32-mdf-adc.c
+patching file drivers/iio/adc/stm32-mdf-serial.c
+```
+
+Run `make menuconfig`
+
+```bash
+$ make menuconfig
+```
+
+Then:
+* select `STMicroelectronics STM32` for the `Target System`
+* select `STM32MP2 boards` for the `Subtarget` 
+* select `STM32MP257F-EV1` (or the demo profile) for the profile.
+* select `Advanced configuration options (for developers) (NEW)`
+* for `Use external kernel tree` set the path to the linux-st kernel tree.
+
+Note that Multiple devices don't work fow now.
+
+Then to start the build.
+
+```bash
+$ make -j$(nproc)
+```
+
+Network bridge don't work, to use network change network configuration to not
+use bridge.
+
