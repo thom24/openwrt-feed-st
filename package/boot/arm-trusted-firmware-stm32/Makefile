@@ -40,8 +40,8 @@ define Trusted-Firmware-A/stm32mp2
   PLAT:=stm32mp2
   METADATA:=1
   MAKE_ARGS = STM32MP_DDR4_TYPE=1 \
-	      PSA_FWU_SUPPORT=1 \
-	      ARM_ARCH_MAJOR=8
+	      ARM_ARCH_MAJOR=8 \
+	      DEBUG=1
 endef
 
 define Trusted-Firmware-A/stm32mp157f-dk2
@@ -68,26 +68,23 @@ TFA_TARGETS := \
 	       stm32mp257f-ev1
 
 TFA_MAKE_FLAGS += \
-		$(if $(CONFIG_aarch64), ARCH=aarch64, ARCH=aarch32 AARCH32_SP=optee) \
+		$(if $(CONFIG_aarch64), ARCH=aarch64 SPD=opteed, ARCH=aarch32 AARCH32_SP=optee) \
 		BL32=$(STAGING_DIR_IMAGE)/$(BUILD_VARIANT)-tee-header_v2.bin \
 		BL32_EXTRA1=$(STAGING_DIR_IMAGE)/$(BUILD_VARIANT)-tee-pager_v2.bin \
-		BL32_EXTRA2=$(STAGING_DIR_IMAGE)/$(BUILD_VARIANT)-tee-pageable_v2.bin \
 		BL33=$(STAGING_DIR_IMAGE)/$(BUILD_VARIANT)-u-boot.bin \
 		BL33_CFG=$(STAGING_DIR_IMAGE)/$(BUILD_VARIANT)-u-boot.dtb \
-		DTB_FILE_NAME=$(DTB_FILE_NAME) \
+		DTB_FIDTB_FILE_NAME=$(DTB_FILE_NAME) \
 		STM32MP_SDMMC=1 \
 		TARGET_BOARD="" \
 		$(MAKE_ARGS) \
-		$(if $(METADATA), metadata) \
 		all fip 
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(STAGING_DIR_IMAGE)
-	$(CP) $(PKG_BUILD_DIR)/build/$(PLAT)/release/tf-a-$(BUILD_VARIANT).stm32 \
+	$(CP) $(PKG_BUILD_DIR)/build/$(PLAT)/debug/tf-a-$(BUILD_VARIANT).stm32 \
 		$(STAGING_DIR_IMAGE)/tf-a-$(BUILD_VARIANT).stm32
-	$(CP) $(PKG_BUILD_DIR)/build/$(PLAT)/release/fip.bin \
+	$(CP) $(PKG_BUILD_DIR)/build/$(PLAT)/debug/fip.bin \
 		$(STAGING_DIR_IMAGE)/fip-$(BUILD_VARIANT).bin
-	$(if $(METADATA), $(CP) $(PKG_BUILD_DIR)/build/$(PLAT)/release/metadata.bin $(STAGING_DIR_IMAGE)/metadata-$(BUILD_VARIANT).bin)
 endef
 
 define Package/trusted-firmare-a/install/default
