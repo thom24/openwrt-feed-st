@@ -32,8 +32,7 @@ define Trusted-Firmware-A/stm32mp1
   PLAT:=stm32mp1
   MAKE_ARGS += STM32MP_USB_PROGRAMMER=1 \
 	       STM32MP1_OPTEE_IN_SYSRAM=1 \
-	       ARM_ARCH_MAJOR=7 \
-	       STM32MP1_OPTEE_IN_SYSRAM=1
+	       ARM_ARCH_MAJOR=7
 endef
 
 define Trusted-Firmware-A/stm32mp2
