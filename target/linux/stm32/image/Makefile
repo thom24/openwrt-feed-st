@@ -41,13 +41,14 @@ define Device/Default
   IMAGE/sysupgrade.img.gz := boot-img-ext4 | sdcard-img | gzip | append-metadata
   KERNEL := kernel-bin
   ENV_SIZE := 0x200000
-  DEVICE_PACKAGES := $(WIFI_PACKAGES) $(USB_PACKAGES) -mtd
+  DEVICE_PACKAGES := $(USB_PACKAGES) -mtd
 endef
 
 define Device/stm32mp1
   KERNEL_NAME := zImage
   KERNEL_IMG := zImage
   DEVICE_DTS_DIR:= $(DTS_DIR)
+  DEVICE_PACKAGES += $(WIFI_PACKAGES)
 endef
 
 define Device/stm32mp2
