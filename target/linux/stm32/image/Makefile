@@ -42,12 +42,13 @@ define Device/Default
   KERNEL := kernel-bin
   DEVICE_DTS_DIR:= $(DTS_DIR)/st
   ENV_SIZE := 0x200000
-  DEVICE_PACKAGES := $(WIFI_PACKAGES) $(USB_PACKAGES) -mtd
+  DEVICE_PACKAGES := $(USB_PACKAGES) -mtd
 endef
 
 define Device/stm32mp1
   KERNEL_NAME := zImage
   KERNEL_IMG := zImage
+  DEVICE_PACKAGES += $(WIFI_PACKAGES)
 endef
 
 define Device/stm32mp2
