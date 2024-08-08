@@ -10,4 +10,4 @@ CPU_SUBTYPE=fp-armv8
 FEATURES+=fpu
 KERNEL_IMAGES:=Image.gz
 
-DEFAULT_PACKAGES += blockdev
+DEFAULT_PACKAGES += blockdev kmod-gpio-button-hotplug
