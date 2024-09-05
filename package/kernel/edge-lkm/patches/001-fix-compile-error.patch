@@ -1,0 +1,13 @@
+Index: edge-lkm-2024.06.13~c7fcfd81/tsn_sw_base.edge-lkm/edge_br_sid.c
+===================================================================
+--- edge-lkm-2024.06.13~c7fcfd81.orig/tsn_sw_base.edge-lkm/edge_br_sid.c
++++ edge-lkm-2024.06.13~c7fcfd81/tsn_sw_base.edge-lkm/edge_br_sid.c
+@@ -651,7 +651,7 @@ static ssize_t sid_port_pos_write(struct
+ 
+ 	if (edgx_sysfs_tbl_params(ofs, count, sizeof(struct port_pos),
+ 				  &idx) || idx >= sid_br->max_streams) {
+-		edgx_br_err(br, "ofs=%u, count=%u, idx=%u, ppsize=%u\n",
++		edgx_br_err(br, "ofs=%u, count=%u, idx=%u, ppsize=%lu\n",
+ 				(unsigned int)ofs, (unsigned int)count,
+ 				(unsigned int)idx, sizeof(struct port_pos));
+ 		return -EINVAL;
