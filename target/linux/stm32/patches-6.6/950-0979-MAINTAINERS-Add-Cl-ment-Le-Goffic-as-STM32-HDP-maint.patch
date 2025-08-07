@@ -22,7 +22,7 @@ Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
 
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -20333,6 +20333,13 @@ F:	drivers/bus/stm32_etzpc.c
+@@ -20334,6 +20334,13 @@ F:	drivers/bus/stm32_etzpc.c
  F:	drivers/bus/stm32_firewall.c
  F:	drivers/bus/stm32_rifsc.c
  

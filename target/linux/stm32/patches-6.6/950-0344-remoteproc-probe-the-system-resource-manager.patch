@@ -23,7 +23,7 @@ Change-Id: I0768405daa33c3658961ccf06252e207042f044a
  #include <asm/byteorder.h>
  #include <linux/platform_device.h>
  
-@@ -2291,6 +2292,11 @@ int rproc_add(struct rproc *rproc)
+@@ -2292,6 +2293,11 @@ int rproc_add(struct rproc *rproc)
  	/* create debugfs entries */
  	rproc_create_debug_dir(rproc);
  
@@ -35,7 +35,7 @@ Change-Id: I0768405daa33c3658961ccf06252e207042f044a
  	/* if rproc is marked always-on, request it to boot */
  	if (rproc->auto_boot) {
  		ret = rproc_trigger_auto_boot(rproc);
-@@ -2572,6 +2578,8 @@ int rproc_del(struct rproc *rproc)
+@@ -2573,6 +2579,8 @@ int rproc_del(struct rproc *rproc)
  	list_del_rcu(&rproc->node);
  	mutex_unlock(&rproc_list_mutex);
  

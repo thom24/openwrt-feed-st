@@ -14,7 +14,7 @@ Change-Id: Ia728317b948da7dcb3c140d3e6faa2ae6b96c1b4
 
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -385,6 +385,8 @@
+@@ -384,6 +384,8 @@
  			#size-cells = <1>;
  			compatible = "st,stm32mp257-pinctrl";
  			ranges = <0 0x44240000 0xa0400>;
@@ -23,7 +23,7 @@ Change-Id: Ia728317b948da7dcb3c140d3e6faa2ae6b96c1b4
  			pins-are-numbered;
  
  			gpioa: gpio@44240000 {
-@@ -514,6 +516,8 @@
+@@ -513,6 +515,8 @@
  			#size-cells = <1>;
  			compatible = "st,stm32mp257-z-pinctrl";
  			ranges = <0 0x46200000 0x400>;

@@ -21,7 +21,7 @@ Signed-off-by: Simeon Marijon <simeon.marijon@foss.st.com>
 
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -20629,6 +20629,7 @@ STM32 TAMP DRIVERS
+@@ -20630,6 +20630,7 @@ STM32 TAMP DRIVERS
  M:	Siméon Marijon <simeon.marijon@foss.st.com>
  S:	Maintained
  F:	Documentation/devicetree/bindings/nvmem/st,stm32-tamp-nvram.yaml

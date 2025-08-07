@@ -15,7 +15,7 @@ Signed-off-by: Pankaj Dev <pankaj.dev@st.com>
 
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -408,6 +408,37 @@
+@@ -407,6 +407,37 @@
  				access-controllers = <&rifsc 76>;
  				status = "disabled";
  			};

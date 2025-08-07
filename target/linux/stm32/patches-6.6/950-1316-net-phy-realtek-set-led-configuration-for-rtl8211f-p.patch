@@ -1,4 +1,4 @@
-From 5d681931af5dbcf9d87eddff5afe99d2daf9a8f2 Mon Sep 17 00:00:00 2001
+From 2a0336120f3b1c61bb02001c43b54cd42a53f20a Mon Sep 17 00:00:00 2001
 From: Christophe Roullier <christophe.roullier@st.com>
 Date: Tue, 18 Feb 2020 15:49:40 +0100
 Subject: [PATCH] net: phy: realtek: set led configuration for rtl8211f phy
@@ -22,9 +22,9 @@ Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
 
 --- a/drivers/net/phy/realtek/realtek_main.c
 +++ b/drivers/net/phy/realtek/realtek_main.c
-@@ -526,6 +526,11 @@ static int rtl8211f_config_init(struct p
- 	phy_write(phydev, 0x10, 0x617f);
- 	phy_write(phydev, RTL821x_PAGE_SELECT, 0x0);
+@@ -521,6 +521,11 @@ static int rtl8211f_config_init(struct p
+ 	u16 val_txdly, val_rxdly;
+ 	int ret;
  
 +	/* Set green LED for Link, yellow LED for Active */
 +	phy_write(phydev, RTL821x_PAGE_SELECT, 0xd04);

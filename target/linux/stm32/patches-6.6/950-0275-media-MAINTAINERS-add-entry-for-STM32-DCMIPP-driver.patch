@@ -19,7 +19,7 @@ Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -13289,13 +13289,16 @@ W:	https://linuxtv.org
+@@ -13290,13 +13290,16 @@ W:	https://linuxtv.org
  T:	git git://linuxtv.org/media_tree.git
  F:	drivers/media/dvb-frontends/stv6111*
  

@@ -34,4 +34,4 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
 +			SNDRV_PCM_FMTBIT_IEC958_SUBFRAME_LE),
  	.max_i2s_channels = 2,
  	.i2s = 1,
- 	.spdif = 1,
+ 	.no_i2s_capture = 1,

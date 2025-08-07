@@ -17,7 +17,7 @@ Change-Id: I35e817ed49c08f79a3682cbe8349165b9761f4d4
 
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -178,6 +178,7 @@
+@@ -177,6 +177,7 @@
  				     <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
  			clocks = <&scmi_clk CK_SCMI_HPDMA1>;
  			#dma-cells = <3>;
@@ -25,7 +25,7 @@ Change-Id: I35e817ed49c08f79a3682cbe8349165b9761f4d4
  		};
  
  		hpdma2: dma-controller@40410000 {
-@@ -201,6 +202,7 @@
+@@ -200,6 +201,7 @@
  				     <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
  			clocks = <&scmi_clk CK_SCMI_HPDMA2>;
  			#dma-cells = <3>;
@@ -33,7 +33,7 @@ Change-Id: I35e817ed49c08f79a3682cbe8349165b9761f4d4
  		};
  
  		hpdma3: dma-controller@40420000 {
-@@ -224,6 +226,7 @@
+@@ -223,6 +225,7 @@
  				     <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
  			clocks = <&scmi_clk CK_SCMI_HPDMA3>;
  			#dma-cells = <3>;

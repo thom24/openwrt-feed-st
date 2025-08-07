@@ -18,13 +18,13 @@ Tested-by: Eric FOURMONT <eric.fourmont-ext@st.com>
 Domain-Review: Eric FOURMONT <eric.fourmont-ext@st.com>
 Reviewed-by: Eric FOURMONT <eric.fourmont-ext@st.com>
 ---
- drivers/net/phy/realtek.c | 10 ++++++++++
+ drivers/net/phy/realtek/realtek_main.c | 10 ++++++++++
  1 file changed, 10 insertions(+)
 
 --- a/drivers/net/phy/realtek/realtek_main.c
 +++ b/drivers/net/phy/realtek/realtek_main.c
-@@ -448,6 +448,16 @@ static int rtl8211f_config_init(struct p
- 			val_rxdly ? "enabled" : "disabled");
+@@ -587,6 +587,16 @@ static int rtl8211f_config_init(struct p
+ 			str_enabled_disabled(val_rxdly));
  	}
  
 +	if (of_property_read_bool(dev->of_node, "realtek,eee-disable")) {
@@ -37,6 +37,6 @@ Reviewed-by: Eric FOURMONT <eric.fourmont-ext@st.com>
 +		phy_write(phydev, 0xe,0x0);
 +	}
 +
- 	if (priv->has_phycr2) {
- 		ret = phy_modify_paged(phydev, 0xa43, RTL8211F_PHYCR2,
- 				       RTL8211F_CLKOUT_EN, priv->phycr2);
+ 	/* Disable PHY-mode EEE so LPI is passed to the MAC */
+ 	ret = phy_modify_paged(phydev, RTL8211F_PHYCR_PAGE, RTL8211F_PHYCR2,
+ 			       RTL8211F_PHYCR2_PHY_EEE_ENABLE, 0);

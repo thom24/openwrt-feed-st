@@ -35,8 +35,6 @@ Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
  drivers/usb/dwc3/Kconfig | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
-index 44bcbc2c8ef4..36b3d46f89dd 100644
 --- a/drivers/usb/dwc3/Kconfig
 +++ b/drivers/usb/dwc3/Kconfig
 @@ -24,20 +24,20 @@ config USB_DWC3_ULPI
@@ -65,6 +63,3 @@ index 44bcbc2c8ef4..36b3d46f89dd 100644
  	help
  	  Select this when you want to use DWC3 in gadget mode only,
  	  thereby the host feature will be regressed.
--- 
-2.39.5
-

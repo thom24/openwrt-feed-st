@@ -27,7 +27,7 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  		chan->txdone_method = TXDONE_BY_ACK;
  
  	spin_unlock_irqrestore(&chan->lock, flags);
-@@ -477,6 +477,16 @@ struct mbox_chan *mbox_request_channel_b
+@@ -478,6 +478,16 @@ struct mbox_chan *mbox_request_channel_b
  }
  EXPORT_SYMBOL_GPL(mbox_request_channel_byname);
  
@@ -44,7 +44,7 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  /**
   * mbox_free_channel - The client relinquishes control of a mailbox
   *			channel by this call.
-@@ -496,8 +506,8 @@ void mbox_free_channel(struct mbox_chan
+@@ -497,8 +507,8 @@ void mbox_free_channel(struct mbox_chan
  	spin_lock_irqsave(&chan->lock, flags);
  	chan->cl = NULL;
  	chan->active_req = NULL;
@@ -55,7 +55,7 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  
  	module_put(chan->mbox->dev->driver->owner);
  	spin_unlock_irqrestore(&chan->lock, flags);
-@@ -530,12 +540,7 @@ int mbox_controller_register(struct mbox
+@@ -531,12 +541,7 @@ int mbox_controller_register(struct mbox
  	if (!mbox || !mbox->dev || !mbox->ops || !mbox->num_chans)
  		return -EINVAL;
  

@@ -18,7 +18,7 @@ Change-Id: I043e4148ee68126154cb75d515aecdbdae9a83c4
 
 --- a/drivers/cpufreq/cpufreq-dt-platdev.c
 +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-@@ -169,6 +169,7 @@ static const struct of_device_id blockli
+@@ -170,6 +170,7 @@ static const struct of_device_id blockli
  	{ .compatible = "st,stih407", },
  	{ .compatible = "st,stih410", },
  	{ .compatible = "st,stih418", },

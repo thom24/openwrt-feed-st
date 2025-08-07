@@ -25,7 +25,7 @@ Change-Id: Ib965606a5dc847c28b51b15b90db21c2f7f8e957
  #include <dt-bindings/regulator/st,stm32mp25-regulator.h>
  #include <dt-bindings/reset/st,stm32mp25-rcc.h>
  
-@@ -394,6 +395,19 @@
+@@ -393,6 +394,19 @@
  				status = "disabled";
  			};
  

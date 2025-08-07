@@ -17,7 +17,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
 
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -20625,6 +20625,15 @@ F:	Documentation/devicetree/bindings/iio
+@@ -20626,6 +20626,15 @@ F:	Documentation/devicetree/bindings/iio
  F:	Documentation/devicetree/bindings/sound/st,stm32-*.yaml
  F:	sound/soc/stm/
  

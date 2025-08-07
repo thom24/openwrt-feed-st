@@ -21,7 +21,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
 
 --- a/Makefile
 +++ b/Makefile
-@@ -1410,7 +1410,7 @@ KBUILD_EXTDTB := $(or $(and $(wildcard $
+@@ -1413,7 +1413,7 @@ KBUILD_EXTDTB := $(or $(and $(wildcard $
  	test ! -e $(dtstree)/$@ -a $(KBUILD_EXTDTB) -eq 1  && ( \
  		echo "Looking for $(patsubst st/%.dtb,%.dtb,$@) into $(KBUILD_EXTDTS)"; \
  		$(MAKE) $(build)=$(stdtstree) src=$(KBUILD_EXTDTS) $(dtstree)/$@ || \
@@ -30,7 +30,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  
  %.dtbo: dtbs_prepare
  	$(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@
-@@ -1418,10 +1418,10 @@ KBUILD_EXTDTB := $(or $(and $(wildcard $
+@@ -1421,10 +1421,10 @@ KBUILD_EXTDTB := $(or $(and $(wildcard $
  PHONY += dtbs dtbs_prepare dtbs_install dtbs_check
  dtbs: dtbs_prepare
  	$(Q)$(MAKE) $(build)=$(stdtstree)

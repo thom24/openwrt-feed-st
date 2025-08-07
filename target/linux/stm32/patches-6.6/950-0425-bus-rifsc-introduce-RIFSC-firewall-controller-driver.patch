@@ -17,7 +17,7 @@ Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
 
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -20330,6 +20330,7 @@ ST STM32 FIREWALL
+@@ -20331,6 +20331,7 @@ ST STM32 FIREWALL
  M:	Gatien Chevallier <gatien.chevallier@foss.st.com>
  S:	Maintained
  F:	drivers/bus/stm32_firewall.c

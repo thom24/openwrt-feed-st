@@ -48,7 +48,7 @@ Change-Id: I9a0d406f15c4db721d3fa2f50e59618c3e09be36
  		};
  
  		clk_rcbsec: clk-rcbsec {
-@@ -129,7 +119,7 @@
+@@ -128,7 +118,7 @@
  				compatible = "st,stm32h7-uart";
  				reg = <0x400e0000 0x400>;
  				interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
@@ -57,7 +57,7 @@ Change-Id: I9a0d406f15c4db721d3fa2f50e59618c3e09be36
  				access-controllers = <&rifsc 32>;
  				status = "disabled";
  			};
-@@ -139,8 +129,9 @@
+@@ -138,8 +128,9 @@
  				arm,primecell-periphid = <0x00353180>;
  				reg = <0x48220000 0x400>, <0x44230400 0x8>;
  				interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>;
@@ -68,7 +68,7 @@ Change-Id: I9a0d406f15c4db721d3fa2f50e59618c3e09be36
  				cap-sd-highspeed;
  				cap-mmc-highspeed;
  				max-frequency = <120000000>;
-@@ -149,6 +140,95 @@
+@@ -148,6 +139,95 @@
  			};
  		};
  
@@ -164,7 +164,7 @@ Change-Id: I9a0d406f15c4db721d3fa2f50e59618c3e09be36
  		syscfg: syscon@44230000 {
  			compatible = "st,stm32mp25-syscfg", "syscon";
  			reg = <0x44230000 0x10000>;
-@@ -167,7 +247,7 @@
+@@ -166,7 +246,7 @@
  				interrupt-controller;
  				#interrupt-cells = <2>;
  				reg = <0x0 0x400>;
@@ -173,7 +173,7 @@ Change-Id: I9a0d406f15c4db721d3fa2f50e59618c3e09be36
  				st,bank-name = "GPIOA";
  				status = "disabled";
  			};
-@@ -178,7 +258,7 @@
+@@ -177,7 +257,7 @@
  				interrupt-controller;
  				#interrupt-cells = <2>;
  				reg = <0x10000 0x400>;
@@ -182,7 +182,7 @@ Change-Id: I9a0d406f15c4db721d3fa2f50e59618c3e09be36
  				st,bank-name = "GPIOB";
  				status = "disabled";
  			};
-@@ -189,7 +269,7 @@
+@@ -188,7 +268,7 @@
  				interrupt-controller;
  				#interrupt-cells = <2>;
  				reg = <0x20000 0x400>;
@@ -191,7 +191,7 @@ Change-Id: I9a0d406f15c4db721d3fa2f50e59618c3e09be36
  				st,bank-name = "GPIOC";
  				status = "disabled";
  			};
-@@ -200,7 +280,7 @@
+@@ -199,7 +279,7 @@
  				interrupt-controller;
  				#interrupt-cells = <2>;
  				reg = <0x30000 0x400>;
@@ -200,7 +200,7 @@ Change-Id: I9a0d406f15c4db721d3fa2f50e59618c3e09be36
  				st,bank-name = "GPIOD";
  				status = "disabled";
  			};
-@@ -211,7 +291,7 @@
+@@ -210,7 +290,7 @@
  				interrupt-controller;
  				#interrupt-cells = <2>;
  				reg = <0x40000 0x400>;
@@ -209,7 +209,7 @@ Change-Id: I9a0d406f15c4db721d3fa2f50e59618c3e09be36
  				st,bank-name = "GPIOE";
  				status = "disabled";
  			};
-@@ -222,7 +302,7 @@
+@@ -221,7 +301,7 @@
  				interrupt-controller;
  				#interrupt-cells = <2>;
  				reg = <0x50000 0x400>;
@@ -218,7 +218,7 @@ Change-Id: I9a0d406f15c4db721d3fa2f50e59618c3e09be36
  				st,bank-name = "GPIOF";
  				status = "disabled";
  			};
-@@ -233,7 +313,7 @@
+@@ -232,7 +312,7 @@
  				interrupt-controller;
  				#interrupt-cells = <2>;
  				reg = <0x60000 0x400>;
@@ -227,7 +227,7 @@ Change-Id: I9a0d406f15c4db721d3fa2f50e59618c3e09be36
  				st,bank-name = "GPIOG";
  				status = "disabled";
  			};
-@@ -244,7 +324,7 @@
+@@ -243,7 +323,7 @@
  				interrupt-controller;
  				#interrupt-cells = <2>;
  				reg = <0x70000 0x400>;
@@ -236,7 +236,7 @@ Change-Id: I9a0d406f15c4db721d3fa2f50e59618c3e09be36
  				st,bank-name = "GPIOH";
  				status = "disabled";
  			};
-@@ -255,7 +335,7 @@
+@@ -254,7 +334,7 @@
  				interrupt-controller;
  				#interrupt-cells = <2>;
  				reg = <0x80000 0x400>;
@@ -245,7 +245,7 @@ Change-Id: I9a0d406f15c4db721d3fa2f50e59618c3e09be36
  				st,bank-name = "GPIOI";
  				status = "disabled";
  			};
-@@ -266,7 +346,7 @@
+@@ -265,7 +345,7 @@
  				interrupt-controller;
  				#interrupt-cells = <2>;
  				reg = <0x90000 0x400>;
@@ -254,7 +254,7 @@ Change-Id: I9a0d406f15c4db721d3fa2f50e59618c3e09be36
  				st,bank-name = "GPIOJ";
  				status = "disabled";
  			};
-@@ -277,7 +357,7 @@
+@@ -276,7 +356,7 @@
  				interrupt-controller;
  				#interrupt-cells = <2>;
  				reg = <0xa0000 0x400>;
@@ -263,7 +263,7 @@ Change-Id: I9a0d406f15c4db721d3fa2f50e59618c3e09be36
  				st,bank-name = "GPIOK";
  				status = "disabled";
  			};
-@@ -296,7 +376,7 @@
+@@ -295,7 +375,7 @@
  				interrupt-controller;
  				#interrupt-cells = <2>;
  				reg = <0 0x400>;

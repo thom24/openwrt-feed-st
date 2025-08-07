@@ -16,7 +16,7 @@ Change-Id: Iad02769f7f2fca7f20c5a1c544ad59c3698ca03d
 
 --- a/drivers/tty/n_tty.c
 +++ b/drivers/tty/n_tty.c
-@@ -1456,10 +1456,15 @@ static void n_tty_receive_char_closing(s
+@@ -1457,10 +1457,15 @@ static void n_tty_receive_char_closing(s
  		c = tolower(c);
  
  	if (I_IXON(tty)) {
