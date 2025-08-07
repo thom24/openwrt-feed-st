@@ -16,8 +16,8 @@ And more boards are supported in the feed.
 You are using the `openwrt-24.10` branch of the feed, which is based on the
 OpenWrt branch `openwrt-24.10`.
 Actually the feed is based on OpenWrt
-[v24.10.1](https://github.com/openwrt/openwrt/tree/v24.10.1)
-([Release Note](https://openwrt.org/releases/24.10/notes-24.10.1)).
+[v24.10.2](https://github.com/openwrt/openwrt/tree/v24.10.2)
+([Release Note](https://openwrt.org/releases/24.10/notes-24.10.2)).
 
 ## Supported devices
 
@@ -69,7 +69,7 @@ This feed is based on the `STPM32MP1/STM32MP2 BSP v6.0`.
 
 For the kernel, the patches from the v6.6-stm32mp branch until the tag
 v6.6-stm32mp-r1 were added.
-They are available in `target/linux/stm32/patches-6.1/`.  
+They are available in `target/linux/stm32/patches-6.6/`.
 
 Some patches were removed as they were applied in Linux, or they are already
 applied by OpenWrt.
@@ -82,6 +82,9 @@ eb99d7c27da7 ("crypto: stm32/cryp - call finalize with bh disabled")
 31286612453a ("perf list: fix arguments order issue for events printing")
 fd68ca2e9089 ("i2c: stm32f7: Do not prepare/unprepare clock during runtime suspend/resume")
 1d8ffe3fcfac ("ARM: dts: stm32: fix IPCC EXTI declaration on stm32mp151")
+22772c87565e ("clocksource: stm32-lptimer: use wakeup capable instead of init wakeup")
+6ab3278ee867 ("pinctrl: devicetree: do not goto err when probing hogs in pinctrl_dt_to_map")
+10b245589fa0 ("drm: bridge: adv7511: fill i2s stream capabilities")
 ```
 
 Some patches had to be modified to fix some conflicts.
@@ -155,19 +158,19 @@ yourself from source, we provide a Starter Package which contains:
 * A ST repository that contains packages (non target-specific) from ST feed.
 
 The following table provides links to all these artifacts, compiled with the
-latest `openstlinux-6.6-openwrt-24.10.1-mpu-v24.11.06` release.
+latest `openstlinux-6.6-openwrt-24.10.2-mpu-v24.11.06` release.
 
 | Starter Package | stm32mp1 | stm32mp2 |
 |-----------------|----------|----------|
-| Factory images | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.1-mpu-v24.11.06/openwrt-stm32-stm32mp1-factory-images.tar.gz) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.1-mpu-v24.11.06/openwrt-stm32-stm32mp2-factory-images.tar.gz) |
-| Sysupgrade images | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.1-mpu-v24.11.06/openwrt-stm32-stm32mp1-sysupgrade-images.tar.gz) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.1-mpu-v24.11.06/openwrt-stm32-stm32mp2-sysupgrade-images.tar.gz) |
-| SDK | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.1-mpu-v24.11.06/openwrt-sdk-stm32-stm32mp1.Linux-x86_64.tar.zst) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.1-mpu-v24.11.06/openwrt-sdk-stm32-stm32mp2.Linux-x86_64.tar.zst) |
-| Image Buider | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.1-mpu-v24.11.06/openwrt-imagebuilder-stm32-stm32mp1.Linux-x86_64.tar.zst) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.1-mpu-v24.11.06/openwrt-imagebuilder-stm32-stm32mp2.Linux-x86_64.tar.zst) |
-| Build info | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.1-mpu-v24.11.06/config-stm32-stm32mp1.buildinfo) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.1-mpu-v24.11.06/config-stm32-stm32mp2.buildinfo) |
-| Feed info | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.1-mpu-v24.11.06/feeds-stm32-stm32mp1.buildinfo) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.1-mpu-v24.11.06/feeds-stm32-stm32mp2.buildinfo) |
-| SBOM | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.1-mpu-v24.11.06/openwrt-stm32-stm32mp1.bom.cdx.json) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.1-mpu-v24.11.06/openwrt-stm32-stm32mp2.bom.cdx.json) |
-| target repository | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.1-mpu-v24.11.06/openwrt-stm32-stm32mp1-target-repository.tar.gz) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.1-mpu-v24.11.06/openwrt-stm32-stm32mp2-target-repository.tar.gz) |
-| ST repository | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.1-mpu-v24.11.06/openwrt-stm32-stm32mp1-st-repository.tar.gz) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.1-mpu-v24.11.06/openwrt-stm32-stm32mp2-st-repository.tar.gz) |
+| Factory images | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.2-mpu-v24.11.06/openwrt-stm32-stm32mp1-factory-images.tar.gz) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.2-mpu-v24.11.06/openwrt-stm32-stm32mp2-factory-images.tar.gz) |
+| Sysupgrade images | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.2-mpu-v24.11.06/openwrt-stm32-stm32mp1-sysupgrade-images.tar.gz) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.2-mpu-v24.11.06/openwrt-stm32-stm32mp2-sysupgrade-images.tar.gz) |
+| SDK | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.2-mpu-v24.11.06/openwrt-sdk-stm32-stm32mp1.Linux-x86_64.tar.zst) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.2-mpu-v24.11.06/openwrt-sdk-stm32-stm32mp2.Linux-x86_64.tar.zst) |
+| Image Buider | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.2-mpu-v24.11.06/openwrt-imagebuilder-stm32-stm32mp1.Linux-x86_64.tar.zst) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.2-mpu-v24.11.06/openwrt-imagebuilder-stm32-stm32mp2.Linux-x86_64.tar.zst) |
+| Build info | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.2-mpu-v24.11.06/config-stm32-stm32mp1.buildinfo) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.2-mpu-v24.11.06/config-stm32-stm32mp2.buildinfo) |
+| Feed info | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.2-mpu-v24.11.06/feeds-stm32-stm32mp1.buildinfo) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.2-mpu-v24.11.06/feeds-stm32-stm32mp2.buildinfo) |
+| SBOM | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.2-mpu-v24.11.06/openwrt-stm32-stm32mp1.bom.cdx.json) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.2-mpu-v24.11.06/openwrt-stm32-stm32mp2.bom.cdx.json) |
+| target repository | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.2-mpu-v24.11.06/openwrt-stm32-stm32mp1-target-repository.tar.gz) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.2-mpu-v24.11.06/openwrt-stm32-stm32mp2-target-repository.tar.gz) |
+| ST repository | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.2-mpu-v24.11.06/openwrt-stm32-stm32mp1-st-repository.tar.gz) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.2-mpu-v24.11.06/openwrt-stm32-stm32mp2-st-repository.tar.gz) |
 
 ## Getting started
 
@@ -181,12 +184,12 @@ And you need to install a set of packages as described in the
 ### Getting the code
 
 The feed is designed to work with the `openwrt-24.10` branch of OpenWRT (last
-tested commit is [v24.10.1](https://github.com/openwrt/openwrt/tree/v24.10.1)).
+tested commit is [v24.10.2](https://github.com/openwrt/openwrt/tree/v24.10.2)).
 
 ```bash
 $ git clone https://git.openwrt.org/openwrt/openwrt.git
 $ cd openwrt
-$ git checkout v24.10.1
+$ git checkout v24.10.2
 ```
 
 Next step is to add the [STMicroelectronics](https://www.st.com) feed in the
