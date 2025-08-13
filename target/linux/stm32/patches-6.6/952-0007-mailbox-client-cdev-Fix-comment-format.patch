@@ -1,0 +1,38 @@
+From 04a096aaf7d255dc333b950784cd0d8d19ae6870 Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Date: Thu, 2 Jan 2025 18:55:02 +0100
+Subject: [PATCH] mailbox: client-cdev: Fix comment format
+
+Fix bad comment format.
+
+Fixes: a2435dc8bb21 ("mailbox: Add mailbox character device driver for coprocessor communication")
+
+Change-Id: I348f05eff3d52dcbdea1160876aea8ef5b3997a4
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/426868
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Gwenael TREUVEUR <gwenael.treuveur@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ drivers/mailbox/mailbox-client_cdev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/mailbox/mailbox-client_cdev.c b/drivers/mailbox/mailbox-client_cdev.c
+index 091401fd400c..ac7c27ea5822 100644
+--- a/drivers/mailbox/mailbox-client_cdev.c
++++ b/drivers/mailbox/mailbox-client_cdev.c
+@@ -231,7 +231,7 @@ static int mbox_cdev_driver_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
+-	// Initialize mailbox client
++	/* Initialize mailbox client */
+ 	ret = mbox_cdev_request_mbox(dev, mbxdev);
+ 	if (ret)
+ 		goto unmap;
+-- 
+2.47.2
+

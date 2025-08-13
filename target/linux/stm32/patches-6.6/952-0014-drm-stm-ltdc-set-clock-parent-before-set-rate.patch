@@ -1,0 +1,50 @@
+From bba33e9f06197842ad5eeb04dda87588ca1f0e59 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Mon, 20 Jan 2025 09:45:35 +0100
+Subject: [PATCH] drm/stm: ltdc: set clock parent before set rate
+
+Pixel clock must be adjusted after its parent is correctly positioned
+so that its frequency is correct.
+
+Change-Id: Ic59898d3a068832a53606cde3c84de191c6cea59
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/437316
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/gpu/drm/stm/ltdc.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+index 11fb670c600c..e55fe70685b3 100644
+--- a/drivers/gpu/drm/stm/ltdc.c
++++ b/drivers/gpu/drm/stm/ltdc.c
+@@ -2169,6 +2169,25 @@ static bool ltdc_encoder_mode_fixup(struct drm_encoder *encoder,
+ 	struct drm_device *ddev = encoder->dev;
+ 	struct ltdc_device *ldev =  ddev->dev_private;
+ 	int rate = mode->clock * 1000;
++	int ret;
++
++	if (encoder->encoder_type == DRM_MODE_ENCODER_LVDS) {
++		if (ldev->lvds_clk) {
++			ret = clk_set_parent(ldev->pixel_clk, ldev->lvds_clk);
++			if (ret) {
++				DRM_ERROR("Could not set parent clock: %d\n", ret);
++				return false;
++			}
++		}
++	} else {
++		if (ldev->ltdc_clk) {
++			ret = clk_set_parent(ldev->pixel_clk, ldev->ltdc_clk);
++			if (ret) {
++				DRM_ERROR("Could not set parent clock: %d\n", ret);
++				return false;
++			}
++		}
++	}
+ 
+ 	if (clk_set_rate(ldev->pixel_clk, rate) < 0) {
+ 		DRM_ERROR("Cannot set rate (%dHz) for pixel clk\n", rate);
+-- 
+2.47.2
+

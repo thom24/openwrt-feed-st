@@ -1,0 +1,50 @@
+From 30338f12c49782fe01e2ef6c07ecf869b4b74ba9 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Tue, 21 Jan 2025 17:26:06 +0100
+Subject: [PATCH] drm/stm: lvds: rework property default-on
+
+Check status of pm_runtime before call of resume function.
+Due to the default-on property, lvds could be powered on by default.
+
+Change-Id: Idc8333ba8e12964292ff40c34a0014c6e379bcd2
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/437317
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/gpu/drm/stm/lvds.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
+index d4106c1bdd5d..2950e62b5a86 100644
+--- a/drivers/gpu/drm/stm/lvds.c
++++ b/drivers/gpu/drm/stm/lvds.c
+@@ -557,10 +557,12 @@ static int lvds_pixel_clk_enable(struct clk_hw *hw)
+ 	struct lvds_phy_info *phy;
+ 	int ret;
+ 
+-	ret = pm_runtime_resume_and_get(lvds->dev);
+-	if (ret < 0) {
+-		DRM_ERROR("Failed to enable clocks, cannot resume pm\n");
+-		return ret;
++	if (!pm_runtime_active(lvds->dev)) {
++		ret = pm_runtime_resume_and_get(lvds->dev);
++		if (ret < 0) {
++			DRM_ERROR("Failed to enable clocks, cannot resume pm\n");
++			return ret;
++		}
+ 	}
+ 
+ 	/* In case we are operating in dual link the second PHY is set before the primary PHY. */
+@@ -1202,7 +1204,7 @@ static int lvds_probe(struct platform_device *pdev)
+ 	 *  the clocks must remain activated
+ 	 */
+ 	if (device_property_read_bool(dev, "default-on")) {
+-		ret = pm_runtime_resume_and_get(dev);
++		ret = pm_runtime_resume_and_get(lvds->dev);
+ 		if (ret < 0) {
+ 			DRM_ERROR("Failed to probe lvds, cannot resume pm\n");
+ 			return ret;
+-- 
+2.47.2
+

@@ -1,0 +1,32 @@
+From 57d6654e68728d6b6776e688a0f8ece6ecfc1209 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Mon, 3 Mar 2025 09:51:46 +0100
+Subject: [PATCH] drm/stm: dsi: replace warning by debug message
+
+To avoid too many warning during low power test, replace warning by
+a drm debug message. This is a miss and should not be upstream.
+
+Change-Id: I8600fac164d2bb91abbc58ce7648b35b7da09ba8
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/441014
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/gpu/drm/stm/dw_mipi_dsi-stm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
+index db5cf665cca5..192857792c7b 100644
+--- a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
++++ b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
+@@ -493,7 +493,7 @@ static void dw_mipi_dsi_clk_disable(struct clk_hw *clk)
+ 			dsi_clear(dsi, DSI_WRPCR, WRPCR_REGEN | WRPCR_BGREN);
+ 		}
+ 	} else {
+-		DRM_WARN("Warning peripheral clock was not enabled!\n");
++		DRM_DEBUG_DRIVER("Warning peripheral clock was not enabled!\n");
+ 	}
+ }
+ 
+-- 
+2.47.2
+

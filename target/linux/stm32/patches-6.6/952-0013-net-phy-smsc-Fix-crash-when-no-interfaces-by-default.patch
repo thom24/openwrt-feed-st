@@ -1,0 +1,105 @@
+From b443f7dc3fac8fa1e6a35faf47f3260052911ab5 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Tue, 28 Jan 2025 10:36:32 +0100
+Subject: [PATCH] net: phy: smsc: Fix crash when no interfaces by default in
+ userland
+
+When no interfaces setup in /etc/network/interfaces
+There is a crash at resume after power cycle:
+
+[   20.288096] Internal error: Oops: 17 [#1] PREEMPT SMP ARM
+[   20.292045] Modules linked in:
+[   20.295179] CPU: 0 PID: 372 Comm: sh Not tainted 6.6.65-g9ebaa3bcaff1-dirty #24
+[   20.302430] Hardware name: STM32 (Device Tree Support)
+[   20.307565] PC is at smsc_phy_config_init+0x38/0xd0
+[   20.312417] LR is at phy_init_hw+0x6c/0xa4
+[   20.316561] pc : [<c083c700>]    lr : [<c082e424>]    psr: 20050053
+[   20.322802] sp : ddd9ddd8  ip : 00000000  fp : c074d914
+[   20.328038] r10: c12d65d0  r9 : c41e0c44  r8 : c132a4c0
+[   20.333273] r7 : c0830908  r6 : 00000010  r5 : c0fa50cc  r4 : c41e0c00
+[   20.339716] r3 : 00000000  r2 : 00008061  r1 : 00000003  r0 : c41e0c00
+[   20.346260] Flags: nzCv  IRQs on  FIQs off  Mode SVC_32  ISA ARM  Segment none
+[   20.353508] Control: 10c5387d  Table: c2f0006a  DAC: 00000051
+[   20.359245] Register r0 information: slab kmalloc-1k start c41e0c00 pointer offset 0 size 1024
+[   20.367827] Register r1 information: non-paged memory
+[   20.372868] Register r2 information: non-paged memory
+[   20.377906] Register r3 information: NULL pointer
+[   20.382643] Register r4 information: slab kmalloc-1k start c41e0c00 pointer offset 0 size 1024
+[   20.391216] Register r5 information: non-slab/vmalloc memory
+[   20.396958] Register r6 information: zero-size pointer
+[   20.401997] Register r7 information: non-slab/vmalloc memory
+[   20.407738] Register r8 information: non-slab/vmalloc memory
+[   20.413379] Register r9 information: slab kmalloc-1k start c41e0c00 pointer offset 68 size 1024
+[   20.422053] Register r10 information: non-slab/vmalloc memory
+[   20.427795] Register r11 information: non-slab/vmalloc memory
+[   20.433537] Register r12 information: NULL pointer
+[   20.438274] Process sh (pid: 372, stack limit = 0xf0bdeaf6)
+[   20.443918] Stack: (0xddd9ddd8 to 0xddd9e000)
+[   20.448254] ddc0:                                                       c41e0c00 c0fa50cc
+[   20.456409] dde0: 00000010 c082e424 c41e0c00 c0830950 c41e0c00 c0fa50cc 00000010 c074d494
+[   20.464563] de00: c41e0c00 00000000 00000000 00000010 c132a4c0 c074d640 c41e0c88 c12d65a4
+[   20.472818] de20: c41e0c00 c12d65d8 c132a4c0 c137ca38 c12d65d0 c074f480 00000010 c1346ba0
+[   20.480972] de40: c132a4c0 00000010 00000003 c134f684 c43f5780 c132a4c0 c1346a1c 00000000
+[   20.489127] de60: 00000000 c074fa58 00000000 c01756ec 00000003 7330b91d c134f6a8 00000000
+[   20.497282] de80: 00000003 c132a4c0 c134f6a8 00000004 c44560c0 c0c37108 00000003 00000003
+[   20.505436] dea0: c0f1b93c c017586c 00000003 c0174578 c44560c0 00000004 c23d4100 c23d4110
+[   20.513690] dec0: ddd9df28 00000000 00000000 c03498c8 00000000 00000000 00000004 c2ef16c0
+[   20.521844] dee0: ddd9df80 00089e60 c43f5780 00000000 00000000 c02bfca4 00000000 00000000
+[   20.529998] df00: 00000000 00000000 01000005 00000001 00000004 00089e60 00000000 00000000
+[   20.538152] df20: 00000001 00000000 c2ef16c0 00000000 00000000 00000000 00000000 00000000
+[   20.546406] df40: 00000000 00004004 00000000 00000000 00000000 7330b91d 00000004 c2ef16c0
+[   20.554561] df60: c2ef16c0 00000000 00000000 c01002c4 c43f5780 00000004 00084404 c02c0018
+[   20.562715] df80: 00000000 00000000 00000003 7330b91d 00000001 00000004 00089e60 00000001
+[   20.570869] dfa0: 00000004 c0100060 00000004 00089e60 00000001 00089e60 00000004 00000001
+[   20.579023] dfc0: 00000004 00089e60 00000001 00000004 00000000 00000020 00000000 00084404
+[   20.587277] dfe0: 00000004 beb55670 b6eab627 b6e285e6 60070030 00000001 00000000 00000000
+[   20.595439]  smsc_phy_config_init from phy_init_hw+0x6c/0xa4
+[   20.601102]  phy_init_hw from mdio_bus_phy_resume+0x48/0x144
+[   20.606761]  mdio_bus_phy_resume from dpm_run_callback+0x48/0x160
+[   20.612824]  dpm_run_callback from __device_resume+0x94/0x368
+[   20.618583]  __device_resume from dpm_resume+0xb4/0x224
+[   20.623741]  dpm_resume from dpm_resume_end+0xc/0x18
+[   20.628697]  dpm_resume_end from suspend_devices_and_enter+0x1bc/0x2fc
+[   20.635267]  suspend_devices_and_enter from enter_state+0x200/0x244
+[   20.641530]  enter_state from pm_suspend+0x40/0x98
+[   20.646282]  pm_suspend from state_store+0x6c/0xc8
+[   20.651038]  state_store from kernfs_fop_write_iter+0xfc/0x1e8
+[   20.656897]  kernfs_fop_write_iter from vfs_write+0x21c/0x42c
+[   20.662655]  vfs_write from ksys_write+0x70/0xf0
+[   20.667305]  ksys_write from ret_fast_syscall+0x0/0x54
+[   20.672355] Exception stack(0xddd9dfa8 to 0xddd9dff0)
+[   20.677495] dfa0:                   00000004 00089e60 00000001 00089e60 00000004 00000001
+[   20.685649] dfc0: 00000004 00089e60 00000001 00000004 00000000 00000020 00000000 00084404
+[   20.693801] dfe0: 00000004 beb55670 b6eab627 b6e285e6
+[   20.698842] Code: e8bd8070 e59433b4 e3082061 e3a01003 (e59331d0)
+[   20.705107] ---[ end trace 0000000000000000 ]---
+
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Change-Id: I228731133b4600c845107005c48bb48cc15be47e
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/432259
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/net/phy/smsc.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/phy/smsc.c b/drivers/net/phy/smsc.c
+index c2fceb4a74a9..9369d345f1e1 100644
+--- a/drivers/net/phy/smsc.c
++++ b/drivers/net/phy/smsc.c
+@@ -130,8 +130,12 @@ static int smsc_phy_config_wol(struct phy_device *phydev)
+ 	int i, wol_ctrl, wol_filter;
+ 	u16 pwd[3] = {0, 0, 0};
+ 
++	const u8 *mac_addr = NULL;
++	if(!phydev->attached_dev)
++		return -ENODEV;
++
+ 	/* Write @MAC in LAN8742_MMD3_MAC_ADDRA/B/C registers */
+-	const u8 *mac_addr = phydev->attached_dev->dev_addr;
++	mac_addr = phydev->attached_dev->dev_addr;
+ 	/* Store the device address for the magic packet */
+ 	for (i = 0; i < ARRAY_SIZE(pwd); i++)
+ 		pwd[i] = mac_addr[5 - i * 2] << 8 | mac_addr[5 - (i * 2 + 1)];
+-- 
+2.47.2
+

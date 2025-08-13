@@ -1,0 +1,89 @@
+From da8071ea4d666e7cf4101471d99922a8b63da449 Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Date: Fri, 3 Jan 2025 10:02:17 +0100
+Subject: [PATCH] mailbox: client-cdev: Fix unmap warning when remove the
+ driver
+
+The memory region is mapped using devm_ioremap_wc. but the unmap is
+done in the probe in case of error or on remove.
+This lead to a warning:
+[  860.695243] Trying to vunmap() nonexistent vm area (00000000424aa509)
+[  860.703967] WARNING: CPU: 0 PID: 1194 at mm/vmalloc.c:2888 vunmap+0x58/0x60
+[  860.708640] Modules linked in: cfg80211 rfkill usb_f_ncm u_ether crct10dif_ce hantro_vpu imx335 libcomposite stm32_dcmipp v4l2_jpeg v4l2_vp9 stm32_csi v4l2_h264 v4l2_mem2mem videobuf2_vm6
+[  860.746428] CPU: 0 PID: 1194 Comm: sh Not tainted 6.6.48 #170
+[  860.752164] Hardware name: STMicroelectronics STM32MP257F-EV1 Evaluation Board (DT)
+[  860.759803] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  860.766742] pc : vunmap+0x58/0x60
+[  860.770069] lr : vunmap+0x58/0x60
+[  860.773293] sp : ffff800082a83af0
+[  860.776613] x29: ffff800082a83af0 x28: ffff000081c38ec0 x27: 0000000000000000
+[  860.783759] x26: 0000000000000000 x25: 0000000000000000 x24: ffff0000803be010
+[  860.790804] x23: 0000000000000002 x22: ffff800082a83b38 x21: ffff0000803be010
+[  860.797950] x20: ffff000082ae4000 x19: ffff80008224a000 x18: 0000000000000000
+[  860.805095] x17: 0000000000000000 x16: 0000000000000000 x15: 0072994003df956c
+[  860.812140] x14: 00001ca45e4a1b34 x13: 000000000000018e x12: 000000000000018e
+[  860.819285] x11: 0000000000000000 x10: 0000000000000a60 x9 : ffff800082a83960
+[  860.826330] x8 : ffff000081c39980 x7 : ffff0000ff76fe00 x6 : 0000000000729940
+[  860.833476] x5 : 00000000410fd040 x4 : 0000000000100000 x3 : 0000000000000000
+[  860.840520] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff000081c38ec0
+[  860.847666] Call trace:
+[  860.850083]  vunmap+0x58/0x60
+[  860.853007]  iounmap+0x30/0x3c
+[  860.856030]  devm_ioremap_release+0x14/0x20
+[  860.860259]  devres_release_all+0xa4/0x10c
+[  860.864290]  device_unbind_cleanup+0x18/0x68
+[  860.868521]  device_release_driver_internal+0x1e8/0x224
+[  860.873753]  device_links_unbind_consumers+0xd8/0x100
+[  860.878786]  device_release_driver_internal+0xe0/0x224
+[  860.883917]  device_driver_detach+0x18/0x24
+
+Remove useless iounmap
+
+Fixes: a2435dc8bb21 ("mailbox: Add mailbox character device driver for coprocessor communication")
+
+Change-Id: Iaff88eef53f9e900e0d8758be6ef45df45c61bab
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/426869
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Gwenael TREUVEUR <gwenael.treuveur@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/mailbox/mailbox-client_cdev.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/drivers/mailbox/mailbox-client_cdev.c b/drivers/mailbox/mailbox-client_cdev.c
+index ac7c27ea5822..07149f31ce53 100644
+--- a/drivers/mailbox/mailbox-client_cdev.c
++++ b/drivers/mailbox/mailbox-client_cdev.c
+@@ -211,7 +211,6 @@ static void mbox_cdev_driver_remove(struct platform_device *pdev)
+ 	struct mbox_cdev_ddata *mbxdev = platform_get_drvdata(pdev);
+ 
+ 	mbox_free_channel(mbxdev->mb.chan);
+-	iounmap(mbxdev->resm);
+ 	cdev_del(&mbxdev->cdev);
+ }
+ 
+@@ -234,7 +233,7 @@ static int mbox_cdev_driver_probe(struct platform_device *pdev)
+ 	/* Initialize mailbox client */
+ 	ret = mbox_cdev_request_mbox(dev, mbxdev);
+ 	if (ret)
+-		goto unmap;
++		return ret;
+ 
+ 	ret = mbxdev_char_device_add(pdev, mbxdev);
+ 	if (ret)
+@@ -246,8 +245,6 @@ static int mbox_cdev_driver_probe(struct platform_device *pdev)
+ 
+ free_mbx:
+ 	mbox_free_channel(mbxdev->mb.chan);
+-unmap:
+-	iounmap(mbxdev->resm);
+ 
+ 	return ret;
+ }
+-- 
+2.47.2
+

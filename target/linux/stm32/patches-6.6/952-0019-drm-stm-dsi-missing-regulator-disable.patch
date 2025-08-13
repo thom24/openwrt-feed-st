@@ -1,0 +1,34 @@
+From 56659b53c523d62f4ef5fa792663e184d30ae1f3 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Thu, 6 Feb 2025 09:36:47 +0100
+Subject: [PATCH] drm/stm: dsi: missing regulator disable
+
+A call of "regulator disable" is missing for the power supply vdda18
+at the end of probe.
+
+Change-Id: I4a1414a09e190ec70a06bd41ff8e5a89a546adfd
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/437321
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/gpu/drm/stm/dw_mipi_dsi-stm.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
+index e4df8639d26f..db5cf665cca5 100644
+--- a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
++++ b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
+@@ -1282,6 +1282,9 @@ static int dw_mipi_dsi_stm_probe(struct platform_device *pdev)
+ 	clk_disable_unprepare(dsi->pclk);
+ 	regulator_disable(dsi->vdd_supply);
+ 
++	if (of_device_is_compatible(dev->of_node, "st,stm32mp25-dsi"))
++		regulator_disable(dsi->vdda18_supply);
++
+ 	return 0;
+ 
+ err_dsi_probe:
+-- 
+2.47.2
+

@@ -1,0 +1,52 @@
+From 70e48bf50bfe85334c9f9e86f104d621d7172689 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Thu, 6 Feb 2025 09:34:16 +0100
+Subject: [PATCH] drm/stm: dsi: defer dsi mipi probe
+
+The dsi mipi probe should be done after clock register to avoid an
+unbalance counter on dsi clocks.
+
+Change-Id: Ie51990e043f682d4620e449e58761d24ad8569f8
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/437320
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/gpu/drm/stm/dw_mipi_dsi-stm.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
+index 59237960fc8c..e4df8639d26f 100644
+--- a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
++++ b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
+@@ -1245,13 +1245,6 @@ static int dw_mipi_dsi_stm_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, dsi);
+ 
+-	dsi->dsi = dw_mipi_dsi_probe(pdev, &dsi->pdata);
+-	if (IS_ERR(dsi->dsi)) {
+-		ret = PTR_ERR(dsi->dsi);
+-		dev_err_probe(dev, ret, "Failed to initialize mipi dsi host\n");
+-		goto err_dsi_probe;
+-	}
+-
+ 	dsi->dev = dev;
+ 
+ 	ret = dw_mipi_dsi_clk_register(dsi);
+@@ -1265,6 +1258,13 @@ static int dw_mipi_dsi_stm_probe(struct platform_device *pdev)
+ 	if (IS_ERR(dsi->px_clk))
+ 		dev_err_probe(dev, PTR_ERR(dsi->px_clk), "Unable to get px_clk clock\n");
+ 
++	dsi->dsi = dw_mipi_dsi_probe(pdev, &dsi->pdata);
++	if (IS_ERR(dsi->dsi)) {
++		ret = PTR_ERR(dsi->dsi);
++		dev_err_probe(dev, ret, "Failed to initialize mipi dsi host\n");
++		goto err_dsi_probe;
++	}
++
+ 	dsi->probe_done = true;
+ 
+ 	/*
+-- 
+2.47.2
+

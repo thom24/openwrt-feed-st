@@ -1,0 +1,102 @@
+From 817592fc555d39d471cf4e9eda5f527da299a47c Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 7 Aug 2024 17:12:39 +0200
+Subject: [PATCH] usb: dwc2: gadget: stop xfer when no request
+
+When no request has been submitted, packets may get stuck in the FIFO
+for endpoints 1...n, preventing correct handling of setup packets on EP0.
+
+When using acm serial gadget, dwc2 may fall into a non-working state when:
+- f_acm (with u_serial) has been configured
+- cat /dev/ttyGS0 hasn't yet been called (application not ready yet)
+- host start to send data packets (at least 3 packets)
+Simply opening the port (/dev/ttyGS0) doesn't allow to recover.
+
+In ddma mode, packets get stored in the RX FIFO, until the /dev/ttyGS0
+gets opened. When the HOST starts to send data packet (echo > /dev/ttyACMx)
+it sends setup packets to the gadget. These packets are simply Ack'ed but
+subsequent IN/OUT xfers are stuck. When more than
+3 requests have been received, we end up in the non-working state.
+
+At later time, when the /dev/ttyGS0 finally gets open for reading, the
+condition is hit where "xfercomplete was generated without SETUP" as
+commented. But here, the EP0 is disabled. The setup packet no longer
+answered.
+
+So, choice is to made to NAK on out endpoint, until proper request
+have been queued to the gadget. Also take care to stop transfers
+(nak on the out endpoint), in case the queue runs out of active
+requests. This can happen when the port has been closed by the
+application or the TTY port has been throttled (tty_throttled
+in u_serial).
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ifea2bb53a029feb61e21382560be4984b8ac5132
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/397382
+Reviewed-by: Ashish VERMA <ashish.verma@st.com>
+Tested-by: Ashish VERMA <ashish.verma@st.com>
+Domain-Review: Ram DAYAL <ram.dayal@st.com>
+---
+ drivers/usb/dwc2/gadget.c | 24 ++++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index ca5a569322a6..0d0c7aec577b 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -1735,6 +1735,9 @@ static struct dwc2_hsotg_req *get_ep_head(struct dwc2_hsotg_ep *hs_ep)
+ 					queue);
+ }
+ 
++static void dwc2_hsotg_ep_stop_xfr(struct dwc2_hsotg *hsotg,
++				   struct dwc2_hsotg_ep *hs_ep);
++
+ /**
+  * dwc2_gadget_start_next_request - Starts next request from ep queue
+  * @hs_ep: Endpoint structure
+@@ -1754,8 +1757,14 @@ static void dwc2_gadget_start_next_request(struct dwc2_hsotg_ep *hs_ep)
+ 		dwc2_hsotg_start_req(hsotg, hs_ep, hs_req, false);
+ 		return;
+ 	}
+-	if (!hs_ep->isochronous)
++	if (!hs_ep->isochronous) {
++		if (hs_ep->index && !dir_in) {
++			/* No new request, stop xfer and NAK on this endpoint. */
++			dev_dbg(hsotg->dev, "No request, stop %s\n", hs_ep->ep.name);
++			dwc2_hsotg_ep_stop_xfr(hsotg, hs_ep);
++		}
+ 		return;
++	}
+ 
+ 	if (dir_in) {
+ 		dev_dbg(hsotg->dev, "%s: No more ISOC-IN requests\n",
+@@ -2936,9 +2945,6 @@ static void dwc2_gadget_handle_out_token_ep_disabled(struct dwc2_hsotg_ep *ep)
+ 
+ }
+ 
+-static void dwc2_hsotg_ep_stop_xfr(struct dwc2_hsotg *hsotg,
+-				   struct dwc2_hsotg_ep *hs_ep);
+-
+ /**
+  * dwc2_gadget_handle_nak - handle NAK interrupt
+  * @hs_ep: The endpoint on which interrupt is asserted.
+@@ -4153,6 +4159,16 @@ static int dwc2_hsotg_ep_enable(struct usb_ep *ep,
+ 
+ 	case USB_ENDPOINT_XFER_BULK:
+ 		epctrl |= DXEPCTL_EPTYPE_BULK;
++		/*
++		 * By default the OUT packets are going to be acked and stored
++		 * in the RX FIFO, even though no request has been queued. That
++		 * can lead to fulfill the FIFO before any request has been
++		 * queued, resulting in a stuck endpoint where the FIFO can't
++		 * be emptied. So NAK the OUT packets until requests has been
++		 * queued.
++		 */
++		if (hs_ep->index && !dir_in)
++			epctrl |= DXEPCTL_SNAK;
+ 		break;
+ 
+ 	case USB_ENDPOINT_XFER_INT:
+-- 
+2.47.2
+

@@ -1,0 +1,63 @@
+From 84c3bdbc28df37889f11ac7581ea27734f28050a Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Date: Fri, 3 Jan 2025 16:01:20 +0100
+Subject: [PATCH] mailbox: client-cdev: Fix support as kernel module
+
+Add dependency on the mailbox framework to properly manage module
+dependencies.
+Fix remove sequence by destroying the /dev/mailbox<x> device.
+
+Fixes: a2435dc8bb21 ("mailbox: Add mailbox character device driver for coprocessor communication")
+
+Change-Id: I59fcd9942a06b50e4adb155cf2b4efb9ddfa78ae
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/426872
+Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Gwenael TREUVEUR <gwenael.treuveur@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/mailbox/Kconfig               | 6 ++++--
+ drivers/mailbox/mailbox-client_cdev.c | 1 +
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/mailbox/Kconfig b/drivers/mailbox/Kconfig
+index 39621976e542..3bf3d11d94fe 100644
+--- a/drivers/mailbox/Kconfig
++++ b/drivers/mailbox/Kconfig
+@@ -295,13 +295,15 @@ config QCOM_IPCC
+ 	  acts as an interrupt controller for receiving interrupts from clients.
+ 	  Say Y here if you want to build this driver.
+ 
++	  It's safe to say N if you don't want to use this interface.
++endif
+ 
+ config MAILBOX_CDEV
+ 	tristate "mailbox client char device"
++	select MAILBOX
+ 	help
+ 	  Say Y here to export mailboxes as a character device files, usually
+ 	  found in /dev/mailbox<%x>. They make it possible for ser-space
+ 	  programs to send and receive message through this interface.
+ 
+-	  It's safe to say N if you don't want to use this interface.
+-endif
++	  It's safe to say N if you don't want to use this interface.
+\ No newline at end of file
+diff --git a/drivers/mailbox/mailbox-client_cdev.c b/drivers/mailbox/mailbox-client_cdev.c
+index 07149f31ce53..7e557d4357c3 100644
+--- a/drivers/mailbox/mailbox-client_cdev.c
++++ b/drivers/mailbox/mailbox-client_cdev.c
+@@ -210,6 +210,7 @@ static void mbox_cdev_driver_remove(struct platform_device *pdev)
+ {
+ 	struct mbox_cdev_ddata *mbxdev = platform_get_drvdata(pdev);
+ 
++	device_destroy(mbox_cl_class, mbxdev->dev.devt);
+ 	mbox_free_channel(mbxdev->mb.chan);
+ 	cdev_del(&mbxdev->cdev);
+ }
+-- 
+2.47.2
+

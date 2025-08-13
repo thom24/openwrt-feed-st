@@ -1,0 +1,38 @@
+From c1b30eb4e74809afb76caa5cb07c29ac80f47a7c Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Date: Thu, 2 Jan 2025 18:30:17 +0100
+Subject: [PATCH] arm64: dts: st: Add mailbox shutdown declaration in m0_rproc
+ node
+
+Add the shutdown mailbox for the Cortex-M0.
+This avoid to declare it for each board.
+
+Change-Id: Ifeef4b39c690af7e53b0482b0422f786df3db073
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/426866
+Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Gwenael TREUVEUR <gwenael.treuveur@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index 925e8c73fff0..5aed351f94e4 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -3360,6 +3360,8 @@ ahbsr: ahb@2 {
+ 		m0_rproc: m0@0 {
+ 			compatible = "st,stm32mp2-m0";
+ 			reg = <0 0>;
++			mboxes = <&ipcc2 2>;
++			mbox-names = "shutdown";
+ 			clocks = <&rcc CK_CPU3>;
+ 			resets = <&rcc C3_R>;
+ 			reset-names = "mcu_rst";
+-- 
+2.47.2
+

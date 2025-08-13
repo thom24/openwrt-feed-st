@@ -1,0 +1,85 @@
+From bb73d851b6a15c5c2d3150a478650116aa01c470 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Fri, 31 Mar 2023 17:28:06 +0200
+Subject: [PATCH] usb: dwc2: gadget: ddma enqueue new setup packet when
+ disabled
+
+When using printer gadget, dwc2 may fall into a non-working state when:
+- f_printer has been configured
+- /dev/g_printerX remains unused
+- A host computer sends some data to print.
+
+The dwc2 will accept data packets (e.g. on data endpoint), as active:
+cat /sys/kernel/debug/usb/49000000.usb-otg/ep1out
+Endpoint index 1, named ep1out,  dir out:
+        DIEPCTL=0x00488200, DOEPCTL=0x00088200
+...
+
+In ddma mode, packets get stored in the RX FIFO, until the /dev/g_printerX
+gets opened. In case it remains unused for some time, the HOST starts to
+send setup packets to read printer status (GET_PORT_STATUS). These packets
+are simply Ack'ed but subsequent IN/OUT xfers are stuck. When more than
+3 requests have been received, we end up in the non-working state.
+
+At later time, when the /dev/g_printerX finally gets open for reading, the
+condition is hit where "xfercomplete was generated without SETUP" as
+commented. But here, the EP0 is disabled. The setup packet to get printer
+status are no longer answered.
+
+So choice is made to kill current (old) queued requests and re-enqueue a
+new request so the non-working situation may be recovered without a full
+re-initialization.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I29f66211e9d4f6b378571e8f0cd462be809fc564
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/397381
+Domain-Review: Ram DAYAL <ram.dayal@st.com>
+Tested-by: Ashish VERMA <ashish.verma@st.com>
+Reviewed-by: Ashish VERMA <ashish.verma@st.com>
+---
+ drivers/usb/dwc2/gadget.c | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index f9166e5124a0..ca5a569322a6 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -3028,6 +3028,9 @@ static void dwc2_gadget_handle_nak(struct dwc2_hsotg_ep *hs_ep)
+ 		dwc2_gadget_start_next_request(hs_ep);
+ }
+ 
++static void kill_all_requests(struct dwc2_hsotg *hsotg,
++			      struct dwc2_hsotg_ep *ep,
++			      int result);
+ /**
+  * dwc2_hsotg_epint - handle an in/out endpoint interrupt
+  * @hsotg: The driver state
+@@ -3070,9 +3073,24 @@ static void dwc2_hsotg_epint(struct dwc2_hsotg *hsotg, unsigned int idx,
+ 	 * exit from setup phase of control transfer.
+ 	 */
+ 	if (using_desc_dma(hsotg) && idx == 0 && !hs_ep->dir_in &&
+-	    hsotg->ep0_state == DWC2_EP0_SETUP && !(ints & DXEPINT_SETUP))
++	    hsotg->ep0_state == DWC2_EP0_SETUP && !(ints & DXEPINT_SETUP)) {
+ 		ints &= ~DXEPINT_XFERCOMPL;
+ 
++		if (!(dwc2_readl(hsotg, epctl_reg) & DXEPCTL_EPENA)) {
++			/*
++			 * More than 3 setup packets have likely been missed.
++			 * This may happen when other packets has been stored
++			 * in the RxFifo on other endpoints accepting packet
++			 * without being enabled.
++			 * As the EP0 got disabled, complete cb will never be
++			 * called. So enforce here the EP0 remains active (re
++			 * enqueue setup) when later stuck packets gets pulled.
++			 */
++			kill_all_requests(hsotg, hsotg->eps_out[0], -ESHUTDOWN);
++			dwc2_hsotg_enqueue_setup(hsotg);
++		}
++	}
++
+ 	if (ints & DXEPINT_XFERCOMPL) {
+ 		dev_dbg(hsotg->dev,
+ 			"%s: XferCompl: DxEPCTL=0x%08x, DXEPTSIZ=%08x\n",
+-- 
+2.47.2
+
