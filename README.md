@@ -65,10 +65,10 @@ This feed is based on the `STPM32MP1/STM32MP2 BSP v6.0`.
 |TF-A|2.10-stm32mp-r1|
 |U-Boot|2023.10-stm32mp-r1|
 |OPTEE|4.0.0-stm32mp-r1|
-|Linux|OpenWRT kernel + v6.6-stm32mp-r1.1|
+|Linux|OpenWRT kernel + v6.6-stm32mp-r1.2|
 
 For the kernel, the patches from the v6.6-stm32mp branch until the tag
-v6.6-stm32mp-r1.1 were added.
+v6.6-stm32mp-r1.2 were added.
 They are available in `target/linux/stm32/patches-6.6/`.
 
 Some patches were removed as they were applied in Linux, or they are already
@@ -85,6 +85,7 @@ fd68ca2e9089 ("i2c: stm32f7: Do not prepare/unprepare clock during runtime suspe
 22772c87565e ("clocksource: stm32-lptimer: use wakeup capable instead of init wakeup")
 6ab3278ee867 ("pinctrl: devicetree: do not goto err when probing hogs in pinctrl_dt_to_map")
 10b245589fa0 ("drm: bridge: adv7511: fill i2s stream capabilities")
+a1ff3250129a ("pinctrl: stm32: check devm_kasprintf() returned value")
 ```
 
 Some patches had to be modified to fix some conflicts.
@@ -128,6 +129,8 @@ dc9d876018c6 ("drm/stm: ltdc: Check the security of layer 2.")
 662800081ef7 ("drm/stm: ltdc: flush remaining vblank event")
 6e8b50d319c9 ("drm/stm: ltdc: Check the security of layer 3.")
 3682d604ecbd ("drm/stm: ltdc: reset ltdc on crtc enable")
+bba33e9f0619 ("drm/stm: ltdc: set clock parent before set rate")
+247114342fd4 ("drm/stm: ltdc: ckeck pm_runtime status")
 ```
 
 ## Starter Package
