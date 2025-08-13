@@ -20,11 +20,9 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  .../platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c     | 9 +++++----
  1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
-index 2e7da8e0cb7d..a0c7bc70056c 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
-@@ -566,11 +566,12 @@ static int dcmipp_pixelcap_start_streaming(struct vb2_queue *vq,
+@@ -566,11 +566,12 @@ static int dcmipp_pixelcap_start_streami
  	if (ret)
  		goto err_media_pipeline_stop;
  
@@ -41,6 +39,3 @@ index 2e7da8e0cb7d..a0c7bc70056c 100644
  	ppcr = vpix->ppcr_fmt;
  	if (vpix->swap_uv)
  		ppcr |= DCMIPP_PxPPCR_SWAPRB;
--- 
-2.47.2
-

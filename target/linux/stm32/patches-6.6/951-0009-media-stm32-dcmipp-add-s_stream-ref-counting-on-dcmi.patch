@@ -21,8 +21,6 @@ Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
  .../st/stm32/stm32-dcmipp/dcmipp-input.c      | 41 +++++++++++++++----
  1 file changed, 34 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
-index d2efac5aa64c..5f64df09b69b 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
 @@ -181,7 +181,10 @@ struct dcmipp_inp_device {
@@ -37,7 +35,7 @@ index d2efac5aa64c..5f64df09b69b 100644
  };
  
  static const struct v4l2_mbus_framefmt fmt_default = {
-@@ -283,8 +286,12 @@ static int dcmipp_inp_set_fmt(struct v4l2_subdev *sd,
+@@ -283,8 +286,12 @@ static int dcmipp_inp_set_fmt(struct v4l
  	struct v4l2_mbus_framefmt *mf;
  	int i;
  
@@ -51,7 +49,7 @@ index d2efac5aa64c..5f64df09b69b 100644
  
  	mf = v4l2_subdev_state_get_format(sd_state, fmt->pad);
  
-@@ -313,6 +320,8 @@ static int dcmipp_inp_set_fmt(struct v4l2_subdev *sd,
+@@ -313,6 +320,8 @@ static int dcmipp_inp_set_fmt(struct v4l
  		}
  	}
  
@@ -60,7 +58,7 @@ index d2efac5aa64c..5f64df09b69b 100644
  	return 0;
  }
  
-@@ -485,40 +494,53 @@ static int dcmipp_inp_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -485,40 +494,53 @@ static int dcmipp_inp_s_stream(struct v4
  		return -EINVAL;
  	s_subdev = media_entity_to_v4l2_subdev(pad->entity);
  
@@ -119,7 +117,7 @@ index d2efac5aa64c..5f64df09b69b 100644
  
  	return ret;
  }
-@@ -550,6 +572,7 @@ void dcmipp_inp_ent_release(struct dcmipp_ent_device *ved)
+@@ -550,6 +572,7 @@ void dcmipp_inp_ent_release(struct dcmip
  			container_of(ved, struct dcmipp_inp_device, ved);
  
  	dcmipp_ent_sd_unregister(ved, &inp->sd);
@@ -127,7 +125,7 @@ index d2efac5aa64c..5f64df09b69b 100644
  }
  
  #define DCMIPP_INP_SINK_PAD_NB_MP13	1
-@@ -578,6 +601,9 @@ struct dcmipp_ent_device *dcmipp_inp_ent_init(const char *entity_name,
+@@ -578,6 +601,9 @@ struct dcmipp_ent_device *dcmipp_inp_ent
  
  	inp->regs = dcmipp->regs;
  
@@ -137,7 +135,7 @@ index d2efac5aa64c..5f64df09b69b 100644
  	/* Initialize ved and sd */
  	ret = dcmipp_ent_sd_register(&inp->ved, &inp->sd, &dcmipp->v4l2_dev,
  				     entity_name, MEDIA_ENT_F_VID_IF_BRIDGE,
-@@ -585,6 +611,7 @@ struct dcmipp_ent_device *dcmipp_inp_ent_init(const char *entity_name,
+@@ -585,6 +611,7 @@ struct dcmipp_ent_device *dcmipp_inp_ent
  				     &dcmipp_inp_int_ops, &dcmipp_inp_ops,
  				     NULL, NULL);
  	if (ret) {
@@ -145,6 +143,3 @@ index d2efac5aa64c..5f64df09b69b 100644
  		kfree(inp);
  		return ERR_PTR(ret);
  	}
--- 
-2.47.2
-

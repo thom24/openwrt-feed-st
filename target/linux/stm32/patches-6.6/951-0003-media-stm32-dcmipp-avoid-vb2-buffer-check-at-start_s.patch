@@ -1,4 +1,4 @@
-From 4155cc64b078f4bfbcb80894ac72cfa809085411 Mon Sep 17 00:00:00 2001
+From 23204b01b1343aa094d2637a25e63cf474f578f0 Mon Sep 17 00:00:00 2001
 From: Alain Volmat <alain.volmat@foss.st.com>
 Date: Thu, 28 Nov 2024 16:53:46 +0100
 Subject: [PATCH] media: stm32: dcmipp: avoid vb2 buffer check at
@@ -21,11 +21,9 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  .../st/stm32/stm32-dcmipp/dcmipp-pixelcap.c     | 17 +++++------------
  1 file changed, 5 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
-index a0c7bc70056c..99d06328a514 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
-@@ -588,24 +588,17 @@ static int dcmipp_pixelcap_start_streaming(struct vb2_queue *vq,
+@@ -588,24 +588,17 @@ static int dcmipp_pixelcap_start_streami
  	reg_set(vcap, DCMIPP_PxFSCR(vcap->pipe_id), DCMIPP_PxFSCR_PIPEN);
  
  	/*
@@ -55,6 +53,3 @@ index a0c7bc70056c..99d06328a514 100644
  
  	return 0;
  
--- 
-2.47.2
-

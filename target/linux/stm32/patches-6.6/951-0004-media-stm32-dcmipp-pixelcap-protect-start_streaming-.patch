@@ -21,11 +21,9 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  .../st/stm32/stm32-dcmipp/dcmipp-pixelcap.c   | 20 +++++++++++--------
  1 file changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
-index 99d06328a514..c69bf06ff10e 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
-@@ -566,6 +566,8 @@ static int dcmipp_pixelcap_start_streaming(struct vb2_queue *vq,
+@@ -566,6 +566,8 @@ static int dcmipp_pixelcap_start_streami
  	if (ret)
  		goto err_media_pipeline_stop;
  
@@ -34,7 +32,7 @@ index 99d06328a514..c69bf06ff10e 100644
  	/*
  	 * Configure the Pixel Packer
  	 * vpix is guaranteed to be valid since pixelformat is validated
-@@ -578,12 +580,6 @@ static int dcmipp_pixelcap_start_streaming(struct vb2_queue *vq,
+@@ -578,12 +580,6 @@ static int dcmipp_pixelcap_start_streami
  
  	reg_write(vcap, DCMIPP_PxPPCR(vcap->pipe_id), ppcr);
  
@@ -47,7 +45,7 @@ index 99d06328a514..c69bf06ff10e 100644
  	/* Enable pipe at the end of programming */
  	reg_set(vcap, DCMIPP_PxFSCR(vcap->pipe_id), DCMIPP_PxFSCR_PIPEN);
  
-@@ -595,11 +591,19 @@ static int dcmipp_pixelcap_start_streaming(struct vb2_queue *vq,
+@@ -595,11 +591,19 @@ static int dcmipp_pixelcap_start_streami
  	dev_dbg(vcap->dev, "Start with next [%d] %p phy=%pad\n",
  		vcap->next->vb.vb2_buf.index, vcap->next, &vcap->next->paddr);
  
@@ -69,6 +67,3 @@ index 99d06328a514..c69bf06ff10e 100644
  	return 0;
  
  err_media_pipeline_stop:
--- 
-2.47.2
-

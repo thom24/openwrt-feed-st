@@ -19,15 +19,13 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
 Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
 Tested-by: Alain VOLMAT <alain.volmat@st.com>
 ---
- drivers/media/v4l2-core/v4l2-subdev.c | 22 ++++++++++------------
- 1 file changed, 10 insertions(+), 12 deletions(-)
+ drivers/media/v4l2-core/v4l2-subdev.c | 20 +++++++++-----------
+ 1 file changed, 9 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index 97dbd70bf9ad..5a3f480e1088 100644
 --- a/drivers/media/v4l2-core/v4l2-subdev.c
 +++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -371,6 +371,15 @@ static int call_s_stream(struct v4l2_subdev *sd, int enable)
- 	if (WARN_ON(!!sd->enabled_streams == !!enable))
+@@ -369,6 +369,15 @@ static int call_s_stream(struct v4l2_sub
+ 	if (WARN_ON(sd->s_stream_enabled == !!enable))
  		return 0;
  
 +#if IS_REACHABLE(CONFIG_LEDS_CLASS)
@@ -42,13 +40,9 @@ index 97dbd70bf9ad..5a3f480e1088 100644
  	ret = sd->ops->video->s_stream(sd, enable);
  
  	if (!enable && ret < 0) {
-@@ -378,20 +387,9 @@ static int call_s_stream(struct v4l2_subdev *sd, int enable)
- 		ret = 0;
- 	}
- 
--	if (!ret) {
-+	if (!ret)
- 		sd->enabled_streams = enable ? BIT(0) : 0;
+@@ -379,17 +388,6 @@ static int call_s_stream(struct v4l2_sub
+ 	if (!ret) {
+ 		sd->s_stream_enabled = enable;
  
 -#if IS_REACHABLE(CONFIG_LEDS_CLASS)
 -		if (!IS_ERR_OR_NULL(sd->privacy_led)) {
@@ -64,6 +58,3 @@ index 97dbd70bf9ad..5a3f480e1088 100644
  	return ret;
  }
  
--- 
-2.47.2
-

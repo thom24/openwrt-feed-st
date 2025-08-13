@@ -23,11 +23,9 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  .../platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c     | 8 --------
  1 file changed, 8 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
-index e9fa98e1db24..9bd891645e34 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
-@@ -121,15 +121,7 @@ static const struct dcmipp_pixelproc_pix_map dcmipp_pixelproc_sink_pix_map_list[
+@@ -121,15 +121,7 @@ static const struct dcmipp_pixelproc_pix
  	PIXMAP_MBUS(RGB888_3X8, DCMIPP_AUX_PIPE),
  	/* YUV formats */
  	PIXMAP_MBUS(YUYV8_2X8, DCMIPP_AUX_PIPE),
@@ -43,6 +41,3 @@ index e9fa98e1db24..9bd891645e34 100644
  	PIXMAP_MBUS(Y8_1X8, DCMIPP_AUX_PIPE),
  	PIXMAP_MBUS(Y10_1X10, DCMIPP_AUX_PIPE),
  	PIXMAP_MBUS(Y12_1X12, DCMIPP_AUX_PIPE),
--- 
-2.47.2
-

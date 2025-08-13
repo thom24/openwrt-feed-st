@@ -22,11 +22,9 @@ Tested-by: Alain VOLMAT <alain.volmat@st.com>
  drivers/media/i2c/gc2145.c | 75 ++++++++++++++++++++++++++++++++++----
  1 file changed, 67 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/i2c/gc2145.c b/drivers/media/i2c/gc2145.c
-index 12d3780b5548..898cf5b96434 100644
 --- a/drivers/media/i2c/gc2145.c
 +++ b/drivers/media/i2c/gc2145.c
-@@ -542,45 +542,82 @@ static const struct gc2145_mode supported_modes[] = {
+@@ -542,45 +542,82 @@ static const struct gc2145_mode supporte
  /**
   * struct gc2145_format - GC2145 pixel format description
   * @code: media bus (MBUS) associated code
@@ -109,7 +107,7 @@ index 12d3780b5548..898cf5b96434 100644
  };
  
  struct gc2145_ctrls {
-@@ -641,7 +678,8 @@ gc2145_get_format_code(struct gc2145 *gc2145, u32 code)
+@@ -641,7 +678,8 @@ gc2145_get_format_code(struct gc2145 *gc
  
  static void gc2145_update_pad_format(struct gc2145 *gc2145,
  				     const struct gc2145_mode *mode,
@@ -119,7 +117,7 @@ index 12d3780b5548..898cf5b96434 100644
  {
  	fmt->code = code;
  	fmt->width = mode->width;
-@@ -663,7 +701,8 @@ static int gc2145_init_cfg(struct v4l2_subdev *sd,
+@@ -663,7 +701,8 @@ static int gc2145_init_cfg(struct v4l2_s
  	/* Initialize pad format */
  	format = v4l2_subdev_state_get_format(state, 0);
  	gc2145_update_pad_format(gc2145, &supported_modes[0], format,
@@ -129,7 +127,7 @@ index 12d3780b5548..898cf5b96434 100644
  
  	/* Initialize crop rectangle. */
  	crop = v4l2_subdev_state_get_crop(state, 0);
-@@ -754,7 +793,13 @@ static int gc2145_set_pad_format(struct v4l2_subdev *sd,
+@@ -754,7 +793,13 @@ static int gc2145_set_pad_format(struct
  				      width, height,
  				      fmt->format.width, fmt->format.height);
  
@@ -144,7 +142,7 @@ index 12d3780b5548..898cf5b96434 100644
  	framefmt = v4l2_subdev_state_get_format(sd_state, fmt->pad);
  	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
  		gc2145->mode = mode;
-@@ -811,7 +856,11 @@ static int gc2145_config_mipi_mode(struct gc2145 *gc2145,
+@@ -811,7 +856,11 @@ static int gc2145_config_mipi_mode(struc
  	 * For RAW8, LWC = image width
  	 * For RAW10, LWC = image width * 1.25
  	 */
@@ -157,7 +155,7 @@ index 12d3780b5548..898cf5b96434 100644
  	cci_write(gc2145->regmap, GC2145_REG_LWC_HIGH, lwc >> 8, &ret);
  	cci_write(gc2145->regmap, GC2145_REG_LWC_LOW, lwc & 0xff, &ret);
  
-@@ -821,10 +870,14 @@ static int gc2145_config_mipi_mode(struct gc2145 *gc2145,
+@@ -821,10 +870,14 @@ static int gc2145_config_mipi_mode(struc
  	 * 1280x720 / 1600x1200 (aka no scaler) non RAW: 0x0001
  	 * 1600x1200 RAW: 0x0190
  	 */
@@ -175,7 +173,7 @@ index 12d3780b5548..898cf5b96434 100644
  
  	cci_write(gc2145->regmap, GC2145_REG_FIFO_FULL_LVL_HIGH,
  		  fifo_full_lvl >> 8, &ret);
-@@ -835,7 +888,9 @@ static int gc2145_config_mipi_mode(struct gc2145 *gc2145,
+@@ -835,7 +888,9 @@ static int gc2145_config_mipi_mode(struc
  	 * Set the FIFO gate mode / MIPI wdiv set:
  	 * 0xf1 in case of RAW mode and 0xf0 otherwise
  	 */
@@ -186,7 +184,7 @@ index 12d3780b5548..898cf5b96434 100644
  
  	/* Set the MIPI data type */
  	cci_write(gc2145->regmap, GC2145_REG_MIPI_DT,
-@@ -883,6 +938,10 @@ static int gc2145_start_streaming(struct gc2145 *gc2145,
+@@ -883,6 +938,10 @@ static int gc2145_start_streaming(struct
  			GC2145_BYPASS_MODE_SWITCH,
  			gc2145_format->switch_bit ? GC2145_BYPASS_MODE_SWITCH
  						  : 0, &ret);
@@ -197,6 +195,3 @@ index 12d3780b5548..898cf5b96434 100644
  	if (ret) {
  		dev_err(&client->dev, "%s failed to write regs\n", __func__);
  		goto err_rpm_put;
--- 
-2.47.2
-

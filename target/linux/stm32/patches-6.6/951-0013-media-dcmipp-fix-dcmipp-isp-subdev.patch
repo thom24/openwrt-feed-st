@@ -22,11 +22,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c | 6 ------
  1 file changed, 6 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
-index 01bd2649ac54..60aacda22546 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
-@@ -83,13 +83,7 @@ static const unsigned int dcmipp_isp_sink_pix_map_list[] = {
+@@ -83,13 +83,7 @@ static const unsigned int dcmipp_isp_sin
  	MEDIA_BUS_FMT_RGB888_1X24,
  	/* YUV422 */
  	MEDIA_BUS_FMT_YUYV8_2X8,
@@ -40,6 +38,3 @@ index 01bd2649ac54..60aacda22546 100644
  	/* GREY */
  	MEDIA_BUS_FMT_Y8_1X8,
  	MEDIA_BUS_FMT_Y10_1X10,
--- 
-2.47.2
-

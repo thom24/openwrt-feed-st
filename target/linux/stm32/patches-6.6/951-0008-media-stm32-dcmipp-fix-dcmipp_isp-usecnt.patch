@@ -20,8 +20,6 @@ Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
  .../st/stm32/stm32-dcmipp/dcmipp-isp.c        | 35 ++++++++++++++-----
  1 file changed, 26 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
-index 03160080d5e5..01bd2649ac54 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
 @@ -156,7 +156,9 @@ struct dcmipp_isp_device {
@@ -35,7 +33,7 @@ index 03160080d5e5..01bd2649ac54 100644
  
  	void __iomem *regs;
  };
-@@ -278,8 +280,12 @@ static int dcmipp_isp_set_fmt(struct v4l2_subdev *sd,
+@@ -278,8 +280,12 @@ static int dcmipp_isp_set_fmt(struct v4l
  	struct dcmipp_isp_device *isp = v4l2_get_subdevdata(sd);
  	struct v4l2_mbus_framefmt *pad_fmt, *opp_pad_fmt;
  
@@ -49,7 +47,7 @@ index 03160080d5e5..01bd2649ac54 100644
  
  	pad_fmt = v4l2_subdev_state_get_format(state, fmt->pad);
  
-@@ -343,6 +349,8 @@ static int dcmipp_isp_set_fmt(struct v4l2_subdev *sd,
+@@ -343,6 +349,8 @@ static int dcmipp_isp_set_fmt(struct v4l
  
  	*pad_fmt = fmt->format;
  
@@ -58,7 +56,7 @@ index 03160080d5e5..01bd2649ac54 100644
  	return 0;
  }
  
-@@ -566,10 +574,12 @@ static int dcmipp_isp_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -566,10 +574,12 @@ static int dcmipp_isp_s_stream(struct v4
  		return -EINVAL;
  	s_subdev = media_entity_to_v4l2_subdev(pad->entity);
  
@@ -73,7 +71,7 @@ index 03160080d5e5..01bd2649ac54 100644
  
  		state = v4l2_subdev_lock_and_get_active_state(&isp->sd);
  		sink_fmt = v4l2_subdev_state_get_format(state, 0);
-@@ -595,18 +605,21 @@ static int dcmipp_isp_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -595,18 +605,21 @@ static int dcmipp_isp_s_stream(struct v4
  		/* Configure Demosaicing */
  		dcmipp_isp_config_demosaicing(isp, sink_fmt);
  	} else {
@@ -99,7 +97,7 @@ index 03160080d5e5..01bd2649ac54 100644
  
  	return 0;
  }
-@@ -626,6 +639,7 @@ void dcmipp_isp_ent_release(struct dcmipp_ent_device *ved)
+@@ -626,6 +639,7 @@ void dcmipp_isp_ent_release(struct dcmip
  			container_of(ved, struct dcmipp_isp_device, ved);
  
  	dcmipp_ent_sd_unregister(ved, &isp->sd);
@@ -107,7 +105,7 @@ index 03160080d5e5..01bd2649ac54 100644
  	kfree(isp);
  }
  
-@@ -662,7 +676,9 @@ struct dcmipp_ent_device *dcmipp_isp_ent_init(const char *entity_name,
+@@ -662,7 +676,9 @@ struct dcmipp_ent_device *dcmipp_isp_ent
  
  	isp->regs = dcmipp->regs;
  	isp->dev = dcmipp->dev;
@@ -118,7 +116,7 @@ index 03160080d5e5..01bd2649ac54 100644
  
  	/* Initialize ved and sd */
  	ret = dcmipp_ent_sd_register(&isp->ved, &isp->sd,
-@@ -672,6 +688,7 @@ struct dcmipp_ent_device *dcmipp_isp_ent_init(const char *entity_name,
+@@ -672,6 +688,7 @@ struct dcmipp_ent_device *dcmipp_isp_ent
  				     NULL, &dcmipp_isp_ops,
  				     NULL, NULL);
  	if (ret) {
@@ -126,6 +124,3 @@ index 03160080d5e5..01bd2649ac54 100644
  		kfree(isp);
  		return ERR_PTR(ret);
  	}
--- 
-2.47.2
-

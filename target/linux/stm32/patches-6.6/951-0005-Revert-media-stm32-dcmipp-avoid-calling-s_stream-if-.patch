@@ -30,11 +30,9 @@ Tested-by: Alain VOLMAT <alain.volmat@st.com>
  .../st/stm32/stm32-dcmipp/dcmipp-statcap.c    |  2 +-
  8 files changed, 10 insertions(+), 49 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
-index a878ea811e10..4279c7b4a827 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
-@@ -375,7 +375,7 @@ static int dcmipp_pipeline_s_stream(struct dcmipp_bytecap_device *vcap,
+@@ -375,7 +375,7 @@ static int dcmipp_pipeline_s_stream(stru
  	if (ret < 0)
  		return ret;
  
@@ -43,11 +41,9 @@ index a878ea811e10..4279c7b4a827 100644
  	if (ret < 0) {
  		dev_err(vcap->dev, "failed to %s streaming (%d)\n",
  			state ? "start" : "stop", ret);
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-index 73829b3ee881..cfaf96ddf49c 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-@@ -604,7 +604,7 @@ static int dcmipp_byteproc_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -604,7 +604,7 @@ static int dcmipp_byteproc_s_stream(stru
  		if (ret)
  			return ret;
  
@@ -56,7 +52,7 @@ index 73829b3ee881..cfaf96ddf49c 100644
  		if (ret < 0) {
  			dev_err(byteproc->dev,
  				"failed to start source subdev streaming (%d)\n",
-@@ -612,7 +612,7 @@ static int dcmipp_byteproc_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -612,7 +612,7 @@ static int dcmipp_byteproc_s_stream(stru
  			return ret;
  		}
  	} else {
@@ -65,11 +61,9 @@ index 73829b3ee881..cfaf96ddf49c 100644
  		if (ret < 0) {
  			dev_err(byteproc->dev,
  				"failed to stop source subdev streaming (%d)\n",
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
-index 00feca94d5cc..a779c4a17e5d 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
-@@ -248,45 +248,6 @@ static inline void __reg_clear(struct device *dev, void __iomem *base, u32 reg,
+@@ -248,45 +248,6 @@ static inline void __reg_clear(struct de
  	__reg_write(dev, base, reg, readl_relaxed(base + reg) & ~mask);
  }
  
@@ -115,11 +109,9 @@ index 00feca94d5cc..a779c4a17e5d 100644
  /* DCMIPP subdev init / release entry points */
  struct dcmipp_ent_device *dcmipp_tpg_ent_init(const char *entity_name,
  					      struct dcmipp_device *dcmipp);
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
-index 3a1157f30db1..d2efac5aa64c 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
-@@ -494,7 +494,7 @@ static int dcmipp_inp_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -494,7 +494,7 @@ static int dcmipp_inp_s_stream(struct v4
  		if (ret)
  			return ret;
  
@@ -128,7 +120,7 @@ index 3a1157f30db1..d2efac5aa64c 100644
  		if (ret < 0) {
  			dev_err(inp->dev,
  				"failed to start source subdev streaming (%d)\n",
-@@ -502,7 +502,7 @@ static int dcmipp_inp_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -502,7 +502,7 @@ static int dcmipp_inp_s_stream(struct v4
  			return ret;
  		}
  	} else {
@@ -137,11 +129,9 @@ index 3a1157f30db1..d2efac5aa64c 100644
  		if (ret < 0) {
  			dev_err(inp->dev,
  				"failed to stop source subdev streaming (%d)\n",
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
-index 68b3577544d0..03160080d5e5 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
-@@ -599,7 +599,7 @@ static int dcmipp_isp_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -599,7 +599,7 @@ static int dcmipp_isp_s_stream(struct v4
  			return 0;
  	}
  
@@ -150,11 +140,9 @@ index 68b3577544d0..03160080d5e5 100644
  	if (ret < 0) {
  		dev_err(isp->dev,
  			"failed to start source subdev streaming (%d)\n", ret);
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
-index c69bf06ff10e..7bb2938f6505 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
-@@ -495,7 +495,7 @@ static int dcmipp_pipeline_s_stream(struct dcmipp_pixelcap_device *vcap,
+@@ -495,7 +495,7 @@ static int dcmipp_pipeline_s_stream(stru
  	if (ret < 0)
  		return ret;
  
@@ -163,11 +151,9 @@ index c69bf06ff10e..7bb2938f6505 100644
  	if (ret < 0) {
  		dev_err(vcap->dev, "failed to %s streaming (%d)\n",
  			state ? "start" : "stop", ret);
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
-index 70a05a91ae45..e9fa98e1db24 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
-@@ -1064,7 +1064,7 @@ static int dcmipp_pixelproc_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -1064,7 +1064,7 @@ static int dcmipp_pixelproc_s_stream(str
  	s_subdev = media_entity_to_v4l2_subdev(pad->entity);
  
  	if (!enable) {
@@ -176,7 +162,7 @@ index 70a05a91ae45..e9fa98e1db24 100644
  		if (ret < 0)
  			dev_err(pixelproc->dev,
  				"failed to stop source subdev streaming (%d)\n",
-@@ -1110,7 +1110,7 @@ static int dcmipp_pixelproc_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -1110,7 +1110,7 @@ static int dcmipp_pixelproc_s_stream(str
  		return ret;
  	}
  
@@ -185,11 +171,9 @@ index 70a05a91ae45..e9fa98e1db24 100644
  	if (ret < 0) {
  		dev_err(pixelproc->dev,
  			"failed to start source subdev streaming (%d)\n", ret);
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
-index 50e52758ac26..4483193ed7de 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
-@@ -202,7 +202,7 @@ static int dcmipp_pipeline_s_stream(struct dcmipp_statcap_device *vcap,
+@@ -202,7 +202,7 @@ static int dcmipp_pipeline_s_stream(stru
  		vcap->s_subdev = media_entity_to_v4l2_subdev(pad->entity);
  	}
  
@@ -198,6 +182,3 @@ index 50e52758ac26..4483193ed7de 100644
  	if (ret < 0) {
  		dev_err(vcap->dev, "failed to %s streaming (%d)\n",
  			state ? "start" : "stop", ret);
--- 
-2.47.2
-
