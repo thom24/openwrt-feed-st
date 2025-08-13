@@ -65,10 +65,10 @@ This feed is based on the `STPM32MP1/STM32MP2 BSP v6.0`.
 |TF-A|2.10-stm32mp-r1|
 |U-Boot|2023.10-stm32mp-r1|
 |OPTEE|4.0.0-stm32mp-r1|
-|Linux|OpenWRT kernel + v6.6-stm32mp-r1|
+|Linux|OpenWRT kernel + v6.6-stm32mp-r1.1|
 
 For the kernel, the patches from the v6.6-stm32mp branch until the tag
-v6.6-stm32mp-r1 were added.
+v6.6-stm32mp-r1.1 were added.
 They are available in `target/linux/stm32/patches-6.6/`.
 
 Some patches were removed as they were applied in Linux, or they are already
@@ -99,6 +99,8 @@ a04c279efc3c ("usb: dwc3: Add support in dwc3 to handle usb-role")
 b1f3318a0f09 ("ASoC: Update wm8994 codec config")
 27c33fae20e0 ("pwm: stm32: lptimer: add pm_runtime support")
 dd680178e937 ("counter: stm32-lptimer-cnt: add pm runtime support")
+0a222d6c04c9 ("Revert "media: stm32: dcmipp: avoid calling s_stream if state already correct"")
+7fdd5f74c211 ("Revert "media: v4l2-subdev: Document and enforce .s_stream() requirements"")
 ```
 Following patches were not applied due to conflicts. They corresponds to the
 empty patches in `target/linux/stm32/patches-6.1/`. They could be applied in the
