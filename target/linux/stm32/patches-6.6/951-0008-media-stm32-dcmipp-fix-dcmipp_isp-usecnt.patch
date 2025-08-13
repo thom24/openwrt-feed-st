@@ -1,0 +1,131 @@
+From 1634411d1fe6bd73c0ff05ab775d6d2c13bddaf0 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Mon, 28 Oct 2024 14:29:04 +0100
+Subject: [PATCH] media: stm32: dcmipp: fix dcmipp_isp usecnt
+
+Correct way usecnt is done within the dcmipp_isp by adding
+a mutex to protect concurrent accesses from multiple capture
+devices.
+
+Change-Id: I908d0300ab3413c20d6da0a1e03b4d3dd9d24253
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/421290
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ .../st/stm32/stm32-dcmipp/dcmipp-isp.c        | 35 ++++++++++++++-----
+ 1 file changed, 26 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
+index 03160080d5e5..01bd2649ac54 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
+@@ -156,7 +156,9 @@ struct dcmipp_isp_device {
+ 	struct v4l2_subdev sd;
+ 	struct device *dev;
+ 
+-	refcount_t usecnt;
++	/* Protect concurrent access to s_stream */
++	struct mutex lock;
++	u32 usecnt;
+ 
+ 	void __iomem *regs;
+ };
+@@ -278,8 +280,12 @@ static int dcmipp_isp_set_fmt(struct v4l2_subdev *sd,
+ 	struct dcmipp_isp_device *isp = v4l2_get_subdevdata(sd);
+ 	struct v4l2_mbus_framefmt *pad_fmt, *opp_pad_fmt;
+ 
+-	if (refcount_read(&isp->usecnt))
++	mutex_lock(&isp->lock);
++
++	if (isp->usecnt) {
++		mutex_unlock(&isp->lock);
+ 		return -EBUSY;
++	}
+ 
+ 	pad_fmt = v4l2_subdev_state_get_format(state, fmt->pad);
+ 
+@@ -343,6 +349,8 @@ static int dcmipp_isp_set_fmt(struct v4l2_subdev *sd,
+ 
+ 	*pad_fmt = fmt->format;
+ 
++	mutex_unlock(&isp->lock);
++
+ 	return 0;
+ }
+ 
+@@ -566,10 +574,12 @@ static int dcmipp_isp_s_stream(struct v4l2_subdev *sd, int enable)
+ 		return -EINVAL;
+ 	s_subdev = media_entity_to_v4l2_subdev(pad->entity);
+ 
++	mutex_lock(&isp->lock);
++
+ 	if (enable) {
+ 		/* Nothing to do if already enabled by someone */
+-		if (refcount_inc_not_zero(&isp->usecnt))
+-			return 0;
++		if (isp->usecnt)
++			goto out;
+ 
+ 		state = v4l2_subdev_lock_and_get_active_state(&isp->sd);
+ 		sink_fmt = v4l2_subdev_state_get_format(state, 0);
+@@ -595,18 +605,21 @@ static int dcmipp_isp_s_stream(struct v4l2_subdev *sd, int enable)
+ 		/* Configure Demosaicing */
+ 		dcmipp_isp_config_demosaicing(isp, sink_fmt);
+ 	} else {
+-		if (refcount_dec_not_one(&isp->usecnt))
+-			return 0;
++		if (isp->usecnt > 1)
++			goto out;
+ 	}
+ 
+ 	ret = v4l2_subdev_call(s_subdev, video, s_stream, enable);
+ 	if (ret < 0) {
+ 		dev_err(isp->dev,
+ 			"failed to start source subdev streaming (%d)\n", ret);
+-		return ret;
++		goto error_s_stream;
+ 	}
+ 
+-	refcount_set(&isp->usecnt, enable ? 1 : 0);
++out:
++	isp->usecnt += enable ? 1 : -1;
++error_s_stream:
++	mutex_unlock(&isp->lock);
+ 
+ 	return 0;
+ }
+@@ -626,6 +639,7 @@ void dcmipp_isp_ent_release(struct dcmipp_ent_device *ved)
+ 			container_of(ved, struct dcmipp_isp_device, ved);
+ 
+ 	dcmipp_ent_sd_unregister(ved, &isp->sd);
++	mutex_destroy(&isp->lock);
+ 	kfree(isp);
+ }
+ 
+@@ -662,7 +676,9 @@ struct dcmipp_ent_device *dcmipp_isp_ent_init(const char *entity_name,
+ 
+ 	isp->regs = dcmipp->regs;
+ 	isp->dev = dcmipp->dev;
+-	refcount_set(&isp->usecnt, 0);
++
++	/* Initialize the lock */
++	mutex_init(&isp->lock);
+ 
+ 	/* Initialize ved and sd */
+ 	ret = dcmipp_ent_sd_register(&isp->ved, &isp->sd,
+@@ -672,6 +688,7 @@ struct dcmipp_ent_device *dcmipp_isp_ent_init(const char *entity_name,
+ 				     NULL, &dcmipp_isp_ops,
+ 				     NULL, NULL);
+ 	if (ret) {
++		mutex_destroy(&isp->lock);
+ 		kfree(isp);
+ 		return ERR_PTR(ret);
+ 	}
+-- 
+2.47.2
+

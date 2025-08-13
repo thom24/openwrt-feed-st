@@ -1,0 +1,45 @@
+From 0e028d6b576da0cbbea859d5acf3dec3c717deed Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Fri, 8 Nov 2024 15:12:39 +0100
+Subject: [PATCH] media: stm32: dcmipp: fix TPG (test pattern generator) subdev
+
+The YUV422 format given by the TPG is actually mapped on the CSI-2 YUV422
+format, that is UYVY.
+
+Change-Id: I1e829c9c67cd57e4491384d165f3900c0a005b8f
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/422107
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-tpg.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-tpg.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-tpg.c
+index 6374a5cdc47e..4526f0398ef8 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-tpg.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-tpg.c
+@@ -65,7 +65,7 @@ struct dcmipp_tpg_pix_map {
+ 		.tpg_format = tpg_fmt,			\
+ 	}
+ static const struct dcmipp_tpg_pix_map dcmipp_tpg_pix_map_list[] = {
+-	PIXMAP_MBUS_TPG(YUYV8_1X16, DCMIPP_CMTPGCR2_FMT_YUV422),
++	PIXMAP_MBUS_TPG(UYVY8_1X16, DCMIPP_CMTPGCR2_FMT_YUV422),
+ 	PIXMAP_MBUS_TPG(RGB565_1X16, DCMIPP_CMTPGCR2_FMT_RGB565),
+ 	PIXMAP_MBUS_TPG(RGB888_1X24, DCMIPP_CMTPGCR2_FMT_RGB888),
+ 	PIXMAP_MBUS_TPG(SBGGR8_1X8, DCMIPP_CMTPGCR2_FMT_RAW8 |
+@@ -278,7 +278,7 @@ static int dcmipp_tpg_s_stream(struct v4l2_subdev *sd, int enable)
+ 		goto unlock;
+ 
+ 	/* Set YT if format is YUV422 */
+-	if (fmt->code == MEDIA_BUS_FMT_YUYV8_1X16) {
++	if (fmt->code == MEDIA_BUS_FMT_UYVY8_1X16) {
+ 		if (fmt->quantization != V4L2_QUANTIZATION_FULL_RANGE)
+ 			reg_set(tpg, DCMIPP_CMTPGCR2,
+ 				DCMIPP_CMTPGCR2_YT_REDUCED);
+-- 
+2.47.2
+

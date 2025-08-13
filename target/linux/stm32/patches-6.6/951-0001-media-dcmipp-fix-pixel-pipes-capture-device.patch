@@ -1,0 +1,59 @@
+From dd863fc776452eb4f70346468b716f25c28ad7ce Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Thu, 28 Nov 2024 16:39:26 +0100
+Subject: [PATCH] media: dcmipp: fix pixel pipes capture device
+
+Make the dcmipp_start_capture function a void function since
+it always return 0.
+
+Change-Id: I65d75e0f5ea319754ac23f460c4cdff562c844a0
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/422026
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+---
+ .../platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c   | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
+index b9b6b867a4d6..2e7da8e0cb7d 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
+@@ -505,8 +505,8 @@ static int dcmipp_pipeline_s_stream(struct dcmipp_pixelcap_device *vcap,
+ 	return 0;
+ }
+ 
+-static int dcmipp_start_capture(struct dcmipp_pixelcap_device *vcap,
+-				struct dcmipp_buf *buf)
++static void dcmipp_start_capture(struct dcmipp_pixelcap_device *vcap,
++				 struct dcmipp_buf *buf)
+ {
+ 	/*
+ 	 * Set frame addresses
+@@ -532,8 +532,6 @@ static int dcmipp_start_capture(struct dcmipp_pixelcap_device *vcap,
+ 
+ 	/* Capture request */
+ 	reg_set(vcap, DCMIPP_PxFCTCR(vcap->pipe_id), DCMIPP_PxFCTCR_CPTREQ);
+-
+-	return 0;
+ }
+ 
+ static int dcmipp_pixelcap_start_streaming(struct vb2_queue *vq,
+@@ -606,9 +604,7 @@ static int dcmipp_pixelcap_start_streaming(struct vb2_queue *vq,
+ 	vcap->state = DCMIPP_RUNNING;
+ 
+ 	/* Start capture */
+-	ret = dcmipp_start_capture(vcap, buf);
+-	if (ret)
+-		goto err_media_pipeline_stop;
++	dcmipp_start_capture(vcap, buf);
+ 
+ 	return 0;
+ 
+-- 
+2.47.2
+

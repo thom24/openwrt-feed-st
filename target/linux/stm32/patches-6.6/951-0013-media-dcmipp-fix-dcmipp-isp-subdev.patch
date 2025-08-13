@@ -1,0 +1,45 @@
+From 392c982e846a1b1e2bb12317260972aa49d850ab Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Fri, 8 Nov 2024 18:46:22 +0100
+Subject: [PATCH] media: dcmipp: fix dcmipp-isp subdev
+
+The dcmipp pixel pipes expects one type of YUV422.
+For CSI input, that is UYVY8_1X16, hence only keep this one
+to ensure correct behavior of the whole pipe.
+Regarding parallel interface input, the pixel pipe
+needs a YUYV8_2X8, aka 4 cycles, Y / U / Y / V hence removing the
+other formats as input.
+
+Change-Id: I964e9f63148f50adbb0fd908790cd4010ec885a7
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/422109
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
+index 01bd2649ac54..60aacda22546 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
+@@ -83,13 +83,7 @@ static const unsigned int dcmipp_isp_sink_pix_map_list[] = {
+ 	MEDIA_BUS_FMT_RGB888_1X24,
+ 	/* YUV422 */
+ 	MEDIA_BUS_FMT_YUYV8_2X8,
+-	MEDIA_BUS_FMT_YUYV8_1X16,
+-	MEDIA_BUS_FMT_UYVY8_2X8,
+ 	MEDIA_BUS_FMT_UYVY8_1X16,
+-	MEDIA_BUS_FMT_YVYU8_2X8,
+-	MEDIA_BUS_FMT_YVYU8_1X16,
+-	MEDIA_BUS_FMT_VYUY8_2X8,
+-	MEDIA_BUS_FMT_VYUY8_1X16,
+ 	/* GREY */
+ 	MEDIA_BUS_FMT_Y8_1X8,
+ 	MEDIA_BUS_FMT_Y10_1X10,
+-- 
+2.47.2
+

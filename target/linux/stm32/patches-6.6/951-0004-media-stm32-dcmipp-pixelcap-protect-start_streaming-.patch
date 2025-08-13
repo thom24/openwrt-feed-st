@@ -1,0 +1,74 @@
+From 6c9545b8c07bcf87c5917c4eda8587e342149ee4 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Thu, 28 Nov 2024 16:57:11 +0100
+Subject: [PATCH] media: stm32: dcmipp: pixelcap: protect start_streaming with
+ irqlock
+
+Protect end of start_streaming function with the irqlock to ensure
+that interrupts are not handled before the end of initialization.
+Moreover adjust the call ordering with what is done in bytecap.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: Id88ebec41e17d767a849e706db80c39324818a20
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/422029
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ .../st/stm32/stm32-dcmipp/dcmipp-pixelcap.c   | 20 +++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
+index 99d06328a514..c69bf06ff10e 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
+@@ -566,6 +566,8 @@ static int dcmipp_pixelcap_start_streaming(struct vb2_queue *vq,
+ 	if (ret)
+ 		goto err_media_pipeline_stop;
+ 
++	spin_lock_irq(&vcap->irqlock);
++
+ 	/*
+ 	 * Configure the Pixel Packer
+ 	 * vpix is guaranteed to be valid since pixelformat is validated
+@@ -578,12 +580,6 @@ static int dcmipp_pixelcap_start_streaming(struct vb2_queue *vq,
+ 
+ 	reg_write(vcap, DCMIPP_PxPPCR(vcap->pipe_id), ppcr);
+ 
+-	/* Enable interruptions */
+-	vcap->cmier |= DCMIPP_CMIER_PxALL(vcap->pipe_id);
+-	spin_lock(&vcap->vdev.v4l2_dev->lock);
+-	reg_set(vcap, DCMIPP_CMIER, vcap->cmier);
+-	spin_unlock(&vcap->vdev.v4l2_dev->lock);
+-
+ 	/* Enable pipe at the end of programming */
+ 	reg_set(vcap, DCMIPP_PxFSCR(vcap->pipe_id), DCMIPP_PxFSCR_PIPEN);
+ 
+@@ -595,11 +591,19 @@ static int dcmipp_pixelcap_start_streaming(struct vb2_queue *vq,
+ 	dev_dbg(vcap->dev, "Start with next [%d] %p phy=%pad\n",
+ 		vcap->next->vb.vb2_buf.index, vcap->next, &vcap->next->paddr);
+ 
+-	vcap->state = DCMIPP_RUNNING;
+-
+ 	/* Start capture */
+ 	dcmipp_start_capture(vcap, vcap->next);
+ 
++	/* Enable interruptions */
++	vcap->cmier |= DCMIPP_CMIER_PxALL(vcap->pipe_id);
++	spin_lock(&vcap->vdev.v4l2_dev->lock);
++	reg_set(vcap, DCMIPP_CMIER, vcap->cmier);
++	spin_unlock(&vcap->vdev.v4l2_dev->lock);
++
++	vcap->state = DCMIPP_RUNNING;
++
++	spin_unlock_irq(&vcap->irqlock);
++
+ 	return 0;
+ 
+ err_media_pipeline_stop:
+-- 
+2.47.2
+

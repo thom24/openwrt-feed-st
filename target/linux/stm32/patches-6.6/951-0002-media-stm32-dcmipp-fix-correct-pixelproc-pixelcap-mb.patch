@@ -1,0 +1,46 @@
+From f40c699733157ed98c3e6bc75ad215d678e81654 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Thu, 28 Nov 2024 16:45:54 +0100
+Subject: [PATCH] media: stm32: dcmipp: fix correct pixelproc/pixelcap mbus
+
+Don't check vpix pointer in start_streaming function since the
+video capture pixelformat is guaranteed to be valid since it is
+set by the s_fmt function before.
+
+Change-Id: I5c74a6143c52597d32951cc6babe299f7f293bbd
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/422027
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ .../platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c     | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
+index 2e7da8e0cb7d..a0c7bc70056c 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
+@@ -566,11 +566,12 @@ static int dcmipp_pixelcap_start_streaming(struct vb2_queue *vq,
+ 	if (ret)
+ 		goto err_media_pipeline_stop;
+ 
+-	/* Configure the Pixel Packer */
++	/*
++	 * Configure the Pixel Packer
++	 * vpix is guaranteed to be valid since pixelformat is validated
++	 * in dcmipp_pixelcap_s_fmt_vid_cap function before
++	 */
+ 	vpix = dcmipp_pixelcap_pix_map_by_pixelformat(vcap->format.pixelformat);
+-	if (!vpix)
+-		goto err_media_pipeline_stop;
+-
+ 	ppcr = vpix->ppcr_fmt;
+ 	if (vpix->swap_uv)
+ 		ppcr |= DCMIPP_PxPPCR_SWAPRB;
+-- 
+2.47.2
+
