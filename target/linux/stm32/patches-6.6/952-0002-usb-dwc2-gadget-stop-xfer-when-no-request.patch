@@ -40,11 +40,9 @@ Domain-Review: Ram DAYAL <ram.dayal@st.com>
  drivers/usb/dwc2/gadget.c | 24 ++++++++++++++++++++----
  1 file changed, 20 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index ca5a569322a6..0d0c7aec577b 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -1735,6 +1735,9 @@ static struct dwc2_hsotg_req *get_ep_head(struct dwc2_hsotg_ep *hs_ep)
+@@ -1735,6 +1735,9 @@ static struct dwc2_hsotg_req *get_ep_hea
  					queue);
  }
  
@@ -54,7 +52,7 @@ index ca5a569322a6..0d0c7aec577b 100644
  /**
   * dwc2_gadget_start_next_request - Starts next request from ep queue
   * @hs_ep: Endpoint structure
-@@ -1754,8 +1757,14 @@ static void dwc2_gadget_start_next_request(struct dwc2_hsotg_ep *hs_ep)
+@@ -1754,8 +1757,14 @@ static void dwc2_gadget_start_next_reque
  		dwc2_hsotg_start_req(hsotg, hs_ep, hs_req, false);
  		return;
  	}
@@ -70,7 +68,7 @@ index ca5a569322a6..0d0c7aec577b 100644
  
  	if (dir_in) {
  		dev_dbg(hsotg->dev, "%s: No more ISOC-IN requests\n",
-@@ -2936,9 +2945,6 @@ static void dwc2_gadget_handle_out_token_ep_disabled(struct dwc2_hsotg_ep *ep)
+@@ -2936,9 +2945,6 @@ static void dwc2_gadget_handle_out_token
  
  }
  
@@ -80,7 +78,7 @@ index ca5a569322a6..0d0c7aec577b 100644
  /**
   * dwc2_gadget_handle_nak - handle NAK interrupt
   * @hs_ep: The endpoint on which interrupt is asserted.
-@@ -4153,6 +4159,16 @@ static int dwc2_hsotg_ep_enable(struct usb_ep *ep,
+@@ -4153,6 +4159,16 @@ static int dwc2_hsotg_ep_enable(struct u
  
  	case USB_ENDPOINT_XFER_BULK:
  		epctrl |= DXEPCTL_EPTYPE_BULK;
@@ -97,6 +95,3 @@ index ca5a569322a6..0d0c7aec577b 100644
  		break;
  
  	case USB_ENDPOINT_XFER_INT:
--- 
-2.47.2
-

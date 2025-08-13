@@ -24,8 +24,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/remoteproc/stm32_m0_rproc.c | 142 ++++++----------------------
  1 file changed, 28 insertions(+), 114 deletions(-)
 
-diff --git a/drivers/remoteproc/stm32_m0_rproc.c b/drivers/remoteproc/stm32_m0_rproc.c
-index 0bcf4b69f988..7d2bf59a9e97 100644
 --- a/drivers/remoteproc/stm32_m0_rproc.c
 +++ b/drivers/remoteproc/stm32_m0_rproc.c
 @@ -19,11 +19,6 @@
@@ -49,7 +47,7 @@ index 0bcf4b69f988..7d2bf59a9e97 100644
  };
  
  static int stm32_m0_rproc_pa_to_da(struct rproc *rproc, phys_addr_t pa, u64 *da)
-@@ -173,32 +168,16 @@ static int stm32_m0_rproc_of_memory_translations(struct platform_device *pdev,
+@@ -173,32 +168,16 @@ free_mem:
  	return ret;
  }
  
@@ -85,7 +83,7 @@ index 0bcf4b69f988..7d2bf59a9e97 100644
  			if (err < 0)
  				dev_warn(&rproc->dev, "warning: remote FW shutdown without ack\n");
  		}
-@@ -262,94 +241,52 @@ static irqreturn_t stm32_rproc_wdg(int irq, void *data)
+@@ -262,94 +241,52 @@ static irqreturn_t stm32_rproc_wdg(int i
  	return IRQ_HANDLED;
  }
  
@@ -121,6 +119,14 @@ index 0bcf4b69f988..7d2bf59a9e97 100644
 -			.rx_callback = stm32_m0_rproc_mb_callback,
 -			.tx_block = false,
 -		},
+-	},
+-	{
+-		.name = STM32_MBX_TX,
+-		.id = 1,
+-		.client = {
+-			.rx_callback = stm32_m0_rproc_mb_callback,
+-			.tx_block = false,
+-		},
 +static const struct stm32_mbox stm32_m0_rproc_mbox = {
 +	.name = STM32_MBX_SHUTDOWN,
 +	.id = -1,
@@ -129,14 +135,6 @@ index 0bcf4b69f988..7d2bf59a9e97 100644
 +		.tx_done = NULL,
 +		.tx_tout = 500, /* 500 ms time out */
  	},
--	{
--		.name = STM32_MBX_TX,
--		.id = 1,
--		.client = {
--			.rx_callback = stm32_m0_rproc_mb_callback,
--			.tx_block = false,
--		},
--	},
 -	{
 -		.name = STM32_MBX_SHUTDOWN,
 -		.id = -1,
@@ -165,7 +163,8 @@ index 0bcf4b69f988..7d2bf59a9e97 100644
 -
 -		cl = &ddata->mb[i].client;
 -		cl->dev = dev->parent;
--
++	memcpy(&ddata->mb, &stm32_m0_rproc_mbox, sizeof(stm32_m0_rproc_mbox));
+ 
 -		ddata->mb[i].chan = mbox_request_channel_byname(cl, name);
 -		if (IS_ERR(ddata->mb[i].chan)) {
 -			if (PTR_ERR(ddata->mb[i].chan) == -EPROBE_DEFER) {
@@ -177,8 +176,6 @@ index 0bcf4b69f988..7d2bf59a9e97 100644
 -			}
 -			dev_warn(dev, "cannot get %s mbox\n", name);
 -			ddata->mb[i].chan = NULL;
-+	memcpy(&ddata->mb, &stm32_m0_rproc_mbox, sizeof(stm32_m0_rproc_mbox));
-+
 +	name = stm32_m0_rproc_mbox.name;
 +	cl = &ddata->mb.client;
 +	cl->dev = dev->parent;
@@ -204,7 +201,7 @@ index 0bcf4b69f988..7d2bf59a9e97 100644
  }
  
  static int stm32_m0_rproc_start(struct rproc *rproc)
-@@ -406,33 +343,10 @@ static int stm32_m0_rproc_stop(struct rproc *rproc)
+@@ -406,33 +343,10 @@ static int stm32_m0_rproc_stop(struct rp
  	return 0;
  }
  
@@ -238,6 +235,3 @@ index 0bcf4b69f988..7d2bf59a9e97 100644
  	.load		= rproc_elf_load_segments,
  	.sanity_check	= rproc_elf_sanity_check,
  };
--- 
-2.47.2
-

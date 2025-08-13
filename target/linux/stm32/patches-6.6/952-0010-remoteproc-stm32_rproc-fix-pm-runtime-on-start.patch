@@ -25,11 +25,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/remoteproc/stm32_rproc.c | 15 ++++++++++++---
  1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index 4b42b95b647d..ff50b064b6a4 100644
 --- a/drivers/remoteproc/stm32_rproc.c
 +++ b/drivers/remoteproc/stm32_rproc.c
-@@ -415,7 +415,7 @@ static int stm32_rproc_tee_start(struct rproc *rproc)
+@@ -415,7 +415,7 @@ static int stm32_rproc_tee_start(struct
  
  	err = tee_rproc_start(ddata->trproc);
  	if (err)
@@ -38,18 +36,18 @@ index 4b42b95b647d..ff50b064b6a4 100644
  
  	return err;
  }
-@@ -730,9 +730,18 @@ static int stm32_rproc_start(struct rproc *rproc)
+@@ -730,9 +730,18 @@ static int stm32_rproc_start(struct rpro
  
  	err = stm32_rproc_set_hold_boot(rproc, false);
  	if (err)
 -		return err;
 +		goto disable_pm;
- 
--	return stm32_rproc_set_hold_boot(rproc, true);
++
 +	err = stm32_rproc_set_hold_boot(rproc, true);
 +	if (err)
 +		goto disable_pm;
-+
+ 
+-	return stm32_rproc_set_hold_boot(rproc, true);
 +	return 0;
 +
 +disable_pm:
@@ -59,6 +57,3 @@ index 4b42b95b647d..ff50b064b6a4 100644
  }
  
  static int stm32_rproc_attach(struct rproc *rproc)
--- 
-2.47.2
-

@@ -16,11 +16,9 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/437322
  drivers/gpu/drm/stm/lvds.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
-index 2950e62b5a86..6b33641e828e 100644
 --- a/drivers/gpu/drm/stm/lvds.c
 +++ b/drivers/gpu/drm/stm/lvds.c
-@@ -862,6 +862,8 @@ static void lvds_config_mode(struct stm_lvds *lvds)
+@@ -862,6 +862,8 @@ static void lvds_config_mode(struct stm_
  		lvds_cr |= CR_VSPOL;
  
  	switch (lvds->link_type) {
@@ -29,6 +27,3 @@ index 2950e62b5a86..6b33641e828e 100644
  	case LVDS_DUAL_LINK_EVEN_ODD_PIXELS: /* LKPHA = 0 */
  		lvds_cr &= ~CR_LKPHA;
  		break;
--- 
-2.47.2
-

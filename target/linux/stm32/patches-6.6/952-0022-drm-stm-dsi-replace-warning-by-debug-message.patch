@@ -14,11 +14,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/stm/dw_mipi_dsi-stm.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
-index db5cf665cca5..192857792c7b 100644
 --- a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
 +++ b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
-@@ -493,7 +493,7 @@ static void dw_mipi_dsi_clk_disable(struct clk_hw *clk)
+@@ -493,7 +493,7 @@ static void dw_mipi_dsi_clk_disable(stru
  			dsi_clear(dsi, DSI_WRPCR, WRPCR_REGEN | WRPCR_BGREN);
  		}
  	} else {
@@ -27,6 +25,3 @@ index db5cf665cca5..192857792c7b 100644
  	}
  }
  
--- 
-2.47.2
-

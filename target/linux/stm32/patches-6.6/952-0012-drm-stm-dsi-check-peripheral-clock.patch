@@ -19,11 +19,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/stm/dw_mipi_dsi-stm.c | 27 +++++++++++----------------
  1 file changed, 11 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
-index d68a2c7ee44f..acdaffa581c5 100644
 --- a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
 +++ b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
-@@ -475,31 +475,26 @@ dw_mipi_dsi_phy_141_get_lane_mbps(void *priv_data,
+@@ -475,31 +475,26 @@ dw_mipi_dsi_phy_141_get_lane_mbps(void *
  static void dw_mipi_dsi_clk_disable(struct clk_hw *clk)
  {
  	struct dw_mipi_dsi_stm *dsi = clk_to_dw_mipi_dsi_stm(clk);
@@ -39,6 +37,10 @@ index d68a2c7ee44f..acdaffa581c5 100644
 -		DRM_ERROR("%s: Failed to enable peripheral clk\n", __func__);
 -		return;
 -	}
+-
+-	if (dsi->hw_version == HWVER_141) {
+-		/* Disable the DSI PLL */
+-		dsi_clear(dsi, DSI_WRPCR2, WRPCR2_PLLEN);
 +	if (__clk_is_enabled(dsi->pclk)) {
 +		if (dsi->hw_version == HWVER_141) {
 +			/* Disable the DSI PLL */
@@ -46,10 +48,7 @@ index d68a2c7ee44f..acdaffa581c5 100644
 +		} else {
 +			/* Disable the DSI PLL */
 +			dsi_clear(dsi, DSI_WRPCR, WRPCR_PLLEN);
- 
--	if (dsi->hw_version == HWVER_141) {
--		/* Disable the DSI PLL */
--		dsi_clear(dsi, DSI_WRPCR2, WRPCR2_PLLEN);
++
 +			/* Disable the regulator */
 +			dsi_clear(dsi, DSI_WRPCR, WRPCR_REGEN | WRPCR_BGREN);
 +		}
@@ -66,6 +65,3 @@ index d68a2c7ee44f..acdaffa581c5 100644
  }
  
  static int dw_mipi_dsi_clk_enable(struct clk_hw *clk)
--- 
-2.47.2
-

@@ -21,8 +21,6 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  .../bindings/remoteproc/st,stm32-m0.yaml      | 21 ++-----------------
  1 file changed, 2 insertions(+), 19 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/st,stm32-m0.yaml b/Documentation/devicetree/bindings/remoteproc/st,stm32-m0.yaml
-index a3ff0f412e0f..0a459dcce1ff 100644
 --- a/Documentation/devicetree/bindings/remoteproc/st,stm32-m0.yaml
 +++ b/Documentation/devicetree/bindings/remoteproc/st,stm32-m0.yaml
 @@ -40,29 +40,12 @@ properties:
@@ -57,6 +55,3 @@ index a3ff0f412e0f..0a459dcce1ff 100644
  
    memory-region:
      description:
--- 
-2.47.2
-

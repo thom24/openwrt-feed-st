@@ -15,11 +15,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/stm/dw_mipi_dsi-stm.c | 14 +++++++-------
  1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
-index 59237960fc8c..e4df8639d26f 100644
 --- a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
 +++ b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
-@@ -1245,13 +1245,6 @@ static int dw_mipi_dsi_stm_probe(struct platform_device *pdev)
+@@ -1245,13 +1245,6 @@ static int dw_mipi_dsi_stm_probe(struct
  
  	platform_set_drvdata(pdev, dsi);
  
@@ -33,7 +31,7 @@ index 59237960fc8c..e4df8639d26f 100644
  	dsi->dev = dev;
  
  	ret = dw_mipi_dsi_clk_register(dsi);
-@@ -1265,6 +1258,13 @@ static int dw_mipi_dsi_stm_probe(struct platform_device *pdev)
+@@ -1265,6 +1258,13 @@ static int dw_mipi_dsi_stm_probe(struct
  	if (IS_ERR(dsi->px_clk))
  		dev_err_probe(dev, PTR_ERR(dsi->px_clk), "Unable to get px_clk clock\n");
  
@@ -47,6 +45,3 @@ index 59237960fc8c..e4df8639d26f 100644
  	dsi->probe_done = true;
  
  	/*
--- 
-2.47.2
-

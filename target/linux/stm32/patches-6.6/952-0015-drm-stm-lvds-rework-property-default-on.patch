@@ -15,11 +15,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/stm/lvds.c | 12 +++++++-----
  1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
-index d4106c1bdd5d..2950e62b5a86 100644
 --- a/drivers/gpu/drm/stm/lvds.c
 +++ b/drivers/gpu/drm/stm/lvds.c
-@@ -557,10 +557,12 @@ static int lvds_pixel_clk_enable(struct clk_hw *hw)
+@@ -557,10 +557,12 @@ static int lvds_pixel_clk_enable(struct
  	struct lvds_phy_info *phy;
  	int ret;
  
@@ -36,7 +34,7 @@ index d4106c1bdd5d..2950e62b5a86 100644
  	}
  
  	/* In case we are operating in dual link the second PHY is set before the primary PHY. */
-@@ -1202,7 +1204,7 @@ static int lvds_probe(struct platform_device *pdev)
+@@ -1202,7 +1204,7 @@ static int lvds_probe(struct platform_de
  	 *  the clocks must remain activated
  	 */
  	if (device_property_read_bool(dev, "default-on")) {
@@ -45,6 +43,3 @@ index d4106c1bdd5d..2950e62b5a86 100644
  		if (ret < 0) {
  			DRM_ERROR("Failed to probe lvds, cannot resume pm\n");
  			return ret;
--- 
-2.47.2
-

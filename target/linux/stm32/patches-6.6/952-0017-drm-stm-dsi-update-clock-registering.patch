@@ -15,11 +15,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/stm/dw_mipi_dsi-stm.c | 31 ++++++++++++++-------------
  1 file changed, 16 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
-index acdaffa581c5..59237960fc8c 100644
 --- a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
 +++ b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
-@@ -733,16 +733,6 @@ static int dw_mipi_dsi_clk_set_rate(struct clk_hw *hw, unsigned long rate,
+@@ -733,16 +733,6 @@ static int dw_mipi_dsi_clk_set_rate(stru
  	return 0;
  }
  
@@ -36,7 +34,7 @@ index acdaffa581c5..59237960fc8c 100644
  static const struct clk_ops dw_mipi_dsi_stm_clk_ops = {
  	.enable = dw_mipi_dsi_clk_enable,
  	.disable = dw_mipi_dsi_clk_disable,
-@@ -766,10 +756,9 @@ static struct clk_init_data cdata_init_141 = {
+@@ -766,10 +756,9 @@ static struct clk_init_data cdata_init_1
  	.num_parents = 1,
  };
  
@@ -49,7 +47,7 @@ index acdaffa581c5..59237960fc8c 100644
  	int ret;
  
  	DRM_DEBUG_DRIVER("Registering clk\n");
-@@ -787,7 +776,7 @@ static int dw_mipi_dsi_clk_register(struct dw_mipi_dsi_stm *dsi,
+@@ -787,7 +776,7 @@ static int dw_mipi_dsi_clk_register(stru
  	if (ret)
  		return ret;
  
@@ -58,7 +56,7 @@ index acdaffa581c5..59237960fc8c 100644
  				     &dsi->txbyte_clk);
  	if (ret)
  		clk_hw_unregister(&dsi->txbyte_clk);
-@@ -795,6 +784,16 @@ static int dw_mipi_dsi_clk_register(struct dw_mipi_dsi_stm *dsi,
+@@ -795,6 +784,16 @@ static int dw_mipi_dsi_clk_register(stru
  	return ret;
  }
  
@@ -75,7 +73,7 @@ index acdaffa581c5..59237960fc8c 100644
  static int dw_mipi_dsi_phy_init(void *priv_data)
  {
  	struct dw_mipi_dsi_stm *dsi = priv_data;
-@@ -1253,7 +1252,9 @@ static int dw_mipi_dsi_stm_probe(struct platform_device *pdev)
+@@ -1253,7 +1252,9 @@ static int dw_mipi_dsi_stm_probe(struct
  		goto err_dsi_probe;
  	}
  
@@ -86,6 +84,3 @@ index acdaffa581c5..59237960fc8c 100644
  	if (ret) {
  		DRM_ERROR("Failed to register DSI pixel clock: %d\n", ret);
  		goto err_dsi_probe;
--- 
-2.47.2
-

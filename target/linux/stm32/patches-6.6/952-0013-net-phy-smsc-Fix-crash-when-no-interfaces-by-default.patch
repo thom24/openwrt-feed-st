@@ -82,11 +82,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/net/phy/smsc.c | 6 +++++-
  1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/phy/smsc.c b/drivers/net/phy/smsc.c
-index c2fceb4a74a9..9369d345f1e1 100644
 --- a/drivers/net/phy/smsc.c
 +++ b/drivers/net/phy/smsc.c
-@@ -130,8 +130,12 @@ static int smsc_phy_config_wol(struct phy_device *phydev)
+@@ -130,8 +130,12 @@ static int smsc_phy_config_wol(struct ph
  	int i, wol_ctrl, wol_filter;
  	u16 pwd[3] = {0, 0, 0};
  
@@ -100,6 +98,3 @@ index c2fceb4a74a9..9369d345f1e1 100644
  	/* Store the device address for the magic packet */
  	for (i = 0; i < ARRAY_SIZE(pwd); i++)
  		pwd[i] = mac_addr[5 - i * 2] << 8 | mac_addr[5 - (i * 2 + 1)];
--- 
-2.47.2
-

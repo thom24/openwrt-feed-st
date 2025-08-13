@@ -20,11 +20,9 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  drivers/mailbox/mailbox-client_cdev.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/mailbox/mailbox-client_cdev.c b/drivers/mailbox/mailbox-client_cdev.c
-index 091401fd400c..ac7c27ea5822 100644
 --- a/drivers/mailbox/mailbox-client_cdev.c
 +++ b/drivers/mailbox/mailbox-client_cdev.c
-@@ -231,7 +231,7 @@ static int mbox_cdev_driver_probe(struct platform_device *pdev)
+@@ -231,7 +231,7 @@ static int mbox_cdev_driver_probe(struct
  		return ret;
  	}
  
@@ -33,6 +31,3 @@ index 091401fd400c..ac7c27ea5822 100644
  	ret = mbox_cdev_request_mbox(dev, mbxdev);
  	if (ret)
  		goto unmap;
--- 
-2.47.2
-

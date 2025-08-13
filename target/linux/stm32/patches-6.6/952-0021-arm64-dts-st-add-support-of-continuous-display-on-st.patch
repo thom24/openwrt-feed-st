@@ -15,11 +15,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 10 ++++++++--
  1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-index 6bc923b7f28f..c07c12d8a876 100644
 --- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-@@ -35,6 +35,8 @@ chosen {
+@@ -35,6 +35,8 @@
  
  		framebuffer {
  			compatible = "simple-framebuffer";
@@ -28,7 +26,7 @@ index 6bc923b7f28f..c07c12d8a876 100644
  			status = "disabled";
  		};
  	};
-@@ -136,6 +138,7 @@ panel_lvds: panel-lvds {
+@@ -136,6 +138,7 @@
  		compatible = "edt,etml0700z9ndha", "panel-lvds";
  		enable-gpios = <&gpioi 4 GPIO_ACTIVE_HIGH>;
  		backlight = <&panel_lvds_backlight>;
@@ -36,7 +34,7 @@ index 6bc923b7f28f..c07c12d8a876 100644
  		status = "okay";
  
  		width-mm = <156>;
-@@ -165,7 +168,7 @@ panel_lvds_backlight: panel-lvds-backlight {
+@@ -165,7 +168,7 @@
  		compatible = "gpio-backlight";
  		gpios = <&gpioi 7 GPIO_ACTIVE_HIGH>;
  		default-on;
@@ -45,7 +43,7 @@ index 6bc923b7f28f..c07c12d8a876 100644
  		status = "okay";
  	};
  
-@@ -485,6 +488,7 @@ timer {
+@@ -485,6 +488,7 @@
  };
  
  &ltdc {
@@ -53,7 +51,7 @@ index 6bc923b7f28f..c07c12d8a876 100644
  	status = "okay";
  
  	port {
-@@ -504,9 +508,11 @@ ltdc_ep1_out: endpoint@1 {
+@@ -504,9 +508,11 @@
  };
  
  &lvds {
@@ -66,6 +64,3 @@ index 6bc923b7f28f..c07c12d8a876 100644
  	ports {
  		#address-cells = <1>;
  		#size-cells = <0>;
--- 
-2.47.2
-

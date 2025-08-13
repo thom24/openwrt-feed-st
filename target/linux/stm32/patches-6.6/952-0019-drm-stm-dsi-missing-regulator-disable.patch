@@ -15,11 +15,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/stm/dw_mipi_dsi-stm.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
-index e4df8639d26f..db5cf665cca5 100644
 --- a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
 +++ b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
-@@ -1282,6 +1282,9 @@ static int dw_mipi_dsi_stm_probe(struct platform_device *pdev)
+@@ -1282,6 +1282,9 @@ static int dw_mipi_dsi_stm_probe(struct
  	clk_disable_unprepare(dsi->pclk);
  	regulator_disable(dsi->vdd_supply);
  
@@ -29,6 +27,3 @@ index e4df8639d26f..db5cf665cca5 100644
  	return 0;
  
  err_dsi_probe:
--- 
-2.47.2
-
