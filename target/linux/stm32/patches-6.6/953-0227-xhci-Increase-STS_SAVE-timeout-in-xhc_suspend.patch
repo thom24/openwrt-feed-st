@@ -1,0 +1,37 @@
+From ea045b0f9f49c38caa60fb9af9c167e3b9c43853 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Fri, 24 Jan 2025 13:04:32 +0100
+Subject: [PATCH] xhci: Increase STS_SAVE timeout in xhc_suspend
+
+Increase Save State timeout to allow ASMEDIA ASM1142 USB 3.1 to suspend.
+
+xhci does not specify a delay for the USBSTS CSS bit poll. Need to increase
+the current timeout which is too small, preventing to suspend.
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I7fc1a46caad565d297d10ab729f178acfa3a064b
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/431378
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/usb/host/xhci.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 70e6c240a540..37603503055c 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -916,7 +916,7 @@ int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup)
+ 	writel(command, &xhci->op_regs->command);
+ 	xhci->broken_suspend = 0;
+ 	if (xhci_handshake(&xhci->op_regs->status,
+-				STS_SAVE, 0, 20 * 1000)) {
++				STS_SAVE, 0, 60 * 1000)) {
+ 	/*
+ 	 * AMD SNPS xHC 3.0 occasionally does not clear the
+ 	 * SSS bit of USBSTS and when driver tries to poll
+-- 
+2.50.1
+

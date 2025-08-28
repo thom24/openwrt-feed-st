@@ -1,0 +1,43 @@
+From 3a871afcb10bd4ad61e5c7469ba6b08b69f914c8 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Mon, 28 Apr 2025 09:27:55 +0200
+Subject: [PATCH] arm64: dts: st: describe pcie_ep DBI accesses on
+ stm32mp251.dtsi
+
+Adjust All DBI related accesses with appropriate bindings. This fixes
+BAR registers can only be programmed using DBI shadow registers, addressed
+mapped with CS2 bit for AXI DBI access
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I39045eba539725aab0989244d89240d17f0e9308
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/454414
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index 0eb853688363..3b96eccc42ea 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -2402,9 +2402,12 @@ dwc3: usb@48300000 {
+ 			pcie_ep: pcie-ep@48400000 {
+ 				compatible = "st,stm32mp25-pcie-ep", "snps,dw-pcie-ep";
+ 				num-lanes = <1>;
+-				reg = <0x48400000 0x400000>,
++				reg = <0x48400000 0x100000>,
++				      <0x48500000 0x100000>,
++				      <0x48700000 0x80000>,
++				      <0x48780000 0x80000>,
+ 				      <0x10000000 0x8000000>;
+-				reg-names = "dbi", "addr_space";
++				reg-names = "dbi", "dbi2", "atu", "dma", "addr_space";
+ 				st,syscfg = <&syscfg>;
+ 				clocks = <&rcc CK_BUS_PCIE>;
+ 				clock-names = "core";
+-- 
+2.50.1
+

@@ -1,0 +1,37 @@
+From 9f4ecce7aadd9873b3b9b2b29c7766c88da2adaf Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Wed, 22 Jan 2025 09:21:32 +0100
+Subject: [PATCH] iio: trigger: stm32-lptimer: increase lptimer array size
+
+Increase lptimer trigger array size to ensure that there is a trailing
+null entry to indicate the end of the array.
+stm32_lptim_register_triggers() functions needs this to parse correctly
+trigger arrays.
+
+Change-Id: Ia9a0cfd298124ed073236d7ae6b6787a95b170cd
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/430558
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/iio/trigger/stm32-lptimer-trigger.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/iio/trigger/stm32-lptimer-trigger.c b/drivers/iio/trigger/stm32-lptimer-trigger.c
+index 1549436c7c35..45dfd437feb3 100644
+--- a/drivers/iio/trigger/stm32-lptimer-trigger.c
++++ b/drivers/iio/trigger/stm32-lptimer-trigger.c
+@@ -16,7 +16,8 @@
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
+ 
+-#define MAX_TRIGGERS 2
++/* Maximum triggers + one trailing null entry to indicate the end of array */
++#define MAX_TRIGGERS 3
+ 
+ struct stm32_lptim_cfg {
+ 	const char * const (*triggers)[MAX_TRIGGERS];
+-- 
+2.50.1
+

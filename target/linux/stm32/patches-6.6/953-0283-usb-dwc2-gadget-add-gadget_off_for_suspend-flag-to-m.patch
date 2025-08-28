@@ -1,0 +1,80 @@
+From f9337ac297f61d215d3b366ad8aaec3bf0f63be1 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 15 Jan 2025 16:01:36 +0100
+Subject: [PATCH] usb: dwc2: gadget: add gadget_off_for_suspend flag, to manage
+ wakeup
+
+When in device mode, the HOST may suspend the bus. When system suspend
+is requested, in order to support bus resume, instead of disconnecting,
+dwc2_hsotg_suspend() checks for L2 state. In case the HOST resumes the
+bus, the wakeup interrupt will change lx_state to L0, before reaching
+the dwc2_hsotg_resume() routine (either exit from clock gating, or ppd,
+or...).
+
+So introduce a new flag, to avoid resuming an un-suspended gadget. This
+way, actions in dwc2_hsotg_suspend()/dwc2_hsotg_resume() becomes strictly
+symmetric.
+
+This is useful for the USB bus powered case, when the HOST suspends or
+resumes the bus: it allows to put the platform in low power state,
+without disconnection.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I527eb47b14cf08b3d69a0fb96ceb568790d0627d
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/430482
+Reviewed-by: Pankaj DEV <pankaj.dev@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/usb/dwc2/core.h   | 1 +
+ drivers/usb/dwc2/gadget.c | 8 ++++++--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+index 397e2cd9f3be..345926c22dbf 100644
+--- a/drivers/usb/dwc2/core.h
++++ b/drivers/usb/dwc2/core.h
+@@ -1074,6 +1074,7 @@ struct dwc2_hsotg {
+ 	unsigned int reset_phy_on_wake:1;
+ 	unsigned int need_phy_for_wake:1;
+ 	unsigned int phy_off_for_suspend:1;
++	bool gadget_off_for_suspend;
+ 	u16 frame_number;
+ 
+ 	struct phy *phy;
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index d128ec8da238..701c4167224e 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -5157,8 +5157,10 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
+ {
+ 	unsigned long flags;
+ 
+-	if (hsotg->lx_state != DWC2_L0)
++	if (hsotg->lx_state != DWC2_L0) {
++		hsotg->gadget_off_for_suspend = false;
+ 		return 0;
++	}
+ 
+ 	if (hsotg->driver) {
+ 		int ep;
+@@ -5181,6 +5183,8 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
+ 		}
+ 	}
+ 
++	hsotg->gadget_off_for_suspend = true;
++
+ 	return 0;
+ }
+ 
+@@ -5188,7 +5192,7 @@ int dwc2_hsotg_resume(struct dwc2_hsotg *hsotg)
+ {
+ 	unsigned long flags;
+ 
+-	if (hsotg->lx_state == DWC2_L2)
++	if (!hsotg->gadget_off_for_suspend)
+ 		return 0;
+ 
+ 	if (hsotg->driver) {
+-- 
+2.50.1
+

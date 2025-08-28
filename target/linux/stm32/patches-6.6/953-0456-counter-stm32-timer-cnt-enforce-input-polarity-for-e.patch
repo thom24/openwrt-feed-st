@@ -1,0 +1,41 @@
+From 11b5ceb323630a21bb7ae9b5f09e757656794a5b Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Thu, 24 Apr 2025 15:59:05 +0200
+Subject: [PATCH] counter: stm32-timer-cnt: enforce input polarity for encoder
+ mode
+
+Enforce TIx inputs polarity as non-inverted/rising edge, for encoder
+mode.
+Polarity could be set by using CC1P and CC2P bits, but the CC1NP
+and CC2NP must be kept low. Polarity isn't supported currently in the
+driver, so ensure all these bits are cleared.
+
+Fixes: ad29937e206f ("counter: Add STM32 Timer quadrature encoder")
+Change-Id: I91e0dae35c34f689a7b112ae5366e4849f139c26
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/453871
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/counter/stm32-timer-cnt.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/counter/stm32-timer-cnt.c b/drivers/counter/stm32-timer-cnt.c
+index 823062603f0e..8c86c84b7b81 100644
+--- a/drivers/counter/stm32-timer-cnt.c
++++ b/drivers/counter/stm32-timer-cnt.c
+@@ -146,6 +146,9 @@ static int stm32_count_function_write(struct counter_device *counter,
+ 
+ 	regmap_update_bits(priv->regmap, TIM_SMCR, TIM_SMCR_SMS, sms);
+ 
++	/* Configure polarity */
++	regmap_clear_bits(priv->regmap, TIM_CCER, TIM_CCER_MASK);
++
+ 	/* Make sure that registers are updated */
+ 	regmap_update_bits(priv->regmap, TIM_EGR, TIM_EGR_UG, TIM_EGR_UG);
+ 
+-- 
+2.50.1
+

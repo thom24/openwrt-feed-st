@@ -1,0 +1,42 @@
+From 55273980dc97f807a7fd0a4f45be6030854f0f72 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Wed, 18 Sep 2024 14:05:40 +0200
+Subject: [PATCH] i2c: stm32: fix the device used for the DMA map
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+If the DMA mapping was failing, it was producing a error log with the
+wrong device name:
+"stm32-dma3 40400000.dma-controller: rejecting DMA map of vmalloc memory"
+Therefore, this patch fixes this issue by replacing the dev with the I2C
+dev.
+
+Fixes: bb8822cbbc53 ("i2c: i2c-stm32: Add generic DMA API")
+Change-Id: I429a76c73d763c0646e4ce39e71a3a4716a17bfc
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/407940
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Domain-Review: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/i2c/busses/i2c-stm32.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/busses/i2c-stm32.c b/drivers/i2c/busses/i2c-stm32.c
+index 157c64e27d0b..5e0b31aed774 100644
+--- a/drivers/i2c/busses/i2c-stm32.c
++++ b/drivers/i2c/busses/i2c-stm32.c
+@@ -118,7 +118,7 @@ int stm32_i2c_prep_dma_xfer(struct device *dev, struct stm32_i2c_dma *dma,
+ 	dma->dma_len = len;
+ 	chan_dev = dma->chan_using->device->dev;
+ 
+-	dma->dma_buf = dma_map_single(chan_dev, buf, dma->dma_len,
++	dma->dma_buf = dma_map_single(dev, buf, dma->dma_len,
+ 				      dma->dma_data_dir);
+ 	if (dma_mapping_error(chan_dev, dma->dma_buf)) {
+ 		dev_err(dev, "DMA mapping failed\n");
+-- 
+2.50.1
+

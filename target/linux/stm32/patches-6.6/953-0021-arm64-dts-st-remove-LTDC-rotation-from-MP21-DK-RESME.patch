@@ -1,0 +1,42 @@
+From 8e557fe4d1252a584ee7a60bb108988839a1a363 Mon Sep 17 00:00:00 2001
+From: Theo GOUREAU <theo.goureau-ext@st.com>
+Date: Mon, 21 Oct 2024 11:08:51 +0200
+Subject: [PATCH] arm64: dts: st: remove LTDC rotation from MP21-DK RESMEM
+ configuration
+
+Remove LTDC rotation from MP21-DK RESMEM configuration.
+
+Change-Id: I372ad671bbcc5460945193652a27038a563a25d7
+Signed-off-by: Theo GOUREAU <theo.goureau-ext@st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/412815
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ .../boot/dts/st/stm32mp215f-dk-ca35tdcid-resmem.dtsi     | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk-ca35tdcid-resmem.dtsi b/arch/arm64/boot/dts/st/stm32mp215f-dk-ca35tdcid-resmem.dtsi
+index 372ee9961b92..41645838e931 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk-ca35tdcid-resmem.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk-ca35tdcid-resmem.dtsi
+@@ -134,13 +134,8 @@ op_tee: op-tee@82000000 {
+ 			no-map;
+ 		};
+ 
+-		ltdc_sec_layer: ltdc-sec-layer@fe800000 {
+-			reg = <0x0 0xfe800000 0x0 0x800000>;
+-			no-map;
+-		};
+-
+-		ltdc_sec_rotation: ltdc-sec-rotation@ff000000 {
+-			reg = <0x0 0xff000000 0x0 0x1000000>;
++		ltdc_sec_layer: ltdc-sec-layer@ff800000 {
++			reg = <0x0 0xff800000 0x0 0x800000>;
+ 			no-map;
+ 		};
+ 
+-- 
+2.50.1
+

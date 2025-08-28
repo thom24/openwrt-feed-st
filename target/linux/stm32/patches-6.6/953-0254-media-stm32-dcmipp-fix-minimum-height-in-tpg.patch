@@ -1,0 +1,35 @@
+From 5d04962f369e19e7636c647c8fb0a928675ae67a Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Mon, 10 Feb 2025 18:33:41 +0100
+Subject: [PATCH] media: stm32: dcmipp: fix minimum height in tpg
+
+Correct the minimum possible height of the TPG to 2 lines.
+
+Change-Id: I6e0ffcebded6240e59de476e090c1829d5398118
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/436017
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Hugues FRUCHET <hugues.fruchet@st.com>
+Tested-by: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-tpg.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-tpg.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-tpg.c
+index 4526f0398ef8..96d3dad5ade8 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-tpg.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-tpg.c
+@@ -51,7 +51,7 @@
+ 
+ #define DCMIPP_TPG_MIN_WIDTH	16
+ #define DCMIPP_TPG_MAX_WIDTH	16383
+-#define DCMIPP_TPG_MIN_HEIGHT	16
++#define DCMIPP_TPG_MIN_HEIGHT	2
+ #define DCMIPP_TPG_MAX_HEIGHT	16383
+ 
+ struct dcmipp_tpg_pix_map {
+-- 
+2.50.1
+

@@ -1,0 +1,40 @@
+From 259e375e7cd1d55acf7065cc6ef8e4dc44d8b5fc Mon Sep 17 00:00:00 2001
+From: Valentin Caron <valentin.caron@foss.st.com>
+Date: Fri, 10 Jan 2025 16:23:48 +0100
+Subject: [PATCH] clocksource: stm32-lptimer: decrease rating to 80
+
+Reduce STM32 low power timer rating from 1000 to 80, otherwise it take
+the place of ARM arch timer as main timer on mono CPU systems.
+
+We choose 80 to get this ranking of timers:
+1: ARM arch timer (rating 400)
+2: STM32 timer (rating 250-100)
+3: STM32 lptimer (rating 80)
+
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: Ie51cd0253c99179d17f30047fe56b7ea1ef282fb
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/428201
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/clocksource/timer-stm32-lp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/clocksource/timer-stm32-lp.c b/drivers/clocksource/timer-stm32-lp.c
+index 8061ef4363e0..2664d171f555 100644
+--- a/drivers/clocksource/timer-stm32-lp.c
++++ b/drivers/clocksource/timer-stm32-lp.c
+@@ -16,7 +16,7 @@
+ #include <linux/pm_wakeirq.h>
+ 
+ #define CFGR_PSC_OFFSET		9
+-#define STM32_LP_RATING		1000
++#define STM32_LP_RATING		80
+ #define STM32_TARGET_CLKRATE	(32000 * HZ)
+ #define STM32_LP_MAX_PSC	7
+ 
+-- 
+2.50.1
+

@@ -1,0 +1,31 @@
+From 19055995c961bbc07bbbfa758e643262bd113f2a Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Fri, 20 Sep 2024 17:06:32 +0200
+Subject: [PATCH] ARM: dts: stm32: fix support of continuous display on
+ stm32mp135f-dk
+
+Missing default-on property on panel rgb.
+
+Change-Id: Iff81d4c9e75016e3f4df502f4936660b8686b087
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/406519
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dk.dts | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+index 511692581eb0..237139234da1 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+@@ -113,6 +113,7 @@ panel_rgb: panel-rgb {
+ 		backlight = <&panel_backlight>;
+ 		power-supply = <&scmi_v3v3_sw>;
+ 		data-mapping = "bgr666";
++		default-on;
+ 		status = "okay";
+ 
+ 		width-mm = <105>;
+-- 
+2.50.1
+

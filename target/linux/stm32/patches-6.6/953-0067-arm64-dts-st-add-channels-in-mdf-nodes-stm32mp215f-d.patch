@@ -1,0 +1,63 @@
+From 597c362580f168800385cef6ca7bfa93d1162b73 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Thu, 14 Nov 2024 15:14:11 +0100
+Subject: [PATCH] arm64: dts: st: add channels in mdf nodes stm32mp215f-dk
+
+Add channels child nodes in MDF filter nodes on STM32MP215F DK.
+
+Change-Id: I9cb3206b14e82e45f86470ea7c6b48c3e6763a10
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/420093
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index eb24058f4c71..da8ff267ba18 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -410,11 +410,18 @@ sitf3: sitf@200 {
+ 	};
+ 
+ 	filter0: filter@84  {
++		#address-cells = <1>;
++		#size-cells = <0>;
+ 		st,cic-mode = <4>;
+ 		st,sitf = <&sitf3 0>;
+ 		st,hpf-filter-cutoff-bp = <625>;
+ 		status = "okay";
+ 
++		channel@0 {
++			reg = <0>;
++			label = "dmic_u26";
++		};
++
+ 		asoc_pdm0: mdf-dai {
+ 			compatible = "st,stm32mp25-mdf-dai";
+ 			#sound-dai-cells = <0>;
+@@ -430,11 +437,18 @@ mdf_endpoint0: endpoint {
+ 	};
+ 
+ 	filter1: filter@104  {
++		#address-cells = <1>;
++		#size-cells = <0>;
+ 		st,cic-mode = <4>;
+ 		st,sitf = <&sitf3 1>;
+ 		st,hpf-filter-cutoff-bp = <625>;
+ 		status = "okay";
+ 
++		channel@1 {
++			reg = <1>;
++			label = "dmic_u27";
++		};
++
+ 		asoc_pdm1: mdf-dai {
+ 			compatible = "st,stm32mp25-mdf-dai";
+ 			#sound-dai-cells = <0>;
+-- 
+2.50.1
+

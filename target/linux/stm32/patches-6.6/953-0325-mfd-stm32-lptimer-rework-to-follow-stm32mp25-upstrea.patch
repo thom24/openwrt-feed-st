@@ -1,0 +1,179 @@
+From 5e58156f2348e7b15bb7bfd6ab386a9ffa2cde7b Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Mon, 17 Mar 2025 11:48:44 +0100
+Subject: [PATCH] mfd: stm32-lptimer: rework to follow stm32mp25 upstream
+
+Rework to follow changes done upstream on stm32mp25:
+- rely on fallback compatible as no specific .data is associated to the
+  driver. Compatibility is added by reading hardware configuration
+  registers.
+- read version register, to be used by clockevent child driver
+- rename register/bits definitions
+- Add DIEROK, ARROK status flags, and their clear flags.
+- remove version debug log, not useful now the driver has been developed
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I97f1641d632556e1d4ef601069da9ff40cca586e
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/445392
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/mfd/stm32-lptimer.c       | 30 +++++++++++----------------
+ include/linux/mfd/stm32-lptimer.h | 34 +++++++++++++++++++++----------
+ 2 files changed, 35 insertions(+), 29 deletions(-)
+
+diff --git a/drivers/mfd/stm32-lptimer.c b/drivers/mfd/stm32-lptimer.c
+index 9fc94122ffb2..eb3c1517603d 100644
+--- a/drivers/mfd/stm32-lptimer.c
++++ b/drivers/mfd/stm32-lptimer.c
+@@ -51,36 +51,32 @@ static int stm32_lptimer_detect_encoder(struct stm32_lptimer *ddata)
+ 	return 0;
+ }
+ 
+-static int stm32_lptimer_detect_hwcfgr(struct device *dev, struct stm32_lptimer *ddata)
++static int stm32_lptimer_detect_hwcfgr(struct stm32_lptimer *ddata)
+ {
+ 	u32 val;
+ 	int ret;
+ 
+-	/* Try to guess parameters from HWCFGR: e.g. encodrer mode (STM32MP15) */
+-	ret = regmap_read(ddata->regmap, STM32MP15_LPTIM_HWCFGR, &val);
++	ret = regmap_read(ddata->regmap, STM32_LPTIM_VERR, &ddata->version);
+ 	if (ret)
+ 		return ret;
+ 
+-	/* Fall back to legacy init if HWCFGR isn't present */
+-	if (!val)
+-		return stm32_lptimer_detect_encoder(ddata);
+-
+-	ddata->has_encoder = FIELD_GET(STM32MP15_LPTIM_HWCFGR_ENCODER, val);
+-
+-	ret = regmap_read(ddata->regmap, STM32MP15_LPTIM_VERR, &val);
++	/* Try to guess parameters from HWCFGR: e.g. encoder mode (STM32MP15) */
++	ret = regmap_read(ddata->regmap, STM32_LPTIM_HWCFGR1, &val);
+ 	if (ret)
+ 		return ret;
+ 
+-	dev_dbg(dev, "LPTIM version: %lu.%lu\n",
+-		FIELD_GET(STM32MP15_MAJREV_MASK, val),
+-		FIELD_GET(STM32MP15_MINREV_MASK, val));
++	/* Fallback to legacy init if HWCFGR isn't present */
++	if (!val)
++		return stm32_lptimer_detect_encoder(ddata);
++
++	ddata->has_encoder = FIELD_GET(STM32_LPTIM_HWCFGR1_ENCODER, val);
+ 
+-	ret = regmap_read(ddata->regmap, STM32MP25_LPTIM_HWCFGR2, &val);
++	ret = regmap_read(ddata->regmap, STM32_LPTIM_HWCFGR2, &val);
+ 	if (ret)
+ 		return ret;
+ 
+ 	/* Number of capture/compare channels */
+-	ddata->num_cc_chans = FIELD_GET(STM32MP25_LPTIM_HWCFGR2_CHAN_NUM, val);
++	ddata->num_cc_chans = FIELD_GET(STM32_LPTIM_HWCFGR2_CHAN_NUM, val);
+ 
+ 	return 0;
+ }
+@@ -109,7 +105,7 @@ static int stm32_lptimer_probe(struct platform_device *pdev)
+ 	if (IS_ERR(ddata->clk))
+ 		return PTR_ERR(ddata->clk);
+ 
+-	ret = stm32_lptimer_detect_hwcfgr(dev, ddata);
++	ret = stm32_lptimer_detect_hwcfgr(ddata);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -124,8 +120,6 @@ static int stm32_lptimer_probe(struct platform_device *pdev)
+ 
+ static const struct of_device_id stm32_lptimer_of_match[] = {
+ 	{ .compatible = "st,stm32-lptimer", },
+-	{ .compatible = "st,stm32mp21-lptimer", },
+-	{ .compatible = "st,stm32mp25-lptimer", },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, stm32_lptimer_of_match);
+diff --git a/include/linux/mfd/stm32-lptimer.h b/include/linux/mfd/stm32-lptimer.h
+index a73dff0cb9ef..1a6927605c55 100644
+--- a/include/linux/mfd/stm32-lptimer.h
++++ b/include/linux/mfd/stm32-lptimer.h
+@@ -17,23 +17,27 @@
+ #define STM32_LPTIM_IER		0x08	/* Interrupt Enable Reg      */
+ #define STM32_LPTIM_CFGR	0x0C	/* Configuration Reg         */
+ #define STM32_LPTIM_CR		0x10	/* Control Reg               */
+-#define STM32_LPTIM_CMP		0x14	/* Compare Reg (CCR1 on mp25)*/
++#define STM32_LPTIM_CMP		0x14	/* Compare Reg (MP25 CCR1)   */
+ #define STM32_LPTIM_ARR		0x18	/* Autoreload Reg            */
+ #define STM32_LPTIM_CNT		0x1C	/* Counter Reg               */
+ #define STM32MP25_LPTIM_CCMR1	0x2C	/* Capture/Compare Mode Reg  */
+ #define STM32MP25_LPTIM_CCR2	0x34	/* Compare Reg2              */
++#define STM32_LPTIM_CCMR1	0x2C	/* Capture/Compare Mode MP25 */
++#define STM32_LPTIM_CCR2	0x34	/* Compare Reg2 MP25         */
+ 
+-#define STM32MP25_LPTIM_HWCFGR2	0x3EC	/* Hardware configuration register 2 */
+-#define STM32MP15_LPTIM_HWCFGR	0x3F0	/* Hardware configuration register 1 */
+-#define STM32MP15_LPTIM_VERR	0x3F4	/* Version identification register   */
++#define STM32_LPTIM_HWCFGR2	0x3EC	/* Hardware configuration register 2 - MP25 */
++#define STM32_LPTIM_HWCFGR1	0x3F0	/* Hardware configuration register 1 - MP15 */
++#define STM32_LPTIM_VERR	0x3F4	/* Version identification register - MP15 */
+ 
+ /* STM32_LPTIM_ISR - bit fields */
++#define STM32_LPTIM_DIEROK_ARROK	(BIT(24) | BIT(4)) /* MP25 */
+ #define STM32_LPTIM_CMP2_ARROK		(BIT(19) | BIT(4))
+ #define STM32_LPTIM_CMPOK_ARROK		GENMASK(4, 3)
+ #define STM32_LPTIM_ARROK		BIT(4)
+ #define STM32_LPTIM_CMPOK		BIT(3)
+ 
+ /* STM32_LPTIM_ICR - bit fields */
++#define STM32_LPTIM_DIEROKCF_ARROKCF	(BIT(24) | BIT(4)) /* MP25 */
+ #define STM32_LPTIM_CMP2OKCF_ARROKCF	(BIT(19) | BIT(4))
+ #define STM32_LPTIM_CMPOKCF_ARROKCF	GENMASK(4, 3)
+ #define STM32_LPTIM_ARRMCF		BIT(1)
+@@ -68,16 +72,22 @@
+ #define STM32MP25_LPTIM_CC1P	GENMASK(3, 2)
+ #define STM32MP25_LPTIM_CC1E	BIT(1)
+ #define STM32MP25_LPTIM_CC1SEL	BIT(0)
++/* STM32_LPTIM_CCMR1 */
++#define STM32_LPTIM_CC2P	GENMASK(19, 18)
++#define STM32_LPTIM_CC2E	BIT(17)
++#define STM32_LPTIM_CC2SEL	BIT(16)
++#define STM32_LPTIM_CC1P	GENMASK(3, 2)
++#define STM32_LPTIM_CC1E	BIT(1)
++#define STM32_LPTIM_CC1SEL	BIT(0)
+ 
+-/* STM32MP15_LPTIM_HWCFGR */
+-#define STM32MP15_LPTIM_HWCFGR_ENCODER	BIT(16)
++/* STM32_LPTIM_HWCFGR1 */
++#define STM32_LPTIM_HWCFGR1_ENCODER	BIT(16)
+ 
+-/* STM32MP25_LPTIM_HWCFGR2 */
+-#define STM32MP25_LPTIM_HWCFGR2_CHAN_NUM	GENMASK(3, 0)
++/* STM32_LPTIM_HWCFGR2 */
++#define STM32_LPTIM_HWCFGR2_CHAN_NUM	GENMASK(3, 0)
+ 
+-/* STM32MP15_LPTIM_VERR */
+-#define STM32MP15_MINREV_MASK		GENMASK(3, 0)
+-#define STM32MP15_MAJREV_MASK		GENMASK(7, 4)
++/* STM32_LPTIM_VERR */
++#define STM32_LPTIM_VERR_23	0x23	/* STM32MP25 */
+ 
+ /**
+  * struct stm32_lptimer - STM32 Low-Power Timer data assigned by parent device
+@@ -85,12 +95,14 @@
+  * @regmap: register map reference for this instance
+  * @has_encoder: indicates this Low-Power Timer supports encoder mode
+  * @num_cc_chans: indicates the number of capture/compare channels
++ * @version: indicates the major and minor revision of the controller
+  */
+ struct stm32_lptimer {
+ 	struct clk *clk;
+ 	struct regmap *regmap;
+ 	bool has_encoder;
+ 	unsigned int num_cc_chans;
++	u32 version;
+ };
+ 
+ #endif
+-- 
+2.50.1
+

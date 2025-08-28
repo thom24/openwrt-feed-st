@@ -1,0 +1,72 @@
+From 08e336def7da2368b548f7eedfcf48ec902e327b Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Thu, 19 Sep 2024 17:21:50 +0200
+Subject: [PATCH] dt-bindings: display: himax-hx8394: Add Rocktech
+ RK055MHD042A0 MIPI Display panel
+
+Add compatible string for the Rocktech's RK055MHD042A0 MIPI Display
+panel.This panel uses a Himax HX8394 display controller.
+
+Change-Id: Ia03b3e60bdf62180db2eb9edda68e25f14cf7188
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/418868
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ .../bindings/display/panel/himax,hx8394.yaml  | 20 ++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml b/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
+index ffb35288ffbb..fd14fce107d2 100644
+--- a/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
++++ b/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
+@@ -15,17 +15,16 @@ description:
+   such as the HannStar HSD060BHW4 720x1440 TFT LCD panel connected with
+   a MIPI-DSI video interface.
+ 
+-allOf:
+-  - $ref: panel-common.yaml#
+-
+ properties:
+   compatible:
+     items:
+       - enum:
+           - hannstar,hsd060bhw4
++          - rocktech,rk055mhd042a0
+       - const: himax,hx8394
+ 
+-  reg: true
++  reg:
++    maxItems: 1
+ 
+   reset-gpios: true
+ 
+@@ -42,7 +41,6 @@ properties:
+ required:
+   - compatible
+   - reg
+-  - reset-gpios
+   - backlight
+   - port
+   - vcc-supply
+@@ -50,6 +48,18 @@ required:
+ 
+ additionalProperties: false
+ 
++allOf:
++  - $ref: panel-common.yaml#
++  - if:
++      not:
++        properties:
++          compatible:
++            enum:
++              - rocktech,rk055mhd042a0
++    then:
++      required:
++        - reset-gpios
++
+ examples:
+   - |
+     #include <dt-bindings/gpio/gpio.h>
+-- 
+2.50.1
+

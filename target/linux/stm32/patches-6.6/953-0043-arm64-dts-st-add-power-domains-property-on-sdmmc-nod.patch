@@ -1,0 +1,48 @@
+From 154672b25202b0ceb75cabcda05a46546b4052ea Mon Sep 17 00:00:00 2001
+From: Christophe Kerello <christophe.kerello@foss.st.com>
+Date: Fri, 8 Nov 2024 15:06:30 +0100
+Subject: [PATCH] arm64: dts: st: add power-domains property on sdmmc nodes
+
+Add power-domains property on sdmmc nodes.
+
+Change-Id: I981de541fd67900013c7a6146be19f7228aebc3c
+Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/417408
+Tested-by: Francois CHOLEAU <francois.choleau@st.com>
+Domain-Review: Francois CHOLEAU <francois.choleau@st.com>
+Reviewed-by: Francois CHOLEAU <francois.choleau@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 84925f2964e8..901405bc4634 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -1770,6 +1770,7 @@ sdmmc1: mmc@48220000 {
+ 				max-frequency = <120000000>;
+ 				access-controllers = <&rifsc 76>;
+ 				st,syscfg-arcr = <&syscfg 0x40c 0x1>;
++				power-domains = <&CLUSTER_PD>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -1786,6 +1787,7 @@ sdmmc2: mmc@48230000 {
+ 				max-frequency = <120000000>;
+ 				access-controllers = <&rifsc 77>;
+ 				st,syscfg-arcr = <&syscfg 0x80c 0x1>;
++				power-domains = <&CLUSTER_PD>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -1802,6 +1804,7 @@ sdmmc3: mmc@48240000 {
+ 				max-frequency = <120000000>;
+ 				access-controllers = <&rifsc 78>;
+ 				st,syscfg-arcr = <&syscfg 0xc0c 0x1>;
++				power-domains = <&CLUSTER_PD>;
+ 				status = "disabled";
+ 			};
+ 
+-- 
+2.50.1
+

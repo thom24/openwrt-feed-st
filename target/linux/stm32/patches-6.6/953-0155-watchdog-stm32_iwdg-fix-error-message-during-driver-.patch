@@ -1,0 +1,46 @@
+From 1f5b929070158b4e7f05d24a4dffb798b310f94c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Wed, 11 Dec 2024 11:03:32 +0100
+Subject: [PATCH] watchdog: stm32_iwdg: fix error message during driver probe
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The commit 3ab1663af6c1 ("watchdog: stm32_iwdg: Add pretimeout support")
+introduces the support for the pre-timeout interrupt.
+
+The support for this interrupt is optional but the driver uses the
+platform_get_irq() which produces an error message during the driver
+probe if we don't have any `interrupts` property in the DT.
+
+Use the platform_get_irq_optional() API to get rid of the error message
+as this property is optional.
+
+Fixes: 3ab1663af6c1 ("watchdog: stm32_iwdg: Add pretimeout support")
+Change-Id: Ibdefd05801f6bfc18a57abe65f194b58509060b2
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Reviewed-by: Marek Vasut <marex@denx.de>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/424149
+Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+Domain-Review: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/watchdog/stm32_iwdg.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/watchdog/stm32_iwdg.c b/drivers/watchdog/stm32_iwdg.c
+index d7dfab2d3c9f..d6a7b74dbfb9 100644
+--- a/drivers/watchdog/stm32_iwdg.c
++++ b/drivers/watchdog/stm32_iwdg.c
+@@ -320,7 +320,7 @@ static int stm32_iwdg_irq_init(struct platform_device *pdev,
+ 	if (!wdt->data->has_early_wakeup)
+ 		return 0;
+ 
+-	irq = platform_get_irq(pdev, 0);
++	irq = platform_get_irq_optional(pdev, 0);
+ 	if (irq <= 0)
+ 		return 0;
+ 
+-- 
+2.50.1
+

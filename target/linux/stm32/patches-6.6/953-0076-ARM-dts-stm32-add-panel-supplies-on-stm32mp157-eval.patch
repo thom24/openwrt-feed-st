@@ -1,0 +1,47 @@
+From 1be4704e9e7e540148a014d381a10267988cb73c Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Fri, 15 Nov 2024 11:28:47 +0100
+Subject: [PATCH] ARM: dts: stm32: add panel supplies on stm32mp157 eval
+
+The panel Rocktech RK055MHD042A0 (driver himax,hx8394) need
+at least 2 supplies: iovcc & vcc. DSI panel node is shared
+betwwen the panel RM68200 & panel HX8394. Panel detection is done
+thanks to uboot & these panels needs several power supplies.
+
+Change-Id: Id9275957ec56fbc3dd0ef4dd72dcc4db033c2119
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/418876
+---
+ arch/arm/boot/dts/st/stm32mp157c-ev1.dts | 2 ++
+ arch/arm/boot/dts/st/stm32mp157f-ev1.dts | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
+index 0fb210e9a795..dcf64bce048b 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
+@@ -329,6 +329,8 @@ panel_dsi: panel@0 {
+ 		reset-gpios = <&gpiof 15 GPIO_ACTIVE_LOW>;
+ 		backlight = <&panel_backlight>;
+ 		power-supply = <&v3v3>;
++		vcc-supply = <&v3v3>;
++		iovcc-supply = <&v3v3>;
+ 		default-on;
+ 		status = "okay";
+ 
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+index 69a8b04cda74..6677d518cde3 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+@@ -330,6 +330,8 @@ panel_dsi: panel@0 {
+ 		reset-gpios = <&gpiof 15 GPIO_ACTIVE_LOW>;
+ 		backlight = <&panel_backlight>;
+ 		power-supply = <&v3v3>;
++		vcc-supply = <&v3v3>;
++		iovcc-supply = <&v3v3>;
+ 		default-on;
+ 		status = "okay";
+ 
+-- 
+2.50.1
+

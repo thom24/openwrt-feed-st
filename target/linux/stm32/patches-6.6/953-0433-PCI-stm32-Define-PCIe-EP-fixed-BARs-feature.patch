@@ -1,0 +1,43 @@
+From 5686515f4621557b9d4cc22417c3fa70f1e0231f Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Tue, 6 May 2025 12:04:19 +0200
+Subject: [PATCH] PCI: stm32: Define PCIe EP fixed BARs feature
+
+Align BAR in the features description used by the epf test driver. The
+current kernel test framework does not support BAR settings thru dbi2.
+Thus describe them as fixed.
+
+Fixed BARs should be removed when rebasing to newer kernel supporting
+re-programmable BARs.
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: Ic701d8f01992e9b98d616e0f869daf6f5be29480
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/456048
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/pci/controller/dwc/pcie-stm32-ep.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/pci/controller/dwc/pcie-stm32-ep.c b/drivers/pci/controller/dwc/pcie-stm32-ep.c
+index 4e2870b89046..ff74de50f767 100644
+--- a/drivers/pci/controller/dwc/pcie-stm32-ep.c
++++ b/drivers/pci/controller/dwc/pcie-stm32-ep.c
+@@ -148,6 +148,12 @@ static const struct pci_epc_features stm32_pcie_epc_features = {
+ 	.force_core_init = true,
+ 	.core_init_notifier = true,
+ 	.msi_capable = true,
++	.msix_capable = false,
++	.bar_fixed_size[0] = SZ_1M,
++	.bar_fixed_size[1] = SZ_64K,
++	.bar_fixed_size[2] = SZ_1M,
++	.bar_fixed_size[3] = SZ_1M,
++	.reserved_bar = 1 << BAR_4 | 1 << BAR_5,
+ 	.align = SZ_64K,
+ };
+ 
+-- 
+2.50.1
+

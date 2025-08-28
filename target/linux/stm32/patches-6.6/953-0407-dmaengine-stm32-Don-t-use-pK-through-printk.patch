@@ -1,0 +1,173 @@
+From ed70fa44d64fd9abf647dbe5c81a0fecce21b043 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Date: Mon, 7 Apr 2025 10:26:00 +0200
+Subject: [PATCH] dmaengine: stm32: Don't use %pK through printk
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+In the past %pK was preferable to %p as it would not leak raw pointer
+values into the kernel log.
+Since commit ad67b74d2469 ("printk: hash addresses printed with %p")
+the regular %p has been improved to avoid this issue.
+Furthermore, restricted pointers ("%pK") were never meant to be used
+through printk(). They can still unintentionally leak raw pointers or
+acquire sleeping looks in atomic contexts.
+
+Switch to the regular pointer formatting which is safer and
+easier to reason about.
+There are still a few users of %pK left, but these use it through seq_file,
+for which its usage is safe.
+
+Change-Id: If36312a88b4065d96e77f078dff130786a1428a0
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+Reviewed-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/451252
+---
+ drivers/dma/stm32/stm32-dma.c  | 10 +++++-----
+ drivers/dma/stm32/stm32-dma3.c | 10 +++++-----
+ drivers/dma/stm32/stm32-mdma.c |  8 ++++----
+ 3 files changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/dma/stm32/stm32-dma.c b/drivers/dma/stm32/stm32-dma.c
+index 75c45179b606..1cd1ffab3a8c 100644
+--- a/drivers/dma/stm32/stm32-dma.c
++++ b/drivers/dma/stm32/stm32-dma.c
+@@ -614,7 +614,7 @@ static void stm32_dma_start_transfer(struct stm32_dma_chan *chan)
+ 	reg->dma_scr |= STM32_DMA_SCR_EN;
+ 	stm32_dma_write(dmadev, STM32_DMA_SCR(chan->id), reg->dma_scr);
+ 
+-	dev_dbg(chan2dev(chan), "vchan %pK: started\n", &chan->vchan);
++	dev_dbg(chan2dev(chan), "vchan %p: started\n", &chan->vchan);
+ }
+ 
+ static void stm32_dma_configure_next_sg(struct stm32_dma_chan *chan)
+@@ -677,7 +677,7 @@ static void stm32_dma_handle_chan_paused(struct stm32_dma_chan *chan)
+ 
+ 	chan->status = DMA_PAUSED;
+ 
+-	dev_dbg(chan2dev(chan), "vchan %pK: paused\n", &chan->vchan);
++	dev_dbg(chan2dev(chan), "vchan %p: paused\n", &chan->vchan);
+ }
+ 
+ static void stm32_dma_post_resume_reconfigure(struct stm32_dma_chan *chan)
+@@ -729,7 +729,7 @@ static void stm32_dma_post_resume_reconfigure(struct stm32_dma_chan *chan)
+ 	dma_scr |= STM32_DMA_SCR_EN;
+ 	stm32_dma_write(dmadev, STM32_DMA_SCR(chan->id), dma_scr);
+ 
+-	dev_dbg(chan2dev(chan), "vchan %pK: reconfigured after pause/resume\n", &chan->vchan);
++	dev_dbg(chan2dev(chan), "vchan %p: reconfigured after pause/resume\n", &chan->vchan);
+ }
+ 
+ static void stm32_dma_handle_chan_done(struct stm32_dma_chan *chan, u32 scr)
+@@ -821,7 +821,7 @@ static void stm32_dma_issue_pending(struct dma_chan *c)
+ 
+ 	spin_lock_irqsave(&chan->vchan.lock, flags);
+ 	if (vchan_issue_pending(&chan->vchan) && !chan->desc && !chan->busy) {
+-		dev_dbg(chan2dev(chan), "vchan %pK: issued\n", &chan->vchan);
++		dev_dbg(chan2dev(chan), "vchan %p: issued\n", &chan->vchan);
+ 		stm32_dma_start_transfer(chan);
+ 
+ 	}
+@@ -923,7 +923,7 @@ static int stm32_dma_resume(struct dma_chan *c)
+ 
+ 	spin_unlock_irqrestore(&chan->vchan.lock, flags);
+ 
+-	dev_dbg(chan2dev(chan), "vchan %pK: resumed\n", &chan->vchan);
++	dev_dbg(chan2dev(chan), "vchan %p: resumed\n", &chan->vchan);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
+index e5a7f8378b78..eaf5d9f4d54f 100644
+--- a/drivers/dma/stm32/stm32-dma3.c
++++ b/drivers/dma/stm32/stm32-dma3.c
+@@ -1108,7 +1108,7 @@ static void stm32_dma3_chan_start(struct stm32_dma3_chan *chan)
+ 
+ 	chan->dma_status = DMA_IN_PROGRESS;
+ 
+-	dev_dbg(chan2dev(chan), "vchan %pK: started\n", &chan->vchan);
++	dev_dbg(chan2dev(chan), "vchan %p: started\n", &chan->vchan);
+ }
+ 
+ static int stm32_dma3_chan_suspend(struct stm32_dma3_chan *chan, bool susp)
+@@ -1852,7 +1852,7 @@ static int stm32_dma3_pause(struct dma_chan *c)
+ 
+ 	chan->dma_status = DMA_PAUSED;
+ 
+-	dev_dbg(chan2dev(chan), "vchan %pK: paused\n", &chan->vchan);
++	dev_dbg(chan2dev(chan), "vchan %p: paused\n", &chan->vchan);
+ 
+ 	return 0;
+ }
+@@ -1865,7 +1865,7 @@ static int stm32_dma3_resume(struct dma_chan *c)
+ 
+ 	chan->dma_status = DMA_IN_PROGRESS;
+ 
+-	dev_dbg(chan2dev(chan), "vchan %pK: resumed\n", &chan->vchan);
++	dev_dbg(chan2dev(chan), "vchan %p: resumed\n", &chan->vchan);
+ 
+ 	return 0;
+ }
+@@ -1890,7 +1890,7 @@ static int stm32_dma3_terminate_all(struct dma_chan *c)
+ 	spin_unlock_irqrestore(&chan->vchan.lock, flags);
+ 	vchan_dma_desc_free_list(&chan->vchan, &head);
+ 
+-	dev_dbg(chan2dev(chan), "vchan %pK: terminated\n", &chan->vchan);
++	dev_dbg(chan2dev(chan), "vchan %p: terminated\n", &chan->vchan);
+ 
+ 	return 0;
+ }
+@@ -1943,7 +1943,7 @@ static void stm32_dma3_issue_pending(struct dma_chan *c)
+ 	spin_lock_irqsave(&chan->vchan.lock, flags);
+ 
+ 	if (vchan_issue_pending(&chan->vchan) && !chan->swdesc) {
+-		dev_dbg(chan2dev(chan), "vchan %pK: issued\n", &chan->vchan);
++		dev_dbg(chan2dev(chan), "vchan %p: issued\n", &chan->vchan);
+ 		stm32_dma3_chan_start(chan);
+ 	}
+ 
+diff --git a/drivers/dma/stm32/stm32-mdma.c b/drivers/dma/stm32/stm32-mdma.c
+index 1f71622524a2..23525b583f40 100644
+--- a/drivers/dma/stm32/stm32-mdma.c
++++ b/drivers/dma/stm32/stm32-mdma.c
+@@ -1188,7 +1188,7 @@ static void stm32_mdma_start_transfer(struct stm32_mdma_chan *chan)
+ 
+ 	chan->busy = true;
+ 
+-	dev_dbg(chan2dev(chan), "vchan %pK: started\n", &chan->vchan);
++	dev_dbg(chan2dev(chan), "vchan %p: started\n", &chan->vchan);
+ }
+ 
+ static void stm32_mdma_issue_pending(struct dma_chan *c)
+@@ -1201,7 +1201,7 @@ static void stm32_mdma_issue_pending(struct dma_chan *c)
+ 	if (!vchan_issue_pending(&chan->vchan))
+ 		goto end;
+ 
+-	dev_dbg(chan2dev(chan), "vchan %pK: issued\n", &chan->vchan);
++	dev_dbg(chan2dev(chan), "vchan %p: issued\n", &chan->vchan);
+ 
+ 	if (!chan->desc && !chan->busy)
+ 		stm32_mdma_start_transfer(chan);
+@@ -1221,7 +1221,7 @@ static int stm32_mdma_pause(struct dma_chan *c)
+ 	spin_unlock_irqrestore(&chan->vchan.lock, flags);
+ 
+ 	if (!ret)
+-		dev_dbg(chan2dev(chan), "vchan %pK: pause\n", &chan->vchan);
++		dev_dbg(chan2dev(chan), "vchan %p: pause\n", &chan->vchan);
+ 
+ 	return ret;
+ }
+@@ -1262,7 +1262,7 @@ static int stm32_mdma_resume(struct dma_chan *c)
+ 
+ 	spin_unlock_irqrestore(&chan->vchan.lock, flags);
+ 
+-	dev_dbg(chan2dev(chan), "vchan %pK: resume\n", &chan->vchan);
++	dev_dbg(chan2dev(chan), "vchan %p: resume\n", &chan->vchan);
+ 
+ 	return 0;
+ }
+-- 
+2.50.1
+

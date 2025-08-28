@@ -1,0 +1,34 @@
+From 89a0520fec63dcbb8b9b56235d287df6458c9b8c Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Mon, 6 Jan 2025 11:46:58 +0100
+Subject: [PATCH] arm64: dts: st: fix hash1 node for stm32mp21
+
+Change Hash1 IRQ to its actual value 132.
+
+Change-Id: I2ede11b994177a76c85bdd6566068b06c5de7421
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/427036
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index a279be0f8ad0..ecafeb9cff73 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -1587,7 +1587,7 @@ channel@17 {
+ 			hash1: hash@42030400 {
+ 				compatible = "st,stm32mp13-hash";
+ 				reg = <0x42030400 0x0 0x400>;
+-				interrupts = <GIC_SPI 145 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts = <GIC_SPI 132 IRQ_TYPE_LEVEL_HIGH>;
+ 				clocks = <&rcc CK_BUS_HASH1>;
+ 				resets = <&rcc HASH1_R>;
+ 				dmas = <&hpdma 6 0x40 0x3021>;
+-- 
+2.50.1
+

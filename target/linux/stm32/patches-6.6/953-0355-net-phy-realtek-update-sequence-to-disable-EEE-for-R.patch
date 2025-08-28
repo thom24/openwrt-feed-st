@@ -1,0 +1,50 @@
+From d0b3f9979ae599f8e8884ff266f5d0e2842dc7e1 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Fri, 28 Feb 2025 14:23:12 +0100
+Subject: [PATCH] net: phy: realtek: update sequence to disable EEE for
+ RTL8211F
+
+Handle MDIO bus lock in the EEE disabling sequence.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: Ie7b7268628e58a7d719d348b7881923932d73acc
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/440791
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Christophe ROULLIER <christophe.roullier@foss.st.com>
+Tested-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+---
+ drivers/net/phy/realtek.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/net/phy/realtek.c b/drivers/net/phy/realtek.c
+index 271cc3174bfe..8a7820c6df58 100644
+--- a/drivers/net/phy/realtek.c
++++ b/drivers/net/phy/realtek.c
+@@ -419,13 +419,15 @@ static int rtl8211f_config_init(struct phy_device *phydev)
+ 	}
+ 
+ 	if (of_property_read_bool(dev->of_node, "realtek,eee-disable")) {
++		phy_lock_mdio_bus(phydev);
+ 		rtl821x_write_page(phydev, 0xa4b);
+-		phy_write(phydev, 0x11, 0x1110);
++		__phy_write(phydev, 0x11, 0x1110);
+ 		rtl821x_write_page(phydev, 0);
+-		phy_write(phydev, 0xd,7);
+-		phy_write(phydev, 0xe,0x3c);
+-		phy_write(phydev, 0xd,0x4007);
+-		phy_write(phydev, 0xe,0x0);
++		__phy_write(phydev, 0xd, 7);
++		__phy_write(phydev, 0xe, 0x3c);
++		__phy_write(phydev, 0xd, 0x4007);
++		__phy_write(phydev, 0xe, 0x0);
++		phy_unlock_mdio_bus(phydev);
+ 	}
+ 
+ 	if (priv->has_phycr2) {
+-- 
+2.50.1
+

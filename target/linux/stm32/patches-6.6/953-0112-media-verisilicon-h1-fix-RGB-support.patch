@@ -1,0 +1,35 @@
+From 6e4a9774053ceacbd07cfd9118577bcd7c6c67d9 Mon Sep 17 00:00:00 2001
+From: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Date: Wed, 30 Oct 2024 10:52:56 +0100
+Subject: [PATCH] media: verisilicon: h1: fix RGB support
+
+Fixes artefacts when encoding in RGB 32 bits.
+
+Change-Id: I15b8136ab8997e78a03150e610a1025b58dad38d
+Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/415152
+Domain-Review: Hugues FRUCHET <hugues.fruchet@st.com>
+Tested-by: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+---
+ drivers/media/platform/verisilicon/hantro_h1.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/verisilicon/hantro_h1.c b/drivers/media/platform/verisilicon/hantro_h1.c
+index 4112cc942137..88f9f7e65729 100644
+--- a/drivers/media/platform/verisilicon/hantro_h1.c
++++ b/drivers/media/platform/verisilicon/hantro_h1.c
+@@ -314,7 +314,7 @@ void hantro_h1_set_axi_ctrl(struct hantro_dev *vpu, struct hantro_ctx *ctx)
+ 	u32 reg;
+ 
+ 	if (is_rgb32(&ctx->src_fmt)) {
+-		input_swap32 = 0;
++		input_swap32 = 1;
+ 		input_swap16 = 0;
+ 		input_swap8  = 0;
+ 	} else if (is_rgb16(&ctx->src_fmt)) {
+-- 
+2.50.1
+

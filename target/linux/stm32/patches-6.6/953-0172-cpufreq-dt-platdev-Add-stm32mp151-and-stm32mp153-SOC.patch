@@ -1,0 +1,37 @@
+From 019d306038dbdf82e9ff4e14855f1b91d53a090b Mon Sep 17 00:00:00 2001
+From: Christophe Guibout <christophe.guibout@st.com>
+Date: Mon, 21 Oct 2024 11:36:59 +0200
+Subject: [PATCH] cpufreq: dt-platdev: Add stm32mp151 and stm32mp153 SOC in the
+ blacklist
+
+A dedicated STM32 cpufreq driver is needed to read OTP data and select
+available OPP for the STM32MP15 series. Those OPP are then registered to OPP
+framework. At the end this driver register a cpufreq-dt device.
+This commit allows it.
+
+Change-Id: I4687951ed3ba0a088cd4813600b6f6683315ad10
+Signed-off-by: Christophe Guibout <christophe.guibout@st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/412684
+Reviewed-by: Pascal PAILLET <p.paillet@st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ drivers/cpufreq/cpufreq-dt-platdev.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+index 3c99e4959c0b..6801f2fa1b79 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -169,6 +169,8 @@ static const struct of_device_id blocklist[] __initconst = {
+ 	{ .compatible = "st,stih407", },
+ 	{ .compatible = "st,stih410", },
+ 	{ .compatible = "st,stih418", },
++	{ .compatible = "st,stm32mp151", },
++	{ .compatible = "st,stm32mp153", },
+ 	{ .compatible = "st,stm32mp157", },
+ 
+ 	{ .compatible = "ti,am33xx", },
+-- 
+2.50.1
+

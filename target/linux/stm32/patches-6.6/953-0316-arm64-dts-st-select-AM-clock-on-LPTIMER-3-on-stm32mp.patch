@@ -1,0 +1,35 @@
+From a47bb19b04e2131bcbe5fefe8f72edba560883c0 Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Date: Wed, 5 Mar 2025 10:53:59 +0100
+Subject: [PATCH] arm64: dts: st: select AM clock on LPTIMER-3 on
+ stm32mp235f-dk board
+
+The CK_LPTIMER3 is stopped in LPLV-Stop1 mode, so to support CpuIdle PSCI
+OSI with LP-TIMER3 must use the autonomous mode of the clock by selecting
+he RCC CK_LPTIM3_AM clock.
+
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Change-Id: I0327c9195a82341943b284b1389974502a00b3e1
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/441802
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index 012dcfec59e5..4bcb483250ee 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -426,6 +426,7 @@ &ipcc1 {
+ 
+ /* use LPTIMER with tick broadcast for suspend mode */
+ &lptimer3 {
++	clocks = <&rcc CK_LPTIM3_AM>;
+ 	status = "okay";
+ 	timer {
+ 		status = "okay";
+-- 
+2.50.1
+

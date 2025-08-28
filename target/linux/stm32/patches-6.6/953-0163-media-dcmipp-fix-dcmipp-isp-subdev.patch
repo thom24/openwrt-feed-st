@@ -1,0 +1,49 @@
+From 96defa6d6998a74783bea7b27aeb8f9b30ff9986 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Wed, 18 Dec 2024 15:19:35 +0100
+Subject: [PATCH] media: dcmipp: fix dcmipp-isp subdev
+
+Remove leftover of color-conversion block register description.
+Color-conversion was previously handled by the isp subdev, before
+moving into the dedicated isp output video device.
+
+Change-Id: Id8137528654a78290ca5280ab7afd8615ac1a285
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/425550
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+---
+ .../platform/st/stm32/stm32-dcmipp/dcmipp-isp.c      | 12 ------------
+ 1 file changed, 12 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
+index a4c70e4b5365..e71a0d6b082d 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
+@@ -52,18 +52,6 @@
+ #define DCMIPP_P1DMCR_TYPE_GBRG		0x2
+ #define DCMIPP_P1DMCR_TYPE_BGGR		0x3
+ 
+-#define DCMIPP_P1CCCR	0x880
+-#define DCMIPP_P1CCCR_ENABLE		BIT(0)
+-#define DCMIPP_P1CCCR_TYPE_YUV		0
+-#define DCMIPP_P1CCCR_TYPE_RGB		BIT(1)
+-#define DCMIPP_P1CCCR_CLAMP		BIT(2)
+-#define DCMIPP_P1CCRR1	0x884
+-#define DCMIPP_P1CCRR2	0x888
+-#define DCMIPP_P1CCGR1	0x88C
+-#define DCMIPP_P1CCGR2	0x890
+-#define DCMIPP_P1CCBR1	0x894
+-#define DCMIPP_P1CCBR2	0x898
+-
+ #define IS_SINK(pad) (!(pad))
+ #define IS_SRC(pad)  ((pad))
+ #define PAD_STR(pad) (IS_SRC((pad))) ? "src" : "sink"
+-- 
+2.50.1
+

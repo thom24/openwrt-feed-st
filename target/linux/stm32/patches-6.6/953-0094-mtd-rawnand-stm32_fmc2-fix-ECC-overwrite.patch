@@ -1,0 +1,52 @@
+From 9207b7bce2799df6f5b2ab09d681b0232dd25669 Mon Sep 17 00:00:00 2001
+From: Christophe Kerello <christophe.kerello@foss.st.com>
+Date: Tue, 3 Dec 2024 14:00:03 +0100
+Subject: [PATCH] mtd: rawnand: stm32_fmc2: fix ECC overwrite
+
+In case OOB write is requested during a data write, ECC is currently
+lost. Avoid this issue by only writing in the free spare area.
+This issue has been seen with a YAFFS2 file system.
+
+Change-Id: Ida1227186e50cf9d17002cb942ae3781507e1d11
+Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/422462
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
+Tested-by: Christophe KERELLO <christophe.kerello@st.com>
+---
+ drivers/mtd/nand/raw/stm32_fmc2_nand.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/mtd/nand/raw/stm32_fmc2_nand.c b/drivers/mtd/nand/raw/stm32_fmc2_nand.c
+index 37d3eab69e2c..b380feecd7ba 100644
+--- a/drivers/mtd/nand/raw/stm32_fmc2_nand.c
++++ b/drivers/mtd/nand/raw/stm32_fmc2_nand.c
+@@ -985,9 +985,21 @@ static int stm32_fmc2_nfc_seq_write(struct nand_chip *chip, const u8 *buf,
+ 
+ 	/* Write oob */
+ 	if (oob_required) {
+-		ret = nand_change_write_column_op(chip, mtd->writesize,
+-						  chip->oob_poi, mtd->oobsize,
+-						  false);
++		unsigned int offset_in_page = mtd->writesize;
++		const void *buf = chip->oob_poi;
++		unsigned int len = mtd->oobsize;
++
++		if (!raw) {
++			struct mtd_oob_region oob_free;
++
++			mtd_ooblayout_free(mtd, 0, &oob_free);
++			offset_in_page += oob_free.offset;
++			buf += oob_free.offset;
++			len = oob_free.length;
++		}
++
++		ret = nand_change_write_column_op(chip, offset_in_page,
++						  buf, len, false);
+ 		if (ret)
+ 			return ret;
+ 	}
+-- 
+2.50.1
+

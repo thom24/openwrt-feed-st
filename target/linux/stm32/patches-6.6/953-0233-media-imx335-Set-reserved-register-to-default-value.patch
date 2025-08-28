@@ -1,0 +1,51 @@
+From 7bc9058c1662022386f1876dc9211eb7296a5061 Mon Sep 17 00:00:00 2001
+From: Umang Jain <umang.jain@ideasonboard.com>
+Date: Tue, 20 Feb 2024 14:58:17 +0530
+Subject: [PATCH] media: imx335: Set reserved register to default value
+
+0x3a00 is a reserved register as per the datasheet. The driver
+currently sets to it 0x01 while the datasheet claims 0x00 to be
+the default value.
+
+On one of the setup based on i.MX8MP platform with IMX335, this register
+write broke the CSI-2 configuration. Setting 0x3a00 to its default
+value (i.e. 0x00) fixed the issue. It is not clear from the datasheet
+what this register write is responsible for but setting it to its default
+value seems the right thing to do, provided it has been found
+responsible to break CSI-2 configuration on one of the platform.
+
+Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+Reported-by: Matthias Fend <matthias.fend@emfend.at>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+(cherry picked from commit 14a60786d72edb73809362a296b8694ffc85d36a)
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+
+Change-Id: I082ee8d745f7ef62708db19f8df760f10ce7d758
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/429195
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ drivers/media/i2c/imx335.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
+index 32046a6b2425..3f4d841e7d6b 100644
+--- a/drivers/media/i2c/imx335.c
++++ b/drivers/media/i2c/imx335.c
+@@ -256,7 +256,7 @@ static const struct imx335_reg mode_2592x1940_regs[] = {
+ 	{0x3794, 0x7a},
+ 	{0x3796, 0xa1},
+ 	{0x37b0, 0x36},
+-	{0x3a00, 0x01},
++	{0x3a00, 0x00},
+ };
+ 
+ static const struct imx335_reg raw10_framefmt_regs[] = {
+-- 
+2.50.1
+

@@ -1,0 +1,99 @@
+From 926763badf5ce33b18d59e68151d8efa2ab0ab5f Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Mon, 17 Feb 2025 16:27:51 +0100
+Subject: [PATCH] usb: dwc2: introduce remote wakeup in gadget ppd exit
+
+Add remote wakeup parameter to dwc2_gadget_exit_partial_power_down()
+routine.
+This is a precursor patch to add support for device initiated wakeup.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Icc5db01a34cae137787a0cad0ae8e7da02774c27
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/438174
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Pankaj DEV <pankaj.dev@st.com>
+---
+ drivers/usb/dwc2/core.c   |  2 +-
+ drivers/usb/dwc2/core.h   |  4 ++--
+ drivers/usb/dwc2/gadget.c | 16 +++++++++++++++-
+ 3 files changed, 18 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/dwc2/core.c b/drivers/usb/dwc2/core.c
+index 5635e4d7ec88..d8465237bf39 100644
+--- a/drivers/usb/dwc2/core.c
++++ b/drivers/usb/dwc2/core.c
+@@ -120,7 +120,7 @@ int dwc2_exit_partial_power_down(struct dwc2_hsotg *hsotg, int rem_wakeup,
+ 		return dwc2_host_exit_partial_power_down(hsotg, rem_wakeup,
+ 							 restore);
+ 	else
+-		return dwc2_gadget_exit_partial_power_down(hsotg, restore);
++		return dwc2_gadget_exit_partial_power_down(hsotg, rem_wakeup, restore);
+ }
+ 
+ /**
+diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+index 7e4e0042ee53..8282412a7e38 100644
+--- a/drivers/usb/dwc2/core.h
++++ b/drivers/usb/dwc2/core.h
+@@ -1440,7 +1440,7 @@ int dwc2_gadget_exit_hibernation(struct dwc2_hsotg *hsotg,
+ 				 int rem_wakeup, int reset);
+ int dwc2_gadget_enter_partial_power_down(struct dwc2_hsotg *hsotg);
+ int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+-					bool restore);
++					int rem_wakeup, bool restore);
+ void dwc2_gadget_enter_clock_gating(struct dwc2_hsotg *hsotg);
+ void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg,
+ 				   int rem_wakeup);
+@@ -1485,7 +1485,7 @@ static inline int dwc2_gadget_exit_hibernation(struct dwc2_hsotg *hsotg,
+ static inline int dwc2_gadget_enter_partial_power_down(struct dwc2_hsotg *hsotg)
+ { return 0; }
+ static inline int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+-						      bool restore)
++						      int rem_wakeup, bool restore)
+ { return 0; }
+ static inline void dwc2_gadget_enter_clock_gating(struct dwc2_hsotg *hsotg) {}
+ static inline void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg,
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 62b6bc195769..7ea8d9100f62 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -5668,6 +5668,7 @@ int dwc2_gadget_enter_partial_power_down(struct dwc2_hsotg *hsotg)
+  * power down.
+  *
+  * @hsotg: Programming view of the DWC_otg controller
++ * @rem_wakeup: indicates device initiated remote wakeup signal
+  * @restore: indicates whether need to restore the registers or not.
+  *
+  * Return: non-zero if failed to exit device partial power down.
+@@ -5675,7 +5676,7 @@ int dwc2_gadget_enter_partial_power_down(struct dwc2_hsotg *hsotg)
+  * This function is for exiting from device mode partial power down.
+  */
+ int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+-					bool restore)
++					int rem_wakeup, bool restore)
+ {
+ 	u32 pcgcctl;
+ 	u32 dctl;
+@@ -5722,6 +5723,19 @@ int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+ 	dctl |= DCTL_PWRONPRGDONE;
+ 	dwc2_writel(hsotg, dctl, DCTL);
+ 
++	if (rem_wakeup) {
++		u32 glpmcfg = dwc2_readl(hsotg, GLPMCFG);
++
++		if (glpmcfg & (GLPMCFG_ENBLSLPM | GLPMCFG_HIRD_THRES_MASK)) {
++			glpmcfg &= ~(GLPMCFG_ENBLSLPM | GLPMCFG_HIRD_THRES_MASK);
++			dwc2_writel(hsotg, glpmcfg, GLPMCFG);
++		}
++
++		dwc2_writel(hsotg, dctl | DCTL_RMTWKUPSIG, DCTL);
++		mdelay(1);
++		dwc2_writel(hsotg, dctl, DCTL);
++	}
++
+ 	/* Set in_ppd flag to 0 as here core exits from suspend. */
+ 	hsotg->in_ppd = 0;
+ 	hsotg->lx_state = DWC2_L0;
+-- 
+2.50.1
+

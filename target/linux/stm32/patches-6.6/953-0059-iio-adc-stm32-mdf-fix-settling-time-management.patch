@@ -1,0 +1,70 @@
+From 392d838314fdb63af4fe74216cac62ac7b5fb043 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Tue, 12 Nov 2024 14:15:36 +0100
+Subject: [PATCH] iio: adc: stm32-mdf: fix settling time management.
+
+A filter managing several channels has to be configured in
+interleaved mode. In interleave mode all the interleaved filters must
+share the same configuration for NBDIS register.
+While the settling time is a channel property which may differ for each
+channel, the corresponding NBDIS setting must be unique.
+In interleave case, use the settling time of the first channel for all
+interleaved filters.
+
+Change-Id: Iab45ff8e90ed9ff4b40847e5cdbafd6d93ecbe50
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/420085
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ drivers/iio/adc/stm32-mdf-adc.c | 24 +++++++++++++++++++-----
+ 1 file changed, 19 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/iio/adc/stm32-mdf-adc.c b/drivers/iio/adc/stm32-mdf-adc.c
+index 2deeb29bc24b..03b3f5239bce 100644
+--- a/drivers/iio/adc/stm32-mdf-adc.c
++++ b/drivers/iio/adc/stm32-mdf-adc.c
+@@ -779,6 +779,11 @@ static int mdf_adc_set_samp_freq(struct iio_dev *indio_dev, unsigned long sample
+ 		dev_dbg(dev, "Sample rate deviation [%lu] ppm: [%lu] vs [%lu] Hz\n",
+ 			delta_ppm, sck_freq / decim_ratio, sample_freq);
+ 
++	/*
++	 * Convert settling time into a minimum number of output sample to discard before releasing
++	 * the data. This allows to drop the samples affected by the impulse response of the
++	 * filter and wait for stable data.
++	 */
+ 	adc->nbdis = DIV_ROUND_UP(adc->stu * sample_freq, 1000000);
+ 	if (adc->nbdis > MDF_DFLTCR_NBDIS_MAX) {
+ 		dev_warn(dev, "NBDIS [%u] too large. Force to [%lu]\n",
+@@ -1177,13 +1182,22 @@ static int stm32_mdf_channel_parse_of(struct iio_dev *indio_dev, struct fwnode_h
+ 
+ 	/* settling-time-us is optional */
+ 	if (fwnode_property_present(node, "settling-time-us")) {
+-		ret = fwnode_property_read_u32(node, "settling-time-us", &stu);
+-		if (ret < 0) {
+-			dev_err(&indio_dev->dev, "Failed to read settling time: [%d]\n", ret);
+-			return ret;
++		/*
++		 * The settling time is relevant only for the first channel. In case of interleaved
++		 * channels, the settling time of the first configured channel, is applied to other
++		 * channels.
++		 */
++		if (!ch->scan_index) {
++			ret = fwnode_property_read_u32(node, "settling-time-us", &stu);
++			if (ret < 0) {
++				dev_err(&indio_dev->dev, "Failed to read settling time: [%d]\n",
++					ret);
++				return ret;
++			}
++
++			adc->stu = stu;
+ 		}
+ 	}
+-	adc->stu = stu;
+ 
+ 	if (adc->dev_data->type == STM32_MDF_IIO) {
+ 		backend = devm_iio_backend_fwnode_get(&indio_dev->dev, NULL, node);
+-- 
+2.50.1
+

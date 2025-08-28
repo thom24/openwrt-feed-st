@@ -1,0 +1,61 @@
+From db2f2c4dc43c84b4a1752d27bf19cec5124b9a0c Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Wed, 4 Dec 2024 15:56:06 +0100
+Subject: [PATCH] ARM: configs: stm32mp25: add config fragments for stm32mp25
+
+Link from aarch64 fragment-0x-defconfig prefixed with 'mp2-' and add
+mp2-fragment-03-multiv7-cleanup.config to disable STM32MP1-exclusive
+configurations and mp2-fragment-04-multiv7-addons.config for specific mp2
+defines.
+
+Change-Id: I2c6447ad9909bb3aa5d70647ef33ea880e8de2fb
+Signed-off-by: Theo GOUREAU <theo.goureau-ext@st.com>
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/441411
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/configs/mp2-fragment-01-defconfig-cleanup.config | 1 +
+ arch/arm/configs/mp2-fragment-02-defconfig-addons.config  | 1 +
+ arch/arm/configs/mp2-fragment-03-multiv7-cleanup.config   | 2 ++
+ arch/arm/configs/mp2-fragment-04-multiv7-addons.config    | 2 ++
+ 4 files changed, 6 insertions(+)
+ create mode 120000 arch/arm/configs/mp2-fragment-01-defconfig-cleanup.config
+ create mode 120000 arch/arm/configs/mp2-fragment-02-defconfig-addons.config
+ create mode 100644 arch/arm/configs/mp2-fragment-03-multiv7-cleanup.config
+ create mode 100644 arch/arm/configs/mp2-fragment-04-multiv7-addons.config
+
+diff --git a/arch/arm/configs/mp2-fragment-01-defconfig-cleanup.config b/arch/arm/configs/mp2-fragment-01-defconfig-cleanup.config
+new file mode 120000
+index 000000000000..71871439139a
+--- /dev/null
++++ b/arch/arm/configs/mp2-fragment-01-defconfig-cleanup.config
+@@ -0,0 +1 @@
++../../arm64/configs/fragment-01-defconfig-cleanup.config
+\ No newline at end of file
+diff --git a/arch/arm/configs/mp2-fragment-02-defconfig-addons.config b/arch/arm/configs/mp2-fragment-02-defconfig-addons.config
+new file mode 120000
+index 000000000000..3af2b688ec53
+--- /dev/null
++++ b/arch/arm/configs/mp2-fragment-02-defconfig-addons.config
+@@ -0,0 +1 @@
++../../arm64/configs/fragment-02-defconfig-addons.config
+\ No newline at end of file
+diff --git a/arch/arm/configs/mp2-fragment-03-multiv7-cleanup.config b/arch/arm/configs/mp2-fragment-03-multiv7-cleanup.config
+new file mode 100644
+index 000000000000..96ea456b8049
+--- /dev/null
++++ b/arch/arm/configs/mp2-fragment-03-multiv7-cleanup.config
+@@ -0,0 +1,2 @@
++# CONFIG_MACH_STM32MP13 is not set
++# CONFIG_MACH_STM32MP157 is not set
+diff --git a/arch/arm/configs/mp2-fragment-04-multiv7-addons.config b/arch/arm/configs/mp2-fragment-04-multiv7-addons.config
+new file mode 100644
+index 000000000000..e2c0a166c9ed
+--- /dev/null
++++ b/arch/arm/configs/mp2-fragment-04-multiv7-addons.config
+@@ -0,0 +1,2 @@
++CONFIG_ARM_LPAE=y
++
+-- 
+2.50.1
+

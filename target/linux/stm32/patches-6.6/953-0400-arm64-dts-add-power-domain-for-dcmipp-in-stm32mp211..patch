@@ -1,0 +1,35 @@
+From d2764a1c8bdca37c8a1d7c8aadcf67d9573924ee Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Fri, 14 Mar 2025 15:37:32 +0100
+Subject: [PATCH] arm64: dts: add power-domain for dcmipp in stm32mp211.dtsi
+
+Add the power-domain property within the dcmipp node.
+
+Change-Id: Ic1ea76572e775cf8010e73d7fa7be7cf1f5a2ba9
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/444308
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 7da7a37f4c2b..d0c8d34b0224 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -2713,6 +2713,7 @@ dcmipp: dcmipp@48030000 {
+ 			clocks = <&rcc CK_BUS_DCMIPP>, <&rcc CK_KER_CSI>;
+ 			clock-names = "kclk", "mclk";
+ 			access-controllers = <&rifsc 87>;
++			power-domains = <&d1_pd>;
+ 			status = "disabled";
+ 		};
+ 
+-- 
+2.50.1
+

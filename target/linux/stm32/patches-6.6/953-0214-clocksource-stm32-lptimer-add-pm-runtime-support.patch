@@ -1,0 +1,76 @@
+From 9016ac80bc930ac7818afd1c96af7db32fa84d28 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Mon, 9 Dec 2024 11:48:54 +0100
+Subject: [PATCH] clocksource: stm32-lptimer: add pm runtime support
+
+Enable PM runtime support to report LP timer clocksource power state.
+On call to set_timer callback, the timer active state is set.
+The active state remains set as long as the system does not go to low
+power states.
+This has no incidence for LP timers which are not associated to a power
+domain.
+
+Change-Id: Ib7eeee47f2147ad71865742826e06816eb3c7edc
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/424580
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/clocksource/timer-stm32-lp.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/drivers/clocksource/timer-stm32-lp.c b/drivers/clocksource/timer-stm32-lp.c
+index 58b0e9427288..5ea8d7c3ce45 100644
+--- a/drivers/clocksource/timer-stm32-lp.c
++++ b/drivers/clocksource/timer-stm32-lp.c
+@@ -13,6 +13,7 @@
+ #include <linux/of_address.h>
+ #include <linux/of_irq.h>
+ #include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
+ #include <linux/pm_wakeirq.h>
+ 
+ #define CFGR_PSC_OFFSET		9
+@@ -52,6 +53,15 @@ static int stm32_clkevent_lp_set_timer(unsigned long evt,
+ 				       int is_periodic)
+ {
+ 	struct stm32_lp_private *priv = to_priv(clkevt);
++	int ret;
++
++	if (!pm_runtime_active(priv->dev)) {
++		ret = pm_runtime_resume_and_get(priv->dev);
++		if (ret) {
++			dev_err(priv->dev, "pm runtime get returned %d\n", ret);
++			return ret;
++		}
++	}
+ 
+ 	/* disable LPTIMER to be able to write into IER register*/
+ 	regmap_write(priv->reg, STM32_LPTIM_CR, 0);
+@@ -131,6 +141,8 @@ static void stm32_clkevent_lp_suspend(struct clock_event_device *clkevt)
+ 
+ 	stm32_clkevent_lp_shutdown(clkevt);
+ 
++	pm_runtime_put_sync_suspend(priv->dev);
++
+ 	/* balance clk_prepare_enable() from the probe */
+ 	clk_disable_unprepare(priv->clk);
+ }
+@@ -208,6 +220,12 @@ static int stm32_clkevent_lp_probe(struct platform_device *pdev)
+ 
+ 	stm32_clkevent_lp_set_prescaler(priv, &rate);
+ 
++	ret = devm_pm_runtime_enable(&pdev->dev);
++	if (ret)
++		return ret;
++
++	pm_runtime_irq_safe(&pdev->dev);
++
+ 	priv->dev = &pdev->dev;
+ 
+ 	stm32_clkevent_lp_init(priv, pdev->dev.parent->of_node, rate);
+-- 
+2.50.1
+

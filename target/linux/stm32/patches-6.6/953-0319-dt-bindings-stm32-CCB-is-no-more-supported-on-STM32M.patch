@@ -1,0 +1,46 @@
+From b089ff78fa7d06611d3b94d60077df317e1c0ef2 Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Tue, 4 Mar 2025 15:01:59 +0100
+Subject: [PATCH] dt-bindings: stm32: CCB is no more supported on STM32MP21
+
+Remove CCB bindings (clock and reset) for STM32MP21.
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: If1996fe202f917db36f5a28ffde6d2ae712b7c1f
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/441585
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ include/dt-bindings/clock/st,stm32mp21-rcc.h | 1 -
+ include/dt-bindings/reset/st,stm32mp21-rcc.h | 1 -
+ 2 files changed, 2 deletions(-)
+
+diff --git a/include/dt-bindings/clock/st,stm32mp21-rcc.h b/include/dt-bindings/clock/st,stm32mp21-rcc.h
+index 9068ef8ea130..be330ec345f6 100644
+--- a/include/dt-bindings/clock/st,stm32mp21-rcc.h
++++ b/include/dt-bindings/clock/st,stm32mp21-rcc.h
+@@ -143,7 +143,6 @@
+ #define CK_BUS_GPIOH		120
+ #define CK_BUS_GPIOI		121
+ #define CK_BUS_GPIOZ		122
+-#define CK_BUS_CCB		123
+ #define CK_BUS_RTC		124
+ #define CK_BUS_LPUART1		125
+ #define CK_BUS_LPTIM3		126
+diff --git a/include/dt-bindings/reset/st,stm32mp21-rcc.h b/include/dt-bindings/reset/st,stm32mp21-rcc.h
+index bb9d3cef019c..b412a8bfabe9 100644
+--- a/include/dt-bindings/reset/st,stm32mp21-rcc.h
++++ b/include/dt-bindings/reset/st,stm32mp21-rcc.h
+@@ -122,7 +122,6 @@
+ #define DDRCFG_R	112
+ #define DDR_R		113
+ #define DDRPERFM_R	114
+-#define CCB_R		115
+ #define IWDG1_SYS_R	116
+ #define IWDG2_SYS_R	117
+ #define IWDG3_SYS_R	118
+-- 
+2.50.1
+

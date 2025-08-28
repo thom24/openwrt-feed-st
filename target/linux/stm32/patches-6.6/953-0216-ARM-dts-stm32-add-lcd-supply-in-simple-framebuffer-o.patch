@@ -1,0 +1,36 @@
+From 257578b781898dbbe5ef62d7059ad7139f14eeee Mon Sep 17 00:00:00 2001
+From: Cheick Traore <cheick.traore@foss.st.com>
+Date: Thu, 30 Jan 2025 11:35:22 +0100
+Subject: [PATCH] ARM: dts: stm32: add lcd-supply in simple-framebuffer on
+ stm32mp135f-dk
+
+Add scmi_v3v3_sw as lcd-supply to avoid it to be disabled during boot
+which might cause the display to be turned off.
+
+Change-Id: I86ab029b2d31649b838e5dd611a83b86e6cf5423
+Signed-off-by: Cheick Traore <cheick.traore@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/433047
+Reviewed-by: Yannick FERTRE <yannick.fertre@foss.st.com>
+Domain-Review: Yannick FERTRE <yannick.fertre@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dk.dts | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+index 237139234da1..c892fb226887 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+@@ -37,6 +37,7 @@ chosen {
+ 		framebuffer {
+ 			compatible = "simple-framebuffer";
+ 			clocks = <&rcc LTDC_PX>;
++			lcd-supply =  <&scmi_v3v3_sw>;
+ 			status = "disabled";
+ 		};
+ 	};
+-- 
+2.50.1
+

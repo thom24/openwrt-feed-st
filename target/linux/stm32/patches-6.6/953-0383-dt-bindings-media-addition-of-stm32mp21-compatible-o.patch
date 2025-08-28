@@ -1,0 +1,36 @@
+From 43b0afc5ff832693ba759fddb8d7b75f1b2fdc6d Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Mon, 24 Mar 2025 15:53:50 +0100
+Subject: [PATCH] dt-bindings: media: addition of stm32mp21 compatible of
+ DCMIPP
+
+Addition of the stm32mp21 compatible for the DCMIPP.
+
+Change-Id: I5524c31a363ee8d6f18828e71f9430c92d556e2a
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/446243
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml b/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
+index 13c0b666ddfd..484ff8a2ade4 100644
+--- a/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
++++ b/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
+@@ -14,6 +14,7 @@ properties:
+   compatible:
+     enum:
+       - st,stm32mp13-dcmipp
++      - st,stm32mp21-dcmipp
+       - st,stm32mp25-dcmipp
+ 
+   reg:
+-- 
+2.50.1
+

@@ -1,0 +1,45 @@
+From bb9f17a5ce57c2e2390934527381efc7c0dd84eb Mon Sep 17 00:00:00 2001
+From: Nicolas Le Bayon <nicolas.le.bayon@st.com>
+Date: Tue, 10 Dec 2024 18:20:20 -0500
+Subject: [PATCH] hwrng: stm32 - fix RNG configuration field naming
+
+Swap RNG_CR_CONFIG1 and RNG_CR_CONFIG3 definitions to fit with
+Reference Manual.
+
+Signed-off-by: Nicolas Le Bayon <nicolas.le.bayon@st.com>
+Change-Id: I62f162db6849e7cf51141aab3f2a96acd3082322
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/426134
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ drivers/char/hw_random/stm32-rng.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
+index d5a0c90d7ba7..a9df329aa031 100644
+--- a/drivers/char/hw_random/stm32-rng.c
++++ b/drivers/char/hw_random/stm32-rng.c
+@@ -20,15 +20,15 @@
+ #define RNG_CR			0x00
+ #define RNG_CR_RNGEN		BIT(2)
+ #define RNG_CR_CED		BIT(5)
+-#define RNG_CR_CONFIG1		GENMASK(11, 8)
++#define RNG_CR_CONFIG3		GENMASK(11, 8)
+ #define RNG_CR_NISTC		BIT(12)
+ #define RNG_CR_CONFIG2		GENMASK(15, 13)
+ #define RNG_CR_CLKDIV_SHIFT	16
+ #define RNG_CR_CLKDIV		GENMASK(19, 16)
+-#define RNG_CR_CONFIG3		GENMASK(25, 20)
++#define RNG_CR_CONFIG1		GENMASK(25, 20)
+ #define RNG_CR_CONDRST		BIT(30)
+ #define RNG_CR_CONFLOCK		BIT(31)
+-#define RNG_CR_ENTROPY_SRC_MASK	(RNG_CR_CONFIG1 | RNG_CR_NISTC | RNG_CR_CONFIG2 | RNG_CR_CONFIG3)
++#define RNG_CR_ENTROPY_SRC_MASK	(RNG_CR_CONFIG3 | RNG_CR_NISTC | RNG_CR_CONFIG2 | RNG_CR_CONFIG1)
+ #define RNG_CR_CONFIG_MASK	(RNG_CR_ENTROPY_SRC_MASK | RNG_CR_CED | RNG_CR_CLKDIV)
+ 
+ #define RNG_SR			0x04
+-- 
+2.50.1
+

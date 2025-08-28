@@ -1,0 +1,128 @@
+From a1d0569e57005158c5a721d110d72b2e4e1fcf86 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Mon, 17 Mar 2025 12:07:01 +0100
+Subject: [PATCH] clocksource: stm32-lptimer: rework to follow stm32mp25
+ upstream
+
+Rework to follow changes done upstream on stm32mp25:
+- Fix interrupt enable register access update, e.g. LP Timer needs to
+  be enabled to access DIER on stm32mp2x.
+- rely on fallback compatible as no specific .data is associated to the
+  driver. Use version data from MFD core.
+- encapsulate IER write into a separate function that manages the
+  enabling/disabling of the LP timer. In addition, DIEROK and ARROK
+  flags checks have been added. So adopt a new routine to set the
+  event into ARR register and enable the interrupt.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ib2a6fba718b8ed8eefa480a5779593da3af421fe
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/445397
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/clocksource/timer-stm32-lp.c | 60 +++++++++++++++++++++++-----
+ 1 file changed, 50 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/clocksource/timer-stm32-lp.c b/drivers/clocksource/timer-stm32-lp.c
+index 5ea8d7c3ce45..2604653531a4 100644
+--- a/drivers/clocksource/timer-stm32-lp.c
++++ b/drivers/clocksource/timer-stm32-lp.c
+@@ -28,6 +28,7 @@ struct stm32_lp_private {
+ 	u32 psc;
+ 	struct device *dev;
+ 	struct clk *clk;
++	u32 version;
+ };
+ 
+ static struct stm32_lp_private*
+@@ -48,6 +49,47 @@ static int stm32_clkevent_lp_shutdown(struct clock_event_device *clkevt)
+ 	return 0;
+ }
+ 
++static int stm32mp25_clkevent_lp_set_evt(struct stm32_lp_private *priv, unsigned long evt)
++{
++	int ret;
++	u32 val;
++
++	/* Enable LPTIMER to be able to write into IER and ARR registers */
++	regmap_write(priv->reg, STM32_LPTIM_CR, STM32_LPTIM_ENABLE);
++	/* set next event counter */
++	regmap_write(priv->reg, STM32_LPTIM_ARR, evt);
++	/* enable ARR interrupt */
++	regmap_write(priv->reg, STM32_LPTIM_IER, STM32_LPTIM_ARRMIE);
++
++	/* Poll DIEROK and ARROK to ensure register access has completed */
++	ret = regmap_read_poll_timeout_atomic(priv->reg, STM32_LPTIM_ISR, val,
++					      (val & STM32_LPTIM_DIEROK_ARROK) ==
++					      STM32_LPTIM_DIEROK_ARROK,
++					      10, 500);
++	if (ret) {
++		dev_err(priv->dev, "access to LPTIM timed out\n");
++		/* Disable LPTIMER */
++		regmap_write(priv->reg, STM32_LPTIM_CR, 0);
++		return ret;
++	}
++	/* Clear DIEROK and ARROK flags */
++	regmap_write(priv->reg, STM32_LPTIM_ICR, STM32_LPTIM_DIEROKCF_ARROKCF);
++
++	return 0;
++}
++
++static void stm32_clkevent_lp_set_evt(struct stm32_lp_private *priv, unsigned long evt)
++{
++	/* disable LPTIMER to be able to write into IER register*/
++	regmap_write(priv->reg, STM32_LPTIM_CR, 0);
++	/* enable ARR interrupt */
++	regmap_write(priv->reg, STM32_LPTIM_IER, STM32_LPTIM_ARRMIE);
++	/* enable LPTIMER to be able to write into ARR register */
++	regmap_write(priv->reg, STM32_LPTIM_CR, STM32_LPTIM_ENABLE);
++	/* set next event counter */
++	regmap_write(priv->reg, STM32_LPTIM_ARR, evt);
++}
++
+ static int stm32_clkevent_lp_set_timer(unsigned long evt,
+ 				       struct clock_event_device *clkevt,
+ 				       int is_periodic)
+@@ -63,14 +105,13 @@ static int stm32_clkevent_lp_set_timer(unsigned long evt,
+ 		}
+ 	}
+ 
+-	/* disable LPTIMER to be able to write into IER register*/
+-	regmap_write(priv->reg, STM32_LPTIM_CR, 0);
+-	/* enable ARR interrupt */
+-	regmap_write(priv->reg, STM32_LPTIM_IER, STM32_LPTIM_ARRMIE);
+-	/* enable LPTIMER to be able to write into ARR register */
+-	regmap_write(priv->reg, STM32_LPTIM_CR, STM32_LPTIM_ENABLE);
+-	/* set next event counter */
+-	regmap_write(priv->reg, STM32_LPTIM_ARR, evt);
++	if (priv->version == STM32_LPTIM_VERR_23) {
++		ret = stm32mp25_clkevent_lp_set_evt(priv, evt);
++		if (ret)
++			return ret;
++	} else {
++		stm32_clkevent_lp_set_evt(priv, evt);
++	}
+ 
+ 	/* start counter */
+ 	if (is_periodic)
+@@ -188,6 +229,7 @@ static int stm32_clkevent_lp_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	priv->reg = ddata->regmap;
++	priv->version = ddata->version;
+ 	priv->clk = ddata->clk;
+ 	ret = clk_prepare_enable(priv->clk);
+ 	if (ret)
+@@ -239,8 +281,6 @@ static int stm32_clkevent_lp_probe(struct platform_device *pdev)
+ 
+ static const struct of_device_id stm32_clkevent_lp_of_match[] = {
+ 	{ .compatible = "st,stm32-lptimer-timer", },
+-	{ .compatible = "st,stm32mp21-lptimer-timer", },
+-	{ .compatible = "st,stm32mp25-lptimer-timer", },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, stm32_clkevent_lp_of_match);
+-- 
+2.50.1
+

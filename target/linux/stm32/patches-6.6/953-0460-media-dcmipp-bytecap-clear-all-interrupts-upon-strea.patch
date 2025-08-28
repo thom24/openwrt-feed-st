@@ -1,0 +1,40 @@
+From ee9c8e78d2f3653be9583cdc0a8dad742cfe166e Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Fri, 16 May 2025 13:54:33 +0200
+Subject: [PATCH] media: dcmipp: bytecap: clear all interrupts upon stream stop
+
+Ensure that there are no pending interrupts after we have stopped the
+pipeline. Indeed, it could happen that new interrupt has been generated
+during the stop_streaming processing hence clear them in order to avoid
+getting a new interrupt right from the start of a next start_streaming.
+
+Change-Id: I4a22eda3f6b63d30f3145957ac3a906e2bfc80f4
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/459522
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
+index 4d0f949d8d91..1fe079a2b188 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
+@@ -525,6 +525,9 @@ static void dcmipp_bytecap_stop_streaming(struct vb2_queue *vq)
+ 	/* Disable pipe */
+ 	reg_clear(vcap, DCMIPP_P0FSCR, DCMIPP_P0FSCR_PIPEN);
+ 
++	/* Clear any pending interrupts */
++	reg_write(vcap, DCMIPP_CMFCR, DCMIPP_CMIER_P0ALL);
++
+ 	dcmipp_pipeline_s_stream(vcap, 0);
+ 
+ 	/* Stop the media pipeline */
+-- 
+2.50.1
+

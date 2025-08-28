@@ -1,0 +1,45 @@
+From 7b91cc4554242ac8f4e579550b534a14a3c6d15b Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Mon, 28 Apr 2025 11:10:33 +0200
+Subject: [PATCH] dt-bindings: i2c: fix RMPsg I2C controller binding
+
+Fix the issue raised by dt_binding_check:
+./Documentation/devicetree/bindings/i2c/i2c-rpmsg.yaml:
+rpmsg,dev-id: missing type definition
+Fix the issue raised by dtbs_check:
+./arch/arm64/boot/dts/st/stm32mp257f-ev1.dtb:
+i2c@2: 'dev-id' is a required property
+from schema $id: http://devicetree.org/schemas/i2c/i2c-rpmsg.yaml#
+
+Change-Id: I8a0aa1b454927fd4c38009d375554afe0c230e0f
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/454452
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ Documentation/devicetree/bindings/i2c/i2c-rpmsg.yaml | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-rpmsg.yaml b/Documentation/devicetree/bindings/i2c/i2c-rpmsg.yaml
+index 879d2f022115..e369efde197e 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c-rpmsg.yaml
++++ b/Documentation/devicetree/bindings/i2c/i2c-rpmsg.yaml
+@@ -21,12 +21,13 @@ properties:
+     const: rpmsg,i2c-controller
+ 
+   rpmsg,dev-id:
++    $ref: /schemas/types.yaml#/definitions/string
+     description:
+       Id name of the rpmsg_i2c device instance
+ 
+ required:
+   - compatible
+-  - dev-id
++  - rpmsg,dev-id
+ 
+ examples:
+   - |
+-- 
+2.50.1
+

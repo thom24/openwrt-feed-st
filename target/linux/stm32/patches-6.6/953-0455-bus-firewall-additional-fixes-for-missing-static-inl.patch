@@ -1,0 +1,47 @@
+From 35fc7a6387ed600af9ab937ba1b56dddbccdceb5 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Mon, 12 May 2025 15:37:31 +0200
+Subject: [PATCH] bus: firewall: additional fixes for missing static inline
+ annotations
+
+Add missing static inline annotations for
+stm32_firewall_controller_register/unregister() stubs.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: Ifce5cb6b66c950b2f62212a8b61cd8232be3a449
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/457578
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Reviewed-by: Patrice CHOTARD <patrice.chotard@foss.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+---
+ include/linux/bus/stm32_firewall.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/bus/stm32_firewall.h b/include/linux/bus/stm32_firewall.h
+index 5a429c818063..854f1f09c25b 100644
+--- a/include/linux/bus/stm32_firewall.h
++++ b/include/linux/bus/stm32_firewall.h
+@@ -72,12 +72,14 @@ void stm32_firewall_controller_unregister(struct stm32_firewall_controller *fire
+ 
+ #else /* IS_ENABLED(CONFIG_STM32_FIREWALL) */
+ 
+-int stm32_firewall_controller_register(struct stm32_firewall_controller *firewall_controller)
++static inline int
++stm32_firewall_controller_register(struct stm32_firewall_controller *firewall_controller)
+ {
+ 	return -ENODEV;
+ }
+ 
+-void stm32_firewall_controller_unregister(struct stm32_firewall_controller *firewall_controller)
++static inline void
++stm32_firewall_controller_unregister(struct stm32_firewall_controller *firewall_controller)
+ {
+ }
+ 
+-- 
+2.50.1
+

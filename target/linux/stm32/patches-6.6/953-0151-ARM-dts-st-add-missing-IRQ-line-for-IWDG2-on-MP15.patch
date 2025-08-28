@@ -1,0 +1,35 @@
+From 1b250e1eebd645286d750d3ab6b61bb31e7a5647 Mon Sep 17 00:00:00 2001
+From: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
+Date: Tue, 10 Dec 2024 16:48:43 +0100
+Subject: [PATCH] ARM: dts: st: add missing IRQ line for IWDG2 on MP15
+
+As IRQ line misses, IWDG2 fails to probe om MP15.
+
+Change-Id: Iad136383c4a03af18e91a3f03b61f4c5712055f6
+Signed-off-by: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/423985
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Clement LE GOFFIC <clement.legoffic@foss.st.com>
+Tested-by: Clement LE GOFFIC <clement.legoffic@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+Domain-Review: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp151.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
+index d0ae364f5661..36226e39fbe0 100644
+--- a/arch/arm/boot/dts/st/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
+@@ -596,6 +596,7 @@ ltdc: display-controller@5a001000 {
+ 		iwdg2: watchdog@5a002000 {
+ 			compatible = "st,stm32mp1-iwdg";
+ 			reg = <0x5a002000 0x400>;
++			interrupts = <GIC_SPI 151 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&rcc IWDG2>, <&rcc CK_LSI>;
+ 			clock-names = "pclk", "lsi";
+ 			status = "disabled";
+-- 
+2.50.1
+

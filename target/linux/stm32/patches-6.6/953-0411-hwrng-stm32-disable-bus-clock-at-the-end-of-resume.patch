@@ -1,0 +1,38 @@
+From 7255ad6cf7746c3a27b0e83dd1e2515488b91913 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Tue, 29 Apr 2025 10:07:34 +0200
+Subject: [PATCH] hwrng: stm32 - disable bus clock at the end of resume
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Bus clock wasn't properly stopped at the end of the function.
+
+Change-Id: I70b9a4afde77a975d6df3008faab5fb54f2b05a6
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/454715
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+Tested-by: Jerome BESNARD <jerome.besnard@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ drivers/char/hw_random/stm32-rng.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
+index 1ab76ef63be1..f1f219de2dcb 100644
+--- a/drivers/char/hw_random/stm32-rng.c
++++ b/drivers/char/hw_random/stm32-rng.c
+@@ -542,6 +542,8 @@ static int __maybe_unused stm32_rng_resume(struct device *dev)
+ 		writel_relaxed(reg, priv->base + RNG_CR);
+ 	}
+ 
++	if (priv->bus_clk)
++		clk_disable_unprepare(priv->bus_clk);
+ 	clk_disable_unprepare(priv->clk);
+ 
+ 	return 0;
+-- 
+2.50.1
+

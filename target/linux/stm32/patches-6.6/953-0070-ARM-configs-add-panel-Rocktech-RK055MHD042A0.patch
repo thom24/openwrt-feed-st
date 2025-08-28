@@ -1,0 +1,31 @@
+From a178ee58932bf617f2f7408d8e005b31ae3bf193 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Thu, 19 Sep 2024 17:33:15 +0200
+Subject: [PATCH] ARM: configs: add panel Rocktech RK055MHD042A0
+
+This config enable the IC Himax HX8694 for the support of the DSI
+panel Rocktech RK055MHD042A0 (720x1280).
+
+Change-Id: I383306d7d6a047399eb4f0398caef7ea82d0aa17
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/418870
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm/configs/fragment-02-multiv7_addons.config | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/configs/fragment-02-multiv7_addons.config b/arch/arm/configs/fragment-02-multiv7_addons.config
+index 48383caa1e84..7b6e480cb84a 100644
+--- a/arch/arm/configs/fragment-02-multiv7_addons.config
++++ b/arch/arm/configs/fragment-02-multiv7_addons.config
+@@ -13,6 +13,7 @@ CONFIG_DEBUG_PREEMPT=y
+ CONFIG_DEBUG_SECTION_MISMATCH=y
+ CONFIG_DRM_DISPLAY_CONNECTOR=y
+ CONFIG_DRM_I2C_ADV7511=y
++CONFIG_DRM_PANEL_HIMAX_HX8394=y
+ CONFIG_DRM_PANEL_ORISETECH_OTM8009A=y
+ CONFIG_DRM_PANEL_RAYDIUM_RM68200=y
+ CONFIG_DRM_PANEL_ROCKTECH_HX8394=y
+-- 
+2.50.1
+

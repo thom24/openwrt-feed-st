@@ -1,0 +1,40 @@
+From 6a3504fbc72f86ae2034fefac12d81523395f5eb Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 29 Jan 2025 11:58:57 +0100
+Subject: [PATCH] usb: dwc2: gadget: move gadget resume after the core is in L0
+ state
+
+When in DWC2_POWER_DOWN_PARAM_NONE, with >no_clock_gating == true, the
+gadget resume happen without lx_state to be set to DWC2_L0.
+This result in "dwc2_hsotg_enqueue_setup: failed queue (-11)" from
+gadget resume routine, trying to queue packet.
+
+Fixes: c9c394abfa84 ("usb: dwc2: Update enter and exit partial power down functions")
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I6dc00621d34dc11d2d89d2ba68f7907191fe3080
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/433271
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+Reviewed-by: Pankaj DEV <pankaj.dev@st.com>
+Tested-by: Christian BRUEL <christian.bruel@foss.st.com>
+---
+ drivers/usb/dwc2/core_intr.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
+index 35f3b5362120..ccacc18e5d63 100644
+--- a/drivers/usb/dwc2/core_intr.c
++++ b/drivers/usb/dwc2/core_intr.c
+@@ -439,6 +439,8 @@ static void dwc2_handle_wakeup_detected_intr(struct dwc2_hsotg *hsotg)
+ 			    !hsotg->params.no_clock_gating)
+ 				dwc2_gadget_exit_clock_gating(hsotg, 0);
+ 
++			/* Change to L0 state, when no_clock_gating == true */
++			hsotg->lx_state = DWC2_L0;
+ 			call_gadget(hsotg, resume);
+ 		} else {
+ 			/* Change to L0 state */
+-- 
+2.50.1
+

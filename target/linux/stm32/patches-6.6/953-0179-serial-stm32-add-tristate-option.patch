@@ -1,0 +1,37 @@
+From b9e45016861bfe0992f61f863bfd83736c5cf56a Mon Sep 17 00:00:00 2001
+From: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+Date: Mon, 9 Sep 2024 09:42:52 +0200
+Subject: [PATCH] serial: stm32: add tristate option
+
+Add tristate option to SERIAL_STM32 driver so it can be built as module
+
+Signed-off-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+Change-Id: If717773d7ce7c92903521af15e5b78cf1f7e90e3
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/402994
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Valentin CARON <valentin.caron@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+---
+ drivers/tty/serial/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+index bdc568a4ab66..90f4c08c0d5b 100644
+--- a/drivers/tty/serial/Kconfig
++++ b/drivers/tty/serial/Kconfig
+@@ -1404,8 +1404,8 @@ config SERIAL_STM32
+ 	  If unsure, say N.
+ 
+ config SERIAL_STM32_CONSOLE
+-	bool "Support for console on STM32"
+-	depends on SERIAL_STM32=y
++	tristate "Support for console on STM32"
++	depends on SERIAL_STM32
+ 	select SERIAL_CORE_CONSOLE
+ 	select SERIAL_EARLYCON
+ 
+-- 
+2.50.1
+

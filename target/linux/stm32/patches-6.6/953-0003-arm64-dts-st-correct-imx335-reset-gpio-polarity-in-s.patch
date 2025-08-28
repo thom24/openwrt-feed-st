@@ -1,0 +1,32 @@
+From 888de956571dcaeff0575336d625b260dabd10c0 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Wed, 8 Jan 2025 11:40:59 +0100
+Subject: [PATCH] arm64: dts: st: correct imx335 reset gpio polarity in
+ stm32mp215f-dk.dts
+
+With commit 9eac174a9b89 ("media: imx335: Fix reset-gpio handling")
+introduction, reset gpio line must be corrected within the device-tree
+in order to match with expected behavior of the reset of module.
+
+Change-Id: I0124211666b9f94dd0218bc71b2a78c54db03b21
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 98e548a035c1..9a9f7c5b8a4e 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -315,7 +315,7 @@ imx335: imx335@1a {
+ 		compatible = "sony,imx335";
+ 		reg = <0x1a>;
+ 		clocks = <&clk_ext_camera>;
+-		reset-gpios = <&gpiod 5 (GPIO_ACTIVE_HIGH | GPIO_PUSH_PULL)>;
++		reset-gpios = <&gpiod 5 (GPIO_ACTIVE_LOW | GPIO_PUSH_PULL)>;
+ 		powerdown-gpios = <&gpiod 0 (GPIO_ACTIVE_HIGH | GPIO_PUSH_PULL)>;
+ 		status = "okay";
+ 
+-- 
+2.50.1
+

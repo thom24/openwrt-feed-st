@@ -1,0 +1,91 @@
+From 55f60c79ac50782cb33031ba3eb885e623f3b938 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Fri, 8 Nov 2024 17:31:54 +0100
+Subject: [PATCH] arm64: dts: st: enable adc on stm32mp215f-dk board
+
+The ADC can be used to monitor the USB Type-C CC1 and CC2 lines. ADC
+reference voltage is 1.8V (from PMIC LDO6). ADC VDDA supply is from PWR
+internal vdda18adc regulator.
+
+CC pin may provide more that 1.8V, hence there is a resistor divider,
+not to exceed max ADC voltage, and a RC filter to accommodate PD
+signaling transitions.
+
+So, configure and enable the ADC, with a "voltage-divider" at each CC
+pin. Full 'Rd' of the divider below CC pin is 5.1K, Rd2 output is 3.9K.
+
+ CC1/CC2 pin
+  -----
+    |                SNK / peripheral (MP21 DK board)
+ .-----.
+ | Rd1 | 1,2K        47K
+ '-----'        .--------------.
+    |------------| Rlp (filter) |-----> ADC ANAx (few pF)
+ .-----.        '--------------'   |
+ | Rd2 | 3,9K                    -----
+ '-----'                         ----- 10nF
+   |                               |
+  GND                             GND
+
+The sampling time at each ANAx pin doesn't need to take into account
+the whole resistors bridge, as the external 10nF filtering capacitor
+is far above SAR ADC internal sampling capacitor (few pF).
+
+Change-Id: Ie91202fd3e115cfad5b97acf3836826e5e9d37f2
+Signed-off-by: Ram Dayal <ram.dayal@st.com>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/419574
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 34 +++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 27e0448ac37a..558774a6276f 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -190,6 +190,40 @@ sound {
+ 		dais = <&mdf1_port0 &mdf1_port1>;
+ 		status = "okay";
+ 	};
++
++	vdiv_cc1: voltage-divider-cc1 {
++		compatible = "voltage-divider";
++		#io-channel-cells = <0>;
++		io-channels = <&adc1 0>;
++		output-ohms = <3900>;
++		full-ohms = <5100>;
++	};
++
++	vdiv_cc2: voltage-divider-cc2 {
++		compatible = "voltage-divider";
++		#io-channel-cells = <0>;
++		io-channels = <&adc1 1>;
++		output-ohms = <3900>;
++		full-ohms = <5100>;
++	};
++};
++
++&adc_1 {
++	/* No pinctrl for ANA0 and ANA1 dedicated pins (channels 0 and 1) */
++	vdda-supply = <&scmi_vdda18adc>;
++	vref-supply = <&scmi_vdda_1v8>;
++	status = "okay";
++	adc1: adc@0 {
++		status = "okay";
++		channel@0 {
++			reg = <0>;
++			st,min-sample-time-ns = <100>;
++		};
++		channel@1{
++			reg = <1>;
++			st,min-sample-time-ns = <100>;
++		};
++	};
+ };
+ 
+ &a35ss_syscfg {
+-- 
+2.50.1
+

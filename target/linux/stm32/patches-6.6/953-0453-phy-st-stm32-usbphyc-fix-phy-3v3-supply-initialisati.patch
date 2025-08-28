@@ -1,0 +1,92 @@
+From ff853d56ec8823c52e31756fd8841a84a8de2603 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Mon, 19 May 2025 11:18:31 +0200
+Subject: [PATCH] phy: st: stm32-usbphyc: fix phy 3v3 supply initialisation
+
+Fix some race when OHCI controller gets resumed first. When OHCI resumes,
+it will call clk_prepare_enable, e.g. stm32_usbphyc_clk48_prepare().
+Currently only 1v1 and 1v8 supplies are enabled, as PLL power supplies.
+The OHCI driver then continues to resume, without the PHY to be fully
+supplied. Last phy_init() and phy_power_on() gets called, OHCI controller
+enters into an IRQ loop condition on STM32MP13 and STM32MP15.
+It seems to coincide with 3V3 regulator_enable(). This results in
+OHCI irq loop, finally disabled by the kernel:
+
+[  131.453882] irq 48: nobody cared (try booting with the "irqpoll" option)
+...
+[  131.590544] handlers:
+[  131.592772] [<9389ab77>] usb_hcd_irq
+[  131.596339] Disabling IRQ #48
+
+Enabling all the USB PHY regulators, a soon as the OHCI resumes fixes the
+issue. This issue isn't systematic, as it may be hidden, by DWC2 (OTG)
+resume phase: it can run asynchronously (hence enabling all the PHY
+common supplies before the OHCI gets resumed)
+
+Fixes: 04edf6d6e22b ("phy: stm32: replace regulator_bulk* by multiple regulator_*")
+Fixes: 94c358da3a05 ("phy: stm32: add support for STM32 USB PHY Controller (USBPHYC)")
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ide36cf754991fb23ca839950067b40b0f7ced850
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/459961
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/phy/st/phy-stm32-usbphyc.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/drivers/phy/st/phy-stm32-usbphyc.c b/drivers/phy/st/phy-stm32-usbphyc.c
+index a11a85783621..e8364e80874f 100644
+--- a/drivers/phy/st/phy-stm32-usbphyc.c
++++ b/drivers/phy/st/phy-stm32-usbphyc.c
+@@ -153,6 +153,7 @@ struct stm32_usbphyc {
+ 	int nphys;
+ 	struct regulator *vdda1v1;
+ 	struct regulator *vdda1v8;
++	struct regulator *vdd3v3;
+ 	atomic_t n_pll_cons;
+ 	struct clk_hw clk48_hw;
+ 	int switch_setup;
+@@ -180,8 +181,14 @@ static int stm32_usbphyc_regulators_enable(struct stm32_usbphyc *usbphyc)
+ 	if (ret)
+ 		goto vdda1v1_disable;
+ 
++	ret = regulator_enable(usbphyc->vdd3v3);
++	if (ret)
++		goto vdda1v8_disable;
++
+ 	return 0;
+ 
++vdda1v8_disable:
++	regulator_disable(usbphyc->vdda1v8);
+ vdda1v1_disable:
+ 	regulator_disable(usbphyc->vdda1v1);
+ 
+@@ -192,6 +199,10 @@ static int stm32_usbphyc_regulators_disable(struct stm32_usbphyc *usbphyc)
+ {
+ 	int ret;
+ 
++	ret = regulator_disable(usbphyc->vdd3v3);
++	if (ret)
++		return ret;
++
+ 	ret = regulator_disable(usbphyc->vdda1v8);
+ 	if (ret)
+ 		return ret;
+@@ -704,6 +715,13 @@ static int stm32_usbphyc_probe(struct platform_device *pdev)
+ 		goto clk_disable;
+ 	}
+ 
++	usbphyc->vdd3v3 = devm_regulator_get(dev, "phy");
++	if (IS_ERR(usbphyc->vdd3v3)) {
++		ret = dev_err_probe(dev, PTR_ERR(usbphyc->vdd3v3),
++				    "failed to get phy supply\n");
++		goto clk_disable;
++	}
++
+ 	for_each_child_of_node(np, child) {
+ 		struct stm32_usbphyc_phy *usbphyc_phy;
+ 		struct phy *phy;
+-- 
+2.50.1
+

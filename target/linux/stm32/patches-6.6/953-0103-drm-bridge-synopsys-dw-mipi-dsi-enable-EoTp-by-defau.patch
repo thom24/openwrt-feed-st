@@ -1,0 +1,48 @@
+From e50d5f456732cad0f84f3bea97a4f5b814eeb715 Mon Sep 17 00:00:00 2001
+From: Christoph Fritz <chf.fritz@googlemail.com>
+Date: Fri, 5 Jul 2024 11:38:44 +0200
+Subject: [PATCH] drm/bridge: synopsys: dw-mipi-dsi: enable EoTp by default
+
+Enable the transmission of an EoTp (end of transmission packet) by
+default. EoTp should be enabled anyway because it is a Linux necessity
+that can be disabled by a dsi mod_flag if needed.
+
+EoTp signals the end of an HS transmission, this adds overall robustness
+at protocol level at the expense of an increased overhead.
+
+Change-Id: I86f8cfa4edd49ef2d26ebf3f627707f43c683ca4
+Signed-off-by: Christoph Fritz <chf.fritz@googlemail.com>
+Reviewed-by: Robert Foss <rfoss@kernel.org>
+Signed-off-by: Robert Foss <rfoss@kernel.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/6a7293bd06942131161c5a7b7878c51cfbbb807e.camel@googlemail.com
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/405683
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Yannick FERTRE <yannick.fertre@foss.st.com>
+Domain-Review: Yannick FERTRE <yannick.fertre@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Yannick FERTRE <yannick.fertre@foss.st.com>
+---
+ drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
+index 4b4ce38af3b4..b053954172e1 100644
+--- a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
++++ b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
+@@ -709,7 +709,12 @@ static void dw_mipi_dsi_dpi_config(struct dw_mipi_dsi *dsi,
+ 
+ static void dw_mipi_dsi_packet_handler_config(struct dw_mipi_dsi *dsi)
+ {
+-	dsi_write(dsi, DSI_PCKHDL_CFG, CRC_RX_EN | ECC_RX_EN | BTA_EN);
++	u32 val = CRC_RX_EN | ECC_RX_EN | BTA_EN | EOTP_TX_EN;
++
++	if (dsi->mode_flags & MIPI_DSI_MODE_NO_EOT_PACKET)
++		val &= ~EOTP_TX_EN;
++
++	dsi_write(dsi, DSI_PCKHDL_CFG, val);
+ }
+ 
+ static void dw_mipi_dsi_video_packet_config(struct dw_mipi_dsi *dsi,
+-- 
+2.50.1
+

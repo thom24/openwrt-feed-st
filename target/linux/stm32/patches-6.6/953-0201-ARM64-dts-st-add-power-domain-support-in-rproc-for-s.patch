@@ -1,0 +1,44 @@
+From 0c2d44f5399311f611ee1be78b739d08ed60638b Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Date: Mon, 3 Feb 2025 19:12:39 +0100
+Subject: [PATCH] ARM64: dts: st: add power domain support in rproc for
+ stm32mp23
+
+Add "default" and "sleep" PM domains in rproc node for CM33 low power
+in SRAM.
+
+These 2 domains allow to correctly handle CPUIDLE and S2IDLE modes;
+- when keep-power-in-suspend is activated in board. the driver selects
+  the power domain "sleep" considering that the CM33 FW is running in
+  RETRAM or MCU SRAMs,
+- when keep-power-in-suspend is deactivated in board. the driver
+  selects the power domain "sleep" considering thate CM33 FW is running
+  in DDR.
+
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Change-Id: I12855072c5011667f61899ee6cd95d39ef227ee4
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/434120
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp231.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+index e0bc9c36c62a..5a4355cda3b8 100644
+--- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+@@ -3020,6 +3020,8 @@ m33_rproc: m33@0 {
+ 			interrupts = <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>;
+ 			nvmem-cells = <&rsc_tbl_addr>, <&rsc_tbl_size>;
+ 			nvmem-cell-names = "rsc-tbl-addr", "rsc-tbl-size";
++			power-domains = <&cluster_pd>, <&ret_pd>;
++			power-domain-names = "default", "sleep";
+ 
+ 			status = "disabled";
+ 		};
+-- 
+2.50.1
+

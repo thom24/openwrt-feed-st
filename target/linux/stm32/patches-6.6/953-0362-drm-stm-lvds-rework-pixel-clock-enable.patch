@@ -1,0 +1,64 @@
+From e56e077107c08cf1335a804a2a7bafc05952cc2d Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Tue, 4 Mar 2025 11:44:11 +0100
+Subject: [PATCH] drm/stm: lvds: rework pixel clock enable
+
+Release the LVDS PHY from reset mode only if it has not been done before.
+This prevents graphical artifacts during the boot sequence.
+
+Change-Id: Ib0ff096348b2c677ddf1c575ff768f34f522aaf6
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/441602
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/gpu/drm/stm/lvds.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
+index a0dd279488da..d4ba3224bf3b 100644
+--- a/drivers/gpu/drm/stm/lvds.c
++++ b/drivers/gpu/drm/stm/lvds.c
+@@ -556,6 +556,7 @@ static int lvds_pixel_clk_enable(struct clk_hw *hw)
+ 	struct drm_device *drm = lvds->lvds_bridge.dev;
+ 	struct lvds_phy_info *phy;
+ 	int ret;
++	u32 reg;
+ 
+ 	ret = clk_prepare_enable(lvds->pclk);
+ 	if (ret) {
+@@ -573,10 +574,13 @@ static int lvds_pixel_clk_enable(struct clk_hw *hw)
+ 	/* In case we are operating in dual link the second PHY is set before the primary PHY. */
+ 	if (lvds->secondary) {
+ 		phy = lvds->secondary;
++		reg = lvds_read(lvds, phy->base + phy->ofs.GCR);
+ 
+ 		/* Release LVDS PHY from reset mode */
+-		lvds_set(lvds, phy->base + phy->ofs.GCR, PHY_GCR_DIV_RSTN | PHY_GCR_RSTZ);
+-		lvds_pll_config(lvds, phy);
++		if (!(reg & (PHY_GCR_DIV_RSTN | PHY_GCR_RSTZ))) {
++			lvds_set(lvds, phy->base + phy->ofs.GCR, PHY_GCR_DIV_RSTN | PHY_GCR_RSTZ);
++			lvds_pll_config(lvds, phy);
++		}
+ 
+ 		ret = lvds_pll_enable(lvds, phy);
+ 		if (ret) {
+@@ -587,10 +591,13 @@ static int lvds_pixel_clk_enable(struct clk_hw *hw)
+ 
+ 	if (lvds->primary) {
+ 		phy = lvds->primary;
++		reg = lvds_read(lvds, phy->base + phy->ofs.GCR);
+ 
+ 		/* Release LVDS PHY from reset mode */
+-		lvds_set(lvds, phy->base + phy->ofs.GCR, PHY_GCR_DIV_RSTN | PHY_GCR_RSTZ);
+-		lvds_pll_config(lvds, phy);
++		if (!(reg & (PHY_GCR_DIV_RSTN | PHY_GCR_RSTZ))) {
++			lvds_set(lvds, phy->base + phy->ofs.GCR, PHY_GCR_DIV_RSTN | PHY_GCR_RSTZ);
++			lvds_pll_config(lvds, phy);
++		}
+ 
+ 		ret = lvds_pll_enable(lvds, phy);
+ 		if (ret) {
+-- 
+2.50.1
+

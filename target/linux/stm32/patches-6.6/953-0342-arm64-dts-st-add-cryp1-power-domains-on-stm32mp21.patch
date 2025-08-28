@@ -1,0 +1,49 @@
+From dd79c8da39ce91299cb416f9d0e3cc0ad049b418 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Tue, 25 Mar 2025 11:34:57 +0100
+Subject: [PATCH] arm64: dts: st: add cryp1 power domains on stm32mp21
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Update cryp1 node to add power domains.
+
+Change-Id: I375fb630cc8c1f800ab1ac70b3148244acbf09fc
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/446399
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp21xc.dtsi | 1 +
+ arch/arm64/boot/dts/st/stm32mp21xf.dtsi | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp21xc.dtsi b/arch/arm64/boot/dts/st/stm32mp21xc.dtsi
+index 0471458af417..38f07c939e39 100644
+--- a/arch/arm64/boot/dts/st/stm32mp21xc.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp21xc.dtsi
+@@ -15,6 +15,7 @@ cryp1: crypto@42030000 {
+ 		       <&hpdma 5 0x43 0x3012>;
+ 		dma-names = "in", "out";
+ 		access-controllers = <&rifsc 98>;
++		power-domains = <&d1_pd>;
+ 		status = "disabled";
+ 	};
+ };
+diff --git a/arch/arm64/boot/dts/st/stm32mp21xf.dtsi b/arch/arm64/boot/dts/st/stm32mp21xf.dtsi
+index 0471458af417..38f07c939e39 100644
+--- a/arch/arm64/boot/dts/st/stm32mp21xf.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp21xf.dtsi
+@@ -15,6 +15,7 @@ cryp1: crypto@42030000 {
+ 		       <&hpdma 5 0x43 0x3012>;
+ 		dma-names = "in", "out";
+ 		access-controllers = <&rifsc 98>;
++		power-domains = <&d1_pd>;
+ 		status = "disabled";
+ 	};
+ };
+-- 
+2.50.1
+

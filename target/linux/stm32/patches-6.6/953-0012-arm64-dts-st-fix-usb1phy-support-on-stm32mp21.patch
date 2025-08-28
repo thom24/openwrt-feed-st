@@ -1,0 +1,47 @@
+From 16c0576ccc889a363a533c8d18a756ebfad260bb Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Mon, 21 Oct 2024 12:40:38 +0200
+Subject: [PATCH] arm64: dts: st: fix usb1phy support on stm32mp21
+
+The USB2PHY1 is a clock provider. It provides clocks (e.g. 48MHz...) to
+the controller, through RCC:
+_______________      ____________________      _____________
+| USB2PHY PLL | ---> | RCC clock gating | ---> | EHCI/OHCI |
+---------------      --------------------      -------------
+
+There are some constraints to enable first the PLL, before the clock can
+be gated, routed to USB controllers. This is achieved by declaring the
+PHY as a clock provider, so it can be inserted properly into the clock
+tree. There are know cases, especially when exiting low power, where
+the clocks needs to be enabled (with clk_enable()) before the phy_init
+is called: OHCI driver may freeze, without properly clocking it.
+
+So add the necessary #clock-cells, so the clock can be requested in the
+controller nodes.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I02c0ea73991d8aad9197201e7a98b29a6fdabf01
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/412807
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Ram DAYAL <ram.dayal@st.com>
+Domain-Review: Ram DAYAL <ram.dayal@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 748f66f9decf..dd0b64a3c20e 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -201,6 +201,7 @@ timer {
+ 	usb2_phy1: usb2-phy1 {
+ 		compatible      = "st,stm32mp21-usb2phy";
+ 		#phy-cells      = <0>;
++		#clock-cells    = <0>;
+ 		st,syscfg       = <&syscfg 0x2400>;
+ 		clocks          = <&rcc CK_KER_USB2PHY1>;
+ 		resets          = <&rcc USB2PHY1_R>;
+-- 
+2.50.1
+

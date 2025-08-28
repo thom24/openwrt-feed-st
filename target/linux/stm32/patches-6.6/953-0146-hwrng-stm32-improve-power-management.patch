@@ -1,0 +1,52 @@
+From 761bee2fa7ea87dd911ed19af6529e9e59743584 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Wed, 8 Jan 2025 18:20:51 +0100
+Subject: [PATCH] hwrng: stm32 - improve power management
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Disable pm_runtime if the driver registration failed in order to avoid
+blocking the SoC to enter in low power mode.
+
+Change-Id: I63852ce53593678dec801cafa5b648781b65060c
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/427656
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ drivers/char/hw_random/stm32-rng.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
+index a9df329aa031..9c630623c53d 100644
+--- a/drivers/char/hw_random/stm32-rng.c
++++ b/drivers/char/hw_random/stm32-rng.c
+@@ -575,6 +575,7 @@ static int stm32_rng_probe(struct platform_device *ofdev)
+ 	struct device_node *np = ofdev->dev.of_node;
+ 	struct stm32_rng_private *priv;
+ 	struct resource *res;
++	int ret;
+ 
+ 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+ 	if (!priv)
+@@ -624,7 +625,13 @@ static int stm32_rng_probe(struct platform_device *ofdev)
+ 	pm_runtime_use_autosuspend(dev);
+ 	pm_runtime_enable(dev);
+ 
+-	return devm_hwrng_register(dev, &priv->rng);
++	ret = devm_hwrng_register(dev, &priv->rng);
++	if (ret) {
++		pm_runtime_disable(dev);
++		pm_runtime_set_suspended(dev);
++	}
++
++	return ret;
+ }
+ 
+ static struct platform_driver stm32_rng_driver = {
+-- 
+2.50.1
+

@@ -1,0 +1,35 @@
+From 669223c2513938aedc6c87d59775f810390d9e31 Mon Sep 17 00:00:00 2001
+From: Michel JAOUEN <michel.jaouen@st.com>
+Date: Tue, 29 Oct 2024 08:46:58 +0100
+Subject: [PATCH] firmware: arm_scmi: increase mailbox timeout
+
+During linux stress test, arm-scmi timeout is observed.
+Increasing this value solves unrecoverable arm-scmi timeout.
+
+Change-Id: If2810ece90404b39ad8f05e8c2a29b2d6a5e6702
+Signed-off-by: Michel JAOUEN <michel.jaouen@st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/414787
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ drivers/firmware/arm_scmi/mailbox.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/firmware/arm_scmi/mailbox.c b/drivers/firmware/arm_scmi/mailbox.c
+index 8e513f70b75d..c4b0afa79acd 100644
+--- a/drivers/firmware/arm_scmi/mailbox.c
++++ b/drivers/firmware/arm_scmi/mailbox.c
+@@ -333,7 +333,7 @@ static const struct scmi_transport_ops scmi_mailbox_ops = {
+ 
+ const struct scmi_desc scmi_mailbox_desc = {
+ 	.ops = &scmi_mailbox_ops,
+-	.max_rx_timeout_ms = 30, /* We may increase this if required */
++	.max_rx_timeout_ms = 100, /* We may increase this if required */
+ 	.max_msg = 20, /* Limited by MBOX_TX_QUEUE_LEN */
+ 	.max_msg_size = 128,
+ };
+-- 
+2.50.1
+

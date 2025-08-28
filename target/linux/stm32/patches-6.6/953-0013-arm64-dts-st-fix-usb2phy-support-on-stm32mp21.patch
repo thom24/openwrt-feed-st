@@ -1,0 +1,47 @@
+From d5257317a3cda477c560906f8490037040271e98 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Mon, 21 Oct 2024 14:05:43 +0200
+Subject: [PATCH] arm64: dts: st: fix usb2phy support on stm32mp21
+
+The USB2PHY2 is a clock provider. It provides clocks (e.g. 48MHz...) to
+the OTG controller, through RCC:
+_______________      ____________________      _____________
+| USB2PHY PLL | ---> | RCC clock gating | ---> |    OTG    |
+---------------      --------------------      -------------
+
+There are some constraints to enable first the PLL, before the clock can
+be gated, routed to OTG controller. This is achieved by declaring the
+PHY as a clock provider, so it can be inserted properly into the clock
+tree. There are know cases, during probe, or when exiting low power,
+where the clocks needs to be enabled (with clk_enable()) before the
+phy_init get called.
+
+Add the necessary #clock-cells, so the clock can be requested in the OTG
+controller node.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Id45bdd777b1b19bfa6d258029443abdeeb6dd823
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/412808
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Ram DAYAL <ram.dayal@st.com>
+Reviewed-by: Ram DAYAL <ram.dayal@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index dd0b64a3c20e..e842b2eaf3dc 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -211,6 +211,7 @@ usb2_phy1: usb2-phy1 {
+ 	usb2_phy2: usb2-phy2 {
+ 		compatible      = "st,stm32mp21-usb2phy";
+ 		#phy-cells      = <0>;
++		#clock-cells    = <0>;
+ 		st,syscfg       = <&syscfg 0x2800>;
+ 		clocks          = <&rcc CK_KER_USB2PHY2EN>;
+ 		resets          = <&rcc USB2PHY2_R>;
+-- 
+2.50.1
+

@@ -1,0 +1,37 @@
+From 2ca8e87f0915105fd1f2e9351b574486cf6528d3 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Mon, 3 Feb 2025 12:40:50 +0100
+Subject: [PATCH] media: dcmipp: isp: reuse default height/width from common
+
+Avoid duplicated define of default HEIGHT and WIDTH
+which are already defined within the dcmipp-common.h file.
+
+Change-Id: I0b310ac2375c9d4b85d146246b3be6a777f047b7
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/436011
+Domain-Review: Hugues FRUCHET <hugues.fruchet@st.com>
+Tested-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
+index b3250de733ce..eb72b504dd82 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
+@@ -24,9 +24,6 @@
+ 
+ #define DCMIPP_ISP_DRV_NAME "dcmipp-isp"
+ 
+-#define DCMIPP_FMT_WIDTH_DEFAULT  640
+-#define DCMIPP_FMT_HEIGHT_DEFAULT 480
+-
+ #define DCMIPP_CMSR2_P1VSYNCF BIT(18)
+ 
+ #define DCMIPP_P1SRCR	0x820
+-- 
+2.50.1
+

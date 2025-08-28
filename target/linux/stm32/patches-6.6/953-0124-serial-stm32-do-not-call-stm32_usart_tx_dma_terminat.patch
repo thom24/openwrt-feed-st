@@ -1,0 +1,37 @@
+From a1ea9beed6683468d644ee0374b0a29abc45c5d3 Mon Sep 17 00:00:00 2001
+From: Valentin Caron <valentin.caron@foss.st.com>
+Date: Mon, 9 Dec 2024 11:57:37 +0100
+Subject: [PATCH] serial: stm32: do not call stm32_usart_tx_dma_terminate every
+ time
+
+It is not necessary to call stm32_usart_tx_dma_terminate() if the transfer
+is not already started. Anyway this does not produce any issue, but this
+is a little bit cleaner.
+
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: I17724099268de5de6c5c7d52101d9cbf57279b2c
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/423586
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ drivers/tty/serial/stm32-usart.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index f975a8454a1e..e7d30a278e7b 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -1208,7 +1208,7 @@ static void stm32_usart_flush_buffer(struct uart_port *port)
+ {
+ 	struct stm32_port *stm32_port = to_stm32_port(port);
+ 
+-	if (stm32_port->tx_ch)
++	if (stm32_port->tx_ch && stm32_usart_tx_dma_started(stm32_port))
+ 		stm32_usart_tx_dma_terminate(stm32_port);
+ }
+ 
+-- 
+2.50.1
+

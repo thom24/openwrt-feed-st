@@ -1,0 +1,55 @@
+From 3bf21e1022ef3f92be7ad106c40dba30bc3ae808 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Wed, 15 Jan 2025 14:28:35 +0100
+Subject: [PATCH] firewall: add stubs in stm32_firewall.h header file
+
+Add stubs for stm32_firewall_controller_register() and
+stm32_firewall_controller_unregister() when CONFIG_STM32_FIREWALL isn't
+embedded.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: Iee044400e310e1add1b0ab9f683f2a984779b955
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/429014
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ include/linux/bus/stm32_firewall.h | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/include/linux/bus/stm32_firewall.h b/include/linux/bus/stm32_firewall.h
+index 4949792cd01d..5a429c818063 100644
+--- a/include/linux/bus/stm32_firewall.h
++++ b/include/linux/bus/stm32_firewall.h
+@@ -52,6 +52,8 @@ struct stm32_firewall_controller {
+ 					 size_t size);
+ };
+ 
++#if IS_ENABLED(CONFIG_STM32_FIREWALL)
++
+ /**
+  * stm32_firewall_controller_register - Register a firewall controller to the STM32 firewall
+  *					framework
+@@ -68,4 +70,16 @@ int stm32_firewall_controller_register(struct stm32_firewall_controller *firewal
+  */
+ void stm32_firewall_controller_unregister(struct stm32_firewall_controller *firewall_controller);
+ 
++#else /* IS_ENABLED(CONFIG_STM32_FIREWALL) */
++
++int stm32_firewall_controller_register(struct stm32_firewall_controller *firewall_controller)
++{
++	return -ENODEV;
++}
++
++void stm32_firewall_controller_unregister(struct stm32_firewall_controller *firewall_controller)
++{
++}
++
++#endif/* IS_ENABLED(CONFIG_STM32_FIREWALL) */
+ #endif /* _STM32_FIREWALL_H */
+-- 
+2.50.1
+

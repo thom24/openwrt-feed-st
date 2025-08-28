@@ -1,0 +1,83 @@
+From 699aa9cabaab6a735f84bc0dcf1b13c6f052c2bd Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Tue, 8 Oct 2024 09:52:14 +0200
+Subject: [PATCH] arm64: dts: st: csi is only available on stm32mp215
+
+Move to the csi node into stm32mp215.dtsi since it is only
+available from stm32mp215 flavor.
+
+Change-Id: I48d038e607b17ebb7786f4500af1dc4d6ae452b7
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/409587
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 14 +-------------
+ arch/arm64/boot/dts/st/stm32mp215.dtsi | 14 ++++++++++++++
+ 2 files changed, 15 insertions(+), 13 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 326c480af60b..84925f2964e8 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -260,7 +260,7 @@ usb2_phy2: usb2-phy2 {
+ 		status          = "disabled";
+ 	};
+ 
+-	soc@0 {
++	soc0: soc@0 {
+ 		compatible = "simple-bus";
+ 		#address-cells = <1>;
+ 		#size-cells = <2>;
+@@ -1643,18 +1643,6 @@ i3c3: i3c@46080000 {
+ 				status = "disabled";
+ 			};
+ 
+-			csi: csi@48020000 {
+-				compatible = "st,stm32mp25-csi";
+-				reg = <0x48020000 0x0 0x2000>;
+-				interrupts = <GIC_SPI 129 IRQ_TYPE_LEVEL_HIGH>;
+-				resets = <&rcc CSI_R>;
+-				clocks = <&rcc CK_KER_CSI>, <&rcc CK_KER_CSITXESC>,
+-					 <&rcc CK_KER_CSIPHY>;
+-				clock-names = "pclk", "txesc", "csi2phy";
+-				access-controllers = <&rifsc 86>;
+-				status = "disabled";
+-			};
+-
+ 			lptimer3: timer@46050000 {
+ 				compatible = "st,stm32mp21-lptimer";
+ 				reg = <0x46050000 0x0 0x400>;
+diff --git a/arch/arm64/boot/dts/st/stm32mp215.dtsi b/arch/arm64/boot/dts/st/stm32mp215.dtsi
+index 9d24dd816408..821d57a95a84 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp215.dtsi
+@@ -5,6 +5,20 @@
+  */
+ #include "stm32mp213.dtsi"
+ 
++&soc0 {
++	csi: csi@48020000 {
++		compatible = "st,stm32mp25-csi";
++		reg = <0x48020000 0x0 0x2000>;
++		interrupts = <GIC_SPI 129 IRQ_TYPE_LEVEL_HIGH>;
++		resets = <&rcc CSI_R>;
++		clocks = <&rcc CK_KER_CSI>, <&rcc CK_KER_CSITXESC>,
++			 <&rcc CK_KER_CSIPHY>;
++		clock-names = "pclk", "txesc", "csi2phy";
++		access-controllers = <&rifsc 86>;
++		status = "disabled";
++	};
++};
++
+ &soc1 {
+ 	ltdc: display-controller@48010000 {
+ 		compatible = "st,stm32mp21-ltdc";
+-- 
+2.50.1
+

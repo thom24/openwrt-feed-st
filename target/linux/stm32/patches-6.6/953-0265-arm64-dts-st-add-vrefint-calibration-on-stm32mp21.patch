@@ -1,0 +1,56 @@
+From 27c3de01d596dc2d5e23b22666529cefe0c8a126 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Thu, 23 Jan 2025 10:36:24 +0100
+Subject: [PATCH] arm64: dts: st: add vrefint calibration on stm32mp21
+
+Describe vrefint calibration cell to be retrieved by ADCs through bsec,
+on STM32MP21.
+
+Change-Id: I9a9eca909aeaf24ae72152c0adedab0d505f881a
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/430954
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 32e1e9dd26a7..2d7c2ff0a1ab 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -1536,6 +1536,8 @@ adc1: adc@0 {
+ 					dmas = <&hpdma 58 0x40 0x12>;
+ 					dma-names = "rx";
+ 					st,adc-trigger-sel = <0>;
++					nvmem-cells = <&vrefint>;
++					nvmem-cell-names = "vrefint";
+ 					status = "disabled";
+ 
+ 					channel@14 {
+@@ -1569,6 +1571,8 @@ adc2: adc@0 {
+ 					dmas = <&hpdma 59 0x40 0x12>;
+ 					dma-names = "rx";
+ 					st,adc-trigger-sel = <1>;
++					nvmem-cells = <&vrefint>;
++					nvmem-cell-names = "vrefint";
+ 					status = "disabled";
+ 
+ 					channel@14 {
+@@ -1987,6 +1991,10 @@ part_number_otp@24 {
+ 				reg = <0x24 0x4>;
+ 			};
+ 
++			vrefint: vrefin-cal@1b8 {
++				reg = <0x1b8 0x2>;
++			};
++
+ 			package_otp@1e8 {
+ 				reg = <0x1e8 0x1>;
+ 				bits = <0 3>;
+-- 
+2.50.1
+

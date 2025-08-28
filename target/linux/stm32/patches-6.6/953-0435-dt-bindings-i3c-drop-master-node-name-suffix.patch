@@ -1,0 +1,116 @@
+From 82f400005bdb2fd700d9c487856a25448616c296 Mon Sep 17 00:00:00 2001
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Date: Wed, 17 Jan 2024 08:56:16 +0100
+Subject: [PATCH] dt-bindings: i3c: drop "master" node name suffix
+
+Drop the requirement of "-master" suffix in node names because:
+1. "Master" word is discouraged and MIPI Alliance renamed it to
+   "Controller".
+2. Some devices can operate in Controller (Master) or Target mode, thus
+   the name is not accurate in such cases.
+3. Other buses, like I2C controllers, use simple "i2c".
+
+Change-Id: I9d27dea08efbb6f208fb745854998c2219e43b67
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/455178
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ Documentation/devicetree/bindings/i3c/aspeed,ast2600-i3c.yaml | 2 +-
+ Documentation/devicetree/bindings/i3c/cdns,i3c-master.yaml    | 2 +-
+ Documentation/devicetree/bindings/i3c/i3c.yaml                | 4 ++--
+ Documentation/devicetree/bindings/i3c/mipi-i3c-hci.yaml       | 2 +-
+ Documentation/devicetree/bindings/i3c/silvaco,i3c-master.yaml | 2 +-
+ Documentation/devicetree/bindings/i3c/snps,dw-i3c-master.yaml | 2 +-
+ 6 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/i3c/aspeed,ast2600-i3c.yaml b/Documentation/devicetree/bindings/i3c/aspeed,ast2600-i3c.yaml
+index fcc3dbff9c9a..47be5d9a32d4 100644
+--- a/Documentation/devicetree/bindings/i3c/aspeed,ast2600-i3c.yaml
++++ b/Documentation/devicetree/bindings/i3c/aspeed,ast2600-i3c.yaml
+@@ -57,7 +57,7 @@ examples:
+   - |
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+ 
+-    i3c-master@2000 {
++    i3c@2000 {
+         compatible = "aspeed,ast2600-i3c";
+         reg = <0x2000 0x1000>;
+         #address-cells = <3>;
+diff --git a/Documentation/devicetree/bindings/i3c/cdns,i3c-master.yaml b/Documentation/devicetree/bindings/i3c/cdns,i3c-master.yaml
+index cc40d25358ec..cad6d53d0e2e 100644
+--- a/Documentation/devicetree/bindings/i3c/cdns,i3c-master.yaml
++++ b/Documentation/devicetree/bindings/i3c/cdns,i3c-master.yaml
+@@ -41,7 +41,7 @@ unevaluatedProperties: false
+ 
+ examples:
+   - |
+-    i3c-master@d040000 {
++    i3c@d040000 {
+         compatible = "cdns,i3c-master";
+         clocks = <&coreclock>, <&i3csysclock>;
+         clock-names = "pclk", "sysclk";
+diff --git a/Documentation/devicetree/bindings/i3c/i3c.yaml b/Documentation/devicetree/bindings/i3c/i3c.yaml
+index ab69f4115de4..073e620a8de2 100644
+--- a/Documentation/devicetree/bindings/i3c/i3c.yaml
++++ b/Documentation/devicetree/bindings/i3c/i3c.yaml
+@@ -17,7 +17,7 @@ description: |
+ 
+ properties:
+   $nodename:
+-    pattern: "^i3c-master@[0-9a-f]+$"
++    pattern: "^i3c@[0-9a-f]+$"
+ 
+   "#address-cells":
+     const: 3
+@@ -147,7 +147,7 @@ additionalProperties: true
+ 
+ examples:
+   - |
+-    i3c-master@d040000 {
++    i3c@d040000 {
+         compatible = "cdns,i3c-master";
+         clocks = <&coreclock>, <&i3csysclock>;
+         clock-names = "pclk", "sysclk";
+diff --git a/Documentation/devicetree/bindings/i3c/mipi-i3c-hci.yaml b/Documentation/devicetree/bindings/i3c/mipi-i3c-hci.yaml
+index 5dda8cb44cdb..39bb1a1784c9 100644
+--- a/Documentation/devicetree/bindings/i3c/mipi-i3c-hci.yaml
++++ b/Documentation/devicetree/bindings/i3c/mipi-i3c-hci.yaml
+@@ -43,7 +43,7 @@ unevaluatedProperties: false
+ 
+ examples:
+   - |
+-    i3c-master@a0000000 {
++    i3c@a0000000 {
+       compatible = "mipi-i3c-hci";
+       reg = <0xa0000000 0x2000>;
+       interrupts = <89>;
+diff --git a/Documentation/devicetree/bindings/i3c/silvaco,i3c-master.yaml b/Documentation/devicetree/bindings/i3c/silvaco,i3c-master.yaml
+index 133855f11b4f..c56ff77677f1 100644
+--- a/Documentation/devicetree/bindings/i3c/silvaco,i3c-master.yaml
++++ b/Documentation/devicetree/bindings/i3c/silvaco,i3c-master.yaml
+@@ -48,7 +48,7 @@ unevaluatedProperties: false
+ 
+ examples:
+   - |
+-    i3c-master@a0000000 {
++    i3c@a0000000 {
+         compatible = "silvaco,i3c-master-v1";
+         clocks = <&zynqmp_clk 71>, <&fclk>, <&sclk>;
+         clock-names = "pclk", "fast_clk", "slow_clk";
+diff --git a/Documentation/devicetree/bindings/i3c/snps,dw-i3c-master.yaml b/Documentation/devicetree/bindings/i3c/snps,dw-i3c-master.yaml
+index 7a76fd32962a..c0e805e531be 100644
+--- a/Documentation/devicetree/bindings/i3c/snps,dw-i3c-master.yaml
++++ b/Documentation/devicetree/bindings/i3c/snps,dw-i3c-master.yaml
+@@ -35,7 +35,7 @@ unevaluatedProperties: false
+ 
+ examples:
+   - |
+-    i3c-master@2000 {
++    i3c@2000 {
+         compatible = "snps,dw-i3c-master-1.00a";
+         #address-cells = <3>;
+         #size-cells = <0>;
+-- 
+2.50.1
+

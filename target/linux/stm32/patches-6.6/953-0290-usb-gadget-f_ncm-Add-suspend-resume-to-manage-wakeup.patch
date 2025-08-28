@@ -1,0 +1,62 @@
+From 348e916c0126bdc469da7fc8192c601810fb23db Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Tue, 28 Jan 2025 17:26:22 +0100
+Subject: [PATCH] usb: gadget: f_ncm: Add suspend/resume to manage wakeup
+ support
+
+Add support for suspend/resume to f_ncm function. When the host has
+suspended the bus, when remote wakeup capability has been enabled, the
+device can trigger a remote wakeup to resume functionality.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ifdadc5d89f59252e58647a230608f874c83c4226
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/432506
+Reviewed-by: Pankaj DEV <pankaj.dev@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/usb/gadget/function/f_ncm.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
+index e2f57ebddc78..6dffe8608399 100644
+--- a/drivers/usb/gadget/function/f_ncm.c
++++ b/drivers/usb/gadget/function/f_ncm.c
+@@ -1686,6 +1686,26 @@ static void ncm_unbind(struct usb_configuration *c, struct usb_function *f)
+ 		gether_unregister_netdev(netdev_priv(opts->net));
+ }
+ 
++static void ncm_suspend(struct usb_function *f)
++{
++	struct f_ncm *ncm = func_to_ncm(f);
++	struct usb_composite_dev *cdev = ncm->port.func.config->cdev;
++
++	DBG(cdev, "ncm Suspend\n");
++
++	gether_suspend(&ncm->port);
++}
++
++static void ncm_resume(struct usb_function *f)
++{
++	struct f_ncm *ncm = func_to_ncm(f);
++	struct usb_composite_dev *cdev = ncm->port.func.config->cdev;
++
++	DBG(cdev, "ncm Resume\n");
++
++	gether_resume(&ncm->port);
++}
++
+ static struct usb_function *ncm_alloc(struct usb_function_instance *fi)
+ {
+ 	struct f_ncm		*ncm;
+@@ -1727,6 +1747,8 @@ static struct usb_function *ncm_alloc(struct usb_function_instance *fi)
+ 	ncm->port.func.setup = ncm_setup;
+ 	ncm->port.func.disable = ncm_disable;
+ 	ncm->port.func.free_func = ncm_free;
++	ncm->port.func.suspend = ncm_suspend;
++	ncm->port.func.resume = ncm_resume;
+ 
+ 	ncm->port.wrap = ncm_wrap_ntb;
+ 	ncm->port.unwrap = ncm_unwrap_ntb;
+-- 
+2.50.1
+

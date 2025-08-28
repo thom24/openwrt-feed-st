@@ -1,0 +1,53 @@
+From 27528592f2e58a39bfe7a41f967ff33cbee4eaf3 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Wed, 4 Dec 2024 13:15:41 +0100
+Subject: [PATCH] i3c: master: Use DIV_ROUND_CLOSEST_ULL for u64 division.
+
+Fix _aeabi_uldivmod undefined aarch32 link error
+(native u64 div is not available on aarch32)
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I8e9daec1cca05c1d65573f098991eebd3de9789d
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/422638
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/i3c/master/stm32-i3c-master.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/i3c/master/stm32-i3c-master.c b/drivers/i3c/master/stm32-i3c-master.c
+index 4806456ab2e2..cba20b0e72a3 100644
+--- a/drivers/i3c/master/stm32-i3c-master.c
++++ b/drivers/i3c/master/stm32-i3c-master.c
+@@ -819,8 +819,8 @@ static int stm32_i3c_pure_timing_cfg(struct i3c_master_controller *m, unsigned l
+ 	dev_dbg(ddata->dev, "mode=%u, i3c freq=%lu\n", bus->mode, bus->scl_rate.i3c);
+ 
+ 	duty_cycle = 50; //TODO SCL duty-cycle in I3C ?
+-	ti3cclk_ps = DIV_ROUND_CLOSEST(PICO, i3cclk_rate);
+-	ti3c_pp_min_ps = DIV_ROUND_CLOSEST(PICO, bus->scl_rate.i3c);
++	ti3cclk_ps = DIV_ROUND_CLOSEST_ULL(PICO, i3cclk_rate);
++	ti3c_pp_min_ps = DIV_ROUND_CLOSEST_ULL(PICO, bus->scl_rate.i3c);
+ 	ti3cl_od_min_ps = I3C_BUS_TLOW_OD_MIN_NS * 1000;
+ 
+ 	/* I3C Open Drain SCL Clock High Period */
+@@ -904,11 +904,11 @@ static int stm32_i3c_mixed_timing_cfg(struct i3c_master_controller *m, unsigned
+ 		bus->mode, bus->scl_rate.i3c, bus->scl_rate.i2c);
+ 
+ 	duty_cycle = 40; //TODO SCL duty-cycle in I2C ?
+-	ti3cclk_ps = DIV_ROUND_CLOSEST(PICO, i3cclk_rate);
+-	ti3c_pp_min_ps = DIV_ROUND_CLOSEST(PICO, bus->scl_rate.i3c);
+-	ti2c_od_min_ps = DIV_ROUND_CLOSEST(PICO, bus->scl_rate.i2c);
++	ti3cclk_ps = DIV_ROUND_CLOSEST_ULL(PICO, i3cclk_rate);
++	ti3c_pp_min_ps = DIV_ROUND_CLOSEST_ULL(PICO, bus->scl_rate.i3c);
++	ti2c_od_min_ps = DIV_ROUND_CLOSEST_ULL(PICO, bus->scl_rate.i2c);
+ 	/*tfmp_od_min_ps = DIV_ROUND_CLOSEST(PICO, I3C_BUS_I2C_FM_PLUS_SCL_RATE);*/
+-	tfm_od_min_ps = DIV_ROUND_CLOSEST(PICO, I3C_BUS_I2C_FM_SCL_RATE);
++	tfm_od_min_ps = DIV_ROUND_CLOSEST_ULL(PICO, I3C_BUS_I2C_FM_SCL_RATE);
+ 
+ 	/* I3C Open Drain SCL Clock High Period */
+ 	sclhi3c = DIV_ROUND_CLOSEST(ti3c_pp_min_ps * duty_cycle / 100, ti3cclk_ps) - 1;
+-- 
+2.50.1
+

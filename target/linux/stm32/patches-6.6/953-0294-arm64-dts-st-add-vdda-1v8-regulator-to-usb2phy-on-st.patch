@@ -1,0 +1,33 @@
+From d399811f6fa01abbc7ed6c9523073fcc524fc829 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Fri, 31 Jan 2025 16:14:39 +0100
+Subject: [PATCH] arm64: dts: st: add vdda 1v8 regulator to usb2phy on
+ stm32mp215f-dk
+
+VDDA18USB is supplied by PMIC ldo6 regulator, a.k.a SCMI vdda_1v8.
+It's used by USB2PHY.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Id14eb3b345165523122d40342ed99aa318785bfb
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/433604
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Pankaj DEV <pankaj.dev@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 4dd7605b17d9..793f67b8aa4a 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -610,6 +610,7 @@ &usart6 {
+ };
+ 
+ &usb2_phy2 {
++	vdda18-supply = <&scmi_vdda_1v8>;
+ 	vdd33-supply = <&scmi_vdd3v3_usb>;
+ 	status = "okay";
+ };
+-- 
+2.50.1
+

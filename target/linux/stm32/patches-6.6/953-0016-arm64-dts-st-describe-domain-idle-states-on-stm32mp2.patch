@@ -1,0 +1,93 @@
+From fbcd1ecdd68111aec242d8abb9adde96e1853c0d Mon Sep 17 00:00:00 2001
+From: Pascal Paillet <p.paillet@foss.st.com>
+Date: Tue, 15 Oct 2024 17:58:23 +0200
+Subject: [PATCH] arm64: dts: st: describe domain-idle-states on stm32mp211
+
+Describe domain-idle-states on STM32MP21.
+
+Change-Id: I53e8fe08308438f0519c82adb6abc0a9e681d379
+Signed-off-by: Pascal Paillet <p.paillet@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/411624
+Reviewed-by: Pascal PAILLET <p.paillet@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 42 ++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 069ca497cef9..20dbbabc7268 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -26,6 +26,45 @@ cpu0: cpu@0 {
+ 			power-domain-names = "psci";
+ 			#cooling-cells = <2>;
+ 		};
++
++		idle-states {
++			entry-method = "psci";
++
++			CPU_PWRDN: cpu-power-down {
++				compatible = "arm,idle-state";
++				arm,psci-suspend-param = <0x00000001>;
++				local-timer-stop;
++				entry-latency-us = <300>;
++				exit-latency-us = <500>;
++				min-residency-us = <1000>;
++			};
++		};
++
++		domain-idle-states {
++			STOP1: domain-stop1 {
++				compatible = "domain-idle-state";
++				arm,psci-suspend-param = <0x00000011>;
++				entry-latency-us = <400>;
++				exit-latency-us = <1200>;
++				min-residency-us = <1500>;
++			};
++
++			LP_STOP1: domain-lp-stop1 {
++				compatible = "domain-idle-state";
++				arm,psci-suspend-param = <0x0000021>;
++				entry-latency-us = <500>;
++				exit-latency-us = <2000>;
++				min-residency-us = <3000>;
++			};
++
++			LPLV_STOP1: domain-lplv-stop1 {
++				compatible = "domain-idle-state";
++				arm,psci-suspend-param = <0x00000211>;
++				entry-latency-us = <500>;
++				exit-latency-us = <3000>;
++				min-residency-us = <4000>;
++			};
++		};
+ 	};
+ 
+ 	arm-pmu {
+@@ -146,16 +185,19 @@ psci {
+ 
+ 		CPU_PD0: power-domain-cpu0 {
+ 			#power-domain-cells = <0>;
++			domain-idle-states = <&CPU_PWRDN>;
+ 			power-domains = <&CLUSTER_PD>;
+ 		};
+ 
+ 		CLUSTER_PD: power-domain-cluster {
+ 			#power-domain-cells = <0>;
++			domain-idle-states = <&STOP1>, <&LP_STOP1>;
+ 			power-domains = <&RET_PD>;
+ 		};
+ 
+ 		RET_PD: power-domain-retention {
+ 			#power-domain-cells = <0>;
++			domain-idle-states = <&LPLV_STOP1>;
+ 		};
+ 	};
+ 
+-- 
+2.50.1
+

@@ -1,0 +1,32 @@
+From 99a37e4e2e6075c2d6459f7e485d7be231cdd94d Mon Sep 17 00:00:00 2001
+From: Theo GOUREAU <theo.goureau-ext@st.com>
+Date: Tue, 11 Feb 2025 12:44:34 +0100
+Subject: [PATCH] arm64: defconfig: set CONFIG_STM32MP2_CA35SS_CLK to m
+
+Set CONFIG_STM32MP2_CA35SS_CLK to m.
+
+Change-Id: Ica126b88df90278311176b95b11ee5e7b4065f2d
+Signed-off-by: Theo GOUREAU <theo.goureau-ext@st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/437268
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ arch/arm64/configs/fragment-02-defconfig-addons.config | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/configs/fragment-02-defconfig-addons.config b/arch/arm64/configs/fragment-02-defconfig-addons.config
+index 90567539507d..4e660aad4cbd 100644
+--- a/arch/arm64/configs/fragment-02-defconfig-addons.config
++++ b/arch/arm64/configs/fragment-02-defconfig-addons.config
+@@ -3,6 +3,7 @@ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+ CONFIG_BACKLIGHT_GPIO=m
+ CONFIG_BT_LE=y
+ CONFIG_CLKSRC_STM32_LP=y
++CONFIG_CLK_STM32MP2_CA35SS=m
+ CONFIG_CORESIGHT=y
+ CONFIG_CORESIGHT_CPU_DEBUG=y
+ CONFIG_CORESIGHT_CTI=y
+-- 
+2.50.1
+

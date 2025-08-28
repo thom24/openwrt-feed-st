@@ -1,0 +1,41 @@
+From 587733fa5403d49cca74f5f5075ac0dcb598680d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Thu, 6 Feb 2025 17:37:53 +0100
+Subject: [PATCH] ARM: dts: stm32: add MDMA channel to spi5 for DMA-MDMA
+ chaining on MP13
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The MDMA channel allows the use of DMA-MDMA chaining for SPI transfers.
+
+Change-Id: Ibfe9960b1277e081194694edd823ff764c17cb57
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/435597
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp131.dtsi | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
+index a28680e3c08d..471ac5183857 100644
+--- a/arch/arm/boot/dts/st/stm32mp131.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
+@@ -1358,8 +1358,9 @@ spi5: spi@4c003000 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				dmas = <&dmamux1 85 0x400 0x01>,
+-				       <&dmamux1 86 0x400 0x01>;
+-				dma-names = "rx", "tx";
++				       <&dmamux1 86 0x400 0x01>,
++				       <&mdma 0 0x3 0x1200000a 0 0>;
++				dma-names = "rx", "tx", "rxm2m";
+ 				access-controllers = <&etzpc 19>;
+ 				status = "disabled";
+ 			};
+-- 
+2.50.1
+

@@ -1,0 +1,192 @@
+From 8580851370dbcb5d288eeca555e3d4d81e20e225 Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Date: Wed, 29 Jan 2025 19:33:48 +0100
+Subject: [PATCH] pmdomain: st: Add STM32MP power domain
+
+Add a simple power domain for STM32MP family to handle D1 domain with
+PM runtime clock framework but without GENPD_FLAG_ACTIVE_WAKEUP
+support for S2IDLE mode, as the wake-up interruptions are handled
+in interruption handler driver EXTI1 with the RET_PD PSCI power domain.
+
+This intermediate power domain is needed as the PSCI power domain
+CLUSTER_PD use GENPD_FLAG_ACTIVE_WAKEUP.
+
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Change-Id: I59b2ea87f07947037b772c49c277092c887f4310
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/434114
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/pmdomain/st/Makefile            |   1 +
+ drivers/pmdomain/st/stm32mp-pm-domain.c | 135 ++++++++++++++++++++++++
+ drivers/soc/st/Kconfig                  |   5 +
+ 3 files changed, 141 insertions(+)
+ create mode 100644 drivers/pmdomain/st/stm32mp-pm-domain.c
+
+diff --git a/drivers/pmdomain/st/Makefile b/drivers/pmdomain/st/Makefile
+index 8fa5f9855460..a01fe3ea9a39 100644
+--- a/drivers/pmdomain/st/Makefile
++++ b/drivers/pmdomain/st/Makefile
+@@ -1,2 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ obj-$(CONFIG_ARCH_U8500)		+= ste-ux500-pm-domain.o
++obj-$(CONFIG_STM32MP_PM_DOMAIN)		+= stm32mp-pm-domain.o
+diff --git a/drivers/pmdomain/st/stm32mp-pm-domain.c b/drivers/pmdomain/st/stm32mp-pm-domain.c
+new file mode 100644
+index 000000000000..275d5e9a2973
+--- /dev/null
++++ b/drivers/pmdomain/st/stm32mp-pm-domain.c
+@@ -0,0 +1,135 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Implements PM domain using the generic PM domain for STM32MP SoC.
++ *
++ * Copyright (C) STMicroelectronics 2024
++ * Author(s): Patrick Delaunay <patrick.delaunay@foss.st.com>
++ */
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/kernel.h>
++#include <linux/of.h>
++#include <linux/pm_domain.h>
++#include <linux/pm_runtime.h>
++#include <linux/platform_device.h>
++#include <linux/printk.h>
++#include <linux/slab.h>
++#include <linux/suspend.h>
++
++static bool stm32mp_pm_domain_state;
++
++static const struct of_device_id stm32mp_pm_domain_matches[] = {
++	{ .compatible = "st,stm32mp-pm-domain", },
++	{ },
++};
++
++static void stm32mp_pm_domain_sync_state(struct device *dev)
++{
++	/*
++	 * All devices have now been attached/probed to the PM domain topology,
++	 * hence it's fine to allow domain states to be picked.
++	 */
++	stm32mp_pm_domain_state = true;
++}
++
++static int stm32mp_pm_domain_power_off(struct generic_pm_domain *pd)
++{
++	if (!stm32mp_pm_domain_state)
++		return -EBUSY;
++
++	return 0;
++}
++
++static int __maybe_unused stm32mp_pm_domain_suspend(struct device *dev)
++{
++	bool s2idle = (pm_suspend_target_state == PM_SUSPEND_TO_IDLE);
++
++	/* S2IDLE is not allowed when the domain state is unknown */
++	if (s2idle && !stm32mp_pm_domain_state)
++		return -EBUSY;
++
++	return 0;
++}
++
++static void stm32mp_pm_domain_genpd_remove(void *data)
++{
++	pm_genpd_remove(data);
++}
++
++static int stm32mp_pm_domain_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct device_node *np = pdev->dev.of_node;
++	struct generic_pm_domain *pd;
++	int ret;
++
++	if (!np)
++		return -ENODEV;
++
++	if (!of_property_present(np, "#power-domain-cells")) {
++		pr_warn("%pOF lacks #power-domain-cells\n", np);
++		return 0;
++	}
++	pd = kzalloc(sizeof(*pd), GFP_KERNEL);
++	if (!pd)
++		return -ENOMEM;
++
++	pd->name = dev_name(dev);
++
++	/*
++	 * Domain based only on PM clk framework, no GENPD_FLAG_ACTIVE_WAKEUP
++	 * support, the wake-up is handled by power domain of interrupt driver
++	 */
++	pd->flags = GENPD_FLAG_PM_CLK | GENPD_FLAG_IRQ_SAFE;
++	pd->power_off = stm32mp_pm_domain_power_off;
++
++	ret = pm_genpd_init(pd, NULL, false);
++	if (ret)
++		return ret;
++
++	ret = devm_add_action_or_reset(dev, stm32mp_pm_domain_genpd_remove, pd);
++	if (ret)
++		return ret;
++
++	ret = of_genpd_add_provider_simple(np, pd);
++	if (ret)
++		return ret;
++
++	ret = pm_genpd_add_subdomain(pd_to_genpd(dev->pm_domain), pd);
++	if (ret)
++		return ret;
++
++	pm_runtime_enable(dev);
++
++	return 0;
++}
++
++static int stm32mp_pm_domain_remove(struct platform_device *pdev)
++{
++	struct device_node *np = pdev->dev.of_node;
++
++	of_genpd_del_provider(np);
++
++	return 0;
++}
++
++static const struct dev_pm_ops stm32mp_pm_domain_pm_ops = {
++	SET_SYSTEM_SLEEP_PM_OPS(stm32mp_pm_domain_suspend, NULL)
++};
++
++static struct platform_driver stm32mp_pm_domain_driver = {
++	.driver = {
++		.name = "stm32mp_pm_domain",
++		.of_match_table = stm32mp_pm_domain_matches,
++		.sync_state = stm32mp_pm_domain_sync_state,
++		.pm = &stm32mp_pm_domain_pm_ops,
++	},
++	.probe  = stm32mp_pm_domain_probe,
++	.remove  = stm32mp_pm_domain_remove,
++};
++
++module_platform_driver(stm32mp_pm_domain_driver);
++
++MODULE_AUTHOR("Patrick Delaunay <patrick.delaunay@foss.st.com>");
++MODULE_DESCRIPTION("ST STM32MP power domain driver");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/soc/st/Kconfig b/drivers/soc/st/Kconfig
+index 704a19692495..6a6f6b38794d 100644
+--- a/drivers/soc/st/Kconfig
++++ b/drivers/soc/st/Kconfig
+@@ -12,6 +12,11 @@ config STM32_PM_DOMAINS
+ 	select PM_GENERIC_DOMAINS
+ 	default y if MACH_STM32MP157
+ 
++config STM32MP_PM_DOMAIN
++	tristate "STM32MP PM domain"
++	select PM_GENERIC_DOMAINS
++	default y
++
+ config STM32_RISAB
+ 	tristate "STM32 RISAB"
+ 	depends on ARM64 && DEBUG_FS
+-- 
+2.50.1
+

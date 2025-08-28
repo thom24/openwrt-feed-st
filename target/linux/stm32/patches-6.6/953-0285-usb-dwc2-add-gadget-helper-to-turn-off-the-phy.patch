@@ -1,0 +1,80 @@
+From e8e013f20cff19a8d263d376f80369c6a8ad1546 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 15 Jan 2025 15:28:51 +0100
+Subject: [PATCH] usb: dwc2: add gadget helper to turn off the phy
+
+Add a routine to better handle cases when to allow the phy to be turned
+off. This is useful in device mode, when the HOST has suspended the bus,
+the platform will be able to wakeup, upon bus resume.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I78c5b11685c393962379f7a92573d8ede2e5cffe
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/430479
+Reviewed-by: Pankaj DEV <pankaj.dev@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/usb/dwc2/core.h     |  3 +++
+ drivers/usb/dwc2/gadget.c   | 12 ++++++++++++
+ drivers/usb/dwc2/platform.c |  2 +-
+ 3 files changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+index 75b3a7154c90..b3222799b343 100644
+--- a/drivers/usb/dwc2/core.h
++++ b/drivers/usb/dwc2/core.h
+@@ -1419,6 +1419,7 @@ int stm32mp2_usb2phy_usb_chg_psy_register(struct dwc2_hsotg *hsotg);
+ #if IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) || \
+ 	IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)
+ int dwc2_hsotg_remove(struct dwc2_hsotg *hsotg);
++bool dwc2_gadget_can_poweroff_phy(struct dwc2_hsotg *hsotg);
+ int dwc2_hsotg_suspend(struct dwc2_hsotg *dwc2);
+ int dwc2_hsotg_resume(struct dwc2_hsotg *dwc2);
+ int dwc2_gadget_init(struct dwc2_hsotg *hsotg);
+@@ -1451,6 +1452,8 @@ static inline void dwc2_clear_fifo_map(struct dwc2_hsotg *hsotg)
+ #else
+ static inline int dwc2_hsotg_remove(struct dwc2_hsotg *dwc2)
+ { return 0; }
++static inline bool dwc2_gadget_can_poweroff_phy(struct dwc2_hsotg *hsotg)
++{ return false; }
+ static inline int dwc2_hsotg_suspend(struct dwc2_hsotg *dwc2)
+ { return 0; }
+ static inline int dwc2_hsotg_resume(struct dwc2_hsotg *dwc2)
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 56402b5ea771..62b6bc195769 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -5180,6 +5180,18 @@ int dwc2_hsotg_remove(struct dwc2_hsotg *hsotg)
+ 	return 0;
+ }
+ 
++bool dwc2_gadget_can_poweroff_phy(struct dwc2_hsotg *hsotg)
++{
++	if (!dwc2_is_device_mode(hsotg))
++		return false;
++
++	if (device_may_wakeup(&hsotg->gadget.dev))
++		return false;
++
++	/* In device mode, but not a wakeup source: can poweroff the PHY */
++	return true;
++}
++
+ int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
+ {
+ 	unsigned long flags;
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index 8b94557f0849..91b54d2822bf 100644
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -962,7 +962,7 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+ 		ret = __dwc2_lowlevel_hw_disable(dwc2);
+ 
+ 	if (dwc2->ll_hw_enabled &&
+-	    (is_device_mode || dwc2_host_can_poweroff_phy(dwc2))) {
++	    (dwc2_gadget_can_poweroff_phy(dwc2) || dwc2_host_can_poweroff_phy(dwc2))) {
+ 		ret = __dwc2_lowlevel_hw_disable(dwc2);
+ 		dwc2->phy_off_for_suspend = true;
+ 	}
+-- 
+2.50.1
+

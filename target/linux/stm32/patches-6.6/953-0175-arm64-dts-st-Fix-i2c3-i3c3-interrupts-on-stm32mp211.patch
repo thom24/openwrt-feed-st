@@ -1,0 +1,44 @@
+From ac688c6b9a2a7e02d72f94938baf5e83af9bfac5 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Fri, 3 Jan 2025 13:21:35 +0100
+Subject: [PATCH] arm64: dts: st: Fix i2c3/i3c3 interrupts on stm32mp211
+
+Interrupts numbers are respectively 124 for I2C3 and 125 for I3C3
+on MP211 boards.
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I09fbdcb35cb2e85cf58dd4e1ff44f0de5bfc5f69
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/426892
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index c26308f375e9..c7aeaef72ca7 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -1648,7 +1648,7 @@ i2c3: i2c@46040000 {
+ 				compatible = "st,stm32mp25-i2c";
+ 				reg = <0x46040000 0x0 0x400>;
+ 				interrupt-names = "event";
+-				interrupts = <GIC_SPI 137 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts = <GIC_SPI 124 IRQ_TYPE_LEVEL_HIGH>;
+ 				clocks = <&rcc CK_KER_I2C3>;
+ 				resets = <&rcc I2C3_R>;
+ 				#address-cells = <1>;
+@@ -1666,7 +1666,7 @@ i3c3: i3c@46080000 {
+ 				#size-cells = <0>;
+ 				compatible = "st,stm32-i3c";
+ 				reg = <0x46080000 0x0 0x400>;
+-				interrupts = <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts = <GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>;
+ 				clocks = <&rcc CK_KER_I3C3>;
+ 				resets = <&rcc I3C3_R>;
+ 				access-controllers = <&rifsc 116>;
+-- 
+2.50.1
+

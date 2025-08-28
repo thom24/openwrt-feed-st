@@ -1,0 +1,45 @@
+From d167ea76f2aeb916ac29b9d6b96b3032f27c1762 Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Date: Thu, 5 Dec 2024 15:52:38 +0100
+Subject: [PATCH] arm64: dts: st: use lptimer3 as ticks on stm32mp21 disco
+ board
+
+During the low power modes the generic ARM timer is deactivated, so the
+the tick broadcast need to be used in low power mode,
+base on LPTIMER3 which is clocked by LSE on STMicroelectronics boards.
+
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Change-Id: Ie1c2fd03bcca3434c2edc8d6c8e3c84467d9c6a6
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/423211
+Reviewed-by: Valentin CARON <valentin.caron@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Valentin CARON <valentin.caron@foss.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index e38e436cde5c..ebb05c55440b 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -346,6 +346,14 @@ &ipcc1 {
+ 	status = "okay";
+ };
+ 
++/* use LPTIMER with tick broadcast for suspend mode */
++&lptimer3 {
++	status = "okay";
++	timer {
++		status = "okay";
++	};
++};
++
+ &ltdc {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&ltdc_pins_a>;
+-- 
+2.50.1
+

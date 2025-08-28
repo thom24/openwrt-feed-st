@@ -1,0 +1,39 @@
+From 5d9a7132e132c393dd8bdf56064234d6f1a904fc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Tue, 29 Apr 2025 15:44:36 +0200
+Subject: [PATCH] dt-bindings: remoteproc: st,stm32-rproc: Rename
+ st,syscfg-m4-state property
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Forget to change the third example property name.
+
+Change-Id: Icd7cd5f08bc692e0a6b4ba39695e3ee3f3b18058
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/455195
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Tested-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ .../devicetree/bindings/remoteproc/st,stm32-rproc.yaml          | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
+index 87b598b398dd..8b4d04571fb3 100644
+--- a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
+@@ -238,7 +238,7 @@ examples:
+             <0x30000000 0x40000>,
+             <0x38000000 0x10000>;
+       st,syscfg-rsc-tbl = <&tamp 0x144 0xFFFFFFFF>;
+-      st,syscfg-m4-state = <&tamp 0x148 0xFFFFFFFF>;
++      st,syscfg-cm-state = <&tamp 0x148 0xFFFFFFFF>;
+     };
+ 
+ ...
+-- 
+2.50.1
+

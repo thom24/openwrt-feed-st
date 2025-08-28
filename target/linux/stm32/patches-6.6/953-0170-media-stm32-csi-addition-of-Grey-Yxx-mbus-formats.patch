@@ -1,0 +1,39 @@
+From 727e4854ea2596c5e031f9a6b366fa09198174f3 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Sun, 8 Dec 2024 19:51:32 +0100
+Subject: [PATCH] media: stm32: csi: addition of Grey (Yxx) mbus formats
+
+Addition of entries in order to allow Yxx MBUS formats at CSI level.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: I9331127b1e27ca09ae05ae8509339d72a3e0e33a
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/423674
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ drivers/media/platform/st/stm32/stm32-csi.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-csi.c b/drivers/media/platform/st/stm32/stm32-csi.c
+index 8138dcc34771..12d231465569 100644
+--- a/drivers/media/platform/st/stm32/stm32-csi.c
++++ b/drivers/media/platform/st/stm32/stm32-csi.c
+@@ -218,6 +218,12 @@ static const struct stm32_csi_fmts stm32_csi_formats[] = {
+ 	FMT_MBUS_DT_DTFMT_BPP(YVYU8_1X16, YUV422_8B, BPP8, 8),
+ 	FMT_MBUS_DT_DTFMT_BPP(VYUY8_1X16, YUV422_8B, BPP8, 8),
+ 
++	/* Grey */
++	FMT_MBUS_DT_DTFMT_BPP(Y8_1X8, RAW8, BPP8, 8),
++	FMT_MBUS_DT_DTFMT_BPP(Y10_1X10, RAW10, BPP10, 10),
++	FMT_MBUS_DT_DTFMT_BPP(Y12_1X12, RAW12, BPP12, 12),
++	FMT_MBUS_DT_DTFMT_BPP(Y14_1X14, RAW14, BPP14, 14),
++
+ 	/* Raw Bayer */
+ 	/* 8 bit */
+ 	FMT_MBUS_DT_DTFMT_BPP(SBGGR8_1X8, RAW8, BPP8, 8),
+-- 
+2.50.1
+

@@ -1,0 +1,94 @@
+From 8088833e4be59fcc054c2c09d244dce1b5545c85 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Mon, 6 Jan 2025 15:09:19 +0100
+Subject: [PATCH] Revert "arm64: dts: st: enable CoreSight on stm32mp235f-dk
+ board"
+
+This reverts commit 5dc2013abcdb04f813d57ddf8f387eacda4255b3.
+
+On SoC "Secure Closed" the CPU has no access to the CoreSight
+peripherals so the kernel pollutes the logs with several probe
+deferred messages.
+
+Revert the activation of CoreSight in board file.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I6d2350b2718892fab989c93dfee68b10cf1969bf
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/427072
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 56 -----------------------
+ 1 file changed, 56 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index fd587675e806..ccef228b2767 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -203,62 +203,6 @@ &cryp1 {
+ 	status = "okay";
+ };
+ 
+-&cs_cpu_debug0 {
+-	status = "okay";
+-};
+-
+-&cs_cpu_debug1 {
+-	status = "okay";
+-};
+-
+-&cs_cti0 {
+-	status = "okay";
+-};
+-
+-&cs_cti1 {
+-	status = "okay";
+-};
+-
+-&cs_cti_cpu0 {
+-	status = "okay";
+-};
+-
+-&cs_cti_cpu1 {
+-	status = "okay";
+-};
+-
+-&cs_etf {
+-	status = "okay";
+-};
+-
+-&cs_etm0 {
+-	status = "okay";
+-};
+-
+-&cs_etm1 {
+-	status = "okay";
+-};
+-
+-&cs_etr {
+-	status = "okay";
+-};
+-
+-&cs_funnel {
+-	status = "okay";
+-};
+-
+-&cs_replicator {
+-	status = "okay";
+-};
+-
+-&cs_stm {
+-	status = "okay";
+-};
+-
+-&cs_tpiu {
+-	status = "okay";
+-};
+-
+ &csi {
+ 	vdd-supply =  <&scmi_vddcore>;
+ 	vdda18-supply = <&scmi_v1v8>;
+-- 
+2.50.1
+

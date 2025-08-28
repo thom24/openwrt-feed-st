@@ -1,0 +1,47 @@
+From 0822bfb1f520c85e8e9925ca3a636bc6bf17d52f Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Tue, 19 Nov 2024 10:20:17 +0100
+Subject: [PATCH] dt-bindings: iio: stm32-mdf: fix clock-output-names
+ definition
+
+fixes warning dtbs check warning with "clock-output-names = "cck1";"
+configuration:
+mdf@404d0000: clock-output-names:0: 'cck0' was expected
+
+Change-Id: Ia15a9d59f7520fe5d44168f2e0d68127ac814963
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/420091
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ .../bindings/iio/adc/st,stm32-mdf-adc.yaml           | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-mdf-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-mdf-adc.yaml
+index 0e40e74536ab..749caf76d293 100644
+--- a/Documentation/devicetree/bindings/iio/adc/st,stm32-mdf-adc.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-mdf-adc.yaml
+@@ -39,9 +39,15 @@ properties:
+       CCK0 and CCK1 are optional output clocks, which share the same clock frequency,
+       but can be gated independently to save power.
+     minItems: 1
+-    items:
+-      - const: cck0
+-      - const: cck1
++    maxItems: 2
++    oneOf:
++      - items:
++          - const: cck0
++      - items:
++          - const: cck1
++      - items:
++          - const: cck0
++          - const: cck1
+ 
+   clock-frequency:
+     description: |
+-- 
+2.50.1
+

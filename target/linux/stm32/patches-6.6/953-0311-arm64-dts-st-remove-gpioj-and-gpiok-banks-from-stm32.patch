@@ -1,0 +1,55 @@
+From 18c4d8f7a22a936303a32e42b2bda6e799ecb7ad Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Thu, 20 Mar 2025 09:27:57 +0100
+Subject: [PATCH] arm64: dts: st: remove gpioj and gpiok banks from stm32mp231
+
+STM32MP23x supports AJ, AK and AL packages, where PI12 to PI15, PJ0 to
+PJ15 (whole K bank) and PK0 to PK7 (whole K bank) pins are not available.
+
+It means gpioj and gpiok nodes are useless in stm32mp231. Remove them.
+
+Change-Id: I7331acb3f7dc434494fe4bae10d35a754f996d35
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/445617
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp231.dtsi | 22 ----------------------
+ 1 file changed, 22 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+index 9613f1606e5e..d6a253ec28b9 100644
+--- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+@@ -2550,28 +2550,6 @@ gpioi: gpio@442c0000 {
+ 				st,bank-name = "GPIOI";
+ 				status = "disabled";
+ 			};
+-
+-			gpioj: gpio@442d0000 {
+-				gpio-controller;
+-				#gpio-cells = <2>;
+-				interrupt-controller;
+-				#interrupt-cells = <2>;
+-				reg = <0x90000 0x400>;
+-				clocks = <&scmi_clk CK_SCMI_GPIOJ>;
+-				st,bank-name = "GPIOJ";
+-				status = "disabled";
+-			};
+-
+-			gpiok: gpio@442e0000 {
+-				gpio-controller;
+-				#gpio-cells = <2>;
+-				interrupt-controller;
+-				#interrupt-cells = <2>;
+-				reg = <0xa0000 0x400>;
+-				clocks = <&scmi_clk CK_SCMI_GPIOK>;
+-				st,bank-name = "GPIOK";
+-				status = "disabled";
+-			};
+ 		};
+ 
+ 		rtc: rtc@46000000 {
+-- 
+2.50.1
+

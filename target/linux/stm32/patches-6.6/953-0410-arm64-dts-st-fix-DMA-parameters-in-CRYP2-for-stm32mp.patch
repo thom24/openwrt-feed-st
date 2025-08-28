@@ -1,0 +1,54 @@
+From 1f83640209074c14f1a6cd976bdf5b03a982b870 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Wed, 2 Apr 2025 15:01:28 +0200
+Subject: [PATCH] arm64: dts: st: fix DMA parameters in CRYP2 for stm32mp25
+ device tree
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+DMA doesn't have 5 arguments but 4.
+
+Change-Id: Ibdbb99ffa2acc6889857289ca45fe0700a9ec1aa
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/448577
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp25xc.dtsi | 4 ++--
+ arch/arm64/boot/dts/st/stm32mp25xf.dtsi | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp25xc.dtsi b/arch/arm64/boot/dts/st/stm32mp25xc.dtsi
+index 786c208345df..302335f80958 100644
+--- a/arch/arm64/boot/dts/st/stm32mp25xc.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp25xc.dtsi
+@@ -25,8 +25,8 @@ cryp2: crypto@42040000 {
+ 		interrupts = <GIC_SPI 180 IRQ_TYPE_LEVEL_HIGH>;
+ 		clocks = <&rcc CK_BUS_CRYP2>;
+ 		resets = <&rcc CRYP2_R>;
+-		dmas = <&hpdma 140 0x40 0x3021 0x0>,
+-		       <&hpdma 141 0x43 0x3012 0x0>;
++		dmas = <&hpdma 140 0x40 0x3021>,
++		       <&hpdma 141 0x43 0x3012>;
+ 		dma-names = "in", "out";
+ 		access-controllers = <&rifsc 97>;
+ 		power-domains = <&d1_pd>;
+diff --git a/arch/arm64/boot/dts/st/stm32mp25xf.dtsi b/arch/arm64/boot/dts/st/stm32mp25xf.dtsi
+index 786c208345df..302335f80958 100644
+--- a/arch/arm64/boot/dts/st/stm32mp25xf.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp25xf.dtsi
+@@ -25,8 +25,8 @@ cryp2: crypto@42040000 {
+ 		interrupts = <GIC_SPI 180 IRQ_TYPE_LEVEL_HIGH>;
+ 		clocks = <&rcc CK_BUS_CRYP2>;
+ 		resets = <&rcc CRYP2_R>;
+-		dmas = <&hpdma 140 0x40 0x3021 0x0>,
+-		       <&hpdma 141 0x43 0x3012 0x0>;
++		dmas = <&hpdma 140 0x40 0x3021>,
++		       <&hpdma 141 0x43 0x3012>;
+ 		dma-names = "in", "out";
+ 		access-controllers = <&rifsc 97>;
+ 		power-domains = <&d1_pd>;
+-- 
+2.50.1
+

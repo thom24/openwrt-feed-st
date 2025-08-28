@@ -1,0 +1,38 @@
+From 92faeb9d4cfecc1821fe1f5e024bb927d7de53be Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Thu, 21 Nov 2024 18:02:46 +0100
+Subject: [PATCH] dt-bindings: phy: Add wakeup-source on usb2phy for stm32mp21
+
+Wakeup interrupt signal from the PHY can be used to wakeup. So add
+wakeup-source and interrupts.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I9f8ec748356fd02d8786a16e3d067a175b0a6634
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/420289
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Ram DAYAL <ram.dayal@st.com>
+Reviewed-by: Ram DAYAL <ram.dayal@st.com>
+---
+ Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml b/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml
+index 348fda52d711..1c50a305578f 100644
+--- a/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml
++++ b/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml
+@@ -43,6 +43,12 @@ properties:
+     description: Phandle to the STM32-MPU System Controller DT node
+                  <syscon-handle cr-offset>
+ 
++  wakeup-source: true
++
++  interrupts:
++    maxItems: 1
++    description: interrupt used for wakeup
++
+   st,pll-ipath-tune:
+     $ref: /schemas/types.yaml#/definitions/uint8
+     description: PLL Integral Path Tune
+-- 
+2.50.1
+

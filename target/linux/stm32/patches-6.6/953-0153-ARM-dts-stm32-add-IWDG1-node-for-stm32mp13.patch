@@ -1,0 +1,44 @@
+From 818fb68275c62c938bab13ce64853e2c0d3ac75d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Wed, 18 Dec 2024 16:11:11 +0100
+Subject: [PATCH] ARM: dts: stm32: add IWDG1 node for stm32mp13
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Add IWDG1 node in stm32mp13 SoC device tree file.
+
+Change-Id: I12c2ce3b21ec7d308083a7c3ec3e61bea073733e
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/425586
+Domain-Review: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp131.dtsi | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
+index 2094a4553583..ca1de15e5974 100644
+--- a/arch/arm/boot/dts/st/stm32mp131.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
+@@ -1148,6 +1148,15 @@ ddrperfm: perf@5a007000 {
+ 			status = "disabled";
+ 		};
+ 
++		iwdg1: watchdog@5c003000 {
++			compatible = "st,stm32mp1-iwdg";
++			reg = <0x5c003000 0x400>;
++			interrupts = <GIC_SPI 126 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&rcc IWDG1>, <&scmi_clk CK_SCMI_LSI>;
++			clock-names = "pclk", "lsi";
++			status = "disabled";
++		};
++
+ 		rtc: rtc@5c004000 {
+ 			compatible = "st,stm32mp1-rtc";
+ 			reg = <0x5c004000 0x400>;
+-- 
+2.50.1
+

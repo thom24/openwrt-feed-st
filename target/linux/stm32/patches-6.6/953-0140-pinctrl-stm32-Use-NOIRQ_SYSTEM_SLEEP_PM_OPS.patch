@@ -1,0 +1,67 @@
+From 576b581b749984af37610f6ef72cbbf601560f9d Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Thu, 12 Dec 2024 17:51:25 +0100
+Subject: [PATCH] pinctrl: stm32: Use NOIRQ_SYSTEM_SLEEP_PM_OPS
+
+Use SET_NOIRQ_SYSTEM_SLEEP_PM_OPS instead of SET_LATE_SYSTEM_SLEEP_PM_OPS
+to make sure that the gpio are correctly resumed before
+stm32_pcie_resume_noirq.
+
+Without this, the devices will not be correctly restarted, even if the
+PCIe controller appear to be functional.
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I26581e54036b2a8ac78fc4c48f3badbe7003267f
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/424582
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+Domain-Review: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+---
+ drivers/pinctrl/stm32/pinctrl-stm32mp215.c | 2 +-
+ drivers/pinctrl/stm32/pinctrl-stm32mp235.c | 2 +-
+ drivers/pinctrl/stm32/pinctrl-stm32mp257.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/pinctrl/stm32/pinctrl-stm32mp215.c b/drivers/pinctrl/stm32/pinctrl-stm32mp215.c
+index b702aaa67b01..972fa4695903 100644
+--- a/drivers/pinctrl/stm32/pinctrl-stm32mp215.c
++++ b/drivers/pinctrl/stm32/pinctrl-stm32mp215.c
+@@ -1789,7 +1789,7 @@ static const struct of_device_id stm32mp215_pctrl_match[] = {
+ MODULE_DEVICE_TABLE(of, stm32mp215_pctrl_match);
+ 
+ static const struct dev_pm_ops stm32_pinctrl_dev_pm_ops = {
+-	 SET_LATE_SYSTEM_SLEEP_PM_OPS(stm32_pinctrl_suspend, stm32_pinctrl_resume)
++	 SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(stm32_pinctrl_suspend, stm32_pinctrl_resume)
+ };
+ 
+ static struct platform_driver stm32mp215_pinctrl_driver = {
+diff --git a/drivers/pinctrl/stm32/pinctrl-stm32mp235.c b/drivers/pinctrl/stm32/pinctrl-stm32mp235.c
+index b1b2421417be..9883c53b3708 100644
+--- a/drivers/pinctrl/stm32/pinctrl-stm32mp235.c
++++ b/drivers/pinctrl/stm32/pinctrl-stm32mp235.c
+@@ -1888,7 +1888,7 @@ static const struct of_device_id stm32mp235_pctrl_match[] = {
+ MODULE_DEVICE_TABLE(of, stm32mp235_pctrl_match);
+ 
+ static const struct dev_pm_ops stm32_pinctrl_dev_pm_ops = {
+-	 SET_LATE_SYSTEM_SLEEP_PM_OPS(stm32_pinctrl_suspend, stm32_pinctrl_resume)
++	 SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(stm32_pinctrl_suspend, stm32_pinctrl_resume)
+ };
+ 
+ static struct platform_driver stm32mp235_pinctrl_driver = {
+diff --git a/drivers/pinctrl/stm32/pinctrl-stm32mp257.c b/drivers/pinctrl/stm32/pinctrl-stm32mp257.c
+index 8e332bb88737..bcf9472e9382 100644
+--- a/drivers/pinctrl/stm32/pinctrl-stm32mp257.c
++++ b/drivers/pinctrl/stm32/pinctrl-stm32mp257.c
+@@ -2570,7 +2570,7 @@ static const struct of_device_id stm32mp257_pctrl_match[] = {
+ MODULE_DEVICE_TABLE(of, stm32mp257_pctrl_match);
+ 
+ static const struct dev_pm_ops stm32_pinctrl_dev_pm_ops = {
+-	 SET_LATE_SYSTEM_SLEEP_PM_OPS(stm32_pinctrl_suspend, stm32_pinctrl_resume)
++	 SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(stm32_pinctrl_suspend, stm32_pinctrl_resume)
+ };
+ 
+ static struct platform_driver stm32mp257_pinctrl_driver = {
+-- 
+2.50.1
+

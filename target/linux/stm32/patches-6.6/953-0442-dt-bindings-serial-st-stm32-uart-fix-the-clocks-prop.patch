@@ -1,0 +1,37 @@
+From 1a4fc935d1ae91df3d725cac25d8b0820bea3dc5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Mon, 28 Apr 2025 17:01:24 +0200
+Subject: [PATCH] dt-bindings: serial: st,stm32-uart: fix the clocks property
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+As clocks is required and the maxItems is 2, setting minItems to 1 is
+implied.
+
+Change-Id: I7ade2a0a4a2eb3a9a16c883b26262ff1462270b2
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/455187
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ Documentation/devicetree/bindings/serial/st,stm32-uart.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml b/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
+index f15535998d83..fd098fbb1b68 100644
+--- a/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
++++ b/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
+@@ -23,6 +23,7 @@ properties:
+     maxItems: 1
+ 
+   clocks:
++    minItems: 1
+     maxItems: 2
+ 
+   resets:
+-- 
+2.50.1
+

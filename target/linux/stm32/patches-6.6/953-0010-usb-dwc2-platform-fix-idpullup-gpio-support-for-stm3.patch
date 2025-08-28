@@ -1,0 +1,311 @@
+From 4f5b5b73c353ad289443629fca45ad94e66b1831 Mon Sep 17 00:00:00 2001
+From: Ram Dayal <ram.dayal@st.com>
+Date: Tue, 8 Oct 2024 11:28:12 +0200
+Subject: [PATCH] usb: dwc2: platform: fix idpullup gpio support for stm32mp21
+
+- Added a new field `otg_mode` to `dwc2_core_params` to store the
+  OTG mode.
+- Defined a new macro `GINTMSK_COMMON_NO_HNP_SRP` for common
+  interrupt masks when HNP/SRP is not supported.
+- Modified interrupt handling in `dwc2_handle_lpm_intr`,
+  `dwc2_hsotg_core_init_disconnected`, and
+  `dwc2_enable_common_interrupts` to account for different OTG
+  modes.
+- Updated `dwc2_ovr_init_stm32mp21`, `dwc2_ovr_avalid_stm32mp21`,
+  and `dwc2_ovr_bvalid_stm32mp21` to handle different role switch
+  modes.
+- Adjusted `dwc2_driver_probe`, `dwc2_driver_remove`, and
+  `dwc2_resume` to handle role switch modes and force mode properly.
+
+Change-Id: I0168e965ced765c31319037a03c890b61ad638a7
+Signed-off-by: Ram Dayal <ram.dayal@st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/410679
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/usb/dwc2/core_intr.c | 11 +++++++++
+ drivers/usb/dwc2/drd.c       | 33 ++++++++++++-------------
+ drivers/usb/dwc2/gadget.c    | 22 ++++++++++++-----
+ drivers/usb/dwc2/hcd.c       | 17 ++++++++++---
+ drivers/usb/dwc2/platform.c  | 47 +++++++++++++++++++-----------------
+ 5 files changed, 80 insertions(+), 50 deletions(-)
+
+diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
+index 7948e352643f..b7577cd5ddae 100644
+--- a/drivers/usb/dwc2/core_intr.c
++++ b/drivers/usb/dwc2/core_intr.c
+@@ -649,6 +649,12 @@ static void dwc2_handle_lpm_intr(struct dwc2_hsotg *hsotg)
+ 			 GINTSTS_USBSUSP | GINTSTS_PRTINT |		\
+ 			 GINTSTS_LPMTRANRCVD)
+ 
++#define GINTMSK_COMMON_NO_HNP_SRP (GINTSTS_WKUPINT | \
++			 GINTSTS_CONIDSTSCHNG |	\
++			 GINTSTS_MODEMIS | GINTSTS_DISCONNINT |		\
++			 GINTSTS_USBSUSP | GINTSTS_PRTINT |		\
++			 GINTSTS_LPMTRANRCVD)
++
+ /*
+  * This function returns the Core Interrupt register
+  */
+@@ -663,6 +669,11 @@ static u32 dwc2_read_common_intr(struct dwc2_hsotg *hsotg)
+ 	gintmsk = dwc2_readl(hsotg, GINTMSK);
+ 	gahbcfg = dwc2_readl(hsotg, GAHBCFG);
+ 
++	if (hsotg->hw_params.op_mode == GHWCFG2_OP_MODE_NO_HNP_SRP_CAPABLE ||
++	    hsotg->hw_params.op_mode == GHWCFG2_OP_MODE_NO_SRP_CAPABLE_DEVICE ||
++	    hsotg->hw_params.op_mode == GHWCFG2_OP_MODE_NO_SRP_CAPABLE_HOST)
++		gintmsk_common = GINTMSK_COMMON_NO_HNP_SRP;
++
+ 	/* If any common interrupts set */
+ 	if (gintsts & gintmsk_common)
+ 		dev_dbg(hsotg->dev, "gintsts=%08x  gintmsk=%08x\n",
+diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
+index 7a1af77434c2..728fb5582d04 100644
+--- a/drivers/usb/dwc2/drd.c
++++ b/drivers/usb/dwc2/drd.c
+@@ -28,8 +28,11 @@ static void dwc2_ovr_init_stm32mp21(struct dwc2_hsotg *hsotg)
+ 	if (hsotg->role_sw_default_mode == USB_DR_MODE_HOST) {
+ 		ggpio &= ~GGPIO_STM32_OTG_GCCFG_VBVALOVAL;
+ 		ggpio &= ~GGPIO_STM32_OTG_GCCFG_IDPULLUP_DIS;
+-	} else {
++	} else if (hsotg->role_sw_default_mode == USB_DR_MODE_PERIPHERAL) {
++		ggpio |= GGPIO_STM32_OTG_GCCFG_IDPULLUP_DIS;
+ 		ggpio |= GGPIO_STM32_OTG_GCCFG_VBVALOVAL;
++	} else {
++		ggpio &= ~GGPIO_STM32_OTG_GCCFG_VBVALOVAL;
+ 		ggpio |= GGPIO_STM32_OTG_GCCFG_IDPULLUP_DIS;
+ 	}
+ 	dwc2_writel(hsotg, ggpio, GGPIO);
+@@ -40,33 +43,27 @@ static void dwc2_ovr_init_stm32mp21(struct dwc2_hsotg *hsotg)
+ 			(hsotg->role_sw_default_mode == USB_DR_MODE_HOST));
+ }
+ 
+-static int dwc2_ovr_avalid_stm32mp21(struct dwc2_hsotg *hsotg, bool valid)
++static void dwc2_ovr_avalid_stm32mp21(struct dwc2_hsotg *hsotg, bool valid)
+ {
+ 	u32 ggpio;
+ 
+ 	ggpio = dwc2_readl(hsotg, GGPIO);
+-	if (valid) {
+-		ggpio &= ~GGPIO_STM32_OTG_GCCFG_VBVALOVAL;
+-		ggpio &= ~GGPIO_STM32_OTG_GCCFG_IDPULLUP_DIS;
+-	} else {
+-		ggpio |= GGPIO_STM32_OTG_GCCFG_VBVALOVAL;
+-		ggpio |= GGPIO_STM32_OTG_GCCFG_IDPULLUP_DIS;
+-	}
++	ggpio &= ~GGPIO_STM32_OTG_GCCFG_IDPULLUP_DIS;
++	ggpio &= ~GGPIO_STM32_OTG_GCCFG_VBVALOVAL;
+ 	dwc2_writel(hsotg, ggpio, GGPIO);
+-
+-	return 0;
+ }
+ 
+-static int dwc2_ovr_bvalid_stm32mp21(struct dwc2_hsotg *hsotg, bool valid)
++static void dwc2_ovr_bvalid_stm32mp21(struct dwc2_hsotg *hsotg, bool valid)
+ {
+ 	u32 ggpio;
+ 
+ 	ggpio = dwc2_readl(hsotg, GGPIO);
+-	ggpio |= GGPIO_STM32_OTG_GCCFG_VBVALOVAL;
+ 	ggpio |= GGPIO_STM32_OTG_GCCFG_IDPULLUP_DIS;
++	if (!valid)
++		ggpio &= ~GGPIO_STM32_OTG_GCCFG_VBVALOVAL;
++	else
++		ggpio |= GGPIO_STM32_OTG_GCCFG_VBVALOVAL;
+ 	dwc2_writel(hsotg, ggpio, GGPIO);
+-
+-	return 0;
+ }
+ 
+ static void dwc2_ovr_init(struct dwc2_hsotg *hsotg)
+@@ -75,7 +72,7 @@ static void dwc2_ovr_init(struct dwc2_hsotg *hsotg)
+ 	u32 gotgctl;
+ 
+ 	if (hsotg->params.activate_stm32_bvaloval_en)
+-		return dwc2_ovr_init_stm32mp21(hsotg);
++		dwc2_ovr_init_stm32mp21(hsotg);
+ 
+ 	spin_lock_irqsave(&hsotg->lock, flags);
+ 
+@@ -99,7 +96,7 @@ static int dwc2_ovr_avalid(struct dwc2_hsotg *hsotg, bool valid)
+ 	u32 gotgctl = dwc2_readl(hsotg, GOTGCTL);
+ 
+ 	if (hsotg->params.activate_stm32_bvaloval_en)
+-		return dwc2_ovr_avalid_stm32mp21(hsotg, valid);
++		dwc2_ovr_avalid_stm32mp21(hsotg, valid);
+ 
+ 	/* Check if A-Session is already in the right state */
+ 	if ((valid && (gotgctl & GOTGCTL_AVALOVAL) && (gotgctl & GOTGCTL_VBVALOVAL)) ||
+@@ -124,7 +121,7 @@ static int dwc2_ovr_bvalid(struct dwc2_hsotg *hsotg, bool valid)
+ 	u32 gotgctl = dwc2_readl(hsotg, GOTGCTL);
+ 
+ 	if (hsotg->params.activate_stm32_bvaloval_en)
+-		return dwc2_ovr_bvalid_stm32mp21(hsotg, valid);
++		dwc2_ovr_bvalid_stm32mp21(hsotg, valid);
+ 
+ 	/* Check if B-Session is already in the right state */
+ 	if ((valid && (gotgctl & GOTGCTL_BVALOVAL) && (gotgctl & GOTGCTL_VBVALOVAL)) ||
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index b5d0d660fc11..a9152185f221 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -3477,12 +3477,22 @@ void dwc2_hsotg_core_init_disconnected(struct dwc2_hsotg *hsotg,
+ 
+ 	/* Clear any pending interrupts */
+ 	dwc2_writel(hsotg, 0xffffffff, GINTSTS);
+-	intmsk = GINTSTS_ERLYSUSP | GINTSTS_SESSREQINT |
+-		GINTSTS_GOUTNAKEFF | GINTSTS_GINNAKEFF |
+-		GINTSTS_USBRST | GINTSTS_RESETDET |
+-		GINTSTS_ENUMDONE | GINTSTS_OTGINT |
+-		GINTSTS_USBSUSP | GINTSTS_WKUPINT |
+-		GINTSTS_LPMTRANRCVD;
++	if (hsotg->hw_params.op_mode == GHWCFG2_OP_MODE_NO_HNP_SRP_CAPABLE ||
++	    hsotg->hw_params.op_mode == GHWCFG2_OP_MODE_NO_SRP_CAPABLE_DEVICE ||
++	    hsotg->hw_params.op_mode == GHWCFG2_OP_MODE_NO_SRP_CAPABLE_HOST)
++		intmsk = GINTSTS_ERLYSUSP |
++			GINTSTS_GOUTNAKEFF | GINTSTS_GINNAKEFF |
++			GINTSTS_USBRST | GINTSTS_RESETDET |
++			GINTSTS_ENUMDONE |
++			GINTSTS_USBSUSP | GINTSTS_WKUPINT |
++			GINTSTS_LPMTRANRCVD;
++	else
++		intmsk = GINTSTS_ERLYSUSP | GINTSTS_SESSREQINT |
++			GINTSTS_GOUTNAKEFF | GINTSTS_GINNAKEFF |
++			GINTSTS_USBRST | GINTSTS_RESETDET |
++			GINTSTS_ENUMDONE | GINTSTS_OTGINT |
++			GINTSTS_USBSUSP | GINTSTS_WKUPINT |
++			GINTSTS_LPMTRANRCVD;
+ 
+ 	if (!using_desc_dma(hsotg))
+ 		intmsk |= GINTSTS_INCOMPL_SOIN | GINTSTS_INCOMPL_SOOUT;
+diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+index 9a81c40367ab..f5cf0acdd5af 100644
+--- a/drivers/usb/dwc2/hcd.c
++++ b/drivers/usb/dwc2/hcd.c
+@@ -50,15 +50,24 @@ static void dwc2_enable_common_interrupts(struct dwc2_hsotg *hsotg)
+ 	dwc2_writel(hsotg, 0xffffffff, GINTSTS);
+ 
+ 	/* Enable the interrupts in the GINTMSK */
+-	intmsk = GINTSTS_MODEMIS | GINTSTS_OTGINT;
++	if (hsotg->hw_params.op_mode == GHWCFG2_OP_MODE_NO_HNP_SRP_CAPABLE ||
++	    hsotg->hw_params.op_mode == GHWCFG2_OP_MODE_NO_SRP_CAPABLE_DEVICE ||
++	    hsotg->hw_params.op_mode == GHWCFG2_OP_MODE_NO_SRP_CAPABLE_HOST)
++		intmsk = GINTSTS_MODEMIS;
++	else
++		intmsk = GINTSTS_MODEMIS | GINTSTS_OTGINT;
+ 
+ 	if (!hsotg->params.host_dma)
+ 		intmsk |= GINTSTS_RXFLVL;
+ 	if (!hsotg->params.external_id_pin_ctl)
+ 		intmsk |= GINTSTS_CONIDSTSCHNG;
+-
+-	intmsk |= GINTSTS_WKUPINT | GINTSTS_USBSUSP |
+-		  GINTSTS_SESSREQINT;
++	if (hsotg->hw_params.op_mode == GHWCFG2_OP_MODE_NO_HNP_SRP_CAPABLE ||
++	    hsotg->hw_params.op_mode == GHWCFG2_OP_MODE_NO_SRP_CAPABLE_DEVICE ||
++	    hsotg->hw_params.op_mode == GHWCFG2_OP_MODE_NO_SRP_CAPABLE_HOST)
++		intmsk |= GINTSTS_WKUPINT | GINTSTS_USBSUSP;
++	else
++		intmsk |= GINTSTS_WKUPINT | GINTSTS_USBSUSP |
++			  GINTSTS_SESSREQINT;
+ 
+ 	if (dwc2_is_device_mode(hsotg) && hsotg->params.lpm)
+ 		intmsk |= GINTSTS_LPMTRANRCVD;
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index 0a9f2a5791a8..677149c6b6c5 100644
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -351,16 +351,16 @@ static void dwc2_driver_remove(struct platform_device *dev)
+ 	if (hsotg->params.activate_stm_id_vb_detection)
+ 		regulator_disable(hsotg->usb33d);
+ 
+-	if (hsotg->ll_hw_enabled)
+-		dwc2_lowlevel_hw_disable(hsotg);
+-
+-	if (hsotg->params.activate_stm32_bvaloval_en) {
++	if (hsotg->params.activate_stm32_bvaloval_en && !hsotg->role_sw) {
+ 		u32 ggpio = dwc2_readl(hsotg, GGPIO);
+ 
+ 		ggpio &= ~GGPIO_STM32_OTG_GCCFG_IDPULLUP_DIS;
+ 		ggpio &= ~GGPIO_STM32_OTG_GCCFG_VBVALOVAL;
+ 		dwc2_writel(hsotg, ggpio, GGPIO);
+ 	}
++
++	if (hsotg->ll_hw_enabled)
++		dwc2_lowlevel_hw_disable(hsotg);
+ }
+ 
+ /**
+@@ -596,13 +596,6 @@ static int dwc2_driver_probe(struct platform_device *dev)
+ 		usleep_range(5000, 7000);
+ 	}
+ 
+-	if (hsotg->params.activate_stm32_bvaloval_en) {
+-		u32 ggpio = dwc2_readl(hsotg, GGPIO);
+-
+-		ggpio |= GGPIO_STM32_OTG_GCCFG_IDPULLUP_DIS;
+-		ggpio |= GGPIO_STM32_OTG_GCCFG_VBVALOVAL;
+-		dwc2_writel(hsotg, ggpio, GGPIO);
+-	}
+ 
+ 	retval = dwc2_drd_init(hsotg);
+ 	if (retval) {
+@@ -610,6 +603,19 @@ static int dwc2_driver_probe(struct platform_device *dev)
+ 		goto error_init;
+ 	}
+ 
++	if (hsotg->params.activate_stm32_bvaloval_en && !hsotg->role_sw) {
++		u32 ggpio = dwc2_readl(hsotg, GGPIO);
++
++		if (hsotg->dr_mode == USB_DR_MODE_HOST) {
++			ggpio &= ~GGPIO_STM32_OTG_GCCFG_IDPULLUP_DIS;
++			ggpio &= ~GGPIO_STM32_OTG_GCCFG_VBVALOVAL;
++		} else if (hsotg->dr_mode == USB_DR_MODE_PERIPHERAL) {
++			ggpio |= GGPIO_STM32_OTG_GCCFG_IDPULLUP_DIS;
++			ggpio |= GGPIO_STM32_OTG_GCCFG_VBVALOVAL;
++		}
++		dwc2_writel(hsotg, ggpio, GGPIO);
++	}
++
+ 	if (hsotg->dr_mode != USB_DR_MODE_HOST) {
+ 		retval = dwc2_gadget_init(hsotg);
+ 		if (retval)
+@@ -739,14 +745,6 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+ 		regulator_disable(dwc2->usb33d);
+ 	}
+ 
+-	if (dwc2->params.activate_stm32_bvaloval_en) {
+-		u32 ggpio = dwc2_readl(dwc2, GGPIO);
+-
+-		ggpio &= ~GGPIO_STM32_OTG_GCCFG_IDPULLUP_DIS;
+-		ggpio &= ~GGPIO_STM32_OTG_GCCFG_VBVALOVAL;
+-		dwc2_writel(dwc2, ggpio, GGPIO);
+-	}
+-
+ 	if (dwc2->ll_hw_enabled &&
+ 	    (is_device_mode || dwc2_host_can_poweroff_phy(dwc2))) {
+ 		ret = __dwc2_lowlevel_hw_disable(dwc2);
+@@ -799,11 +797,16 @@ static int __maybe_unused dwc2_resume(struct device *dev)
+ 		spin_unlock_irqrestore(&dwc2->lock, flags);
+ 	}
+ 
+-	if (dwc2->params.activate_stm32_bvaloval_en) {
++	if (dwc2->params.activate_stm32_bvaloval_en && !dwc2->role_sw) {
+ 		u32 ggpio = dwc2_readl(dwc2, GGPIO);
+ 
+-		ggpio |= GGPIO_STM32_OTG_GCCFG_IDPULLUP_DIS;
+-		ggpio |= GGPIO_STM32_OTG_GCCFG_VBVALOVAL;
++		if (dwc2->dr_mode == USB_DR_MODE_HOST) {
++			ggpio &= ~GGPIO_STM32_OTG_GCCFG_IDPULLUP_DIS;
++			ggpio &= ~GGPIO_STM32_OTG_GCCFG_VBVALOVAL;
++		} else if (dwc2->dr_mode == USB_DR_MODE_PERIPHERAL) {
++			ggpio |= GGPIO_STM32_OTG_GCCFG_IDPULLUP_DIS;
++			ggpio |= GGPIO_STM32_OTG_GCCFG_VBVALOVAL;
++		}
+ 		dwc2_writel(dwc2, ggpio, GGPIO);
+ 	}
+ 
+-- 
+2.50.1
+

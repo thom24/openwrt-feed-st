@@ -1,0 +1,76 @@
+From 87cc085db2b24865563dd5795344d03f866c4b72 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Mon, 30 Sep 2024 13:30:48 +0200
+Subject: [PATCH] ARM: dts: stm32: move dfsdm nodes to generic binding on
+ stm32mp135f-dk-a7-examples
+
+Replace the legacy channel binding by the generic channel binding in
+DFSDM nodes stm32mp135f-dk-a7-examples device tree.
+
+Change-Id: If707720afabe3f610f5a97578a961a38bd368fd8
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/408561
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ .../dts/st/stm32mp135f-dk-a7-examples.dts     | 28 +++++++++++++------
+ 1 file changed, 19 insertions(+), 9 deletions(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk-a7-examples.dts b/arch/arm/boot/dts/st/stm32mp135f-dk-a7-examples.dts
+index 85c9e577ed19..ea9918ef2a45 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk-a7-examples.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk-a7-examples.dts
+@@ -64,13 +64,18 @@ &dfsdm {
+ 
+ 	dfsdm0: filter@0 {
+ 		compatible = "st,stm32-dfsdm-dmic";
+-		st,adc-channels = <3>;
+-		st,adc-channel-names = "dmic0";
+-		st,adc-channel-types = "SPI_R";
+-		st,adc-channel-clk-src = "CLKOUT";
++		#address-cells = <1>;
++		#size-cells = <0>;
+ 		st,filter-order = <3>;
+ 		status = "okay";
+ 
++		channel@3 {
++			reg = <3>;
++			label = "dmic0";
++			st,adc-channel-type = "SPI_R";
++			st,adc-channel-clk-src = "CLKOUT";
++		};
++
+ 		asoc_pdm0: dfsdm-dai {
+ 			compatible = "st,stm32h7-dfsdm-dai";
+ 			#sound-dai-cells = <0>;
+@@ -87,14 +92,19 @@ dfsdm_endpoint0: endpoint {
+ 
+ 	dfsdm1: filter@1 {
+ 		compatible = "st,stm32-dfsdm-dmic";
+-		st,adc-channels = <0>;
+-		st,adc-channel-names = "dmic1";
+-		st,adc-channel-types = "SPI_F";
+-		st,adc-channel-clk-src = "CLKOUT";
++		#address-cells = <1>;
++		#size-cells = <0>;
+ 		st,filter-order = <3>;
+-		st,adc-alt-channel;
+ 		status = "okay";
+ 
++		channel@0 {
++			reg = <0>;
++			label = "dmic1";
++			st,adc-channel-type = "SPI_F";
++			st,adc-channel-clk-src = "CLKOUT";
++			st,adc-alt-channel;
++		};
++
+ 		asoc_pdm1: dfsdm-dai {
+ 			compatible = "st,stm32h7-dfsdm-dai";
+ 			#sound-dai-cells = <0>;
+-- 
+2.50.1
+

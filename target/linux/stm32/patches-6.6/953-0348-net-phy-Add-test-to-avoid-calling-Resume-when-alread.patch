@@ -1,0 +1,46 @@
+From ebfa3e69a58ea3678b6c0989d7d61fb7a2939452 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Mon, 24 Mar 2025 16:52:22 +0100
+Subject: [PATCH] net: phy: Add test to avoid calling Resume when already
+ RUNNING state
+
+Add protection to avoid calling mdio_bus_phy_resume when phy state is
+already in Running state
+TEMPORARY PATCH
+
+Change-Id: Id66b0598d8535628d76d09e0950a52ef5f97a095
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/446383
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/net/phy/phy_device.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+index 918232786153..39220acbefbe 100644
+--- a/drivers/net/phy/phy_device.c
++++ b/drivers/net/phy/phy_device.c
+@@ -342,7 +342,7 @@ static __maybe_unused int mdio_bus_phy_suspend(struct device *dev)
+ static __maybe_unused int mdio_bus_phy_resume(struct device *dev)
+ {
+ 	struct phy_device *phydev = to_phy_device(dev);
+-	int ret;
++	int ret = 0;
+ 
+ 	if (phydev->mac_managed_pm)
+ 		return 0;
+@@ -352,6 +352,10 @@ static __maybe_unused int mdio_bus_phy_resume(struct device *dev)
+ 
+ 	phydev->suspended_by_mdio_bus = 0;
+ 
++	/* Already RUNNING no need to resume */
++	if (phydev->state == PHY_RUNNING)
++		return ret;
++
+ 	/* If we managed to get here with the PHY state machine in a state
+ 	 * neither PHY_HALTED, PHY_READY nor PHY_UP, this is an indication
+ 	 * that something went wrong and we should most likely be using
+-- 
+2.50.1
+

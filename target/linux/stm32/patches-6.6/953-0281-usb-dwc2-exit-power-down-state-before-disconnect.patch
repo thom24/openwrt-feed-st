@@ -1,0 +1,47 @@
+From 82c5d2f8b635fd9efef372219af8479f3d1cdb43 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Fri, 14 Feb 2025 14:22:20 +0100
+Subject: [PATCH] usb: dwc2: exit power down state before disconnect
+
+If the controller has been put in partial power down or clock gating mode,
+it must be restored before disconnecting. Otherwise, the next session
+(e.g. connect can result in a stuck controller / platform).
+
+Change-Id: I568e135d2f449f183521fe4b98c6d83b0ee326bc
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/437433
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/usb/dwc2/gadget.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 41d0a6058507..d128ec8da238 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -3624,6 +3624,21 @@ void dwc2_hsotg_core_init_disconnected(struct dwc2_hsotg *hsotg,
+ 
+ void dwc2_hsotg_core_disconnect(struct dwc2_hsotg *hsotg)
+ {
++	/*
++	 * If controller is in partial power down state or in clock gating mode, it must
++	 * exit from that state before being disconnected, and detached.
++	 */
++	if (hsotg->lx_state == DWC2_L2) {
++		/* No need to check the return value as registers are not being restored. */
++		if (hsotg->in_ppd)
++			dwc2_exit_partial_power_down(hsotg, 0, false);
++
++		if (hsotg->params.power_down ==
++		    DWC2_POWER_DOWN_PARAM_NONE && hsotg->bus_suspended &&
++		    !hsotg->params.no_clock_gating)
++			dwc2_gadget_exit_clock_gating(hsotg, 0);
++	}
++
+ 	/* set the soft-disconnect bit */
+ 	dwc2_set_bit(hsotg, DCTL, DCTL_SFTDISCON);
+ }
+-- 
+2.50.1
+

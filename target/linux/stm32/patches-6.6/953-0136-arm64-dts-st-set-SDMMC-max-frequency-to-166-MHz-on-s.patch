@@ -1,0 +1,54 @@
+From 5ad935ebc8ea66fa704c77fc2fe7c4bb409ac55c Mon Sep 17 00:00:00 2001
+From: Christophe Kerello <christophe.kerello@foss.st.com>
+Date: Wed, 18 Dec 2024 13:51:13 +0100
+Subject: [PATCH] arm64: dts: st: set SDMMC max frequency to 166 MHz on
+ stm32mp25
+
+Set SDMMC max frequency to 166 MHz on stm32mp25.
+
+Change-Id: Ia0e0605551e9ea222d7f400663a696780aef223c
+Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/426124
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
+Tested-by: Christophe KERELLO <christophe.kerello@st.com>
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index 14555db35555..3140d5436ebf 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -2238,7 +2238,7 @@ sdmmc1: mmc@48220000 {
+ 				resets = <&rcc SDMMC1_R>;
+ 				cap-sd-highspeed;
+ 				cap-mmc-highspeed;
+-				max-frequency = <120000000>;
++				max-frequency = <166000000>;
+ 				access-controllers = <&rifsc 76>;
+ 				power-domains = <&CLUSTER_PD>;
+ 				status = "disabled";
+@@ -2254,7 +2254,7 @@ sdmmc2: mmc@48230000 {
+ 				resets = <&rcc SDMMC2_R>;
+ 				cap-sd-highspeed;
+ 				cap-mmc-highspeed;
+-				max-frequency = <120000000>;
++				max-frequency = <166000000>;
+ 				access-controllers = <&rifsc 77>;
+ 				power-domains = <&CLUSTER_PD>;
+ 				status = "disabled";
+@@ -2270,7 +2270,7 @@ sdmmc3: mmc@48240000 {
+ 				resets = <&rcc SDMMC3_R>;
+ 				cap-sd-highspeed;
+ 				cap-mmc-highspeed;
+-				max-frequency = <120000000>;
++				max-frequency = <166000000>;
+ 				access-controllers = <&rifsc 78>;
+ 				power-domains = <&CLUSTER_PD>;
+ 				status = "disabled";
+-- 
+2.50.1
+

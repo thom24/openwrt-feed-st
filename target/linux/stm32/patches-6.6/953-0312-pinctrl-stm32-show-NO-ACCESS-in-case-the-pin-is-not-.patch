@@ -1,0 +1,39 @@
+From 398f6a43442103c7a137aeb8ad86fbfce8ab623f Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Thu, 20 Mar 2025 18:29:02 +0100
+Subject: [PATCH] pinctrl: stm32: show 'NO ACCESS' in case the pin is not
+ available
+
+Depending on package, the range of a pin could not be found. The driver is
+unable to find the pin configuration if no range is found.
+To avoid having an empty information instead of the configuration after pin
+name in debugfs, add "NO ACCESS" when range is not found.
+
+Change-Id: I782346755f8d2d845d3aad7004389da49c90673e
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/445618
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/pinctrl/stm32/pinctrl-stm32.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
+index 3302e125adfe..b4eccd00744f 100644
+--- a/drivers/pinctrl/stm32/pinctrl-stm32.c
++++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
+@@ -1608,8 +1608,10 @@ static void stm32_pconf_dbg_show(struct pinctrl_dev *pctldev,
+ 	bool val;
+ 
+ 	range = pinctrl_find_gpio_range_from_pin_nolock(pctldev, pin);
+-	if (!range)
++	if (!range) {
++		seq_puts(s, "NO ACCESS");
+ 		return;
++	}
+ 
+ 	bank = gpiochip_get_data(range->gc);
+ 	offset = stm32_gpio_pin(pin);
+-- 
+2.50.1
+

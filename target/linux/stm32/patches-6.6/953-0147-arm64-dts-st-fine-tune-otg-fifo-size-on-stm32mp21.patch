@@ -1,0 +1,43 @@
+From 1cb85be94892d84083253369c65f4eff90edcdf3 Mon Sep 17 00:00:00 2001
+From: Rahul Kumar <rahul.kumar05@st.com>
+Date: Thu, 28 Nov 2024 09:53:30 +0530
+Subject: [PATCH] arm64: dts: st: fine tune otg fifo size on stm32mp21
+
+Fine tune fifo size for otg gadget to support composite device features.
+
+Tested with composite device configured as NCM + mass storage
+Two endpoints are used to support composite device.
+The size of supported endpoint is 128, 256 & 512.
+Here 512 is used for g-rx-fifo-size by default.
+
+Change-Id: Ibdcf6f5dd4c92519a3dc49059fcfcb5dc090a840
+Signed-off-by: Rahul Kumar <rahul.kumar05@st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/421224
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Ram DAYAL <ram.dayal@st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index ecafeb9cff73..c26308f375e9 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -1884,9 +1884,9 @@ usbotg_hs: usb@48300000 {
+ 				reset-names = "dwc2";
+ 				interrupts = <GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH>;
+ 				access-controllers = <&rifsc 66>;
+-				g-rx-fifo-size = <1024>;
++				g-rx-fifo-size = <512>;
+ 				g-np-tx-fifo-size = <64>;
+-				g-tx-fifo-size = <512 16 16 16 16 16 16 16>;
++				g-tx-fifo-size = <512 512 16 16 16 16 16 16>;
+ 				dr_mode = "otg";
+ 				otg-rev = <0x200>;
+ 				phys = <&usb2_phy2>;
+-- 
+2.50.1
+

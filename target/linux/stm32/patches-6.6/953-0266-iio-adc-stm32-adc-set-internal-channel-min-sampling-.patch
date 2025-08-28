@@ -1,0 +1,34 @@
+From f7de4a637861a21f28958453b3c22439ccdb65ac Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Thu, 23 Jan 2025 13:28:20 +0100
+Subject: [PATCH] iio: adc: stm32-adc: set internal channel min sampling time
+
+Remove comment on stm32_adc_min_ts_mp21 internal channels sampling time
+array, after check of values from datasheet.
+
+Change-Id: Ia9f76525a611fe70fdc68e6b6308248396d94517
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/431022
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/iio/adc/stm32-adc.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/iio/adc/stm32-adc.c b/drivers/iio/adc/stm32-adc.c
+index ba1fb9477f16..a49223594b0a 100644
+--- a/drivers/iio/adc/stm32-adc.c
++++ b/drivers/iio/adc/stm32-adc.c
+@@ -3243,7 +3243,6 @@ static const struct stm32_adc_cfg stm32mp13_adc_cfg = {
+ 	.vref_charac = 3300,
+ };
+ 
+-/* TODO: Update min sampling time with databrief */
+ static const unsigned int stm32_adc_min_ts_mp21[] = { 34, 34, 0, 34, 34, 0 };
+ static_assert(ARRAY_SIZE(stm32_adc_min_ts_mp21) == STM32_ADC_INT_CH_NB);
+ 
+-- 
+2.50.1
+

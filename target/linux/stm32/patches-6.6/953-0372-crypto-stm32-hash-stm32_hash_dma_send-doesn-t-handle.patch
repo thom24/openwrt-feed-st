@@ -1,0 +1,44 @@
+From d4468379bb93010f4f878dfb8cd6f438011eeb7b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Fri, 21 Mar 2025 18:49:47 +0100
+Subject: [PATCH] crypto: stm32/hash - stm32_hash_dma_send doesn't handle null
+ length scatterlist
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+In certain situations, when the scatter-gather list has a size under 16
+octets, the data length calculation that determines what the DMA has to
+send may underflow. This underflow can result in a DMA request for an
+absurdly large size (approximately 4GB). This issue can be resolved by
+setting the length to 0, which will bypass the DMA transfer (0-byte
+length data to send). Consequently, the data will be written manually to
+the DIN register during the final process.
+
+Change-Id: Ie279788f9afabe053430c18bd8b5ba951fa13d14
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/446033
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ drivers/crypto/stm32/stm32-hash.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/crypto/stm32/stm32-hash.c b/drivers/crypto/stm32/stm32-hash.c
+index 1311e0636746..73daa40e3723 100644
+--- a/drivers/crypto/stm32/stm32-hash.c
++++ b/drivers/crypto/stm32/stm32-hash.c
+@@ -696,7 +696,7 @@ static int stm32_hash_dma_send(struct stm32_hash_dev *hdev)
+ 				 */
+ 				sg->length = rctx->total - bufcnt;
+ 				if (hdev->dma_mode > 0) {
+-					len = (ALIGN(sg->length, 16) - 16);
++					len = sg->length ? (ALIGN(sg->length, 16) - 16) : 0;
+ 
+ 					ncp = sg_pcopy_to_buffer(rctx->sg, rctx->nents,
+ 								 rctx->state.buffer,
+-- 
+2.50.1
+

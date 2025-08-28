@@ -1,0 +1,40 @@
+From 51c4cef0eed84d14d0aadeb03cd50e41233a86b2 Mon Sep 17 00:00:00 2001
+From: Theo GOUREAU <theo.goureau-ext@st.com>
+Date: Tue, 7 Jan 2025 15:27:32 +0100
+Subject: [PATCH] arm64: dts: st: add GPIOZ and LPTIM4 clocks to m0_rproc for
+ stm32mp257f-ev1
+
+Add GPIOZ and LPTIM4 clocks to m0_rproc for stm32mp257f-ev1.
+
+Change-Id: Id619371f3bdc49c8aabedce1aa7bc941afaa26e5
+Signed-off-by: Theo GOUREAU <theo.goureau-ext@st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/427542
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Gwenael TREUVEUR <gwenael.treuveur@st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+index 0643948951e5..a8efce0eb459 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+@@ -573,6 +573,12 @@ &m0_rproc {
+ 		 <&rcc CK_LPUART1_C3>,
+ 		 <&rcc CK_KER_LPUART1>,
+ 		 <&rcc CK_LPUART1_AM>,
++		 <&rcc CK_GPIOZ_C3>,
++		 <&scmi_clk CK_SCMI_GPIOZ>,
++		 <&scmi_clk CK_SCMI_GPIOZ_AM>,
++		 <&rcc CK_LPTIM4_C3>,
++		 <&rcc CK_KER_LPTIM4>,
++		 <&rcc CK_LPTIM4_AM>,
+ 		 <&scmi_clk CK_SCMI_IPCC2>,
+ 		 <&scmi_clk CK_SCMI_IPCC2_AM>;
+ 	status = "okay";
+-- 
+2.50.1
+

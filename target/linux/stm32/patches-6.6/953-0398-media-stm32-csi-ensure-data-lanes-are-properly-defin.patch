@@ -1,0 +1,36 @@
+From d0d0c646bbf572bf7886907506e4d8f6fdf6dee9 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Wed, 19 Mar 2025 09:33:24 +0100
+Subject: [PATCH] media: stm32: csi: ensure data-lanes are properly defined
+
+Ensure that data-lanes property is properly filled in the device-tree.
+
+Change-Id: I0545aaf9f0f8c0681013a1dba5ee08feae7e9fde
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/445145
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ drivers/media/platform/st/stm32/stm32-csi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-csi.c b/drivers/media/platform/st/stm32/stm32-csi.c
+index 7e11dd272f62..75f76ec36d73 100644
+--- a/drivers/media/platform/st/stm32/stm32-csi.c
++++ b/drivers/media/platform/st/stm32/stm32-csi.c
+@@ -968,7 +968,7 @@ static int stm32_csi_parse_dt(struct stm32_csi_dev *csi2priv)
+ 	}
+ 
+ 	csi2priv->num_lanes = v4l2_ep.bus.mipi_csi2.num_data_lanes;
+-	if (csi2priv->num_lanes > STM32_CSI_LANES_MAX) {
++	if (!csi2priv->num_lanes || csi2priv->num_lanes > STM32_CSI_LANES_MAX) {
+ 		dev_err(csi2priv->dev, "Unsupported number of data-lanes: %d\n",
+ 			csi2priv->num_lanes);
+ 		return -EINVAL;
+-- 
+2.50.1
+

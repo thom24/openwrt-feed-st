@@ -1,0 +1,39 @@
+From ac66899cd3e96bae114436287f356b6e3498a705 Mon Sep 17 00:00:00 2001
+From: Cheick Traore <cheick.traore@foss.st.com>
+Date: Tue, 15 Apr 2025 11:16:29 +0200
+Subject: [PATCH] serial: stm32: do not deassert RS485 RTS GPIO prematurely
+
+If stm32_usart_start_tx is called with an empty xmit buffer, RTS GPIO
+could be deasserted prematurely, as bytes in TX FIFO are still
+transmitting.
+So this patch remove rts disable when xmit buffer is empty.
+
+Change-Id: If2e1f08ef47dac2ff81df491ec59ef572f1acc0b
+Signed-off-by: Cheick Traore <cheick.traore@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/451525
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ drivers/tty/serial/stm32-usart.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index 48cd2d8d69d8..89c36ddea304 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -1177,10 +1177,8 @@ static void stm32_usart_start_tx(struct uart_port *port)
+ {
+ 	struct circ_buf *xmit = &port->state->xmit;
+ 
+-	if (uart_circ_empty(xmit) && !port->x_char) {
+-		stm32_usart_rs485_rts_disable(port);
++	if (uart_circ_empty(xmit) && !port->x_char)
+ 		return;
+-	}
+ 
+ 	stm32_usart_rs485_rts_enable(port);
+ 
+-- 
+2.50.1
+

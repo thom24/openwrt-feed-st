@@ -1,0 +1,65 @@
+From c24aea326a70cc96af00483890548e1ba652ff8d Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Wed, 26 Mar 2025 11:43:59 +0100
+Subject: [PATCH] mmc: mmci: Fix SDIO voltage switch
+
+Mmci_sig_volt_switch is currently returning 0 even if
+mmc_regulator_set_vqmmc fails. For example, during SDIO initialization,
+the first try is at 3,3V. It fails as the regulator is at 1,8V, but we
+return 0. If we dump sysfs ios file, the signal voltage is at 3,3V instead
+of 1,8V.
+
+Change-Id: I93abdf9cc1679d18b82d8129567d542a4f90d676
+Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+---
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/446912
+Tested-by: Christophe KERELLO <christophe.kerello@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
+---
+ drivers/mmc/host/mmci.c | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/mmc/host/mmci.c b/drivers/mmc/host/mmci.c
+index 7fbc0529ecaf..409115fa72d2 100644
+--- a/drivers/mmc/host/mmci.c
++++ b/drivers/mmc/host/mmci.c
+@@ -2052,19 +2052,23 @@ static int mmci_get_cd(struct mmc_host *mmc)
+ static int mmci_sig_volt_switch(struct mmc_host *mmc, struct mmc_ios *ios)
+ {
+ 	struct mmci_host *host = mmc_priv(mmc);
+-	int ret;
+ 
+-	ret = mmc_regulator_set_vqmmc(mmc, ios);
++	if (!IS_ERR(mmc->supply.vqmmc)) {
++		int ret;
+ 
+-	if (!ret && host->ops && host->ops->post_sig_volt_switch)
+-		ret = host->ops->post_sig_volt_switch(host, ios);
+-	else if (ret)
+-		ret = 0;
++		ret = mmc_regulator_set_vqmmc(mmc, ios);
+ 
+-	if (ret < 0)
+-		dev_warn(mmc_dev(mmc), "Voltage switch failed\n");
++		if (!ret && host->ops && host->ops->post_sig_volt_switch)
++			ret = host->ops->post_sig_volt_switch(host, ios);
+ 
+-	return ret;
++		return min(ret, 0);
++	}
++
++	/* No vqmmc regulator, assume fixed regulator at 3.3V */
++	if (mmc->ios.signal_voltage == MMC_SIGNAL_VOLTAGE_330)
++		return 0;
++
++	return -EINVAL;
+ }
+ 
+ static void mmci_enable_sdio_irq(struct mmc_host *mmc, int enable)
+-- 
+2.50.1
+

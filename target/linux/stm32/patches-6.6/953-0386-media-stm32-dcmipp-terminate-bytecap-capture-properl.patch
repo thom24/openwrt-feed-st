@@ -1,0 +1,54 @@
+From 975795fb807cbe4e731b9bc48cb29997705fba20 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Mon, 17 Mar 2025 14:45:39 +0100
+Subject: [PATCH] media: stm32: dcmipp: terminate bytecap capture properly
+
+Ensure to keep the pipe input still running when stopping
+capture in order to avoid having data partially going through
+the pipeline (and the IP-Plug).  Only stop the input once the
+capture has actually stopped.
+
+Change-Id: If9bdd72862f2949e316686ff4f050978963043ae
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/445031
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ .../platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c    | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
+index 4279c7b4a827..472f6083e2b7 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
+@@ -508,11 +508,6 @@ static void dcmipp_bytecap_stop_streaming(struct vb2_queue *vq)
+ 	int ret;
+ 	u32 status;
+ 
+-	dcmipp_pipeline_s_stream(vcap, 0);
+-
+-	/* Stop the media pipeline */
+-	media_pipeline_stop(vcap->vdev.entity.pads);
+-
+ 	/* Disable interruptions */
+ 	spin_lock(&vcap->vdev.v4l2_dev->lock);
+ 	reg_clear(vcap, DCMIPP_CMIER, vcap->cmier);
+@@ -532,6 +527,11 @@ static void dcmipp_bytecap_stop_streaming(struct vb2_queue *vq)
+ 	/* Disable pipe */
+ 	reg_clear(vcap, DCMIPP_P0FSCR, DCMIPP_P0FSCR_PIPEN);
+ 
++	dcmipp_pipeline_s_stream(vcap, 0);
++
++	/* Stop the media pipeline */
++	media_pipeline_stop(vcap->vdev.entity.pads);
++
+ 	spin_lock_irq(&vcap->irqlock);
+ 
+ 	/* Return all queued buffers to vb2 in ERROR state */
+-- 
+2.50.1
+

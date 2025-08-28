@@ -1,0 +1,49 @@
+From 3e9d084eb9aabe5eccfb0ba76eb220adb71b9cfe Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Mon, 17 Feb 2025 15:21:25 +0100
+Subject: [PATCH] dt-bindings: bus: document st,stm32mp21-rifsc compatible
+
+Add st,stm32mp21-rifsc compatible to the list of possible compatibles
+for the RIFSC.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I69385cec94d09271b28e8e8853bc2a97b0407a28
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/437677
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ .../devicetree/bindings/bus/st,stm32mp25-rifsc.yaml       | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml b/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
+index b179fd5f580c..b4b3680d517d 100644
+--- a/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
++++ b/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
+@@ -33,14 +33,18 @@ select:
+   properties:
+     compatible:
+       contains:
+-        const: st,stm32mp25-rifsc
++        enum:
++          - st,stm32mp21-rifsc
++          - st,stm32mp25-rifsc
+   required:
+     - compatible
+ 
+ properties:
+   compatible:
+     items:
+-      - const: st,stm32mp25-rifsc
++      - enum:
++        - st,stm32mp21-rifsc
++        - st,stm32mp25-rifsc
+       - const: simple-bus
+ 
+   reg:
+-- 
+2.50.1
+

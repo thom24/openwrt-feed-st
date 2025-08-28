@@ -1,0 +1,44 @@
+From f954bd7eeec8fff4231fc4e35fd7a91311018ec9 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Mon, 7 Apr 2025 11:46:56 +0200
+Subject: [PATCH] arm64: dts: add fdcan2 instance in stm32mp233.dtsi
+
+add missing m_can2 node in the stm32mp23 soc devicetree
+
+Change-Id: If533335162c27220aea8d9dea4b78b663365047b
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/449893
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp233.dtsi | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp233.dtsi b/arch/arm64/boot/dts/st/stm32mp233.dtsi
+index 21c606b9b4c1..0701102d846c 100644
+--- a/arch/arm64/boot/dts/st/stm32mp233.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp233.dtsi
+@@ -115,6 +115,21 @@ m_can1: can@402d0000 {
+ 		status = "disabled";
+ 	};
+ 
++	m_can2: can@402e0000 {
++		compatible = "bosch,m_can";
++		reg = <0x402e0000 0x400>, <0x40310000 0x2800>;
++		reg-names = "m_can", "message_ram";
++		interrupts = <GIC_SPI 92 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "int0", "int1";
++		clocks = <&rcc CK_BUS_FDCAN>, <&rcc CK_KER_FDCAN>;
++		clock-names = "hclk", "cclk";
++		bosch,mram-cfg = <0x1400 0 0 32 0 0 2 2>;
++		access-controllers = <&rifsc 56>;
++		power-domains = <&d1_pd>;
++		status = "disabled";
++	};
++
+ 	eth2: eth2@482d0000 {
+ 		compatible = "st,stm32mp25-dwmac", "snps,dwmac-5.10a";
+ 		reg = <0x482d0000 0x4000>;
+-- 
+2.50.1
+

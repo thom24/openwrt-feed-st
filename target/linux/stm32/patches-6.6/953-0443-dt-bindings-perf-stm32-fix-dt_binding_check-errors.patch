@@ -1,0 +1,113 @@
+From e865d2426e13a24ff0fdf7e4d950ae3e04dc0ed5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Tue, 29 Apr 2025 11:52:10 +0200
+Subject: [PATCH] dt-bindings: perf: stm32: fix dt_binding_check errors
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Rename $id value to correspond to the name of the file.
+Remove 'bindings' word from the title value.
+Remove the MP1 example as we had a conflict with the MP21 example
+includes.
+Add soc and root nodes for MP21 example due to the need of size-cell = <2>.
+
+Change-Id: I1442e8581fee60601931a0a65178af059b95980b
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/455189
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Tested-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ .../bindings/perf/stm32-ddrperfm-pmu.yaml     | 49 ++++++++++---------
+ 1 file changed, 26 insertions(+), 23 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/perf/stm32-ddrperfm-pmu.yaml b/Documentation/devicetree/bindings/perf/stm32-ddrperfm-pmu.yaml
+index 318cf5aac4f4..3f8f029dc4ed 100644
+--- a/Documentation/devicetree/bindings/perf/stm32-ddrperfm-pmu.yaml
++++ b/Documentation/devicetree/bindings/perf/stm32-ddrperfm-pmu.yaml
+@@ -1,13 +1,13 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: http://devicetree.org/schemas/perf/stm32-ddr-pmu.yaml#
++$id: http://devicetree.org/schemas/perf/stm32-ddrperfm-pmu.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ maintainers:
+   - Clément Le Goffic <clement.legoffic@foss.st.com
+ 
+-title: STMicroelectronics STM32 DDR Performance Monitor (DDRPERFM) bindings
++title: STMicroelectronics STM32 DDR Performance Monitor (DDRPERFM)
+ 
+ properties:
+   compatible:
+@@ -32,6 +32,7 @@ properties:
+ 
+   st,dram-type:
+     description: type of DRAM on the associated memory controller
++    $ref: /schemas/types.yaml#/definitions/uint32
+     enum:
+       - 0 # LPDDR4
+       - 1 # LPDDR3
+@@ -67,19 +68,7 @@ additionalProperties: false
+ 
+ examples:
+   - |
+-    #include <dt-bindings/clock/stm32mp1-clks.h>
+-    #include <dt-bindings/reset/stm32mp1-resets.h>
+-
+-    ddrperfm: perf@5a007000 {
+-        compatible = "st,stm32-ddr-pmu";
+-        reg = <0x5a007000 0x400>;
+-        clocks = <&rcc DDRPERFM>;
+-        resets = <&rcc DDRPERFM_R>;
+-        status = "disabled";
+-    };
+-
+-  - |
+-    ddrperfm: perf@48041000 {
++    perf@48041000 {
+       compatible = "st,stm32mp25-ddr-pmu";
+       reg = <0x48041000 0x400>;
+       access-controllers = <&rcc 104>;
+@@ -91,13 +80,27 @@ examples:
+     #include <dt-bindings/clock/st,stm32mp21-rcc.h>
+     #include <dt-bindings/reset/st,stm32mp21-rcc.h>
+ 
+-    ddrperfm: perf@480c0000 {
+-      compatible = "st,stm32mp25-ddr-pmu";
+-      reg = <0x480c0000 0x0 0x400>;
+-      clocks = <&rcc CK_BUS_DDRPERFM>;
+-      resets = <&rcc DDRPERFM_R>;
+-      access-controllers = <&rifsc 67>;
+-      st,dram-type = <0>;
+-      status = "disabled";
++    / {
++      #address-cells = <2>;
++      #size-cells = <2>;
++
++      soc0: soc@0 {
++        compatible = "simple-bus";
++        #address-cells = <1>;
++        #size-cells = <2>;
++        interrupt-parent = <&intc>;
++        ranges = <0x0 0x0 0x0 0x0 0x80000000>;
++        dma-ranges = <0x0 0x0 0x80000000 0x1 0x0>;
++
++        perf@480c0000 {
++          compatible = "st,stm32mp25-ddr-pmu";
++          reg = <0x480c0000 0x0 0x400>;
++          clocks = <&rcc CK_BUS_DDRPERFM>;
++          resets = <&rcc DDRPERFM_R>;
++          access-controllers = <&rifsc 67>;
++          st,dram-type = <0>;
++          status = "disabled";
++        };
++      };
+     };
+ ...
+-- 
+2.50.1
+

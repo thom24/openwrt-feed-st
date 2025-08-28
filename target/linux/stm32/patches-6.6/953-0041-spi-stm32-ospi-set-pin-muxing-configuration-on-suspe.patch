@@ -1,0 +1,44 @@
+From 5f61114efba359fc78cecc0463a688d1dffa4fd2 Mon Sep 17 00:00:00 2001
+From: Christophe Kerello <christophe.kerello@foss.st.com>
+Date: Thu, 7 Nov 2024 12:59:40 +0100
+Subject: [PATCH] spi: stm32-ospi: set pin muxing configuration on
+ suspend/resume
+
+Set pin muxing configuration on suspend/resume.
+
+Change-Id: I348558db7602ecffb08c15f7d7b3e7a5b848e932
+Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/417191
+Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
+Tested-by: Christophe KERELLO <christophe.kerello@st.com>
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/spi/spi-stm32-ospi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
+index 084b420d2e11..1969c16fa587 100644
+--- a/drivers/spi/spi-stm32-ospi.c
++++ b/drivers/spi/spi-stm32-ospi.c
+@@ -1167,7 +1167,7 @@ static int __maybe_unused stm32_ospi_suspend(struct device *dev)
+ 	struct stm32_ospi *ospi = dev_get_drvdata(dev);
+ 	struct stm32_omi *omi = ospi->omi;
+ 
+-	pinctrl_pm_select_sleep_state(dev);
++	pinctrl_pm_select_sleep_state(omi->dev);
+ 
+ 	return pm_runtime_force_suspend(omi->dev);
+ }
+@@ -1183,7 +1183,7 @@ static int __maybe_unused stm32_ospi_resume(struct device *dev)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	pinctrl_pm_select_default_state(dev);
++	pinctrl_pm_select_default_state(omi->dev);
+ 
+ 	ret = pm_runtime_resume_and_get(omi->dev);
+ 	if (ret < 0)
+-- 
+2.50.1
+

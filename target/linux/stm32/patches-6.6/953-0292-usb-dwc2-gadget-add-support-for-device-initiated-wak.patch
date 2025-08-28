@@ -1,0 +1,157 @@
+From 991b99c7391211aba613f3e6d1146b8cafadaf9a Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Tue, 28 Jan 2025 18:28:39 +0100
+Subject: [PATCH] usb: dwc2: gadget: add support for device initiated wakeup
+
+Add .set_remote_wakeup() callback, to flag the remote wakeup as configured.
+Add .wakeup() callback procedure, in order to send remote signaling to
+the host. When host instructs to enable wakeup, the remote_wakeup_allowed
+flag is set. When the gadget is configured with bmAttributes bit 5 set,
+(e.g. USB_CONFIG_ATT_WAKEUP), it configures the remote wakeup. When
+both flags are set, the controller must exit from low power mode, and
+send remote signaling.
+The RMTWKUPSIG bit must be cleared after 1ms to 15ms.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ib9d2903081576695540ec51a55ac051b0e943d62
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/432507
+Reviewed-by: Pankaj DEV <pankaj.dev@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/usb/dwc2/core.h   |  1 +
+ drivers/usb/dwc2/gadget.c | 65 ++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 65 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+index 8282412a7e38..6756456fea09 100644
+--- a/drivers/usb/dwc2/core.h
++++ b/drivers/usb/dwc2/core.h
+@@ -1223,6 +1223,7 @@ struct dwc2_hsotg {
+ 	unsigned int enabled:1;
+ 	unsigned int connected:1;
+ 	unsigned int remote_wakeup_allowed:1;
++	unsigned int wakeup_configured:1;
+ 	struct dwc2_hsotg_ep *eps_in[MAX_EPS_CHANNELS];
+ 	struct dwc2_hsotg_ep *eps_out[MAX_EPS_CHANNELS];
+ #endif /* CONFIG_USB_DWC2_PERIPHERAL || CONFIG_USB_DWC2_DUAL_ROLE */
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 7ea8d9100f62..3a47cbdc448d 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -3357,6 +3357,7 @@ void dwc2_hsotg_disconnect(struct dwc2_hsotg *hsotg)
+ 	}
+ 
+ 	call_gadget(hsotg, disconnect);
++	hsotg->remote_wakeup_allowed = 0;
+ 	hsotg->lx_state = DWC2_L3;
+ 
+ 	usb_gadget_set_state(&hsotg->gadget, USB_STATE_NOTATTACHED);
+@@ -3786,6 +3787,7 @@ static irqreturn_t dwc2_hsotg_irq(int irq, void *pw)
+ 		    !hsotg->params.no_clock_gating)
+ 			dwc2_gadget_exit_clock_gating(hsotg, 0);
+ 
++		hsotg->remote_wakeup_allowed = 0;
+ 		hsotg->lx_state = DWC2_L0;
+ 	}
+ 
+@@ -4701,6 +4703,63 @@ static int dwc2_hsotg_gadget_getframe(struct usb_gadget *gadget)
+ 	return dwc2_hsotg_read_frameno(to_hsotg(gadget));
+ }
+ 
++static int dwc2_hsotg_set_remote_wakeup(struct usb_gadget *gadget, int set)
++{
++	struct dwc2_hsotg *hsotg = to_hsotg(gadget);
++	unsigned long flags;
++
++	dev_dbg(hsotg->dev, "%s wakeup_configured: %d\n", __func__, set);
++
++	spin_lock_irqsave(&hsotg->lock, flags);
++	hsotg->wakeup_configured = !!set;
++	spin_unlock_irqrestore(&hsotg->lock, flags);
++
++	return 0;
++}
++
++static int dwc2_hsotg_wakeup(struct usb_gadget *gadget)
++{
++	struct dwc2_hsotg *hsotg = to_hsotg(gadget);
++	unsigned long flags;
++
++	dev_dbg(hsotg->dev, "%s remote_wakeup_allowed: %d\n", __func__,
++		hsotg->remote_wakeup_allowed);
++
++	spin_lock_irqsave(&hsotg->lock, flags);
++
++	if (!hsotg->wakeup_configured) {
++		spin_unlock_irqrestore(&hsotg->lock, flags);
++		dev_err(hsotg->dev, "remote wakeup not configured\n");
++		return -EINVAL;
++	}
++
++	if (!hsotg->remote_wakeup_allowed) {
++		spin_unlock_irqrestore(&hsotg->lock, flags);
++		dev_err(hsotg->dev, "not allowed to wake-up host\n");
++		return -EINVAL;
++	}
++
++	if (hsotg->in_ppd && hsotg->lx_state == DWC2_L2) {
++		dwc2_gadget_exit_partial_power_down(hsotg, 1, true);
++	} else if (hsotg->params.power_down ==
++	    DWC2_POWER_DOWN_PARAM_NONE && hsotg->bus_suspended &&
++	    !hsotg->params.no_clock_gating) {
++		dwc2_gadget_exit_clock_gating(hsotg, 1);
++	} else {
++		dwc2_set_bit(hsotg, DCTL, DCTL_RMTWKUPSIG);
++		mdelay(1);
++		dwc2_clear_bit(hsotg, DCTL, DCTL_RMTWKUPSIG);
++		hsotg->lx_state = DWC2_L0;
++	}
++
++	usb_gadget_set_state(&hsotg->gadget, hsotg->suspended_from);
++	call_gadget(hsotg, resume);
++
++	spin_unlock_irqrestore(&hsotg->lock, flags);
++
++	return 0;
++}
++
+ /**
+  * dwc2_hsotg_set_selfpowered - set if device is self/bus powered
+  * @gadget: The usb gadget state
+@@ -4845,6 +4904,7 @@ static void dwc2_gadget_set_speed(struct usb_gadget *g, enum usb_device_speed sp
+ 
+ static const struct usb_gadget_ops dwc2_hsotg_gadget_ops = {
+ 	.get_frame	= dwc2_hsotg_gadget_getframe,
++	.set_remote_wakeup	= dwc2_hsotg_set_remote_wakeup,
+ 	.set_selfpowered	= dwc2_hsotg_set_selfpowered,
+ 	.udc_start		= dwc2_hsotg_udc_start,
+ 	.udc_stop		= dwc2_hsotg_udc_stop,
+@@ -4852,6 +4912,7 @@ static const struct usb_gadget_ops dwc2_hsotg_gadget_ops = {
+ 	.udc_set_speed		= dwc2_gadget_set_speed,
+ 	.vbus_session		= dwc2_hsotg_vbus_session,
+ 	.vbus_draw		= dwc2_hsotg_vbus_draw,
++	.wakeup			= dwc2_hsotg_wakeup,
+ };
+ 
+ /**
+@@ -5081,6 +5142,7 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
+ 	hsotg->gadget.name = dev_name(dev);
+ 	hsotg->gadget.otg_caps = &hsotg->params.otg_caps;
+ 	hsotg->remote_wakeup_allowed = 0;
++	hsotg->gadget.wakeup_capable = true;
+ 
+ 	if (hsotg->params.lpm)
+ 		hsotg->gadget.lpm_capable = true;
+@@ -5807,7 +5869,8 @@ void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
+ 	if (rem_wakeup) {
+ 		/* Set Remote Wakeup Signaling */
+ 		dctl = dwc2_readl(hsotg, DCTL);
+-		dctl |= DCTL_RMTWKUPSIG;
++		dwc2_writel(hsotg, dctl | DCTL_RMTWKUPSIG, DCTL);
++		mdelay(1);
+ 		dwc2_writel(hsotg, dctl, DCTL);
+ 	}
+ 
+-- 
+2.50.1
+

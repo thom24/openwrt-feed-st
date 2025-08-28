@@ -1,0 +1,33 @@
+From 08936e4c1996d38569ac76c36674741071c3bf4c Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Mon, 3 Mar 2025 14:54:48 +0100
+Subject: [PATCH] dt-bindings: stm32: document stm32mp257f-ev1-aarch32
+
+Add new entry for stm32mp257f-ev1 built for aarch32
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I30af99b7a5dcd43e9c0e8aa731aacdb5c3167c25
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/441197
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ Documentation/devicetree/bindings/arm/stm32/stm32.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
+index 7268897d9bdf..9ce5e3302c8f 100644
+--- a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
++++ b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
+@@ -176,6 +176,7 @@ properties:
+           - enum:
+               - st,stm32mp257f-dk
+               - st,stm32mp257f-ev1
++              - st,stm32mp257f-ev1-aarch32
+           - const: st,stm32mp257
+ 
+       - description: ST STM32MP235 based Boards
+-- 
+2.50.1
+

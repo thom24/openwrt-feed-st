@@ -1,0 +1,62 @@
+From ca524189e02fdc610ae62d168708d18a7dc1b6a9 Mon Sep 17 00:00:00 2001
+From: Xianting Tian <tian.xianting@h3c.com>
+Date: Tue, 16 May 2023 15:22:02 +0300
+Subject: [PATCH] sched/rt: Print curr when RT throttling activated
+
+We may meet the issue, that one RT thread occupied the cpu by 950ms/1s,
+The RT thread maybe is a business thread or other unknown thread.
+
+Currently, it only outputs the print "sched: RT throttling activated"
+when RT throttling happen. It is hard to know what is the RT thread,
+For further analysis, we need add more prints.
+
+This patch is to print current RT task when RT throttling activated,
+It help us to know what is the RT thread in the first time.
+
+Tested-by: Alexandru Ardelean <alex@shruggie.ro>
+Change-Id: Ia80f673af617ffa867a3893b1e842a9be6e3a8cd
+Signed-off-by: Xianting Tian <tian.xianting@h3c.com>
+[With fix for checkpatch: CHECK: Alignment should match open parenthesis]
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/440772
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ kernel/sched/rt.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+index b89223a97316..ccf1a4433feb 100644
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -999,7 +999,7 @@ static inline int rt_se_prio(struct sched_rt_entity *rt_se)
+ 	return rt_task_of(rt_se)->prio;
+ }
+ 
+-static int sched_rt_runtime_exceeded(struct rt_rq *rt_rq)
++static int sched_rt_runtime_exceeded(struct rt_rq *rt_rq, struct task_struct *curr)
+ {
+ 	u64 runtime = sched_rt_runtime(rt_rq);
+ 
+@@ -1023,7 +1023,8 @@ static int sched_rt_runtime_exceeded(struct rt_rq *rt_rq)
+ 		 */
+ 		if (likely(rt_b->rt_runtime)) {
+ 			rt_rq->rt_throttled = 1;
+-			printk_deferred_once("sched: RT throttling activated\n");
++			printk_deferred_once("sched: RT throttling activated (pid %d, comm %s)\n",
++					     curr->pid, curr->comm);
+ 		} else {
+ 			/*
+ 			 * In case we did anyway, make it go away,
+@@ -1069,7 +1070,7 @@ static void update_curr_rt(struct rq *rq)
+ 		if (sched_rt_runtime(rt_rq) != RUNTIME_INF) {
+ 			raw_spin_lock(&rt_rq->rt_runtime_lock);
+ 			rt_rq->rt_time += delta_exec;
+-			exceeded = sched_rt_runtime_exceeded(rt_rq);
++			exceeded = sched_rt_runtime_exceeded(rt_rq, curr);
+ 			if (exceeded)
+ 				resched_curr(rq);
+ 			raw_spin_unlock(&rt_rq->rt_runtime_lock);
+-- 
+2.50.1
+

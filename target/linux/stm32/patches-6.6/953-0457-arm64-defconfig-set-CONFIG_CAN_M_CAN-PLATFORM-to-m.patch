@@ -1,0 +1,33 @@
+From 23673e4f0b2492fa9701590a90bbef036063693b Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Tue, 13 May 2025 08:48:11 +0200
+Subject: [PATCH] arm64: defconfig: set CONFIG_CAN_M_CAN/PLATFORM to m
+
+Set Bosch M_CAN controller CONFIG_CAN_M_CAN/PLATFORM to m.
+
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Change-Id: Ic8671e6780650de8e3c7aa436f44b55dbce0972b
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/457722
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/configs/fragment-02-defconfig-addons.config | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm64/configs/fragment-02-defconfig-addons.config b/arch/arm64/configs/fragment-02-defconfig-addons.config
+index 4e660aad4cbd..0c98441954e3 100644
+--- a/arch/arm64/configs/fragment-02-defconfig-addons.config
++++ b/arch/arm64/configs/fragment-02-defconfig-addons.config
+@@ -2,6 +2,8 @@
+ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+ CONFIG_BACKLIGHT_GPIO=m
+ CONFIG_BT_LE=y
++CONFIG_CAN_M_CAN=m
++CONFIG_CAN_M_CAN_PLATFORM=m
+ CONFIG_CLKSRC_STM32_LP=y
+ CONFIG_CLK_STM32MP2_CA35SS=m
+ CONFIG_CORESIGHT=y
+-- 
+2.50.1
+

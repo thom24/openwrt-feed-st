@@ -1,0 +1,51 @@
+From 09a76e5507a86903580b556c09146ddeb94923e1 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Fri, 20 Sep 2024 17:08:47 +0200
+Subject: [PATCH] drm/panel: simple: Add default-on property
+
+This property keep on the panel at probe.
+
+Change-Id: I5ba544b9bdc18714f1e73a8a44a6e831698330c4
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/406520
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/gpu/drm/panel/panel-simple.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
+index f90da0ba29bb..839eca8750ce 100644
+--- a/drivers/gpu/drm/panel/panel-simple.c
++++ b/drivers/gpu/drm/panel/panel-simple.c
+@@ -594,8 +594,11 @@ static int panel_simple_probe(struct device *dev, const struct panel_desc *desc)
+ 	if (IS_ERR(panel->supply))
+ 		return PTR_ERR(panel->supply);
+ 
+-	panel->enable_gpio = devm_gpiod_get_optional(dev, "enable",
+-						     GPIOD_OUT_LOW);
++	if (device_property_read_bool(dev, "default-on"))
++		panel->enable_gpio = devm_gpiod_get_optional(dev, "enable", GPIOD_OUT_HIGH);
++	else
++		panel->enable_gpio = devm_gpiod_get_optional(dev, "enable", GPIOD_OUT_LOW);
++
+ 	if (IS_ERR(panel->enable_gpio))
+ 		return dev_err_probe(dev, PTR_ERR(panel->enable_gpio),
+ 				     "failed to request GPIO\n");
+@@ -694,6 +697,14 @@ static int panel_simple_probe(struct device *dev, const struct panel_desc *desc)
+ 
+ 	drm_panel_init(&panel->base, dev, &panel_simple_funcs, connector_type);
+ 
++	if (device_property_read_bool(dev, "default-on")) {
++		err = pm_runtime_get_sync(dev);
++		if (err < 0)
++			goto disable_pm_runtime;
++
++		panel->prepared = true;
++	}
++
+ 	err = drm_panel_of_backlight(&panel->base);
+ 	if (err) {
+ 		dev_err_probe(dev, err, "Could not find backlight\n");
+-- 
+2.50.1
+

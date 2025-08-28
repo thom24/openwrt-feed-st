@@ -1,0 +1,57 @@
+From 1a786742dc3756216a83d3f41768b6f63dfbb138 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Wed, 5 Feb 2025 10:04:56 +0100
+Subject: [PATCH] arm64: dts: st: change power domain for i2s on
+ stm32mp211.dtsi
+
+The SPI/I2S peripheral supports LP-Stop1/2 low power mode.
+(See "Functionalities depending on system operating mode" table in ref
+manual). However, the is2 driver does not support the autonomous mode.
+Change power domain to "CLUSTER_PD" for i2s nodes, on stm32mp211.dtsi.
+
+Change-Id: Ib486222bdb50cf53559546fa6176da31096ef72f
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/434541
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index c7aeaef72ca7..d790a4bfda87 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -395,7 +395,7 @@ i2s2: audio-controller@400b0000 {
+ 					<&hpdma 35 0x43 0x21>;
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&rifsc 23>;
+-				power-domains = <&RET_PD>;
++				power-domains = <&CLUSTER_PD>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -768,7 +768,7 @@ i2s3: audio-controller@400c0000 {
+ 					<&hpdma 37 0x43 0x21>;
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&rifsc 24>;
+-				power-domains = <&RET_PD>;
++				power-domains = <&CLUSTER_PD>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -1074,7 +1074,7 @@ i2s1: audio-controller@40230000 {
+ 					<&hpdma 33 0x43 0x21>;
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&rifsc 22>;
+-				power-domains = <&RET_PD>;
++				power-domains = <&CLUSTER_PD>;
+ 				status = "disabled";
+ 			};
+ 
+-- 
+2.50.1
+

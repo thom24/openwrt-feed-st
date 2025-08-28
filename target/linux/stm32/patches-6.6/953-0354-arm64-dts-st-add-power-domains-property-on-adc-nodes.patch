@@ -1,0 +1,42 @@
+From 82bb8681d5aa01e6421f566d661d6708d0ac6db9 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Mon, 17 Mar 2025 15:42:38 +0100
+Subject: [PATCH] arm64: dts: st: add power-domains property on adc nodes for
+ stm32mp211
+
+Add power-domains property on adc nodes for STM32MP211.
+
+Change-Id: I8c797818572027449cd6f70feb283bf6cb888bbd
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/444748
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index a2a886976f75..d49d58e07adc 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -1518,6 +1518,7 @@ adc_1: adc@404e0000 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				access-controllers = <&rifsc 58>;
++				power-domains = <&d1_pd>;
+ 				status = "disabled";
+ 
+ 				adc1: adc@0 {
+@@ -1553,6 +1554,7 @@ adc_2: adc@404f0000 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				access-controllers = <&rifsc 59>;
++				power-domains = <&d1_pd>;
+ 				status = "disabled";
+ 
+ 				adc2: adc@0 {
+-- 
+2.50.1
+

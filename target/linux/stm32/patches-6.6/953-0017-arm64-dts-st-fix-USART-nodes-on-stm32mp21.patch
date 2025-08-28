@@ -1,0 +1,136 @@
+From 9daebd05f47cc488ea515babcf33b6497fd08ff9 Mon Sep 17 00:00:00 2001
+From: Pascal Paillet <p.paillet@foss.st.com>
+Date: Tue, 15 Oct 2024 17:54:07 +0200
+Subject: [PATCH] arm64: dts: st: fix USART nodes on stm32mp21
+
+Use EXTI as IRQ CHIP instead of GIC for USART2 so that
+IMR2 is set when entering in suspend.
+
+Change-Id: I50454584d7a28ecb1ab0133e5e876999f4da8eed
+Signed-off-by: Pascal Paillet <p.paillet@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/411625
+Reviewed-by: Pascal PAILLET <p.paillet@st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Pascal PAILLET <p.paillet@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 20dbbabc7268..326c480af60b 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -786,52 +786,56 @@ spdifrx: audio-controller@400d0000 {
+ 			usart2: serial@400e0000 {
+ 				compatible = "st,stm32h7-uart";
+ 				reg = <0x400e0000 0x0 0x400>;
+-				interrupts = <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts-extended = <&exti1 27 IRQ_TYPE_LEVEL_HIGH>;
+ 				clocks = <&rcc CK_KER_USART2>;
+ 				dmas = <&hpdma 11 0x40 0x12>,
+ 				       <&hpdma 12 0x40 0x3021>;
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&rifsc 32>;
+ 				power-domains = <&CLUSTER_PD>;
++				wakeup-source;
+ 				status = "disabled";
+ 			};
+ 
+ 			usart3: serial@400f0000 {
+ 				compatible = "st,stm32h7-uart";
+ 				reg = <0x400f0000 0x0 0x400>;
+-				interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts-extended = <&exti1 28 IRQ_TYPE_LEVEL_HIGH>;
+ 				clocks = <&rcc CK_KER_USART3>;
+ 				dmas = <&hpdma 13 0x40 0x12>,
+ 				       <&hpdma 14 0x40 0x3021>;
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&rifsc 33>;
+ 				power-domains = <&CLUSTER_PD>;
++				wakeup-source;
+ 				status = "disabled";
+ 			};
+ 
+ 			uart4: serial@40100000 {
+ 				compatible = "st,stm32h7-uart";
+ 				reg = <0x40100000 0x0 0x400>;
+-				interrupts = <GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts-extended = <&exti1 30 IRQ_TYPE_LEVEL_HIGH>;
+ 				clocks = <&rcc CK_KER_UART4>;
+ 				dmas = <&hpdma 15 0x40 0x12>,
+ 				       <&hpdma 16 0x40 0x3021>;
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&rifsc 34>;
+ 				power-domains = <&CLUSTER_PD>;
++				wakeup-source;
+ 				status = "disabled";
+ 			};
+ 
+ 			uart5: serial@40110000 {
+ 				compatible = "st,stm32h7-uart";
+ 				reg = <0x40110000 0x0 0x400>;
+-				interrupts = <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts-extended = <&exti1 31 IRQ_TYPE_LEVEL_HIGH>;
+ 				clocks = <&rcc CK_KER_UART5>;
+ 				dmas = <&hpdma 17 0x40 0x12>,
+ 				       <&hpdma 18 0x40 0x3021>;
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&rifsc 35>;
+ 				power-domains = <&CLUSTER_PD>;
++				wakeup-source;
+ 				status = "disabled";
+ 			};
+ 
+@@ -1028,13 +1032,14 @@ timer@7 {
+ 			usart6: serial@40220000 {
+ 				compatible = "st,stm32h7-uart";
+ 				reg = <0x40220000 0x0 0x400>;
+-				interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts-extended = <&exti1 29 IRQ_TYPE_LEVEL_HIGH>;
+ 				clocks = <&rcc CK_KER_USART6>;
+ 				dmas = <&hpdma 19 0x40 0x12>,
+ 				       <&hpdma 20 0x40 0x3021>;
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&rifsc 36>;
+ 				power-domains = <&CLUSTER_PD>;
++				wakeup-source;
+ 				status = "disabled";
+ 			};
+ 
+@@ -1309,13 +1314,14 @@ sai3b: audio-controller@502b0024 {
+ 			usart1: serial@40330000 {
+ 				compatible = "st,stm32h7-uart";
+ 				reg = <0x40330000 0x0 0x400>;
+-				interrupts = <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts-extended = <&exti1 26 IRQ_TYPE_LEVEL_HIGH>;
+ 				clocks = <&rcc CK_KER_USART1>;
+ 				dmas = <&hpdma 9 0x40 0x12>,
+ 				       <&hpdma 10 0x40 0x3021>;
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&rifsc 31>;
+ 				power-domains = <&CLUSTER_PD>;
++				wakeup-source;
+ 				status = "disabled";
+ 			};
+ 
+@@ -1439,12 +1445,13 @@ filter3: filter@204 {
+ 			uart7: serial@40370000 {
+ 				compatible = "st,stm32h7-uart";
+ 				reg = <0x40370000 0x0 0x400>;
+-				interrupts = <GIC_SPI 135 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts-extended = <&exti1 32 IRQ_TYPE_LEVEL_HIGH>;
+ 				clocks = <&rcc CK_KER_UART7>;
+ 				dmas = <&hpdma 21 0x40 0x12>,
+ 				       <&hpdma 22 0x40 0x3021>;
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&rifsc 37>;
++				wakeup-source;
+ 				status = "disabled";
+ 			};
+ 
+-- 
+2.50.1
+

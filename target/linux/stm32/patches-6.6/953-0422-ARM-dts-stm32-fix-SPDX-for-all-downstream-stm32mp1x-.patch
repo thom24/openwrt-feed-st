@@ -1,0 +1,438 @@
+From bba01d6c889d71c9fc81f5a4ce95c7832bd585ed Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Wed, 7 May 2025 09:49:12 +0200
+Subject: [PATCH] ARM: dts: stm32: fix SPDX for all downstream stm32mp1x device
+ trees
+
+Use SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) for all
+downstream stm32mp1x device trees.
+
+Change-Id: I7b5ac44c9118230d1bb1c0ed1b95ae357a6f3e80
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/456291
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dk-a7-examples.dts  | 2 +-
+ arch/arm/boot/dts/st/stm32mp13xa.dtsi                | 2 +-
+ arch/arm/boot/dts/st/stm32mp13xd.dtsi                | 2 +-
+ arch/arm/boot/dts/st/stm32mp15-m4-srm-pinctrl.dtsi   | 2 +-
+ arch/arm/boot/dts/st/stm32mp15-m4-srm.dtsi           | 2 +-
+ arch/arm/boot/dts/st/stm32mp157a-dk1-a7-examples.dts | 2 +-
+ arch/arm/boot/dts/st/stm32mp157a-dk1-m4-examples.dts | 2 +-
+ arch/arm/boot/dts/st/stm32mp157a-dk1-scmi.dtsi       | 2 +-
+ arch/arm/boot/dts/st/stm32mp157a-ed1-scmi.dtsi       | 2 +-
+ arch/arm/boot/dts/st/stm32mp157a-ed1.dts             | 2 +-
+ arch/arm/boot/dts/st/stm32mp157a-ev1-a7-examples.dts | 2 +-
+ arch/arm/boot/dts/st/stm32mp157a-ev1-m4-examples.dts | 2 +-
+ arch/arm/boot/dts/st/stm32mp157a-ev1-scmi.dtsi       | 2 +-
+ arch/arm/boot/dts/st/stm32mp157a-ev1.dts             | 2 +-
+ arch/arm/boot/dts/st/stm32mp157c-dk2-a7-examples.dts | 2 +-
+ arch/arm/boot/dts/st/stm32mp157c-dk2-m4-examples.dts | 2 +-
+ arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dtsi       | 2 +-
+ arch/arm/boot/dts/st/stm32mp157c-ed1-scmi.dtsi       | 2 +-
+ arch/arm/boot/dts/st/stm32mp157c-ev1-a7-examples.dts | 2 +-
+ arch/arm/boot/dts/st/stm32mp157c-ev1-m4-examples.dts | 2 +-
+ arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dtsi       | 2 +-
+ arch/arm/boot/dts/st/stm32mp157d-dk1-a7-examples.dts | 2 +-
+ arch/arm/boot/dts/st/stm32mp157d-dk1-m4-examples.dts | 2 +-
+ arch/arm/boot/dts/st/stm32mp157d-dk1.dts             | 2 +-
+ arch/arm/boot/dts/st/stm32mp157d-ed1.dts             | 2 +-
+ arch/arm/boot/dts/st/stm32mp157d-ev1-a7-examples.dts | 2 +-
+ arch/arm/boot/dts/st/stm32mp157d-ev1-m4-examples.dts | 2 +-
+ arch/arm/boot/dts/st/stm32mp157d-ev1.dts             | 2 +-
+ arch/arm/boot/dts/st/stm32mp157f-dk2-a7-examples.dts | 2 +-
+ arch/arm/boot/dts/st/stm32mp157f-dk2-m4-examples.dts | 2 +-
+ arch/arm/boot/dts/st/stm32mp157f-dk2.dts             | 2 +-
+ arch/arm/boot/dts/st/stm32mp157f-ed1.dts             | 2 +-
+ arch/arm/boot/dts/st/stm32mp157f-ev1-a7-examples.dts | 2 +-
+ arch/arm/boot/dts/st/stm32mp157f-ev1-m4-examples.dts | 2 +-
+ arch/arm/boot/dts/st/stm32mp157f-ev1.dts             | 2 +-
+ arch/arm/boot/dts/st/stm32mp15xa.dtsi                | 2 +-
+ arch/arm/boot/dts/st/stm32mp15xd.dtsi                | 2 +-
+ arch/arm/boot/dts/st/stm32mp15xf.dtsi                | 2 +-
+ 38 files changed, 38 insertions(+), 38 deletions(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk-a7-examples.dts b/arch/arm/boot/dts/st/stm32mp135f-dk-a7-examples.dts
+index ea9918ef2a45..b8bbf371cb2f 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk-a7-examples.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk-a7-examples.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp13xa.dtsi b/arch/arm/boot/dts/st/stm32mp13xa.dtsi
+index cc6456e71be9..5fb0294e6e6c 100644
+--- a/arch/arm/boot/dts/st/stm32mp13xa.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp13xa.dtsi
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp13xd.dtsi b/arch/arm/boot/dts/st/stm32mp13xd.dtsi
+index 2a436a379ede..3b2c116ada47 100644
+--- a/arch/arm/boot/dts/st/stm32mp13xd.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp13xd.dtsi
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp15-m4-srm-pinctrl.dtsi b/arch/arm/boot/dts/st/stm32mp15-m4-srm-pinctrl.dtsi
+index 49a3ea5db90b..484b4e8e5339 100644
+--- a/arch/arm/boot/dts/st/stm32mp15-m4-srm-pinctrl.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp15-m4-srm-pinctrl.dtsi
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2019 - All Rights Reserved
+  * Author: Fabien Dessenne <fabien.dessenne@st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp15-m4-srm.dtsi b/arch/arm/boot/dts/st/stm32mp15-m4-srm.dtsi
+index 7fa3ca411a95..acc0bf9dd656 100644
+--- a/arch/arm/boot/dts/st/stm32mp15-m4-srm.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp15-m4-srm.dtsi
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2019 - All Rights Reserved
+  * Author: Fabien Dessenne <fabien.dessenne@st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157a-dk1-a7-examples.dts b/arch/arm/boot/dts/st/stm32mp157a-dk1-a7-examples.dts
+index 6ae06baab8d8..1c13c5b117c5 100644
+--- a/arch/arm/boot/dts/st/stm32mp157a-dk1-a7-examples.dts
++++ b/arch/arm/boot/dts/st/stm32mp157a-dk1-a7-examples.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157a-dk1-m4-examples.dts b/arch/arm/boot/dts/st/stm32mp157a-dk1-m4-examples.dts
+index 4bd40eba12f6..508356e1ba0a 100644
+--- a/arch/arm/boot/dts/st/stm32mp157a-dk1-m4-examples.dts
++++ b/arch/arm/boot/dts/st/stm32mp157a-dk1-m4-examples.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
+  * Author: Amelie Delaunay <amelie.delaunay@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157a-dk1-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp157a-dk1-scmi.dtsi
+index 34fcf8c155d6..3f6eb362040f 100644
+--- a/arch/arm/boot/dts/st/stm32mp157a-dk1-scmi.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp157a-dk1-scmi.dtsi
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157a-ed1-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp157a-ed1-scmi.dtsi
+index 283f63f85d15..0edd2bf4835f 100644
+--- a/arch/arm/boot/dts/st/stm32mp157a-ed1-scmi.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp157a-ed1-scmi.dtsi
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2023 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157a-ed1.dts b/arch/arm/boot/dts/st/stm32mp157a-ed1.dts
+index 7722b32828f1..5d17d6c10dde 100644
+--- a/arch/arm/boot/dts/st/stm32mp157a-ed1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157a-ed1.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2023 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157a-ev1-a7-examples.dts b/arch/arm/boot/dts/st/stm32mp157a-ev1-a7-examples.dts
+index f6b28d373c3a..f2a995d31637 100644
+--- a/arch/arm/boot/dts/st/stm32mp157a-ev1-a7-examples.dts
++++ b/arch/arm/boot/dts/st/stm32mp157a-ev1-a7-examples.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157a-ev1-m4-examples.dts b/arch/arm/boot/dts/st/stm32mp157a-ev1-m4-examples.dts
+index 760ca55c279a..8afda68e2c02 100644
+--- a/arch/arm/boot/dts/st/stm32mp157a-ev1-m4-examples.dts
++++ b/arch/arm/boot/dts/st/stm32mp157a-ev1-m4-examples.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157a-ev1-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp157a-ev1-scmi.dtsi
+index 0c79a2b3edab..ee10768051a7 100644
+--- a/arch/arm/boot/dts/st/stm32mp157a-ev1-scmi.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp157a-ev1-scmi.dtsi
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157a-ev1.dts b/arch/arm/boot/dts/st/stm32mp157a-ev1.dts
+index 26d0e3b05282..362db3704bb5 100644
+--- a/arch/arm/boot/dts/st/stm32mp157a-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157a-ev1.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2023 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2-a7-examples.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2-a7-examples.dts
+index 533ed4efe093..0cff4710f645 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-dk2-a7-examples.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-dk2-a7-examples.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2-m4-examples.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2-m4-examples.dts
+index 1fbd2b8c44ad..ef30720231d6 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-dk2-m4-examples.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-dk2-m4-examples.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2017 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dtsi
+index 0b8bba427cda..ead69e3decc1 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dtsi
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp157c-ed1-scmi.dtsi
+index a26929e6966b..1d39c343ad55 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ed1-scmi.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp157c-ed1-scmi.dtsi
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-a7-examples.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-a7-examples.dts
+index 7d05d6e91f07..a00220f8b82e 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1-a7-examples.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-a7-examples.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-m4-examples.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-m4-examples.dts
+index 2266a3ce559e..11adfb69bbc0 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1-m4-examples.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-m4-examples.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2017 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dtsi
+index b682649ebe9b..37fac21741eb 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dtsi
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-dk1-a7-examples.dts b/arch/arm/boot/dts/st/stm32mp157d-dk1-a7-examples.dts
+index c5cf176c392f..f45ff23787ce 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-dk1-a7-examples.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-dk1-a7-examples.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-dk1-m4-examples.dts b/arch/arm/boot/dts/st/stm32mp157d-dk1-m4-examples.dts
+index 8e37e7640e86..96de631eda0c 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-dk1-m4-examples.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-dk1-m4-examples.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
+  * Author: Amelie Delaunay <amelie.delaunay@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-dk1.dts b/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
+index 0fbaeccc7301..e6d2e7c5e7ca 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2023 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
+index 068e598b1329..d823250956a2 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2023 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1-a7-examples.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1-a7-examples.dts
+index 60dde36f0fb2..8f7369d3e6f6 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ev1-a7-examples.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ev1-a7-examples.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1-m4-examples.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1-m4-examples.dts
+index 4a4cb1532915..a745ce7be62c 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ev1-m4-examples.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ev1-m4-examples.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+index 4631832ee824..877a8c00bfbc 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2023 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2-a7-examples.dts b/arch/arm/boot/dts/st/stm32mp157f-dk2-a7-examples.dts
+index 8da80c96cfe6..0042ffd650fb 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-dk2-a7-examples.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-dk2-a7-examples.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2-m4-examples.dts b/arch/arm/boot/dts/st/stm32mp157f-dk2-m4-examples.dts
+index ccec51342a24..fdbbb7405b22 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-dk2-m4-examples.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-dk2-m4-examples.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2017 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
+index 523d7ef309f2..5a663dfc372b 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2023 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
+index fbfb25cd65be..ef97d301de5b 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2023 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1-a7-examples.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1-a7-examples.dts
+index 1d6691b41e44..08c042e672d0 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ev1-a7-examples.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ev1-a7-examples.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1-m4-examples.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1-m4-examples.dts
+index 6964892a1cdf..bd71921280b1 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ev1-m4-examples.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ev1-m4-examples.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2017 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+index f21c875a1531..d525c2e6d352 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2023 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp15xa.dtsi b/arch/arm/boot/dts/st/stm32mp15xa.dtsi
+index f56c44a122ed..9bc874c55f07 100644
+--- a/arch/arm/boot/dts/st/stm32mp15xa.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp15xa.dtsi
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2023 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp15xd.dtsi b/arch/arm/boot/dts/st/stm32mp15xd.dtsi
+index a5feeec2e4cd..bfa1039bf8cb 100644
+--- a/arch/arm/boot/dts/st/stm32mp15xd.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp15xd.dtsi
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2023 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+diff --git a/arch/arm/boot/dts/st/stm32mp15xf.dtsi b/arch/arm/boot/dts/st/stm32mp15xf.dtsi
+index 8134f7ec6282..f05f9b16f5ef 100644
+--- a/arch/arm/boot/dts/st/stm32mp15xf.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp15xf.dtsi
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+ /*
+  * Copyright (C) STMicroelectronics 2023 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+-- 
+2.50.1
+

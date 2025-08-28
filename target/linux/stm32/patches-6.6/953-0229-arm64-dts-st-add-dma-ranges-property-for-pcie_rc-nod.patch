@@ -1,0 +1,36 @@
+From 5155e1009073799d9cb01a98169ce67f906ceff8 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Mon, 3 Feb 2025 09:40:28 +0100
+Subject: [PATCH] arm64: dts: st: add dma-ranges property for pcie_rc node on
+ stm32mp25
+
+DMA cannot access the last 2GB above the 4GB addressing space
+when the DDR size is > 4GB.
+Add dma-ranges property to limit access DMA to the first 2GB DDR.
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: Iae4380eb660e0500351db557d5f83cc6dd3bbd48
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/433744
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index 46a9dc515b88..a5029a182cfd 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -2439,6 +2439,7 @@ pcie_rc: pcie@48400000 {
+ 				ranges = <0x01000000 0 0x10010000 0x10010000 0 0x10000>,
+ 					 <0x02000000 0 0x10020000 0x10020000 0 0x7fe0000>,
+ 					 <0x42000000 0 0x18000000 0x18000000 0 0x8000000>;
++				dma-ranges = <0x42000000 0x0 0x80000000 0x80000000 0x0 0x80000000>;
+ 				bus-range = <0x00 0xff>;
+ 				clocks = <&rcc CK_BUS_PCIE>;
+ 				clock-names = "core";
+-- 
+2.50.1
+

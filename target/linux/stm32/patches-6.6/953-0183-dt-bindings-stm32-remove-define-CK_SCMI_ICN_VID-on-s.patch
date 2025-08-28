@@ -1,0 +1,32 @@
+From 573cbcafd70d5ee34b828767b0ba6d65a9b2632a Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Date: Mon, 20 Jan 2025 10:14:02 +0100
+Subject: [PATCH] dt-bindings: stm32: remove define CK_SCMI_ICN_VID on
+ stm32mp21
+
+ck_icn_vid is removed in STM32MP21 series, so remove the associated define
+
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Change-Id: I4f8c6ecbf5aea2149a1f5eb20d88f9072da34a04
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/429888
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ include/dt-bindings/clock/st,stm32mp21-rcc.h | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/include/dt-bindings/clock/st,stm32mp21-rcc.h b/include/dt-bindings/clock/st,stm32mp21-rcc.h
+index 1b6d533e1ec8..9068ef8ea130 100644
+--- a/include/dt-bindings/clock/st,stm32mp21-rcc.h
++++ b/include/dt-bindings/clock/st,stm32mp21-rcc.h
+@@ -319,7 +319,6 @@
+ #define CK_SCMI_ICN_DISPLAY	3
+ #define CK_SCMI_ICN_HSL		4
+ #define CK_SCMI_ICN_NIC		5
+-#define CK_SCMI_ICN_VID		6
+ #define CK_SCMI_FLEXGEN_07	7
+ #define CK_SCMI_FLEXGEN_08	8
+ #define CK_SCMI_FLEXGEN_09	9
+-- 
+2.50.1
+

@@ -1,0 +1,44 @@
+From 786f7b74fc075bb1b0f847c04e5eed9251b5135b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Wed, 26 Mar 2025 15:53:10 +0100
+Subject: [PATCH] crypto: stm32/cryp - ensure write completion to fix ordering
+ issue
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This commit implements a workaround for an issue that is not completely
+understood.
+Replace writel_relaxed with writel to ensure that all write operation
+completes before continuing the AES GCM auth tag procedure. This
+prevents potential issues from relaxed writes not guaranteeing operation
+order, which could lead to incorrect device behavior.
+
+Change-Id: I7018f03671bb77d4155ad681540a77bafc5016c8
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/446866
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/crypto/stm32/stm32-cryp.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/crypto/stm32/stm32-cryp.c b/drivers/crypto/stm32/stm32-cryp.c
+index 84a58600ad24..b46194956c30 100644
+--- a/drivers/crypto/stm32/stm32-cryp.c
++++ b/drivers/crypto/stm32/stm32-cryp.c
+@@ -1972,7 +1972,8 @@ static int stm32_cryp_read_auth_tag(struct stm32_cryp *cryp)
+ 	cfg &= ~CR_DEC_NOT_ENC;
+ 	cfg |= CR_CRYPEN;
+ 
+-	stm32_cryp_write(cryp, cryp->caps->cr, cfg);
++	/* Not relaxed: this ensures write completes before continuing */
++	writel(cfg, cryp->regs + cryp->caps->cr);
+ 
+ 	if (is_gcm(cryp)) {
+ 		/* GCM: write aad and payload size (in bits) */
+-- 
+2.50.1
+

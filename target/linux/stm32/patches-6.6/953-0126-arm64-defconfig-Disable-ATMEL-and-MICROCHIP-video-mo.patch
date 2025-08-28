@@ -1,0 +1,36 @@
+From a530ded8b0f84ab9265a17e3734c4277da9e07ba Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Wed, 4 Dec 2024 10:46:33 +0100
+Subject: [PATCH] arm64: defconfig: Disable ATMEL and MICROCHIP video modules
+
+Those modules don't build in aarch32 mode. Since we try to commonalize
+framgents between aarch32 and aarch64 as mode as possible, skip them
+for all modes.
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I5c1adc053755a3777c961d3b38954e9b33a973cb
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/422573
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/configs/fragment-01-defconfig-cleanup.config | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm64/configs/fragment-01-defconfig-cleanup.config b/arch/arm64/configs/fragment-01-defconfig-cleanup.config
+index b9ccefe07a54..94cb50b7c437 100644
+--- a/arch/arm64/configs/fragment-01-defconfig-cleanup.config
++++ b/arch/arm64/configs/fragment-01-defconfig-cleanup.config
+@@ -55,3 +55,7 @@
+ # CONFIG_PAGE_POOL_STATS is not set
+ # CONFIG_SOC_BRCMSTB is not set
+ # CONFIG_SOC_TI is not set
++# CONFIG_VIDEO_ATMEL_ISI is not set
++# CONFIG_VIDEO_MICROCHIP_ISC is not set
++# CONFIG_VIDEO_MICROCHIP_XISC is not set
++# CONFIG_VIDEO_MICROCHIP_CSI2DC is not set
+\ No newline at end of file
+-- 
+2.50.1
+

@@ -1,0 +1,41 @@
+From 4b03b76c09e1ba7fade51df3cc75c23efcc864ae Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Tue, 12 Nov 2024 13:10:27 +0100
+Subject: [PATCH] iio: adc: stm32-mdf: fix crash on iio sysfs read
+
+When MDF is configured for audio, the raw value read accesses in iio sysfs
+produce a null pointer oops. This occurs because adc completion variable
+is initialized in adc init only.
+The voltage raw value is not relevant in audio use cases, so the
+IIO_CHAN_INFO_RAW mask can be dropped for audio channels.
+
+Change-Id: Ie3c13e5785c29742445196805edf3ccbddc74d1f
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/420083
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/iio/adc/stm32-mdf-adc.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/iio/adc/stm32-mdf-adc.c b/drivers/iio/adc/stm32-mdf-adc.c
+index c7e433a59176..e2dedf5f5081 100644
+--- a/drivers/iio/adc/stm32-mdf-adc.c
++++ b/drivers/iio/adc/stm32-mdf-adc.c
+@@ -1218,10 +1218,8 @@ static int stm32_mdf_adc_chan_init_one(struct iio_dev *indio_dev, struct fwnode_
+ 		ch->scan_type.shift = 8;
+ 	}
+ 
+-	if (adc->dev_data->type == STM32_MDF_AUDIO) {
++	if (adc->dev_data->type == STM32_MDF_AUDIO)
+ 		ch->ext_info = stm32_mdf_adc_audio_ext_info;
+-		ch->info_mask_separate = BIT(IIO_CHAN_INFO_RAW);
+-	}
+ 
+ 	ch->info_mask_shared_by_all = BIT(IIO_CHAN_INFO_SAMP_FREQ);
+ 	ch->scan_type.sign = 's';
+-- 
+2.50.1
+

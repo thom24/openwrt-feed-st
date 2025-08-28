@@ -1,0 +1,33 @@
+From 8731597057d36761db6a31b83237db205c42738e Mon Sep 17 00:00:00 2001
+From: Christophe Kerello <christophe.kerello@foss.st.com>
+Date: Fri, 8 Nov 2024 15:07:25 +0100
+Subject: [PATCH] arm64: dts: st: add power-domains property on ospi node
+
+Add power-domains property on ospi node.
+
+Change-Id: I2103fa9d29e1b4c8323d6e3c4d7f99f51ae8475e
+Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/417409
+Tested-by: Francois CHOLEAU <francois.choleau@st.com>
+Reviewed-by: Francois CHOLEAU <francois.choleau@st.com>
+Domain-Review: Francois CHOLEAU <francois.choleau@st.com>
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 901405bc4634..57b65c8b96cc 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -1466,6 +1466,7 @@ ospi1: spi@40430000 {
+ 				clocks = <&scmi_clk CK_SCMI_OSPI1>;
+ 				resets = <&scmi_reset RST_SCMI_OSPI1>, <&scmi_reset RST_SCMI_OSPI1DLL>;
+ 				access-controllers = <&rifsc 74>;
++				power-domains = <&CLUSTER_PD>;
+ 				status = "disabled";
+ 			};
+ 
+-- 
+2.50.1
+

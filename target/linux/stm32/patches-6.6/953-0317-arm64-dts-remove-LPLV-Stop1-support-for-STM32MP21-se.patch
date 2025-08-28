@@ -1,0 +1,49 @@
+From f5684d6d94bad5a959eff4ff39bcf471a4738f7d Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Date: Tue, 4 Mar 2025 20:02:00 +0100
+Subject: [PATCH] arm64: dts: remove LPLV-Stop1 support for STM32MP21 series
+
+The LP-Timer is not functional in LPLV-Stop1 mode, so Linux have no
+more available hrtimer to manage the wake-up ticks.
+
+So LPLV-Stop1 is no more supported for STM32MP21 series as CpuIdle PSCI
+OSI moden the power-domain-retention is keep only for compatibility.
+
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Change-Id: Ie1eb175cd92497d78ba5f22bc2f5e6f6fe2413fc
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/441795
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 60c8bc1f376a..3e1cffe73ebc 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -58,14 +58,6 @@ LP_STOP1: domain-lp-stop1 {
+ 				exit-latency-us = <600>;
+ 				min-residency-us = <2000>;
+ 			};
+-
+-			LPLV_STOP1: domain-lplv-stop1 {
+-				compatible = "domain-idle-state";
+-				arm,psci-suspend-param = <0x00000211>;
+-				entry-latency-us = <500>;
+-				exit-latency-us = <2000>;
+-				min-residency-us = <2500>;
+-			};
+ 		};
+ 	};
+ 
+@@ -220,7 +212,6 @@ cluster_pd: power-domain-cluster {
+ 
+ 		ret_pd: power-domain-retention {
+ 			#power-domain-cells = <0>;
+-			domain-idle-states = <&LPLV_STOP1>;
+ 		};
+ 	};
+ 
+-- 
+2.50.1
+

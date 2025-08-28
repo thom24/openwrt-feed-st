@@ -1,0 +1,338 @@
+From 06a18ca0edc7a0668c6a5271dc365a63c033ebb7 Mon Sep 17 00:00:00 2001
+From: Ram Dayal <ram.dayal@st.com>
+Date: Thu, 28 Nov 2024 09:33:57 +0100
+Subject: [PATCH] usb: dwc2: Add battery charging detection support for STM32
+
+This patch adds support for battery charging detection
+in the DWC2 driver for STM32 platforms. It handles device
+mode detection only.
+
+Change-Id: I5d4787034978ced771cc34cb9e0a17ff3ecb949b
+Signed-off-by: Ram Dayal <ram.dayal@st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/421269
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/usb/dwc2/core.h     |   9 ++
+ drivers/usb/dwc2/gadget.c   |   7 ++
+ drivers/usb/dwc2/hw.h       |  15 ++-
+ drivers/usb/dwc2/params.c   |   1 +
+ drivers/usb/dwc2/platform.c | 188 ++++++++++++++++++++++++++++++++++++
+ 5 files changed, 216 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+index 9da9d436314b..397e2cd9f3be 100644
+--- a/drivers/usb/dwc2/core.h
++++ b/drivers/usb/dwc2/core.h
+@@ -10,6 +10,7 @@
+ 
+ #include <linux/acpi.h>
+ #include <linux/phy/phy.h>
++#include <linux/power_supply.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/usb/gadget.h>
+ #include <linux/usb/otg.h>
+@@ -474,6 +475,7 @@ struct dwc2_core_params {
+ 	bool activate_stm32_bvaloval_en;
+ 	bool activate_ingenic_overcurrent_detection;
+ 	bool activate_stm32_otgarcr_en;
++	bool stm32_has_batt_chg_det;
+ 	bool ipg_isoc_en;
+ 	u16 max_packet_count;
+ 	u32 max_transfer_size;
+@@ -1219,6 +1221,11 @@ struct dwc2_hsotg {
+ 	struct dwc2_hsotg_ep *eps_in[MAX_EPS_CHANNELS];
+ 	struct dwc2_hsotg_ep *eps_out[MAX_EPS_CHANNELS];
+ #endif /* CONFIG_USB_DWC2_PERIPHERAL || CONFIG_USB_DWC2_DUAL_ROLE */
++	struct power_supply *psy_batt_chg;
++	struct power_supply_desc batt_chg_psy_desc;
++	int chg_current;
++	enum power_supply_type batt_chg_psy_type;
++	bool has_batt_chg_det;
+ };
+ 
+ /* Normal architectures just use readl/write */
+@@ -1402,6 +1409,8 @@ void dwc2_drd_exit(struct dwc2_hsotg *hsotg);
+ void dwc2_dump_dev_registers(struct dwc2_hsotg *hsotg);
+ void dwc2_dump_host_registers(struct dwc2_hsotg *hsotg);
+ void dwc2_dump_global_registers(struct dwc2_hsotg *hsotg);
++int stm32mp2_usb2phy_batt_chg_det(struct dwc2_hsotg *hsotg);
++int stm32mp2_usb2phy_usb_chg_psy_register(struct dwc2_hsotg *hsotg);
+ 
+ /* Gadget defines */
+ #if IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) || \
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index a9152185f221..ad37eda68129 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -4712,6 +4712,7 @@ static int dwc2_hsotg_pullup(struct usb_gadget *gadget, int is_on)
+ {
+ 	struct dwc2_hsotg *hsotg = to_hsotg(gadget);
+ 	unsigned long flags;
++	int ret;
+ 
+ 	dev_dbg(hsotg->dev, "%s: is_on: %d op_state: %d\n", __func__, is_on,
+ 		hsotg->op_state);
+@@ -4722,6 +4723,12 @@ static int dwc2_hsotg_pullup(struct usb_gadget *gadget, int is_on)
+ 		return 0;
+ 	}
+ 
++	if (hsotg->params.stm32_has_batt_chg_det && is_on) {
++		ret = stm32mp2_usb2phy_batt_chg_det(hsotg);
++		if (ret)
++			dev_dbg(hsotg->dev, "%s: battery detection failed\n", __func__);
++	}
++
+ 	spin_lock_irqsave(&hsotg->lock, flags);
+ 	if (is_on) {
+ 		hsotg->enabled = 1;
+diff --git a/drivers/usb/dwc2/hw.h b/drivers/usb/dwc2/hw.h
+index 8be7c84cf617..65dfd555bdc4 100644
+--- a/drivers/usb/dwc2/hw.h
++++ b/drivers/usb/dwc2/hw.h
+@@ -204,11 +204,18 @@
+ 
+ #define GPVNDCTL			HSOTG_REG(0x0034)
+ #define GGPIO				HSOTG_REG(0x0038)
+-#define GGPIO_STM32_OTG_GCCFG_PWRDWN	BIT(16)
+-#define GGPIO_STM32_OTG_GCCFG_VBDEN	BIT(21)
+-#define GGPIO_STM32_OTG_GCCFG_IDEN	BIT(22)
+-#define GGPIO_STM32_OTG_GCCFG_VBVALOVAL	BIT(23)
+ #define GGPIO_STM32_OTG_GCCFG_IDPULLUP_DIS	BIT(28)
++#define GGPIO_STM32_OTG_GCCFG_BCDEN     BIT(26)
++#define GGPIO_STM32_OTG_GCCFG_VBVALOVAL	BIT(23)
++#define GGPIO_STM32_OTG_GCCFG_IDEN	BIT(22) /* For STM32MP15 */
++#define GGPIO_STM32_OTG_GCCFG_SDEN	BIT(22) /* For STM32MP21 */
++#define GGPIO_STM32_OTG_GCCFG_VBDEN	BIT(21)
++#define GGPIO_STM32_OTG_GCCFG_PDEN      BIT(20)
++#define GGPIO_STM32_OTG_GCCFG_DCDEN     BIT(19)
++#define GGPIO_STM32_OTG_GCCFG_PWRDWN	BIT(16)
++#define GGPIO_STM32_OTG_GCCFG_FSVMINUS  BIT(2)
++#define GGPIO_STM32_OTG_GCCFG_FSVPLUS   BIT(1)
++#define GGPIO_STM32_OTG_GCCFG_CHGDET    BIT(0)
+ #define STM32_SYSCFG_OTGARCR_OFFSET_AREN_MASK	BIT(0)
+ 
+ #define GUID				HSOTG_REG(0x003c)
+diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
+index be22d4202966..1b0b8eee2ad8 100644
+--- a/drivers/usb/dwc2/params.c
++++ b/drivers/usb/dwc2/params.c
+@@ -284,6 +284,7 @@ static void dwc2_set_stm32mp21_hsotg_params(struct dwc2_hsotg *hsotg)
+ 	p->hird_threshold_en = false;
+ 	p->activate_stm32_bvaloval_en = true;
+ 	p->activate_stm32_otgarcr_en = true;
++	p->stm32_has_batt_chg_det = true;
+ }
+ 
+ const struct of_device_id dwc2_of_match_table[] = {
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index f42e9fdc9f42..8b94557f0849 100644
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -28,6 +28,188 @@
+ 
+ static const char dwc2_driver_name[] = "dwc2";
+ 
++#define TDCD_DBNC		100
++
++#define VBUS_CURRENT_500MA	500
++#define VBUS_CURRENT_1500MA	1500
++#define VBUS_CURRENT_MAX	1500
++
++static enum power_supply_property usb_chg_props[] = {
++	POWER_SUPPLY_PROP_ONLINE,
++	POWER_SUPPLY_PROP_CURRENT_NOW,
++	POWER_SUPPLY_PROP_CURRENT_MAX,
++};
++
++static enum power_supply_usb_type usb_chg_psy_types[] = {
++	POWER_SUPPLY_USB_TYPE_SDP,	      /* Standard Downstream Port */
++	POWER_SUPPLY_USB_TYPE_DCP,	      /* Dedicated Charging Port */
++	POWER_SUPPLY_USB_TYPE_CDP,	      /* Charging Downstream Port */
++};
++
++static int stm32mp2_usb2phy_batt_chg_get_property(struct power_supply *psy,
++						  enum power_supply_property psp,
++						  union power_supply_propval *val)
++{
++	struct dwc2_hsotg *hsotg = power_supply_get_drvdata(psy);
++
++	switch (psp) {
++	case POWER_SUPPLY_PROP_ONLINE:
++		val->intval = 1;
++		break;
++	case POWER_SUPPLY_PROP_CURRENT_NOW:
++		val->intval = hsotg->chg_current * 1000;
++		break;
++	case POWER_SUPPLY_PROP_CURRENT_MAX:
++		val->intval = VBUS_CURRENT_MAX * 1000;  /* Convert to uA */;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int stm32mp2_usb2phy_data_contact_det(struct dwc2_hsotg *hsotg)
++{
++	u32 reg_val;
++	int retval = 0;
++
++	/* Data contact det */
++	reg_val = dwc2_readl(hsotg, GGPIO);
++	reg_val |= GGPIO_STM32_OTG_GCCFG_DCDEN;
++	dwc2_writel(hsotg, reg_val, GGPIO);
++
++	/* Wait for debounce time */
++	msleep(TDCD_DBNC);
++
++	reg_val = dwc2_readl(hsotg, GGPIO);
++	if (!(reg_val & GGPIO_STM32_OTG_GCCFG_FSVPLUS))
++		retval = 0;
++	else
++		retval = -EAGAIN;
++
++	/* reset DCDEN */
++	reg_val = dwc2_readl(hsotg, GGPIO);
++	reg_val &= ~GGPIO_STM32_OTG_GCCFG_DCDEN;
++	dwc2_writel(hsotg, reg_val, GGPIO);
++
++	return retval;
++}
++
++static int stm32mp2_usb2phy_primary_det(struct dwc2_hsotg *hsotg)
++{
++	u32 reg_val;
++	int retval = 0;
++
++	/* Primary det */
++	reg_val = dwc2_readl(hsotg, GGPIO);
++	reg_val |= GGPIO_STM32_OTG_GCCFG_PDEN;
++	dwc2_writel(hsotg, reg_val, GGPIO);
++
++	msleep(20);
++
++	/* Check CHGDET bit */
++	reg_val = dwc2_readl(hsotg, GGPIO);
++	if (reg_val & GGPIO_STM32_OTG_GCCFG_CHGDET) {
++		/* Device is connected to CDP or DCP */
++		retval = 1;
++	} else {
++		/* Device is connected to SDP */
++		dev_info(hsotg->dev, "Device connected to SDP\n");
++		hsotg->batt_chg_psy_type = POWER_SUPPLY_TYPE_USB;
++		hsotg->chg_current = VBUS_CURRENT_500MA;
++		retval = 0;
++	}
++
++	reg_val = dwc2_readl(hsotg, GGPIO);
++	reg_val &= ~GGPIO_STM32_OTG_GCCFG_PDEN;
++	dwc2_writel(hsotg, reg_val, GGPIO);
++
++	return retval;
++}
++
++static void stm32mp2_usb2phy_secondary_det(struct dwc2_hsotg *hsotg)
++{
++	u32 reg_val;
++
++	/* Secondary det */
++	reg_val = dwc2_readl(hsotg, GGPIO);
++	reg_val |= GGPIO_STM32_OTG_GCCFG_SDEN;
++	dwc2_writel(hsotg, reg_val, GGPIO);
++
++	msleep(20);
++
++	/* Check CHGDET bit */
++	reg_val = dwc2_readl(hsotg, GGPIO);
++	if (reg_val & GGPIO_STM32_OTG_GCCFG_CHGDET) {
++		/* Device is connected to DCP */
++		dev_info(hsotg->dev, "Device connected to DCP\n");
++		hsotg->batt_chg_psy_type = POWER_SUPPLY_TYPE_USB_DCP;
++		hsotg->chg_current = VBUS_CURRENT_1500MA;
++	} else {
++		/* Device is connected to CDP */
++		dev_info(hsotg->dev, "Device connected to CDP\n");
++		hsotg->batt_chg_psy_type = POWER_SUPPLY_TYPE_USB_CDP;
++		hsotg->chg_current = VBUS_CURRENT_1500MA;
++	}
++
++	reg_val = dwc2_readl(hsotg, GGPIO);
++	reg_val &= ~GGPIO_STM32_OTG_GCCFG_SDEN;
++	dwc2_writel(hsotg, reg_val, GGPIO);
++}
++
++int stm32mp2_usb2phy_usb_chg_psy_register(struct dwc2_hsotg *hsotg)
++{
++	struct power_supply_desc *psy_desc = &hsotg->batt_chg_psy_desc;
++	struct power_supply_config usb_chg_psy_cfg = {};
++	char *psy_name;
++
++	psy_name = devm_kasprintf(hsotg->dev, GFP_KERNEL, "psy-%s",
++				  dev_name(hsotg->dev));
++	if (!psy_name)
++		return -ENOMEM;
++
++	psy_desc->name = psy_name;
++	psy_desc->type = POWER_SUPPLY_TYPE_USB;
++	psy_desc->usb_types = usb_chg_psy_types;
++	psy_desc->num_usb_types = ARRAY_SIZE(usb_chg_psy_types);
++	psy_desc->properties = usb_chg_props;
++	psy_desc->num_properties = ARRAY_SIZE(usb_chg_props);
++	psy_desc->get_property = stm32mp2_usb2phy_batt_chg_get_property;
++
++	hsotg->batt_chg_psy_type = POWER_SUPPLY_TYPE_USB;
++
++	usb_chg_psy_cfg.drv_data = hsotg;
++	hsotg->chg_current = VBUS_CURRENT_500MA; /* Default current */
++	hsotg->psy_batt_chg = devm_power_supply_register(hsotg->dev, psy_desc,
++							 &usb_chg_psy_cfg);
++
++	if (IS_ERR(hsotg->psy_batt_chg)) {
++		dev_warn(hsotg->dev, "unable to register power supply\n");
++		return PTR_ERR(hsotg->psy_batt_chg);
++	}
++
++	return 0;
++}
++
++int stm32mp2_usb2phy_batt_chg_det(struct dwc2_hsotg *hsotg)
++{
++	int ret;
++
++	ret = stm32mp2_usb2phy_data_contact_det(hsotg);
++	if (ret)
++		return ret;
++
++	ret = stm32mp2_usb2phy_primary_det(hsotg);
++	if (ret)
++		stm32mp2_usb2phy_secondary_det(hsotg);
++
++	if (hsotg->chg_current != VBUS_CURRENT_500MA)
++		power_supply_changed(hsotg->psy_batt_chg);
++
++	return 0;
++}
++
+ /*
+  * Check the dr_mode against the module configuration and hardware
+  * capabilities.
+@@ -633,6 +815,12 @@ static int dwc2_driver_probe(struct platform_device *dev)
+ 		hsotg->gadget_enabled = 1;
+ 	}
+ 
++	if (hsotg->params.stm32_has_batt_chg_det && hsotg->dr_mode != USB_DR_MODE_HOST) {
++		retval = stm32mp2_usb2phy_usb_chg_psy_register(hsotg);
++		if (retval)
++			goto error_drd;
++	}
++
+ 	/*
+ 	 * If we need PHY for wakeup we must be wakeup capable.
+ 	 * When we have a device that can wake without the PHY we
+-- 
+2.50.1
+

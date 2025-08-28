@@ -1,0 +1,147 @@
+From 4ff6c67227612e8b2b7aeb8c69b1eb9109dc1571 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Tue, 25 Mar 2025 17:34:54 +0100
+Subject: [PATCH] clocksource: stm32-lptimer: improve pm runtime usage
+
+Currently, even if the device is unused, the PM runtime of the parent
+MFD driver is always active, due to the pm_runtime_irq_safe() call.
+Purpose of marking it as irq_safe, was to avoid issues in atomic
+context, as pm_runtime_resume_and_get() is called from set_next_event()
+callback.
+Also, pm_runtime_put_sync_suspend() wasn't balanced, as it is
+called unconditionally in the suspend routine. So unused clockevent
+device will call it, without being active.
+
+Rework by adopting the asynchronous pm_runtime get/put API allowed
+in atomic context. It's sufficient as the purpose is to manage the
+power domain (sync'ed up by using PM runtime) of the parent MFD
+device (e.g. lptimer1 and lptimer2 on STM32MP25).
+
+Use the set_state_[shutdown/periodic/oneshot] ops to put/get PM runtime
+(out of the set_next_event callback). Rely on the "old" clkevent state
+clockevent_state_*() helpers to balance get/put calls, when these
+callback are called.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I2157031f537400e5b1b3174201ca6e0a28aa6d04
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/446573
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/clocksource/timer-stm32-lp.c | 61 +++++++++++++++++++++-------
+ 1 file changed, 47 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/clocksource/timer-stm32-lp.c b/drivers/clocksource/timer-stm32-lp.c
+index 2604653531a4..8f370c3a00b9 100644
+--- a/drivers/clocksource/timer-stm32-lp.c
++++ b/drivers/clocksource/timer-stm32-lp.c
+@@ -40,6 +40,15 @@ to_priv(struct clock_event_device *clkevt)
+ static int stm32_clkevent_lp_shutdown(struct clock_event_device *clkevt)
+ {
+ 	struct stm32_lp_private *priv = to_priv(clkevt);
++	int ret;
++
++	if (clockevent_state_oneshot(clkevt) || clockevent_state_periodic(clkevt)) {
++		ret = pm_runtime_put(priv->dev);
++		if (ret < 0) {
++			dev_err(priv->dev, "pm runtime get returned %d\n", ret);
++			return ret;
++		}
++	}
+ 
+ 	regmap_write(priv->reg, STM32_LPTIM_CR, 0);
+ 	regmap_write(priv->reg, STM32_LPTIM_IER, 0);
+@@ -97,14 +106,6 @@ static int stm32_clkevent_lp_set_timer(unsigned long evt,
+ 	struct stm32_lp_private *priv = to_priv(clkevt);
+ 	int ret;
+ 
+-	if (!pm_runtime_active(priv->dev)) {
+-		ret = pm_runtime_resume_and_get(priv->dev);
+-		if (ret) {
+-			dev_err(priv->dev, "pm runtime get returned %d\n", ret);
+-			return ret;
+-		}
+-	}
+-
+ 	if (priv->version == STM32_LPTIM_VERR_23) {
+ 		ret = stm32mp25_clkevent_lp_set_evt(priv, evt);
+ 		if (ret)
+@@ -131,18 +132,54 @@ static int stm32_clkevent_lp_set_next_event(unsigned long evt,
+ 					   clockevent_state_periodic(clkevt));
+ }
+ 
++static int stm32_clkevent_lp_pm_runtime_get(struct clock_event_device *clkevt)
++{
++	struct stm32_lp_private *priv = to_priv(clkevt);
++	int ret;
++
++	/* Rely on old clockevent state, to balance pm_runtime_get() / pm_runtime_put() calls */
++	if (clockevent_state_detached(clkevt) || clockevent_state_shutdown(clkevt)) {
++		ret = pm_runtime_get(priv->dev);
++		if (ret < 0) {
++			pm_runtime_put_noidle(priv->dev);
++			dev_err(priv->dev, "pm runtime get returned %d\n", ret);
++			return ret;
++		}
++	}
++
++	return 0;
++}
++
+ static int stm32_clkevent_lp_set_periodic(struct clock_event_device *clkevt)
+ {
+ 	struct stm32_lp_private *priv = to_priv(clkevt);
++	int ret;
++
++	ret = stm32_clkevent_lp_pm_runtime_get(clkevt);
++	if (ret < 0)
++		return ret;
++
++	ret = stm32_clkevent_lp_set_timer(priv->period, clkevt, true);
++	if (ret < 0)
++		pm_runtime_put(priv->dev);
+ 
+-	return stm32_clkevent_lp_set_timer(priv->period, clkevt, true);
++	return ret;
+ }
+ 
+ static int stm32_clkevent_lp_set_oneshot(struct clock_event_device *clkevt)
+ {
+ 	struct stm32_lp_private *priv = to_priv(clkevt);
++	int ret;
++
++	ret = stm32_clkevent_lp_pm_runtime_get(clkevt);
++	if (ret < 0)
++		return ret;
+ 
+-	return stm32_clkevent_lp_set_timer(priv->period, clkevt, false);
++	ret = stm32_clkevent_lp_set_timer(priv->period, clkevt, false);
++	if (ret < 0)
++		pm_runtime_put(priv->dev);
++
++	return ret;
+ }
+ 
+ static irqreturn_t stm32_clkevent_lp_irq_handler(int irq, void *dev_id)
+@@ -182,8 +219,6 @@ static void stm32_clkevent_lp_suspend(struct clock_event_device *clkevt)
+ 
+ 	stm32_clkevent_lp_shutdown(clkevt);
+ 
+-	pm_runtime_put_sync_suspend(priv->dev);
+-
+ 	/* balance clk_prepare_enable() from the probe */
+ 	clk_disable_unprepare(priv->clk);
+ }
+@@ -266,8 +301,6 @@ static int stm32_clkevent_lp_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
+-	pm_runtime_irq_safe(&pdev->dev);
+-
+ 	priv->dev = &pdev->dev;
+ 
+ 	stm32_clkevent_lp_init(priv, pdev->dev.parent->of_node, rate);
+-- 
+2.50.1
+

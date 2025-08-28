@@ -1,0 +1,43 @@
+From 66ab233ae8a1278c5f70c862627b25299414cb0d Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Date: Thu, 13 Mar 2025 16:46:56 +0100
+Subject: [PATCH] arm64: dts: st: add peripherals clocks to m0_rproc for
+ stm32mp257f-dk
+
+Add GPIOZ, LPUART1 and LPTIM4 clocks to m0_rproc. these declarations allow
+to run the peripherals and GPIOs in normal and LP modes.
+
+Change-Id: I167e0c83724a2f790813b268a0ff2455da8c5acc
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/442358
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index cff4e8c8c26f..8890b902ed70 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -509,6 +509,15 @@ &m0_rproc {
+ 	memory-region = <&cm0_cube_fw>, <&cm0_cube_data>;
+ 	clocks = <&rcc CK_CPU3>,
+ 		 <&rcc CK_CPU3_AM>,
++		 <&rcc CK_LPUART1_C3>,
++		 <&rcc CK_KER_LPUART1>,
++		 <&rcc CK_LPUART1_AM>,
++		 <&rcc CK_GPIOZ_C3>,
++		 <&scmi_clk CK_SCMI_GPIOZ>,
++		 <&scmi_clk CK_SCMI_GPIOZ_AM>,
++		 <&rcc CK_LPTIM4_C3>,
++		 <&rcc CK_KER_LPTIM4>,
++		 <&rcc CK_LPTIM4_AM>,
+ 		 <&scmi_clk CK_SCMI_IPCC2>,
+ 		 <&scmi_clk CK_SCMI_IPCC2_AM>;
+ 	status = "okay";
+-- 
+2.50.1
+

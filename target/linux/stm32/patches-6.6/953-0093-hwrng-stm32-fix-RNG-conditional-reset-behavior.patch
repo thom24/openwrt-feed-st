@@ -1,0 +1,64 @@
+From a2bd4f78c132ef5254af46b8590e754b3ad26dc9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Fri, 22 Nov 2024 15:45:35 +0100
+Subject: [PATCH] hwrng: stm32 - fix RNG conditional reset behavior
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The SEIS bit in RNG_SR is used to indicate to software that a seed error
+has occurred. It is not mandatory to panic when SEIS is set because the
+RNG hardware can automatically resolve the issue. The SECS bit is more
+appropriate and is already implemented. nscr is also set to enable all
+oscillator for STM32MP21.
+
+Change-Id: I69c795cb387ae2816880bcd883d772b899213918
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/420393
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ drivers/char/hw_random/stm32-rng.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
+index f2f5f1eac3ae..d5a0c90d7ba7 100644
+--- a/drivers/char/hw_random/stm32-rng.c
++++ b/drivers/char/hw_random/stm32-rng.c
+@@ -95,9 +95,8 @@ struct stm32_rng_private {
+  * Indeed, when SEIS is set and SECS is cleared it means RNG performed
+  * the reset automatically (auto-reset).
+  * 2. If SECS was set in step 1 (no auto-reset) wait for CONDRST
+- * to be cleared in the RNG_CR register, then confirm that SEIS is
+- * cleared in the RNG_SR register. Otherwise just clear SEIS bit in
+- * the RNG_SR register.
++ * to be cleared in the RNG_CR register. Otherwise just clear SEIS bit
++ * in the RNG_SR register.
+  * 3. If SECS was set in step 1 (no auto-reset) wait for SECS to be
+  * cleared by RNG. The random number generation is now back to normal.
+  */
+@@ -125,10 +124,6 @@ static int stm32_rng_conceal_seed_error_cond_reset(struct stm32_rng_private *pri
+ 		return err;
+ 	}
+ 
+-	/* Check SEIS is cleared (step 2.) */
+-	if (readl_relaxed(priv->base + RNG_SR) & RNG_SR_SEIS)
+-		return -EINVAL;
+-
+ 	err = readl_relaxed_poll_timeout_atomic(priv->base + RNG_SR, sr, !(sr & RNG_SR_SECS), 10,
+ 						100000);
+ 	if (err) {
+@@ -534,7 +529,7 @@ static const struct stm32_rng_data stm32mp21_rng_data = {
+ 	.max_clock_rate = 48000000,
+ 	.nb_clock = 2,
+ 	.cr = 0x00800D00,
+-	.nscr = 0x01F7,
++	.nscr = 0x01FF,
+ 	.htcr = 0xAAC7,
+ };
+ 
+-- 
+2.50.1
+

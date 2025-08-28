@@ -1,0 +1,68 @@
+From fa60c571598472f0b1624a0a083fefcbf7e33c46 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Mon, 21 Oct 2024 12:33:06 +0200
+Subject: [PATCH] usb: dwc2: fix address remapping support for stm32mp21
+
+After going to standby, the controller is no longer functional. When in
+peripheral mode, it connects to the host, but it no longer answers to its
+requests (timeouts). Error messages are seen like:
+[ 9435.378029] usb 3-6.1: new high-speed USB device number 71 using
+               xhci_hcd
+[ 9440.698063] usb 3-6.1: device descriptor read/64, error -110
+[ 9456.310079] usb 3-6.1: device descriptor read/64, error -110
+...
+[ 9858.914628] xhci_hcd 0000:00:14.0: Timeout while waiting for setup
+               device command
+[ 9859.122632] usb 3-6.1: device not accepting address 77, error -62
+[ 9859.122734] usb 3-6-port1: unable to enumerate USB device
+
+This is due to AHB errors, that can be seen in the embedded by enabling
+CONFIG_DYNAMIC_DEBUG, and enabling debug logs:
+echo "func dwc2_hsotg_epint +pf" > /sys/kernel/debug/dynamic_debug/control
+dmesg -n8
+[  491.352770] dwc2 48300000.usb: new device is high-speed
+[  491.417779] dwc2_hsotg_epint: dwc2 48300000.usb: dwc2_hsotg_epint:
+               ep0(out) DxEPINT=0x00000204
+[  491.420861] dwc2_hsotg_epint: dwc2 48300000.usb: dwc2_hsotg_epint:
+               AHBErr
+[  491.427707] dwc2_hsotg_epint: dwc2 48300000.usb: dwc2_hsotg_epint:
+               BNA interrupt
+
+AHR errors causes the endpoint interrupt enable bits to be cleared by
+hardware (hence the controller no longer respond to the HOST). It's due
+to the address remapping feature to be reset-disabled after standby, and
+not being restored by the driver.
+Fix this by setting back address remapping in syscfg in dwc2_resume() as
+done at probe() time.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I27b8a51549e4bfb08b9c26bf706015a56722743e
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/412806
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Ram DAYAL <ram.dayal@st.com>
+Reviewed-by: Ram DAYAL <ram.dayal@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/usb/dwc2/platform.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index 677149c6b6c5..c67faabbf8af 100644
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -765,6 +765,12 @@ static int __maybe_unused dwc2_resume(struct device *dev)
+ 	if (device_may_wakeup(dev) || device_wakeup_path(dev))
+ 		disable_irq_wake(dwc2->irq);
+ 
++	if (dev->dma_range_map && dwc2->params.activate_stm32_otgarcr_en) {
++		regmap_set_bits(dwc2->params.stm32_regmap,
++				dwc2->params.stm32_syscfg_otgarcr_reg_off,
++				STM32_SYSCFG_OTGARCR_OFFSET_AREN_MASK);
++	}
++
+ 	if (dwc2->phy_off_for_suspend && dwc2->ll_hw_enabled) {
+ 		ret = __dwc2_lowlevel_hw_enable(dwc2);
+ 		if (ret)
+-- 
+2.50.1
+

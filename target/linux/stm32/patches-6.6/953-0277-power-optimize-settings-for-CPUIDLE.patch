@@ -1,0 +1,169 @@
+From d79ac2c9ec4514c775fd0607f7c5ca463aabec11 Mon Sep 17 00:00:00 2001
+From: Olivier BIDEAU <olivier.bideau@st.com>
+Date: Thu, 20 Feb 2025 11:14:32 +0100
+Subject: [PATCH] power: optimize settings for CPUIDLE
+
+The new settings are based on latency measurements.
+They are a tradeoff between performance and power saving.
+They have also been checked in OSI configuration.
+
+Signed-off-by: Olivier BIDEAU <olivier.bideau@st.com>
+Change-Id: Ia64fe68ed6302c513729c6c67d2c88d47025b2f7
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/438774
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 18 +++++++++---------
+ arch/arm64/boot/dts/st/stm32mp231.dtsi | 18 +++++++++---------
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 18 +++++++++---------
+ 3 files changed, 27 insertions(+), 27 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 2d7c2ff0a1ab..aebb608f31ba 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -36,8 +36,8 @@ CPU_PWRDN: cpu-power-down {
+ 				compatible = "arm,idle-state";
+ 				arm,psci-suspend-param = <0x00000001>;
+ 				local-timer-stop;
+-				entry-latency-us = <300>;
+-				exit-latency-us = <500>;
++				entry-latency-us = <150>;
++				exit-latency-us = <200>;
+ 				min-residency-us = <1000>;
+ 			};
+ 		};
+@@ -46,25 +46,25 @@ domain-idle-states {
+ 			STOP1: domain-stop1 {
+ 				compatible = "domain-idle-state";
+ 				arm,psci-suspend-param = <0x00000011>;
+-				entry-latency-us = <400>;
+-				exit-latency-us = <1200>;
++				entry-latency-us = <300>;
++				exit-latency-us = <500>;
+ 				min-residency-us = <1500>;
+ 			};
+ 
+ 			LP_STOP1: domain-lp-stop1 {
+ 				compatible = "domain-idle-state";
+ 				arm,psci-suspend-param = <0x0000021>;
+-				entry-latency-us = <500>;
+-				exit-latency-us = <2000>;
+-				min-residency-us = <3000>;
++				entry-latency-us = <350>;
++				exit-latency-us = <600>;
++				min-residency-us = <2000>;
+ 			};
+ 
+ 			LPLV_STOP1: domain-lplv-stop1 {
+ 				compatible = "domain-idle-state";
+ 				arm,psci-suspend-param = <0x00000211>;
+ 				entry-latency-us = <500>;
+-				exit-latency-us = <3000>;
+-				min-residency-us = <4000>;
++				exit-latency-us = <2000>;
++				min-residency-us = <2500>;
+ 			};
+ 		};
+ 	};
+diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+index 5a4355cda3b8..9613f1606e5e 100644
+--- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+@@ -37,8 +37,8 @@ CPU_PWRDN: cpu-power-down {
+ 				compatible = "arm,idle-state";
+ 				arm,psci-suspend-param = <0x00000001>;
+ 				local-timer-stop;
+-				entry-latency-us = <300>;
+-				exit-latency-us = <500>;
++				entry-latency-us = <150>;
++				exit-latency-us = <200>;
+ 				min-residency-us = <1000>;
+ 			};
+ 		};
+@@ -47,25 +47,25 @@ domain-idle-states {
+ 			STOP1: domain-stop1 {
+ 				compatible = "domain-idle-state";
+ 				arm,psci-suspend-param = <0x00000011>;
+-				entry-latency-us = <400>;
+-				exit-latency-us = <1200>;
++				entry-latency-us = <300>;
++				exit-latency-us = <500>;
+ 				min-residency-us = <1500>;
+ 			};
+ 
+ 			LP_STOP1: domain-lp-stop1 {
+ 				compatible = "domain-idle-state";
+ 				arm,psci-suspend-param = <0x0000021>;
+-				entry-latency-us = <500>;
+-				exit-latency-us = <2000>;
+-				min-residency-us = <3000>;
++				entry-latency-us = <3500>;
++				exit-latency-us = <600>;
++				min-residency-us = <2000>;
+ 			};
+ 
+ 			LPLV_STOP1: domain-lplv-stop1 {
+ 				compatible = "domain-idle-state";
+ 				arm,psci-suspend-param = <0x00000211>;
+ 				entry-latency-us = <500>;
+-				exit-latency-us = <3000>;
+-				min-residency-us = <4000>;
++				exit-latency-us = <2000>;
++				min-residency-us = <2500>;
+ 			};
+ 		};
+ 	};
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index a5029a182cfd..c694e2c5dabc 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -37,8 +37,8 @@ CPU_PWRDN: cpu-power-down {
+ 				compatible = "arm,idle-state";
+ 				arm,psci-suspend-param = <0x00000001>;
+ 				local-timer-stop;
+-				entry-latency-us = <300>;
+-				exit-latency-us = <500>;
++				entry-latency-us = <150>;
++				exit-latency-us = <200>;
+ 				min-residency-us = <1000>;
+ 			};
+ 		};
+@@ -47,25 +47,25 @@ domain-idle-states {
+ 			STOP1: domain-stop1 {
+ 				compatible = "domain-idle-state";
+ 				arm,psci-suspend-param = <0x00000011>;
+-				entry-latency-us = <400>;
+-				exit-latency-us = <1200>;
++				entry-latency-us = <300>;
++				exit-latency-us = <500>;
+ 				min-residency-us = <1500>;
+ 			};
+ 
+ 			LP_STOP1: domain-lp-stop1 {
+ 				compatible = "domain-idle-state";
+ 				arm,psci-suspend-param = <0x0000021>;
+-				entry-latency-us = <500>;
+-				exit-latency-us = <2000>;
+-				min-residency-us = <3000>;
++				entry-latency-us = <350>;
++				exit-latency-us = <600>;
++				min-residency-us = <2000>;
+ 			};
+ 
+ 			LPLV_STOP1: domain-lplv-stop1 {
+ 				compatible = "domain-idle-state";
+ 				arm,psci-suspend-param = <0x00000211>;
+ 				entry-latency-us = <500>;
+-				exit-latency-us = <3000>;
+-				min-residency-us = <4000>;
++				exit-latency-us = <2000>;
++				min-residency-us = <2500>;
+ 			};
+ 		};
+ 	};
+-- 
+2.50.1
+

@@ -1,0 +1,91 @@
+From baca1b6337c3fd4d280483666cced0e69058a6ba Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Fri, 7 Feb 2025 14:12:41 +0100
+Subject: [PATCH] dt-bindings: spi: stm32: update bindings with SPI Rx DMA-MDMA
+ chaining
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Add MDMA channel, and new sram property which are mandatory to enable
+SPI Rx DMA-MDMA chaining.
+
+Change-Id: I5d8c726158c6bec6aa96fd585670404a92ee5758
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/435593
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ .../devicetree/bindings/spi/st,stm32-spi.yaml | 39 ++++++++++++++++++-
+ 1 file changed, 37 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
+index c7593fed165a..88def4ea282a 100644
+--- a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
++++ b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
+@@ -27,6 +27,29 @@ allOf:
+     then:
+       properties:
+         st,spi-midi-ns: false
++        sram: false
++        dmas:
++          maxItems: 2
++        dma-names:
++          items:
++            - const: rx
++            - const: tx
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: st,stm32mp25-spi
++
++    then:
++      properties:
++        sram: false
++        dmas:
++          maxItems: 2
++        dma-names:
++          items:
++            - const: rx
++            - const: tx
+ 
+ properties:
+   compatible:
+@@ -49,16 +72,28 @@ properties:
+ 
+   dmas:
+     description: |
+-      DMA specifiers for tx and rx dma. DMA fifo mode must be used. See
+-      the STM32 DMA bindings Documentation/devicetree/bindings/dma/st,stm32-dma.yaml.
++      DMA specifiers for tx and rx channels. DMA fifo mode must be used. See
++      the STM32 DMA bindings Documentation/devicetree/bindings/dma/stm32/st,*dma.yaml
++    minItems: 2
+     items:
+       - description: rx DMA channel
+       - description: tx DMA channel
++      - description: rxm2m MDMA channel
+ 
+   dma-names:
++    minItems: 2
+     items:
+       - const: rx
+       - const: tx
++      - const: rxm2m
++
++  sram:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: |
++      Phandles to a reserved SRAM region which is used as temporary
++      storage memory between DMA and MDMA engines.
++      The region should be defined as child node of the AHB SRAM node
++      as per the generic bindings in Documentation/devicetree/bindings/sram/sram.yaml
+ 
+   access-controllers:
+     minItems: 1
+-- 
+2.50.1
+

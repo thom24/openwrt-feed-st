@@ -1,0 +1,58 @@
+From 4df50225f182e31dd8ba538b598dcab1431605c4 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Tue, 18 Feb 2025 17:01:49 +0100
+Subject: [PATCH] usb: dwc2: drd: fix partial power down mode on USB role
+ switch
+
+The USB role updates needs the peripheral to be clocked and functional.
+It's been fixed already for the clock gating mode [1]. Fix it too for
+partial power down mode.
+
+[1] https://lore.kernel.org/r/20240906055025.25057-1-tomas.marek@elrest.cz
+
+Fixes: 0112b7ce68ea ("usb: dwc2: Update dwc2_handle_usb_suspend_intr function.")
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Iebc243a7e63b5c63c6c64cb2395d6182a1a6aa18
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/438171
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Pankaj DEV <pankaj.dev@st.com>
+---
+ drivers/usb/dwc2/drd.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
+index 728fb5582d04..faae1902f683 100644
+--- a/drivers/usb/dwc2/drd.c
++++ b/drivers/usb/dwc2/drd.c
+@@ -188,11 +188,14 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+ 	if ((IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) ||
+ 	     IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)) &&
+ 	     dwc2_is_device_mode(hsotg) &&
+-	     hsotg->lx_state == DWC2_L2 &&
+-	     hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
+-	     hsotg->bus_suspended &&
+-	     !hsotg->params.no_clock_gating)
+-		dwc2_gadget_exit_clock_gating(hsotg, 0);
++	     hsotg->lx_state == DWC2_L2) {
++		if (hsotg->in_ppd)
++			dwc2_gadget_exit_partial_power_down(hsotg, 0, true);
++
++		if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
++		    !hsotg->params.no_clock_gating)
++			dwc2_gadget_exit_clock_gating(hsotg, 0);
++	}
+ 
+ 	if (role == USB_ROLE_HOST) {
+ 		already = dwc2_ovr_avalid(hsotg, true);
+@@ -220,7 +223,7 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+ 		 * may not be HW accessible. Schedule work to call dwc2_conn_id_status_change
+ 		 * to handle the port resume before switching mode.
+ 		 */
+-		if (hsotg->bus_suspended && hsotg->wq_otg)
++		if (hsotg->wq_otg)
+ 			queue_work(hsotg->wq_otg, &hsotg->wf_otg);
+ 
+ 		/* This will raise a Connector ID Status Change Interrupt */
+-- 
+2.50.1
+

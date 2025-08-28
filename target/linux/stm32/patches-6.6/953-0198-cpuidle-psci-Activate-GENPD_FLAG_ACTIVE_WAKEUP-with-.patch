@@ -1,0 +1,53 @@
+From 4d4ffeaf88efa166264e0b951520227ca5338298 Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Date: Fri, 15 Nov 2024 17:43:24 +0100
+Subject: [PATCH] cpuidle: psci: Activate GENPD_FLAG_ACTIVE_WAKEUP with OSI
+
+Set flag GENPD_FLAG_ACTIVE_WAKEUP to psci cpuidle genpd when OSI
+is activated, then when a device is set as wake-up source using
+device_set_wakeup_path, the PSCI power domain could be kept on to make
+sure the associated device could wake-up the system.
+
+With this flag, for system wide suspend S2IDLE the wake-up path is managed
+in each device driver and is tested in the power framework: a PSCI domain
+is only powered off when GENPD_FLAG_ACTIVE_WAKEUP is activated and the
+associated device is not in the wake-up path, so PSCI CPUIdle selects the
+lowest level in PSCI topology according the wake-up path.
+
+This patch is a preliminary step to support PSCI OSI in STM32MP25 platform
+with D1 domain (power-domain-cluster) with the cortex A35 cluster and all
+the associated peripherals including EXTI1 which manages the wake-up
+interruptions for D1 domain.
+
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/418954
+Change-Id: Ia56f1e40d6e69cc55793cfcb8c9b2775ccd1c691
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/432415
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/cpuidle/cpuidle-psci-domain.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+index b88af1262f1a..f2bd861a1605 100644
+--- a/drivers/cpuidle/cpuidle-psci-domain.c
++++ b/drivers/cpuidle/cpuidle-psci-domain.c
+@@ -68,10 +68,12 @@ static int psci_pd_init(struct device_node *np, bool use_osi)
+ 	 * Allow power off when OSI has been successfully enabled.
+ 	 * PREEMPT_RT is not yet ready to enter domain idle states.
+ 	 */
+-	if (use_osi && !IS_ENABLED(CONFIG_PREEMPT_RT))
++	if (use_osi && !IS_ENABLED(CONFIG_PREEMPT_RT)) {
+ 		pd->power_off = psci_pd_power_off;
+-	else
++		pd->flags |= GENPD_FLAG_ACTIVE_WAKEUP;
++	} else {
+ 		pd->flags |= GENPD_FLAG_ALWAYS_ON;
++	}
+ 
+ 	/* Use governor for CPU PM domains if it has some states to manage. */
+ 	pd_gov = pd->states ? &pm_domain_cpu_gov : NULL;
+-- 
+2.50.1
+

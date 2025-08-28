@@ -1,0 +1,36 @@
+From a412df29445de2f28a92ceafd1bd367e51d1f74e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Tue, 25 Mar 2025 11:40:28 +0100
+Subject: [PATCH] arm64: dts: st: add power domains in crc node for STM32MP21
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+add missing power domain property for crc in STM32MP21
+
+Change-Id: Ica994b855dfcd4f78f8a2faf3bb6d04ca2871b2d
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/446400
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index a142195a712a..94570804e5c6 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -1503,6 +1503,7 @@ crc: crc@404c0000 {
+ 				reg = <0x404c0000 0x0 0x400>;
+ 				clocks = <&rcc CK_BUS_CRC>;
+ 				access-controllers = <&rifsc 109>;
++				power-domains = <&d1_pd>;
+ 				status = "disabled";
+ 			};
+ 
+-- 
+2.50.1
+

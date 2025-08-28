@@ -1,0 +1,45 @@
+From 936f55d42b6ef0f693fea0a00315fb6c4eee0e5b Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 5 Jul 2024 13:50:31 +0200
+Subject: [PATCH] dt-bindings: watchdog: stm32-iwdg: Document interrupt and
+ wakeup properties
+
+The watchdog IP can generate pre-timeout interrupt and can be used as
+a wake up source. Document both properties.
+
+Change-Id: I455a3a4b04467262efdef47e36b10b3ab46b2fbb
+Signed-off-by: Marek Vasut <marex@denx.de>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20240705115052.116705-1-marex@denx.de
+Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/425584
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Clement LE GOFFIC <clement.legoffic@foss.st.com>
+Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+Domain-Review: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Clement LE GOFFIC <clement.legoffic@foss.st.com>
+---
+ .../devicetree/bindings/watchdog/st,stm32-iwdg.yaml         | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml b/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml
+index 6b13bfc11e11..86bd39d50850 100644
+--- a/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml
++++ b/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml
+@@ -36,6 +36,12 @@ properties:
+     minItems: 1
+     maxItems: 2
+ 
++  interrupts:
++    maxItems: 1
++    description: Pre-timeout interrupt from the watchdog.
++
++  wakeup-source: true
++
+ required:
+   - compatible
+   - reg
+-- 
+2.50.1
+

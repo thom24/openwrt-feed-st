@@ -1,0 +1,38 @@
+From 33ae6df3cd79ebed43e51932bda6aab5c2fbdc59 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Wed, 4 Dec 2024 10:18:43 +0100
+Subject: [PATCH] mailbox: Fix mailbox character device driver for coprocessor
+ communication
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+fix aarch32 build error:
+ error: invalid use of undefined type ‘struct file’
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: Ib50ade4a1790a752bc227ecfba113fe9b28aa5e7
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/422548
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/mailbox/mailbox-client_cdev.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/mailbox/mailbox-client_cdev.c b/drivers/mailbox/mailbox-client_cdev.c
+index 2d9178589e37..d159c59655e2 100644
+--- a/drivers/mailbox/mailbox-client_cdev.c
++++ b/drivers/mailbox/mailbox-client_cdev.c
+@@ -6,6 +6,7 @@
+ 
+ #include <linux/cdev.h>
+ #include <linux/device.h>
++#include <linux/fs.h>
+ #include <linux/io.h>
+ #include <linux/kernel.h>
+ #include <linux/mailbox_client.h>
+-- 
+2.50.1
+

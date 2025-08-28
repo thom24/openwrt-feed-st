@@ -1,0 +1,82 @@
+From 02559208d078893d2fab79f703901917b4f9281e Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Mon, 6 Jan 2025 15:05:03 +0100
+Subject: [PATCH] Revert "arm64: dts: st: enable CoreSight on stm32mp215f-dk
+ board"
+
+This reverts commit 6071cb84f17f2620e1a435a3b23c1e81e4f99fe6.
+
+On SoC "Secure Closed" the CPU has no access to the CoreSight
+peripherals so the kernel pollutes the logs with several probe
+deferred messages.
+
+Revert the activation of CoreSight in board file.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I1e054102355268b3154cdbd63856968c9e1311d0
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/427071
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 44 -----------------------
+ 1 file changed, 44 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index e9edec1e6539..e38e436cde5c 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -209,50 +209,6 @@ &cryp1 {
+ 	status = "okay";
+ };
+ 
+-&cs_cpu_debug0 {
+-	status = "okay";
+-};
+-
+-&cs_cti0 {
+-	status = "okay";
+-};
+-
+-&cs_cti1 {
+-	status = "okay";
+-};
+-
+-&cs_cti_cpu0 {
+-	status = "okay";
+-};
+-
+-&cs_etf {
+-	status = "okay";
+-};
+-
+-&cs_etm0 {
+-	status = "okay";
+-};
+-
+-&cs_etr {
+-	status = "okay";
+-};
+-
+-&cs_funnel {
+-	status = "okay";
+-};
+-
+-&cs_replicator {
+-	status = "okay";
+-};
+-
+-&cs_stm {
+-	status = "okay";
+-};
+-
+-&cs_tpiu {
+-	status = "okay";
+-};
+-
+ &csi {
+ 	vdd-supply =  <&scmi_vddcore>;
+ 	vdda18-supply = <&scmi_vdda_1v8>;
+-- 
+2.50.1
+

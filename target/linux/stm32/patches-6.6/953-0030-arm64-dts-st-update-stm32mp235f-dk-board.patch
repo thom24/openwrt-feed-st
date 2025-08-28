@@ -1,0 +1,54 @@
+From 66f016f81588d098db0b4a7097b62321a70fe5cc Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Wed, 16 Oct 2024 13:52:24 +0200
+Subject: [PATCH] arm64: dts: st: update stm32mp235f-dk board
+
+Correct imx335 regulator nodes name which should be
+such as regulator-[0-9]v[0-9].
+
+Change-Id: I015f88fe53c2bd5b0892dd37afdc7e333847f600
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/411740
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index 2a3160857706..298cd3fcc13e 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -105,7 +105,7 @@ hdmi_connector_in: endpoint {
+ 		};
+ 	};
+ 
+-	imx335_2v9: imx335-2v9 {
++	imx335_2v9: regulator-2v9 {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "imx335-avdd";
+ 		regulator-min-microvolt = <2900000>;
+@@ -113,7 +113,7 @@ imx335_2v9: imx335-2v9 {
+ 		regulator-always-on;
+ 	};
+ 
+-	imx335_1v8: imx335-1v8 {
++	imx335_1v8: regulator-1v8 {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "imx335-ovdd";
+ 		regulator-min-microvolt = <1800000>;
+@@ -121,7 +121,7 @@ imx335_1v8: imx335-1v8 {
+ 		regulator-always-on;
+ 	};
+ 
+-	imx335_1v2: imx335-1v2 {
++	imx335_1v2: regulator-1v2 {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "imx335-dvdd";
+ 		regulator-min-microvolt = <1200000>;
+-- 
+2.50.1
+

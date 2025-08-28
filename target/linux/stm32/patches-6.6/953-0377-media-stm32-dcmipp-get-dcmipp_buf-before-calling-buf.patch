@@ -1,0 +1,94 @@
+From 3e1fa478267d77c672da87f18f7dd468c1a56a25 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Thu, 20 Mar 2025 10:16:42 +0100
+Subject: [PATCH] media: stm32: dcmipp: get dcmipp_buf before calling
+ buffer_done in statcap
+
+In preparation to introduction of the histogram support, retrieve the
+struct dcmipp_buf pointer outside of the dcmipp_statcap_buffer_done
+function. Indeed, when histogram are also used, that function will have
+to be called with a struct dcmipp_buf which already contains histogram
+data written into it.
+
+Change-Id: I15f871d97b6723ef942dd0ee4db1d555d5349253
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/446240
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ .../st/stm32/stm32-dcmipp/dcmipp-statcap.c    | 34 +++++++++----------
+ 1 file changed, 17 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
+index 0ee28a55a913..04d5ee735319 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
+@@ -573,28 +573,20 @@ void dcmipp_statcap_ent_release(struct dcmipp_ent_device *ved)
+ 	vb2_video_unregister_device(&vcap->vdev);
+ }
+ 
+-static void dcmipp_statcap_buffer_done(struct dcmipp_statcap_device *vcap)
++static void dcmipp_statcap_buffer_done(struct dcmipp_statcap_device *vcap,
++				       struct dcmipp_buf *dcmipp_buf)
+ {
+ 	struct stm32_dcmipp_stat_buf *stat_buf;
+-	struct dcmipp_buf *cur_buf = NULL;
+-
+-	/* Get an available buffer */
+-	if (!list_empty(&vcap->buffers)) {
+-		cur_buf = list_first_entry(&vcap->buffers, struct dcmipp_buf, list);
+-		list_del(&cur_buf->list);
+-	}
+-	if (!cur_buf)
+-		return;
+ 
+-	stat_buf = (struct stm32_dcmipp_stat_buf *)vb2_plane_vaddr(&cur_buf->vb.vb2_buf, 0);
++	stat_buf = (struct stm32_dcmipp_stat_buf *)vb2_plane_vaddr(&dcmipp_buf->vb.vb2_buf, 0);
+ 	*stat_buf = vcap->local_buf;
+ 
+ 	/* Send buffer */
+-	vb2_set_plane_payload(&cur_buf->vb.vb2_buf, 0,
++	vb2_set_plane_payload(&dcmipp_buf->vb.vb2_buf, 0,
+ 			      sizeof(struct stm32_dcmipp_stat_buf));
+-	cur_buf->vb.sequence = vcap->sequence++;
+-	cur_buf->vb.vb2_buf.timestamp = ktime_get_ns();
+-	vb2_buffer_done(&cur_buf->vb.vb2_buf, VB2_BUF_STATE_DONE);
++	dcmipp_buf->vb.sequence = vcap->sequence++;
++	dcmipp_buf->vb.vb2_buf.timestamp = ktime_get_ns();
++	vb2_buffer_done(&dcmipp_buf->vb.vb2_buf, VB2_BUF_STATE_DONE);
+ }
+ 
+ static u32 dcmipp_statcap_get_src(u32 location,
+@@ -790,6 +782,7 @@ static irqreturn_t dcmipp_statcap_irq_thread(int irq, void *arg)
+ {
+ 	struct dcmipp_statcap_device *vcap =
+ 			container_of(arg, struct dcmipp_statcap_device, ved);
++	struct dcmipp_buf *cur_buf = NULL;
+ 
+ 	/* We only to do things if we are streaming */
+ 	if (!vb2_is_streaming(&vcap->queue))
+@@ -800,8 +793,15 @@ static irqreturn_t dcmipp_statcap_irq_thread(int irq, void *arg)
+ 	dcmipp_statcap_update_local_buf(vcap);
+ 
+ 	/* If a full capture cycle has been done, output data to a buffer */
+-	if (vcap->stat_ready)
+-		dcmipp_statcap_buffer_done(vcap);
++	if (vcap->stat_ready) {
++		/* Get an available buffer */
++		if (!list_empty(&vcap->buffers)) {
++			cur_buf = list_first_entry(&vcap->buffers, struct dcmipp_buf, list);
++			list_del(&cur_buf->list);
++		}
++		if (cur_buf)
++			dcmipp_statcap_buffer_done(vcap, cur_buf);
++	}
+ 
+ 	spin_unlock_irq(&vcap->irqlock);
+ 
+-- 
+2.50.1
+

@@ -1,0 +1,43 @@
+From c9e88bcc96d5455d73edd0260fc48e555d2c0d13 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Mon, 25 Nov 2024 14:29:13 +0100
+Subject: [PATCH] usb: dwc2: fix endless IRQ loop when suspended before session
+ end
+
+There may be a race, with suspend interrupt, that puts the controller
+into DWC2_L2 state, and enters clock gating. In case session end irq
+is then asserted, the driver simply set lx_state = DWC2_L0, without
+exiting clock gating. Then the core may fall into interrupt loop,
+not being able to clear subsequent interrupt flags.
+
+So take care to exit clock gating, before setting DWC2_L0 state.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I99da2b9b8f9979b2ce4f7080ecfbaf5816ebff61
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/420601
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/usb/dwc2/core_intr.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
+index b9cb876e5952..35f3b5362120 100644
+--- a/drivers/usb/dwc2/core_intr.c
++++ b/drivers/usb/dwc2/core_intr.c
+@@ -112,6 +112,12 @@ static void dwc2_handle_otg_intr(struct dwc2_hsotg *hsotg)
+ 					"Device Not Connected/Responding!\n");
+ 			}
+ 
++			/* Exit gadget mode clock gating. */
++			if (hsotg->params.power_down ==
++			    DWC2_POWER_DOWN_PARAM_NONE && hsotg->bus_suspended &&
++			    !hsotg->params.no_clock_gating)
++				dwc2_gadget_exit_clock_gating(hsotg, 0);
++
+ 			/*
+ 			 * If Session End Detected the B-Cable has been
+ 			 * disconnected
+-- 
+2.50.1
+

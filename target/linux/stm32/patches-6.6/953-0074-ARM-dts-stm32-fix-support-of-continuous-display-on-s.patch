@@ -1,0 +1,44 @@
+From b772aefb3f4b8a53422a53787bec49c46b56b985 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Fri, 20 Sep 2024 15:17:36 +0200
+Subject: [PATCH] ARM: dts: stm32: fix support of continuous display on
+ stm32mp157 EV1 boards
+
+Missing default-on property on panel.
+
+Change-Id: I7166043695b923fa32f4408ca3b42bd42377d382
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/418874
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp157c-ev1.dts | 1 +
+ arch/arm/boot/dts/st/stm32mp157f-ev1.dts | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
+index 8736d78ee9a2..0fb210e9a795 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
+@@ -329,6 +329,7 @@ panel_dsi: panel@0 {
+ 		reset-gpios = <&gpiof 15 GPIO_ACTIVE_LOW>;
+ 		backlight = <&panel_backlight>;
+ 		power-supply = <&v3v3>;
++		default-on;
+ 		status = "okay";
+ 
+ 		port {
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+index 74cea13fcfa1..69a8b04cda74 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+@@ -330,6 +330,7 @@ panel_dsi: panel@0 {
+ 		reset-gpios = <&gpiof 15 GPIO_ACTIVE_LOW>;
+ 		backlight = <&panel_backlight>;
+ 		power-supply = <&v3v3>;
++		default-on;
+ 		status = "okay";
+ 
+ 		port {
+-- 
+2.50.1
+

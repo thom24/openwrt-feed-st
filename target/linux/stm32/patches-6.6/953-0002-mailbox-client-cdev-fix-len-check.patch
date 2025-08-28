@@ -1,0 +1,44 @@
+From 465d3359d3d2236f79982e42cfb94fbc1d5a6305 Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Date: Wed, 7 May 2025 17:21:56 +0200
+Subject: [PATCH] mailbox: client-cdev: fix len check
+
+The len is compared to the size of the mbxdev->resm_size variable
+instead of comparing it to mbxdev->resm_size.
+
+Change-Id: Ib20700976cd731d056d93e4684ce4200f0134b68
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/457433
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ drivers/mailbox/mailbox-client_cdev.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/mailbox/mailbox-client_cdev.c b/drivers/mailbox/mailbox-client_cdev.c
+index 7e557d4357c3..2d9178589e37 100644
+--- a/drivers/mailbox/mailbox-client_cdev.c
++++ b/drivers/mailbox/mailbox-client_cdev.c
+@@ -82,7 +82,7 @@ static ssize_t mbox_cdev_read(struct file *filep, char *buffer, size_t len, loff
+ {
+ 	struct mbox_cdev_ddata *mbxdev = cdev_to_mbxdev(filep->f_inode->i_cdev);
+ 
+-	if (len > sizeof(mbxdev->resm_size))
++	if (len > mbxdev->resm_size)
+ 		return -EINVAL;
+ 
+ 	if (mbxdev->req_state == NO_REQ)
+@@ -104,7 +104,7 @@ static ssize_t mbox_cdev_write(struct file *filep, const char *buffer, size_t le
+ 	struct mbox_cdev_ddata *mbxdev = cdev_to_mbxdev(filep->f_inode->i_cdev);
+ 	int ret;
+ 
+-	if (len > sizeof(mbxdev->resm_size))
++	if (len > mbxdev->resm_size)
+ 		return -EINVAL;
+ 
+ 	if (mbxdev->req_state == REQ_SENT)
+-- 
+2.50.1
+

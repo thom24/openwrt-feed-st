@@ -1,0 +1,39 @@
+From cb383cfd9b439efc3b36d93a6f922bcceeba4ab2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Mon, 28 Apr 2025 16:52:13 +0200
+Subject: [PATCH] dt-bindings: nvmem: fix dt_binding_check warning in STM32
+ TAMP
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Remove unnecessary quotes.
+
+Change-Id: I39c01d70212a02610be52398343f009eea3211f6
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/455185
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Tested-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ .../devicetree/bindings/nvmem/st,stm32-tamp-nvram.yaml          | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/nvmem/st,stm32-tamp-nvram.yaml b/Documentation/devicetree/bindings/nvmem/st,stm32-tamp-nvram.yaml
+index 8f4dc7649f74..93be57f0bf0a 100644
+--- a/Documentation/devicetree/bindings/nvmem/st,stm32-tamp-nvram.yaml
++++ b/Documentation/devicetree/bindings/nvmem/st,stm32-tamp-nvram.yaml
+@@ -14,7 +14,7 @@ maintainers:
+   - Siméon Marijon <simeon.marijon@foss.st.com>
+ 
+ allOf:
+-  - $ref: "nvmem.yaml#"
++  - $ref: nvmem.yaml#
+ 
+ properties:
+   compatible:
+-- 
+2.50.1
+

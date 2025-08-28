@@ -1,0 +1,61 @@
+From e9d46947dbed74264109b19b082cbf7d6fe68728 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Thu, 31 Oct 2024 15:50:56 +0100
+Subject: [PATCH] arm64: dts: st: add rng2 node for stm32mp21
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Support RNG2 node for STM32MP21
+
+Change-Id: I789cd4cb8c24fd6f6c5c448b9915b087e8667957
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/415693
+Reviewed-by: Francois CHOLEAU <francois.choleau@st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+Tested-by: Francois CHOLEAU <francois.choleau@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 3ff5b6feac11..0513d0778dab 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -82,6 +82,14 @@ arm_wdt: watchdog {
+ 		status = "disabled";
+ 	};
+ 
++	clocks {
++		clk_rcbsec: clk-rcbsec {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++			clock-frequency = <64000000>;
++		};
++	};
++
+ 	cs_replicator: replicator {
+ 		compatible = "arm,coresight-static-replicator";
+ 		clocks = <&scmi_clk CK_SCMI_SYSATB>;
+@@ -1585,6 +1593,17 @@ hash1: hash@42030400 {
+ 				status = "disabled";
+ 			};
+ 
++			rng2: rng@42020000 {
++				compatible = "st,stm32mp21-rng";
++				reg = <0x42020000 0x0 0x400>;
++				clocks = <&clk_rcbsec>, <&rcc CK_BUS_RNG2>;
++				clock-names = "rng_clk", "rng_hclk";
++				resets = <&rcc RNG2_R>;
++				access-controllers = <&rifsc 93>;
++				power-domains = <&CLUSTER_PD>;
++				status = "disabled";
++			};
++
+ 			iwdg1: watchdog@44010000 {
+ 				compatible = "st,stm32mp1-iwdg";
+ 				reg = <0x44010000 0x0 0x400>;
+-- 
+2.50.1
+

@@ -1,0 +1,61 @@
+From 538e2e79b47d5288ff315821af35407d32378f9e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Mon, 28 Apr 2025 15:04:27 +0200
+Subject: [PATCH] dt-bindings: phy: fix dt_binding_check errors in STM32
+ USB2PHY bindings
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Remove unnecessary quotes.
+Fix enum instruction.
+Add extra space at the beginning of the comment.
+
+Change-Id: I2e65b8853370f2368e42cb5382515e24b2cf330d
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/455182
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Tested-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ .../devicetree/bindings/phy/st,stm32-usb2phy.yaml         | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml b/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml
+index 1c50a305578f..81b1605dcd94 100644
+--- a/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml
++++ b/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/phy/st,stm32-usb2phy.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/phy/st,stm32-usb2phy.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: STMicroelectronics STM32 MPU High-Speed USB PHY
+ 
+@@ -17,7 +17,7 @@ maintainers:
+ 
+ properties:
+   compatible:
+-    - enum:
++    enum:
+       - st,stm32mp21-usb2phy
+       - st,stm32mp25-usb2phy
+ 
+@@ -39,7 +39,7 @@ properties:
+     description: phandle to regulator providing 1V8 power supply to the USB2 HS PHY
+ 
+   st,syscfg:
+-    $ref: /schemas/types.yaml#/definitions/phandle-array #(arm/stm32/st,stm32-syscon.yaml#)
++    $ref: /schemas/types.yaml#/definitions/phandle-array # (arm/stm32/st,stm32-syscon.yaml#)
+     description: Phandle to the STM32-MPU System Controller DT node
+                  <syscon-handle cr-offset>
+ 
+-- 
+2.50.1
+

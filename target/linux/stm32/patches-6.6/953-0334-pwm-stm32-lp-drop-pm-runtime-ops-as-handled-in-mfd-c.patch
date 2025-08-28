@@ -1,0 +1,56 @@
+From f67138433b1f98b89b608b1b90fdcaf860724d5c Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 19 Mar 2025 14:20:44 +0100
+Subject: [PATCH] pwm: stm32-lp: drop pm runtime ops as handled in mfd core
+
+Now that the stm32-lptimer MFD driver manages the clock with runtime PM,
+it can be removed from here. It's now redundant.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Iaa7dec05b7fca99ba6ab8c59f18a136be3f7c320
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/445401
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+---
+ drivers/pwm/pwm-stm32-lp.c | 22 ----------------------
+ 1 file changed, 22 deletions(-)
+
+diff --git a/drivers/pwm/pwm-stm32-lp.c b/drivers/pwm/pwm-stm32-lp.c
+index bfc0bd7759f3..9d6d45803ab4 100644
+--- a/drivers/pwm/pwm-stm32-lp.c
++++ b/drivers/pwm/pwm-stm32-lp.c
+@@ -421,30 +421,8 @@ static int stm32_pwm_lp_resume(struct device *dev)
+ 	return pinctrl_pm_select_default_state(dev);
+ }
+ 
+-static int stm32_pwm_lp_runtime_suspend(struct device *dev)
+-{
+-	struct stm32_pwm_lp *priv = dev_get_drvdata(dev);
+-
+-	clk_disable(priv->clk);
+-
+-	return 0;
+-}
+-
+-static int stm32_pwm_lp_runtime_resume(struct device *dev)
+-{
+-	struct stm32_pwm_lp *priv = dev_get_drvdata(dev);
+-	int ret;
+-
+-	ret = clk_enable(priv->clk);
+-	if (ret)
+-		dev_err(dev, "failed to enable clock. Error [%d]\n", ret);
+-
+-	return ret;
+-}
+-
+ static const struct dev_pm_ops stm32_pwm_lp_pm_ops = {
+ 	SYSTEM_SLEEP_PM_OPS(stm32_pwm_lp_suspend, stm32_pwm_lp_resume)
+-	RUNTIME_PM_OPS(stm32_pwm_lp_runtime_suspend, stm32_pwm_lp_runtime_resume, NULL)
+ };
+ 
+ static const struct of_device_id stm32_pwm_lp_of_match[] = {
+-- 
+2.50.1
+

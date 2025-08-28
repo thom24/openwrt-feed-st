@@ -1,0 +1,34 @@
+From d125d0feddc2ca0a28963b465b67a9188c6ab53b Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Thu, 28 Nov 2024 18:08:37 +0100
+Subject: [PATCH] pinctrl: stm32: Enable stm32mp25 pinctrl for aarch32
+
+PINCTRL_STM32MP257 is needed for stm32mp25 to boot in aarch32
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I6aaab70c0adac8cb901f380a6e3bf9a72b0060fd
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/421503
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/pinctrl/stm32/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/pinctrl/stm32/Kconfig b/drivers/pinctrl/stm32/Kconfig
+index 253d80f2e4ed..ef6d6cfc00cd 100644
+--- a/drivers/pinctrl/stm32/Kconfig
++++ b/drivers/pinctrl/stm32/Kconfig
+@@ -67,7 +67,7 @@ config PINCTRL_STM32MP235
+ config PINCTRL_STM32MP257
+ 	tristate "STMicroelectronics STM32MP257 pin control"
+ 	depends on OF && HAS_IOMEM
+-	default MACH_STM32MP25 || ARM64
++	default MACH_STM32MP25 || ARM64 || ARM
+ 	select PINCTRL_STM32
+ 
+ config PINCTRL_STM32_HDP
+-- 
+2.50.1
+

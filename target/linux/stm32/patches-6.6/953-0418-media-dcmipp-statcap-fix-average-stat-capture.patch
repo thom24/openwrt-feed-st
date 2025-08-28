@@ -1,0 +1,48 @@
+From 7dca5deca64efed7cafb0a81883266498800df84 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Tue, 29 Apr 2025 13:46:45 +0200
+Subject: [PATCH] media: dcmipp: statcap: fix average stat capture
+
+stat_ready was set one VSYNC earlier than necessary.  Correct the moment it
+is set in order to ensure that there are really valid statistics available
+to read.
+
+Change-Id: I8e67bb2b0f0240417e884f0ae597dddbd85e6ebc
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/454814
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Domain-Review: Hugues FRUCHET <hugues.fruchet@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
+index f8a1390dbf2d..654cc1dd785c 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
+@@ -918,6 +918,7 @@ static void dcmipp_statcap_update_local_buf(struct dcmipp_statcap_device *vcap)
+ 	case AV_READ:
+ 		/* State used for the AVERAGE PRE capture mode */
+ 		dcmipp_statcap_read_avg_stats(vcap);
++		vcap->stat_ready = true;
+ 		break;
+ 
+ 	default:
+@@ -942,7 +943,6 @@ static void dcmipp_statcap_update_local_buf(struct dcmipp_statcap_device *vcap)
+ 			vcap->capture_state = PHY_AV_RGB;
+ 		} else if (vcap->capture_state == PHY_AV_RGB) {
+ 			vcap->capture_state = AV_READ;
+-			vcap->stat_ready = true;
+ 		}
+ 		break;
+ 	}
+-- 
+2.50.1
+

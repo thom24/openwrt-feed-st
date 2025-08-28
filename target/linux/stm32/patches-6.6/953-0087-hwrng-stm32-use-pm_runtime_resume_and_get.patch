@@ -1,0 +1,51 @@
+From 3afc1b850703b500c2b552308d9a75202ae1936c Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 31 May 2024 10:53:22 +0200
+Subject: [PATCH] hwrng: stm32 - use pm_runtime_resume_and_get()
+
+include/linux/pm_runtime.h pm_runtime_get_sync() description suggests to
+... consider using pm_runtime_resume_and_get() instead of it, especially
+if its return value is checked by the caller, as this is likely to result
+in cleaner code.
+
+This is indeed better, switch to pm_runtime_resume_and_get() which
+correctly suspends the device again in case of failure. Also add error
+checking into the RNG driver in case pm_runtime_resume_and_get() does
+fail, which is currently not done, and it does detect sporadic -EACCES
+error return after resume, which would otherwise lead to a hang due to
+register access on un-resumed hardware. Now the read simply errors out
+and the system does not hang.
+
+Acked-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I008b9b41544c9d54d26a70c736b7870d2599b7e7
+Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/420457
+Tested-by: Maxime MERE <maxime.mere@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Maxime MERE <maxime.mere@foss.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ drivers/char/hw_random/stm32-rng.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
+index 1bcea36a671d..7b5639d9311e 100644
+--- a/drivers/char/hw_random/stm32-rng.c
++++ b/drivers/char/hw_random/stm32-rng.c
+@@ -190,7 +190,9 @@ static int stm32_rng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+ 	int retval = 0, err = 0;
+ 	u32 sr;
+ 
+-	pm_runtime_get_sync((struct device *) priv->rng.priv);
++	retval = pm_runtime_resume_and_get((struct device *)priv->rng.priv);
++	if (retval)
++		return retval;
+ 
+ 	if (readl_relaxed(priv->base + RNG_SR) & RNG_SR_SEIS)
+ 		stm32_rng_conceal_seed_error(rng);
+-- 
+2.50.1
+

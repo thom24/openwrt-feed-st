@@ -1,0 +1,35 @@
+From 679793b6112a09a4b4c16d86da8d4fbbbc871ef5 Mon Sep 17 00:00:00 2001
+From: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
+Date: Tue, 10 Dec 2024 17:07:04 +0100
+Subject: [PATCH] ARM: dts: st: add missing IRQ line for IWDG2 for MP13
+
+As IRQ line misses, IWDG2 fails to probe om MP13.
+
+Change-Id: Ib83ecd687984e6d5d37f0e88a709e1718428baf5
+Signed-off-by: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/425585
+Tested-by: Clement LE GOFFIC <clement.legoffic@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Clement LE GOFFIC <clement.legoffic@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp131.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
+index e555717c0048..2094a4553583 100644
+--- a/arch/arm/boot/dts/st/stm32mp131.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
+@@ -1134,6 +1134,7 @@ usbh_ehci: usb@5800d000 {
+ 		iwdg2: watchdog@5a002000 {
+ 			compatible = "st,stm32mp1-iwdg";
+ 			reg = <0x5a002000 0x400>;
++			interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
+ 			clock-names = "pclk", "lsi";
+ 			status = "disabled";
+-- 
+2.50.1
+

@@ -1,0 +1,60 @@
+From 060d3f5521ebf15c0a3ec9dfdf4a293d38726510 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Thu, 27 Feb 2025 08:20:38 +0100
+Subject: [PATCH] arm64: dts: enable LPO_32 clock to M2 connector on
+ stm32mp215f-dk
+
+Fill rtc node to handle LPO_32 clock on stm32mp215f-dk board
+
+Change-Id: I0a0a0bff3882a49f4f86cf53025ea9b307509ce3
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/446972
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi | 6 ++++++
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts     | 4 ++++
+ 2 files changed, 10 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi
+index b22a2c07977d..c83b31aec240 100644
+--- a/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi
+@@ -264,6 +264,12 @@ pins {
+ 		};
+ 	};
+ 
++	rtc_out1_pins_a: rtc-out1-pins-0 {
++		pins {
++			pinmux = <STM32_PINMUX('C', 13, ANALOG)>; /* RTC_OUT1 */
++		};
++	};
++
+ 	sdmmc1_b4_pins_a: sdmmc1-b4-0 {
+ 		pins1 {
+ 			pinmux = <STM32_PINMUX('E', 4, AF10)>, /* SDMMC1_D0 */
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 82679bd55f82..39551beda69a 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -9,6 +9,7 @@
+ #include <dt-bindings/gpio/gpio.h>
+ #include <dt-bindings/leds/common.h>
+ #include <dt-bindings/input/input.h>
++#include <dt-bindings/rtc/rtc-stm32.h>
+ #include "stm32mp215.dtsi"
+ #include "stm32mp21xf.dtsi"
+ #include "stm32mp21-pinctrl.dtsi"
+@@ -506,6 +507,9 @@ mdf_endpoint1: endpoint {
+ };
+ 
+ &rtc {
++	st,lsco = <RTC_OUT1>;
++	pinctrl-0 = <&rtc_out1_pins_a>;
++	pinctrl-names = "default";
+ 	status = "okay";
+ };
+ 
+-- 
+2.50.1
+

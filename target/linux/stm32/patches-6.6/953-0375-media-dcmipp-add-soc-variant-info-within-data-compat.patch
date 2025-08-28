@@ -1,0 +1,241 @@
+From 8c105c200192f6f5a88b479ab766666f26ffdd1d Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Mon, 24 Mar 2025 14:29:30 +0100
+Subject: [PATCH] media: dcmipp: add soc variant info within data compatible
+ struct
+
+In order to avoid checking for compatible type in various place of
+the driver, add features within the compatible data structure.
+For that purpose, move the structude definition within the
+dcmipp-common.h header and within dcmipp-core / dcmipp-input, check
+for related feature information in order to adapt driver behavior.
+
+Change-Id: Ib5903139c3af28275cbccb2d1e4ce8b43d393595
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/446238
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ .../st/stm32/stm32-dcmipp/dcmipp-common.h     | 31 ++++++++++
+ .../st/stm32/stm32-dcmipp/dcmipp-core.c       | 58 ++++++-------------
+ .../st/stm32/stm32-dcmipp/dcmipp-input.c      | 17 +-----
+ 3 files changed, 51 insertions(+), 55 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
+index d02fa90fe69b..e09c7271e328 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
+@@ -97,6 +97,37 @@ struct dcmipp_device {
+ 	struct stm32_firewall		firewall;
+ };
+ 
++/* Structure which describes individual configuration for each entity */
++struct dcmipp_ent_config {
++	const char *name;
++	struct dcmipp_ent_device *(*init)
++		(const char *entity_name,
++		 struct dcmipp_device *dcmipp);
++	void (*release)(struct dcmipp_ent_device *ved);
++};
++
++/* Structure which describes links between entities */
++struct dcmipp_ent_link {
++	unsigned int src_ent;
++	u16 src_pad;
++	unsigned int sink_ent;
++	u16 sink_pad;
++	u32 flags;
++};
++
++/* Structure which describes the whole topology */
++struct dcmipp_pipeline_config {
++	const struct dcmipp_ent_config *ents;
++	size_t num_ents;
++	const struct dcmipp_ent_link *links;
++	size_t num_links;
++	u32 hw_revision;
++	bool has_csi2;
++	bool has_tpg;
++	bool needs_mclk;
++	unsigned int pipe_nb;
++};
++
+ /**
+  * struct dcmipp_ent_device - core struct that represents a node in the topology
+  *
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
+index 7c7cc6f60b88..aecf7e5feb15 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
+@@ -42,33 +42,6 @@ notifier_to_dcmipp(struct v4l2_async_notifier *n)
+ 	return container_of(n, struct dcmipp_device, notifier);
+ }
+ 
+-/* Structure which describes individual configuration for each entity */
+-struct dcmipp_ent_config {
+-	const char *name;
+-	struct dcmipp_ent_device *(*init)
+-		(const char *entity_name,
+-		 struct dcmipp_device *dcmipp);
+-	void (*release)(struct dcmipp_ent_device *ved);
+-};
+-
+-/* Structure which describes links between entities */
+-struct dcmipp_ent_link {
+-	unsigned int src_ent;
+-	u16 src_pad;
+-	unsigned int sink_ent;
+-	u16 sink_pad;
+-	u32 flags;
+-};
+-
+-/* Structure which describes the whole topology */
+-struct dcmipp_pipeline_config {
+-	const struct dcmipp_ent_config *ents;
+-	size_t num_ents;
+-	const struct dcmipp_ent_link *links;
+-	size_t num_links;
+-	u32 hw_revision;
+-};
+-
+ /* --------------------------------------------------------------------------
+  * Topology Configuration
+  */
+@@ -108,7 +81,8 @@ static const struct dcmipp_pipeline_config stm32mp13_pipe_cfg = {
+ 	.num_ents	= ARRAY_SIZE(stm32mp13_ent_config),
+ 	.links		= stm32mp13_ent_links,
+ 	.num_links	= ARRAY_SIZE(stm32mp13_ent_links),
+-	.hw_revision	= DCMIPP_STM32MP13_VERR
++	.hw_revision	= DCMIPP_STM32MP13_VERR,
++	.pipe_nb	= 1
+ };
+ 
+ #define	ID_MAIN_ISP 3
+@@ -203,7 +177,11 @@ static const struct dcmipp_pipeline_config stm32mp25_pipe_cfg = {
+ 	.num_ents	= ARRAY_SIZE(stm32mp25_ent_config),
+ 	.links		= stm32mp25_ent_links,
+ 	.num_links	= ARRAY_SIZE(stm32mp25_ent_links),
+-	.hw_revision	= DCMIPP_STM32MP25_VERR
++	.hw_revision	= DCMIPP_STM32MP25_VERR,
++	.has_csi2	= true,
++	.has_tpg	= true,
++	.needs_mclk	= true,
++	.pipe_nb	= 3
+ };
+ 
+ #define LINK_FLAG_TO_STR(f) ((f) == 0 ? "" :\
+@@ -338,7 +316,7 @@ static int dcmipp_graph_notify_bound(struct v4l2_async_notifier *notifier,
+ 				     struct v4l2_async_connection *asd)
+ {
+ 	struct dcmipp_device *dcmipp = notifier_to_dcmipp(notifier);
+-	unsigned int ret;
++	unsigned int ret = -EINVAL;
+ 	int src_pad, i;
+ 	struct dcmipp_ent_device *sink;
+ 	struct v4l2_fwnode_endpoint vep = { 0 };
+@@ -346,16 +324,10 @@ static int dcmipp_graph_notify_bound(struct v4l2_async_notifier *notifier,
+ 	enum v4l2_mbus_type supported_types[] = {
+ 		V4L2_MBUS_PARALLEL, V4L2_MBUS_BT656, V4L2_MBUS_CSI2_DPHY
+ 	};
+-	int supported_types_nb = ARRAY_SIZE(supported_types);
+ 	u32 media_flags = 0;
+ 
+ 	dev_dbg(dcmipp->dev, "Subdev \"%s\" bound\n", subdev->name);
+ 
+-	/* Only MP25 supports CSI input */
+-	if (!of_device_is_compatible(dcmipp->dev->of_node,
+-				     "st,stm32mp25-dcmipp"))
+-		supported_types_nb--;
+-
+ 	/*
+ 	 * Link this sub-device to DCMIPP, it could be
+ 	 * a parallel camera sensor or a CSI-2 to parallel bridge
+@@ -373,7 +345,12 @@ static int dcmipp_graph_notify_bound(struct v4l2_async_notifier *notifier,
+ 	}
+ 
+ 	/* Check for supported MBUS type */
+-	for (i = 0; i < supported_types_nb; i++) {
++	for (i = 0; i < ARRAY_SIZE(supported_types); i++) {
++		/* Skip unsupported types */
++		if (supported_types[i] == V4L2_MBUS_CSI2_DPHY &&
++		    !dcmipp->pipe_cfg->has_csi2)
++			continue;
++
+ 		vep.bus_type = supported_types[i];
+ 		ret = v4l2_fwnode_endpoint_parse(ep, &vep);
+ 		if (!ret)
+@@ -411,11 +388,10 @@ static int dcmipp_graph_notify_bound(struct v4l2_async_notifier *notifier,
+ 	sink->bus_type = vep.bus_type;
+ 
+ 	/*
+-	 * STM32MP25 has a TPG input hence link between dcmipp_input and
++	 * If a TPG is available, link between dcmipp_input and
+ 	 * bridge or sensor should not be IMMUTABLE
+ 	 */
+-	if (!of_device_is_compatible(dcmipp->dev->of_node,
+-				     "st,stm32mp25-dcmipp"))
++	if (!dcmipp->pipe_cfg->has_tpg)
+ 		media_flags = MEDIA_LNK_FL_IMMUTABLE;
+ 
+ 	ret = media_create_pad_link(&subdev->entity, src_pad, sink->ent, 0,
+@@ -583,7 +559,7 @@ static int dcmipp_probe(struct platform_device *pdev)
+ 				     "Unable to get kclk\n");
+ 	dcmipp->kclk = kclk;
+ 
+-	if (!of_device_is_compatible(pdev->dev.of_node, "st,stm32mp13-dcmipp")) {
++	if (dcmipp->pipe_cfg->needs_mclk) {
+ 		mclk = devm_clk_get(&pdev->dev, "mclk");
+ 		if (IS_ERR(mclk))
+ 			return dev_err_probe(&pdev->dev, PTR_ERR(mclk),
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
+index e221eeee9b77..f5d112982585 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
+@@ -462,14 +462,9 @@ static int dcmipp_inp_configure_csi_dt(struct dcmipp_inp_device *inp,
+ 
+ static int dcmipp_inp_configure_csi(struct dcmipp_inp_device *inp)
+ {
+-	int i, pipe_nb, ret;
++	int i, ret;
+ 
+-	if (of_device_is_compatible(inp->dev->of_node, "st,stm32mp25-dcmipp"))
+-		pipe_nb = 3;
+-	else
+-		pipe_nb = 1;
+-
+-	for (i = 0; i < pipe_nb; i++) {
++	for (i = 0; i < inp->ved.dcmipp->pipe_cfg->pipe_nb; i++) {
+ 		ret = dcmipp_inp_configure_csi_dt(inp, i);
+ 		if (ret)
+ 			return ret;
+@@ -587,8 +582,6 @@ void dcmipp_inp_ent_release(struct dcmipp_ent_device *ved)
+ 	mutex_destroy(&inp->lock);
+ }
+ 
+-#define DCMIPP_INP_SINK_PAD_NB_MP13	1
+-#define DCMIPP_INP_SINK_PAD_NB_MP25	3
+ struct dcmipp_ent_device *dcmipp_inp_ent_init(const char *entity_name,
+ 					      struct dcmipp_device *dcmipp)
+ {
+@@ -598,13 +591,9 @@ struct dcmipp_ent_device *dcmipp_inp_ent_init(const char *entity_name,
+ 		MEDIA_PAD_FL_SOURCE, MEDIA_PAD_FL_SOURCE,
+ 	};
+ 	struct device *dev = dcmipp->dev;
+-	u16 pads_nb = DCMIPP_INP_SINK_PAD_NB_MP25 + 1;
++	u16 pads_nb = dcmipp->pipe_cfg->pipe_nb + 1;
+ 	int ret;
+ 
+-	if (of_device_is_compatible(dev->of_node, "st,stm32mp13-dcmipp"))
+-		pads_nb = DCMIPP_INP_SINK_PAD_NB_MP13 + 1;
+-	else if (of_device_is_compatible(dev->of_node, "st,stm32mp25-dcmipp"))
+-		pads_nb = DCMIPP_INP_SINK_PAD_NB_MP25 + 1;
+ 
+ 	/* Allocate the inp struct */
+ 	inp = kzalloc(sizeof(*inp), GFP_KERNEL);
+-- 
+2.50.1
+

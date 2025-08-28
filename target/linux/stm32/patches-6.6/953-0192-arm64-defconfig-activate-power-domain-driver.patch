@@ -1,0 +1,31 @@
+From 078603635461e61531c9f06dc52b2dea7e880609 Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Date: Mon, 3 Feb 2025 17:37:07 +0100
+Subject: [PATCH] arm64: defconfig: activate power domain driver
+
+Activate the power domain driver as built-in driver.
+
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Change-Id: I1b442d12fdaa9694f24fada5e47ca69724706bdd
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/434115
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/configs/fragment-02-defconfig-addons.config | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/configs/fragment-02-defconfig-addons.config b/arch/arm64/configs/fragment-02-defconfig-addons.config
+index f4809c68ce7b..5bb092a86b03 100644
+--- a/arch/arm64/configs/fragment-02-defconfig-addons.config
++++ b/arch/arm64/configs/fragment-02-defconfig-addons.config
+@@ -96,6 +96,7 @@ CONFIG_SND_SOC_WM8994=m
+ CONFIG_SND_USB_AUDIO=m
+ CONFIG_SPI_STM32=m
+ CONFIG_SPI_STM32_OSPI=y
++CONFIG_STM32MP_PM_DOMAIN=y
+ CONFIG_STM32_ADC=m
+ CONFIG_STM32_ADC_CORE=m
+ CONFIG_STM32_DMA3=y
+-- 
+2.50.1
+

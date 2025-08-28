@@ -1,0 +1,118 @@
+From e9813d379cc95cc55d81ca283cd43df34a5cfa09 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Mon, 21 Oct 2024 17:22:33 +0200
+Subject: [PATCH] usb: dwc2: fix suspend in peripheral mode when gadget isn't
+ configured
+
+When in peripheral mode, the low level HW may have been left disabled
+from the probe, e.g.:
+	/* Gadget code manages lowlevel hw on its own */
+	if (hsotg->dr_mode == USB_DR_MODE_PERIPHERAL)
+		dwc2_lowlevel_hw_disable(hsotg);
+
+It can be the case when no gadget configuration has been applied.
+It could happen if the gadget has been removed before suspending.
+
+When going to suspend, register access in dwc2_is_device_mode(dwc2) will
+trigger an exception:
+[   47.996629] Internal error: synchronous external abort:
+               0000000096000210 [#1] PREEMPT SMP
+....
+[   48.154706]  dwc2_suspend+0x2c/0x2c8
+[   48.158337]  platform_pm_suspend+0x34/0x80
+[   48.162368]  dpm_run_callback+0x50/0x1b0
+[   48.166303]  __device_suspend+0xf4/0x488
+[   48.170237]  dpm_suspend+0x160/0x308
+[   48.173870]  dpm_suspend_start+0x88/0xb0
+[   48.177804]  suspend_devices_and_enter+0x1e8/0x8b0
+[   48.182645]  pm_suspend+0x304/0x5a8
+
+It is due to all clocks being disabled. In such case, to properly handle
+the suspend request, temporarily re-enable the HW. Similar needs to
+be done at resume time as well.
+
+Fixes: c846b03ff767 ("USB: dwc2: Don't turn off the usbphy in suspend if wakeup is enabled")
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I3d6b0fb45609edb0fc6e4e8009258be672b910ac
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/412960
+Tested-by: Patrice GUILEMOND <patrice.guilemond-ext@st.com>
+Reviewed-by: Patrice GUILEMOND <patrice.guilemond-ext@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/usb/dwc2/platform.c | 31 ++++++++++++++++++++++++++++++-
+ 1 file changed, 30 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index c67faabbf8af..58503ad84a9d 100644
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -695,9 +695,23 @@ static int dwc2_driver_probe(struct platform_device *dev)
+ static int __maybe_unused dwc2_suspend(struct device *dev)
+ {
+ 	struct dwc2_hsotg *dwc2 = dev_get_drvdata(dev);
+-	bool is_device_mode = dwc2_is_device_mode(dwc2);
++	bool is_device_mode;
++	bool ll_hw_enabled = dwc2->ll_hw_enabled;
+ 	int ret = 0;
+ 
++	/*
++	 * The low level HW may have been left disabled from the probe,
++	 * or disabled later on (e.g. gadget driver removed. Need to re-enable
++	 * temporarily, to properly manage the suspend.
++	 */
++	if (!ll_hw_enabled) {
++		ret = __dwc2_lowlevel_hw_enable(dwc2);
++		if (ret)
++			return ret;
++	}
++
++	is_device_mode = dwc2_is_device_mode(dwc2);
++
+ 	if (is_device_mode) {
+ 		/*
+ 		 * Handle the case when bus has been suspended prior to platform suspend.
+@@ -745,6 +759,10 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+ 		regulator_disable(dwc2->usb33d);
+ 	}
+ 
++	/* balance temporarily re-enabled HW */
++	if (!ll_hw_enabled)
++		ret = __dwc2_lowlevel_hw_disable(dwc2);
++
+ 	if (dwc2->ll_hw_enabled &&
+ 	    (is_device_mode || dwc2_host_can_poweroff_phy(dwc2))) {
+ 		ret = __dwc2_lowlevel_hw_disable(dwc2);
+@@ -760,11 +778,18 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+ static int __maybe_unused dwc2_resume(struct device *dev)
+ {
+ 	struct dwc2_hsotg *dwc2 = dev_get_drvdata(dev);
++	bool ll_hw_enabled = dwc2->ll_hw_enabled;
+ 	int ret = 0;
+ 
+ 	if (device_may_wakeup(dev) || device_wakeup_path(dev))
+ 		disable_irq_wake(dwc2->irq);
+ 
++	if (!ll_hw_enabled) {
++		ret = __dwc2_lowlevel_hw_enable(dwc2);
++		if (ret)
++			return ret;
++	}
++
+ 	if (dev->dma_range_map && dwc2->params.activate_stm32_otgarcr_en) {
+ 		regmap_set_bits(dwc2->params.stm32_regmap,
+ 				dwc2->params.stm32_syscfg_otgarcr_reg_off,
+@@ -826,6 +851,10 @@ static int __maybe_unused dwc2_resume(struct device *dev)
+ 	if (dwc2_is_device_mode(dwc2))
+ 		ret = dwc2_hsotg_resume(dwc2);
+ 
++	/* balance temporarily re-enabled HW */
++	if (!ll_hw_enabled)
++		ret = __dwc2_lowlevel_hw_disable(dwc2);
++
+ 	return ret;
+ }
+ 
+-- 
+2.50.1
+

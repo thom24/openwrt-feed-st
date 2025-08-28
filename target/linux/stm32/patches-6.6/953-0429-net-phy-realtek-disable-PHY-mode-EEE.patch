@@ -1,0 +1,61 @@
+From 07963aca871a6d0e39ff2d6287130ed0018e2e9e Mon Sep 17 00:00:00 2001
+From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Date: Sun, 16 Mar 2025 12:39:54 +0000
+Subject: [PATCH] net: phy: realtek: disable PHY-mode EEE
+
+Realtek RTL8211F has a "PHY-mode" EEE support which interferes with an
+IEEE 802.3 compliant implementation. This mode defaults to enabled, and
+results in the MAC receive path not seeing the link transition to LPI
+state.
+
+Fix this by disabling PHY-mode EEE.
+
+(cherry picked from commit bfc17c1658353f22843c7c13e27c2d31950f1887)
+
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Link: https://patch.msgid.link/E1ttnHW-00785s-Uq@rmk-PC.armlinux.org.uk
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I9e7427e8b203685e072a6e255ff99dce27af1395
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/454989
+Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+Domain-Review: Christophe ROULLIER <christophe.roullier@foss.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Tested-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+---
+ drivers/net/phy/realtek.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/net/phy/realtek.c b/drivers/net/phy/realtek.c
+index 8a7820c6df58..5e58d0f48111 100644
+--- a/drivers/net/phy/realtek.c
++++ b/drivers/net/phy/realtek.c
+@@ -30,6 +30,9 @@
+ 
+ #define RTL8211F_PHYCR1				0x18
+ #define RTL8211F_PHYCR2				0x19
++#define RTL8211F_CLKOUT_EN			BIT(0)
++#define RTL8211F_PHYCR2_PHY_EEE_ENABLE		BIT(5)
++
+ #define RTL8211F_INSR				0x1d
+ 
+ #define RTL8211F_TX_DELAY			BIT(8)
+@@ -430,6 +433,12 @@ static int rtl8211f_config_init(struct phy_device *phydev)
+ 		phy_unlock_mdio_bus(phydev);
+ 	}
+ 
++	/* Disable PHY-mode EEE so LPI is passed to the MAC */
++	ret = phy_modify_paged(phydev, 0xa43, RTL8211F_PHYCR2,
++			       RTL8211F_PHYCR2_PHY_EEE_ENABLE, 0);
++	if (ret)
++		return ret;
++
+ 	if (priv->has_phycr2) {
+ 		ret = phy_modify_paged(phydev, 0xa43, RTL8211F_PHYCR2,
+ 				       RTL8211F_CLKOUT_EN, priv->phycr2);
+-- 
+2.50.1
+

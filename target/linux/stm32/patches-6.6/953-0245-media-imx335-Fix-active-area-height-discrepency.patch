@@ -1,0 +1,65 @@
+From 32a9c8771177b24fd8bd4c5e96c23b3353d083ea Mon Sep 17 00:00:00 2001
+From: Umang Jain <umang.jain@ideasonboard.com>
+Date: Sun, 14 Apr 2024 19:36:20 +0530
+Subject: [PATCH] media: imx335: Fix active area height discrepency
+
+The imx335 reports a recommended pixel area of - 2592x1944.
+The driver supported mode however limits it to height=1940.
+
+Fix the height discrepency by correctly the value of height
+(with updates to vblank and mode registers).
+
+The IMX335_REG_HTRIMMING should also be corrected to the start
+offset(i.e. 48) instead of chosing a abritrary crop start of 384.
+
+Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+(cherry picked from commit 81495a59baebab3fd8fd859a60dac7bf82d2b290)
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+
+Change-Id: I3500b8cb416ee8b6151d35b23818e8540d652c4d
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/429207
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ drivers/media/i2c/imx335.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
+index cb87993415a7..deabfed87071 100644
+--- a/drivers/media/i2c/imx335.c
++++ b/drivers/media/i2c/imx335.c
+@@ -257,9 +257,9 @@ static const struct cci_reg_sequence mode_2592x1940_regs[] = {
+ 	{ IMX335_REG_MODE_SELECT, IMX335_MODE_STANDBY },
+ 	{ IMX335_REG_MASTER_MODE, 0x00 },
+ 	{ IMX335_REG_WINMODE, 0x04 },
+-	{ IMX335_REG_HTRIMMING_START, 384 },
++	{ IMX335_REG_HTRIMMING_START, 48 },
+ 	{ IMX335_REG_HNUM, 2592 },
+-	{ IMX335_REG_Y_OUT_SIZE, 1940 },
++	{ IMX335_REG_Y_OUT_SIZE, 1944 },
+ 	{ IMX335_REG_AREA3_ST_ADR_1, 176 },
+ 	{ IMX335_REG_AREA3_WIDTH_1, 3928 },
+ 	{ IMX335_REG_OPB_SIZE_V, 0 },
+@@ -410,10 +410,10 @@ static const u32 imx335_mbus_codes[] = {
+ /* Supported sensor mode configurations */
+ static const struct imx335_mode supported_mode = {
+ 	.width = 2592,
+-	.height = 1940,
++	.height = 1944,
+ 	.hblank = 342,
+-	.vblank = 2560,
+-	.vblank_min = 2560,
++	.vblank = 2556,
++	.vblank_min = 2556,
+ 	.vblank_max = 133060,
+ 	.pclk = 396000000,
+ 	.reg_list = {
+-- 
+2.50.1
+

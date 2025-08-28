@@ -1,0 +1,48 @@
+From 13df1b1879d3594028d5a8ffc62d45bf43fc0180 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Mon, 21 Oct 2024 14:17:03 +0200
+Subject: [PATCH] arm64: dts: st: fix usbh support on stm32mp21
+
+The USBH composed of EHCI and OHCI controllers needs the PHY clock to be
+initialized first, before enabling (gating) them. The reverse is also
+required when going to suspend.
+So, add USBPHY clock as 1st entry in both controllers, so the USBPHY PLL
+gets enabled 1st upon controller init. Upon suspend/resume, this also makes
+the clock to be disabled/re-enabled in the correct order.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I362e79304a08955eba2688bb02a7af84d92bf319
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/412809
+Reviewed-by: Ram DAYAL <ram.dayal@st.com>
+Domain-Review: Ram DAYAL <ram.dayal@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index e842b2eaf3dc..5632f620b54a 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -1780,7 +1780,7 @@ usbh: usb@482e0000 {
+ 				usbh_ohci: usb@482e0000 {
+ 					compatible = "generic-ohci";
+ 					reg = <0x482e0000 0x1000>;
+-					clocks = <&rcc CK_BUS_USBHOHCI>;
++					clocks = <&usb2_phy1>, <&rcc CK_BUS_USBHOHCI>;
+ 					resets = <&rcc USBH_R>;
+ 					interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_HIGH>;
+ 					phys = <&usb2_phy1>;
+@@ -1790,7 +1790,7 @@ usbh_ohci: usb@482e0000 {
+ 				usbh_ehci: usb@482f0000 {
+ 					compatible = "generic-ehci";
+ 					reg = <0x482f0000 0x1000>;
+-					clocks = <&rcc CK_BUS_USBHEHCI>;
++					clocks = <&usb2_phy1>, <&rcc CK_BUS_USBHEHCI>;
+ 					resets = <&rcc USBH_R>;
+ 					interrupts = <GIC_SPI 126 IRQ_TYPE_LEVEL_HIGH>;
+ 					companion = <&usbh_ohci>;
+-- 
+2.50.1
+

@@ -1,0 +1,37 @@
+From 9bdc9c3faa169d8762ab4530ec2b84b22fb8b8df Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Tue, 27 Aug 2024 12:58:37 +0200
+Subject: [PATCH] ARM: decompressor: Use Domain Manager Access permissions
+
+EL1 exec access with read/write permissions result in a Permission Fault if
+SCTLR.WXN or SCTLR.UWXN is set by TF-A Secure Monitor setup_el1_context.
+Since XN attribute is not checked for domains marked as Manager, change
+the domain used for kernel relocation.
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: Ie93923c357a9fb8c87c4149e9c9c07faf96491c6
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/401436
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+---
+ arch/arm/boot/compressed/head.S | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/compressed/head.S b/arch/arm/boot/compressed/head.S
+index 9f406e9c0ea6..029d67ea41ee 100644
+--- a/arch/arm/boot/compressed/head.S
++++ b/arch/arm/boot/compressed/head.S
+@@ -888,7 +888,7 @@ __armv7_mmu_cache_on:
+  ARM_BE8(	orr	r0, r0, #1 << 25 )	@ big-endian page tables
+ 		mrcne   p15, 0, r6, c2, c0, 2   @ read ttb control reg
+ 		orrne	r0, r0, #1		@ MMU enabled
+-		movne	r1, #0xfffffffd		@ domain 0 = client
++		movne	r1, #0xffffffff		@ domain 0 = manager
+ 		bic     r6, r6, #1 << 31        @ 32-bit translation system
+ 		bic     r6, r6, #(7 << 0) | (1 << 4)	@ use only ttbr0
+ 		mcrne	p15, 0, r3, c2, c0, 0	@ load page table pointer
+-- 
+2.50.1
+

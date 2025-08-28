@@ -1,0 +1,46 @@
+From 03569cc51046c033916ab6f785df8c1fadadc52a Mon Sep 17 00:00:00 2001
+From: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
+Date: Tue, 26 Nov 2024 17:21:54 +0100
+Subject: [PATCH] mfd: stm32-lptimer: use raw_spinlock
+
+In CONFIG_PREEMPT_RT and by enabling Prove Locking Flags,
+errors are shown as:
+[ 20.723562] rt_spin_lock+0x54/0x114
+[ 20.723575] regmap_lock_spinlock+0x18/0x2c
+[ 20.723589] regmap_write+0x3c/0x78
+[ 20.723598] stm32_clkevent_lp_shutdown+0x24/0x58
+
+It's caused by LPTIMER clkevent driver (used by default on MP25 boards),
+that registers the interrupt with IRQF_TIMER flag. As consequence, the
+interrupt can't be run from thread context, but uses HW interrupt context
+handler, when sleeping isn't possible (RT spin_lock may sleep).
+For this case, there's no choice but to use raw_spinlock.
+Choice is done no to change current behavior when CONFIG_PREEMPT_RT is
+unused.
+
+Change-Id: Id3632785a777b71e1bf58da451e15d29fd433bba
+Signed-off-by: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/445403
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+---
+ drivers/mfd/stm32-lptimer.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/mfd/stm32-lptimer.c b/drivers/mfd/stm32-lptimer.c
+index abb64b7f6339..78eb237a9092 100644
+--- a/drivers/mfd/stm32-lptimer.c
++++ b/drivers/mfd/stm32-lptimer.c
+@@ -21,6 +21,7 @@ static const struct regmap_config stm32_lptimer_regmap_cfg = {
+ 	.reg_stride = sizeof(u32),
+ 	.max_register = STM32_LPTIM_MAX_REGISTER,
+ 	.fast_io = true,
++	.use_raw_spinlock = IS_ENABLED(CONFIG_PREEMPT_RT) ? true : false,
+ };
+ 
+ static int stm32_lptimer_detect_encoder(struct stm32_lptimer *ddata)
+-- 
+2.50.1
+

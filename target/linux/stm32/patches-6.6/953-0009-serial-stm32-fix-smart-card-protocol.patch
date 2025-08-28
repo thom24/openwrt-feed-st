@@ -1,0 +1,36 @@
+From fdddb3e8b596aae911c702080c6b54917d16101d Mon Sep 17 00:00:00 2001
+From: Valentin Caron <valentin.caron@foss.st.com>
+Date: Tue, 22 Oct 2024 10:09:08 +0200
+Subject: [PATCH] serial: stm32: fix smart-card protocol
+
+LTS merge has introduce a modification of stm32_usart_interrupt function.
+Update this patch to take care of IRQ_HANDLED return.
+
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: I7da2683e5de32d2f2fc2599762556ec846017139
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/413029
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Cheick TRAORE <cheick.traore@foss.st.com>
+Domain-Review: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/tty/serial/stm32-usart.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index 89c36ddea304..709d756d3c28 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -1087,6 +1087,8 @@ static irqreturn_t stm32_usart_interrupt(int irq, void *ptr)
+ 		}
+ 		/* Discard rx which contains tx echo */
+ 		stm32_usart_set_bits(port, ofs->rqr, USART_RQR_RXFRQ);
++
++		ret = IRQ_HANDLED;
+ 	} else {
+ 		/*
+ 		 * rx errors in dma mode has to be handled ASAP to avoid overrun as the DMA request
+-- 
+2.50.1
+

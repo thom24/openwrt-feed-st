@@ -1,0 +1,42 @@
+From c7efc378195df72434e232964f7f625ab4ac9c00 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Mon, 21 Oct 2024 14:24:17 +0200
+Subject: [PATCH] arm64: dts: st: fix otg support on stm32mp21
+
+There are some constraints to enable first the PLL, before the clock can
+be gated, routed to OTG controller. In DWC2 driver, the clk gets enabled
+with clk_prepare_enable() before phy_init()/phy_power_on() gets called.
+Currently, the PLL gets enabled, when phy_init() get called (after
+clk_prepare_enable() call).
+In order to enforce correct order when enabling clocks (e.g. enable the
+PLL before clock gate is enabled), add usb2_phy2 clock provider.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ief0684c4bfb424fc326bc70989bf085458ac12f2
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/412810
+Reviewed-by: Ram DAYAL <ram.dayal@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Ram DAYAL <ram.dayal@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 5632f620b54a..069ca497cef9 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -1802,8 +1802,8 @@ usbh_ehci: usb@482f0000 {
+ 			usbotg_hs: usb@48300000 {
+ 				compatible = "st,stm32mp21-hsotg", "snps,dwc2";
+ 				reg = <0x48300000 0x0 0x10000>;
+-				clocks = <&rcc CK_BUS_OTG>;
+-				clock-names = "otg";
++				clocks = <&rcc CK_BUS_OTG>, <&usb2_phy2>;
++				clock-names = "otg", "utmi";
+ 				resets = <&rcc OTG_R>;
+ 				reset-names = "dwc2";
+ 				interrupts = <GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH>;
+-- 
+2.50.1
+

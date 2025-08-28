@@ -1,0 +1,40 @@
+From f06cc817ba60bbe64864dc15addaa1fa7a7bd76b Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Wed, 26 Mar 2025 11:45:15 +0100
+Subject: [PATCH] mmc: core: sdio: fix S18A broken devices
+
+BCM4373 device is returning S18A to 1 even if we are at 1,8V. Based on
+SDIO specification, it should be 0. The framework is then trying to switch
+the voltage when it should not. To avoid such issue, the proposal is to
+switch the voltage if S18A is set to 1 and the voltage set to 3,3V.
+
+Change-Id: I800592802cc11888aa26cbdf1d8cee2b17ddc4b1
+Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/446913
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Christophe KERELLO <christophe.kerello@st.com>
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+---
+ drivers/mmc/core/sdio.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/mmc/core/sdio.c b/drivers/mmc/core/sdio.c
+index cb87e8273779..ea4dee396347 100644
+--- a/drivers/mmc/core/sdio.c
++++ b/drivers/mmc/core/sdio.c
+@@ -739,7 +739,8 @@ static int mmc_sdio_init_card(struct mmc_host *host, u32 ocr,
+ 	 * try to init uhs card. sdio_read_cccr will take over this task
+ 	 * to make sure which speed mode should work.
+ 	 */
+-	if (rocr & ocr & R4_18V_PRESENT) {
++	if ((rocr & ocr & R4_18V_PRESENT) &&
++	    host->ios.signal_voltage == MMC_SIGNAL_VOLTAGE_330) {
+ 		err = mmc_set_uhs_voltage(host, ocr_card);
+ 		if (err == -EAGAIN) {
+ 			mmc_sdio_pre_init(host, ocr_card, card);
+-- 
+2.50.1
+

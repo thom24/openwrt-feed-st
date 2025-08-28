@@ -1,0 +1,49 @@
+From fd60930fa1222d8a5b5326ea4c407af6a1b1994f Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Thu, 2 Jan 2025 14:02:40 +0100
+Subject: [PATCH] clk: stm32mp21: Fix i2c3/i3c3 clock source
+
+i2c3 and i2c3 use ck_icn_apb5 as bus clock.
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: Ide80e71d0a5edb3709b7fd2f7a49e0005ac76ac6
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/426742
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
+---
+ drivers/clk/stm32/clk-stm32mp21.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/clk/stm32/clk-stm32mp21.c b/drivers/clk/stm32/clk-stm32mp21.c
+index f672ce2eb8d0..4d15ac6e792b 100644
+--- a/drivers/clk/stm32/clk-stm32mp21.c
++++ b/drivers/clk/stm32/clk-stm32mp21.c
+@@ -802,7 +802,7 @@ static struct clk_stm32_gate ck_icn_p_i3c2 = {
+ 
+ static struct clk_stm32_gate ck_icn_p_i3c3 = {
+ 	.gate_id = GATE_I3C3,
+-	.hw.init = CLK_HW_INIT_INDEX("ck_icn_p_i3c3", ICN_APB1, &clk_stm32_gate_ops, 0),
++	.hw.init = CLK_HW_INIT_INDEX("ck_icn_p_i3c3", ICN_APB5, &clk_stm32_gate_ops, 0),
+ };
+ 
+ static struct clk_stm32_gate ck_ker_i3c1 = {
+@@ -2284,10 +2284,10 @@ CS_GATE(ck_icn_p_uart4, ck_icn_apb1, GATE_UART4);
+ CS_GATE(ck_icn_p_uart5, ck_icn_apb1, GATE_UART5);
+ CS_GATE(ck_icn_p_i2c1, ck_icn_apb1, GATE_I2C1);
+ CS_GATE(ck_icn_p_i2c2, ck_icn_apb1, GATE_I2C2);
+-CS_GATE(ck_icn_p_i2c3, ck_icn_apb1, GATE_I2C3);
++CS_GATE(ck_icn_p_i2c3, ck_icn_apb5, GATE_I2C3);
+ CS_GATE(ck_icn_p_i3c1, ck_icn_apb1, GATE_I3C1);
+ CS_GATE(ck_icn_p_i3c2, ck_icn_apb1, GATE_I3C2);
+-CS_GATE(ck_icn_p_i3c3, ck_icn_apb1, GATE_I3C3);
++CS_GATE(ck_icn_p_i3c3, ck_icn_apb5, GATE_I3C3);
+ CS_GATE(ck_icn_p_tim1, ck_icn_apb2, GATE_TIM1);
+ CS_GATE(ck_icn_p_tim8, ck_icn_apb2, GATE_TIM8);
+ CS_GATE(ck_icn_p_tim15, ck_icn_apb2, GATE_TIM15);
+-- 
+2.50.1
+

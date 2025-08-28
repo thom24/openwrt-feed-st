@@ -1,0 +1,45 @@
+From c12a2f96713d6104937bc424b2ece00f9653af47 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 15 Jan 2025 15:11:39 +0100
+Subject: [PATCH] usb: dwc2: hcd: only allow to turn off the PHY when in host
+ mode
+
+When in device mode, the hcd API shouldn't allow to turn off the PHY.
+It is handled in a similar manner in gadget driver.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: If48d476f014c7b4f2bb02156046a44b97c0d1f96
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/430477
+Reviewed-by: Pankaj DEV <pankaj.dev@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/usb/dwc2/hcd.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+index f5cf0acdd5af..30deffd7a1c0 100644
+--- a/drivers/usb/dwc2/hcd.c
++++ b/drivers/usb/dwc2/hcd.c
+@@ -5726,12 +5726,18 @@ int dwc2_host_exit_hibernation(struct dwc2_hsotg *hsotg, int rem_wakeup,
+ 
+ bool dwc2_host_can_poweroff_phy(struct dwc2_hsotg *dwc2)
+ {
+-	struct usb_device *root_hub = dwc2_hsotg_to_hcd(dwc2)->self.root_hub;
++	struct usb_device *root_hub;
++
++	/* host driver don't need the PHY, as in device mode */
++	if (dwc2_is_device_mode(dwc2) || dwc2->dr_mode == USB_DR_MODE_PERIPHERAL)
++		return false;
+ 
+ 	/* If the controller isn't allowed to wakeup then we can power off. */
+ 	if (!device_may_wakeup(dwc2->dev))
+ 		return true;
+ 
++	root_hub = dwc2_hsotg_to_hcd(dwc2)->self.root_hub;
++
+ 	/*
+ 	 * We don't want to power off the PHY if something under the
+ 	 * root hub has wakeup enabled.
+-- 
+2.50.1
+

@@ -1,0 +1,36 @@
+From b9dc6cb42a0e3c12f87d68c8cc4ed65036fde694 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Mon, 17 Mar 2025 11:58:52 +0100
+Subject: [PATCH] counter: stm32-lptimer-cnt: rely on fallback compatible on
+ stm32mp2
+
+Rework to follow changes done upstream on stm32mp25. Fallback compatible
+strings are used for now stm32mp21, stm32mp23 and stm32mp25. New
+compatibles can be used later on, to support new features.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I2a00a82ab8e04bd84a2456417d86cdd751d1c4f7
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/445396
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+---
+ drivers/counter/stm32-lptimer-cnt.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/counter/stm32-lptimer-cnt.c b/drivers/counter/stm32-lptimer-cnt.c
+index c68e9339b68c..5a50f1ac4390 100644
+--- a/drivers/counter/stm32-lptimer-cnt.c
++++ b/drivers/counter/stm32-lptimer-cnt.c
+@@ -537,8 +537,6 @@ static const struct dev_pm_ops stm32_lptim_cnt_pm_ops = {
+ 
+ static const struct of_device_id stm32_lptim_cnt_of_match[] = {
+ 	{ .compatible = "st,stm32-lptimer-counter", },
+-	{ .compatible = "st,stm32mp21-lptimer-counter", },
+-	{ .compatible = "st,stm32mp25-lptimer-counter", },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, stm32_lptim_cnt_of_match);
+-- 
+2.50.1
+

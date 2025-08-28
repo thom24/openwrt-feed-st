@@ -1,0 +1,35 @@
+From 5fdb919c557ec4ffe2e0aa2e72e6298078ff1dd3 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Fri, 31 Jan 2025 16:57:02 +0100
+Subject: [PATCH] arm64: dts: st: add 3v3 regulator to ethernet on
+ stm32mp215f-dk
+
+The Ethernet PHY is supplied by 3v3 PMIC regulator, add it to Ethernet
+node.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Idc9e0c05201427f24346f5eeab7a4ab788c5cf8b
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/433605
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+Domain-Review: Christophe ROULLIER <christophe.roullier@foss.st.com>
+Tested-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 6293103b4461..27e0448ac37a 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -256,6 +256,7 @@ &eth1 {
+ 	phy-mode = "rmii";
+ 	max-speed = <100>;
+ 	phy-handle = <&phy0_eth1>;
++	phy-supply = <&scmi_v3v3>;
+ 	st,ext-phyclk;
+ 
+ 	mdio1 {
+-- 
+2.50.1
+

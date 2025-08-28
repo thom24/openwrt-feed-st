@@ -1,0 +1,34 @@
+From 8a093f1ac3347e4b8d8286f6778f75988402d859 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Wed, 20 Nov 2024 09:09:32 +0100
+Subject: [PATCH] dt-bindings: interrupt-controller: arm,gic: Add
+ st,stm32mp25-cortex-a7-gic
+
+Add st,stm32mp25-cortex-a7-gic compatible to support remapping of GICC_DIR
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I2f31d00fa8d6ff85b63d549033a525ae7aebcf96
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/419697
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ .../devicetree/bindings/interrupt-controller/arm,gic.yaml        | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/arm,gic.yaml b/Documentation/devicetree/bindings/interrupt-controller/arm,gic.yaml
+index a2846e493497..6a5fa3a742d1 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/arm,gic.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/arm,gic.yaml
+@@ -37,6 +37,7 @@ properties:
+               - arm,tc11mp-gic
+               - qcom,msm-8660-qgic
+               - qcom,msm-qgic2
++              - st,stm32mp2-cortex-a7-gic
+ 
+       - items:
+           - const: arm,gic-400
+-- 
+2.50.1
+

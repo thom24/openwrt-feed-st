@@ -1,0 +1,61 @@
+From 7e191dae013d6e91577b8ed08bed06be69a198d2 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Wed, 5 Mar 2025 15:49:41 +0100
+Subject: [PATCH] media: stm32: dcmipp: move gamma control define into
+ stm32-dcmipp-config.h
+
+Move the V4L2 ctrl for gamma correct into the stm32-dcmipp-config.h header
+file so that application can rely on it instead of defining it locally.
+
+Change-Id: I968a652ea42b8c792b1b9a48934bb31860ffac71
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/441925
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ .../media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c    | 3 +--
+ include/uapi/linux/stm32-dcmipp-config.h                       | 3 +++
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
+index b2539450abaa..f9b3fba694b4 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
+@@ -17,6 +17,7 @@
+ #include <media/v4l2-subdev.h>
+ 
+ #include "dcmipp-common.h"
++#include "uapi/linux/stm32-dcmipp-config.h"
+ 
+ #define DCMIPP_P1FCTCR	0x900
+ #define DCMIPP_P2FCTCR	0xD00
+@@ -463,8 +464,6 @@ static const struct v4l2_rect crop_min = {
+ /*
+  * Functions handling controls
+  */
+-#define V4L2_CID_PIXELPROC_GAMMA_CORRECTION	(V4L2_CID_USER_BASE | 0x1001)
+-
+ static int dcmipp_pixelproc_s_ctrl(struct v4l2_ctrl *ctrl)
+ {
+ 	struct dcmipp_pixelproc_device *pixelproc =
+diff --git a/include/uapi/linux/stm32-dcmipp-config.h b/include/uapi/linux/stm32-dcmipp-config.h
+index 9b20f2988a3f..d4adee54064d 100644
+--- a/include/uapi/linux/stm32-dcmipp-config.h
++++ b/include/uapi/linux/stm32-dcmipp-config.h
+@@ -9,6 +9,9 @@
+ 
+ #include <linux/types.h>
+ 
++/* DCMIPP specific V4L2 control */
++#define V4L2_CID_PIXELPROC_GAMMA_CORRECTION	(V4L2_CID_USER_BASE | 0x1001)
++
+ /* Bad Pixel Removal */
+ #define STM32_DCMIPP_ISP_BPR		(1U << 0)
+ /* Black Level Correction */
+-- 
+2.50.1
+

@@ -1,0 +1,35 @@
+From cee743b9927fc4dee536c9fdd1d05c4157b39ca6 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Fri, 14 Mar 2025 16:28:38 +0100
+Subject: [PATCH] arm64: dts: add power-domain for dcmi in stm32mp211.dtsi
+
+Add the power-domain property within the dcmi node.
+
+Change-Id: I4c4100d49c49be0c45e703951e41cb7417a66191
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/444339
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index d0c8d34b0224..72a26e2069b4 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -1495,6 +1495,7 @@ dcmi: dcmi@404a0000 {
+ 				dmas = <&hpdma 105 0x60 0x3012>;
+ 				dma-names = "tx";
+ 				access-controllers = <&rifsc 88>;
++				power-domains = <&d1_pd>;
+ 				status = "disabled";
+ 			};
+ 
+-- 
+2.50.1
+

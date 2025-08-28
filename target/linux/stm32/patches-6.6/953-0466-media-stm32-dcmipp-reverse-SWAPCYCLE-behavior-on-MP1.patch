@@ -1,0 +1,57 @@
+From f01241fbba4d879fa770685629b49d42e904e43c Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Mon, 26 May 2025 15:41:41 +0200
+Subject: [PATCH] media: stm32: dcmipp: reverse SWAPCYCLE behavior on MP13
+
+The STM32MP13 dcmipp does not embed a SWAPYUV bit to exchange the
+Y and V component (compared to other dcmipp implementation) hence
+in case of parallel input the SWAPCYCLE behavior should also take
+care of this point to avoid getting swapped Y and U component when
+capturing from the DUMP pipe.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: Ia531b67ec2387208bb0381db4e1691242f7bb6a2
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/461924
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ .../st/stm32/stm32-dcmipp/dcmipp-input.c       | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
+index f5d112982585..9205936c2344 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
+@@ -394,8 +394,22 @@ static int dcmipp_inp_configure_parallel(struct dcmipp_inp_device *inp,
+ 	val |= vpix->prcr_format << DCMIPP_PRCR_FORMAT_SHIFT;
+ 
+ 	/* swap cycles */
+-	if (vpix->prcr_swapcycles)
+-		val |= DCMIPP_PRCR_SWAPCYCLES;
++	/*
++	 * PPCR SWAPYUV is not available on STM32MP13 so behavior regarding
++	 * to SWAPCYCLES should be reversed compared to other platforms for
++	 * YUV422 format
++	 */
++	if (of_device_is_compatible(inp->dev->of_node, "st,stm32mp13-dcmipp") &&
++	    (src_fmt->code == MEDIA_BUS_FMT_YUYV8_2X8 ||
++	     src_fmt->code == MEDIA_BUS_FMT_YVYU8_2X8 ||
++	     src_fmt->code == MEDIA_BUS_FMT_UYVY8_2X8 ||
++	     src_fmt->code == MEDIA_BUS_FMT_VYUY8_2X8)) {
++		if (!vpix->prcr_swapcycles)
++			val |= DCMIPP_PRCR_SWAPCYCLES;
++	} else {
++		if (vpix->prcr_swapcycles)
++			val |= DCMIPP_PRCR_SWAPCYCLES;
++	}
+ 
+ 	reg_write(inp, DCMIPP_PRCR, val);
+ 
+-- 
+2.50.1
+

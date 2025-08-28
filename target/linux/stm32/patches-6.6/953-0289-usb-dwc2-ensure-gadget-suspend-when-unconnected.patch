@@ -1,0 +1,61 @@
+From d24a90a5cdfcd9c72b68d05694d290c462b1f299 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 22 Jan 2025 11:14:50 +0100
+Subject: [PATCH] usb: dwc2: ensure gadget suspend when unconnected
+
+When unplugging the cable, dwc2 detects a bus suspend, hence later when
+requesting system-wide suspend, dwc2_hsotg_suspend() sees the bus into
+DWC2_L2 state and turns to be a no-op. It isn't properly suspended.
+So when device isn't connected, ensure to first exit one of the low
+power modes (clock gating, partial power down...) to ensure
+dwc2_hsotg_suspend() properly disconnects the gadget during system-wide
+suspend.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I3fe9aaa141c19d4456a628848e63e4058a04570b
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/432504
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/usb/dwc2/platform.c | 25 +++++++++++++++++++------
+ 1 file changed, 19 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index 91b54d2822bf..9505c5b32645 100644
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -913,13 +913,26 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+ 	if (is_device_mode) {
+ 		/*
+ 		 * Handle the case when bus has been suspended prior to platform suspend.
+-		 * As the lx_state is DWC2_L2, dwc2_hsotg_suspend() is then a no-op.
+-		 * So need to exit clock gating first, so the gadget can be suspended and
+-		 * resumed later on.
++		 * - When the lx_state is DWC2_L2, the HOST has suspended the bus. So the
++		 * device shouldn't disconnect: dwc2_hsotg_suspend() is then a no-op. It
++		 * could request to resume the bus, or the HOST may request a bus resume.
++		 * Still user could disable wakeup trough sysfs, so check also if it can
++		 * be powered OFF.
++		 * - In case the device has been disconnected, then it should be properly
++		 * suspended/disconnected. Then, temporarily exit the low power mode (clock
++		 * gating, ppd), so the gadget can be suspended and resumed later on.
+ 		 */
+-		if (dwc2->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
+-		    dwc2->bus_suspended)
+-			dwc2_gadget_exit_clock_gating(dwc2, 0);
++		if (!dwc2_is_device_connected(dwc2) || dwc2_gadget_can_poweroff_phy(dwc2)) {
++			if (dwc2->in_ppd) {
++				ret = dwc2_exit_partial_power_down(dwc2, 0, true);
++				if (ret)
++					dev_err(dwc2->dev, "exit power_down failed\n");
++			}
++
++			if (dwc2->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
++			    dwc2->bus_suspended && !dwc2->params.no_clock_gating)
++				dwc2_gadget_exit_clock_gating(dwc2, 0);
++		}
+ 
+ 		dwc2_hsotg_suspend(dwc2);
+ 	}
+-- 
+2.50.1
+

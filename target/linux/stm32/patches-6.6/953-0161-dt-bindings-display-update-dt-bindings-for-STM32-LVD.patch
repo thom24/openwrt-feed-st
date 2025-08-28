@@ -1,0 +1,57 @@
+From 15830653a1f679760d16289db62a9c1d58af8697 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Mon, 6 Jan 2025 14:19:21 +0100
+Subject: [PATCH] dt-bindings: display: update dt-bindings for STM32 LVDS
+ device
+
+Add second output port node.
+
+Change-Id: I2412301d375243787f6dbf517147d15cfd62e8ab
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/427054
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ .../bindings/display/st,stm32-lvds.yaml          | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/display/st,stm32-lvds.yaml b/Documentation/devicetree/bindings/display/st,stm32-lvds.yaml
+index a6383858cd2c..0b15c600b9cc 100644
+--- a/Documentation/devicetree/bindings/display/st,stm32-lvds.yaml
++++ b/Documentation/devicetree/bindings/display/st,stm32-lvds.yaml
+@@ -68,6 +68,12 @@ properties:
+         description:
+           LVDS output port node, connected to a panel or bridge input port.
+ 
++      port@2:
++        $ref: /schemas/graph.yaml#/properties/port
++        description:
++          LVDS output port node, connected to a panel or bridge input second port.
++          (sink for odd or even pixels).
++
+     required:
+       - port@0
+       - port@1
+@@ -110,10 +116,16 @@ examples:
+             port@1 {
+                 reg = <1>;
+                 lvds_out0: endpoint {
+-                   remote-endpoint = <&lvds_panel_in>;
++                   remote-endpoint = <&lvds_panel_in0>;
++                };
++            };
++
++            port@2 {
++                reg = <2>;
++                lvds_out1: endpoint {
++                    remote-endpoint = <&lvds_panel_in1>;
+                 };
+             };
+         };
+     };
+ 
+-...
+-- 
+2.50.1
+

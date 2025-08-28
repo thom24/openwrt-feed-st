@@ -1,0 +1,36 @@
+From 63a887a269bf966b0979d1a5a095cfb8f9bc716e Mon Sep 17 00:00:00 2001
+From: Cheick Traore <cheick.traore@foss.st.com>
+Date: Tue, 11 Feb 2025 11:18:27 +0100
+Subject: [PATCH] ARM: dts: stm32: add 3v3 regulator for pwm-backlight on
+ stm32mp135f-dk
+
+Add scmi_v3v3_sw as power-supply for pwm backlight in order to completely
+disable and suspend the timer when suspending the display.
+
+Change-Id: Ib7bcaf0988d8e8687d054093db4803796a2e7b42
+Signed-off-by: Cheick Traore <cheick.traore@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/436174
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Domain-Review: Yannick FERTRE <yannick.fertre@foss.st.com>
+Reviewed-by: Yannick FERTRE <yannick.fertre@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dk.dts | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+index c892fb226887..91f06963e9d1 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+@@ -105,6 +105,7 @@ panel_backlight: panel-backlight {
+ 		pwms = <&pwm1 2 1000000 PWM_POLARITY_INVERTED>;
+ 		brightness-levels = <0 16 22 30 40 55 75 102 138 188 255>;
+ 		default-brightness-level = <10>;
++		power-supply = <&scmi_v3v3_sw>;
+ 		status = "okay";
+ 	};
+ 
+-- 
+2.50.1
+

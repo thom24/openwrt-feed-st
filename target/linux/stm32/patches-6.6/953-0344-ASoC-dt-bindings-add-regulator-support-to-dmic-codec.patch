@@ -1,0 +1,39 @@
+From 9c2a77d7498c86eb805285e1f26c8146fa654db3 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Thu, 6 Mar 2025 18:18:39 +0100
+Subject: [PATCH] ASoC: dt-bindings: add regulator support to dmic codec
+
+Add optional vref-supply property to describe the regulator supplying
+the digital microphones.
+
+Change-Id: I71934bb3177b8ac8662634f593636a6ff570f585
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Acked-by: "Rob Herring (Arm)" <robh@kernel.org>
+Link: https://patch.msgid.link/20250306171840.593443-2-olivier.moysan@foss.st.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/443081
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ Documentation/devicetree/bindings/sound/dmic-codec.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/sound/dmic-codec.yaml b/Documentation/devicetree/bindings/sound/dmic-codec.yaml
+index 59ef0cf6b6e5..cc3c84dd4c26 100644
+--- a/Documentation/devicetree/bindings/sound/dmic-codec.yaml
++++ b/Documentation/devicetree/bindings/sound/dmic-codec.yaml
+@@ -19,6 +19,9 @@ properties:
+   '#sound-dai-cells':
+     const: 0
+ 
++  vref-supply:
++    description: Phandle to the digital microphone reference supply
++
+   dmicen-gpios:
+     description: GPIO specifier for DMIC to control start and stop
+     maxItems: 1
+-- 
+2.50.1
+

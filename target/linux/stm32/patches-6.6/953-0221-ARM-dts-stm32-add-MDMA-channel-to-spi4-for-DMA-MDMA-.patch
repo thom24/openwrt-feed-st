@@ -1,0 +1,41 @@
+From 265a7760173ea64a507c34434fa957de9f220b9d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Thu, 6 Feb 2025 17:27:46 +0100
+Subject: [PATCH] ARM: dts: stm32: add MDMA channel to spi4 for DMA-MDMA
+ chaining on MP15
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The MDMA channel allows the use of DMA-MDMA chaining for SPI transfers.
+
+Change-Id: I82d7243e3496ae56380090e29d9fdd38ec59ffa8
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/435595
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp151.dtsi | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
+index d7e65765039d..1a70a62902e0 100644
+--- a/arch/arm/boot/dts/st/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
+@@ -1402,8 +1402,9 @@ spi4: spi@44005000 {
+ 				clocks = <&rcc SPI4_K>;
+ 				resets = <&rcc SPI4_R>;
+ 				dmas = <&dmamux1 83 0x400 0x01>,
+-				       <&dmamux1 84 0x400 0x01>;
+-				dma-names = "rx", "tx";
++				       <&dmamux1 84 0x400 0x01>,
++				       <&mdma1 0 0x3 0x1200000a 0 0>;
++				dma-names = "rx", "tx", "rxm2m";
+ 				access-controllers = <&etzpc 53>;
+ 				status = "disabled";
+ 			};
+-- 
+2.50.1
+

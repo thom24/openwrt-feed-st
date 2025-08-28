@@ -1,0 +1,50 @@
+From d26fde93ed30f00422c91520dd6604d03f5b24a2 Mon Sep 17 00:00:00 2001
+From: Sui Jingfeng <sui.jingfeng@linux.dev>
+Date: Mon, 13 May 2024 23:31:06 +0800
+Subject: [PATCH] drm/bridge: synopsys: dw-mipi-dsi: Remove a redundant check
+ on existence of bridge->encoder
+
+In the dw_mipi_dsi_bridge_attach() function, the check on the existence
+of bridge->encoder is not necessary, as it has already been checked in
+the drm_bridge_attach() function invocked by previous bridge or KMS driver.
+The previous drm_bridge_attach() will quit with a negative error code
+returned if it fails for some reasons, hence, it is guaranteed that the
+.encoder member of the struct drm_bridge is not NULL when
+dw_mipi_dsi_bridge_attach() function gets called.
+
+Remove the redundant checking codes "if (!bridge->encoder) { ... }".
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Change-Id: I3ca74e6c6921d5558d8d6bc3e2aa5a8a0d9e8319
+Signed-off-by: Sui Jingfeng <sui.jingfeng@linux.dev>
+Signed-off-by: Robert Foss <rfoss@kernel.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20240513153109.46786-10-sui.jingfeng@linux.dev
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/405682
+Domain-Review: Yannick FERTRE <yannick.fertre@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Yannick FERTRE <yannick.fertre@foss.st.com>
+Reviewed-by: Yannick FERTRE <yannick.fertre@foss.st.com>
+---
+ drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
+index 0d7394bb2c77..4b4ce38af3b4 100644
+--- a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
++++ b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
+@@ -1081,11 +1081,6 @@ static int dw_mipi_dsi_bridge_attach(struct drm_bridge *bridge,
+ {
+ 	struct dw_mipi_dsi *dsi = bridge_to_dsi(bridge);
+ 
+-	if (!bridge->encoder) {
+-		DRM_ERROR("Parent encoder object not found\n");
+-		return -ENODEV;
+-	}
+-
+ 	/* Set the encoder type as caller does not know it */
+ 	bridge->encoder->encoder_type = DRM_MODE_ENCODER_DSI;
+ 
+-- 
+2.50.1
+

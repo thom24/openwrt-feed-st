@@ -1,0 +1,49 @@
+From d57b0263e8bd40b0b78c859507a3e04addb9bedf Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Thu, 31 Mar 2022 12:09:45 +0200
+Subject: [PATCH] Revert "usb: dwc2: drd: properly handle connector ID when the
+ bus is suspended"
+
+Since "usb: dwc2: drd: fix clock gating on USB role switch"
+it's redundant to queue a work that is going to call
+dwc2_conn_id_status_change(). It was used to exit the low power mode.
+It also caused dwc2_hsotg_core_connect() to be called. It also now cause
+the device to connect to the host, even if the gadget driver hasn't been
+configured. It results in the host not being able to enumerate:
+"device descriptor read/64, error -110".
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I9a3b9b112fcb6da23b5073e2fbaf0a48c6d2889b
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/461203
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/usb/dwc2/drd.c | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
+
+diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
+index faae1902f683..c7900a4dcf6a 100644
+--- a/drivers/usb/dwc2/drd.c
++++ b/drivers/usb/dwc2/drd.c
+@@ -217,18 +217,9 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+ 
+ 	spin_unlock_irqrestore(&hsotg->lock, flags);
+ 
+-	if (!already && hsotg->dr_mode == USB_DR_MODE_OTG) {
+-		/*
+-		 * The bus may have been suspended (typically in hcd), need to resume as the HW
+-		 * may not be HW accessible. Schedule work to call dwc2_conn_id_status_change
+-		 * to handle the port resume before switching mode.
+-		 */
+-		if (hsotg->wq_otg)
+-			queue_work(hsotg->wq_otg, &hsotg->wf_otg);
+-
++	if (!already && hsotg->dr_mode == USB_DR_MODE_OTG)
+ 		/* This will raise a Connector ID Status Change Interrupt */
+ 		dwc2_force_mode(hsotg, role == USB_ROLE_HOST);
+-	}
+ 
+ 	if (!hsotg->ll_hw_enabled && hsotg->clk)
+ 		clk_disable_unprepare(hsotg->clk);
+-- 
+2.50.1
+

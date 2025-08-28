@@ -1,0 +1,89 @@
+From 96450685530dcd6b66cba223471aab01b2c6178b Mon Sep 17 00:00:00 2001
+From: Cheick Traore <cheick.traore@foss.st.com>
+Date: Thu, 14 Nov 2024 10:57:53 +0100
+Subject: [PATCH] arm64: dts: stm32: Manage display brightness using pwm on
+ STM32MP257F-DK
+
+Change panel_backlight compatible to use pwm_backlight driver
+compatible. The pwm source is TIM3_CH2 (channel number start at 0)
+channel in not inverted polarity mode (0). Add brightness level and
+default brightness value.
+Also add TIM3_CH2 (on PI7) pinout.
+
+Change-Id: Ie500401543dc98f6793554993dbc60b089fe8c7d
+Signed-off-by: Cheick Traore <cheick.traore@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/418614
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi | 15 +++++++++++++++
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts     | 18 ++++++++++++++----
+ 2 files changed, 29 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
+index a6ed7566aa4c..253a840a7aa7 100644
+--- a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
+@@ -469,6 +469,21 @@ pins {
+ 		};
+ 	};
+ 
++	pwm3_ch2_pins_a: pwm3-ch2-0 {
++		pins {
++			pinmux = <STM32_PINMUX('I', 7, AF8)>; /* TIM3_CH2 */
++			bias-pull-down;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++	};
++
++	pwm3_ch2_sleep_pins_a: pwm3-ch2-sleep-0 {
++		pins {
++			pinmux = <STM32_PINMUX('I', 7, ANALOG)>; /* TIM3_CH2 */
++		};
++	};
++
+ 	rtc_out2_rmp_pins_a: rtc-out2-rmp-pins-0 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('I', 8, ANALOG)>; /* RTC_OUT2_RMP */
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index 40cc86d9e401..d7e20e9b31c5 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -192,10 +192,10 @@ lvds_panel_in: endpoint {
+ 	};
+ 
+ 	panel_lvds_backlight: panel-lvds-backlight {
+-		compatible = "gpio-backlight";
+-		gpios = <&gpioi 7 GPIO_ACTIVE_HIGH>;
+-		default-on;
+-		default-brightness-level = <1>;
++		compatible = "pwm-backlight";
++		pwms = <&pwm3 1 1000000 0>;
++		brightness-levels = <0 16 22 30 40 55 75 102 138 188 255>;
++		default-brightness-level = <10>;
+ 		status = "okay";
+ 	};
+ 
+@@ -821,6 +821,16 @@ &spi6 {
+ 	status = "disabled";
+ };
+ 
++&timers3 {
++	status = "okay";
++	pwm3: pwm {
++		pinctrl-0 = <&pwm3_ch2_pins_a>;
++		pinctrl-1 = <&pwm3_ch2_sleep_pins_a>;
++		pinctrl-names = "default", "sleep";
++		status = "okay";
++	};
++};
++
+ /* Bluetooth */
+ &usart1 {
+ 	pinctrl-names = "default", "sleep", "idle";
+-- 
+2.50.1
+

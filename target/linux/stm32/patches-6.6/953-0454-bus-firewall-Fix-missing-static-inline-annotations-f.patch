@@ -1,0 +1,72 @@
+From 5eef9964592755a3f99e2b6dde076ea235292859 Mon Sep 17 00:00:00 2001
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Date: Wed, 7 May 2025 11:21:22 +0200
+Subject: [PATCH] bus: firewall: Fix missing static inline annotations for
+ stubs
+
+Stubs in the header file for !CONFIG_STM32_FIREWALL case should be both
+static and inline, because they do not come with earlier declaration and
+should be inlined in every unit including the header.
+
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: stable@vger.kernel.org
+Fixes: 5c9668cfc6d7 ("firewall: introduce stm32_firewall framework")
+Link: https://lore.kernel.org/r/20250507092121.95121-2-krzysztof.kozlowski@linaro.org
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: Icef5e313afa7019786dd8bb5b6c2008e1afdedc1
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/457568
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+Reviewed-by: Patrice CHOTARD <patrice.chotard@foss.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ include/linux/bus/stm32_firewall_device.h | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/include/linux/bus/stm32_firewall_device.h b/include/linux/bus/stm32_firewall_device.h
+index bbbee0b24ea8..eaa7a3f54450 100644
+--- a/include/linux/bus/stm32_firewall_device.h
++++ b/include/linux/bus/stm32_firewall_device.h
+@@ -114,26 +114,30 @@ void stm32_firewall_release_access_by_id(struct stm32_firewall *firewall, u32 su
+ 
+ #else /* CONFIG_STM32_FIREWALL */
+ 
+-int stm32_firewall_get_firewall(struct device_node *np, struct stm32_firewall *firewall)
++static inline int stm32_firewall_get_firewall(struct device_node *np,
++					      struct stm32_firewall *firewall,
++					      unsigned int nb_firewall)
+ {
+ 	return -ENODEV;
+ }
+ 
+-int stm32_firewall_grant_access(struct stm32_firewall *firewall)
++static inline int stm32_firewall_grant_access(struct stm32_firewall *firewall)
+ {
+ 	return -ENODEV;
+ }
+ 
+-void stm32_firewall_release_access(struct stm32_firewall *firewall)
++static inline void stm32_firewall_release_access(struct stm32_firewall *firewall)
+ {
+ }
+ 
+-int stm32_firewall_grant_access_by_id(struct stm32_firewall *firewall, u32 subsystem_id)
++static inline int stm32_firewall_grant_access_by_id(struct stm32_firewall *firewall,
++						    u32 subsystem_id)
+ {
+ 	return -ENODEV;
+ }
+ 
+-void stm32_firewall_release_access_by_id(struct stm32_firewall *firewall, u32 subsystem_id)
++static inline void stm32_firewall_release_access_by_id(struct stm32_firewall *firewall,
++						       u32 subsystem_id)
+ {
+ }
+ 
+-- 
+2.50.1
+

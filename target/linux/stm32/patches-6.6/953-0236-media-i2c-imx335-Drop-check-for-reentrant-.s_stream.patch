@@ -1,0 +1,75 @@
+From 24523b55333b5077cbe99fa1fe9293474c8b1bd8 Mon Sep 17 00:00:00 2001
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Date: Thu, 14 Sep 2023 21:16:17 +0300
+Subject: [PATCH] media: i2c: imx335: Drop check for reentrant .s_stream()
+
+The subdev .s_stream() operation shall not be called to start streaming
+on an already started subdev, or stop streaming on a stopped subdev.
+Remove the check that guards against that condition.
+
+The streaming field of the driver's private structure is now unused,
+drop it as well.
+
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+(cherry picked from commit ee44330bf068eaca358ba474ac525264e78ec3fd)
+
+Change-Id: If3438d9af61e2eb306b3c8c9259464d32877cd34
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/429198
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/media/i2c/imx335.c | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
+index 01b1e24fabdc..59cb031c55b3 100644
+--- a/drivers/media/i2c/imx335.c
++++ b/drivers/media/i2c/imx335.c
+@@ -135,7 +135,6 @@ struct imx335_mode {
+  * @vblank: Vertical blanking in lines
+  * @cur_mode: Pointer to current selected sensor mode
+  * @mutex: Mutex for serializing sensor controls
+- * @streaming: Flag indicating streaming state
+  * @cur_mbus_code: Currently selected media bus format code
+  */
+ struct imx335 {
+@@ -159,7 +158,6 @@ struct imx335 {
+ 	u32 vblank;
+ 	const struct imx335_mode *cur_mode;
+ 	struct mutex mutex;
+-	bool streaming;
+ 	u32 cur_mbus_code;
+ };
+ 
+@@ -821,11 +819,6 @@ static int imx335_set_stream(struct v4l2_subdev *sd, int enable)
+ 
+ 	mutex_lock(&imx335->mutex);
+ 
+-	if (imx335->streaming == enable) {
+-		mutex_unlock(&imx335->mutex);
+-		return 0;
+-	}
+-
+ 	if (enable) {
+ 		ret = pm_runtime_resume_and_get(imx335->dev);
+ 		if (ret)
+@@ -839,8 +832,6 @@ static int imx335_set_stream(struct v4l2_subdev *sd, int enable)
+ 		pm_runtime_put(imx335->dev);
+ 	}
+ 
+-	imx335->streaming = enable;
+-
+ 	mutex_unlock(&imx335->mutex);
+ 
+ 	return 0;
+-- 
+2.50.1
+

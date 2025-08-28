@@ -1,0 +1,40 @@
+From 2f8547541b7b59be609557ac4c3b24c893388278 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Tue, 8 Apr 2025 13:52:55 +0200
+Subject: [PATCH] ARM: dts: stm32: fix stm32mp257f-ev1 board support
+
+On aarch32, the vmalloc area size is 0x0F000000 whereas
+we try to allocate 0x10001000 which leads to an overflow warning.
+Reduce OSPI1 memory region's size to match exactly the SPI NOR's
+size.
+
+It fixes the following kernel warning :
+"vmap allocation for size 268439552 failed: use vmalloc=<size>
+ to increase size".
+
+Change-Id: Ia425aa3622d523fc4a797f1275267cf6024f93ac
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/450088
+Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+---
+ arch/arm/boot/dts/st/stm32mp257f-ev1.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm/boot/dts/st/stm32mp257f-ev1.dts
+index 737a820134ff..36b91d3e9253 100644
+--- a/arch/arm/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp257f-ev1.dts
+@@ -16,3 +16,7 @@ timer {
+ 		arm,cpu-registers-not-fw-configured;
+ 	};
+ };
++
++&mm_ospi1 {
++	reg = <0x0 0x60000000 0x0 0x4000000>;
++};
+-- 
+2.50.1
+

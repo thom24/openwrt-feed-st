@@ -1,0 +1,54 @@
+From 2be81d8b92eb90d73861dd11890e73f61d70fd98 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Wed, 30 Oct 2024 09:31:12 +0100
+Subject: [PATCH] bus: rifsc: enclose stm32_rifsc_register_debugfs() with
+ CONFIG_DEBUG_FS
+
+Enclose stm32_rifsc_register_debugfs() call with CONFIG_DEBUG_FS as
+it is only defined if CONFIG_DEBUG_FS is set above.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I55ad65014b42f83f2dfe8d5030c8c832ec1683be
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/415127
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/bus/stm32_rifsc.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/bus/stm32_rifsc.c b/drivers/bus/stm32_rifsc.c
+index 21ea5f88072a..52fe233bcbe3 100644
+--- a/drivers/bus/stm32_rifsc.c
++++ b/drivers/bus/stm32_rifsc.c
+@@ -456,6 +456,11 @@ static int stm32_rifsc_register_debugfs(struct stm32_firewall_controller *contro
+ 
+ 	return 0;
+ }
++#else /* CONFIG_DEBUG_FS */
++static int stm32_rifsc_register_debugfs(struct stm32_firewall_controller *controller __unused)
++{
++	return 0;
++}
+ #endif /* CONFIG_DEBUG_FS */
+ 
+ static bool stm32_rifsc_is_semaphore_available(void __iomem *addr)
+@@ -659,7 +664,11 @@ static int stm32_rifsc_probe(struct platform_device *pdev)
+ 		return rc;
+ 	}
+ 
+-	stm32_rifsc_register_debugfs(rifsc_controller);
++	rc = stm32_rifsc_register_debugfs(rifsc_controller);
++	if (rc) {
++		dev_err(rifsc_controller->dev, "Couldn't add RIFSC debug entry: %d", rc);
++		return rc;
++	}
+ 
+ 	/* Populate all allowed nodes */
+ 	return of_platform_populate(np, NULL, NULL, &pdev->dev);
+-- 
+2.50.1
+

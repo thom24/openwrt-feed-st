@@ -1,0 +1,41 @@
+From 46b22e2e6e72e0beecb67716dd1ec9a3b8eddada Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Mon, 28 Apr 2025 16:58:24 +0200
+Subject: [PATCH] dt-bindings: bus: fix dt_binding warning in STM32MP25 RIFSC
+ bindings
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Fix indentation, 10 instead of 8.
+
+Change-Id: I446d37f3711f478f36373bc1b2f479160669d88c
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/455186
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+Tested-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml b/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
+index b4b3680d517d..1b4659f1592b 100644
+--- a/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
++++ b/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
+@@ -43,8 +43,8 @@ properties:
+   compatible:
+     items:
+       - enum:
+-        - st,stm32mp21-rifsc
+-        - st,stm32mp25-rifsc
++          - st,stm32mp21-rifsc
++          - st,stm32mp25-rifsc
+       - const: simple-bus
+ 
+   reg:
+-- 
+2.50.1
+

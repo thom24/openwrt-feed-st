@@ -1,0 +1,119 @@
+From b0009da6063bd3ce6b4eb0737fd3f02472fabd16 Mon Sep 17 00:00:00 2001
+From: Umang Jain <umang.jain@ideasonboard.com>
+Date: Tue, 20 Feb 2024 14:58:18 +0530
+Subject: [PATCH] media: imx335: Use v4l2_link_freq_to_bitmap helper
+
+Use the v4l2_link_freq_to_bitmap() helper to figure out which
+driver-supported link frequencies can be used on a given system.
+
+Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+(cherry picked from commit 0862582b5239a618a1b5197544b30f77ed71eca0)
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+
+Change-Id: I17eed3ae72487ed414af6f00f108c1ec869011b6
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/429199
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ drivers/media/i2c/imx335.c | 36 ++++++++++++++++++------------------
+ 1 file changed, 18 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
+index 59cb031c55b3..3d7aba73479d 100644
+--- a/drivers/media/i2c/imx335.c
++++ b/drivers/media/i2c/imx335.c
+@@ -49,7 +49,7 @@
+ #define IMX335_INCLK_RATE	24000000
+ 
+ /* CSI2 HW configuration */
+-#define IMX335_LINK_FREQ	594000000
++#define IMX335_LINK_FREQ	594000000LL
+ #define IMX335_NUM_DATA_LANES	4
+ 
+ #define IMX335_REG_MIN		0x00
+@@ -135,6 +135,7 @@ struct imx335_mode {
+  * @vblank: Vertical blanking in lines
+  * @cur_mode: Pointer to current selected sensor mode
+  * @mutex: Mutex for serializing sensor controls
++ * @link_freq_bitmap: Menu bitmap for link_freq_ctrl
+  * @cur_mbus_code: Currently selected media bus format code
+  */
+ struct imx335 {
+@@ -158,6 +159,7 @@ struct imx335 {
+ 	u32 vblank;
+ 	const struct imx335_mode *cur_mode;
+ 	struct mutex mutex;
++	unsigned long link_freq_bitmap;
+ 	u32 cur_mbus_code;
+ };
+ 
+@@ -406,7 +408,8 @@ static int imx335_update_controls(struct imx335 *imx335,
+ {
+ 	int ret;
+ 
+-	ret = __v4l2_ctrl_s_ctrl(imx335->link_freq_ctrl, mode->link_freq_idx);
++	ret = __v4l2_ctrl_s_ctrl(imx335->link_freq_ctrl,
++				 __ffs(imx335->link_freq_bitmap));
+ 	if (ret)
+ 		return ret;
+ 
+@@ -692,6 +695,13 @@ static int imx335_init_pad_cfg(struct v4l2_subdev *sd,
+ 	fmt.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
+ 	imx335_fill_pad_format(imx335, &supported_mode, &fmt);
+ 
++	mutex_lock(&imx335->mutex);
++	__v4l2_ctrl_modify_range(imx335->link_freq_ctrl, 0,
++				 __fls(imx335->link_freq_bitmap),
++				 ~(imx335->link_freq_bitmap),
++				 __ffs(imx335->link_freq_bitmap));
++	mutex_unlock(&imx335->mutex);
++
+ 	return imx335_set_pad_format(sd, sd_state, &fmt);
+ }
+ 
+@@ -949,19 +959,10 @@ static int imx335_parse_hw_config(struct imx335 *imx335)
+ 		goto done_endpoint_free;
+ 	}
+ 
+-	if (!bus_cfg.nr_of_link_frequencies) {
+-		dev_err(imx335->dev, "no link frequencies defined\n");
+-		ret = -EINVAL;
+-		goto done_endpoint_free;
+-	}
+-
+-	for (i = 0; i < bus_cfg.nr_of_link_frequencies; i++)
+-		if (bus_cfg.link_frequencies[i] == IMX335_LINK_FREQ)
+-			goto done_endpoint_free;
+-
+-	dev_err(imx335->dev, "no compatible link frequencies found\n");
+-
+-	ret = -EINVAL;
++	ret = v4l2_link_freq_to_bitmap(imx335->dev, bus_cfg.link_frequencies,
++				       bus_cfg.nr_of_link_frequencies,
++				       link_freq, ARRAY_SIZE(link_freq),
++				       &imx335->link_freq_bitmap);
+ 
+ done_endpoint_free:
+ 	v4l2_fwnode_endpoint_free(&bus_cfg);
+@@ -1115,9 +1116,8 @@ static int imx335_init_controls(struct imx335 *imx335)
+ 	imx335->link_freq_ctrl = v4l2_ctrl_new_int_menu(ctrl_hdlr,
+ 							&imx335_ctrl_ops,
+ 							V4L2_CID_LINK_FREQ,
+-							ARRAY_SIZE(link_freq) -
+-							1,
+-							mode->link_freq_idx,
++							__fls(imx335->link_freq_bitmap),
++							__ffs(imx335->link_freq_bitmap),
+ 							link_freq);
+ 	if (imx335->link_freq_ctrl)
+ 		imx335->link_freq_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+-- 
+2.50.1
+

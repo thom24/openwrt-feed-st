@@ -1,0 +1,42 @@
+From f3d685be1518c46f41c13552b52b83caaeb73ba4 Mon Sep 17 00:00:00 2001
+From: Umang Jain <umang.jain@ideasonboard.com>
+Date: Mon, 22 Apr 2024 16:12:47 +0530
+Subject: [PATCH] media: imx335: Describe CCI struct member
+
+Add description for 'struct regmap *cci' member of struct imx335.
+
+This will fix the following compile-time warning:
+warning: Function parameter or struct member 'cci' not described in 'imx335'
+
+Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+(cherry picked from commit 062fc96830a145498ea48da627f28e3cc3d9d297)
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+
+Change-Id: I80cab034da9845d70e1ecfcf7b3a4bc6395c98ef
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/429209
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ drivers/media/i2c/imx335.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
+index deabfed87071..b2b38aa1313c 100644
+--- a/drivers/media/i2c/imx335.c
++++ b/drivers/media/i2c/imx335.c
+@@ -177,6 +177,7 @@ struct imx335_mode {
+  * @reset_gpio: Sensor reset gpio
+  * @powerdown_gpio: Sensor powerdown gpio
+  * @supplies: Regulator supplies to handle power control
++ * @cci: CCI register map
+  * @inclk: Sensor input clock
+  * @ctrl_handler: V4L2 control handler
+  * @link_freq_ctrl: Pointer to link frequency control
+-- 
+2.50.1
+

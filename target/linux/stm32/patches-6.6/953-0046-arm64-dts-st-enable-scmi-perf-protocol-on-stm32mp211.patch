@@ -1,0 +1,46 @@
+From 358d2608568f1cc45344ca938b4622e5f9b3ba53 Mon Sep 17 00:00:00 2001
+From: Pascal Paillet <p.paillet@foss.st.com>
+Date: Wed, 30 Oct 2024 16:33:57 +0100
+Subject: [PATCH] arm64: dts: st: enable scmi perf protocol on stm32mp211
+
+Enable SCMI performance protocol on stm32mp21.
+This is used to handle CPU FREQ.
+
+Change-Id: Ifed690e559e74a74783c727d2b65ec55a166babe
+Signed-off-by: Pascal Paillet <p.paillet@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/415280
+Domain-Review: Francois CHOLEAU <francois.choleau@st.com>
+Tested-by: Francois CHOLEAU <francois.choleau@st.com>
+Reviewed-by: Francois CHOLEAU <francois.choleau@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index f449b5e21c0a..1f7b8344ce2f 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -22,6 +22,8 @@ cpu0: cpu@0 {
+ 			device_type = "cpu";
+ 			reg = <0>;
+ 			enable-method = "psci";
++			clocks = <&scmi_perf 0>;
++			clock-names = "cpu";
+ 			power-domains = <&CPU_PD0>;
+ 			power-domain-names = "psci";
+ 			#cooling-cells = <2>;
+@@ -130,6 +132,11 @@ scmi: scmi {
+ 			#size-cells = <0>;
+ 			linaro,optee-channel-id = <0>;
+ 
++			scmi_perf: protocol@13 {
++				reg = <0x13>;
++				#clock-cells = <1>;
++			};
++
+ 			scmi_clk: protocol@14 {
+ 				reg = <0x14>;
+ 				#clock-cells = <1>;
+-- 
+2.50.1
+

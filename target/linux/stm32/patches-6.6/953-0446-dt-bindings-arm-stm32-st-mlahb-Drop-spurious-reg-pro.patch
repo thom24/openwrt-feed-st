@@ -1,0 +1,45 @@
+From 84f88620de743ebffdd6de1bc23eaa99a9897c90 Mon Sep 17 00:00:00 2001
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Date: Thu, 23 May 2024 10:42:07 -0500
+Subject: [PATCH] dt-bindings: arm: stm32: st,mlahb: Drop spurious "reg"
+ property from example
+
+"reg" is not documented nor used for st,mlahb, so drop it from the
+example to fix the warning:
+
+Documentation/devicetree/bindings/arm/stm32/st,mlahb.example.dtb: ahb@38000000: Unevaluated properties are not allowed ('reg' was unexpected)
+        from schema $id: http://devicetree.org/schemas/arm/stm32/st,mlahb.yaml#
+
+Since "reg" is dropped, the unit-address must be as well.
+
+Link: https://lore.kernel.org/all/20240523154208.2457864-1-robh@kernel.org/
+Change-Id: Idad045bb07efa11766376a611215b534969eb80a
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/455196
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml b/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml
+index d2dce238ff5d..3e996346b264 100644
+--- a/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml
++++ b/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml
+@@ -54,11 +54,10 @@ unevaluatedProperties: false
+ 
+ examples:
+   - |
+-    mlahb: ahb@38000000 {
++    ahb {
+       compatible = "st,mlahb", "simple-bus";
+       #address-cells = <1>;
+       #size-cells = <1>;
+-      reg = <0x10000000 0x40000>;
+       ranges;
+       dma-ranges = <0x00000000 0x38000000 0x10000>,
+                    <0x10000000 0x10000000 0x60000>,
+-- 
+2.50.1
+

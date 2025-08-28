@@ -1,0 +1,41 @@
+From c80d36341a67a5ba4092a5b854a978eec799c03a Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 25 Mar 2025 09:03:37 +0100
+Subject: [PATCH] dmaengine: stm32-dma32: use module_platform_driver
+
+Without module_platform_driver(), stm32-dma3 doesn't have a
+module_exit procedure. Once stm32-dma3 module is inserted, it
+can't be removed, marked busy.
+Use module_platform_driver instead of subsys_initcall to register
+(insmod) and unregister (rmmod) stm32-dma3 driver.
+
+Change-Id: I767c17a6d9a333aaa2a44ad5f8319f74e70c7d24
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/446574
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/dma/stm32/stm32-dma3.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
+index 2aa38427a190..e5a7f8378b78 100644
+--- a/drivers/dma/stm32/stm32-dma3.c
++++ b/drivers/dma/stm32/stm32-dma3.c
+@@ -2421,12 +2421,7 @@ static struct platform_driver stm32_dma3_driver = {
+ 	},
+ };
+ 
+-static int __init stm32_dma3_init(void)
+-{
+-	return platform_driver_register(&stm32_dma3_driver);
+-}
+-
+-subsys_initcall(stm32_dma3_init);
++module_platform_driver(stm32_dma3_driver);
+ 
+ MODULE_DESCRIPTION("STM32 DMA3 controller driver");
+ MODULE_AUTHOR("Amelie Delaunay <amelie.delaunay@foss.st.com>");
+-- 
+2.50.1
+

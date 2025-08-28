@@ -1,0 +1,48 @@
+From 91428407effae4c0cbf31fb7e38aac640119805c Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Mon, 17 Mar 2025 13:57:06 +0100
+Subject: [PATCH] mfd: stm32-lptimer: remove renamed registers
+
+Now that all registers have been renamed in all drivers, these defines
+can be removed.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I0509d70983a075295cf761c2c8016d272206391c
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/445394
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+---
+ include/linux/mfd/stm32-lptimer.h | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/include/linux/mfd/stm32-lptimer.h b/include/linux/mfd/stm32-lptimer.h
+index 1a6927605c55..0fa2b34d8fff 100644
+--- a/include/linux/mfd/stm32-lptimer.h
++++ b/include/linux/mfd/stm32-lptimer.h
+@@ -20,8 +20,6 @@
+ #define STM32_LPTIM_CMP		0x14	/* Compare Reg (MP25 CCR1)   */
+ #define STM32_LPTIM_ARR		0x18	/* Autoreload Reg            */
+ #define STM32_LPTIM_CNT		0x1C	/* Counter Reg               */
+-#define STM32MP25_LPTIM_CCMR1	0x2C	/* Capture/Compare Mode Reg  */
+-#define STM32MP25_LPTIM_CCR2	0x34	/* Compare Reg2              */
+ #define STM32_LPTIM_CCMR1	0x2C	/* Capture/Compare Mode MP25 */
+ #define STM32_LPTIM_CCR2	0x34	/* Compare Reg2 MP25         */
+ 
+@@ -65,13 +63,6 @@
+ /* STM32_LPTIM_ARR */
+ #define STM32_LPTIM_MAX_ARR	0xFFFF
+ 
+-/* STM32MP25_LPTIM_CCMR1 */
+-#define STM32MP25_LPTIM_CC2P	GENMASK(19, 18)
+-#define STM32MP25_LPTIM_CC2E	BIT(17)
+-#define STM32MP25_LPTIM_CC2SEL	BIT(16)
+-#define STM32MP25_LPTIM_CC1P	GENMASK(3, 2)
+-#define STM32MP25_LPTIM_CC1E	BIT(1)
+-#define STM32MP25_LPTIM_CC1SEL	BIT(0)
+ /* STM32_LPTIM_CCMR1 */
+ #define STM32_LPTIM_CC2P	GENMASK(19, 18)
+ #define STM32_LPTIM_CC2E	BIT(17)
+-- 
+2.50.1
+

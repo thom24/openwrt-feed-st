@@ -1,0 +1,37 @@
+From 0cf29453001263d75b8a798bf33611a3c4fd6b3d Mon Sep 17 00:00:00 2001
+From: Yann Gautier <yann.gautier@foss.st.com>
+Date: Mon, 18 Nov 2024 15:38:00 +0100
+Subject: [PATCH] dt-bindings: nvmem: add optional OTP mirror memory-region for
+ STM32MP2
+
+On STM32MP2 platform, if Cortex-M33 is TDCID, it will fill a memory
+area mirroring the non-secure OTP fuses. Add an optional memory-region
+property that will link to this OTP mirror region.
+
+Change-Id: I34c19e970eed68372b405d7917c9b525afadb371
+Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/419560
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+index 92bfe25f0571..cda4b0d86032 100644
+--- a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
++++ b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+@@ -29,6 +29,9 @@ properties:
+   reg:
+     maxItems: 1
+ 
++  memory-region:
++    description: Phandle to a node describing non-secure OTP mirror area
++
+ patternProperties:
+   "^.*@[0-9a-f]+$":
+     type: object
+-- 
+2.50.1
+

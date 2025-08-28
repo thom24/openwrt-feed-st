@@ -1,0 +1,31 @@
+From ef5382907b3a02b76c1d7a564481d8f6fc4b9dfc Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Tue, 11 Feb 2025 14:16:08 +0100
+Subject: [PATCH] arm64: dts: st: add panel power on stm32mp257-dk board
+
+Lvds panel driver support the management of power supply.
+
+Change-Id: I6657b43606d5025c6fb8316ecc9f750af3b50259
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/436221
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index e7f9e59b2020..f05dafbc9d12 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -165,6 +165,7 @@ panel_lvds: panel-lvds {
+ 		compatible = "edt,etml0700z9ndha", "panel-lvds";
+ 		enable-gpios = <&gpioi 4 GPIO_ACTIVE_HIGH>;
+ 		backlight = <&panel_lvds_backlight>;
++		power-supply = <&scmi_v3v3>;
+ 		default-on;
+ 		status = "okay";
+ 
+-- 
+2.50.1
+

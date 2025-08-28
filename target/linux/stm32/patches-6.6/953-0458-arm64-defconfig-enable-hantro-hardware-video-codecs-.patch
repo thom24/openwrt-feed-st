@@ -1,0 +1,34 @@
+From 42af0c5460e68c44c91431b9f1f764e10c40a483 Mon Sep 17 00:00:00 2001
+From: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Date: Wed, 24 May 2023 10:45:49 +0200
+Subject: [PATCH] arm64: defconfig: enable hantro hardware video codecs support
+
+Enable CONFIG_VIDEO_HANTRO in fragment-02-defconfig-addons.
+
+Change-Id: I94ac777375f8e7ca9339178d07e443d382f53e4a
+Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/454405
+Tested-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Hugues FRUCHET <hugues.fruchet@st.com>
+---
+ arch/arm64/configs/fragment-02-defconfig-addons.config | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/configs/fragment-02-defconfig-addons.config b/arch/arm64/configs/fragment-02-defconfig-addons.config
+index 0c98441954e3..76fd2362534d 100644
+--- a/arch/arm64/configs/fragment-02-defconfig-addons.config
++++ b/arch/arm64/configs/fragment-02-defconfig-addons.config
+@@ -133,6 +133,7 @@ CONFIG_USB_HIDDEV=y
+ CONFIG_USB_ONBOARD_HUB=y
+ CONFIG_USB_STM32_USBH=m
+ CONFIG_V4L_TEST_DRIVERS=y
++CONFIG_VIDEO_HANTRO=m
+ CONFIG_VIDEO_IMX335=m
+ CONFIG_VIDEO_STM32_CSI=m
+ CONFIG_VIDEO_STM32_DCMI=m
+-- 
+2.50.1
+

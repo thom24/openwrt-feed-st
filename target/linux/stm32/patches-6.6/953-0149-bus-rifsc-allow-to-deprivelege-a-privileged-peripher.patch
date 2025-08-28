@@ -1,0 +1,79 @@
+From 5be7b0b41b385a8c305e28c585a475a3f110848d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Fri, 29 Nov 2024 15:38:31 +0100
+Subject: [PATCH] bus: rifsc: allow to deprivelege a privileged peripheral
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Use CONFIG_STM32_RIFSC_DEBUG to deprivilege a peripheral during rifsc
+bus probe.
+
+Change-Id: Id54fa9124dd757a4152222c9216ca4bd6c7d951a
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/421713
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/bus/Kconfig       |  7 +++++++
+ drivers/bus/stm32_rifsc.c | 18 ++++++++++++++++++
+ 2 files changed, 25 insertions(+)
+
+diff --git a/drivers/bus/Kconfig b/drivers/bus/Kconfig
+index 2fc2eafe82f4..8f1d380cbc57 100644
+--- a/drivers/bus/Kconfig
++++ b/drivers/bus/Kconfig
+@@ -173,6 +173,13 @@ config STM32_FIREWALL
+ 	  hardware resources linked to a firewall controller can be requested
+ 	  through this STM32 framework.
+ 
++config STM32_RIFSC_DEBUG
++	bool "STM32 Unprivileged access to debug resources"
++	depends on (STM32_FIREWALL)
++	help
++	  Say y to deprivilege access to peripheral resources. This allows
++	  to read and write to memory mapped registers of peripherals.
++
+ config SUN50I_DE2_BUS
+ 	bool "Allwinner A64 DE2 Bus Driver"
+ 	  default ARM64
+diff --git a/drivers/bus/stm32_rifsc.c b/drivers/bus/stm32_rifsc.c
+index a16fd7999cc0..5a77ca164db2 100644
+--- a/drivers/bus/stm32_rifsc.c
++++ b/drivers/bus/stm32_rifsc.c
+@@ -576,6 +576,20 @@ static void stm32_rifsc_release_access(struct stm32_firewall_controller *ctrl, u
+ 	stm32_rif_release_semaphore(ctrl, firewall_id);
+ }
+ 
++static void stm32_rifsc_unpriv_by_id(struct stm32_firewall_controller *ctrl, u32 firewall_id)
++{
++	u32 reg_id, reg_offset, priv_value;
++
++	reg_id = firewall_id / IDS_PER_RISC_SEC_PRIV_REGS;
++	reg_offset = firewall_id % IDS_PER_RISC_SEC_PRIV_REGS;
++
++	priv_value = readl(ctrl->mmio + RIFSC_RISC_PRIVCFGR0 + 0x4 * reg_id);
++	if (priv_value & BIT(reg_offset)) {
++		priv_value &= ~BIT(reg_offset);
++		writel(priv_value, ctrl->mmio + RIFSC_RISC_PRIVCFGR0 + 0x4 * reg_id);
++	}
++}
++
+ static int stm32_rifsc_populate_bus(struct stm32_firewall_controller *ctrl)
+ {
+ 	struct stm32_firewall *firewalls;
+@@ -623,6 +637,10 @@ static int stm32_rifsc_populate_bus(struct stm32_firewall_controller *ctrl)
+ 				dev_err(parent, "%s: Device driver will not be probed, error: %d\n",
+ 					child->full_name, err);
+ 			}
++			if (IS_ENABLED(CONFIG_STM32_RIFSC_DEBUG)) {
++				dev_dbg(parent, "Unprivileged %s", child->full_name);
++				stm32_rifsc_unpriv_by_id(ctrl, firewalls[i].firewall_id);
++			}
+ 		}
+ 
+ 		kfree(firewalls);
+-- 
+2.50.1
+

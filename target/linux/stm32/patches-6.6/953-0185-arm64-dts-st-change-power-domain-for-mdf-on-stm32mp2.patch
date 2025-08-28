@@ -1,0 +1,40 @@
+From e21038f5d926ea4e320c1b326734cf20b1e676f9 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Mon, 3 Feb 2025 16:12:39 +0100
+Subject: [PATCH] arm64: dts: st: change power domain for mdf on
+ stm32mp251.dtsi
+
+The MDF peripheral supports LP-Stop1/2 low power mode.
+(See "Functionalities depending on system operating mode" table in ref
+manual). However, the mdf driver does not support the autonomous mode.
+Change power domain to "CLUSTER_PD" for mdf nodes, on stm32mp251.dtsi.
+
+Change-Id: I778c562f0cbe3c889a542e2a4d8b48a98fbed48b
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/434540
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index 9efe77aa55d8..20e13a96fce8 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -1772,7 +1772,7 @@ mdf1: mdf@404d0000 {
+ 				resets = <&rcc MDF1_R>;
+ 				reset-names = "mdf";
+ 				access-controllers = <&rifsc 54>;
+-				power-domains = <&RET_PD>;
++				power-domains = <&CLUSTER_PD>;
+ 				status = "disabled";
+ 
+ 				sitf0: sitf@80 {
+-- 
+2.50.1
+

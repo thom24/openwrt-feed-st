@@ -1,0 +1,54 @@
+From 9b98926b52b553dc22f04510c70704c7051eb422 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Mon, 28 Apr 2025 11:30:40 +0200
+Subject: [PATCH] arm64: dts: stm32: decrease usart max speed for Bluetooth for
+ MPx platform
+
+To avoid :
+Bluetooth: hci0: command 0xfc4c tx timeout
+Bluetooth: hci0: BCM: Patch command fc4c failed (-110)
+Bluetooth: hci0: BCM: Patch failed (-110)
+...
+Bluetooth: hci0: command 0xfc4c tx timeout
+Bluetooth: hci0: BCM: failed to write update baudrate (-110)
+
+Need to decrease max-speed to 2Mbps.
+
+Change-Id: I226fba494a02f64f949be8cc31c0e44c1aed9735
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/454464
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 2 +-
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index 4d9de66c70c6..04a447ceb99a 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -618,7 +618,7 @@ &usart1 {
+ 	bluetooth {
+ 		shutdown-gpios = <&gpiog 4 GPIO_ACTIVE_HIGH>;
+ 		compatible = "brcm,bcm43438-bt";
+-		max-speed = <3000000>;
++		max-speed = <2000000>;
+ 		vbat-supply = <&scmi_v3v3>;
+ 		vddio-supply = <&scmi_v3v3>;
+ 	};
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index b804379d2012..88bafebefe06 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -778,7 +778,7 @@ &usart1 {
+ 	bluetooth {
+ 		shutdown-gpios = <&gpiog 4 GPIO_ACTIVE_HIGH>;
+ 		compatible = "brcm,bcm43438-bt";
+-		max-speed = <3000000>;
++		max-speed = <2000000>;
+ 		vbat-supply = <&scmi_v3v3>;
+ 		vddio-supply = <&scmi_v3v3>;
+ 	};
+-- 
+2.50.1
+

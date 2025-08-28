@@ -1,0 +1,62 @@
+From b06d3e126164cff4587b0eefd65eebb5ab65e5d5 Mon Sep 17 00:00:00 2001
+From: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Date: Sun, 14 Apr 2024 19:36:17 +0530
+Subject: [PATCH] media: imx335: Parse fwnode properties
+
+Call the V4L2 fwnode device parser to handle controls that are
+standardised by the framework.
+
+Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+(cherry picked from commit d08d61ee516f33ef985455576708680cf06b876c)
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+
+Change-Id: Iea5e210ee3989fc8a466f656cbbfe296c933aeab
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/429204
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ drivers/media/i2c/imx335.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
+index a06dd32f46fe..fa806effd44d 100644
+--- a/drivers/media/i2c/imx335.c
++++ b/drivers/media/i2c/imx335.c
+@@ -1243,10 +1243,16 @@ static int imx335_init_controls(struct imx335 *imx335)
+ {
+ 	struct v4l2_ctrl_handler *ctrl_hdlr = &imx335->ctrl_handler;
+ 	const struct imx335_mode *mode = imx335->cur_mode;
++	struct v4l2_fwnode_device_properties props;
+ 	u32 lpfr;
+ 	int ret;
+ 
+-	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 7);
++	ret = v4l2_fwnode_device_parse(imx335->dev, &props);
++	if (ret)
++		return ret;
++
++	/* v4l2_fwnode_device_properties can add two more controls */
++	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 9);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -1311,6 +1317,8 @@ static int imx335_init_controls(struct imx335 *imx335)
+ 	if (imx335->hblank_ctrl)
+ 		imx335->hblank_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ 
++	v4l2_ctrl_new_fwnode_properties(ctrl_hdlr, &imx335_ctrl_ops, &props);
++
+ 	if (ctrl_hdlr->error) {
+ 		dev_err(imx335->dev, "control init failed: %d\n",
+ 			ctrl_hdlr->error);
+-- 
+2.50.1
+

@@ -1,0 +1,50 @@
+From 1a8d90d8a88144a31f4a7c1afb81b2508dc1f791 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Wed, 19 Mar 2025 16:57:56 +0100
+Subject: [PATCH] arm64: dts: st: add power-domains property for HPDMAx on
+ stm32mp21
+
+HPDMAx has data/state retained in LPLV_STOP1 power mode. Add power-domains
+property in HPDMAx nodes to reflect this.
+
+Change-Id: Icedb0e4b1c9a253c5bb64de6d0f44622e4086b8d
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/445363
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index aebb608f31ba..60c8bc1f376a 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -313,6 +313,7 @@ hpdma: dma-controller@40400000 {
+ 				     <GIC_SPI 45 IRQ_TYPE_LEVEL_HIGH>,
+ 				     <GIC_SPI 46 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&scmi_clk CK_SCMI_HPDMA1>;
++			power-domains = <&ret_pd>;
+ 			#dma-cells = <3>;
+ 			st,axi-max-burst-len = <16>;
+ 			st,syscfg-arcr = <&syscfg 0x2050 0x1>;
+@@ -338,6 +339,7 @@ hpdma2: dma-controller@40410000 {
+ 				     <GIC_SPI 61 IRQ_TYPE_LEVEL_HIGH>,
+ 				     <GIC_SPI 62 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&scmi_clk CK_SCMI_HPDMA2>;
++			power-domains = <&ret_pd>;
+ 			#dma-cells = <3>;
+ 			st,axi-max-burst-len = <16>;
+ 			st,syscfg-arcr = <&syscfg 0x2050 0x2>;
+@@ -363,6 +365,7 @@ hpdma3: dma-controller@40420000 {
+ 				     <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>,
+ 				     <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&scmi_clk CK_SCMI_HPDMA3>;
++			power-domains = <&ret_pd>;
+ 			#dma-cells = <3>;
+ 			st,axi-max-burst-len = <16>;
+ 			st,syscfg-arcr = <&syscfg 0x2050 0x4>;
+-- 
+2.50.1
+

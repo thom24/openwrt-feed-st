@@ -1,0 +1,98 @@
+From 0c5da677133b40e9123e4fec3afeb38ca79cc66d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Mon, 28 Apr 2025 11:42:23 +0200
+Subject: [PATCH] dt-bindings: pinctrl: fix dt_binding_check errors in STM32
+ HDP bindings
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Fix the position of the 'st,syscfg' property.
+Remove unneeded quotes.
+Remove duplicated label in examples.
+
+Change-Id: I242d3fe8efb89c644ed9263cdfa06058bdd2aba6
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/455179
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ .../pinctrl/st,stm32-pinctrl-hdp.yaml         | 30 ++++++++++---------
+ 1 file changed, 16 insertions(+), 14 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl-hdp.yaml b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl-hdp.yaml
+index 62a97b00c565..be5596c9e2b8 100644
+--- a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl-hdp.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl-hdp.yaml
+@@ -24,6 +24,17 @@ properties:
+   clocks:
+     maxItems: 1
+ 
++  st,syscfg:
++    description: Use to select the type of USB signals to output, either OTG or
++                 HOST.
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    items:
++      - items:
++          - description: Phandle of syscon node with the HDP option register.
++          - description: The offset of the HDP option register.
++          - description: The mask to use when writing to the register.
++          - description: The value to write in the register.
++
+ patternProperties:
+   '-pins$':
+     type: object
+@@ -44,17 +55,8 @@ patternProperties:
+ 
+     additionalProperties: false
+ 
+-  st,syscfg:
+-    $ref: /schemas/types.yaml#/definitions/phandle-array
+-    items:
+-      - items:
+-        - description: Phandle of syscon node with the HDP option register.
+-        - description: The offset of the HDP option register.
+-        - description: The mask to use when writing to the register.
+-        - description: The value to write in the register.
+-
+ allOf:
+-  - $ref: "pinctrl.yaml#"
++  - $ref: pinctrl.yaml#
+ 
+ required:
+   - compatible
+@@ -68,13 +70,13 @@ examples:
+     #include <dt-bindings/clock/stm32mp1-clks.h>
+     #include <dt-bindings/pinctrl/stm32mp15-hdp.h>
+     //Example 1
+-    hdp: pinctrl@54090000 {
++    pinctrl@54090000 {
+       compatible = "st,stm32mp-hdp";
+       reg = <0x54090000 0x400>;
+       clocks = <&rcc HDP>;
+       pinctrl-names = "default";
+       pinctrl-0 = <&hdp2>;
+-      hdp2: hdp2-pins {
++      hdp2-pins {
+         function = HDP2_GPOVAL_2;
+         pins = "hdp2";
+       };
+@@ -84,11 +86,11 @@ examples:
+     #include <dt-bindings/clock/stm32mp1-clks.h>
+     #include <dt-bindings/pinctrl/stm32mp15-hdp.h>
+     //Example 2
+-    hdp: pinctrl@54090000 {
++    pinctrl@54090000 {
+       compatible = "st,stm32mp-hdp";
+       reg = <0x54090000 0x400>;
+       clocks = <&rcc HDP>;
+-      hdp2: hdp2-pins {
++      hdp2-pins {
+         pins = "hdp2";
+         function = HDP2_GPOVAL_2;
+       };
+-- 
+2.50.1
+

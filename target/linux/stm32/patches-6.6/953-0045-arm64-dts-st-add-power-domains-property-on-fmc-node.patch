@@ -1,0 +1,32 @@
+From 37aebd2ea3c31924e7b87b2b83a9d928b4365cb6 Mon Sep 17 00:00:00 2001
+From: Christophe Kerello <christophe.kerello@foss.st.com>
+Date: Fri, 8 Nov 2024 15:08:13 +0100
+Subject: [PATCH] arm64: dts: st: add power-domains property on fmc node
+
+Add power-domains property on fmc node.
+
+Change-Id: I6d38e089a4c4eea847d28fe35dda1bcdf747cf82
+Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/417410
+Domain-Review: Francois CHOLEAU <francois.choleau@st.com>
+Tested-by: Francois CHOLEAU <francois.choleau@st.com>
+Reviewed-by: Francois CHOLEAU <francois.choleau@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 57b65c8b96cc..f449b5e21c0a 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -2379,6 +2379,7 @@ fmc: memory-controller@48200000 {
+ 			#size-cells = <1>;
+ 			clocks = <&scmi_clk CK_SCMI_FMC>;
+ 			resets = <&scmi_reset RST_SCMI_FMC>;
++			power-domains = <&CLUSTER_PD>;
+ 			status = "disabled";
+ 
+ 			nand-controller@4,0 {
+-- 
+2.50.1
+

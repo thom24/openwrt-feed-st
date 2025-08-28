@@ -1,0 +1,115 @@
+From 6f9090f57aa0b85817472993098dd8ce39c9579b Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 19 Mar 2025 13:55:59 +0100
+Subject: [PATCH] mfd: stm32-lptimer: don't rely on regmap to manage the clock
+
+The stm32-lptimer driver uses devm_regmap_init_mmio_clk() to enable
+or disable the clock upon each register access through regmap API.
+Child drivers used to rely on it as well.
+
+It's not possible when using CONFIG_PREEMPT_RT, to manage the clock
+from within regmap, when clocksource driver is used. The IRQ requires
+to access the register, hence calls clk_[en|dis]able. It takes a
+spin_lock which isn't allowed in hard irq context (IRQF_TIMER flag):
+-> stm32_clkevent_lp_irq_handler
+-> regmap_write
+-> clk_enable
+-> rt_spin_lock
+It's highlighted in logs by "BUG: scheduling while atomic..." stack dumps.
+
+The child drivers have been updated to manage the clock through runtime
+PM. So replace devm_regmap_init_mmio_clk() and manage the clock directly
+with runtime PM too.
+The clk_prepare() call previously done through devm_regmap_init_mmio_clk()
+is moved to devm_clk_get_prepared().
+
+There's no functional change intended here. Instead, call pm_runtime
+get/put method to manage the clock, before/after accessing the
+registers.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ic748a27a41f7e1e1970ad233ace6868ec2718222
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/445400
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/mfd/stm32-lptimer.c | 39 +++++++++++++++++++++++++++++++------
+ 1 file changed, 33 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/mfd/stm32-lptimer.c b/drivers/mfd/stm32-lptimer.c
+index eb3c1517603d..abb64b7f6339 100644
+--- a/drivers/mfd/stm32-lptimer.c
++++ b/drivers/mfd/stm32-lptimer.c
+@@ -96,28 +96,54 @@ static int stm32_lptimer_probe(struct platform_device *pdev)
+ 	if (IS_ERR(mmio))
+ 		return PTR_ERR(mmio);
+ 
+-	ddata->regmap = devm_regmap_init_mmio_clk(dev, "mux", mmio,
+-						  &stm32_lptimer_regmap_cfg);
++	ddata->regmap = devm_regmap_init_mmio(dev, mmio, &stm32_lptimer_regmap_cfg);
+ 	if (IS_ERR(ddata->regmap))
+ 		return PTR_ERR(ddata->regmap);
+ 
+-	ddata->clk = devm_clk_get(dev, NULL);
++	ddata->clk = devm_clk_get_prepared(dev, NULL);
+ 	if (IS_ERR(ddata->clk))
+ 		return PTR_ERR(ddata->clk);
+ 
+-	ret = stm32_lptimer_detect_hwcfgr(ddata);
++	platform_set_drvdata(pdev, ddata);
++
++	ret = devm_pm_runtime_enable(dev);
+ 	if (ret)
+ 		return ret;
+ 
+-	platform_set_drvdata(pdev, ddata);
++	ret = pm_runtime_resume_and_get(dev);
++		if (ret)
++			return ret;
+ 
+-	ret = devm_pm_runtime_enable(dev);
++	ret = stm32_lptimer_detect_hwcfgr(ddata);
+ 	if (ret)
+ 		return ret;
+ 
++	pm_runtime_put(dev);
++
+ 	return devm_of_platform_populate(&pdev->dev);
+ }
+ 
++static int stm32_lptimer_runtime_suspend(struct device *dev)
++{
++	struct stm32_lptimer *priv = dev_get_drvdata(dev);
++
++	clk_disable(priv->clk);
++
++	return 0;
++}
++
++static int stm32_lptimer_runtime_resume(struct device *dev)
++{
++	struct stm32_lptimer *priv = dev_get_drvdata(dev);
++
++	return clk_enable(priv->clk);
++}
++
++static const struct dev_pm_ops stm32_lptim_pm_ops = {
++	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend, pm_runtime_force_resume)
++	SET_RUNTIME_PM_OPS(stm32_lptimer_runtime_suspend, stm32_lptimer_runtime_resume, NULL)
++};
++
+ static const struct of_device_id stm32_lptimer_of_match[] = {
+ 	{ .compatible = "st,stm32-lptimer", },
+ 	{},
+@@ -129,6 +155,7 @@ static struct platform_driver stm32_lptimer_driver = {
+ 	.driver = {
+ 		.name = "stm32-lptimer",
+ 		.of_match_table = stm32_lptimer_of_match,
++		.pm = pm_ptr(&stm32_lptim_pm_ops),
+ 	},
+ };
+ module_platform_driver(stm32_lptimer_driver);
+-- 
+2.50.1
+

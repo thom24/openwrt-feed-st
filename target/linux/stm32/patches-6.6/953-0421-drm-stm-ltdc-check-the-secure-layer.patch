@@ -1,0 +1,53 @@
+From a825a4c452836077af0c5aa2af62f1ae550bd561 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Tue, 29 Apr 2025 08:39:58 +0200
+Subject: [PATCH] drm/stm: ltdc: check the secure layer
+
+Do not expose the crc to the user if the third layer is secure.
+
+Change-Id: I4557ecc7e3c1357c9b704f40a48462a200271580
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/454678
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/gpu/drm/stm/ltdc.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+index 0b0bb12b76ab..b1eb57c142f7 100644
+--- a/drivers/gpu/drm/stm/ltdc.c
++++ b/drivers/gpu/drm/stm/ltdc.c
+@@ -2249,6 +2249,7 @@ static int ltdc_get_caps(struct drm_device *ddev)
+ 	u32 bus_width_log2, lcr, gc2r, lxc1r;
+ 	const struct ltdc_plat_data *pdata = of_device_get_match_data(ddev->dev);
+ 	int ret, i;
++	bool is_layer_secured = false;
+ 
+ 	/*
+ 	 * at least 1 layer must be managed & the number of layers
+@@ -2301,6 +2302,7 @@ static int ltdc_get_caps(struct drm_device *ddev)
+ 					 */
+ 					if (!strcmp("l3", fwl[i].entry)) {
+ 						ldev->caps.nb_layers--;
++						is_layer_secured = true;
+ 					} else {
+ 						stm32_firewall_release_access(fwl);
+ 						return ret;
+@@ -2425,6 +2427,13 @@ static int ltdc_get_caps(struct drm_device *ddev)
+ 			else
+ 				ldev->caps.plane_scaling[i] = false;
+ 		}
++
++		if (of_device_is_compatible(dev->of_node, "st,stm32mp21-ltdc") ||
++		    of_device_is_compatible(dev->of_node, "st,stm32mp25-ltdc")) {
++			/* Do not expose the crc to the user if the third layer is secure.*/
++			if (is_layer_secured)
++				ldev->caps.crc = false;
++		}
+ 		break;
+ 	default:
+ 		DRM_ERROR("hardware identifier (0x%08x) not supported!\n", ldev->caps.hw_version);
+-- 
+2.50.1
+

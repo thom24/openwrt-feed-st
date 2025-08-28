@@ -1,0 +1,48 @@
+From f69fed45ebb12dca55bfc2899f6abc72e401456b Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Mon, 24 Mar 2025 16:47:45 +0100
+Subject: [PATCH] arm64: dts: st: select AHB port for HPDMA linked-list on
+ stm32mp215f-dk
+
+By default, if lli-bus-interface is not used, DMA3 driver relies on its
+first port which is AXI on stm32mp21. With AXI address remapping, DMA3
+driver forces the port if it can't access the address allocated for its
+linked-list with the default or user-configured linked-list port.
+As internal memory is used for LLI (memory-region), configure LLI port to
+use the second port which is AHB on stm32mp21. Then the driver won't have
+to force the port, unless there is no more room in internal memory.
+
+Change-Id: I6f77740fcd8d94c840cf4a46bcdc1388b74c7b2d
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/446251
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index f920bd050a23..0ebefdb525cf 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -328,14 +328,17 @@ phy0_eth1: ethernet-phy@0 {
+ 
+ &hpdma {
+ 	memory-region = <&hpdma1_lli>;
++	lli-bus-interface = <1>;
+ };
+ 
+ &hpdma2 {
+ 	memory-region = <&hpdma2_lli>;
++	lli-bus-interface = <1>;
+ };
+ 
+ &hpdma3 {
+ 	memory-region = <&hpdma3_lli>;
++	lli-bus-interface = <1>;
+ };
+ 
+ &i2c2 {
+-- 
+2.50.1
+

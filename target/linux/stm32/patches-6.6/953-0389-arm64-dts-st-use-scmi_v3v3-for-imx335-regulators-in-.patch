@@ -1,0 +1,74 @@
+From 130c21c164c902772e8db582a8fecfc1317fc4fa Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Thu, 6 Mar 2025 09:37:00 +0100
+Subject: [PATCH] arm64: dts: st: use scmi_v3v3 for imx335 regulators in
+ stm32mp257f-dk.dts
+
+The 3 imx335 supplies are generated within the MB1854 and all come
+from the v3v3 coming from the board.  Ensure that this regulator is
+enabled by using the scmi_v3v3 as supplier of the imx335.
+
+Change-Id: I201dfe94f98f331ccf1ffc43275c66d099e9cb1c
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/442179
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 30 +++--------------------
+ 1 file changed, 3 insertions(+), 27 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index b8065f6dc229..cb40de9ff97e 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -134,30 +134,6 @@ hdmi_connector_in: endpoint {
+ 		};
+ 	};
+ 
+-	imx335_2v9: regulator-2v9 {
+-		compatible = "regulator-fixed";
+-		regulator-name = "imx335-avdd";
+-		regulator-min-microvolt = <2900000>;
+-		regulator-max-microvolt = <2900000>;
+-		regulator-always-on;
+-	};
+-
+-	imx335_1v8: regulator-1v8 {
+-		compatible = "regulator-fixed";
+-		regulator-name = "imx335-ovdd";
+-		regulator-min-microvolt = <1800000>;
+-		regulator-max-microvolt = <1800000>;
+-		regulator-always-on;
+-	};
+-
+-	imx335_1v2: regulator-1v2 {
+-		compatible = "regulator-fixed";
+-		regulator-name = "imx335-dvdd";
+-		regulator-min-microvolt = <1200000>;
+-		regulator-max-microvolt = <1200000>;
+-		regulator-always-on;
+-	};
+-
+ 	memory@80000000 {
+ 		device_type = "memory";
+ 		reg = <0x0 0x80000000 0x1 0x0>;
+@@ -366,9 +342,9 @@ imx335: camera@1a {
+ 		compatible = "sony,imx335";
+ 		reg = <0x1a>;
+ 		clocks = <&clk_ext_camera>;
+-		avdd-supply = <&imx335_2v9>;
+-		ovdd-supply = <&imx335_1v8>;
+-		dvdd-supply = <&imx335_1v2>;
++		avdd-supply = <&scmi_v3v3>;
++		ovdd-supply = <&scmi_v3v3>;
++		dvdd-supply = <&scmi_v3v3>;
+ 		reset-gpios = <&gpiob 1 (GPIO_ACTIVE_LOW | GPIO_PUSH_PULL)>;
+ 		powerdown-gpios = <&gpiob 11 (GPIO_ACTIVE_HIGH | GPIO_PUSH_PULL)>;
+ 		status = "okay";
+-- 
+2.50.1
+

@@ -1,0 +1,155 @@
+From cf2f1b885568af55cb53eec3525c2e9c34d1d760 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Fri, 14 Mar 2025 15:31:38 +0100
+Subject: [PATCH] drm/stm: ltdc: set configuration register masks to 12 bits
+
+The display configuration registers vary between LTDC IP versions.
+The registers controlling height settings are 11 or 12-bit based.
+Therefore, the masks must be updated depending on the LTDC IP version.
+
+Change-Id: I0b41e9e6aba67810afcc3c7aeec68b5147206d72
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/444305
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/gpu/drm/stm/ltdc.c | 72 +++++++++++++++++++++++++++++++-------
+ drivers/gpu/drm/stm/ltdc.h |  1 +
+ 2 files changed, 60 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+index 443ed4b04f74..0b0bb12b76ab 100644
+--- a/drivers/gpu/drm/stm/ltdc.c
++++ b/drivers/gpu/drm/stm/ltdc.c
+@@ -127,17 +127,14 @@
+ #define LTDC_L1FPF1R	(ldev->caps.layer_regs[30])	/* L1 Flexible Pixel Format 1 */
+ 
+ /* Bit definitions */
+-#define SSCR_VSH	GENMASK(10, 0)	/* Vertical Synchronization Height */
+-#define SSCR_HSW	GENMASK(27, 16)	/* Horizontal Synchronization Width */
+-
+-#define BPCR_AVBP	GENMASK(10, 0)	/* Accumulated Vertical Back Porch */
+-#define BPCR_AHBP	GENMASK(27, 16)	/* Accumulated Horizontal Back Porch */
+-
+-#define AWCR_AAH	GENMASK(10, 0)	/* Accumulated Active Height */
+-#define AWCR_AAW	GENMASK(27, 16)	/* Accumulated Active Width */
+-
+-#define TWCR_TOTALH	GENMASK(10, 0)	/* TOTAL Height */
+-#define TWCR_TOTALW	GENMASK(27, 16)	/* TOTAL Width */
++#define SSCR_VSH	(ldev->caps.conf_regs[0])	/* Vertical Synchronization Height */
++#define SSCR_HSW	(ldev->caps.conf_regs[1])	/* Horizontal Synchronization Width */
++#define BPCR_AVBP	(ldev->caps.conf_regs[2])	/* Accumulated Vertical Back Porch */
++#define BPCR_AHBP	(ldev->caps.conf_regs[3])	/* Accumulated Horizontal Back Porch */
++#define AWCR_AAH	(ldev->caps.conf_regs[4])	/* Accumulated Active Height */
++#define AWCR_AAW	(ldev->caps.conf_regs[5])	/* Accumulated Active Width */
++#define TWCR_TOTALH	(ldev->caps.conf_regs[6])	/* TOTAL Height */
++#define TWCR_TOTALW	(ldev->caps.conf_regs[7])	/* TOTAL Width */
+ 
+ #define GCR_LTDCEN	BIT(0)		/* LTDC ENable */
+ #define GCR_ROTEN	BIT(2)		/* ROTation ENable */
+@@ -495,6 +492,28 @@ static const u32 ltdc_layer_regs_a2[] = {
+ 	0x178	/* L1 Flexible Pixel Format 1 */
+ };
+ 
++static const u32 ltdc_conf_regs_a0[] = {
++	GENMASK(10, 0),		/* Vertical Synchronization Height */
++	GENMASK(27, 16),	/* Horizontal Synchronization Width */
++	GENMASK(10, 0),		/* Accumulated Vertical Back Porch */
++	GENMASK(27, 16),	/* Accumulated Horizontal Back Porch */
++	GENMASK(10, 0),		/* Accumulated Active Height */
++	GENMASK(27, 16),	/* Accumulated Active Width */
++	GENMASK(10, 0),		/* TOTAL Height */
++	GENMASK(27, 16)		/* TOTAL Width */
++};
++
++static const u32 ltdc_conf_regs_a1[] = {
++	GENMASK(11, 0),		/* Vertical Synchronization Height */
++	GENMASK(27, 16),	/* Horizontal Synchronization Width */
++	GENMASK(11, 0),		/* Accumulated Vertical Back Porch */
++	GENMASK(27, 16),	/* Accumulated Horizontal Back Porch */
++	GENMASK(11, 0),		/* Accumulated Active Height */
++	GENMASK(27, 16),	/* Accumulated Active Width */
++	GENMASK(11, 0),		/* TOTAL Height */
++	GENMASK(27, 16)		/* TOTAL Width */
++};
++
+ static const u64 ltdc_format_modifiers[] = {
+ 	DRM_FORMAT_MOD_LINEAR,
+ 	DRM_FORMAT_MOD_INVALID
+@@ -2301,9 +2320,36 @@ static int ltdc_get_caps(struct drm_device *ddev)
+ 
+ 	switch (ldev->caps.hw_version) {
+ 	case HWVER_10200:
++		ldev->caps.layer_ofs = LAY_OFS_0;
++		ldev->caps.layer_regs = ltdc_layer_regs_a0;
++		ldev->caps.conf_regs = ltdc_conf_regs_a0;
++		ldev->caps.pix_fmt_hw = ltdc_pix_fmt_a0;
++		ldev->caps.pix_fmt_drm = ltdc_drm_fmt_a0;
++		ldev->caps.pix_fmt_nb = ARRAY_SIZE(ltdc_drm_fmt_a0);
++		ldev->caps.pix_fmt_flex = false;
++		/*
++		 * Hw older versions support non-alpha color formats derived
++		 * from native alpha color formats only on the primary layer.
++		 * For instance, RG16 native format without alpha works fine
++		 * on 2nd layer but XR24 (derived color format from AR24)
++		 * does not work on 2nd layer.
++		 */
++		ldev->caps.non_alpha_only_l1 = true;
++		ldev->caps.pad_max_freq_hz = 65000000;
++		ldev->caps.nb_irq = 2;
++		ldev->caps.ycbcr_input = false;
++		ldev->caps.ycbcr_output = false;
++		ldev->caps.plane_reg_shadow = false;
++		ldev->caps.crc = false;
++		ldev->caps.dynamic_zorder = false;
++		ldev->caps.plane_rotation = false;
++		ldev->caps.crtc_rotation = false;
++		ldev->caps.fifo_threshold = false;
++		break;
+ 	case HWVER_10300:
+ 		ldev->caps.layer_ofs = LAY_OFS_0;
+ 		ldev->caps.layer_regs = ltdc_layer_regs_a0;
++		ldev->caps.conf_regs = ltdc_conf_regs_a1;
+ 		ldev->caps.pix_fmt_hw = ltdc_pix_fmt_a0;
+ 		ldev->caps.pix_fmt_drm = ltdc_drm_fmt_a0;
+ 		ldev->caps.pix_fmt_nb = ARRAY_SIZE(ltdc_drm_fmt_a0);
+@@ -2316,8 +2362,6 @@ static int ltdc_get_caps(struct drm_device *ddev)
+ 		 * does not work on 2nd layer.
+ 		 */
+ 		ldev->caps.non_alpha_only_l1 = true;
+-		if (ldev->caps.hw_version == HWVER_10200)
+-			ldev->caps.pad_max_freq_hz = 65000000;
+ 		ldev->caps.nb_irq = 2;
+ 		ldev->caps.ycbcr_input = false;
+ 		ldev->caps.ycbcr_output = false;
+@@ -2331,6 +2375,7 @@ static int ltdc_get_caps(struct drm_device *ddev)
+ 	case HWVER_20101:
+ 		ldev->caps.layer_ofs = LAY_OFS_0;
+ 		ldev->caps.layer_regs = ltdc_layer_regs_a1;
++		ldev->caps.conf_regs = ltdc_conf_regs_a1;
+ 		ldev->caps.pix_fmt_hw = ltdc_pix_fmt_a1;
+ 		ldev->caps.pix_fmt_drm = ltdc_drm_fmt_a1;
+ 		ldev->caps.pix_fmt_nb = ARRAY_SIZE(ltdc_drm_fmt_a1);
+@@ -2351,6 +2396,7 @@ static int ltdc_get_caps(struct drm_device *ddev)
+ 	case HWVER_40101:
+ 		ldev->caps.layer_ofs = LAY_OFS_1;
+ 		ldev->caps.layer_regs = ltdc_layer_regs_a2;
++		ldev->caps.conf_regs = ltdc_conf_regs_a1;
+ 		ldev->caps.pix_fmt_hw = ltdc_pix_fmt_a2;
+ 		ldev->caps.pix_fmt_drm = ltdc_drm_fmt_a2;
+ 		ldev->caps.pix_fmt_nb = ARRAY_SIZE(ltdc_drm_fmt_a2);
+diff --git a/drivers/gpu/drm/stm/ltdc.h b/drivers/gpu/drm/stm/ltdc.h
+index 356033af6b9b..ecbce35bf7b9 100644
+--- a/drivers/gpu/drm/stm/ltdc.h
++++ b/drivers/gpu/drm/stm/ltdc.h
+@@ -21,6 +21,7 @@ struct ltdc_caps {
+ 	u32 nb_layers;		/* number of supported layers */
+ 	u32 layer_ofs;		/* layer offset for applicable regs */
+ 	const u32 *layer_regs;	/* layer register offset */
++	const u32 *conf_regs;	/* display configuration register masks */
+ 	u32 bus_width;		/* bus width (32 or 64 bits) */
+ 	const u32 *pix_fmt_hw;	/* supported hw pixel formats */
+ 	const u32 *pix_fmt_drm;	/* supported drm pixel formats */
+-- 
+2.50.1
+

@@ -1,0 +1,61 @@
+From 4b41edc358b21d8d1b01187fdc609a7354c4e666 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Fri, 21 Feb 2025 12:24:01 +0100
+Subject: [PATCH] ARM: dts: stm32: add stm32mp215f-dk board aarch32 support
+
+Add aarch32 support for stm32mp215f-dk board. It includes the original
+board device tree from arm64 and update armv8-timer node with
+arm,cpu-registers-not-fw-configured property, to force the use of
+ARCH_TIMER_PHYS_SECURE_PPI, as used on aarch64 and configured by TF-A,
+instead of ARCH_TIMER_VIRT_PPI when CONFIG_ARM64 is not enabled.
+
+Change-Id: Ib95eded84bdfa2be6248d5f0c4d5869594a92612
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/443278
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/dts/st/Makefile           |  1 +
+ arch/arm/boot/dts/st/stm32mp215f-dk.dts | 18 ++++++++++++++++++
+ 2 files changed, 19 insertions(+)
+ create mode 100644 arch/arm/boot/dts/st/stm32mp215f-dk.dts
+
+diff --git a/arch/arm/boot/dts/st/Makefile b/arch/arm/boot/dts/st/Makefile
+index 74036ab16a43..f4426da153f4 100644
+--- a/arch/arm/boot/dts/st/Makefile
++++ b/arch/arm/boot/dts/st/Makefile
+@@ -81,6 +81,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
+ 	stm32mp157f-ev1.dtb \
+ 	stm32mp157f-ev1-a7-examples.dtb \
+ 	stm32mp157f-ev1-m4-examples.dtb \
++	stm32mp215f-dk.dtb \
+ 	stm32mp257f-ev1.dtb
+ 
+ dtb-$(CONFIG_ARCH_U8500) += \
+diff --git a/arch/arm/boot/dts/st/stm32mp215f-dk.dts b/arch/arm/boot/dts/st/stm32mp215f-dk.dts
+new file mode 100644
+index 000000000000..181b860ffc4b
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp215f-dk.dts
+@@ -0,0 +1,18 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
++/*
++ * Copyright (C) STMicroelectronics 2025 - All Rights Reserved
++ * Author: Amelie Delaunay <amelie.delaunay@foss.st.com> for STMicroelectronics.
++ */
++
++/dts-v1/;
++
++#include "../../../../arm64/boot/dts/st/stm32mp215f-dk.dts"
++
++/ {
++	model = "STMicroelectronics STM32MP215F-DK AARCH32 Discovery Board";
++	compatible = "st,stm32mp215f-dk-aarch32", "st,stm32mp215f-dk", "st,stm32mp215";
++
++	timer {
++		arm,cpu-registers-not-fw-configured;
++	};
++};
+-- 
+2.50.1
+

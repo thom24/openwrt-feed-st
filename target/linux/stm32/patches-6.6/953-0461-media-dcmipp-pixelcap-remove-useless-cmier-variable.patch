@@ -1,0 +1,68 @@
+From 6923aef6e9e84de4f77a4aebde95b233a8f9f263 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Fri, 16 May 2025 14:05:08 +0200
+Subject: [PATCH] media: dcmipp: pixelcap: remove useless cmier variable
+
+The struct dcmipp_pixelcap_device embeds a cmier variable which is
+actually only set once and then used in several places for interrupt
+mask or interrupt enable/disable. Use the DCMIPP_CMIER_PxALL
+bitfield macro directly instead of using it through the cmier
+variable.
+
+Change-Id: If6959d8a5aaa19f5e339c00ae1e21d6481b9c3ae
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/459523
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ .../platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c      | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
+index b0ce4c9ea69d..876c069580f4 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
+@@ -184,7 +184,6 @@ struct dcmipp_pixelcap_device {
+ 
+ 	u32 pipe_id;
+ 
+-	u32 cmier;
+ 	u32 cmsr2;
+ 
+ 	struct {
+@@ -595,9 +594,8 @@ static int dcmipp_pixelcap_start_streaming(struct vb2_queue *vq,
+ 	dcmipp_start_capture(vcap, vcap->next);
+ 
+ 	/* Enable interruptions */
+-	vcap->cmier |= DCMIPP_CMIER_PxALL(vcap->pipe_id);
+ 	spin_lock(&vcap->vdev.v4l2_dev->lock);
+-	reg_set(vcap, DCMIPP_CMIER, vcap->cmier);
++	reg_set(vcap, DCMIPP_CMIER, DCMIPP_CMIER_PxALL(vcap->pipe_id));
+ 	spin_unlock(&vcap->vdev.v4l2_dev->lock);
+ 
+ 	vcap->state = DCMIPP_RUNNING;
+@@ -638,7 +636,7 @@ static void dcmipp_pixelcap_stop_streaming(struct vb2_queue *vq)
+ 
+ 	/* Disable interruptions */
+ 	spin_lock(&vcap->vdev.v4l2_dev->lock);
+-	reg_clear(vcap, DCMIPP_CMIER, vcap->cmier);
++	reg_clear(vcap, DCMIPP_CMIER, DCMIPP_CMIER_PxALL(vcap->pipe_id));
+ 	spin_unlock(&vcap->vdev.v4l2_dev->lock);
+ 
+ 	/* Stop capture */
+@@ -967,7 +965,7 @@ static irqreturn_t dcmipp_pixelcap_irq_callback(int irq, void *arg)
+ 			container_of(arg, struct dcmipp_pixelcap_device, ved);
+ 	struct dcmipp_ent_device *ved = arg;
+ 
+-	vcap->cmsr2 = ved->cmsr2 & vcap->cmier;
++	vcap->cmsr2 = ved->cmsr2 & DCMIPP_CMIER_PxALL(vcap->pipe_id);
+ 	if (!vcap->cmsr2)
+ 		return IRQ_HANDLED;
+ 
+-- 
+2.50.1
+

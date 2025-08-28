@@ -1,0 +1,39 @@
+From 72c3d780d0c3254ac335b45be670cbf5e06fd747 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Mon, 17 Feb 2025 15:20:24 +0100
+Subject: [PATCH] arm64: dts: st: use st,stm32mp21-rifsc compatible for RIFSC
+ node
+
+Use the st,stm32mp21-rifsc compatible for the RIFSC node to be able
+to differentiate stm32mp21x from stm32mp25x platforms in the RIFSC driver
+as there is no difference in the version register of the peripheral.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I178c6fe8c8022650f19a9e55a156f128bedab6ac
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/437679
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 6ef908388f9f..8d1db320e585 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -381,7 +381,7 @@ ipcc1: mailbox@40490000 {
+ 		};
+ 
+ 		rifsc: bus@42080000 {
+-			compatible = "st,stm32mp25-rifsc", "simple-bus";
++			compatible = "st,stm32mp21-rifsc", "simple-bus";
+ 			reg = <0x42080000 0x0 0x1000>;
+ 			#address-cells = <1>;
+ 			#size-cells = <2>;
+-- 
+2.50.1
+

@@ -1,0 +1,73 @@
+From da88a858afe90b270908a94fe18e2fe7b59dba04 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Wed, 26 Mar 2025 16:59:23 +0100
+Subject: [PATCH] arm64: dts: add SDMMC2 support in stm32mp215f-dk
+
+SDMMC2 is available on M.2 connector. (to connect for example
+PCIE M.2 WLAN Module using SDIO.
+
+Change-Id: Ibf03829821bf14fc088a38d5fd3bef9d9d2f0897
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/446914
+Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Christophe KERELLO <christophe.kerello@st.com>
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 29 +++++++++++++++--------
+ 1 file changed, 19 insertions(+), 10 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index f9ee2213f206..82679bd55f82 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -226,6 +226,11 @@ vdiv_cc2: voltage-divider-cc2 {
+ 		output-ohms = <3900>;
+ 		full-ohms = <5100>;
+ 	};
++
++	wifi_pwrseq: wifi-pwrseq {
++		compatible = "mmc-pwrseq-simple";
++		reset-gpios = <&gpiob 2 GPIO_ACTIVE_LOW>;
++	};
+ };
+ 
+ &adc_1 {
+@@ -553,19 +558,23 @@ &sdmmc1 {
+ 
+ &sdmmc2 {
+ 	pinctrl-names = "default", "opendrain", "sleep";
+-	pinctrl-0 = <&sdmmc2_b4_pins_a &sdmmc2_d47_pins_a>;
+-	pinctrl-1 = <&sdmmc2_b4_od_pins_a &sdmmc2_d47_pins_a>;
+-	pinctrl-2 = <&sdmmc2_b4_sleep_pins_a &sdmmc2_d47_sleep_pins_a>;
+-	non-removable;
+-	no-sd;
+-	no-sdio;
++	pinctrl-0 = <&sdmmc2_b4_pins_a>;
++	pinctrl-1 = <&sdmmc2_b4_od_pins_a>;
++	pinctrl-2 = <&sdmmc2_b4_sleep_pins_a>;
+ 	st,neg-edge;
+-	bus-width = <8>;
++	cap-sdio-irq;
++	bus-width = <4>;
+ 	vmmc-supply = <&scmi_v3v3>;
+ 	vqmmc-supply = <&scmi_vddio2>;
+-	mmc-ddr-1_8v;
+-	mmc-hs200-1_8v;
+-	status = "okay";
++	mmc-pwrseq = <&wifi_pwrseq>;
++	#address-cells = <1>;
++	#size-cells = <0>;
++	sd-uhs-sdr12;
++	sd-uhs-sdr25;
++	sd-uhs-sdr50;
++	sd-uhs-ddr50;
++	sd-uhs-sdr104;
++	status = "disabled";
+ };
+ 
+ &sdmmc3 {
+-- 
+2.50.1
+

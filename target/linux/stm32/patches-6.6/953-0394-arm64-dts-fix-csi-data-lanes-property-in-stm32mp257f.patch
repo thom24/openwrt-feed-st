@@ -1,0 +1,39 @@
+From 14799f3af34882e7185e0599a37608934c4d2608 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Tue, 18 Mar 2025 18:22:04 +0100
+Subject: [PATCH] arm64: dts: fix csi data-lanes property in
+ stm32mp257f-ev1.dts
+
+The csi receiver data-lanes property should always start from 1
+instead of 0 since 0 is reserved for the clock-lane. Update the
+device-tree to match this requirement.
+
+Change-Id: I6bcbe5ed8348187627328a75b4466f06ae943a9a
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/445121
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+index df2e625d30a6..e077018ca37d 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+@@ -232,7 +232,7 @@ port@0 {
+ 			reg = <0>;
+ 			csi_sink: endpoint {
+ 				remote-endpoint = <&imx335_ep>;
+-				data-lanes = <0 1>;
++				data-lanes = <1 2>;
+ 				bus-type = <4>;
+ 			};
+ 		};
+-- 
+2.50.1
+

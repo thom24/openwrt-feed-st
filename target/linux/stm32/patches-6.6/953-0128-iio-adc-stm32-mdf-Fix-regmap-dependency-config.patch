@@ -1,0 +1,36 @@
+From 6e75e2ab7bd971841fe497b354ddd0ae412c14f6 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Wed, 4 Dec 2024 13:47:52 +0100
+Subject: [PATCH] iio: adc: stm32-mdf: Fix regmap dependency config
+
+MDF module depends on &clk_regmap_gate_ops, add COMMON_CLK_REGMAP
+dependency config.
+The COMMON_CLK_STM32MP257 already defines the dependency
+but better to enforce the dependency here.
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I935490065733578d9622a6c02b469c90125257d2
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/422646
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/iio/adc/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
+index 4e3bc819e5d2..411a61289b8d 100644
+--- a/drivers/iio/adc/Kconfig
++++ b/drivers/iio/adc/Kconfig
+@@ -1126,6 +1126,7 @@ config STM32_MDF_ADC
+ 	tristate "STMicroelectronics STM32 MDF adc"
+ 	depends on (ARCH_STM32 && OF) || COMPILE_TEST
+ 	select STM32_MDF_CORE
++	select COMMON_CLK_REGMAP
+ 	select IIO_BUFFER
+ 	select IIO_BUFFER_HW_CONSUMER
+ 	select IIO_BACKEND
+-- 
+2.50.1
+

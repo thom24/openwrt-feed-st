@@ -1,0 +1,36 @@
+From 1c3c027058d67e5c9ae5399f0fba6ece505ba76a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Thu, 24 Oct 2024 11:06:09 +0200
+Subject: [PATCH] dt-bindings: rng: introduce st,stm32mp21-rng compatible
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Add RNG STM32MP21x platforms compatible.
+
+Change-Id: Iad33234c8bb7873515b756176ca38316047e8425
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/413796
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ Documentation/devicetree/bindings/rng/st,stm32-rng.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml b/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml
+index c6ab47e4e9e5..afbfb23f3321 100644
+--- a/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml
++++ b/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml
+@@ -18,6 +18,7 @@ properties:
+     enum:
+       - st,stm32-rng
+       - st,stm32mp13-rng
++      - st,stm32mp21-rng
+       - st,stm32mp25-rng
+ 
+   reg:
+-- 
+2.50.1
+

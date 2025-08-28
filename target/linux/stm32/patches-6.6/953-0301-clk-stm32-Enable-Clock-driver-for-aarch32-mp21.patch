@@ -1,0 +1,59 @@
+From 7034259baf75a353b673db3cc7d9f3f1645bf355 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Mon, 24 Feb 2025 10:38:08 +0100
+Subject: [PATCH] clk: stm32: Enable Clock driver for aarch32 mp21
+
+COMMON_CLK_STM32MP215 needed for aarch32 mp21 build.
+
+do_div parameter type is an unsigned long long. Fixed 32 bit build
+and remove uselss 0L initialisation
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I403ac102304e767c79bc03e766fc209a8444f437
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/439413
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/clk/stm32/Kconfig         | 2 +-
+ drivers/clk/stm32/clk-stm32mp21.c | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/clk/stm32/Kconfig b/drivers/clk/stm32/Kconfig
+index 650a33518a90..d81cec0c3b12 100644
+--- a/drivers/clk/stm32/Kconfig
++++ b/drivers/clk/stm32/Kconfig
+@@ -27,7 +27,7 @@ config COMMON_CLK_STM32MP157
+ 
+ config COMMON_CLK_STM32MP215
+ 	bool "Clock driver for stm32m21x clocks"
+-	depends on ARM64 || COMPILE_TEST
++	depends on ARM || ARM64 || COMPILE_TEST
+ 	select COMMON_CLK_REGMAP
+ 	default y
+ 	help
+diff --git a/drivers/clk/stm32/clk-stm32mp21.c b/drivers/clk/stm32/clk-stm32mp21.c
+index 4d15ac6e792b..a5de53bff9b6 100644
+--- a/drivers/clk/stm32/clk-stm32mp21.c
++++ b/drivers/clk/stm32/clk-stm32mp21.c
+@@ -4,6 +4,7 @@
+  * Author: Gabriel Fernandez <gabriel.fernandez@foss.st.com> for STMicroelectronics.
+  */
+ 
++#include <linux/bitfield.h>
+ #include <linux/bus/stm32_firewall_device.h>
+ #include <linux/clk.h>
+ #include <linux/of_address.h>
+@@ -1843,7 +1844,7 @@ static unsigned long clk_get_pll_fvco(struct clk_stm32_clock_data *data, u32 off
+ 	void __iomem *pllxcfgr1 = data->base + offset_base;
+ 	void __iomem *pllxcfgr2 = pllxcfgr1 + RCC_OFFSET_PLLXCFGR2;
+ 	void __iomem *pllxcfgr3 = pllxcfgr1 + RCC_OFFSET_PLLXCFGR3;
+-	unsigned long fvco = 0UL;
++	u64 fvco;
+ 	u32 fracin, fbdiv, refdiv;
+ 
+ 	fracin = readl(pllxcfgr3) & RCC_PLLxCFGR3_FRACIN_MASK;
+-- 
+2.50.1
+

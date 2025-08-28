@@ -1,0 +1,44 @@
+From 2e98c9922da4929769f0efe90ee720fa8ed3c751 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Wed, 18 Dec 2024 16:19:41 +0100
+Subject: [PATCH] ARM: dts: stm32: add IWDG1 node for stm32mp15
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Add IWDG1 node in stm32mp15 SoC device tree file.
+
+Change-Id: Ic7bde59d4a41e979989a1be143f95b6c298d907a
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/425587
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp151.dtsi | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
+index 36226e39fbe0..c3cb20bbb44a 100644
+--- a/arch/arm/boot/dts/st/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
+@@ -633,6 +633,15 @@ ddrperfm: perf@5a007000 {
+ 			status = "disabled";
+ 		};
+ 
++		iwdg1: watchdog@5c003000 {
++			compatible = "st,stm32mp1-iwdg";
++			reg = <0x5c003000 0x400>;
++			interrupts = <GIC_SPI 150 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&rcc IWDG1>, <&rcc CK_LSI>;
++			clock-names = "pclk", "lsi";
++			status = "disabled";
++		};
++
+ 		rtc: rtc@5c004000 {
+ 			compatible = "st,stm32mp1-rtc";
+ 			reg = <0x5c004000 0x400>;
+-- 
+2.50.1
+

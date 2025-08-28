@@ -1,0 +1,68 @@
+From 572068f44ce9405bba7ff245bcf19a209f928749 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Wed, 16 Oct 2024 13:10:18 +0200
+Subject: [PATCH] arm64: dts: st: fix nodes for imx335/csi/dcmipp in
+ stm32mp215f-dk
+
+Add all 3 properties avdd/ovdd/dvdd into the imx335 nodes.
+
+Change-Id: I8ddc1cbb634b2217600562b022a1fa2bb973d0c2
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/411743
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 27 +++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index a8da85304d79..1ec181f735fd 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -111,6 +111,30 @@ led-blue {
+ 		};
+ 	};
+ 
++	imx335_2v9: regulator-2v9 {
++		compatible = "regulator-fixed";
++		regulator-name = "imx335-avdd";
++		regulator-min-microvolt = <2900000>;
++		regulator-max-microvolt = <2900000>;
++		regulator-always-on;
++	};
++
++	imx335_1v8: regulator-1v8 {
++		compatible = "regulator-fixed";
++		regulator-name = "imx335-ovdd";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++		regulator-always-on;
++	};
++
++	imx335_1v2: regulator-1v2 {
++		compatible = "regulator-fixed";
++		regulator-name = "imx335-dvdd";
++		regulator-min-microvolt = <1200000>;
++		regulator-max-microvolt = <1200000>;
++		regulator-always-on;
++	};
++
+ 	memory@80000000 {
+ 		device_type = "memory";
+ 		reg = <0x0 0x80000000 0x0 0x80000000>;
+@@ -315,6 +339,9 @@ imx335: camera@1a {
+ 		compatible = "sony,imx335";
+ 		reg = <0x1a>;
+ 		clocks = <&clk_ext_camera>;
++		avdd-supply = <&imx335_2v9>;
++		ovdd-supply = <&imx335_1v8>;
++		dvdd-supply = <&imx335_1v2>;
+ 		reset-gpios = <&gpiod 5 (GPIO_ACTIVE_LOW | GPIO_PUSH_PULL)>;
+ 		powerdown-gpios = <&gpiod 0 (GPIO_ACTIVE_HIGH | GPIO_PUSH_PULL)>;
+ 
+-- 
+2.50.1
+

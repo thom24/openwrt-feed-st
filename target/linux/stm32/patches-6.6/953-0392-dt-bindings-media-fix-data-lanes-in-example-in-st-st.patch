@@ -1,0 +1,37 @@
+From f0d46c64b610277355386bd09037982ad367a4c8 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Tue, 18 Mar 2025 18:17:43 +0100
+Subject: [PATCH] dt-bindings: media: fix data-lanes in example in
+ st,stm32-csi.yaml
+
+The data-lanes should always start from 1 since lane 0 is always the clock.
+
+Change-Id: Ic2afb4b584fddaf65a0464fc4799a0d190365580
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/445119
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ Documentation/devicetree/bindings/media/st,stm32-csi.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/media/st,stm32-csi.yaml b/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
+index 6b7f01b99a1d..23781f850a4d 100644
+--- a/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
++++ b/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
+@@ -98,7 +98,7 @@ examples:
+                 reg = <0>;
+                 endpoint {
+                     remote-endpoint = <&imx335_ep>;
+-                    data-lanes = <0 1>;
++                    data-lanes = <1 2>;
+                     bus-type = <MEDIA_BUS_TYPE_CSI2_DPHY>;
+                 };
+             };
+-- 
+2.50.1
+

@@ -1,0 +1,86 @@
+From 0a3714397ce29fe92d4b058f1edbb9e1d4cbd119 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Thu, 14 Nov 2024 15:35:50 +0100
+Subject: [PATCH] iio: adc: stm32-mdf: use dev_err_probe
+
+Use dev_err_probe() where relevant, to manage properly -EPROBE_DEFER
+errors.
+
+Change-Id: I44fe64a14d8ce9ab7516522db9402c7c2b1cb2f1
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/420086
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ drivers/iio/adc/stm32-mdf-adc.c | 29 ++++++++++-------------------
+ 1 file changed, 10 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/iio/adc/stm32-mdf-adc.c b/drivers/iio/adc/stm32-mdf-adc.c
+index 03b3f5239bce..165c26d90f72 100644
+--- a/drivers/iio/adc/stm32-mdf-adc.c
++++ b/drivers/iio/adc/stm32-mdf-adc.c
+@@ -1255,19 +1255,15 @@ static int stm32_mdf_adc_chan_init(struct iio_dev *indio_dev, struct iio_chan_sp
+ 
+ 		ret = stm32_mdf_adc_chan_init_one(indio_dev, child, &channels[chan_idx], chan_idx);
+ 		if (ret < 0) {
+-			dev_err(&indio_dev->dev, "Channels [%d] init failed\n", chan_idx);
+-			goto err;
++			fwnode_handle_put(child);
++			return dev_err_probe(&indio_dev->dev, ret, "Channels [%d] init failed\n",
++					     chan_idx);
+ 		}
+ 
+ 		chan_idx++;
+ 	}
+ 
+ 	return chan_idx;
+-
+-err:
+-	fwnode_handle_put(child);
+-
+-	return ret;
+ }
+ 
+ static int stm32_mdf_set_watermark(struct iio_dev *indio_dev, unsigned int val)
+@@ -1525,18 +1521,15 @@ static int stm32_mdf_audio_init(struct device *dev, struct iio_dev *indio_dev)
+ 		return -ENOMEM;
+ 
+ 	ret = stm32_mdf_adc_chan_init(indio_dev, ch);
+-	if (ret < 0) {
+-		dev_err(&indio_dev->dev, "Channels init failed\n");
+-		return ret;
+-	}
++	if (ret < 0)
++		return dev_err_probe(&indio_dev->dev, ret, "Channels init failed\n");
++
+ 	indio_dev->num_channels = 1;
+ 	indio_dev->channels = ch;
+ 
+ 	ret = stm32_mdf_dma_request(dev, indio_dev);
+-	if (ret) {
+-		dev_err(&indio_dev->dev, "Failed to get dma: %d\n", ret);
+-		return ret;
+-	}
++	if (ret)
++		return dev_err_probe(&indio_dev->dev, ret, "Failed to get dma: %d\n", ret);
+ 
+ 	ret =  stm32_mdf_adc_filter_set_mode(adc, true);
+ 	if (ret)
+@@ -1576,10 +1569,8 @@ static int stm32_mdf_adc_init(struct device *dev, struct iio_dev *indio_dev)
+ 			return -ENOMEM;
+ 
+ 		ret = stm32_mdf_adc_chan_init(indio_dev, ch);
+-		if (ret < 0) {
+-			dev_err(&indio_dev->dev, "Channels init failed\n");
+-			return ret;
+-		}
++		if (ret < 0)
++			return dev_err_probe(&indio_dev->dev, ret, "Channels init failed\n");
+ 	}
+ 
+ 	indio_dev->num_channels = num_ch;
+-- 
+2.50.1
+

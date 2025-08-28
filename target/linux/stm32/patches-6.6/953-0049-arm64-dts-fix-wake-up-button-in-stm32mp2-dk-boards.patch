@@ -1,0 +1,59 @@
+From 8e147ff996520bee022e52fd68549eca2d46bae1 Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Date: Thu, 31 Oct 2024 15:21:35 +0100
+Subject: [PATCH] arm64: dts: fix wake-up button in stm32mp2 dk boards
+
+Add the missing "wakeup-source" field for wake-up button . This indication
+is required to exit of the S2Idle loop for freeze command.
+
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Change-Id: I55d8163bd3d7e472537351e9dea0a4f414b6ef90
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/415689
+Reviewed-by: Eric FOURMONT <eric.fourmont-ext@st.com>
+Domain-Review: Eric FOURMONT <eric.fourmont-ext@st.com>
+Tested-by: Eric FOURMONT <eric.fourmont-ext@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 1 +
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 1 +
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 1 +
+ 3 files changed, 3 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 1ec181f735fd..eb24058f4c71 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -95,6 +95,7 @@ button-wake-up {
+ 			label = "wake-up";
+ 			linux,code = <KEY_WAKEUP>;
+ 			interrupts-extended = <&optee 0>;
++			wakeup-source;
+ 			status = "okay";
+ 		};
+ 	};
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index 298cd3fcc13e..889e34ed6cc3 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -76,6 +76,7 @@ button-wake-up {
+ 			label = "wake-up";
+ 			linux,code = <KEY_WAKEUP>;
+ 			interrupts-extended = <&optee 0>;
++			wakeup-source;
+ 			status = "okay";
+ 		};
+ 	};
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index 5010f67b54aa..a6e555c90d6d 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -102,6 +102,7 @@ button-wake-up {
+ 			label = "wake-up";
+ 			linux,code = <KEY_WAKEUP>;
+ 			interrupts-extended = <&optee 0>;
++			wakeup-source;
+ 			status = "okay";
+ 		};
+ 	};
+-- 
+2.50.1
+

@@ -1,0 +1,41 @@
+From 25c37773555f3ddc80e4c008f88cabfb79cb07de Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Wed, 18 Dec 2024 18:15:54 +0100
+Subject: [PATCH] clocksource: stm32-lptimer: fix lptimer initialization
+
+Calling stm32_clkevent_lp_init() before initializing dev in private
+structure is not safe. The timer callbacks may be called with this field
+not yet initialized. Change initialization sequence.
+
+Fixes: 48b41c5e2de6 ("clocksource: Add Low Power STM32 timers driver")
+Change-Id: Ifc648d3a41a6c42ddc9ed19011b3128152e42d8f
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/425700
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/clocksource/timer-stm32-lp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/clocksource/timer-stm32-lp.c b/drivers/clocksource/timer-stm32-lp.c
+index 2664d171f555..58b0e9427288 100644
+--- a/drivers/clocksource/timer-stm32-lp.c
++++ b/drivers/clocksource/timer-stm32-lp.c
+@@ -208,10 +208,10 @@ static int stm32_clkevent_lp_probe(struct platform_device *pdev)
+ 
+ 	stm32_clkevent_lp_set_prescaler(priv, &rate);
+ 
+-	stm32_clkevent_lp_init(priv, pdev->dev.parent->of_node, rate);
+-
+ 	priv->dev = &pdev->dev;
+ 
++	stm32_clkevent_lp_init(priv, pdev->dev.parent->of_node, rate);
++
+ 	return 0;
+ 
+ out_clk_disable:
+-- 
+2.50.1
+

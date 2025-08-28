@@ -1,0 +1,42 @@
+From a851240574f1c44835981c72b8a799055a4fa258 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Thu, 19 Dec 2024 11:58:43 +0100
+Subject: [PATCH] net: ethernet: stmmac: fix resume on STM32MP2x
+
+The STM32MP2 keeps clk_rx enabled during suspend, and therefore the
+driver does not enable the clock in stm32_dwmac_init() if the device was
+suspended. The problem is that this same code runs on STM32 MCUs, which
+do disable clk_rx during suspend, causing the clock to never be
+re-enabled on resume.
+
+This patch adds a variant flag to indicate that clk_rx remains enabled
+during suspend, and uses this to decide whether to enable the clock in
+stm32_dwmac_init() if the device was suspended.
+
+This approach fixes this specific bug with limited opportunity for
+unintended side-effects, but I have a follow up patch that will refactor
+the clock configuration and hopefully make it less error prone.
+
+Change-Id: I1291d50cd5a860e203464baf2a64fca44edc316c
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/427195
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
+index 9bbb46ef8bfa..2436c9d0f919 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
+@@ -727,6 +727,7 @@ static struct stm32_ops stm32mp25_dwmac_data = {
+ 	.suspend = stm32mp1_suspend,
+ 	.resume = stm32mp1_resume,
+ 	.parse_data = stm32mp1_parse_data,
++	.clk_rx_enable_in_suspend = true,
+ 	.syscfg_eth_mask = SYSCFG_MP2_ETH_MASK
+ };
+ 
+-- 
+2.50.1
+

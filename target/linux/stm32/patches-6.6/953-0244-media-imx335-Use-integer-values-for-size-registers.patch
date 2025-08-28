@@ -1,0 +1,57 @@
+From 4c70d19a4aeccaf89ec3f86cd4b98400d971a1d1 Mon Sep 17 00:00:00 2001
+From: Umang Jain <umang.jain@ideasonboard.com>
+Date: Sun, 14 Apr 2024 19:36:19 +0530
+Subject: [PATCH] media: imx335: Use integer values for size registers
+
+Consider integer values for registers that are related to various
+sizes in the register map. This helps in improving the overall
+readability.
+
+No functional changes intended in this patch.
+
+Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+Reviewed-by: Tommaso Merciai <tomm.merciai@gmail.com>
+Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+(cherry picked from commit 15a853bb1f5267578efa4ed33a56aaa593b97c62)
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+
+Change-Id: I10ab5f0c3bb7f0ee3e25f030c745c0e4f9f91699
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/429206
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ drivers/media/i2c/imx335.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
+index 9c8f9b229d4b..cb87993415a7 100644
+--- a/drivers/media/i2c/imx335.c
++++ b/drivers/media/i2c/imx335.c
+@@ -257,12 +257,12 @@ static const struct cci_reg_sequence mode_2592x1940_regs[] = {
+ 	{ IMX335_REG_MODE_SELECT, IMX335_MODE_STANDBY },
+ 	{ IMX335_REG_MASTER_MODE, 0x00 },
+ 	{ IMX335_REG_WINMODE, 0x04 },
+-	{ IMX335_REG_HTRIMMING_START, 0x0180 },
+-	{ IMX335_REG_HNUM, 0x0a20 },
+-	{ IMX335_REG_Y_OUT_SIZE, 0x0794 },
+-	{ IMX335_REG_AREA3_ST_ADR_1, 0x00b0 },
+-	{ IMX335_REG_AREA3_WIDTH_1, 0x0f58 },
+-	{ IMX335_REG_OPB_SIZE_V, 0x00 },
++	{ IMX335_REG_HTRIMMING_START, 384 },
++	{ IMX335_REG_HNUM, 2592 },
++	{ IMX335_REG_Y_OUT_SIZE, 1940 },
++	{ IMX335_REG_AREA3_ST_ADR_1, 176 },
++	{ IMX335_REG_AREA3_WIDTH_1, 3928 },
++	{ IMX335_REG_OPB_SIZE_V, 0 },
+ 	{ IMX335_REG_XVS_XHS_DRV, 0x00 },
+ 	{ CCI_REG8(0x3288), 0x21 },
+ 	{ CCI_REG8(0x328a), 0x02 },
+-- 
+2.50.1
+

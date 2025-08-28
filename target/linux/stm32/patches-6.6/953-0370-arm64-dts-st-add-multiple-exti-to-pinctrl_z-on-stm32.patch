@@ -1,0 +1,39 @@
+From fb34e67a4a10f04c56158eda89456611757380d5 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Thu, 13 Mar 2025 15:43:52 +0100
+Subject: [PATCH] arm64: dts: st: add multiple exti to pinctrl_z on stm32mp251
+
+Specify the multiple EXTI through the property interrupt-extended.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: Ief1d6e2024afc1863315f8c4d9d7929358d2bef8
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/444089
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index 0631b9cc7a8e..0eb853688363 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -2950,6 +2950,15 @@ pinctrl_z: pinctrl@46200000 {
+ 			compatible = "st,stm32mp257-z-pinctrl";
+ 			ranges = <0 0x46200000 0x400>;
+ 			interrupt-parent = <&exti1>;
++			interrupts-extended =
++				<&exti1  0 0>, <&exti1  1 0>, <&exti1  2 0>, <&exti1  3 0>,
++				<&exti1  4 0>, <&exti1  5 0>, <&exti1  6 0>, <&exti1  7 0>,
++				<&exti1  8 0>, <&exti1  9 0>, <&exti1 10 0>, <&exti1 11 0>,
++				<&exti1 12 0>, <&exti1 13 0>, <&exti1 14 0>, <&exti1 15 0>,
++				<&exti2  0 0>, <&exti2  1 0>, <&exti2  2 0>, <&exti2  3 0>,
++				<&exti2  4 0>, <&exti2  5 0>, <&exti2  6 0>, <&exti2  7 0>,
++				<&exti2  8 0>, <&exti2  9 0>, <&exti2 10 0>, <&exti2 11 0>,
++				<&exti2 12 0>, <&exti2 13 0>, <&exti2 14 0>, <&exti2 15 0>;
+ 
+ 			gpioz: gpio@46200000 {
+ 				gpio-controller;
+-- 
+2.50.1
+

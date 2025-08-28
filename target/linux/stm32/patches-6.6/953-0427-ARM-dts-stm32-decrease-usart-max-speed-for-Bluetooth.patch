@@ -1,0 +1,69 @@
+From 61bda5a207ebce153ca372a49b8baaf3dd900e9d Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Mon, 28 Apr 2025 11:30:15 +0200
+Subject: [PATCH] ARM: dts: stm32: decrease usart max speed for Bluetooth for
+ MPx platform
+
+To avoid :
+Bluetooth: hci0: command 0xfc4c tx timeout
+Bluetooth: hci0: BCM: Patch command fc4c failed (-110)
+Bluetooth: hci0: BCM: Patch failed (-110)
+...
+Bluetooth: hci0: command 0xfc4c tx timeout
+Bluetooth: hci0: BCM: failed to write update baudrate (-110)
+
+Need to decrease max-speed to 2Mbps.
+
+Change-Id: Ib774da53eff501bb3b9e3a5307ce519e9ec7fc3c
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/454463
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dk.dts  | 2 +-
+ arch/arm/boot/dts/st/stm32mp157c-dk2.dts | 2 +-
+ arch/arm/boot/dts/st/stm32mp157f-dk2.dts | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+index fb0f354ace53..9e53c7d49d9c 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+@@ -650,7 +650,7 @@ &usart2 {
+ 	bluetooth {
+ 		shutdown-gpios = <&mcp23017 13 GPIO_ACTIVE_HIGH>;
+ 		compatible = "brcm,bcm43438-bt";
+-		max-speed = <3000000>;
++		max-speed = <2000000>;
+ 		vbat-supply = <&v3v3_ao>;
+ 		vddio-supply = <&v3v3_ao>;
+ 	};
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
+index d8992a6efad8..a37c3f2fe152 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
+@@ -145,7 +145,7 @@ &usart2 {
+ 	bluetooth {
+ 		shutdown-gpios = <&gpioz 6 GPIO_ACTIVE_HIGH>;
+ 		compatible = "brcm,bcm43438-bt";
+-		max-speed = <3000000>;
++		max-speed = <2000000>;
+ 		vbat-supply = <&v3v3>;
+ 		vddio-supply = <&v3v3>;
+ 	};
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
+index 5a663dfc372b..0748828dabcc 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
+@@ -156,7 +156,7 @@ &usart2 {
+ 	bluetooth {
+ 		shutdown-gpios = <&gpioz 6 GPIO_ACTIVE_HIGH>;
+ 		compatible = "brcm,bcm43438-bt";
+-		max-speed = <3000000>;
++		max-speed = <2000000>;
+ 		vbat-supply = <&v3v3>;
+ 		vddio-supply = <&v3v3>;
+ 	};
+-- 
+2.50.1
+

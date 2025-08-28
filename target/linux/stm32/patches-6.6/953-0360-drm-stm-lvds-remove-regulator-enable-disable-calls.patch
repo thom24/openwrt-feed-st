@@ -1,0 +1,125 @@
+From 6948652feb0535d576b92cb1f532c63a585ff2df Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Tue, 4 Mar 2025 10:54:52 +0100
+Subject: [PATCH] drm/stm: lvds: remove regulator enable/disable calls
+
+Due to a conflict between regulators & atomic critical section,
+regulators should be enabled/disabled during call of functions
+lvds_atomic_enable/lvds_atomic_disable.
+
+Change-Id: I5a6d7e969165e98eb81f90af8afa938b329ce122
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/441600
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/gpu/drm/stm/lvds.c | 46 ++++++++++++++++++++------------------
+ 1 file changed, 24 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
+index a9fe8727480b..bf05a017753d 100644
+--- a/drivers/gpu/drm/stm/lvds.c
++++ b/drivers/gpu/drm/stm/lvds.c
+@@ -995,19 +995,32 @@ static void lvds_atomic_enable(struct drm_bridge *bridge,
+ 	struct drm_connector *connector;
+ 	int ret;
+ 
++	ret = regulator_enable(lvds->vdda18_supply);
++	if (ret) {
++		DRM_ERROR("Failed to enable regulator vdda18: %d\n", ret);
++		return;
++	}
++
++	ret = regulator_enable(lvds->vdd_supply);
++	if (ret) {
++		regulator_disable(lvds->vdda18_supply);
++		DRM_ERROR("Failed to enable regulator vdd: %d\n", ret);
++		return;
++	}
++
+ 	ret = pm_runtime_resume_and_get(lvds->dev);
+ 	if (ret < 0) {
+ 		DRM_ERROR("Failed to enable lvds, cannot resume pm\n");
+-		return;
++		goto err;
+ 	}
+ 
+ 	connector = drm_atomic_get_new_connector_for_encoder(state, bridge->encoder);
+ 	if (!connector)
+-		return;
++		goto err;
+ 
+ 	conn_state = drm_atomic_get_new_connector_state(state, connector);
+ 	if (!conn_state)
+-		return;
++		goto err;
+ 
+ 	lvds_config_mode(lvds);
+ 
+@@ -1021,6 +1034,11 @@ static void lvds_atomic_enable(struct drm_bridge *bridge,
+ 		drm_panel_prepare(lvds->panel);
+ 		drm_panel_enable(lvds->panel);
+ 	}
++
++	return;
++err:
++	regulator_disable(lvds->vdd_supply);
++	regulator_disable(lvds->vdda18_supply);
+ }
+ 
+ static void lvds_atomic_disable(struct drm_bridge *bridge,
+@@ -1037,6 +1055,9 @@ static void lvds_atomic_disable(struct drm_bridge *bridge,
+ 	lvds_clear(lvds, LVDS_CR, CR_LVDSEN);
+ 
+ 	pm_runtime_put(lvds->dev);
++
++	regulator_disable(lvds->vdd_supply);
++	regulator_disable(lvds->vdda18_supply);
+ }
+ 
+ static const struct drm_bridge_funcs lvds_bridge_funcs = {
+@@ -1221,8 +1242,6 @@ static int __maybe_unused lvds_runtime_suspend(struct device *dev)
+ 
+ 	clk_disable_unprepare(lvds->pllref_clk);
+ 	clk_disable_unprepare(lvds->pclk);
+-	regulator_disable(lvds->vdd_supply);
+-	regulator_disable(lvds->vdda18_supply);
+ 
+ 	return 0;
+ }
+@@ -1234,23 +1253,8 @@ static int __maybe_unused lvds_runtime_resume(struct device *dev)
+ 
+ 	DRM_DEBUG_DRIVER("\n");
+ 
+-	ret = regulator_enable(lvds->vdda18_supply);
+-	if (ret) {
+-		DRM_ERROR("Failed to enable regulator vdda18: %d\n", ret);
+-		return ret;
+-	}
+-
+-	ret = regulator_enable(lvds->vdd_supply);
+-	if (ret) {
+-		regulator_disable(lvds->vdda18_supply);
+-		DRM_ERROR("Failed to enable regulator vdd: %d\n", ret);
+-		return ret;
+-	}
+-
+ 	ret = clk_prepare_enable(lvds->pclk);
+ 	if (ret) {
+-		regulator_disable(lvds->vdd_supply);
+-		regulator_disable(lvds->vdda18_supply);
+ 		DRM_ERROR("Failed to enable pclk: %d\n", ret);
+ 		return ret;
+ 	}
+@@ -1258,8 +1262,6 @@ static int __maybe_unused lvds_runtime_resume(struct device *dev)
+ 	ret = clk_prepare_enable(lvds->pllref_clk);
+ 	if (ret) {
+ 		clk_disable_unprepare(lvds->pclk);
+-		regulator_disable(lvds->vdd_supply);
+-		regulator_disable(lvds->vdda18_supply);
+ 		DRM_ERROR("Failed to enable pllref_clk: %d\n", ret);
+ 	}
+ 
+-- 
+2.50.1
+

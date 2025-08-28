@@ -1,0 +1,49 @@
+From a283845ded7774a11c784a10cdfcb7b11dc3b0da Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Thu, 22 May 2025 18:25:42 +0200
+Subject: [PATCH] usb: dwc2: gadget: resume the core even if no gadget driver
+ is bound.
+
+When no gadget driver has been bound, at least re-initialize the core as
+disconnected. It addresses the case when a device gets plugged-in later
+(e.g. dwc2 switches to host). This way, the necessary low level init has
+been done to switch to host mode.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ic4c8b8a0bb57c0f6afab5ac613d47d8d2ae8c3df
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/461204
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/usb/dwc2/gadget.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index b52bc79820c7..c4455dde7e3b 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -5320,19 +5320,19 @@ int dwc2_hsotg_resume(struct dwc2_hsotg *hsotg)
+ 	if (!hsotg->gadget_off_for_suspend)
+ 		return 0;
+ 
++	spin_lock_irqsave(&hsotg->lock, flags);
++	dwc2_hsotg_core_init_disconnected(hsotg, false);
+ 	if (hsotg->driver) {
+ 		dev_info(hsotg->dev, "resuming usb gadget %s\n",
+ 			 hsotg->driver->driver.name);
+ 
+-		spin_lock_irqsave(&hsotg->lock, flags);
+-		dwc2_hsotg_core_init_disconnected(hsotg, false);
+ 		if (hsotg->enabled) {
+ 			/* Enable ACG feature in device mode,if supported */
+ 			dwc2_enable_acg(hsotg);
+ 			dwc2_hsotg_core_connect(hsotg);
+ 		}
+-		spin_unlock_irqrestore(&hsotg->lock, flags);
+ 	}
++	spin_unlock_irqrestore(&hsotg->lock, flags);
+ 
+ 	return 0;
+ }
+-- 
+2.50.1
+

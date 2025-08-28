@@ -1,0 +1,90 @@
+From 5f1692343d0888b406e1e580d48a98a68c5b914e Mon Sep 17 00:00:00 2001
+From: Jonas Rebmann <jre@pengutronix.de>
+Date: Thu, 7 Nov 2024 16:07:31 +0100
+Subject: [PATCH] spi: spidev_test: add support for word delay
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Support setting the word delay using the -w/--word-delay command line
+parameter. Note that spidev exposes word delay only as an u8, allowing
+for a maximum of 255us of delay to be inserted.
+
+Change-Id: Ifb437ac0acdf6afda69dd62a622893c6022cc49e
+Signed-off-by: Jonas Rebmann <jre@pengutronix.de>
+Link: https://patch.msgid.link/20241107-spidev-test-word-delay-v1-1-d4bba5569e39@pengutronix.de
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/437302
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ tools/spi/spidev_test.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/tools/spi/spidev_test.c b/tools/spi/spidev_test.c
+index 9179942d7f15..f2135d619a0b 100644
+--- a/tools/spi/spidev_test.c
++++ b/tools/spi/spidev_test.c
+@@ -42,6 +42,7 @@ static char *input_file;
+ static char *output_file;
+ static uint32_t speed = 500000;
+ static uint16_t delay;
++static uint16_t word_delay;
+ static int verbose;
+ static int transfer_size;
+ static int iterations;
+@@ -124,6 +125,7 @@ static void transfer(int fd, uint8_t const *tx, uint8_t const *rx, size_t len)
+ 		.rx_buf = (unsigned long)rx,
+ 		.len = len,
+ 		.delay_usecs = delay,
++		.word_delay_usecs = word_delay,
+ 		.speed_hz = speed,
+ 		.bits_per_word = bits,
+ 	};
+@@ -172,11 +174,12 @@ static void transfer(int fd, uint8_t const *tx, uint8_t const *rx, size_t len)
+ 
+ static void print_usage(const char *prog)
+ {
+-	printf("Usage: %s [-2348CDFHILMNORSZbdilopsv]\n", prog);
++	printf("Usage: %s [-2348CDFHILMNORSZbdilopsvw]\n", prog);
+ 	puts("general device settings:\n"
+ 		 "  -D --device         device to use (default /dev/spidev1.1)\n"
+ 		 "  -s --speed          max speed (Hz)\n"
+ 		 "  -d --delay          delay (usec)\n"
++		 "  -w --word-delay     word delay (usec)\n"
+ 		 "  -l --loop           loopback\n"
+ 		 "spi mode:\n"
+ 		 "  -H --cpha           clock phase\n"
+@@ -213,6 +216,7 @@ static void parse_opts(int argc, char *argv[])
+ 			{ "device",        1, 0, 'D' },
+ 			{ "speed",         1, 0, 's' },
+ 			{ "delay",         1, 0, 'd' },
++			{ "word-delay",    1, 0, 'w' },
+ 			{ "loop",          0, 0, 'l' },
+ 			{ "cpha",          0, 0, 'H' },
+ 			{ "cpol",          0, 0, 'O' },
+@@ -237,7 +241,7 @@ static void parse_opts(int argc, char *argv[])
+ 		};
+ 		int c;
+ 
+-		c = getopt_long(argc, argv, "D:s:d:b:i:o:lHOLC3ZFMNR248p:vS:I:",
++		c = getopt_long(argc, argv, "D:s:d:w:b:i:o:lHOLC3ZFMNR248p:vS:I:",
+ 				lopts, NULL);
+ 
+ 		if (c == -1)
+@@ -253,6 +257,9 @@ static void parse_opts(int argc, char *argv[])
+ 		case 'd':
+ 			delay = atoi(optarg);
+ 			break;
++		case 'w':
++			word_delay = atoi(optarg);
++			break;
+ 		case 'b':
+ 			bits = atoi(optarg);
+ 			break;
+-- 
+2.50.1
+

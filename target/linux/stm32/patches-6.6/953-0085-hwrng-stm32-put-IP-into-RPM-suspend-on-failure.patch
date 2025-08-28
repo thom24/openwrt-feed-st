@@ -1,0 +1,58 @@
+From 070411baa29af675429f4f550c00657f7ba8b6d7 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 19 Apr 2024 07:01:13 +0200
+Subject: [PATCH] hwrng: stm32 - put IP into RPM suspend on failure
+
+In case of an irrecoverable failure, put the IP into RPM suspend
+to avoid RPM imbalance. I did not trigger this case, but it seems
+it should be done based on reading the code.
+
+Fixes: b17bc6eb7c2b ("hwrng: stm32 - rework error handling in stm32_rng_read()")
+Change-Id: I1da6139f87471c5c41722d23bea2eb07015fa074
+Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/420455
+Reviewed-by: Maxime MERE <maxime.mere@foss.st.com>
+Tested-by: Maxime MERE <maxime.mere@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ drivers/char/hw_random/stm32-rng.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
+index a2669ccf71e6..dd4f66b1b47f 100644
+--- a/drivers/char/hw_random/stm32-rng.c
++++ b/drivers/char/hw_random/stm32-rng.c
+@@ -223,7 +223,8 @@ static int stm32_rng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+ 				if (err && i > RNG_NB_RECOVER_TRIES) {
+ 					dev_err((struct device *)priv->rng.priv,
+ 						"Couldn't recover from seed error\n");
+-					return -ENOTRECOVERABLE;
++					retval = -ENOTRECOVERABLE;
++					goto exit_rpm;
+ 				}
+ 
+ 				continue;
+@@ -241,7 +242,8 @@ static int stm32_rng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+ 			if (err && i > RNG_NB_RECOVER_TRIES) {
+ 				dev_err((struct device *)priv->rng.priv,
+ 					"Couldn't recover from seed error");
+-				return -ENOTRECOVERABLE;
++				retval = -ENOTRECOVERABLE;
++				goto exit_rpm;
+ 			}
+ 
+ 			continue;
+@@ -253,6 +255,7 @@ static int stm32_rng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+ 		max -= sizeof(u32);
+ 	}
+ 
++exit_rpm:
+ 	pm_runtime_mark_last_busy((struct device *) priv->rng.priv);
+ 	pm_runtime_put_sync_autosuspend((struct device *) priv->rng.priv);
+ 
+-- 
+2.50.1
+

@@ -1,0 +1,49 @@
+From 6d544a84fa7871a8296897e214a53641ea2de3a5 Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Date: Mon, 24 Feb 2025 16:30:36 +0100
+Subject: [PATCH] arm64: dts: st: change power domain for mdf-dai on stm32mp25
+ dk board
+
+The MDF peripheral supports LP-Stop1/2 low power mode.
+(See "Functionalities depending on system operating mode" table in ref
+manual). However, the mdf driver does not support the autonomous mode.
+Change power domain to "d1_pd" for mdf-da sub-nodes on stm32mp25 dk
+device tree.
+
+Fixes: 16317c36f9bc ("arm64: dts: st: change power domain for mdf on stm32mp251.dtsi")
+Change-Id: I5523144808a096090565feb160cc05ef603c6048
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/439590
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index f05dafbc9d12..c1a8afe6270f 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -581,7 +581,7 @@ asoc_pdm0: mdf-dai {
+ 			compatible = "st,stm32mp25-mdf-dai";
+ 			#sound-dai-cells = <0>;
+ 			io-channels = <&filter0 0>;
+-			power-domains = <&ret_pd>;
++			power-domains = <&d1_pd>;
+ 			status = "okay";
+ 
+ 			mdf1_port0: port {
+@@ -609,7 +609,7 @@ asoc_pdm1: mdf-dai {
+ 			compatible = "st,stm32mp25-mdf-dai";
+ 			#sound-dai-cells = <0>;
+ 			io-channels = <&filter1 0>;
+-			power-domains = <&ret_pd>;
++			power-domains = <&d1_pd>;
+ 			status = "okay";
+ 
+ 			mdf1_port1: port {
+-- 
+2.50.1
+

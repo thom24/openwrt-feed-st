@@ -1,0 +1,38 @@
+From 39b0dc2207da69afeb603ac2762cd9661902a27b Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Tue, 19 Nov 2024 14:01:54 +0100
+Subject: [PATCH] iio: adc: stm32-mdf: show sub channels number in iio_info
+
+The channel extended info "sub_channels_nb" reports the actual number
+of channels supported by the device to the MDF audio driver.
+Add a carriage return in buffer string populated by
+stm32_mdf_adc_audio_get_channels() to allow iio_info to show the
+sub_channels_nb value.
+
+Change-Id: I71bd99a265f07cca6cb2d46683050220b08b2d3f
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/420089
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/iio/adc/stm32-mdf-adc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/iio/adc/stm32-mdf-adc.c b/drivers/iio/adc/stm32-mdf-adc.c
+index 7979a77a5379..648298d1deca 100644
+--- a/drivers/iio/adc/stm32-mdf-adc.c
++++ b/drivers/iio/adc/stm32-mdf-adc.c
+@@ -1115,7 +1115,7 @@ static ssize_t stm32_mdf_adc_audio_get_channels(struct iio_dev *indio_dev, uintp
+ 	if (MDF_IS_FILTER0(adc) && adc->mdf->nb_interleave)
+ 		sub_channels_nb = adc->mdf->nb_interleave;
+ 
+-	return snprintf(buf, STM32_MDF_EXT_INFO_BUZ_SZ, "%u", sub_channels_nb);
++	return snprintf(buf, STM32_MDF_EXT_INFO_BUZ_SZ, "%u\n", sub_channels_nb);
+ }
+ 
+ /*
+-- 
+2.50.1
+

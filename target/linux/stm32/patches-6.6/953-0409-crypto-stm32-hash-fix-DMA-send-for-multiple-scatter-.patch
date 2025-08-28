@@ -1,0 +1,39 @@
+From 3e7b57897a11b5ed4b579c108d9371513fb9dda3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Wed, 2 Apr 2025 12:01:20 +0200
+Subject: [PATCH] crypto: stm32/hash - fix DMA send for multiple scatter list
+ entities
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The previous implementation incorrectly subtracted the number of data
+sent through the DMA from rctx->total. Instead, the number of data sent
+must be stored in bufcnt. This approach failed when the scatter list
+contained multiple entities, leading to incorrect processing.
+
+Change-Id: I8ae3b39d56f90c34eb5d2bdde8313b274d12163c
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/448573
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ drivers/crypto/stm32/stm32-hash.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/crypto/stm32/stm32-hash.c b/drivers/crypto/stm32/stm32-hash.c
+index 73daa40e3723..184505fac2dc 100644
+--- a/drivers/crypto/stm32/stm32-hash.c
++++ b/drivers/crypto/stm32/stm32-hash.c
+@@ -733,8 +733,6 @@ static int stm32_hash_dma_send(struct stm32_hash_dev *hdev)
+ 			len += sizeof(u32);
+ 		}
+ 
+-		rctx->total -= len;
+-
+ 		bufcnt += sg[0].length;
+ 		dma_unmap_sg(hdev->dev, sg, 1, DMA_TO_DEVICE);
+ 
+-- 
+2.50.1
+

@@ -1,0 +1,44 @@
+From b4f800b9235fb410c4433ffa9fa5ca6b6f6b7b56 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Mon, 3 Feb 2025 13:43:39 +0100
+Subject: [PATCH] ASoC: stm32: sai: add a check on minimal kernel frequency
+
+On MP2 SoCs SAI kernel clock rate is managed through
+stm32_sai_set_parent_rate() function.
+If the kernel clock rate was set previously to a low frequency, this
+frequency may be too low to support the newly requested audio stream rate.
+However the stm32_sai_rate_accurate() will only check accuracy against
+the maximum kernel clock rate. The function will return leaving the kernel
+clock rate unchanged.
+Add a check on minimal frequency requirement, to avoid this.
+
+Fixes: b1d2e4067dc6 ("ASoC: stm32: sai: add stm32mp25 support")
+Change-Id: Ie39b68bd0067756fa1065a6a3a3f139576b0c98b
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/430824
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ sound/soc/stm/stm32_sai_sub.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/sound/soc/stm/stm32_sai_sub.c b/sound/soc/stm/stm32_sai_sub.c
+index 1d3cb4cf7280..c8567cf5efab 100644
+--- a/sound/soc/stm/stm32_sai_sub.c
++++ b/sound/soc/stm/stm32_sai_sub.c
+@@ -460,7 +460,10 @@ static int stm32_sai_set_parent_rate(struct stm32_sai_sub_data *sai,
+ 	 * return immediately.
+ 	 */
+ 	sai_curr_rate = clk_get_rate(sai->sai_ck);
+-	if (stm32_sai_rate_accurate(sai_ck_max_rate, sai_curr_rate))
++	dev_dbg(&pdev->dev, "kernel clock rate: min [%u], max [%u], current [%u]",
++		sai_ck_min_rate, sai_ck_max_rate, sai_curr_rate);
++	if (stm32_sai_rate_accurate(sai_ck_max_rate, sai_curr_rate) &&
++	    sai_curr_rate >= sai_ck_min_rate)
+ 		return 0;
+ 
+ 	/*
+-- 
+2.50.1
+

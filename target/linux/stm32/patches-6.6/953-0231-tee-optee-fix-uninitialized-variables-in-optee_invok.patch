@@ -1,0 +1,44 @@
+From 84b69249eec03fc0f23a884d4ba05be078489763 Mon Sep 17 00:00:00 2001
+From: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Date: Mon, 13 Jan 2025 15:32:12 +0100
+Subject: [PATCH] tee: optee: fix uninitialized variables in
+ optee_invoke_func_helper
+
+Correct LLVM warnings found with -Wsometimes-uninitialized on variables
+'offs' and 'shm'.
+
+variable 'offs' is used uninitialized whenever 'if' condition is true
+initialize the variable 'offs' to silence this warning
+variable 'shm' is used uninitialized whenever 'if' condition is true
+remove the 'if' if its condition is always false
+
+Signed-off-by: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Change-Id: I688796f4ab196f36691aaa812ca54cf91a63b721
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/428542
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ drivers/tee/optee/call.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/tee/optee/call.c b/drivers/tee/optee/call.c
+index 91df4a17a8a5..38df85bb9cdd 100644
+--- a/drivers/tee/optee/call.c
++++ b/drivers/tee/optee/call.c
+@@ -419,9 +419,9 @@ int optee_invoke_func_helper(struct tee_context *ctx,
+ 	struct optee_shm_arg_entry *entry;
+ 	struct optee_msg_arg *msg_arg;
+ 	struct optee_session *sess;
+-	struct tee_shm *shm;
++	struct tee_shm *shm = NULL;
+ 	u32 session_id;
+-	u_int offs;
++	u_int offs = 0;
+ 	int rc;
+ 
+ 	if (tee_ocall_in_progress(ocall_arg))
+-- 
+2.50.1
+

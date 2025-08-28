@@ -1,0 +1,64 @@
+From b33e2a7c06e230210cba88d74dabfc09c65d05bd Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Tue, 3 Dec 2024 14:09:48 +0100
+Subject: [PATCH] ARM: dts: stm32: add stm32mp257f-ev1 board aarch32 support
+
+Add aarch32 support for stm32mp257f-ev1 board. It includes the original
+board device tree from arm64 and update armv8-timer node with
+arm,cpu-registers-not-fw-configured property, to force the use of
+ARCH_TIMER_PHYS_SECURE_PPI, as used on aarch64 and configured by TF-A,
+instead of ARCH_TIMER_VIRT_PPI when CONFIG_ARM64 is not enabled.
+
+Change-Id: I36e5ebd6d013c53cfa80330a9f88824c1fe4ac3e
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/441177
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/dts/st/Makefile            |  4 +++-
+ arch/arm/boot/dts/st/stm32mp257f-ev1.dts | 18 ++++++++++++++++++
+ 2 files changed, 21 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm/boot/dts/st/stm32mp257f-ev1.dts
+
+diff --git a/arch/arm/boot/dts/st/Makefile b/arch/arm/boot/dts/st/Makefile
+index 1c201b5b5533..74036ab16a43 100644
+--- a/arch/arm/boot/dts/st/Makefile
++++ b/arch/arm/boot/dts/st/Makefile
+@@ -80,7 +80,9 @@ dtb-$(CONFIG_ARCH_STM32) += \
+ 	stm32mp157f-ed1.dtb \
+ 	stm32mp157f-ev1.dtb \
+ 	stm32mp157f-ev1-a7-examples.dtb \
+-	stm32mp157f-ev1-m4-examples.dtb
++	stm32mp157f-ev1-m4-examples.dtb \
++	stm32mp257f-ev1.dtb
++
+ dtb-$(CONFIG_ARCH_U8500) += \
+ 	ste-snowball.dtb \
+ 	ste-hrefprev60-stuib.dtb \
+diff --git a/arch/arm/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm/boot/dts/st/stm32mp257f-ev1.dts
+new file mode 100644
+index 000000000000..737a820134ff
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp257f-ev1.dts
+@@ -0,0 +1,18 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
++/*
++ * Copyright (C) STMicroelectronics 2025 - All Rights Reserved
++ * Author: Amelie Delaunay <amelie.delaunay@foss.st.com> for STMicroelectronics.
++ */
++
++/dts-v1/;
++
++#include "../../../../arm64/boot/dts/st/stm32mp257f-ev1.dts"
++
++/ {
++	model = "STMicroelectronics STM32MP257F-EV1 AARCH32 Evaluation Board";
++	compatible = "st,stm32mp257f-ev1-aarch32", "st,stm32mp257f-ev1", "st,stm32mp257";
++
++	timer {
++		arm,cpu-registers-not-fw-configured;
++	};
++};
+-- 
+2.50.1
+

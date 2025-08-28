@@ -1,0 +1,62 @@
+From bb2234f9812a2174e9510bb3fa9a5b5bea322af8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Wed, 30 Oct 2024 16:29:21 +0100
+Subject: [PATCH] ARM: dts: stm32: add sram[123] nodes on stm32mp131
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Add SRAM nodes with "mmio-sram" compatible in STM32MP131 SoC device
+tree.
+Those nodes describe the SRAM memory area (SRAM1 16kB, SRAM2 8kB, SRAM3
+8kB).
+
+Change-Id: Icb56a27a0a8aa612d161e6a5abc0320908b94180
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/432295
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp131.dtsi | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
+index ca1de15e5974..a28680e3c08d 100644
+--- a/arch/arm/boot/dts/st/stm32mp131.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
+@@ -161,6 +161,30 @@ soc {
+ 		interrupt-parent = <&intc>;
+ 		ranges;
+ 
++		sram1: sram@30000000 {
++			compatible = "mmio-sram";
++			reg = <0x30000000 0x4000>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0 0x30000000 0x4000>;
++		};
++
++		sram2: sram@30004000 {
++			compatible = "mmio-sram";
++			reg = <0x30004000 0x2000>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0 0x30004000 0x2000>;
++		};
++
++		sram3: sram@30006000 {
++			compatible = "mmio-sram";
++			reg = <0x30006000 0x2000>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0 0x30006000 0x2000>;
++		};
++
+ 		timers2: timer@40000000 {
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+-- 
+2.50.1
+

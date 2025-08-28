@@ -1,0 +1,52 @@
+From a08293cb8053e8bd04265a732f34799e49d4618a Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Thu, 21 Nov 2024 11:52:10 +0100
+Subject: [PATCH] arm64: dts: st: add low power properties to usbh on stm32mp21
+
+USBH can wakeup stm32mp21 from LP stop modes, by using EXTI wakeup source.
+So add the relevant power-domains, wakeup-source and interrupts-extended,
+to the usbh nodes on stm32mp21.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ia68c596ed33c68615e0dd897053737774245db52
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/420287
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Ram DAYAL <ram.dayal@st.com>
+Domain-Review: Ram DAYAL <ram.dayal@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 3c7a84b53a13..8baf3c7ac4f9 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -1844,6 +1844,9 @@ usbh: usb@482e0000 {
+ 				#size-cells = <1>;
+ 				ranges = <0x482e0000 0x482e0000 0x20000>;
+ 				access-controllers = <&rifsc 63>;
++				power-domains = <&CLUSTER_PD>;
++				wakeup-source;
++				interrupts-extended = <&exti1 43 IRQ_TYPE_EDGE_RISING>;
+ 				status = "disabled";
+ 
+ 				usbh_ohci: usb@482e0000 {
+@@ -1854,6 +1857,7 @@ usbh_ohci: usb@482e0000 {
+ 					interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_HIGH>;
+ 					phys = <&usb2_phy1>;
+ 					phy-names = "usb";
++					wakeup-source;
+ 				};
+ 
+ 				usbh_ehci: usb@482f0000 {
+@@ -1865,6 +1869,7 @@ usbh_ehci: usb@482f0000 {
+ 					companion = <&usbh_ohci>;
+ 					phys = <&usb2_phy1>;
+ 					phy-names = "usb";
++					wakeup-source;
+ 				};
+ 			};
+ 
+-- 
+2.50.1
+

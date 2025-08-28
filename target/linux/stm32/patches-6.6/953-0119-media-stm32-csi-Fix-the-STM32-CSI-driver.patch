@@ -1,0 +1,35 @@
+From f8f3f63664439904b7a51be934aed589c97cfa0f Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Wed, 4 Dec 2024 13:20:12 +0100
+Subject: [PATCH] media: stm32: csi: Fix the STM32 CSI driver
+
+Fix _aeabi_uldivmod undefined aarch32 link error
+ (native u64 div is not available on aarch32)
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: Id16f5be4a3362028cdc07c647edb14441ad12117
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/422639
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ drivers/media/platform/st/stm32/stm32-csi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-csi.c b/drivers/media/platform/st/stm32/stm32-csi.c
+index 13ea4d463e00..8138dcc34771 100644
+--- a/drivers/media/platform/st/stm32/stm32-csi.c
++++ b/drivers/media/platform/st/stm32/stm32-csi.c
+@@ -483,7 +483,7 @@ static int stm32_csi_start(struct stm32_csi_dev *csi2priv)
+ 
+ 	/* MBPS is expressed in Mbps, hence link_freq / 100000 * 2 */
+ 	/* TODO - calcul below doesn't sound right, extra 0 ?? */
+-	mbps = link_freq / 500000;
++	mbps = DIV_ROUND_CLOSEST_ULL((u64)link_freq, 500000);
+ 	dev_dbg(csi2priv->dev, "Computed Mbps: %u\n", mbps);
+ 
+ 	for (phy_regs = snps_stm32mp25; phy_regs->mbps != 0; phy_regs++)
+-- 
+2.50.1
+

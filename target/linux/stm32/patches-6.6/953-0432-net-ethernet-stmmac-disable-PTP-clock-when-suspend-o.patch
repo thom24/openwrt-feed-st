@@ -1,0 +1,57 @@
+From 71ee641d351a4d50cae710565b5384d03d1f7278 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Wed, 2 Apr 2025 11:34:33 +0200
+Subject: [PATCH] net: ethernet: stmmac: disable PTP clock when suspend on
+ STM32MPx
+
+ETH main clock has dependency with eth-ck, ptp_ref (from RCC gating)
+In order to optimize consumption in suspend, need to disable ptp_ref
+in suspend and re-enable it on resume. No impact for WoL, to manage
+well Magic Packet must need only mac-clk-rx.
+
+Change-Id: I087b5453cbd2ab70a70a95db4e6f93b2194f9888
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/449576
+---
+ drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
+index 2436c9d0f919..bdb6b77b3805 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
+@@ -599,8 +599,10 @@ static void stm32_dwmac_remove(struct platform_device *pdev)
+ 
+ static int stm32mp1_suspend(struct stm32_dwmac *dwmac)
+ {
+-	int ret = 0;
++	struct net_device *ndev = dev_get_drvdata(dwmac->dev);
++	struct stmmac_priv *priv = netdev_priv(ndev);
+ 
++	int ret = 0;
+ 	ret = clk_prepare_enable(dwmac->clk_ethstp);
+ 	if (ret)
+ 		return ret;
+@@ -609,6 +611,7 @@ static int stm32mp1_suspend(struct stm32_dwmac *dwmac)
+ 	clk_disable_unprepare(dwmac->syscfg_clk);
+ 	if (dwmac->enable_eth_ck)
+ 		clk_disable_unprepare(dwmac->clk_eth_ck);
++	clk_disable_unprepare(priv->plat->clk_ptp_ref);
+ 
+ 	/* Keep the PHY up if we use Wake-on-Lan. */
+ 	if (!device_may_wakeup(dwmac->dev))
+@@ -619,7 +622,11 @@ static int stm32mp1_suspend(struct stm32_dwmac *dwmac)
+ 
+ static void stm32mp1_resume(struct stm32_dwmac *dwmac)
+ {
++	struct net_device *ndev = dev_get_drvdata(dwmac->dev);
++	struct stmmac_priv *priv = netdev_priv(ndev);
++
+ 	clk_disable_unprepare(dwmac->clk_ethstp);
++	clk_prepare_enable(priv->plat->clk_ptp_ref);
+ 
+ 	/* The PHY was up for Wake-on-Lan. */
+ 	if (!device_may_wakeup(dwmac->dev))
+-- 
+2.50.1
+

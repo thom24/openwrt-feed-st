@@ -1,0 +1,42 @@
+From 3aa4f32a2adacacafe4588e3287ae643fdc8f1f3 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Wed, 18 Dec 2024 15:23:15 +0100
+Subject: [PATCH] media: stm32: dcmipp: disable all isp blocks on stream
+ disable
+
+Ensure to disable all blocks of the isp subdev when disabling
+the stream.
+
+Change-Id: I938b6930c8a59804d384a8fb232315713d064471
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/425551
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
+index e71a0d6b082d..b3250de733ce 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
+@@ -562,6 +562,11 @@ static int dcmipp_isp_s_stream(struct v4l2_subdev *sd, int enable)
+ 	} else {
+ 		if (isp->usecnt > 1)
+ 			goto out;
++
++		/* Disable all blocks */
++		reg_write(isp, DCMIPP_P1SRCR, 0);
++		reg_write(isp, DCMIPP_P1DECR, 0);
++		reg_write(isp, DCMIPP_P1DMCR, 0);
+ 	}
+ 
+ 	ret = v4l2_subdev_call(s_subdev, video, s_stream, enable);
+-- 
+2.50.1
+

@@ -1,0 +1,78 @@
+From bd2fc29739b3bf51193c46b4835ae00288c9487b Mon Sep 17 00:00:00 2001
+From: Rob Herring <robh@kernel.org>
+Date: Thu, 14 Sep 2023 14:00:42 -0500
+Subject: [PATCH] spi: dt-bindings: st,stm32-spi: Move "st,spi-midi-ns" to
+ spi-peripheral-props.yaml
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+In order to validate SPI peripherals, SPI controller-specific child node
+properties need to be in a separate schema, spi-peripheral-props.yaml,
+which SPI peripheral schemas reference. As there is just a single
+property in this case, just add it to spi-peripheral-props.yaml directly.
+
+Change-Id: Ibbc1fea5897934fdd70512ae67aff906e8712b83
+Signed-off-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/20230914190049.1853136-1-robh@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/440580
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ .../bindings/spi/spi-peripheral-props.yaml           |  5 +++++
+ .../devicetree/bindings/spi/st,stm32-spi.yaml        | 12 ------------
+ 2 files changed, 5 insertions(+), 12 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+index 782a014b63a7..c0c578444feb 100644
+--- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+@@ -113,6 +113,11 @@ properties:
+     minItems: 2
+     maxItems: 4
+ 
++  st,spi-midi-ns:
++    description: |
++      Only for STM32H7, (Master Inter-Data Idleness) minimum time
++      delay in nanoseconds inserted between two consecutive data frames.
++
+ # The controller specific properties go here.
+ allOf:
+   - $ref: cdns,qspi-nor-peripheral-props.yaml#
+diff --git a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
+index 88def4ea282a..dd9ad6682b27 100644
+--- a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
++++ b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
+@@ -26,7 +26,6 @@ allOf:
+ 
+     then:
+       properties:
+-        st,spi-midi-ns: false
+         sram: false
+         dmas:
+           maxItems: 2
+@@ -99,17 +98,6 @@ properties:
+     minItems: 1
+     maxItems: 2
+ 
+-patternProperties:
+-  "^[a-zA-Z][a-zA-Z0-9,+\\-._]{0,63}@[0-9a-f]+$":
+-    type: object
+-    # SPI slave nodes must be children of the SPI master node and can
+-    # contain the following properties.
+-    properties:
+-      st,spi-midi-ns:
+-        description: |
+-          Only for STM32H7, (Master Inter-Data Idleness) minimum time
+-          delay in nanoseconds inserted between two consecutive data frames.
+-
+ required:
+   - compatible
+   - reg
+-- 
+2.50.1
+

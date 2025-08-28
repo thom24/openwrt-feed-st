@@ -1,0 +1,90 @@
+From 1ec3d4702149d7df70dc18b14ed7da4084dfe354 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Tue, 17 Dec 2024 17:54:25 +0100
+Subject: [PATCH] Revert "net: stmmac: fix MAC not working when system resume
+ back with WoL active"
+
+This reverts commit 90702dcd19c093621b422ba16fcfd870afe2552f.
+
+Change-Id: Iedf41f471b833420279e3b26de2df6551db66e97
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/428096
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 32 ++++++++++++-------
+ 1 file changed, 20 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 90009ee3ac0e..9558ee3b8624 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -7746,6 +7746,8 @@ int stmmac_suspend(struct device *dev)
+ 		return 0;
+ 	}
+ 
++	phylink_mac_change(priv->phylink, false);
++
+ 	mutex_lock(&priv->lock);
+ 
+ 	netif_device_detach(ndev);
+@@ -7771,22 +7773,20 @@ int stmmac_suspend(struct device *dev)
+ 		stmmac_pmt(priv, priv->hw, priv->wolopts);
+ 		priv->irq_wake = 1;
+ 	} else {
++		mutex_unlock(&priv->lock);
++		rtnl_lock();
++		if (device_may_wakeup(priv->device))
++			phylink_speed_down(priv->phylink, false);
++		phylink_stop(priv->phylink);
++		rtnl_unlock();
++		mutex_lock(&priv->lock);
++
+ 		stmmac_mac_set(priv, priv->ioaddr, false);
+ 		pinctrl_pm_select_sleep_state(priv->device);
+ 	}
+ 
+ 	mutex_unlock(&priv->lock);
+ 
+-	rtnl_lock();
+-	if (device_may_wakeup(priv->device) && priv->plat->pmt) {
+-		phylink_suspend(priv->phylink, true);
+-	} else {
+-		if (device_may_wakeup(priv->device))
+-			phylink_speed_down(priv->phylink, false);
+-		phylink_suspend(priv->phylink, false);
+-	}
+-	rtnl_unlock();
+-
+ 	if (priv->dma_cap.fpesel) {
+ 		/* Disable FPE */
+ 		stmmac_fpe_configure(priv, priv->ioaddr,
+@@ -7884,9 +7884,15 @@ int stmmac_resume(struct device *dev)
+ 			return ret;
+ 	}
+ 
+-	rtnl_lock();
+-	phylink_phy_resume(priv->phylink);
++	if (!device_may_wakeup(priv->device) || !priv->plat->pmt) {
++		rtnl_lock();
++		phylink_start(priv->phylink);
++		/* We may have called phylink_speed_down before */
++		phylink_speed_up(priv->phylink);
++		rtnl_unlock();
++	}
+ 
++	rtnl_lock();
+ 	mutex_lock(&priv->lock);
+ 
+ 	stmmac_reset_queues_param(priv);
+@@ -7911,6 +7917,8 @@ int stmmac_resume(struct device *dev)
+ 
+ 	rtnl_unlock();
+ 
++	phylink_mac_change(priv->phylink, true);
++
+ 	netif_device_attach(ndev);
+ 
+ 	return 0;
+-- 
+2.50.1
+

@@ -1,0 +1,54 @@
+From 82170c9b9dc5a5c1f0a1c80803f1974d03642205 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Mon, 3 Feb 2025 09:36:38 +0100
+Subject: [PATCH] Revert PCI: stm32: set bus_dma_limit on PCIe devices
+
+This reverts commit 73ded2e64e1a008df5cd46358d59c8421c0d6989.
+
+Correct way of setting the dma bus mask for devices is to use
+dma-ranges property.
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I1d725f1a833a8a24fa74e56a16e17970119c65e5
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/433743
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/pci/controller/dwc/pcie-stm32.c | 20 --------------------
+ 1 file changed, 20 deletions(-)
+
+diff --git a/drivers/pci/controller/dwc/pcie-stm32.c b/drivers/pci/controller/dwc/pcie-stm32.c
+index 0800617e2b93..8187d4bce760 100644
+--- a/drivers/pci/controller/dwc/pcie-stm32.c
++++ b/drivers/pci/controller/dwc/pcie-stm32.c
+@@ -571,26 +571,6 @@ static void quirk_stm32_pcie_limit_mrrs(struct pci_dev *pci)
+ DECLARE_PCI_FIXUP_HEADER(PCI_ANY_ID, PCI_ANY_ID,
+ 			 quirk_stm32_pcie_limit_mrrs);
+ 
+-static int stm32_dma_limit(struct pci_dev *pdev, void *data)
+-{
+-	dev_dbg(&pdev->dev, "set bus_dma_limit");
+-
+-	pdev->dev.bus_dma_limit = DMA_BIT_MASK(32);
+-
+-	return 0;
+-}
+-
+-static void quirk_stm32_dma_mask(struct pci_dev *pci)
+-{
+-	struct pci_dev *root_port;
+-
+-	root_port = pcie_find_root_port(pci);
+-
+-	if (root_port && is_stm32_pcie_driver(root_port->dev.parent))
+-		pci_walk_bus(pci->bus, stm32_dma_limit, NULL);
+-}
+-DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_SYNOPSYS, 0x0550, quirk_stm32_dma_mask);
+-
+ module_platform_driver(stm32_pcie_driver);
+ MODULE_DESCRIPTION("STM32MP25 PCIe Controller driver");
+ MODULE_LICENSE("GPL");
+-- 
+2.50.1
+

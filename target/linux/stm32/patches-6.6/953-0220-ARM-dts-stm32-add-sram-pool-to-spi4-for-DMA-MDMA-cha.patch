@@ -1,0 +1,54 @@
+From a0f5620ffb3e7fcecd55af40bb80184c2632afeb Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Thu, 6 Feb 2025 16:57:50 +0100
+Subject: [PATCH] ARM: dts: stm32: add sram pool to spi4 for DMA-MDMA chaining
+ on MP15 DK
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The sram pool is used as a buffer area during a spi transfer using
+DMA-MDMA chaining.
+The pool size depends on the SPI framework that creates sg up to
+4096 bytes.
+
+Change-Id: Ib42e0f69240aaac18152edd5c722b612b2e5c93b
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/435594
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
+index 5fae7937c740..4b7e3a317918 100644
+--- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
+@@ -624,6 +624,7 @@ &spi4 {
+ 	pinctrl-0 = <&spi4_pins_b>;
+ 	pinctrl-1 = <&spi4_sleep_pins_b>;
+ 	status = "disabled";
++	sram = <&spi4_dma_pool>;
+ };
+ 
+ &spi5 {
+@@ -633,6 +634,13 @@ &spi5 {
+ 	status = "disabled";
+ };
+ 
++&sram4 {
++	spi4_dma_pool: dma-sram@9000 {
++		reg = <0x9000 0x1000>;
++		pool;
++	};
++};
++
+ &timers1 {
+ 	/* spare dmas for other usage */
+ 	/delete-property/dmas;
+-- 
+2.50.1
+

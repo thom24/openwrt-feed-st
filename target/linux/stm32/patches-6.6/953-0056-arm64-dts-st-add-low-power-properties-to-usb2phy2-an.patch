@@ -1,0 +1,45 @@
+From b5aa3d73f7d9da9207a62e3511eb21142392a13e Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Thu, 21 Nov 2024 17:59:54 +0100
+Subject: [PATCH] arm64: dts: st: add low power properties to usb2phy2 and otg
+ on stm32mp21
+
+The OTG controller can be wakeup through USB2PHY2. Add the relevant
+wakeup interrupt to the PHY. Mark the PHY and the controller as
+"wakeup-source".
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I48c40fd5f024e6da8059f8b82e00f716060c7f9f
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/420291
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Ram DAYAL <ram.dayal@st.com>
+Domain-Review: Ram DAYAL <ram.dayal@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 8baf3c7ac4f9..7af05e3f45ef 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -274,6 +274,8 @@ usb2_phy2: usb2-phy2 {
+ 		st,syscfg       = <&syscfg 0x2800>;
+ 		clocks          = <&rcc CK_KER_USB2PHY2EN>;
+ 		resets          = <&rcc USB2PHY2_R>;
++		interrupts-extended = <&exti1 44 IRQ_TYPE_EDGE_RISING>;
++		wakeup-source;
+ 		status          = "disabled";
+ 	};
+ 
+@@ -1890,6 +1892,8 @@ usbotg_hs: usb@48300000 {
+ 				phys = <&usb2_phy2>;
+ 				phy-names = "usb2-phy";
+ 				st,syscfg = <&syscfg 0x2824>;
++				power-domains = <&CLUSTER_PD>;
++				wakeup-source;
+ 				status = "disabled";
+ 			};
+ 		};
+-- 
+2.50.1
+

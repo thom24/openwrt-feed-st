@@ -1,0 +1,50 @@
+From 8980381fe19faeaf274264ac496d93fed9f870bc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Tue, 17 Dec 2024 10:16:26 +0100
+Subject: [PATCH] crypto: stm32/cryp - increase waiting time of input and
+ output
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+In some case 10 us could be too short to have the output flag set.
+It's even more the case if DMA is not used. Increase waiting time like
+it was in the other wait function. Also, set the same time for wait
+input for coherency.
+
+Change-Id: If672cb7467f5816889ca28c30f8b1f0aa13cb6ec
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/425170
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ drivers/crypto/stm32/stm32-cryp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/crypto/stm32/stm32-cryp.c b/drivers/crypto/stm32/stm32-cryp.c
+index c995c608e14b..84a58600ad24 100644
+--- a/drivers/crypto/stm32/stm32-cryp.c
++++ b/drivers/crypto/stm32/stm32-cryp.c
+@@ -333,7 +333,7 @@ static inline int stm32_cryp_wait_input(struct stm32_cryp *cryp)
+ 	u32 status;
+ 
+ 	return readl_relaxed_poll_timeout_atomic(cryp->regs + cryp->caps->sr, status,
+-			status & SR_IFNF, 1, 10);
++			status & SR_IFNF, 10, 100000);
+ }
+ 
+ static inline int stm32_cryp_wait_output(struct stm32_cryp *cryp)
+@@ -341,7 +341,7 @@ static inline int stm32_cryp_wait_output(struct stm32_cryp *cryp)
+ 	u32 status;
+ 
+ 	return readl_relaxed_poll_timeout_atomic(cryp->regs + cryp->caps->sr, status,
+-			status & SR_OFNE, 1, 10);
++			status & SR_OFNE, 10, 100000);
+ }
+ 
+ static inline void stm32_cryp_key_read_enable(struct stm32_cryp *cryp)
+-- 
+2.50.1
+

@@ -1,0 +1,41 @@
+From c7aa45a4a52361224482bef0ce9f013c1e4feac9 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Thu, 16 Jan 2025 15:40:03 +0100
+Subject: [PATCH] media: stm32: dcmipp: correct bad logical check in
+ dcmipp_statcap_irq_thread
+
+Correct the check related to stat location reported by the following warning:
+
+dcmipp-statcap.c:703:15: warning: logical not is only applied to the left hand side of this comparison [-Wlogical-not-parentheses]
+703 |                         avr_bins = !vcap->stat_location == DCMIPP_P1STXCR_SRC_LOC_PRE ?
+    |                                    ^                    ~~
+dcmipp-statcap.c:703:15: note: add parentheses after the '!' to evaluate the comparison first
+
+Change-Id: Ied5c8939af5d95a89642cb90c591d654597fade6
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/429389
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
+index 4483193ed7de..d583801f8cbc 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
+@@ -700,7 +700,7 @@ static irqreturn_t dcmipp_statcap_irq_thread(int irq, void *arg)
+ 
+ 		if (vcap->prev_capture_state == PHY_BIN_3_SHA_AV_RGB) {
+ 			/* The data capture refer to the previous location */
+-			avr_bins = !vcap->stat_location == DCMIPP_P1STXCR_SRC_LOC_PRE ?
++			avr_bins = !(vcap->stat_location == DCMIPP_P1STXCR_SRC_LOC_PRE) ?
+ 					&vcap->local_buf.pre : &vcap->local_buf.post;
+ 			/* Accumulators contains the 4th set of BINS */
+ 			for (i = 0; i < 3; i++)
+-- 
+2.50.1
+

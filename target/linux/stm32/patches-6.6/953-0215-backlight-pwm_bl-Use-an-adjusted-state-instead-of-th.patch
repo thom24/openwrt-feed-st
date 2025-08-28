@@ -1,0 +1,54 @@
+From d106e853f7761ed549964dc737e5c7d3a5ef8330 Mon Sep 17 00:00:00 2001
+From: Cheick Traore <cheick.traore@foss.st.com>
+Date: Tue, 28 Jan 2025 16:45:51 +0100
+Subject: [PATCH] backlight: pwm_bl: Use an adjusted state instead of the
+ initial one for pwm during probe.
+
+After using pwm_init_state to retrieve a state applied in
+pwm_apply_might_sleep, the duty_cycle is initialized to zero which
+result in turning off the backlight before retrieving default
+brighteness from DT and applied it. To avoid turning off the backlight,
+we will use pwm_adjust_config to retrieve the duty_cycle and assuming
+that the period from bootloader and kernel stages are the same, it will
+apply the correct duty_cycle or if not the case it will adjust it.
+
+Inspired by the suggestion in this upstream discussion:
+Link: https://lore.kernel.org/lkml/20230608-backlight-pwm-avoid-flicker-v1-1-afd380d50174@pengutronix.de/T/
+ > Looking a little deeper in the PWM code, it looks to me like pwm_bl.c
+ > could just use pwm_adjust_config() during probe to transition between
+ > bootloader settings and kernel settings!
+ >
+ > Daniel.
+
+Change-Id: I7734bdf6b1f8458d99639d01b85c05255c019af6
+Signed-off-by: Cheick Traore <cheick.traore@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/432483
+Domain-Review: Yannick FERTRE <yannick.fertre@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Reviewed-by: Yannick FERTRE <yannick.fertre@foss.st.com>
+---
+ drivers/video/backlight/pwm_bl.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/video/backlight/pwm_bl.c b/drivers/video/backlight/pwm_bl.c
+index 35c716e9043c..d6466913cb49 100644
+--- a/drivers/video/backlight/pwm_bl.c
++++ b/drivers/video/backlight/pwm_bl.c
+@@ -528,10 +528,9 @@ static int pwm_backlight_probe(struct platform_device *pdev)
+ 	if (!state.period && (data->pwm_period_ns > 0))
+ 		state.period = data->pwm_period_ns;
+ 
+-	ret = pwm_apply_might_sleep(pb->pwm, &state);
++	ret = pwm_adjust_config(pb->pwm);
+ 	if (ret) {
+-		dev_err(&pdev->dev, "failed to apply initial PWM state: %d\n",
+-			ret);
++		dev_err(&pdev->dev, "failed to apply adjusted PWM state: %d\n", ret);
+ 		goto err_alloc;
+ 	}
+ 
+-- 
+2.50.1
+

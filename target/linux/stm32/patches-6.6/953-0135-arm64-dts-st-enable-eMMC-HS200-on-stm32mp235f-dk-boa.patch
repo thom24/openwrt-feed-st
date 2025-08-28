@@ -1,0 +1,34 @@
+From defea5a25856f486154a74bd31e2ca03c3a3f841 Mon Sep 17 00:00:00 2001
+From: Christophe Kerello <christophe.kerello@foss.st.com>
+Date: Wed, 18 Dec 2024 13:47:21 +0100
+Subject: [PATCH] arm64: dts: st: enable eMMC HS200 on stm32mp235f-dk board
+
+Enable eMMC HS200 on stm32mp235f-dk board.
+
+Change-Id: I649b7ef99920c7e900e90f0035a694ddd0ada479
+Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/426123
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+Tested-by: Christophe KERELLO <christophe.kerello@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index 889e34ed6cc3..fd587675e806 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -658,6 +658,7 @@ &sdmmc2 {
+ 	vmmc-supply = <&scmi_vdd_emmc>;
+ 	vqmmc-supply = <&scmi_vddio2>;
+ 	mmc-ddr-1_8v;
++	mmc-hs200-1_8v;
+ 	status = "okay";
+ };
+ 
+-- 
+2.50.1
+

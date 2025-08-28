@@ -1,0 +1,38 @@
+From 1d4f415e1b62e6bcf442d419ab0771395739e70b Mon Sep 17 00:00:00 2001
+From: Pascal Paillet <p.paillet@foss.st.com>
+Date: Wed, 16 Oct 2024 09:32:09 +0200
+Subject: [PATCH] arm64: dts: st: enable the RTC on stm32mp215f-dk
+
+Enable the RTC on stm32mp215f-dk.
+
+Change-Id: Ide1e3b7f528fc5b900e2cdd872c2f62fd513064a
+Signed-off-by: Pascal Paillet <p.paillet@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/411626
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Clement LE GOFFIC <clement.legoffic@foss.st.com>
+Reviewed-by: Pascal PAILLET <p.paillet@st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Tested-by: Pascal PAILLET <p.paillet@st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 9a9f7c5b8a4e..6502d97cb7ed 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -424,6 +424,10 @@ mdf_endpoint1: endpoint {
+ 	};
+ };
+ 
++&rtc {
++	status = "okay";
++};
++
+ &scmi_regu {
+ 	scmi_vddcore: regulator@5  {
+ 		reg = <VOLTD_SCMI_STPMIC_BUCK1>;
+-- 
+2.50.1
+

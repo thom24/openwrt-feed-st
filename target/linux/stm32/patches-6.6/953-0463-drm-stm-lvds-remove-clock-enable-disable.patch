@@ -1,0 +1,55 @@
+From c2a477077cc4181b6517ae4b8cfc1e1ea320cafc Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Thu, 15 May 2025 14:06:53 +0200
+Subject: [PATCH] drm/stm: lvds: remove clock enable/disable
+
+This issue rarely occurs when requesting to enable/disable the LVDS
+pixel clock. The LVDS driver enables/disables the reference and peripheral
+clocks. This is not necessary, as the clock framework does this itself
+(the reference clock is the parent of the LVDS pixel clock).
+
+Change-Id: I4289ce9d3636e4b3fbeef32572af7ef8634c439c
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/458856
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/gpu/drm/stm/lvds.c | 16 ----------------
+ 1 file changed, 16 deletions(-)
+
+diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
+index d4ba3224bf3b..913cfffd8427 100644
+--- a/drivers/gpu/drm/stm/lvds.c
++++ b/drivers/gpu/drm/stm/lvds.c
+@@ -558,19 +558,6 @@ static int lvds_pixel_clk_enable(struct clk_hw *hw)
+ 	int ret;
+ 	u32 reg;
+ 
+-	ret = clk_prepare_enable(lvds->pclk);
+-	if (ret) {
+-		DRM_ERROR("Failed to enable pclk: %d\n", ret);
+-		return ret;
+-	}
+-
+-	ret = clk_prepare_enable(lvds->pllref_clk);
+-	if (ret) {
+-		clk_disable_unprepare(lvds->pclk);
+-		DRM_ERROR("Failed to enable pllref_clk: %d\n", ret);
+-		return ret;
+-	}
+-
+ 	/* In case we are operating in dual link the second PHY is set before the primary PHY. */
+ 	if (lvds->secondary) {
+ 		phy = lvds->secondary;
+@@ -637,9 +624,6 @@ static void lvds_pixel_clk_disable(struct clk_hw *hw)
+ 		lvds_clear(lvds, lvds->secondary->base + lvds->secondary->ofs.GCR,
+ 			   PHY_GCR_DIV_RSTN | PHY_GCR_RSTZ);
+ 	}
+-
+-	clk_disable_unprepare(lvds->pllref_clk);
+-	clk_disable_unprepare(lvds->pclk);
+ }
+ 
+ static unsigned long lvds_pixel_clk_recalc_rate(struct clk_hw *hw,
+-- 
+2.50.1
+

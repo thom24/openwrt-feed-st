@@ -1,0 +1,59 @@
+From bb42f15ffc8112023509b4c89caeb284d924e35b Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 2 Apr 2025 16:10:11 +0200
+Subject: [PATCH] clocksource: stm32-lptimer: fix timeout when enabling
+
+On STM32MP2, a timeout error is sometimes seen while booting:
+"access to LPTIM timed out".
+There's a constraint to write ARR & IER registers: the LPTIM has to be
+enabled. Enabling the LPTIM requires two counter clock cycles before
+the LPTIM is actually enabled.
+There's a race after setting STM32_LPTIM_ENABLE, to write to ARR and IER
+that causes the timeout error to be sometimes seen.
+So add a delay that matches at least the expected 32KHz rate, when the
+LPTIM has been enabled.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ifa74dd91702f0bc80b970667512c66df47e47c70
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/454752
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/clocksource/timer-stm32-lp.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/clocksource/timer-stm32-lp.c b/drivers/clocksource/timer-stm32-lp.c
+index 8f370c3a00b9..815abee7ce4a 100644
+--- a/drivers/clocksource/timer-stm32-lp.c
++++ b/drivers/clocksource/timer-stm32-lp.c
+@@ -5,6 +5,7 @@
+  *	    Pascal Paillet <p.paillet@st.com> for STMicroelectronics.
+  */
+ 
++#include <linux/bitfield.h>
+ #include <linux/clk.h>
+ #include <linux/clockchips.h>
+ #include <linux/interrupt.h>
+@@ -63,8 +64,17 @@ static int stm32mp25_clkevent_lp_set_evt(struct stm32_lp_private *priv, unsigned
+ 	int ret;
+ 	u32 val;
+ 
+-	/* Enable LPTIMER to be able to write into IER and ARR registers */
+-	regmap_write(priv->reg, STM32_LPTIM_CR, STM32_LPTIM_ENABLE);
++	regmap_read(priv->reg, STM32_LPTIM_CR, &val);
++	if (!FIELD_GET(STM32_LPTIM_ENABLE, val)) {
++		/* Enable LPTIMER to be able to write into IER and ARR registers */
++		regmap_write(priv->reg, STM32_LPTIM_CR, STM32_LPTIM_ENABLE);
++		/*
++		 * After setting the ENABLE bit, a delay of two counter clock cycles is needed
++		 * before the LPTIM is actually enabled. For 32KHz rate, this makes approximately
++		 * 62.5 micro-seconds, round it up.
++		 */
++		udelay(63);
++	}
+ 	/* set next event counter */
+ 	regmap_write(priv->reg, STM32_LPTIM_ARR, evt);
+ 	/* enable ARR interrupt */
+-- 
+2.50.1
+

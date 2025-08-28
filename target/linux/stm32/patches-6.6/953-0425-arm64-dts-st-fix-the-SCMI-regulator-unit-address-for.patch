@@ -1,0 +1,210 @@
+From 6084289eeea98b67081d33fe0d2153082cac3789 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Wed, 7 May 2025 11:36:29 +0200
+Subject: [PATCH] arm64: dts: st: fix the SCMI regulator unit-address for
+ STM32MP boards
+
+The SCMI regulators in device tree use format regulator@unit-address
+and unit-address must be equal to the reg value in hexadecimal format,
+but It is not the case for regulator used in STM32MP boards.
+
+This patch solves this issue, even if the issue have no functional impact
+and if DTC detects this issue only for simple-bus (warning simple_bus_reg).
+
+Change-Id: Ib0df5b6b1476bb4a97bfda9797cccdef333c1f79
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/456318
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi     |  2 +-
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts  | 10 +++++-----
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts  | 16 ++++++++--------
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts  | 16 ++++++++--------
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 12 ++++++------
+ 5 files changed, 28 insertions(+), 28 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 72a26e2069b4..b58c7acbb19e 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -166,7 +166,7 @@ scmi_vddio3: regulator@2 {
+ 						reg = <VOLTD_SCMI_VDDIO3>;
+ 						regulator-name = "vddio3";
+ 					};
+-					scmi_vdda18adc: regulator@7 {
++					scmi_vdda18adc: regulator@3 {
+ 						reg = <VOLTD_SCMI_ADC>;
+ 						regulator-name = "vdda18adc";
+ 					};
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 5450a2a7dd3c..4a426bc00597 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -492,23 +492,23 @@ &rtc {
+ };
+ 
+ &scmi_regu {
+-	scmi_vddcore: regulator@5  {
++	scmi_vddcore: regulator@5 {
+ 		reg = <VOLTD_SCMI_STPMIC_BUCK1>;
+ 		regulator-name = "vddcore";
+ 	};
+-	scmi_vdd3v3_usb: regulator@15  {
++	scmi_vdd3v3_usb: regulator@f {
+ 		reg = <VOLTD_SCMI_STPMIC_LDO4>;
+ 		regulator-name = "vdd3v3_usb";
+ 	};
+-	scmi_vdd_flash: regulator@16  {
++	scmi_vdd_flash: regulator@10 {
+ 		reg = <VOLTD_SCMI_STPMIC_LDO5>;
+ 		regulator-name = "vdd_flash";
+ 	};
+-	scmi_vdda_1v8: regulator@17  {
++	scmi_vdda_1v8: regulator@11 {
+ 		reg = <VOLTD_SCMI_STPMIC_LDO6>;
+ 		regulator-name = "vdda_1v8";
+ 	};
+-	scmi_v3v3: regulator@21  {
++	scmi_v3v3: regulator@15 {
+ 		reg = <VOLTD_SCMI_STPMIC_GPO1>;
+ 		regulator-name = "v3v3";
+ 	};
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index d39ba4f4e025..4d9de66c70c6 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -513,35 +513,35 @@ scmi_vddio1: regulator@0 {
+ 		regulator-min-microvolt = <1800000>;
+ 		regulator-max-microvolt = <3300000>;
+ 	};
+-	scmi_vddcore: regulator@11  {
++	scmi_vddcore: regulator@b {
+ 		reg = <VOLTD_SCMI_STPMIC2_BUCK2>;
+ 		regulator-name = "vddcore";
+ 	};
+-	scmi_v1v8: regulator@14  {
++	scmi_v1v8: regulator@e {
+ 		reg = <VOLTD_SCMI_STPMIC2_BUCK5>;
+ 		regulator-name = "v1v8";
+ 	};
+-	scmi_v3v3: regulator@16 {
++	scmi_v3v3: regulator@10 {
+ 		reg = <VOLTD_SCMI_STPMIC2_BUCK7>;
+ 		regulator-name = "v3v3";
+ 	};
+-	scmi_vdd_emmc: regulator@18 {
++	scmi_vdd_emmc: regulator@12 {
+ 		reg = <VOLTD_SCMI_STPMIC2_LDO2>;
+ 		regulator-name = "vdd_emmc";
+ 	};
+-	scmi_vdd3v3_usb: regulator@20 {
++	scmi_vdd3v3_usb: regulator@14 {
+ 		reg = <VOLTD_SCMI_STPMIC2_LDO4>;
+ 		regulator-name = "vdd3v3_usb";
+ 	};
+-	scmi_v5v_hdmi: regulator@21 {
++	scmi_v5v_hdmi: regulator@15 {
+ 		reg = <VOLTD_SCMI_STPMIC2_LDO5>;
+ 		regulator-name = "v5v_hdmi";
+ 	};
+-	scmi_v5v_vconn: regulator@22 {
++	scmi_v5v_vconn: regulator@16 {
+ 		reg = <VOLTD_SCMI_STPMIC2_LDO6>;
+ 		regulator-name = "v5v_vconn";
+ 	};
+-	scmi_vdd_sdcard: regulator@23 {
++	scmi_vdd_sdcard: regulator@17 {
+ 		reg = <VOLTD_SCMI_STPMIC2_LDO7>;
+ 		regulator-name = "vdd_sdcard";
+ 	};
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index 8890b902ed70..b804379d2012 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -656,35 +656,35 @@ scmi_vddio1: regulator@0 {
+ 		regulator-min-microvolt = <1800000>;
+ 		regulator-max-microvolt = <3300000>;
+ 	};
+-	scmi_vddcore: regulator@11  {
++	scmi_vddcore: regulator@b {
+ 		reg = <VOLTD_SCMI_STPMIC2_BUCK2>;
+ 		regulator-name = "vddcore";
+ 	};
+-	scmi_v1v8: regulator@14  {
++	scmi_v1v8: regulator@e {
+ 		reg = <VOLTD_SCMI_STPMIC2_BUCK5>;
+ 		regulator-name = "v1v8";
+ 	};
+-	scmi_v3v3: regulator@16 {
++	scmi_v3v3: regulator@10 {
+ 		reg = <VOLTD_SCMI_STPMIC2_BUCK7>;
+ 		regulator-name = "v3v3";
+ 	};
+-	scmi_vdd_emmc: regulator@18 {
++	scmi_vdd_emmc: regulator@12 {
+ 		reg = <VOLTD_SCMI_STPMIC2_LDO2>;
+ 		regulator-name = "vdd_emmc";
+ 	};
+-	scmi_vdd3v3_usb: regulator@20 {
++	scmi_vdd3v3_usb: regulator@14 {
+ 		reg = <VOLTD_SCMI_STPMIC2_LDO4>;
+ 		regulator-name = "vdd3v3_usb";
+ 	};
+-	scmi_v5v_hdmi: regulator@21 {
++	scmi_v5v_hdmi: regulator@15 {
+ 		reg = <VOLTD_SCMI_STPMIC2_LDO5>;
+ 		regulator-name = "v5v_hdmi";
+ 	};
+-	scmi_v5v_vconn: regulator@22 {
++	scmi_v5v_vconn: regulator@16 {
+ 		reg = <VOLTD_SCMI_STPMIC2_LDO6>;
+ 		regulator-name = "v5v_vconn";
+ 	};
+-	scmi_vdd_sdcard: regulator@23 {
++	scmi_vdd_sdcard: regulator@17 {
+ 		reg = <VOLTD_SCMI_STPMIC2_LDO7>;
+ 		regulator-name = "vdd_sdcard";
+ 	};
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+index e077018ca37d..8a240acbe00b 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+@@ -678,27 +678,27 @@ scmi_vddio1: regulator@0 {
+ 		regulator-min-microvolt = <1800000>;
+ 		regulator-max-microvolt = <3300000>;
+ 	};
+-	scmi_vddcore: regulator@11  {
++	scmi_vddcore: regulator@b {
+ 		reg = <VOLTD_SCMI_STPMIC2_BUCK2>;
+ 		regulator-name = "vddcore";
+ 	};
+-	scmi_v1v8: regulator@14  {
++	scmi_v1v8: regulator@e {
+ 		reg = <VOLTD_SCMI_STPMIC2_BUCK5>;
+ 		regulator-name = "v1v8";
+ 	};
+-	scmi_v3v3: regulator@16 {
++	scmi_v3v3: regulator@10 {
+ 		reg = <VOLTD_SCMI_STPMIC2_BUCK7>;
+ 		regulator-name = "v3v3";
+ 	};
+-	scmi_vdd_emmc: regulator@18 {
++	scmi_vdd_emmc: regulator@12 {
+ 		reg = <VOLTD_SCMI_STPMIC2_LDO2>;
+ 		regulator-name = "vdd_emmc";
+ 	};
+-	scmi_vdd3v3_usb: regulator@20 {
++	scmi_vdd3v3_usb: regulator@14 {
+ 		reg = <VOLTD_SCMI_STPMIC2_LDO4>;
+ 		regulator-name = "vdd3v3_usb";
+ 	};
+-	scmi_vdd_sdcard: regulator@23 {
++	scmi_vdd_sdcard: regulator@17 {
+ 		reg = <VOLTD_SCMI_STPMIC2_LDO7>;
+ 		regulator-name = "vdd_sdcard";
+ 	};
+-- 
+2.50.1
+

@@ -1,0 +1,34 @@
+From aeab7889c2be190e4e1b42ef91ed847e5dd1c2fc Mon Sep 17 00:00:00 2001
+From: Theo GOUREAU <theo.goureau-ext@st.com>
+Date: Mon, 21 Oct 2024 10:22:52 +0200
+Subject: [PATCH] arm64: dts: st: remove LTDC rotation from stm32mp215.dtsi
+
+Remove LTDC rotation from stm32mp215.dtsi.
+
+Change-Id: Ibfc27615f9fe46b2465d7483fc7a4c91ae90ea50
+Signed-off-by: Theo GOUREAU <theo.goureau-ext@st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/412816
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215.dtsi | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215.dtsi b/arch/arm64/boot/dts/st/stm32mp215.dtsi
+index 8f25051bfe13..9d24dd816408 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp215.dtsi
+@@ -28,9 +28,5 @@ l3 {
+ 			access-controllers = <&rifsc 120>;
+ 			access-controller-names = "l3";
+ 		};
+-		rot {
+-			access-controllers = <&rifsc 121>;
+-			access-controller-names = "rot";
+-		};
+ 	};
+ };
+-- 
+2.50.1
+

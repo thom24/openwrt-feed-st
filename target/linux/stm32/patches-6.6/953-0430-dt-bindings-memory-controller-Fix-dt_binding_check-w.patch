@@ -1,0 +1,90 @@
+From caf7530b27e0642179ff70f4c4e13800ee8d23b8 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Wed, 30 Apr 2025 15:51:54 +0200
+Subject: [PATCH] dt-bindings: memory-controller: Fix dt_binding_check warnings
+
+Fix dt_binding_check warnings.
+
+Change-Id: I624af5edac875cb4f56c124c9a6f91e26c203e65
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/455260
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+---
+ .../memory-controllers/st,stm32-omi.yaml        | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/memory-controllers/st,stm32-omi.yaml b/Documentation/devicetree/bindings/memory-controllers/st,stm32-omi.yaml
+index 4e07bb7f5b2b..68890bb1ff91 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/st,stm32-omi.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/st,stm32-omi.yaml
+@@ -64,7 +64,7 @@ properties:
+         to sample the data in their valid window.
+         Tune the phase of the TX launch clock in order to meet setup
+         and hold constraints of TX signals versus the memory clock.
+-    $ref: "/schemas/types.yaml#/definitions/phandle-array"
++    $ref: /schemas/types.yaml#/definitions/phandle-array
+     items:
+       minItems: 2
+       maxItems: 2
+@@ -77,6 +77,11 @@ properties:
+   power-domains:
+     maxItems: 1
+ 
++  cs-gpios:
++    maxItems: 1
++    description:
++      GPIO for chip select
++
+ required:
+   - compatible
+   - reg
+@@ -111,7 +116,7 @@ patternProperties:
+                 - st,octal-bus
+ 
+         then:
+-          $ref: "/schemas/spi/spi-controller.yaml#"
++          $ref: /schemas/spi/spi-controller.yaml#
+ 
+       - if:
+           properties:
+@@ -121,11 +126,10 @@ patternProperties:
+                   - cfi-flash
+ 
+         then:
+-          $ref: "/schemas/mtd/mtd-physmap.yaml#"
++          $ref: /schemas/mtd/mtd-physmap.yaml#
+ 
+           properties:
+             st,max-frequency:
+-              $ref: /schemas/types.yaml#/definitions/uint32
+               description:
+                 Maximum clocking speed of the device in Hz.
+ 
+@@ -152,6 +156,8 @@ patternProperties:
+           required:
+             - spi-max-frequency
+ 
++    additionalProperties: true
++
+ additionalProperties: false
+ 
+ examples:
+@@ -212,10 +218,11 @@ examples:
+       };
+     };
+   - |
++    #include <dt-bindings/gpio/gpio.h>
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+     #include <dt-bindings/clock/st,stm32mp25-rcc.h>
+     #include <dt-bindings/reset/st,stm32mp25-rcc.h>
+-    memory-controller@40430000 {
++    spi@40430000 {
+       compatible = "st,stm32mp25-omi";
+       reg = <0x40430000 0x400>;
+       memory-region = <&mm_ospi1>;
+-- 
+2.50.1
+

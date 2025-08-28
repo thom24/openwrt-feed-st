@@ -1,0 +1,125 @@
+From 8f52864e7688a68f4453be3ffb924caef0240356 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Tue, 21 Jan 2025 10:44:05 +0100
+Subject: [PATCH] ASoC: stm32: i2s: manage update of master clock rate
+
+Multiple requests to update the master clock rate can be received by the
+i2s driver. When the same rate is requested several times, the call of
+clk_set_rate_exclusive increments the usage counter of the clock in the
+clock framework.
+On device closure, the clock usage counter is decreased only once, which
+lets the clock in protected state and blocks subsequent master clock rate
+change requests.
+For one i2s instance the clock usage counter should be increased only
+once to avoid unbalanced state.
+Skip rate update if rate is the same, and add protection against race
+conditions on master clock rate update.
+
+Change-Id: I981897d22ededafcd3ec38a915f3a00259e68f4b
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/430294
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ sound/soc/stm/stm32_i2s.c | 34 +++++++++++++++++++++++-----------
+ 1 file changed, 23 insertions(+), 11 deletions(-)
+
+diff --git a/sound/soc/stm/stm32_i2s.c b/sound/soc/stm/stm32_i2s.c
+index 808f8a1c38bb..58fdd4bb36a2 100644
+--- a/sound/soc/stm/stm32_i2s.c
++++ b/sound/soc/stm/stm32_i2s.c
+@@ -222,6 +222,7 @@ enum i2s_datlen {
+  * @phys_addr: I2S registers physical base address
+  * @lock_fd: lock to manage race conditions in full duplex mode
+  * @irq_lock: prevent race condition with IRQ
++ * @lock_mclk: manage race conditions on mclk rate update
+  * @mclk_rate: master clock frequency (Hz)
+  * @fmt: DAI protocol
+  * @divider: prescaler division ratio
+@@ -251,6 +252,7 @@ struct stm32_i2s_data {
+ 	dma_addr_t phys_addr;
+ 	spinlock_t lock_fd; /* Manage race conditions for full duplex */
+ 	spinlock_t irq_lock; /* used to prevent race condition with IRQ */
++	spinlock_t lock_mclk; /* Manage race conditions on mclk rate update */
+ 	unsigned int mclk_rate;
+ 	unsigned int fmt;
+ 	unsigned int divider;
+@@ -750,45 +752,54 @@ static int stm32_i2s_set_sysclk(struct snd_soc_dai *cpu_dai,
+ 		freq, STM32_I2S_IS_MASTER(i2s) ? "master" : "slave",
+ 		dir ? "output" : "input");
+ 
++	spin_lock(&i2s->lock_mclk);
++
+ 	/* MCLK generation is available only in master mode */
+ 	if (dir == SND_SOC_CLOCK_OUT && STM32_I2S_IS_MASTER(i2s)) {
+ 		if (!i2s->i2smclk) {
+ 			dev_dbg(cpu_dai->dev, "No MCLK registered\n");
+-			return 0;
++			goto out;
+ 		}
+ 
++		/* Leave early if nothing to do */
++		if (freq == i2s->mclk_rate)
++			goto out;
++
+ 		/* Assume shutdown if requested frequency is 0Hz */
+ 		if (!freq) {
+-			/* Release mclk rate only if rate was actually set */
+-			if (i2s->mclk_rate) {
+-				clk_rate_exclusive_put(i2s->i2smclk);
+-				i2s->mclk_rate = 0;
+-			}
++			clk_rate_exclusive_put(i2s->i2smclk);
+ 
+ 			if (i2s->put_i2s_clk_rate)
+ 				i2s->put_i2s_clk_rate(i2s);
+ 
+-			return regmap_update_bits(i2s->regmap,
+-						  STM32_I2S_CGFR_REG,
+-						  I2S_CGFR_MCKOE, 0);
++			ret = regmap_update_bits(i2s->regmap, STM32_I2S_CGFR_REG,
++						 I2S_CGFR_MCKOE, 0);
++			if (!ret)
++				i2s->mclk_rate = 0;
++
++			goto out;
+ 		}
+ 
+ 		/* If master clock is used, set parent clock now */
+ 		ret = i2s->set_i2s_clk_rate(i2s, freq);
+ 		if (ret)
+-			return ret;
++			goto out;
+ 
+ 		ret = clk_set_rate_exclusive(i2s->i2smclk, freq);
+ 		if (ret) {
+ 			dev_err(cpu_dai->dev, "Could not set mclk rate\n");
+-			return ret;
++			goto out;
+ 		}
++
+ 		ret = regmap_update_bits(i2s->regmap, STM32_I2S_CGFR_REG,
+ 					 I2S_CGFR_MCKOE, I2S_CGFR_MCKOE);
+ 		if (!ret)
+ 			i2s->mclk_rate = freq;
+ 	}
+ 
++out:
++	spin_unlock(&i2s->lock_mclk);
++
+ 	return ret;
+ }
+ 
+@@ -1286,6 +1297,7 @@ static int stm32_i2s_probe(struct platform_device *pdev)
+ 	i2s->pdev = pdev;
+ 	i2s->ms_flg = I2S_MS_NOT_SET;
+ 	spin_lock_init(&i2s->lock_fd);
++	spin_lock_init(&i2s->lock_mclk);
+ 	spin_lock_init(&i2s->irq_lock);
+ 	platform_set_drvdata(pdev, i2s);
+ 
+-- 
+2.50.1
+

@@ -1,0 +1,42 @@
+From a906c37a80e5f94447e33632f98d151e906d9fbc Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Wed, 4 Dec 2024 14:35:32 +0100
+Subject: [PATCH] iio: adc: stm32-mdf: Use DIV_ROUND_CLOSEST_ULL for u64
+ division.
+
+Fix _aeabi_uldivmod undefined aarch32 link error
+(native u64 div is not available on aarch32)
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I3d30373dd7ae8d99fede7ccc6465d8599abeee0a
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/422656
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/iio/adc/stm32-mdf-adc.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/iio/adc/stm32-mdf-adc.c b/drivers/iio/adc/stm32-mdf-adc.c
+index c87edf865a77..fc7eb518034a 100644
+--- a/drivers/iio/adc/stm32-mdf-adc.c
++++ b/drivers/iio/adc/stm32-mdf-adc.c
+@@ -684,11 +684,11 @@ static int stm32_mdf_adc_set_filters_config(struct iio_dev *indio_dev, unsigned
+ 
+ 	if (gain_lin > 0) {
+ 		max *= gain_lin;
+-		max /= 1000;
++		max = DIV_ROUND_CLOSEST_ULL(max, 1000);
+ 	}
+ 	if (gain_lin < 0) {
+-		max /= -gain_lin;
+-		max /= 10;
++		max = DIV_ROUND_CLOSEST_ULL(max, -gain_lin);
++		max = DIV_ROUND_CLOSEST_ULL(max,  10);
+ 	}
+ 
+ 	adc->dflt_max = max;
+-- 
+2.50.1
+

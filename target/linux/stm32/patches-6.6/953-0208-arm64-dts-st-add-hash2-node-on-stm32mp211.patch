@@ -1,0 +1,44 @@
+From abc3e410e8b60974638a42271daad25b413f0531 Mon Sep 17 00:00:00 2001
+From: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Date: Thu, 30 Jan 2025 14:25:36 +0100
+Subject: [PATCH] arm64: dts: st: add hash2 node on stm32mp211
+
+Add support hash2 node for STM32MP21
+
+Signed-off-by: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Change-Id: I8b22f5778dd63562a7196d9a5eaa2fa960271b4e
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/433141
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 1a728062e33f..c1ec3872aba0 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -1590,6 +1590,19 @@ channel@17 {
+ 				};
+ 			};
+ 
++			hash2: hash@42010000 {
++				compatible = "st,stm32mp13-hash";
++				reg = <0x42010000 0x0 0x400>;
++				interrupts = <GIC_SPI 178 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&rcc CK_BUS_HASH2>;
++				resets = <&rcc HASH2_R>;
++				dmas = <&hpdma 142 0x40 0x3021>;
++				dma-names = "in";
++				access-controllers = <&rifsc 97>;
++				power-domains = <&d1_pd>;
++				status = "disabled";
++			};
++
+ 			rng2: rng@42020000 {
+ 				compatible = "st,stm32mp21-rng";
+ 				reg = <0x42020000 0x0 0x400>;
+-- 
+2.50.1
+

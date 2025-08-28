@@ -1,0 +1,42 @@
+From fdd9f795b43ffa5075a073350ca04510eaba446f Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Mon, 28 Apr 2025 10:26:00 +0200
+Subject: [PATCH] dt-bindings: i3c: fix STM32 I3C bindings
+
+Fix the issues raised by dt_binding_check:
+./Documentation/devicetree/bindings/i3c/st,stm32-i3c.yaml:13:11:
+[error] string value is redundantly quoted with any quotes (quoted-strings)
+./Documentation/devicetree/bindings/i3c/st,stm32-i3c.yaml:53:7:
+[error] no new line character at the end of file (new-line-at-end-of-file)
+
+Change-Id: I4eb6c3a9d1f6d5139843e2f7ce4f1e6a8540a117
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/454449
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ Documentation/devicetree/bindings/i3c/st,stm32-i3c.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/i3c/st,stm32-i3c.yaml b/Documentation/devicetree/bindings/i3c/st,stm32-i3c.yaml
+index 49191851be44..4524e880e5c7 100644
+--- a/Documentation/devicetree/bindings/i3c/st,stm32-i3c.yaml
++++ b/Documentation/devicetree/bindings/i3c/st,stm32-i3c.yaml
+@@ -10,7 +10,7 @@ maintainers:
+   - Amelie Delaunay <amelie.delaunay@foss.st.com>
+ 
+ allOf:
+-  - $ref: "i3c.yaml#"
++  - $ref: i3c.yaml#
+ 
+ properties:
+   compatible:
+@@ -50,4 +50,4 @@ examples:
+       clocks = <&rcc CK_KER_I3C1>;
+       resets = <&rcc I3C4_R>;
+       status = "disabled";
+-    };
+\ No newline at end of file
++    };
+-- 
+2.50.1
+

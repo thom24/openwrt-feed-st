@@ -1,0 +1,99 @@
+From e34c691bc2239e4af7fb9ffa56ac733b6dd36afc Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Wed, 19 Mar 2025 16:52:07 +0100
+Subject: [PATCH] media: stm32: dcmipp: preparation before histogram support in
+ statcap
+
+In preparation of the addition of the histogram support within
+statcap, move the whole local_buf related handling (bad pixels /
+average and register based BINS extraction) into a dedicated
+function which is called from the irq handler.
+
+This also move the buffer copy into v4l2_buffer at the end so
+that it can later on merged with the histogram handling.
+
+Change-Id: I092ea92586439e8bc6272361cba9c445be095cfa
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/446239
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ .../st/stm32/stm32-dcmipp/dcmipp-statcap.c    | 38 +++++++++----------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
+index d583801f8cbc..0ee28a55a913 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
+@@ -631,27 +631,13 @@ static void dcmipp_statcap_read_avg_stats(struct dcmipp_statcap_device *vcap)
+ 	}
+ }
+ 
+-static irqreturn_t dcmipp_statcap_irq_thread(int irq, void *arg)
++static void dcmipp_statcap_update_local_buf(struct dcmipp_statcap_device *vcap)
+ {
+-	struct dcmipp_statcap_device *vcap =
+-			container_of(arg, struct dcmipp_statcap_device, ved);
+-	struct dcmipp_ent_device *ved = arg;
+ 	struct stm32_dcmipp_stat_avr_bins *avr_bins =
+ 		vcap->stat_location == DCMIPP_P1STXCR_SRC_LOC_PRE ? &vcap->local_buf.pre :
+ 								    &vcap->local_buf.post;
+ 	int i;
+ 
+-	/* We only to do things if we are streaming */
+-	if (!vb2_is_streaming(&vcap->queue))
+-		return IRQ_HANDLED;
+-
+-	/* We are only interested in VSYNC interrupts */
+-	if (!(ved->cmsr2 & DCMIPP_CMSR2_P1VSYNCF) &&
+-	    !(ved->cmsr2 & DCMIPP_CMSR2_P2VSYNCF))
+-		return IRQ_HANDLED;
+-
+-	spin_lock_irq(&vcap->irqlock);
+-
+ 	/* Read the bad pixel count stat and store it locally */
+ 	vcap->local_buf.bad_pixel_count = reg_read(vcap, DCMIPP_P1BPRSR) &
+ 						DCMIPP_P1BPRSR_BADCNT_MASK;
+@@ -776,10 +762,6 @@ static irqreturn_t dcmipp_statcap_irq_thread(int irq, void *arg)
+ 		break;
+ 	}
+ 
+-	/* If a full capture cycle has been done, output data to a buffer */
+-	if (vcap->stat_ready)
+-		dcmipp_statcap_buffer_done(vcap);
+-
+ 	/* Update the capture_state & prev_capture_state */
+ 	switch (vcap->stat_profile) {
+ 	case V4L2_STAT_PROFILE_FULL:
+@@ -802,6 +784,24 @@ static irqreturn_t dcmipp_statcap_irq_thread(int irq, void *arg)
+ 		}
+ 		break;
+ 	}
++}
++
++static irqreturn_t dcmipp_statcap_irq_thread(int irq, void *arg)
++{
++	struct dcmipp_statcap_device *vcap =
++			container_of(arg, struct dcmipp_statcap_device, ved);
++
++	/* We only to do things if we are streaming */
++	if (!vb2_is_streaming(&vcap->queue))
++		return IRQ_HANDLED;
++
++	spin_lock_irq(&vcap->irqlock);
++
++	dcmipp_statcap_update_local_buf(vcap);
++
++	/* If a full capture cycle has been done, output data to a buffer */
++	if (vcap->stat_ready)
++		dcmipp_statcap_buffer_done(vcap);
+ 
+ 	spin_unlock_irq(&vcap->irqlock);
+ 
+-- 
+2.50.1
+

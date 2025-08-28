@@ -1,0 +1,105 @@
+From 3f2c4bbe28f88ce0488ba53ba23473b5f4993a02 Mon Sep 17 00:00:00 2001
+From: Umang Jain <umang.jain@ideasonboard.com>
+Date: Tue, 20 Feb 2024 14:58:20 +0530
+Subject: [PATCH] media: imx335: Refactor power sequence to set controls
+
+Additional controls might require the sensor to be powered up
+to set the control value. Currently, only the exposure control
+powers up the sensor.
+
+Move the power up sequence out of the switch-case block.
+In a subsequent patch, test pattern control will be added that
+needs the sensor to be powered up. Hence, refactor the power
+sequence to be present outside the switch-case block.
+
+The VBLANK control is also moved out of the switch-case in order
+to be handled early on, to propagate the changes to other controls.
+
+Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+(cherry picked from commit 2d5aea517c195d32ccf73be8543da9d4ec539503)
+
+Change-Id: Ie5760b105cebb9c72ab4d45b62f83e6c429af68e
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/429201
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ drivers/media/i2c/imx335.c | 35 ++++++++++++++++++++---------------
+ 1 file changed, 20 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
+index 5a67e7cfde1f..efc7d200ed47 100644
+--- a/drivers/media/i2c/imx335.c
++++ b/drivers/media/i2c/imx335.c
+@@ -528,26 +528,31 @@ static int imx335_set_ctrl(struct v4l2_ctrl *ctrl)
+ 	u32 exposure;
+ 	int ret;
+ 
+-	switch (ctrl->id) {
+-	case V4L2_CID_VBLANK:
++	/* Propagate change of current control to all related controls */
++	if (ctrl->id == V4L2_CID_VBLANK) {
+ 		imx335->vblank = imx335->vblank_ctrl->val;
+ 
+ 		dev_dbg(imx335->dev, "Received vblank %u, new lpfr %u\n",
+ 			imx335->vblank,
+ 			imx335->vblank + imx335->cur_mode->height);
+ 
+-		ret = __v4l2_ctrl_modify_range(imx335->exp_ctrl,
+-					       IMX335_EXPOSURE_MIN,
+-					       imx335->vblank +
+-					       imx335->cur_mode->height -
+-					       IMX335_EXPOSURE_OFFSET,
+-					       1, IMX335_EXPOSURE_DEFAULT);
+-		break;
+-	case V4L2_CID_EXPOSURE:
+-		/* Set controls only if sensor is in power on state */
+-		if (!pm_runtime_get_if_in_use(imx335->dev))
+-			return 0;
++		return __v4l2_ctrl_modify_range(imx335->exp_ctrl,
++						IMX335_EXPOSURE_MIN,
++						imx335->vblank +
++						imx335->cur_mode->height -
++						IMX335_EXPOSURE_OFFSET,
++						1, IMX335_EXPOSURE_DEFAULT);
++	}
++
++	/*
++	 * Applying V4L2 control value only happens
++	 * when power is up for streaming.
++	 */
++	if (pm_runtime_get_if_in_use(imx335->dev) == 0)
++		return 0;
+ 
++	switch (ctrl->id) {
++	case V4L2_CID_EXPOSURE:
+ 		exposure = ctrl->val;
+ 		analog_gain = imx335->again_ctrl->val;
+ 
+@@ -556,14 +561,14 @@ static int imx335_set_ctrl(struct v4l2_ctrl *ctrl)
+ 
+ 		ret = imx335_update_exp_gain(imx335, exposure, analog_gain);
+ 
+-		pm_runtime_put(imx335->dev);
+-
+ 		break;
+ 	default:
+ 		dev_err(imx335->dev, "Invalid control %d\n", ctrl->id);
+ 		ret = -EINVAL;
+ 	}
+ 
++	pm_runtime_put(imx335->dev);
++
+ 	return ret;
+ }
+ 
+-- 
+2.50.1
+

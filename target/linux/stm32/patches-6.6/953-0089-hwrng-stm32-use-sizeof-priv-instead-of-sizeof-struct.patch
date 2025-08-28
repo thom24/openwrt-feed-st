@@ -1,0 +1,46 @@
+From f9b1e4f9ae753b587c742e2dc2710f819ab6754b Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 31 May 2024 10:57:34 +0200
+Subject: [PATCH] hwrng: stm32 - use sizeof(*priv) instead of sizeof(struct
+ stm32_rng_private)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Use sizeof(*priv) instead of sizeof(struct stm32_rng_private), the
+former makes renaming of struct stm32_rng_private easier if necessary,
+as it removes one site where such rename has to happen. No functional
+change.
+
+Change-Id: I7bd753ea861bb2785377fa68e6ea9da45d41b1a6
+Signed-off-by: Marek Vasut <marex@denx.de>
+Acked-by: Uwe Kleine-König <ukleinek@kernel.org>
+Acked-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/420459
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+Tested-by: Maxime MERE <maxime.mere@foss.st.com>
+Reviewed-by: Maxime MERE <maxime.mere@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/char/hw_random/stm32-rng.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
+index 08c72f11c94b..f2f5f1eac3ae 100644
+--- a/drivers/char/hw_random/stm32-rng.c
++++ b/drivers/char/hw_random/stm32-rng.c
+@@ -581,7 +581,7 @@ static int stm32_rng_probe(struct platform_device *ofdev)
+ 	struct stm32_rng_private *priv;
+ 	struct resource *res;
+ 
+-	priv = devm_kzalloc(dev, sizeof(struct stm32_rng_private), GFP_KERNEL);
++	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+ 	if (!priv)
+ 		return -ENOMEM;
+ 
+-- 
+2.50.1
+
