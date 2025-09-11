@@ -21,8 +21,6 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/clocksource/timer-stm32-lp.c | 18 ++++++++++++++++++
  1 file changed, 18 insertions(+)
 
-diff --git a/drivers/clocksource/timer-stm32-lp.c b/drivers/clocksource/timer-stm32-lp.c
-index 58b0e9427288..5ea8d7c3ce45 100644
 --- a/drivers/clocksource/timer-stm32-lp.c
 +++ b/drivers/clocksource/timer-stm32-lp.c
 @@ -13,6 +13,7 @@
@@ -33,7 +31,7 @@ index 58b0e9427288..5ea8d7c3ce45 100644
  #include <linux/pm_wakeirq.h>
  
  #define CFGR_PSC_OFFSET		9
-@@ -52,6 +53,15 @@ static int stm32_clkevent_lp_set_timer(unsigned long evt,
+@@ -52,6 +53,15 @@ static int stm32_clkevent_lp_set_timer(u
  				       int is_periodic)
  {
  	struct stm32_lp_private *priv = to_priv(clkevt);
@@ -49,7 +47,7 @@ index 58b0e9427288..5ea8d7c3ce45 100644
  
  	/* disable LPTIMER to be able to write into IER register*/
  	regmap_write(priv->reg, STM32_LPTIM_CR, 0);
-@@ -131,6 +141,8 @@ static void stm32_clkevent_lp_suspend(struct clock_event_device *clkevt)
+@@ -131,6 +141,8 @@ static void stm32_clkevent_lp_suspend(st
  
  	stm32_clkevent_lp_shutdown(clkevt);
  
@@ -58,7 +56,7 @@ index 58b0e9427288..5ea8d7c3ce45 100644
  	/* balance clk_prepare_enable() from the probe */
  	clk_disable_unprepare(priv->clk);
  }
-@@ -208,6 +220,12 @@ static int stm32_clkevent_lp_probe(struct platform_device *pdev)
+@@ -208,6 +220,12 @@ static int stm32_clkevent_lp_probe(struc
  
  	stm32_clkevent_lp_set_prescaler(priv, &rate);
  
@@ -71,6 +69,3 @@ index 58b0e9427288..5ea8d7c3ce45 100644
  	priv->dev = &pdev->dev;
  
  	stm32_clkevent_lp_init(priv, pdev->dev.parent->of_node, rate);
--- 
-2.50.1
-

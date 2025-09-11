@@ -19,11 +19,9 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/usb/host/xhci.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 70e6c240a540..37603503055c 100644
 --- a/drivers/usb/host/xhci.c
 +++ b/drivers/usb/host/xhci.c
-@@ -916,7 +916,7 @@ int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup)
+@@ -942,7 +942,7 @@ int xhci_suspend(struct xhci_hcd *xhci,
  	writel(command, &xhci->op_regs->command);
  	xhci->broken_suspend = 0;
  	if (xhci_handshake(&xhci->op_regs->status,
@@ -32,6 +30,3 @@ index 70e6c240a540..37603503055c 100644
  	/*
  	 * AMD SNPS xHC 3.0 occasionally does not clear the
  	 * SSS bit of USBSTS and when driver tries to poll
--- 
-2.50.1
-

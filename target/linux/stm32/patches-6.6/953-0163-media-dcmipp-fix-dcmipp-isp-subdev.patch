@@ -21,8 +21,6 @@ Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
  .../platform/st/stm32/stm32-dcmipp/dcmipp-isp.c      | 12 ------------
  1 file changed, 12 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
-index a4c70e4b5365..e71a0d6b082d 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
 @@ -52,18 +52,6 @@
@@ -44,6 +42,3 @@ index a4c70e4b5365..e71a0d6b082d 100644
  #define IS_SINK(pad) (!(pad))
  #define IS_SRC(pad)  ((pad))
  #define PAD_STR(pad) (IS_SRC((pad))) ? "src" : "sink"
--- 
-2.50.1
-

@@ -20,11 +20,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/usb/dwc2/drd.c | 11 +----------
  1 file changed, 1 insertion(+), 10 deletions(-)
 
-diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
-index faae1902f683..c7900a4dcf6a 100644
 --- a/drivers/usb/dwc2/drd.c
 +++ b/drivers/usb/dwc2/drd.c
-@@ -217,18 +217,9 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+@@ -217,18 +217,9 @@ static int dwc2_drd_role_sw_set(struct u
  
  	spin_unlock_irqrestore(&hsotg->lock, flags);
  
@@ -44,6 +42,3 @@ index faae1902f683..c7900a4dcf6a 100644
  
  	if (!hsotg->ll_hw_enabled && hsotg->clk)
  		clk_disable_unprepare(hsotg->clk);
--- 
-2.50.1
-

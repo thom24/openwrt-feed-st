@@ -22,8 +22,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/char/hw_random/stm32-rng.c | 41 +++++++++++++++++++++++++-----
  1 file changed, 35 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
-index 0cb084b35062..9e470f6b733e 100644
 --- a/drivers/char/hw_random/stm32-rng.c
 +++ b/drivers/char/hw_random/stm32-rng.c
 @@ -82,6 +82,7 @@ struct stm32_rng_private {
@@ -34,7 +32,7 @@ index 0cb084b35062..9e470f6b733e 100644
  };
  
  /*
-@@ -293,8 +294,10 @@ static int stm32_rng_init(struct hwrng *rng)
+@@ -293,8 +294,10 @@ static int stm32_rng_init(struct hwrng *
  
  	if (priv->bus_clk) {
  		err = clk_prepare_enable(priv->bus_clk);
@@ -46,7 +44,7 @@ index 0cb084b35062..9e470f6b733e 100644
  	}
  
  	/* clear error indicators */
-@@ -361,21 +364,30 @@ static int stm32_rng_init(struct hwrng *rng)
+@@ -361,21 +364,30 @@ static int stm32_rng_init(struct hwrng *
  						reg & RNG_SR_DRDY,
  						10, 100000);
  
@@ -81,7 +79,7 @@ index 0cb084b35062..9e470f6b733e 100644
  static int stm32_rng_remove(struct platform_device *ofdev)
  {
  	pm_runtime_disable(&ofdev->dev);
-@@ -404,10 +416,22 @@ static int __maybe_unused stm32_rng_suspend(struct device *dev)
+@@ -404,10 +416,22 @@ static int __maybe_unused stm32_rng_susp
  	struct stm32_rng_private *priv = dev_get_drvdata(dev);
  	int err;
  
@@ -104,7 +102,7 @@ index 0cb084b35062..9e470f6b733e 100644
  	if (priv->data->has_cond_reset) {
  		priv->pm_conf.nscr = readl_relaxed(priv->base + RNG_NSCR);
  		priv->pm_conf.htcr = readl_relaxed(priv->base + RNG_HTCR);
-@@ -459,6 +483,10 @@ static int __maybe_unused stm32_rng_resume(struct device *dev)
+@@ -459,6 +483,10 @@ static int __maybe_unused stm32_rng_resu
  	int err;
  	u32 reg;
  
@@ -115,7 +113,7 @@ index 0cb084b35062..9e470f6b733e 100644
  	err = clk_prepare_enable(priv->clk);
  	if (err)
  		return err;
-@@ -608,6 +636,7 @@ static int stm32_rng_probe(struct platform_device *ofdev)
+@@ -608,6 +636,7 @@ static int stm32_rng_probe(struct platfo
  
  	priv->rng.name = dev_driver_string(dev);
  	priv->rng.init = stm32_rng_init;
@@ -123,7 +121,7 @@ index 0cb084b35062..9e470f6b733e 100644
  	priv->rng.read = stm32_rng_read;
  	priv->rng.quality = 900;
  
-@@ -617,7 +646,7 @@ static int stm32_rng_probe(struct platform_device *ofdev)
+@@ -617,7 +646,7 @@ static int stm32_rng_probe(struct platfo
  			return PTR_ERR(priv->clk);
  
  		priv->bus_clk = devm_clk_get(&ofdev->dev, "rng_hclk");
@@ -132,6 +130,3 @@ index 0cb084b35062..9e470f6b733e 100644
  			return PTR_ERR(priv->bus_clk);
  	} else {
  		priv->clk = devm_clk_get(&ofdev->dev, NULL);
--- 
-2.50.1
-

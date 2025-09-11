@@ -20,11 +20,9 @@ Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index e1e4f781e2ae..7da7a37f4c2b 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -2706,7 +2706,7 @@ soc1: soc@1 {
+@@ -2706,7 +2706,7 @@
  		ranges = <0x0 0x0 0x0 0x80000000>;
  
  		dcmipp: dcmipp@48030000 {
@@ -33,6 +31,3 @@ index e1e4f781e2ae..7da7a37f4c2b 100644
  			reg = <0x48030000 0x1000>;
  			interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH>;
  			resets = <&rcc DCMIPP_R>;
--- 
-2.50.1
-

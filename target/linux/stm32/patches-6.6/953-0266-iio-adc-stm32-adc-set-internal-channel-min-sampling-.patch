@@ -17,11 +17,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/iio/adc/stm32-adc.c | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/drivers/iio/adc/stm32-adc.c b/drivers/iio/adc/stm32-adc.c
-index ba1fb9477f16..a49223594b0a 100644
 --- a/drivers/iio/adc/stm32-adc.c
 +++ b/drivers/iio/adc/stm32-adc.c
-@@ -3243,7 +3243,6 @@ static const struct stm32_adc_cfg stm32mp13_adc_cfg = {
+@@ -3243,7 +3243,6 @@ static const struct stm32_adc_cfg stm32m
  	.vref_charac = 3300,
  };
  
@@ -29,6 +27,3 @@ index ba1fb9477f16..a49223594b0a 100644
  static const unsigned int stm32_adc_min_ts_mp21[] = { 34, 34, 0, 34, 34, 0 };
  static_assert(ARRAY_SIZE(stm32_adc_min_ts_mp21) == STM32_ADC_INT_CH_NB);
  
--- 
-2.50.1
-

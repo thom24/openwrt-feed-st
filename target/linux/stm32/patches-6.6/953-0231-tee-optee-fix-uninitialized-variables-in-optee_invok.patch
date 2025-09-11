@@ -23,11 +23,9 @@ Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
  drivers/tee/optee/call.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tee/optee/call.c b/drivers/tee/optee/call.c
-index 91df4a17a8a5..38df85bb9cdd 100644
 --- a/drivers/tee/optee/call.c
 +++ b/drivers/tee/optee/call.c
-@@ -419,9 +419,9 @@ int optee_invoke_func_helper(struct tee_context *ctx,
+@@ -419,9 +419,9 @@ int optee_invoke_func_helper(struct tee_
  	struct optee_shm_arg_entry *entry;
  	struct optee_msg_arg *msg_arg;
  	struct optee_session *sess;
@@ -39,6 +37,3 @@ index 91df4a17a8a5..38df85bb9cdd 100644
  	int rc;
  
  	if (tee_ocall_in_progress(ocall_arg))
--- 
-2.50.1
-

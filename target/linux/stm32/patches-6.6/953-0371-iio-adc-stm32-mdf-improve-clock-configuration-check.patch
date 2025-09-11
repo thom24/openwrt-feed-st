@@ -26,8 +26,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/iio/adc/stm32-mdf-core.c | 10 ++--
  2 files changed, 61 insertions(+), 39 deletions(-)
 
-diff --git a/drivers/iio/adc/stm32-mdf-adc.c b/drivers/iio/adc/stm32-mdf-adc.c
-index fc7eb518034a..c5c0ae51c111 100644
 --- a/drivers/iio/adc/stm32-mdf-adc.c
 +++ b/drivers/iio/adc/stm32-mdf-adc.c
 @@ -44,6 +44,10 @@
@@ -41,7 +39,7 @@ index fc7eb518034a..c5c0ae51c111 100644
  struct stm32_mdf_dev_data {
  	int type;
  	int (*init)(struct device *dev, struct iio_dev *indio_dev);
-@@ -698,28 +702,63 @@ static int stm32_mdf_adc_set_filters_config(struct iio_dev *indio_dev, unsigned
+@@ -698,28 +702,63 @@ static int stm32_mdf_adc_set_filters_con
  	return stm32_mdf_adc_apply_filters_config(adc, scale);
  }
  
@@ -117,7 +115,7 @@ index fc7eb518034a..c5c0ae51c111 100644
  }
  
  static int mdf_adc_set_samp_freq(struct iio_dev *indio_dev, unsigned long sample_freq, int lock)
-@@ -728,7 +767,6 @@ static int mdf_adc_set_samp_freq(struct iio_dev *indio_dev, unsigned long sample
+@@ -728,7 +767,6 @@ static int mdf_adc_set_samp_freq(struct
  	struct device *dev = &indio_dev->dev;
  	unsigned int decim_ratio;
  	unsigned long delta, delta_ppm, sck_freq;
@@ -125,7 +123,7 @@ index fc7eb518034a..c5c0ae51c111 100644
  	int ret;
  
  	if (lock) {
-@@ -753,25 +791,9 @@ static int mdf_adc_set_samp_freq(struct iio_dev *indio_dev, unsigned long sample
+@@ -753,25 +791,9 @@ static int mdf_adc_set_samp_freq(struct
  	if (!sample_freq)
  		sample_freq = sck_freq / MDF_DEFAULT_DECIM_RATIO;
  
@@ -154,7 +152,7 @@ index fc7eb518034a..c5c0ae51c111 100644
  
  	decim_ratio = DIV_ROUND_CLOSEST(sck_freq, sample_freq);
  
-@@ -803,10 +825,6 @@ static int mdf_adc_set_samp_freq(struct iio_dev *indio_dev, unsigned long sample
+@@ -803,10 +825,6 @@ static int mdf_adc_set_samp_freq(struct
  	if (ret < 0)
  		goto err;
  
@@ -165,11 +163,9 @@ index fc7eb518034a..c5c0ae51c111 100644
  	adc->sample_freq = DIV_ROUND_CLOSEST(sck_freq, decim_ratio);
  	adc->decim_ratio = decim_ratio;
  
-diff --git a/drivers/iio/adc/stm32-mdf-core.c b/drivers/iio/adc/stm32-mdf-core.c
-index 23360563e222..6071638b6569 100644
 --- a/drivers/iio/adc/stm32-mdf-core.c
 +++ b/drivers/iio/adc/stm32-mdf-core.c
-@@ -194,13 +194,16 @@ EXPORT_SYMBOL_GPL(stm32_mdf_core_get_cck);
+@@ -194,13 +194,16 @@ EXPORT_SYMBOL_GPL(stm32_mdf_core_get_cck
  int stm32_mdf_core_lock_kclk_rate(struct stm32_mdf *mdf)
  {
  	struct stm32_mdf_priv *priv = to_stm32_mdf_priv(mdf);
@@ -187,7 +183,7 @@ index 23360563e222..6071638b6569 100644
  
  		priv->exclusive_flg = true;
  	}
-@@ -228,11 +231,12 @@ int stm32_mdf_core_restore_cck(struct stm32_mdf *mdf)
+@@ -228,11 +231,12 @@ int stm32_mdf_core_restore_cck(struct st
  
  	ret = clk_set_rate(priv->kclk, priv->kclk_rate);
  	if (ret) {
@@ -202,6 +198,3 @@ index 23360563e222..6071638b6569 100644
  
  	return 0;
  }
--- 
-2.50.1
-

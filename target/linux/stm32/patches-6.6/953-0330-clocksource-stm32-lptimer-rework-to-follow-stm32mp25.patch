@@ -24,8 +24,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/clocksource/timer-stm32-lp.c | 60 +++++++++++++++++++++++-----
  1 file changed, 50 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/clocksource/timer-stm32-lp.c b/drivers/clocksource/timer-stm32-lp.c
-index 5ea8d7c3ce45..2604653531a4 100644
 --- a/drivers/clocksource/timer-stm32-lp.c
 +++ b/drivers/clocksource/timer-stm32-lp.c
 @@ -28,6 +28,7 @@ struct stm32_lp_private {
@@ -36,7 +34,7 @@ index 5ea8d7c3ce45..2604653531a4 100644
  };
  
  static struct stm32_lp_private*
-@@ -48,6 +49,47 @@ static int stm32_clkevent_lp_shutdown(struct clock_event_device *clkevt)
+@@ -48,6 +49,47 @@ static int stm32_clkevent_lp_shutdown(st
  	return 0;
  }
  
@@ -84,7 +82,7 @@ index 5ea8d7c3ce45..2604653531a4 100644
  static int stm32_clkevent_lp_set_timer(unsigned long evt,
  				       struct clock_event_device *clkevt,
  				       int is_periodic)
-@@ -63,14 +105,13 @@ static int stm32_clkevent_lp_set_timer(unsigned long evt,
+@@ -63,14 +105,13 @@ static int stm32_clkevent_lp_set_timer(u
  		}
  	}
  
@@ -106,7 +104,7 @@ index 5ea8d7c3ce45..2604653531a4 100644
  
  	/* start counter */
  	if (is_periodic)
-@@ -188,6 +229,7 @@ static int stm32_clkevent_lp_probe(struct platform_device *pdev)
+@@ -188,6 +229,7 @@ static int stm32_clkevent_lp_probe(struc
  		return -ENOMEM;
  
  	priv->reg = ddata->regmap;
@@ -114,7 +112,7 @@ index 5ea8d7c3ce45..2604653531a4 100644
  	priv->clk = ddata->clk;
  	ret = clk_prepare_enable(priv->clk);
  	if (ret)
-@@ -239,8 +281,6 @@ static int stm32_clkevent_lp_probe(struct platform_device *pdev)
+@@ -239,8 +281,6 @@ out_clk_disable:
  
  static const struct of_device_id stm32_clkevent_lp_of_match[] = {
  	{ .compatible = "st,stm32-lptimer-timer", },
@@ -123,6 +121,3 @@ index 5ea8d7c3ce45..2604653531a4 100644
  	{},
  };
  MODULE_DEVICE_TABLE(of, stm32_clkevent_lp_of_match);
--- 
-2.50.1
-

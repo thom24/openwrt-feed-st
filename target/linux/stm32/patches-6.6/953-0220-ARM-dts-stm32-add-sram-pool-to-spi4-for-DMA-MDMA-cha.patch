@@ -23,11 +23,9 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi | 8 ++++++++
  1 file changed, 8 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-index 5fae7937c740..4b7e3a317918 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-@@ -624,6 +624,7 @@ &spi4 {
+@@ -624,6 +624,7 @@
  	pinctrl-0 = <&spi4_pins_b>;
  	pinctrl-1 = <&spi4_sleep_pins_b>;
  	status = "disabled";
@@ -35,7 +33,7 @@ index 5fae7937c740..4b7e3a317918 100644
  };
  
  &spi5 {
-@@ -633,6 +634,13 @@ &spi5 {
+@@ -633,6 +634,13 @@
  	status = "disabled";
  };
  
@@ -49,6 +47,3 @@ index 5fae7937c740..4b7e3a317918 100644
  &timers1 {
  	/* spare dmas for other usage */
  	/delete-property/dmas;
--- 
-2.50.1
-

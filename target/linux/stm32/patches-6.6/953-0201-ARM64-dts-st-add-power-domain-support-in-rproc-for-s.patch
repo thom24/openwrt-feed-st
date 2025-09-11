@@ -26,11 +26,9 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  arch/arm64/boot/dts/st/stm32mp231.dtsi | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index e0bc9c36c62a..5a4355cda3b8 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -3020,6 +3020,8 @@ m33_rproc: m33@0 {
+@@ -3020,6 +3020,8 @@
  			interrupts = <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>;
  			nvmem-cells = <&rsc_tbl_addr>, <&rsc_tbl_size>;
  			nvmem-cell-names = "rsc-tbl-addr", "rsc-tbl-size";
@@ -39,6 +37,3 @@ index e0bc9c36c62a..5a4355cda3b8 100644
  
  			status = "disabled";
  		};
--- 
-2.50.1
-

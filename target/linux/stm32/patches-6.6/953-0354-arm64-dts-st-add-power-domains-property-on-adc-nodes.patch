@@ -17,11 +17,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index a2a886976f75..d49d58e07adc 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -1518,6 +1518,7 @@ adc_1: adc@404e0000 {
+@@ -1518,6 +1518,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 58>;
@@ -29,7 +27,7 @@ index a2a886976f75..d49d58e07adc 100644
  				status = "disabled";
  
  				adc1: adc@0 {
-@@ -1553,6 +1554,7 @@ adc_2: adc@404f0000 {
+@@ -1553,6 +1554,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 59>;
@@ -37,6 +35,3 @@ index a2a886976f75..d49d58e07adc 100644
  				status = "disabled";
  
  				adc2: adc@0 {
--- 
-2.50.1
-

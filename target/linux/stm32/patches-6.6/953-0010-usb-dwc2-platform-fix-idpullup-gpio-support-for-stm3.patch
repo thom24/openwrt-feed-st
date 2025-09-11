@@ -31,11 +31,9 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/usb/dwc2/platform.c  | 47 +++++++++++++++++++-----------------
  5 files changed, 80 insertions(+), 50 deletions(-)
 
-diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
-index 7948e352643f..b7577cd5ddae 100644
 --- a/drivers/usb/dwc2/core_intr.c
 +++ b/drivers/usb/dwc2/core_intr.c
-@@ -649,6 +649,12 @@ static void dwc2_handle_lpm_intr(struct dwc2_hsotg *hsotg)
+@@ -649,6 +649,12 @@ static void dwc2_handle_lpm_intr(struct
  			 GINTSTS_USBSUSP | GINTSTS_PRTINT |		\
  			 GINTSTS_LPMTRANRCVD)
  
@@ -48,7 +46,7 @@ index 7948e352643f..b7577cd5ddae 100644
  /*
   * This function returns the Core Interrupt register
   */
-@@ -663,6 +669,11 @@ static u32 dwc2_read_common_intr(struct dwc2_hsotg *hsotg)
+@@ -663,6 +669,11 @@ static u32 dwc2_read_common_intr(struct
  	gintmsk = dwc2_readl(hsotg, GINTMSK);
  	gahbcfg = dwc2_readl(hsotg, GAHBCFG);
  
@@ -60,11 +58,9 @@ index 7948e352643f..b7577cd5ddae 100644
  	/* If any common interrupts set */
  	if (gintsts & gintmsk_common)
  		dev_dbg(hsotg->dev, "gintsts=%08x  gintmsk=%08x\n",
-diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
-index 7a1af77434c2..728fb5582d04 100644
 --- a/drivers/usb/dwc2/drd.c
 +++ b/drivers/usb/dwc2/drd.c
-@@ -28,8 +28,11 @@ static void dwc2_ovr_init_stm32mp21(struct dwc2_hsotg *hsotg)
+@@ -28,8 +28,11 @@ static void dwc2_ovr_init_stm32mp21(stru
  	if (hsotg->role_sw_default_mode == USB_DR_MODE_HOST) {
  		ggpio &= ~GGPIO_STM32_OTG_GCCFG_VBVALOVAL;
  		ggpio &= ~GGPIO_STM32_OTG_GCCFG_IDPULLUP_DIS;
@@ -77,7 +73,7 @@ index 7a1af77434c2..728fb5582d04 100644
  		ggpio |= GGPIO_STM32_OTG_GCCFG_IDPULLUP_DIS;
  	}
  	dwc2_writel(hsotg, ggpio, GGPIO);
-@@ -40,33 +43,27 @@ static void dwc2_ovr_init_stm32mp21(struct dwc2_hsotg *hsotg)
+@@ -40,33 +43,27 @@ static void dwc2_ovr_init_stm32mp21(stru
  			(hsotg->role_sw_default_mode == USB_DR_MODE_HOST));
  }
  
@@ -119,7 +115,7 @@ index 7a1af77434c2..728fb5582d04 100644
  }
  
  static void dwc2_ovr_init(struct dwc2_hsotg *hsotg)
-@@ -75,7 +72,7 @@ static void dwc2_ovr_init(struct dwc2_hsotg *hsotg)
+@@ -75,7 +72,7 @@ static void dwc2_ovr_init(struct dwc2_hs
  	u32 gotgctl;
  
  	if (hsotg->params.activate_stm32_bvaloval_en)
@@ -128,7 +124,7 @@ index 7a1af77434c2..728fb5582d04 100644
  
  	spin_lock_irqsave(&hsotg->lock, flags);
  
-@@ -99,7 +96,7 @@ static int dwc2_ovr_avalid(struct dwc2_hsotg *hsotg, bool valid)
+@@ -99,7 +96,7 @@ static int dwc2_ovr_avalid(struct dwc2_h
  	u32 gotgctl = dwc2_readl(hsotg, GOTGCTL);
  
  	if (hsotg->params.activate_stm32_bvaloval_en)
@@ -137,7 +133,7 @@ index 7a1af77434c2..728fb5582d04 100644
  
  	/* Check if A-Session is already in the right state */
  	if ((valid && (gotgctl & GOTGCTL_AVALOVAL) && (gotgctl & GOTGCTL_VBVALOVAL)) ||
-@@ -124,7 +121,7 @@ static int dwc2_ovr_bvalid(struct dwc2_hsotg *hsotg, bool valid)
+@@ -124,7 +121,7 @@ static int dwc2_ovr_bvalid(struct dwc2_h
  	u32 gotgctl = dwc2_readl(hsotg, GOTGCTL);
  
  	if (hsotg->params.activate_stm32_bvaloval_en)
@@ -146,11 +142,9 @@ index 7a1af77434c2..728fb5582d04 100644
  
  	/* Check if B-Session is already in the right state */
  	if ((valid && (gotgctl & GOTGCTL_BVALOVAL) && (gotgctl & GOTGCTL_VBVALOVAL)) ||
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index b5d0d660fc11..a9152185f221 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -3477,12 +3477,22 @@ void dwc2_hsotg_core_init_disconnected(struct dwc2_hsotg *hsotg,
+@@ -3477,12 +3477,22 @@ void dwc2_hsotg_core_init_disconnected(s
  
  	/* Clear any pending interrupts */
  	dwc2_writel(hsotg, 0xffffffff, GINTSTS);
@@ -179,11 +173,9 @@ index b5d0d660fc11..a9152185f221 100644
  
  	if (!using_desc_dma(hsotg))
  		intmsk |= GINTSTS_INCOMPL_SOIN | GINTSTS_INCOMPL_SOOUT;
-diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index 9a81c40367ab..f5cf0acdd5af 100644
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
-@@ -50,15 +50,24 @@ static void dwc2_enable_common_interrupts(struct dwc2_hsotg *hsotg)
+@@ -50,15 +50,24 @@ static void dwc2_enable_common_interrupt
  	dwc2_writel(hsotg, 0xffffffff, GINTSTS);
  
  	/* Enable the interrupts in the GINTMSK */
@@ -212,11 +204,9 @@ index 9a81c40367ab..f5cf0acdd5af 100644
  
  	if (dwc2_is_device_mode(hsotg) && hsotg->params.lpm)
  		intmsk |= GINTSTS_LPMTRANRCVD;
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index 0a9f2a5791a8..677149c6b6c5 100644
 --- a/drivers/usb/dwc2/platform.c
 +++ b/drivers/usb/dwc2/platform.c
-@@ -351,16 +351,16 @@ static void dwc2_driver_remove(struct platform_device *dev)
+@@ -351,16 +351,16 @@ static void dwc2_driver_remove(struct pl
  	if (hsotg->params.activate_stm_id_vb_detection)
  		regulator_disable(hsotg->usb33d);
  
@@ -237,7 +227,7 @@ index 0a9f2a5791a8..677149c6b6c5 100644
  }
  
  /**
-@@ -596,13 +596,6 @@ static int dwc2_driver_probe(struct platform_device *dev)
+@@ -596,13 +596,6 @@ static int dwc2_driver_probe(struct plat
  		usleep_range(5000, 7000);
  	}
  
@@ -251,7 +241,7 @@ index 0a9f2a5791a8..677149c6b6c5 100644
  
  	retval = dwc2_drd_init(hsotg);
  	if (retval) {
-@@ -610,6 +603,19 @@ static int dwc2_driver_probe(struct platform_device *dev)
+@@ -610,6 +603,19 @@ static int dwc2_driver_probe(struct plat
  		goto error_init;
  	}
  
@@ -271,7 +261,7 @@ index 0a9f2a5791a8..677149c6b6c5 100644
  	if (hsotg->dr_mode != USB_DR_MODE_HOST) {
  		retval = dwc2_gadget_init(hsotg);
  		if (retval)
-@@ -739,14 +745,6 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+@@ -739,14 +745,6 @@ static int __maybe_unused dwc2_suspend(s
  		regulator_disable(dwc2->usb33d);
  	}
  
@@ -286,7 +276,7 @@ index 0a9f2a5791a8..677149c6b6c5 100644
  	if (dwc2->ll_hw_enabled &&
  	    (is_device_mode || dwc2_host_can_poweroff_phy(dwc2))) {
  		ret = __dwc2_lowlevel_hw_disable(dwc2);
-@@ -799,11 +797,16 @@ static int __maybe_unused dwc2_resume(struct device *dev)
+@@ -799,11 +797,16 @@ static int __maybe_unused dwc2_resume(st
  		spin_unlock_irqrestore(&dwc2->lock, flags);
  	}
  
@@ -306,6 +296,3 @@ index 0a9f2a5791a8..677149c6b6c5 100644
  		dwc2_writel(dwc2, ggpio, GGPIO);
  	}
  
--- 
-2.50.1
-

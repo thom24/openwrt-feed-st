@@ -15,8 +15,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  include/dt-bindings/clock/st,stm32mp21-rcc.h | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/include/dt-bindings/clock/st,stm32mp21-rcc.h b/include/dt-bindings/clock/st,stm32mp21-rcc.h
-index 1b6d533e1ec8..9068ef8ea130 100644
 --- a/include/dt-bindings/clock/st,stm32mp21-rcc.h
 +++ b/include/dt-bindings/clock/st,stm32mp21-rcc.h
 @@ -319,7 +319,6 @@
@@ -27,6 +25,3 @@ index 1b6d533e1ec8..9068ef8ea130 100644
  #define CK_SCMI_FLEXGEN_07	7
  #define CK_SCMI_FLEXGEN_08	8
  #define CK_SCMI_FLEXGEN_09	9
--- 
-2.50.1
-

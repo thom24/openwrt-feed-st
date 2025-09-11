@@ -17,11 +17,9 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  drivers/firmware/arm_scmi/mailbox.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/firmware/arm_scmi/mailbox.c b/drivers/firmware/arm_scmi/mailbox.c
-index 8e513f70b75d..c4b0afa79acd 100644
 --- a/drivers/firmware/arm_scmi/mailbox.c
 +++ b/drivers/firmware/arm_scmi/mailbox.c
-@@ -333,7 +333,7 @@ static const struct scmi_transport_ops scmi_mailbox_ops = {
+@@ -336,7 +336,7 @@ static const struct scmi_transport_ops s
  
  const struct scmi_desc scmi_mailbox_desc = {
  	.ops = &scmi_mailbox_ops,
@@ -30,6 +28,3 @@ index 8e513f70b75d..c4b0afa79acd 100644
  	.max_msg = 20, /* Limited by MBOX_TX_QUEUE_LEN */
  	.max_msg_size = 128,
  };
--- 
-2.50.1
-

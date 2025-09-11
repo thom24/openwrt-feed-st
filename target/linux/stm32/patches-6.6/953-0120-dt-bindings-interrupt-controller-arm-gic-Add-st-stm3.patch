@@ -17,8 +17,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  .../devicetree/bindings/interrupt-controller/arm,gic.yaml        | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/arm,gic.yaml b/Documentation/devicetree/bindings/interrupt-controller/arm,gic.yaml
-index a2846e493497..6a5fa3a742d1 100644
 --- a/Documentation/devicetree/bindings/interrupt-controller/arm,gic.yaml
 +++ b/Documentation/devicetree/bindings/interrupt-controller/arm,gic.yaml
 @@ -37,6 +37,7 @@ properties:
@@ -29,6 +27,3 @@ index a2846e493497..6a5fa3a742d1 100644
  
        - items:
            - const: arm,gic-400
--- 
-2.50.1
-

@@ -28,11 +28,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/char/hw_random/stm32-rng.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
-index 08c72f11c94b..f2f5f1eac3ae 100644
 --- a/drivers/char/hw_random/stm32-rng.c
 +++ b/drivers/char/hw_random/stm32-rng.c
-@@ -581,7 +581,7 @@ static int stm32_rng_probe(struct platform_device *ofdev)
+@@ -581,7 +581,7 @@ static int stm32_rng_probe(struct platfo
  	struct stm32_rng_private *priv;
  	struct resource *res;
  
@@ -41,6 +39,3 @@ index 08c72f11c94b..f2f5f1eac3ae 100644
  	if (!priv)
  		return -ENOMEM;
  
--- 
-2.50.1
-

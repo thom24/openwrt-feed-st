@@ -20,8 +20,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/bus/stm32_rifsc.c | 18 ++++++++++++++++++
  2 files changed, 25 insertions(+)
 
-diff --git a/drivers/bus/Kconfig b/drivers/bus/Kconfig
-index 2fc2eafe82f4..8f1d380cbc57 100644
 --- a/drivers/bus/Kconfig
 +++ b/drivers/bus/Kconfig
 @@ -173,6 +173,13 @@ config STM32_FIREWALL
@@ -38,11 +36,9 @@ index 2fc2eafe82f4..8f1d380cbc57 100644
  config SUN50I_DE2_BUS
  	bool "Allwinner A64 DE2 Bus Driver"
  	  default ARM64
-diff --git a/drivers/bus/stm32_rifsc.c b/drivers/bus/stm32_rifsc.c
-index a16fd7999cc0..5a77ca164db2 100644
 --- a/drivers/bus/stm32_rifsc.c
 +++ b/drivers/bus/stm32_rifsc.c
-@@ -576,6 +576,20 @@ static void stm32_rifsc_release_access(struct stm32_firewall_controller *ctrl, u
+@@ -576,6 +576,20 @@ static void stm32_rifsc_release_access(s
  	stm32_rif_release_semaphore(ctrl, firewall_id);
  }
  
@@ -63,7 +59,7 @@ index a16fd7999cc0..5a77ca164db2 100644
  static int stm32_rifsc_populate_bus(struct stm32_firewall_controller *ctrl)
  {
  	struct stm32_firewall *firewalls;
-@@ -623,6 +637,10 @@ static int stm32_rifsc_populate_bus(struct stm32_firewall_controller *ctrl)
+@@ -623,6 +637,10 @@ static int stm32_rifsc_populate_bus(stru
  				dev_err(parent, "%s: Device driver will not be probed, error: %d\n",
  					child->full_name, err);
  			}
@@ -74,6 +70,3 @@ index a16fd7999cc0..5a77ca164db2 100644
  		}
  
  		kfree(firewalls);
--- 
-2.50.1
-

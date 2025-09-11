@@ -19,8 +19,6 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/iio/adc/Kconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
-index 4e3bc819e5d2..411a61289b8d 100644
 --- a/drivers/iio/adc/Kconfig
 +++ b/drivers/iio/adc/Kconfig
 @@ -1126,6 +1126,7 @@ config STM32_MDF_ADC
@@ -31,6 +29,3 @@ index 4e3bc819e5d2..411a61289b8d 100644
  	select IIO_BUFFER
  	select IIO_BUFFER_HW_CONSUMER
  	select IIO_BACKEND
--- 
-2.50.1
-

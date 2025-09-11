@@ -17,8 +17,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp25xxaj-pinctrl.dtsi            | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1-ca35tdcid-resmem.dtsi b/arch/arm64/boot/dts/st/stm32mp257f-ev1-ca35tdcid-resmem.dtsi
-index 265338977023..9990523113e0 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-ev1-ca35tdcid-resmem.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1-ca35tdcid-resmem.dtsi
 @@ -1,4 +1,4 @@
@@ -27,8 +25,6 @@ index 265338977023..9990523113e0 100644
  /*
   * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
   * Author: Loic Pallardy loic.pallardy@foss.st.com for STMicroelectronics.
-diff --git a/arch/arm64/boot/dts/st/stm32mp25xxaj-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp25xxaj-pinctrl.dtsi
-index 036b0946ccc9..6834943c1849 100644
 --- a/arch/arm64/boot/dts/st/stm32mp25xxaj-pinctrl.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp25xxaj-pinctrl.dtsi
 @@ -1,4 +1,4 @@
@@ -37,6 +33,3 @@ index 036b0946ccc9..6834943c1849 100644
  /*
   * Copyright (C) STMicroelectronics 2024 - All Rights Reserved
   * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
--- 
-2.50.1
-

@@ -20,11 +20,9 @@ Tested-by: Alain VOLMAT <alain.volmat@st.com>
  arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-index 33444b32e795..d39ba4f4e025 100644
 --- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-@@ -190,7 +190,7 @@ port@0 {
+@@ -190,7 +190,7 @@
  			reg = <0>;
  			csi_sink: endpoint {
  				remote-endpoint = <&imx335_ep>;
@@ -33,6 +31,3 @@ index 33444b32e795..d39ba4f4e025 100644
  				bus-type = <4>;
  			};
  		};
--- 
-2.50.1
-

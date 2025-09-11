@@ -14,11 +14,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/panel/panel-orisetech-otm8009a.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-orisetech-otm8009a.c b/drivers/gpu/drm/panel/panel-orisetech-otm8009a.c
-index 138caa5f1eb5..a360c3b20011 100644
 --- a/drivers/gpu/drm/panel/panel-orisetech-otm8009a.c
 +++ b/drivers/gpu/drm/panel/panel-orisetech-otm8009a.c
-@@ -467,7 +467,8 @@ static int otm8009a_probe(struct mipi_dsi_device *dsi)
+@@ -467,7 +467,8 @@ static int otm8009a_probe(struct mipi_ds
  	dsi->lanes = 2;
  	dsi->format = MIPI_DSI_FMT_RGB888;
  	dsi->mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_BURST |
@@ -28,6 +26,3 @@ index 138caa5f1eb5..a360c3b20011 100644
  
  	pm_runtime_enable(ctx->dev);
  	pm_runtime_set_autosuspend_delay(ctx->dev, 1000);
--- 
-2.50.1
-

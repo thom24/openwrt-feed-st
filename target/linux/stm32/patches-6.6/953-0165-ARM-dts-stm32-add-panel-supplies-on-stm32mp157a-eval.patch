@@ -16,11 +16,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm/boot/dts/st/stm32mp157a-ev1.dts | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157a-ev1.dts b/arch/arm/boot/dts/st/stm32mp157a-ev1.dts
-index 2a4d941fc450..03783d84efc3 100644
 --- a/arch/arm/boot/dts/st/stm32mp157a-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157a-ev1.dts
-@@ -347,6 +347,8 @@ panel_dsi: panel@0 {
+@@ -347,6 +347,8 @@
  		reset-gpios = <&gpiof 15 GPIO_ACTIVE_LOW>;
  		backlight = <&panel_backlight>;
  		power-supply = <&v3v3>;
@@ -29,6 +27,3 @@ index 2a4d941fc450..03783d84efc3 100644
  		status = "okay";
  
  		port {
--- 
-2.50.1
-

@@ -16,8 +16,6 @@ Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
  include/linux/mfd/stm32-lptimer.h | 9 ---------
  1 file changed, 9 deletions(-)
 
-diff --git a/include/linux/mfd/stm32-lptimer.h b/include/linux/mfd/stm32-lptimer.h
-index 1a6927605c55..0fa2b34d8fff 100644
 --- a/include/linux/mfd/stm32-lptimer.h
 +++ b/include/linux/mfd/stm32-lptimer.h
 @@ -20,8 +20,6 @@
@@ -43,6 +41,3 @@ index 1a6927605c55..0fa2b34d8fff 100644
  /* STM32_LPTIM_CCMR1 */
  #define STM32_LPTIM_CC2P	GENMASK(19, 18)
  #define STM32_LPTIM_CC2E	BIT(17)
--- 
-2.50.1
-

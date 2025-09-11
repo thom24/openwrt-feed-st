@@ -28,11 +28,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/watchdog/stm32_iwdg.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/watchdog/stm32_iwdg.c b/drivers/watchdog/stm32_iwdg.c
-index d7dfab2d3c9f..d6a7b74dbfb9 100644
 --- a/drivers/watchdog/stm32_iwdg.c
 +++ b/drivers/watchdog/stm32_iwdg.c
-@@ -320,7 +320,7 @@ static int stm32_iwdg_irq_init(struct platform_device *pdev,
+@@ -320,7 +320,7 @@ static int stm32_iwdg_irq_init(struct pl
  	if (!wdt->data->has_early_wakeup)
  		return 0;
  
@@ -41,6 +39,3 @@ index d7dfab2d3c9f..d6a7b74dbfb9 100644
  	if (irq <= 0)
  		return 0;
  
--- 
-2.50.1
-

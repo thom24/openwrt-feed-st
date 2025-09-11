@@ -18,11 +18,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/pwm/pwm-stm32.c | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/pwm/pwm-stm32.c b/drivers/pwm/pwm-stm32.c
-index 8b7879d80e5b..92fdda018121 100644
 --- a/drivers/pwm/pwm-stm32.c
 +++ b/drivers/pwm/pwm-stm32.c
-@@ -466,9 +466,7 @@ static int stm32_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+@@ -466,9 +466,7 @@ static int stm32_pwm_apply(struct pwm_ch
  		return 0;
  	}
  
@@ -33,6 +31,3 @@ index 8b7879d80e5b..92fdda018121 100644
  	ret = stm32_pwm_config(priv, pwm->hwpwm,
  			       state->duty_cycle, state->period);
  	if (ret)
--- 
-2.50.1
-

@@ -18,11 +18,9 @@ Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
  drivers/mtd/hyperbus/hyperbus-stm32.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/mtd/hyperbus/hyperbus-stm32.c b/drivers/mtd/hyperbus/hyperbus-stm32.c
-index 33ce520bf1bc..429cd72158e4 100644
 --- a/drivers/mtd/hyperbus/hyperbus-stm32.c
 +++ b/drivers/mtd/hyperbus/hyperbus-stm32.c
-@@ -250,7 +250,7 @@ static int __maybe_unused stm32_hyperbus_suspend(struct device *dev)
+@@ -250,7 +250,7 @@ static int __maybe_unused stm32_hyperbus
  
  	pm_runtime_put_sync_suspend(omi->dev);
  
@@ -31,7 +29,7 @@ index 33ce520bf1bc..429cd72158e4 100644
  
  	return pm_runtime_force_suspend(omi->dev);
  }
-@@ -265,7 +265,7 @@ static int __maybe_unused stm32_hyperbus_resume(struct device *dev)
+@@ -265,7 +265,7 @@ static int __maybe_unused stm32_hyperbus
  	if (ret < 0)
  		return ret;
  
@@ -40,6 +38,3 @@ index 33ce520bf1bc..429cd72158e4 100644
  
  	ret = pm_runtime_resume_and_get(omi->dev);
  	if (ret < 0)
--- 
-2.50.1
-

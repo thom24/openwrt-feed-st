@@ -18,8 +18,6 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  drivers/iio/adc/stm32-mdf-adc.c | 46 ++++++++++++++++++++++++++++++---
  1 file changed, 42 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/iio/adc/stm32-mdf-adc.c b/drivers/iio/adc/stm32-mdf-adc.c
-index 165c26d90f72..7ee3b5588926 100644
 --- a/drivers/iio/adc/stm32-mdf-adc.c
 +++ b/drivers/iio/adc/stm32-mdf-adc.c
 @@ -49,6 +49,10 @@ struct stm32_mdf_dev_data {
@@ -49,7 +47,7 @@ index 165c26d90f72..7ee3b5588926 100644
  	const struct stm32_mdf_dev_data *dev_data;
  	struct stm32_mdf_sitf *sitf;
  	struct completion completion;
-@@ -1171,6 +1177,7 @@ static int stm32_mdf_channel_parse_of(struct iio_dev *indio_dev, struct fwnode_h
+@@ -1171,6 +1177,7 @@ static int stm32_mdf_channel_parse_of(st
  {
  	struct stm32_mdf_adc *adc = iio_priv(indio_dev);
  	struct iio_backend *backend;
@@ -57,7 +55,7 @@ index 165c26d90f72..7ee3b5588926 100644
  	int ret;
  	u32 stu = 0;
  
-@@ -1180,6 +1187,17 @@ static int stm32_mdf_channel_parse_of(struct iio_dev *indio_dev, struct fwnode_h
+@@ -1180,6 +1187,17 @@ static int stm32_mdf_channel_parse_of(st
  		return ret;
  	}
  
@@ -75,7 +73,7 @@ index 165c26d90f72..7ee3b5588926 100644
  	/* settling-time-us is optional */
  	if (fwnode_property_present(node, "settling-time-us")) {
  		/*
-@@ -1449,16 +1467,27 @@ static int stm32_mdf_adc_read_raw(struct iio_dev *indio_dev, struct iio_chan_spe
+@@ -1449,16 +1467,27 @@ err_release_direct_mode:
  	return ret;
  }
  
@@ -103,7 +101,7 @@ index 165c26d90f72..7ee3b5588926 100644
  	.validate_trigger = stm32_mdf_adc_get_trig,
  };
  
-@@ -1520,6 +1549,10 @@ static int stm32_mdf_audio_init(struct device *dev, struct iio_dev *indio_dev)
+@@ -1520,6 +1549,10 @@ static int stm32_mdf_audio_init(struct d
  	if (!ch)
  		return -ENOMEM;
  
@@ -114,7 +112,7 @@ index 165c26d90f72..7ee3b5588926 100644
  	ret = stm32_mdf_adc_chan_init(indio_dev, ch);
  	if (ret < 0)
  		return dev_err_probe(&indio_dev->dev, ret, "Channels init failed\n");
-@@ -1559,15 +1592,20 @@ static int stm32_mdf_adc_init(struct device *dev, struct iio_dev *indio_dev)
+@@ -1559,15 +1592,20 @@ static int stm32_mdf_adc_init(struct dev
  			}
  		}
  
@@ -139,6 +137,3 @@ index 165c26d90f72..7ee3b5588926 100644
  		ret = stm32_mdf_adc_chan_init(indio_dev, ch);
  		if (ret < 0)
  			return dev_err_probe(&indio_dev->dev, ret, "Channels init failed\n");
--- 
-2.50.1
-

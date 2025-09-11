@@ -24,8 +24,6 @@ Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
  drivers/char/hw_random/stm32-rng.c | 32 ++++++++++++------------------
  1 file changed, 13 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
-index 7b5639d9311e..08c72f11c94b 100644
 --- a/drivers/char/hw_random/stm32-rng.c
 +++ b/drivers/char/hw_random/stm32-rng.c
 @@ -72,6 +72,7 @@ struct stm32_rng_config {
@@ -45,7 +43,7 @@ index 7b5639d9311e..08c72f11c94b 100644
  	u32 sr = readl_relaxed(priv->base + RNG_SR);
  	u32 cr = readl_relaxed(priv->base + RNG_CR);
  	int err;
-@@ -174,7 +175,7 @@ static int stm32_rng_conceal_seed_error(struct hwrng *rng)
+@@ -174,7 +175,7 @@ static int stm32_rng_conceal_seed_error(
  {
  	struct stm32_rng_private *priv = container_of(rng, struct stm32_rng_private, rng);
  
@@ -54,7 +52,7 @@ index 7b5639d9311e..08c72f11c94b 100644
  
  	if (priv->data->has_cond_reset)
  		return stm32_rng_conceal_seed_error_cond_reset(priv);
-@@ -190,7 +191,7 @@ static int stm32_rng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+@@ -190,7 +191,7 @@ static int stm32_rng_read(struct hwrng *
  	int retval = 0, err = 0;
  	u32 sr;
  
@@ -63,7 +61,7 @@ index 7b5639d9311e..08c72f11c94b 100644
  	if (retval)
  		return retval;
  
-@@ -209,8 +210,7 @@ static int stm32_rng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+@@ -209,8 +210,7 @@ static int stm32_rng_read(struct hwrng *
  								   sr, sr,
  								   10, 50000);
  			if (err) {
@@ -73,7 +71,7 @@ index 7b5639d9311e..08c72f11c94b 100644
  				break;
  			}
  		} else if (!sr) {
-@@ -223,8 +223,7 @@ static int stm32_rng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+@@ -223,8 +223,7 @@ static int stm32_rng_read(struct hwrng *
  				err = stm32_rng_conceal_seed_error(rng);
  				i++;
  				if (err && i > RNG_NB_RECOVER_TRIES) {
@@ -83,7 +81,7 @@ index 7b5639d9311e..08c72f11c94b 100644
  					retval = -ENOTRECOVERABLE;
  					goto exit_rpm;
  				}
-@@ -242,8 +241,7 @@ static int stm32_rng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+@@ -242,8 +241,7 @@ static int stm32_rng_read(struct hwrng *
  			err = stm32_rng_conceal_seed_error(rng);
  			i++;
  			if (err && i > RNG_NB_RECOVER_TRIES) {
@@ -93,7 +91,7 @@ index 7b5639d9311e..08c72f11c94b 100644
  				retval = -ENOTRECOVERABLE;
  				goto exit_rpm;
  			}
-@@ -258,8 +256,8 @@ static int stm32_rng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+@@ -258,8 +256,8 @@ static int stm32_rng_read(struct hwrng *
  	}
  
  exit_rpm:
@@ -104,7 +102,7 @@ index 7b5639d9311e..08c72f11c94b 100644
  
  	return retval || !wait ? retval : -EIO;
  }
-@@ -340,8 +338,7 @@ static int stm32_rng_init(struct hwrng *rng)
+@@ -340,8 +338,7 @@ static int stm32_rng_init(struct hwrng *
  							10, 50000);
  		if (err) {
  			clk_disable_unprepare(priv->clk);
@@ -114,7 +112,7 @@ index 7b5639d9311e..08c72f11c94b 100644
  			return -EINVAL;
  		}
  	} else {
-@@ -371,9 +368,7 @@ static int stm32_rng_init(struct hwrng *rng)
+@@ -371,9 +368,7 @@ static int stm32_rng_init(struct hwrng *
  		if (priv->bus_clk)
  			clk_disable_unprepare(priv->bus_clk);
  		clk_disable_unprepare(priv->clk);
@@ -125,7 +123,7 @@ index 7b5639d9311e..08c72f11c94b 100644
  		return -EINVAL;
  	}
  
-@@ -504,8 +499,7 @@ static int __maybe_unused stm32_rng_resume(struct device *dev)
+@@ -504,8 +499,7 @@ static int __maybe_unused stm32_rng_resu
  			if (priv->bus_clk)
  				clk_disable_unprepare(priv->bus_clk);
  			clk_disable_unprepare(priv->clk);
@@ -135,7 +133,7 @@ index 7b5639d9311e..08c72f11c94b 100644
  			return -EINVAL;
  		}
  	} else {
-@@ -604,6 +598,7 @@ static int stm32_rng_probe(struct platform_device *ofdev)
+@@ -604,6 +598,7 @@ static int stm32_rng_probe(struct platfo
  
  	priv->ced = of_property_read_bool(np, "clock-error-detect");
  	priv->lock_conf = of_property_read_bool(np, "st,rng-lock-conf");
@@ -143,7 +141,7 @@ index 7b5639d9311e..08c72f11c94b 100644
  
  	priv->data = of_device_get_match_data(dev);
  	if (!priv->data)
-@@ -614,7 +609,6 @@ static int stm32_rng_probe(struct platform_device *ofdev)
+@@ -614,7 +609,6 @@ static int stm32_rng_probe(struct platfo
  	priv->rng.name = dev_driver_string(dev);
  	priv->rng.init = stm32_rng_init;
  	priv->rng.read = stm32_rng_read;
@@ -151,6 +149,3 @@ index 7b5639d9311e..08c72f11c94b 100644
  	priv->rng.quality = 900;
  
  	if (priv->data->nb_clock > 1) {
--- 
-2.50.1
-

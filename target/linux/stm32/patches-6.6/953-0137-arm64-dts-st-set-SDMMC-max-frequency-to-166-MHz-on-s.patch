@@ -18,11 +18,9 @@ Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index c95f9309ab54..a279be0f8ad0 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -1798,7 +1798,7 @@ sdmmc1: mmc@48220000 {
+@@ -1798,7 +1798,7 @@
  				resets = <&rcc SDMMC1_R>;
  				cap-sd-highspeed;
  				cap-mmc-highspeed;
@@ -31,7 +29,7 @@ index c95f9309ab54..a279be0f8ad0 100644
  				access-controllers = <&rifsc 76>;
  				st,syscfg-arcr = <&syscfg 0x40c 0x1>;
  				power-domains = <&CLUSTER_PD>;
-@@ -1815,7 +1815,7 @@ sdmmc2: mmc@48230000 {
+@@ -1815,7 +1815,7 @@
  				resets = <&rcc SDMMC2_R>;
  				cap-sd-highspeed;
  				cap-mmc-highspeed;
@@ -40,7 +38,7 @@ index c95f9309ab54..a279be0f8ad0 100644
  				access-controllers = <&rifsc 77>;
  				st,syscfg-arcr = <&syscfg 0x80c 0x1>;
  				power-domains = <&CLUSTER_PD>;
-@@ -1832,7 +1832,7 @@ sdmmc3: mmc@48240000 {
+@@ -1832,7 +1832,7 @@
  				resets = <&rcc SDMMC3_R>;
  				cap-sd-highspeed;
  				cap-mmc-highspeed;
@@ -49,6 +47,3 @@ index c95f9309ab54..a279be0f8ad0 100644
  				access-controllers = <&rifsc 78>;
  				st,syscfg-arcr = <&syscfg 0xc0c 0x1>;
  				power-domains = <&CLUSTER_PD>;
--- 
-2.50.1
-

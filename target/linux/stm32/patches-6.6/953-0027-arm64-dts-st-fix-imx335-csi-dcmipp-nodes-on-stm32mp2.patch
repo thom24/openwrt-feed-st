@@ -17,11 +17,9 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-index c07c12d8a876..2a3160857706 100644
 --- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-@@ -371,7 +371,7 @@ &i2c2 {
+@@ -371,7 +371,7 @@
  	/delete-property/dmas;
  	/delete-property/dma-names;
  
@@ -30,6 +28,3 @@ index c07c12d8a876..2a3160857706 100644
  		compatible = "sony,imx335";
  		reg = <0x1a>;
  		clocks = <&clk_ext_camera>;
--- 
-2.50.1
-

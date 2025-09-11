@@ -20,8 +20,6 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  .../bindings/soc/st/st,stm32mp25-risab.yaml      | 16 +++++++++-------
  1 file changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/soc/st/st,stm32mp25-risab.yaml b/Documentation/devicetree/bindings/soc/st/st,stm32mp25-risab.yaml
-index 5febe1463580..83754df8bd2d 100644
 --- a/Documentation/devicetree/bindings/soc/st/st,stm32mp25-risab.yaml
 +++ b/Documentation/devicetree/bindings/soc/st/st,stm32mp25-risab.yaml
 @@ -58,10 +58,12 @@ additionalProperties: false
@@ -44,6 +42,3 @@ index 5febe1463580..83754df8bd2d 100644
 +      st,mem-map = <0xa000000 0x20000>;
 +      st,srwiad;
 +    };
--- 
-2.50.1
-

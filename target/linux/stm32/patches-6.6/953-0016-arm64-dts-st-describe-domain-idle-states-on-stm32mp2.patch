@@ -18,11 +18,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 42 ++++++++++++++++++++++++++
  1 file changed, 42 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index 069ca497cef9..20dbbabc7268 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -26,6 +26,45 @@ cpu0: cpu@0 {
+@@ -26,6 +26,45 @@
  			power-domain-names = "psci";
  			#cooling-cells = <2>;
  		};
@@ -68,7 +66,7 @@ index 069ca497cef9..20dbbabc7268 100644
  	};
  
  	arm-pmu {
-@@ -146,16 +185,19 @@ psci {
+@@ -146,16 +185,19 @@
  
  		CPU_PD0: power-domain-cpu0 {
  			#power-domain-cells = <0>;
@@ -88,6 +86,3 @@ index 069ca497cef9..20dbbabc7268 100644
  		};
  	};
  
--- 
-2.50.1
-

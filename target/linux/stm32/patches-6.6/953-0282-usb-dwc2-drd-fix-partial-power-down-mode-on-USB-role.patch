@@ -20,11 +20,9 @@ Reviewed-by: Pankaj DEV <pankaj.dev@st.com>
  drivers/usb/dwc2/drd.c | 15 +++++++++------
  1 file changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
-index 728fb5582d04..faae1902f683 100644
 --- a/drivers/usb/dwc2/drd.c
 +++ b/drivers/usb/dwc2/drd.c
-@@ -188,11 +188,14 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+@@ -188,11 +188,14 @@ static int dwc2_drd_role_sw_set(struct u
  	if ((IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) ||
  	     IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)) &&
  	     dwc2_is_device_mode(hsotg) &&
@@ -44,7 +42,7 @@ index 728fb5582d04..faae1902f683 100644
  
  	if (role == USB_ROLE_HOST) {
  		already = dwc2_ovr_avalid(hsotg, true);
-@@ -220,7 +223,7 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+@@ -220,7 +223,7 @@ static int dwc2_drd_role_sw_set(struct u
  		 * may not be HW accessible. Schedule work to call dwc2_conn_id_status_change
  		 * to handle the port resume before switching mode.
  		 */
@@ -53,6 +51,3 @@ index 728fb5582d04..faae1902f683 100644
  			queue_work(hsotg->wq_otg, &hsotg->wf_otg);
  
  		/* This will raise a Connector ID Status Change Interrupt */
--- 
-2.50.1
-

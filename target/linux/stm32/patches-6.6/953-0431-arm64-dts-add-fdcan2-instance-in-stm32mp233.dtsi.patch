@@ -13,11 +13,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp233.dtsi | 15 +++++++++++++++
  1 file changed, 15 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp233.dtsi b/arch/arm64/boot/dts/st/stm32mp233.dtsi
-index 21c606b9b4c1..0701102d846c 100644
 --- a/arch/arm64/boot/dts/st/stm32mp233.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp233.dtsi
-@@ -115,6 +115,21 @@ m_can1: can@402d0000 {
+@@ -115,6 +115,21 @@
  		status = "disabled";
  	};
  
@@ -39,6 +37,3 @@ index 21c606b9b4c1..0701102d846c 100644
  	eth2: eth2@482d0000 {
  		compatible = "st,stm32mp25-dwmac", "snps,dwmac-5.10a";
  		reg = <0x482d0000 0x4000>;
--- 
-2.50.1
-

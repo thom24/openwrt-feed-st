@@ -15,11 +15,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/stm/dw_mipi_dsi-stm.c | 20 ++++++++++++++------
  1 file changed, 14 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
-index 192857792c7b..b289ab16499c 100644
 --- a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
 +++ b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
-@@ -997,7 +997,10 @@ dw_mipi_dsi_phy_141_get_timing(void *priv_data, unsigned int lane_mbps,
+@@ -997,7 +997,10 @@ dw_mipi_dsi_phy_141_get_timing(void *pri
  	return 0;
  }
  
@@ -31,7 +29,7 @@ index 192857792c7b..b289ab16499c 100644
  
  static enum drm_mode_status
  dw_mipi_dsi_stm_mode_valid(void *priv_data,
-@@ -1038,7 +1041,7 @@ dw_mipi_dsi_stm_mode_valid(void *priv_data,
+@@ -1038,7 +1041,7 @@ dw_mipi_dsi_stm_mode_valid(void *priv_da
  	}
  
  	if (!(mode_flags & MIPI_DSI_MODE_VIDEO_BURST)) {
@@ -40,7 +38,7 @@ index 192857792c7b..b289ab16499c 100644
  		int dsi_short_packet_size_px, hfp, hsync, hbp, delay_to_lp;
  		struct dw_mipi_dsi_dphy_timing dphy_timing;
  
-@@ -1046,14 +1049,19 @@ dw_mipi_dsi_stm_mode_valid(void *priv_data,
+@@ -1046,14 +1049,19 @@ dw_mipi_dsi_stm_mode_valid(void *priv_da
  		pll_out_khz = dsi_pll_get_clkout_khz(pll_in_khz, idf, ndiv, odf);
  
  		px_clock_hz = DIV_ROUND_CLOSEST_ULL(1000ULL * pll_out_khz * lanes, bpp);
@@ -64,6 +62,3 @@ index 192857792c7b..b289ab16499c 100644
  
  		/* sync packets are codes as DSI short packets (4 bytes) */
  		dsi_short_packet_size_px = DIV_ROUND_UP(4 * BITS_PER_BYTE, bpp);
--- 
-2.50.1
-

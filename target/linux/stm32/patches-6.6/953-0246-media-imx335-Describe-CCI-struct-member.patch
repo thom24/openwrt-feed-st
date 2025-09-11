@@ -25,8 +25,6 @@ Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
  drivers/media/i2c/imx335.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
-index deabfed87071..b2b38aa1313c 100644
 --- a/drivers/media/i2c/imx335.c
 +++ b/drivers/media/i2c/imx335.c
 @@ -177,6 +177,7 @@ struct imx335_mode {
@@ -37,6 +35,3 @@ index deabfed87071..b2b38aa1313c 100644
   * @inclk: Sensor input clock
   * @ctrl_handler: V4L2 control handler
   * @link_freq_ctrl: Pointer to link frequency control
--- 
-2.50.1
-

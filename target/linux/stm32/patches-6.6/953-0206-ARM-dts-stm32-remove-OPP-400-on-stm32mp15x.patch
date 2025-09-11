@@ -19,11 +19,9 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp151.dtsi | 9 +--------
  1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
-index c3cb20bbb44a..d7e65765039d 100644
 --- a/arch/arm/boot/dts/st/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
-@@ -32,17 +32,10 @@ cpu0_opp_table: cpu0-opp-table {
+@@ -32,17 +32,10 @@
  		compatible = "operating-points-v2";
  		opp-shared;
  
@@ -42,6 +40,3 @@ index c3cb20bbb44a..d7e65765039d 100644
  		};
  
  		opp-800000000 {
--- 
-2.50.1
-

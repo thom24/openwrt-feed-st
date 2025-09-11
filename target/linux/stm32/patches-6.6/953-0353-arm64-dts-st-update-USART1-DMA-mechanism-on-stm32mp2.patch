@@ -20,11 +20,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index 94570804e5c6..a2a886976f75 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -1332,7 +1332,7 @@ usart1: serial@40330000 {
+@@ -1332,7 +1332,7 @@
  				reg = <0x40330000 0x0 0x400>;
  				interrupts-extended = <&exti1 26 IRQ_TYPE_LEVEL_HIGH>;
  				clocks = <&rcc CK_KER_USART1>;
@@ -33,6 +31,3 @@ index 94570804e5c6..a2a886976f75 100644
  				       <&hpdma 10 0x40 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 31>;
--- 
-2.50.1
-

@@ -18,8 +18,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c | 3 ---
  1 file changed, 3 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
-index b3250de733ce..eb72b504dd82 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
 @@ -24,9 +24,6 @@
@@ -32,6 +30,3 @@ index b3250de733ce..eb72b504dd82 100644
  #define DCMIPP_CMSR2_P1VSYNCF BIT(18)
  
  #define DCMIPP_P1SRCR	0x820
--- 
-2.50.1
-

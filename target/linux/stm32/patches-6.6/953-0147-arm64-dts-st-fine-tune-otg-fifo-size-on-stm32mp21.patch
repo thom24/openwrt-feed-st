@@ -22,11 +22,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index ecafeb9cff73..c26308f375e9 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -1884,9 +1884,9 @@ usbotg_hs: usb@48300000 {
+@@ -1884,9 +1884,9 @@
  				reset-names = "dwc2";
  				interrupts = <GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH>;
  				access-controllers = <&rifsc 66>;
@@ -38,6 +36,3 @@ index ecafeb9cff73..c26308f375e9 100644
  				dr_mode = "otg";
  				otg-rev = <0x200>;
  				phys = <&usb2_phy2>;
--- 
-2.50.1
-

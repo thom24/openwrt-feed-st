@@ -17,11 +17,9 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index c26308f375e9..c7aeaef72ca7 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -1648,7 +1648,7 @@ i2c3: i2c@46040000 {
+@@ -1648,7 +1648,7 @@
  				compatible = "st,stm32mp25-i2c";
  				reg = <0x46040000 0x0 0x400>;
  				interrupt-names = "event";
@@ -30,7 +28,7 @@ index c26308f375e9..c7aeaef72ca7 100644
  				clocks = <&rcc CK_KER_I2C3>;
  				resets = <&rcc I2C3_R>;
  				#address-cells = <1>;
-@@ -1666,7 +1666,7 @@ i3c3: i3c@46080000 {
+@@ -1666,7 +1666,7 @@
  				#size-cells = <0>;
  				compatible = "st,stm32-i3c";
  				reg = <0x46080000 0x0 0x400>;
@@ -39,6 +37,3 @@ index c26308f375e9..c7aeaef72ca7 100644
  				clocks = <&rcc CK_KER_I3C3>;
  				resets = <&rcc I3C3_R>;
  				access-controllers = <&rifsc 116>;
--- 
-2.50.1
-

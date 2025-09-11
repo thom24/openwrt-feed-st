@@ -21,11 +21,9 @@ Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
  include/linux/bus/stm32_firewall.h | 6 ++++--
  1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/bus/stm32_firewall.h b/include/linux/bus/stm32_firewall.h
-index 5a429c818063..854f1f09c25b 100644
 --- a/include/linux/bus/stm32_firewall.h
 +++ b/include/linux/bus/stm32_firewall.h
-@@ -72,12 +72,14 @@ void stm32_firewall_controller_unregister(struct stm32_firewall_controller *fire
+@@ -72,12 +72,14 @@ void stm32_firewall_controller_unregiste
  
  #else /* IS_ENABLED(CONFIG_STM32_FIREWALL) */
  
@@ -42,6 +40,3 @@ index 5a429c818063..854f1f09c25b 100644
  {
  }
  
--- 
-2.50.1
-

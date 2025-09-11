@@ -17,8 +17,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/panel/panel-himax-hx8394.c | 137 +++++++++++++++++++++
  1 file changed, 137 insertions(+)
 
-diff --git a/drivers/gpu/drm/panel/panel-himax-hx8394.c b/drivers/gpu/drm/panel/panel-himax-hx8394.c
-index 631420d28be4..023c2678a2bf 100644
 --- a/drivers/gpu/drm/panel/panel-himax-hx8394.c
 +++ b/drivers/gpu/drm/panel/panel-himax-hx8394.c
 @@ -38,6 +38,7 @@
@@ -56,7 +54,7 @@ index 631420d28be4..023c2678a2bf 100644
  struct hx8394 {
  	struct device *dev;
  	struct drm_panel panel;
-@@ -203,6 +217,128 @@ static const struct hx8394_panel_desc hsd060bhw4_desc = {
+@@ -203,6 +217,128 @@ static const struct hx8394_panel_desc hs
  	.init_sequence = hsd060bhw4_init_sequence,
  };
  
@@ -185,7 +183,7 @@ index 631420d28be4..023c2678a2bf 100644
  static int hx8394_enable(struct drm_panel *panel)
  {
  	struct hx8394 *ctx = panel_to_hx8394(panel);
-@@ -430,6 +566,7 @@ static void hx8394_remove(struct mipi_dsi_device *dsi)
+@@ -430,6 +566,7 @@ static void hx8394_remove(struct mipi_ds
  
  static const struct of_device_id hx8394_of_match[] = {
  	{ .compatible = "hannstar,hsd060bhw4", .data = &hsd060bhw4_desc },
@@ -193,6 +191,3 @@ index 631420d28be4..023c2678a2bf 100644
  	{ /* sentinel */ }
  };
  MODULE_DEVICE_TABLE(of, hx8394_of_match);
--- 
-2.50.1
-

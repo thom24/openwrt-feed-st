@@ -23,8 +23,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/dma/stm32/stm32-dma3.c | 70 +++++++++++++++++++++-------------
  1 file changed, 44 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
-index f783fd9839c1..1d615b8be418 100644
 --- a/drivers/dma/stm32/stm32-dma3.c
 +++ b/drivers/dma/stm32/stm32-dma3.c
 @@ -8,6 +8,7 @@
@@ -44,7 +42,7 @@ index f783fd9839c1..1d615b8be418 100644
  	u32 lap;
  	struct gen_pool *gen_pool;
  	struct dma_pool *dma_pool;
-@@ -373,17 +374,32 @@ static void stm32_dma3_dbg_summary_show(struct seq_file *s, struct dma_device *d
+@@ -373,17 +374,32 @@ static void stm32_dma3_dbg_summary_show(
  static dma_addr_t stm32_dma3_translate_addr(struct stm32_dma3_ddata *ddata, u32 port,
  					    struct device *client, dma_addr_t dma_addr)
  {
@@ -86,7 +84,7 @@ index f783fd9839c1..1d615b8be418 100644
  }
  
  static void stm32_dma3_chan_dump_reg(struct stm32_dma3_chan *chan)
-@@ -430,8 +446,8 @@ static void stm32_dma3_chan_dump_reg(struct stm32_dma3_chan *chan)
+@@ -430,8 +446,8 @@ static void stm32_dma3_chan_dump_reg(str
  	offset = STM32_DMA3_CLLR(id);
  	dev_dbg(dev, "C%dLLR(0x%03x): %08x\n", id, offset, readl_relaxed(ddata->base + offset));
  	if (axi_port_used && ddata->axi_addr_offset)
@@ -97,7 +95,7 @@ index f783fd9839c1..1d615b8be418 100644
  }
  
  static void stm32_dma3_chan_dump_hwdesc(struct stm32_dma3_chan *chan,
-@@ -450,16 +466,16 @@ static void stm32_dma3_chan_dump_hwdesc(struct stm32_dma3_chan *chan,
+@@ -450,16 +466,16 @@ static void stm32_dma3_chan_dump_hwdesc(
  			dev_dbg(chan2dev(chan), "V\n");
  		axi_used = port_is_axi(ddata->ports_max_dw[FIELD_GET(CCR_LAP, swdesc->ccr)]);
  		dev_dbg(chan2dev(chan), "[%d]@%pad%s\n", i, &swdesc->lli[i].hwdesc_addr,
@@ -117,7 +115,7 @@ index f783fd9839c1..1d615b8be418 100644
  		dev_dbg(chan2dev(chan), "| C%dLLR: %08x\n", chan->id, hwdesc->cllr);
  		axi_port_used |= axi_used;
  	}
-@@ -472,8 +488,8 @@ static void stm32_dma3_chan_dump_hwdesc(struct stm32_dma3_chan *chan,
+@@ -472,8 +488,8 @@ static void stm32_dma3_chan_dump_hwdesc(
  	}
  
  	if (axi_port_used && ddata->axi_addr_offset)
@@ -128,7 +126,7 @@ index f783fd9839c1..1d615b8be418 100644
  }
  
  static int stm32_dma3_lli_pool_create(struct platform_device *pdev, struct stm32_dma3_ddata *ddata)
-@@ -1493,8 +1509,7 @@ static void stm32_dma3_init_chan_config_for_memcpy(struct stm32_dma3_chan *chan,
+@@ -1493,8 +1509,7 @@ static void stm32_dma3_init_chan_config_
  {
  	struct stm32_dma3_ddata *ddata = to_stm32_dma3_ddata(chan);
  	struct device *client = chan->vchan.chan.slave;
@@ -138,7 +136,7 @@ index f783fd9839c1..1d615b8be418 100644
  
  	/* Initialize dt_config if channel not pre-configured through DT */
  	if (!(chan->config_set & STM32_DMA3_CFG_SET_DT)) {
-@@ -1513,12 +1528,15 @@ static void stm32_dma3_init_chan_config_for_memcpy(struct stm32_dma3_chan *chan,
+@@ -1513,12 +1528,15 @@ static void stm32_dma3_init_chan_config_
  		chan->dt_config.tr_conf |= FIELD_PREP(STM32_DMA3_DT_TCEM, CTR2_TCEM_CHANNEL);
  	}
  
@@ -158,7 +156,7 @@ index f783fd9839c1..1d615b8be418 100644
  		chan->dma_config.src_addr = src;
  		chan->dma_config.dst_addr = dst;
  	}
-@@ -1990,9 +2008,9 @@ static int stm32_dma3_get_axi_port_config(struct platform_device *pdev,
+@@ -1990,9 +2008,9 @@ static int stm32_dma3_get_axi_port_confi
  
  	remap = regmap_test_bits(regmap, offset, mask);
  	if (remap && pdev->dev.dma_range_map) { /* dma-ranges is required */
@@ -171,6 +169,3 @@ index f783fd9839c1..1d615b8be418 100644
  	}
  
  	return 0;
--- 
-2.50.1
-

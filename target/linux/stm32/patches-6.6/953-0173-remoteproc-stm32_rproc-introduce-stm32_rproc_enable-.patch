@@ -25,8 +25,6 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  drivers/remoteproc/stm32_rproc.c | 94 +++++++++++++++++++++-----------
  1 file changed, 63 insertions(+), 31 deletions(-)
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index ff50b064b6a4..d7acf0c02631 100644
 --- a/drivers/remoteproc/stm32_rproc.c
 +++ b/drivers/remoteproc/stm32_rproc.c
 @@ -105,6 +105,7 @@ struct stm32_rproc {
@@ -37,7 +35,7 @@ index ff50b064b6a4..d7acf0c02631 100644
  	u32 nb_rmems;
  	struct stm32_rproc_mem *rmems;
  	struct stm32_mbox mb[MBOX_NB_MBX];
-@@ -404,18 +405,52 @@ stm32_rproc_tee_elf_find_loaded_rsc_table(struct rproc *rproc,
+@@ -404,18 +405,52 @@ stm32_rproc_tee_elf_find_loaded_rsc_tabl
  	return tee_rproc_get_loaded_rsc_table(ddata->trproc);
  }
  
@@ -92,7 +90,7 @@ index ff50b064b6a4..d7acf0c02631 100644
  
  	return err;
  }
-@@ -433,14 +468,12 @@ static int stm32_rproc_tee_stop(struct rproc *rproc)
+@@ -433,14 +468,12 @@ static int stm32_rproc_tee_stop(struct r
  
  	stm32_rproc_request_shutdown(rproc);
  
@@ -109,7 +107,7 @@ index ff50b064b6a4..d7acf0c02631 100644
  	ddata->fw_loaded = false;
  
  	return stm32_rproc_release(rproc);
-@@ -724,7 +757,7 @@ static int stm32_rproc_start(struct rproc *rproc)
+@@ -724,7 +757,7 @@ static int stm32_rproc_start(struct rpro
  		}
  	}
  
@@ -118,7 +116,7 @@ index ff50b064b6a4..d7acf0c02631 100644
  	if (err)
  		return err;
  
-@@ -739,21 +772,15 @@ static int stm32_rproc_start(struct rproc *rproc)
+@@ -739,21 +772,15 @@ static int stm32_rproc_start(struct rpro
  	return 0;
  
  disable_pm:
@@ -141,7 +139,7 @@ index ff50b064b6a4..d7acf0c02631 100644
  	return stm32_rproc_set_hold_boot(rproc, true);
  }
  
-@@ -791,9 +818,7 @@ static int stm32_rproc_stop(struct rproc *rproc)
+@@ -791,9 +818,7 @@ static int stm32_rproc_stop(struct rproc
  		return err;
  	}
  
@@ -152,7 +150,7 @@ index ff50b064b6a4..d7acf0c02631 100644
  
  	return stm32_rproc_release(rproc);
  }
-@@ -1035,10 +1060,8 @@ static int stm32_rproc_parse_dt(struct platform_device *pdev,
+@@ -1035,10 +1060,8 @@ static int stm32_rproc_parse_dt(struct p
  
  		ddata->wdg_irq = irq;
  
@@ -165,7 +163,7 @@ index ff50b064b6a4..d7acf0c02631 100644
  
  		dev_info(dev, "wdg irq registered\n");
  	}
-@@ -1244,19 +1267,29 @@ static int stm32_rproc_probe(struct platform_device *pdev)
+@@ -1244,19 +1267,29 @@ static int stm32_rproc_probe(struct plat
  
  	ret = stm32_rproc_powerdomain_init(dev, ddata);
  	if (ret < 0)
@@ -201,7 +199,7 @@ index ff50b064b6a4..d7acf0c02631 100644
  	rproc_free(rproc);
  free_tee:
  	if (trproc)
-@@ -1279,10 +1312,6 @@ static void stm32_rproc_remove(struct platform_device *pdev)
+@@ -1279,10 +1312,6 @@ static void stm32_rproc_remove(struct pl
  	rproc_del(rproc);
  	stm32_rproc_free_mbox(rproc);
  
@@ -212,7 +210,7 @@ index ff50b064b6a4..d7acf0c02631 100644
  	rproc_free(rproc);
  	if (ddata->trproc)
  		tee_rproc_unregister(ddata->trproc);
-@@ -1302,6 +1331,9 @@ static int stm32_rproc_suspend(struct device *dev)
+@@ -1302,6 +1331,9 @@ static int stm32_rproc_suspend(struct de
  	struct rproc *rproc = dev_get_drvdata(dev);
  	struct stm32_rproc *ddata = rproc->priv;
  
@@ -222,6 +220,3 @@ index ff50b064b6a4..d7acf0c02631 100644
  	if (ddata->genpd_dev && rproc->state != RPROC_OFFLINE &&
  	    !device_property_present(dev, "keep-power-in-suspend"))
  		return -EBUSY;
--- 
-2.50.1
-

@@ -16,8 +16,6 @@ Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
  .../memory-controllers/st,stm32-omi.yaml        | 17 ++++++++++++-----
  1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/memory-controllers/st,stm32-omi.yaml b/Documentation/devicetree/bindings/memory-controllers/st,stm32-omi.yaml
-index 4e07bb7f5b2b..68890bb1ff91 100644
 --- a/Documentation/devicetree/bindings/memory-controllers/st,stm32-omi.yaml
 +++ b/Documentation/devicetree/bindings/memory-controllers/st,stm32-omi.yaml
 @@ -64,7 +64,7 @@ properties:
@@ -85,6 +83,3 @@ index 4e07bb7f5b2b..68890bb1ff91 100644
        compatible = "st,stm32mp25-omi";
        reg = <0x40430000 0x400>;
        memory-region = <&mm_ospi1>;
--- 
-2.50.1
-

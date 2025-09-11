@@ -20,11 +20,9 @@ Domain-Review: Alain VOLMAT <alain.volmat@st.com>
  drivers/i2c/busses/i2c-stm32f7.c | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index 61a0f9ad48ea..60210c6d27f9 100644
 --- a/drivers/i2c/busses/i2c-stm32f7.c
 +++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -1623,6 +1623,8 @@ static irqreturn_t stm32f7_i2c_isr_event_thread(int irq, void *data)
+@@ -1623,6 +1623,8 @@ static irqreturn_t stm32f7_i2c_isr_event
  		if (i2c_dev->use_dma) {
  			stm32f7_i2c_disable_dma_req(i2c_dev);
  			dmaengine_terminate_async(dma->chan_using);
@@ -33,7 +31,7 @@ index 61a0f9ad48ea..60210c6d27f9 100644
  		}
  		f7_msg->result = -ENXIO;
  	}
-@@ -1643,6 +1645,8 @@ static irqreturn_t stm32f7_i2c_isr_event_thread(int irq, void *data)
+@@ -1643,6 +1645,8 @@ static irqreturn_t stm32f7_i2c_isr_event
  				dev_dbg(i2c_dev->dev, "<%s>: Timed out\n", __func__);
  				stm32f7_i2c_disable_dma_req(i2c_dev);
  				dmaengine_terminate_async(dma->chan_using);
@@ -42,6 +40,3 @@ index 61a0f9ad48ea..60210c6d27f9 100644
  				f7_msg->result = -ETIMEDOUT;
  			}
  		}
--- 
-2.50.1
-

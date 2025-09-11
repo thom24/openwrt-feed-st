@@ -27,8 +27,6 @@ Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
  .../st/stm32/stm32-dcmipp/dcmipp-isp.c        | 27 -------------------
  2 files changed, 12 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
-index 124f4b179f25..40f432f44510 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
 @@ -45,6 +45,7 @@
@@ -39,7 +37,7 @@ index 124f4b179f25..40f432f44510 100644
  #define DCMIPP_PxFSCR_DTMODE_MASK	GENMASK(17, 16)
  #define DCMIPP_PxFSCR_DTMODE_SHIFT	16
  #define DCMIPP_PxFSCR_DTMODE_DTIDA	0x00
-@@ -509,6 +510,17 @@ static int dcmipp_inp_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -509,6 +510,17 @@ static int dcmipp_inp_s_stream(struct v4
  		if (ret)
  			goto error_s_stream;
  
@@ -57,8 +55,6 @@ index 124f4b179f25..40f432f44510 100644
  		ret = v4l2_subdev_call(s_subdev, video, s_stream, enable);
  		if (ret < 0) {
  			dev_err(inp->dev,
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
-index 60aacda22546..a4c70e4b5365 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
 @@ -29,9 +29,6 @@
@@ -71,7 +67,7 @@ index 60aacda22546..a4c70e4b5365 100644
  #define DCMIPP_P1SRCR	0x820
  #define DCMIPP_P1SRCR_LASTLINE_SHIFT	0
  #define DCMIPP_P1SRCR_LASTLINE_MASK	GENMASK(11, 0)
-@@ -518,24 +515,6 @@ static void dcmipp_isp_config_demosaicing(struct dcmipp_isp_device *isp,
+@@ -518,24 +515,6 @@ static void dcmipp_isp_config_demosaicin
  	reg_set(isp, DCMIPP_P1DMCR, val);
  }
  
@@ -96,7 +92,7 @@ index 60aacda22546..a4c70e4b5365 100644
  static void dcmipp_isp_config_decimation(struct dcmipp_isp_device *isp,
  					 struct v4l2_rect *crop,
  					 struct v4l2_rect *compose)
-@@ -581,12 +560,6 @@ static int dcmipp_isp_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -581,12 +560,6 @@ static int dcmipp_isp_s_stream(struct v4
  		compose = v4l2_subdev_state_get_compose(state, 0);
  		v4l2_subdev_unlock_state(state);
  
@@ -109,6 +105,3 @@ index 60aacda22546..a4c70e4b5365 100644
  		/* Configure Statistic Removal */
  		reg_write(isp, DCMIPP_P1SRCR,
  			  ((crop->top << DCMIPP_P1SRCR_FIRSTLINEDEL_SHIFT) |
--- 
-2.50.1
-

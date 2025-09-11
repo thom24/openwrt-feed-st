@@ -25,11 +25,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/crypto/stm32/stm32-cryp.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/crypto/stm32/stm32-cryp.c b/drivers/crypto/stm32/stm32-cryp.c
-index 84a58600ad24..b46194956c30 100644
 --- a/drivers/crypto/stm32/stm32-cryp.c
 +++ b/drivers/crypto/stm32/stm32-cryp.c
-@@ -1972,7 +1972,8 @@ static int stm32_cryp_read_auth_tag(struct stm32_cryp *cryp)
+@@ -1972,7 +1972,8 @@ static int stm32_cryp_read_auth_tag(stru
  	cfg &= ~CR_DEC_NOT_ENC;
  	cfg |= CR_CRYPEN;
  
@@ -39,6 +37,3 @@ index 84a58600ad24..b46194956c30 100644
  
  	if (is_gcm(cryp)) {
  		/* GCM: write aad and payload size (in bits) */
--- 
-2.50.1
-

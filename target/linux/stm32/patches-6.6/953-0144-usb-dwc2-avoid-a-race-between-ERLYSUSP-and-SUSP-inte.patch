@@ -34,11 +34,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/usb/dwc2/core_intr.c | 16 ++++++++++++++++
  1 file changed, 16 insertions(+)
 
-diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
-index b7577cd5ddae..b9cb876e5952 100644
 --- a/drivers/usb/dwc2/core_intr.c
 +++ b/drivers/usb/dwc2/core_intr.c
-@@ -499,9 +499,25 @@ static void dwc2_handle_disconnect_intr(struct dwc2_hsotg *hsotg)
+@@ -499,9 +499,25 @@ static void dwc2_handle_disconnect_intr(
   */
  static void dwc2_handle_usb_suspend_intr(struct dwc2_hsotg *hsotg)
  {
@@ -64,6 +62,3 @@ index b7577cd5ddae..b9cb876e5952 100644
  	/* Clear interrupt */
  	dwc2_writel(hsotg, GINTSTS_USBSUSP, GINTSTS);
  
--- 
-2.50.1
-

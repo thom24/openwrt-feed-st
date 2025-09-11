@@ -18,8 +18,6 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/iio/trigger/stm32-lptimer-trigger.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iio/trigger/stm32-lptimer-trigger.c b/drivers/iio/trigger/stm32-lptimer-trigger.c
-index 1549436c7c35..45dfd437feb3 100644
 --- a/drivers/iio/trigger/stm32-lptimer-trigger.c
 +++ b/drivers/iio/trigger/stm32-lptimer-trigger.c
 @@ -16,7 +16,8 @@
@@ -32,6 +30,3 @@ index 1549436c7c35..45dfd437feb3 100644
  
  struct stm32_lptim_cfg {
  	const char * const (*triggers)[MAX_TRIGGERS];
--- 
-2.50.1
-

@@ -26,11 +26,9 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  drivers/media/i2c/imx335.c | 10 +++++++++-
  1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
-index a06dd32f46fe..fa806effd44d 100644
 --- a/drivers/media/i2c/imx335.c
 +++ b/drivers/media/i2c/imx335.c
-@@ -1243,10 +1243,16 @@ static int imx335_init_controls(struct imx335 *imx335)
+@@ -1242,10 +1242,16 @@ static int imx335_init_controls(struct i
  {
  	struct v4l2_ctrl_handler *ctrl_hdlr = &imx335->ctrl_handler;
  	const struct imx335_mode *mode = imx335->cur_mode;
@@ -48,7 +46,7 @@ index a06dd32f46fe..fa806effd44d 100644
  	if (ret)
  		return ret;
  
-@@ -1311,6 +1317,8 @@ static int imx335_init_controls(struct imx335 *imx335)
+@@ -1310,6 +1316,8 @@ static int imx335_init_controls(struct i
  	if (imx335->hblank_ctrl)
  		imx335->hblank_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
  
@@ -57,6 +55,3 @@ index a06dd32f46fe..fa806effd44d 100644
  	if (ctrl_hdlr->error) {
  		dev_err(imx335->dev, "control init failed: %d\n",
  			ctrl_hdlr->error);
--- 
-2.50.1
-

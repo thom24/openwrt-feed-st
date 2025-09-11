@@ -23,11 +23,9 @@ Tested-by: Alain VOLMAT <alain.volmat@st.com>
  .../st/stm32/stm32-dcmipp/dcmipp-statcap.c    | 34 +++++++++----------
  1 file changed, 17 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
-index 0ee28a55a913..04d5ee735319 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
-@@ -573,28 +573,20 @@ void dcmipp_statcap_ent_release(struct dcmipp_ent_device *ved)
+@@ -573,28 +573,20 @@ void dcmipp_statcap_ent_release(struct d
  	vb2_video_unregister_device(&vcap->vdev);
  }
  
@@ -63,7 +61,7 @@ index 0ee28a55a913..04d5ee735319 100644
  }
  
  static u32 dcmipp_statcap_get_src(u32 location,
-@@ -790,6 +782,7 @@ static irqreturn_t dcmipp_statcap_irq_thread(int irq, void *arg)
+@@ -790,6 +782,7 @@ static irqreturn_t dcmipp_statcap_irq_th
  {
  	struct dcmipp_statcap_device *vcap =
  			container_of(arg, struct dcmipp_statcap_device, ved);
@@ -71,7 +69,7 @@ index 0ee28a55a913..04d5ee735319 100644
  
  	/* We only to do things if we are streaming */
  	if (!vb2_is_streaming(&vcap->queue))
-@@ -800,8 +793,15 @@ static irqreturn_t dcmipp_statcap_irq_thread(int irq, void *arg)
+@@ -800,8 +793,15 @@ static irqreturn_t dcmipp_statcap_irq_th
  	dcmipp_statcap_update_local_buf(vcap);
  
  	/* If a full capture cycle has been done, output data to a buffer */
@@ -89,6 +87,3 @@ index 0ee28a55a913..04d5ee735319 100644
  
  	spin_unlock_irq(&vcap->irqlock);
  
--- 
-2.50.1
-

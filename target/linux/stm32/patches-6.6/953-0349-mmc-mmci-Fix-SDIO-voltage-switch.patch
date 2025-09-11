@@ -23,11 +23,9 @@ Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
  drivers/mmc/host/mmci.c | 22 +++++++++++++---------
  1 file changed, 13 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/mmc/host/mmci.c b/drivers/mmc/host/mmci.c
-index 7fbc0529ecaf..409115fa72d2 100644
 --- a/drivers/mmc/host/mmci.c
 +++ b/drivers/mmc/host/mmci.c
-@@ -2052,19 +2052,23 @@ static int mmci_get_cd(struct mmc_host *mmc)
+@@ -2052,19 +2052,23 @@ static int mmci_get_cd(struct mmc_host *
  static int mmci_sig_volt_switch(struct mmc_host *mmc, struct mmc_ios *ios)
  {
  	struct mmci_host *host = mmc_priv(mmc);
@@ -60,6 +58,3 @@ index 7fbc0529ecaf..409115fa72d2 100644
  }
  
  static void mmci_enable_sdio_irq(struct mmc_host *mmc, int enable)
--- 
-2.50.1
-

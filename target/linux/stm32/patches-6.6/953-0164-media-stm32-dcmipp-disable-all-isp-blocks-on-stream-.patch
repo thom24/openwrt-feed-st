@@ -21,11 +21,9 @@ Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
  drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
-index e71a0d6b082d..b3250de733ce 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
-@@ -562,6 +562,11 @@ static int dcmipp_isp_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -562,6 +562,11 @@ static int dcmipp_isp_s_stream(struct v4
  	} else {
  		if (isp->usecnt > 1)
  			goto out;
@@ -37,6 +35,3 @@ index e71a0d6b082d..b3250de733ce 100644
  	}
  
  	ret = v4l2_subdev_call(s_subdev, video, s_stream, enable);
--- 
-2.50.1
-

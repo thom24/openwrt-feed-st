@@ -21,11 +21,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/tty/serial/stm32-usart.c | 26 +++++++++++++++++++++-----
  1 file changed, 21 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 709d756d3c28..f975a8454a1e 100644
 --- a/drivers/tty/serial/stm32-usart.c
 +++ b/drivers/tty/serial/stm32-usart.c
-@@ -113,6 +113,7 @@ static struct stm32_usart_info __maybe_unused stm32h7_info = {
+@@ -113,6 +113,7 @@ static struct stm32_usart_info __maybe_u
  static void stm32_usart_stop_tx(struct uart_port *port);
  static void stm32_usart_transmit_chars(struct uart_port *port);
  static void __maybe_unused stm32_usart_console_putchar(struct uart_port *port, unsigned char ch);
@@ -33,7 +31,7 @@ index 709d756d3c28..f975a8454a1e 100644
  
  static inline struct stm32_port *to_stm32_port(struct uart_port *port)
  {
-@@ -648,18 +649,33 @@ static unsigned int stm32_usart_receive_chars(struct uart_port *port, bool force
+@@ -648,18 +649,33 @@ static unsigned int stm32_usart_receive_
  {
  	struct stm32_port *stm32_port = to_stm32_port(port);
  	const struct stm32_usart_offsets *ofs = &stm32_port->info->ofs;
@@ -71,7 +69,7 @@ index 709d756d3c28..f975a8454a1e 100644
  			sr = readl_relaxed(port->membase + ofs->isr);
  			if (sr & USART_SR_ERR_MASK) {
  				/* Disable DMA request line */
-@@ -1117,7 +1133,7 @@ static irqreturn_t stm32_usart_interrupt(int irq, void *ptr)
+@@ -1117,7 +1133,7 @@ static irqreturn_t stm32_usart_interrupt
  	/* Receiver timeout irq for DMA RX */
  	if (stm32_usart_rx_dma_started(stm32_port) && !stm32_port->throttled) {
  		spin_lock(&port->lock);
@@ -80,6 +78,3 @@ index 709d756d3c28..f975a8454a1e 100644
  		uart_unlock_and_check_sysrq(port);
  		if (size)
  			tty_flip_buffer_push(tport);
--- 
-2.50.1
-

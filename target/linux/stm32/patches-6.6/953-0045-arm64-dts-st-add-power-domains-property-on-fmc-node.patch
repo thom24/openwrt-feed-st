@@ -15,11 +15,9 @@ Reviewed-by: Francois CHOLEAU <francois.choleau@st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index 57b65c8b96cc..f449b5e21c0a 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -2379,6 +2379,7 @@ fmc: memory-controller@48200000 {
+@@ -2379,6 +2379,7 @@
  			#size-cells = <1>;
  			clocks = <&scmi_clk CK_SCMI_FMC>;
  			resets = <&scmi_reset RST_SCMI_FMC>;
@@ -27,6 +25,3 @@ index 57b65c8b96cc..f449b5e21c0a 100644
  			status = "disabled";
  
  			nand-controller@4,0 {
--- 
-2.50.1
-

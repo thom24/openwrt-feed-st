@@ -21,11 +21,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-index f920bd050a23..0ebefdb525cf 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-@@ -328,14 +328,17 @@ phy0_eth1: ethernet-phy@0 {
+@@ -328,14 +328,17 @@
  
  &hpdma {
  	memory-region = <&hpdma1_lli>;
@@ -43,6 +41,3 @@ index f920bd050a23..0ebefdb525cf 100644
  };
  
  &i2c2 {
--- 
-2.50.1
-

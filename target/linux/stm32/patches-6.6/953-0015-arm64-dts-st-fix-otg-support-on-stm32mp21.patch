@@ -22,11 +22,9 @@ Domain-Review: Ram DAYAL <ram.dayal@st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index 5632f620b54a..069ca497cef9 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -1802,8 +1802,8 @@ usbh_ehci: usb@482f0000 {
+@@ -1802,8 +1802,8 @@
  			usbotg_hs: usb@48300000 {
  				compatible = "st,stm32mp21-hsotg", "snps,dwc2";
  				reg = <0x48300000 0x0 0x10000>;
@@ -37,6 +35,3 @@ index 5632f620b54a..069ca497cef9 100644
  				resets = <&rcc OTG_R>;
  				reset-names = "dwc2";
  				interrupts = <GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH>;
--- 
-2.50.1
-

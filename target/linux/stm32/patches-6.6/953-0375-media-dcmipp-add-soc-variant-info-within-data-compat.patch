@@ -25,8 +25,6 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  .../st/stm32/stm32-dcmipp/dcmipp-input.c      | 17 +-----
  3 files changed, 51 insertions(+), 55 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
-index d02fa90fe69b..e09c7271e328 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
 @@ -97,6 +97,37 @@ struct dcmipp_device {
@@ -67,11 +65,9 @@ index d02fa90fe69b..e09c7271e328 100644
  /**
   * struct dcmipp_ent_device - core struct that represents a node in the topology
   *
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
-index 7c7cc6f60b88..aecf7e5feb15 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
-@@ -42,33 +42,6 @@ notifier_to_dcmipp(struct v4l2_async_notifier *n)
+@@ -42,33 +42,6 @@ notifier_to_dcmipp(struct v4l2_async_not
  	return container_of(n, struct dcmipp_device, notifier);
  }
  
@@ -105,7 +101,7 @@ index 7c7cc6f60b88..aecf7e5feb15 100644
  /* --------------------------------------------------------------------------
   * Topology Configuration
   */
-@@ -108,7 +81,8 @@ static const struct dcmipp_pipeline_config stm32mp13_pipe_cfg = {
+@@ -108,7 +81,8 @@ static const struct dcmipp_pipeline_conf
  	.num_ents	= ARRAY_SIZE(stm32mp13_ent_config),
  	.links		= stm32mp13_ent_links,
  	.num_links	= ARRAY_SIZE(stm32mp13_ent_links),
@@ -115,7 +111,7 @@ index 7c7cc6f60b88..aecf7e5feb15 100644
  };
  
  #define	ID_MAIN_ISP 3
-@@ -203,7 +177,11 @@ static const struct dcmipp_pipeline_config stm32mp25_pipe_cfg = {
+@@ -203,7 +177,11 @@ static const struct dcmipp_pipeline_conf
  	.num_ents	= ARRAY_SIZE(stm32mp25_ent_config),
  	.links		= stm32mp25_ent_links,
  	.num_links	= ARRAY_SIZE(stm32mp25_ent_links),
@@ -128,7 +124,7 @@ index 7c7cc6f60b88..aecf7e5feb15 100644
  };
  
  #define LINK_FLAG_TO_STR(f) ((f) == 0 ? "" :\
-@@ -338,7 +316,7 @@ static int dcmipp_graph_notify_bound(struct v4l2_async_notifier *notifier,
+@@ -338,7 +316,7 @@ static int dcmipp_graph_notify_bound(str
  				     struct v4l2_async_connection *asd)
  {
  	struct dcmipp_device *dcmipp = notifier_to_dcmipp(notifier);
@@ -137,7 +133,7 @@ index 7c7cc6f60b88..aecf7e5feb15 100644
  	int src_pad, i;
  	struct dcmipp_ent_device *sink;
  	struct v4l2_fwnode_endpoint vep = { 0 };
-@@ -346,16 +324,10 @@ static int dcmipp_graph_notify_bound(struct v4l2_async_notifier *notifier,
+@@ -346,16 +324,10 @@ static int dcmipp_graph_notify_bound(str
  	enum v4l2_mbus_type supported_types[] = {
  		V4L2_MBUS_PARALLEL, V4L2_MBUS_BT656, V4L2_MBUS_CSI2_DPHY
  	};
@@ -154,7 +150,7 @@ index 7c7cc6f60b88..aecf7e5feb15 100644
  	/*
  	 * Link this sub-device to DCMIPP, it could be
  	 * a parallel camera sensor or a CSI-2 to parallel bridge
-@@ -373,7 +345,12 @@ static int dcmipp_graph_notify_bound(struct v4l2_async_notifier *notifier,
+@@ -373,7 +345,12 @@ static int dcmipp_graph_notify_bound(str
  	}
  
  	/* Check for supported MBUS type */
@@ -168,7 +164,7 @@ index 7c7cc6f60b88..aecf7e5feb15 100644
  		vep.bus_type = supported_types[i];
  		ret = v4l2_fwnode_endpoint_parse(ep, &vep);
  		if (!ret)
-@@ -411,11 +388,10 @@ static int dcmipp_graph_notify_bound(struct v4l2_async_notifier *notifier,
+@@ -411,11 +388,10 @@ static int dcmipp_graph_notify_bound(str
  	sink->bus_type = vep.bus_type;
  
  	/*
@@ -182,7 +178,7 @@ index 7c7cc6f60b88..aecf7e5feb15 100644
  		media_flags = MEDIA_LNK_FL_IMMUTABLE;
  
  	ret = media_create_pad_link(&subdev->entity, src_pad, sink->ent, 0,
-@@ -583,7 +559,7 @@ static int dcmipp_probe(struct platform_device *pdev)
+@@ -583,7 +559,7 @@ static int dcmipp_probe(struct platform_
  				     "Unable to get kclk\n");
  	dcmipp->kclk = kclk;
  
@@ -191,11 +187,9 @@ index 7c7cc6f60b88..aecf7e5feb15 100644
  		mclk = devm_clk_get(&pdev->dev, "mclk");
  		if (IS_ERR(mclk))
  			return dev_err_probe(&pdev->dev, PTR_ERR(mclk),
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
-index e221eeee9b77..f5d112982585 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
-@@ -462,14 +462,9 @@ static int dcmipp_inp_configure_csi_dt(struct dcmipp_inp_device *inp,
+@@ -462,14 +462,9 @@ static int dcmipp_inp_configure_csi_dt(s
  
  static int dcmipp_inp_configure_csi(struct dcmipp_inp_device *inp)
  {
@@ -212,7 +206,7 @@ index e221eeee9b77..f5d112982585 100644
  		ret = dcmipp_inp_configure_csi_dt(inp, i);
  		if (ret)
  			return ret;
-@@ -587,8 +582,6 @@ void dcmipp_inp_ent_release(struct dcmipp_ent_device *ved)
+@@ -587,8 +582,6 @@ void dcmipp_inp_ent_release(struct dcmip
  	mutex_destroy(&inp->lock);
  }
  
@@ -221,7 +215,7 @@ index e221eeee9b77..f5d112982585 100644
  struct dcmipp_ent_device *dcmipp_inp_ent_init(const char *entity_name,
  					      struct dcmipp_device *dcmipp)
  {
-@@ -598,13 +591,9 @@ struct dcmipp_ent_device *dcmipp_inp_ent_init(const char *entity_name,
+@@ -598,13 +591,9 @@ struct dcmipp_ent_device *dcmipp_inp_ent
  		MEDIA_PAD_FL_SOURCE, MEDIA_PAD_FL_SOURCE,
  	};
  	struct device *dev = dcmipp->dev;
@@ -236,6 +230,3 @@ index e221eeee9b77..f5d112982585 100644
  
  	/* Allocate the inp struct */
  	inp = kzalloc(sizeof(*inp), GFP_KERNEL);
--- 
-2.50.1
-

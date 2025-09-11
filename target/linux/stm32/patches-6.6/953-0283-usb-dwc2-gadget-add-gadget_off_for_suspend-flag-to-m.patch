@@ -29,8 +29,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/usb/dwc2/gadget.c | 8 ++++++--
  2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index 397e2cd9f3be..345926c22dbf 100644
 --- a/drivers/usb/dwc2/core.h
 +++ b/drivers/usb/dwc2/core.h
 @@ -1074,6 +1074,7 @@ struct dwc2_hsotg {
@@ -41,11 +39,9 @@ index 397e2cd9f3be..345926c22dbf 100644
  	u16 frame_number;
  
  	struct phy *phy;
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index d128ec8da238..701c4167224e 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -5157,8 +5157,10 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
+@@ -5157,8 +5157,10 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg
  {
  	unsigned long flags;
  
@@ -57,7 +53,7 @@ index d128ec8da238..701c4167224e 100644
  
  	if (hsotg->driver) {
  		int ep;
-@@ -5181,6 +5183,8 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
+@@ -5181,6 +5183,8 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg
  		}
  	}
  
@@ -66,7 +62,7 @@ index d128ec8da238..701c4167224e 100644
  	return 0;
  }
  
-@@ -5188,7 +5192,7 @@ int dwc2_hsotg_resume(struct dwc2_hsotg *hsotg)
+@@ -5188,7 +5192,7 @@ int dwc2_hsotg_resume(struct dwc2_hsotg
  {
  	unsigned long flags;
  
@@ -75,6 +71,3 @@ index d128ec8da238..701c4167224e 100644
  		return 0;
  
  	if (hsotg->driver) {
--- 
-2.50.1
-

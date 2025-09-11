@@ -20,11 +20,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp151.dtsi | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
-index d7e65765039d..1a70a62902e0 100644
 --- a/arch/arm/boot/dts/st/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
-@@ -1402,8 +1402,9 @@ spi4: spi@44005000 {
+@@ -1402,8 +1402,9 @@
  				clocks = <&rcc SPI4_K>;
  				resets = <&rcc SPI4_R>;
  				dmas = <&dmamux1 83 0x400 0x01>,
@@ -36,6 +34,3 @@ index d7e65765039d..1a70a62902e0 100644
  				access-controllers = <&etzpc 53>;
  				status = "disabled";
  			};
--- 
-2.50.1
-

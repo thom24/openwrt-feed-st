@@ -21,11 +21,9 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 8 ++++++++
  1 file changed, 8 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-index e38e436cde5c..ebb05c55440b 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-@@ -346,6 +346,14 @@ &ipcc1 {
+@@ -346,6 +346,14 @@
  	status = "okay";
  };
  
@@ -40,6 +38,3 @@ index e38e436cde5c..ebb05c55440b 100644
  &ltdc {
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&ltdc_pins_a>;
--- 
-2.50.1
-

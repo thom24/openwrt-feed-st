@@ -15,11 +15,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/stm/dw_mipi_dsi-stm.c | 30 ++++++++++++++++++++-------
  1 file changed, 23 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
-index b289ab16499c..8cf2ca577165 100644
 --- a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
 +++ b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
-@@ -338,6 +338,7 @@ static int dsi_phy_141_pll_get_params(struct dw_mipi_dsi_stm *dsi,
+@@ -338,6 +338,7 @@ static int dsi_phy_141_pll_get_params(st
  {
  	int i, n;
  	int delta, best_delta; /* all in khz */
@@ -27,7 +25,7 @@ index b289ab16499c..8cf2ca577165 100644
  
  	/* Early checks preventing division by 0 & odd results */
  	if (clkin_khz <= 0 || clkout_khz <= 0)
-@@ -345,10 +346,9 @@ static int dsi_phy_141_pll_get_params(struct dw_mipi_dsi_stm *dsi,
+@@ -345,10 +346,9 @@ static int dsi_phy_141_pll_get_params(st
  
  	/* find frequency mapping */
  	for (i = 0; i < ARRAY_SIZE(dppa_map); i++) {
@@ -39,7 +37,7 @@ index b289ab16499c..8cf2ca577165 100644
  			break;
  		}
  	}
-@@ -357,7 +357,17 @@ static int dsi_phy_141_pll_get_params(struct dw_mipi_dsi_stm *dsi,
+@@ -357,7 +357,17 @@ static int dsi_phy_141_pll_get_params(st
  	if (index)
  		*index = i;
  
@@ -58,7 +56,7 @@ index b289ab16499c..8cf2ca577165 100644
  
  	best_delta = 1000000; /* big started value (1000000khz) */
  
-@@ -605,7 +615,10 @@ static unsigned long dw_mipi_dsi_clk_recalc_rate(struct clk_hw *hw,
+@@ -605,7 +615,10 @@ static unsigned long dw_mipi_dsi_clk_rec
  
  	clk_disable_unprepare(dsi->pclk);
  
@@ -70,7 +68,7 @@ index b289ab16499c..8cf2ca577165 100644
  }
  
  static long dw_mipi_dsi_clk_round_rate(struct clk_hw *hw, unsigned long rate,
-@@ -644,7 +657,10 @@ static long dw_mipi_dsi_clk_round_rate(struct clk_hw *hw, unsigned long rate,
+@@ -644,7 +657,10 @@ static long dw_mipi_dsi_clk_round_rate(s
  
  	clk_disable_unprepare(dsi->pclk);
  
@@ -82,7 +80,7 @@ index b289ab16499c..8cf2ca577165 100644
  }
  
  static int dw_mipi_dsi_clk_set_rate(struct clk_hw *hw, unsigned long rate,
-@@ -687,6 +703,7 @@ static int dw_mipi_dsi_clk_set_rate(struct clk_hw *hw, unsigned long rate,
+@@ -687,6 +703,7 @@ static int dw_mipi_dsi_clk_set_rate(stru
  		int1 = 0x00;
  		gmp = 0x01;
  		prop = dppa_map[dppa_index].prop;
@@ -90,7 +88,7 @@ index b289ab16499c..8cf2ca577165 100644
  
  		/* set DLD, HSFR & CCF */
  		val = (hsfreq << 8) | ccf;
-@@ -695,8 +712,7 @@ static int dw_mipi_dsi_clk_set_rate(struct clk_hw *hw, unsigned long rate,
+@@ -695,8 +712,7 @@ static int dw_mipi_dsi_clk_set_rate(stru
  		val = ((ndiv - 2) << 4) | (idf - 1);
  		dsi_write(dsi, DSI_WRPCR0, val);
  
@@ -100,6 +98,3 @@ index b289ab16499c..8cf2ca577165 100644
  		dsi_write(dsi, DSI_WRPCR1, val);
  
  		dsi_write(dsi, DSI_PCTLR, PCTLR_CKEN);
--- 
-2.50.1
-

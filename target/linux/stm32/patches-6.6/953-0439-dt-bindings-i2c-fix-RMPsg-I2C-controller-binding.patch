@@ -21,8 +21,6 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  Documentation/devicetree/bindings/i2c/i2c-rpmsg.yaml | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-rpmsg.yaml b/Documentation/devicetree/bindings/i2c/i2c-rpmsg.yaml
-index 879d2f022115..e369efde197e 100644
 --- a/Documentation/devicetree/bindings/i2c/i2c-rpmsg.yaml
 +++ b/Documentation/devicetree/bindings/i2c/i2c-rpmsg.yaml
 @@ -21,12 +21,13 @@ properties:
@@ -40,6 +38,3 @@ index 879d2f022115..e369efde197e 100644
  
  examples:
    - |
--- 
-2.50.1
-

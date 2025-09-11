@@ -15,11 +15,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/stm/dw_mipi_dsi-stm.c | 127 +++++++++++++++++++++++---
  1 file changed, 113 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
-index 8cf2ca577165..56ffa02f9c5d 100644
 --- a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
 +++ b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
-@@ -1102,20 +1102,119 @@ dw_mipi_dsi_stm_mode_valid(void *priv_data,
+@@ -1102,20 +1102,119 @@ dw_mipi_dsi_stm_mode_valid(void *priv_da
  
  		lane_mbps = pll_out_khz / 1000;
  
@@ -152,7 +150,7 @@ index 8cf2ca577165..56ffa02f9c5d 100644
  	}
  
  	return MODE_OK;
-@@ -1145,7 +1244,7 @@ static struct dw_mipi_dsi_plat_data dw_mipi_dsi_stm_plat_data = {
+@@ -1145,7 +1244,7 @@ static struct dw_mipi_dsi_plat_data dw_m
  
  static struct dw_mipi_dsi_plat_data dw_mipi_dsi_stm32mp25_plat_data = {
  	.max_data_lanes = 4,
@@ -161,6 +159,3 @@ index 8cf2ca577165..56ffa02f9c5d 100644
  	.phy_ops = &dw_mipi_dsi_stm_phy_141_ops,
  };
  
--- 
-2.50.1
-

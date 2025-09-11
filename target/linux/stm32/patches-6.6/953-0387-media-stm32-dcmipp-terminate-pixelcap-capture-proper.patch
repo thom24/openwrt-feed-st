@@ -21,11 +21,9 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  .../platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c   | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
-index af3621be4bf8..b0ce4c9ea69d 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
-@@ -636,11 +636,6 @@ static void dcmipp_pixelcap_stop_streaming(struct vb2_queue *vq)
+@@ -636,11 +636,6 @@ static void dcmipp_pixelcap_stop_streami
  	u32 status;
  	int ret;
  
@@ -37,7 +35,7 @@ index af3621be4bf8..b0ce4c9ea69d 100644
  	/* Disable interruptions */
  	spin_lock(&vcap->vdev.v4l2_dev->lock);
  	reg_clear(vcap, DCMIPP_CMIER, vcap->cmier);
-@@ -661,6 +656,11 @@ static void dcmipp_pixelcap_stop_streaming(struct vb2_queue *vq)
+@@ -661,6 +656,11 @@ static void dcmipp_pixelcap_stop_streami
  	/* Disable pipe */
  	reg_clear(vcap, DCMIPP_PxFSCR(vcap->pipe_id), DCMIPP_PxFSCR_PIPEN);
  
@@ -49,6 +47,3 @@ index af3621be4bf8..b0ce4c9ea69d 100644
  	spin_lock_irq(&vcap->irqlock);
  
  	/* Return all queued buffers to vb2 in ERROR state */
--- 
-2.50.1
-

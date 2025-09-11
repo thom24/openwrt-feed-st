@@ -17,11 +17,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/iio/trigger/stm32-lptimer-trigger.c | 44 +++------------------
  1 file changed, 6 insertions(+), 38 deletions(-)
 
-diff --git a/drivers/iio/trigger/stm32-lptimer-trigger.c b/drivers/iio/trigger/stm32-lptimer-trigger.c
-index 45dfd437feb3..ae67e409f523 100644
 --- a/drivers/iio/trigger/stm32-lptimer-trigger.c
 +++ b/drivers/iio/trigger/stm32-lptimer-trigger.c
-@@ -53,7 +53,6 @@ static const struct stm32_lptim_cfg stm32mp25_lptim_cfg = {
+@@ -53,7 +53,6 @@ static const struct stm32_lptim_cfg stm3
  struct stm32_lptim_trigger {
  	struct device *dev;
  	const char * const *triggers;
@@ -29,7 +27,7 @@ index 45dfd437feb3..ae67e409f523 100644
  };
  
  static int stm32_lptim_validate_device(struct iio_trigger *trig,
-@@ -82,21 +81,11 @@ bool is_stm32_lptim_trigger(struct iio_trigger *trig)
+@@ -82,21 +81,11 @@ bool is_stm32_lptim_trigger(struct iio_t
  }
  EXPORT_SYMBOL(is_stm32_lptim_trigger);
  
@@ -52,7 +50,7 @@ index 45dfd437feb3..ae67e409f523 100644
  	while (cur && *cur) {
  		struct iio_trigger *trig;
  
-@@ -108,11 +97,9 @@ static int stm32_lptim_register_triggers(struct stm32_lptim_trigger *priv)
+@@ -108,11 +97,9 @@ static int stm32_lptim_register_triggers
  		trig->ops = &stm32_lptim_trigger_ops;
  		iio_trigger_set_drvdata(trig, priv);
  
@@ -65,7 +63,7 @@ index 45dfd437feb3..ae67e409f523 100644
  		cur++;
  	}
  
-@@ -124,7 +111,6 @@ static int stm32_lptim_trigger_probe(struct platform_device *pdev)
+@@ -124,7 +111,6 @@ static int stm32_lptim_trigger_probe(str
  	struct stm32_lptim_trigger *priv;
  	struct stm32_lptim_cfg const *lptim_cfg;
  	u32 index;
@@ -73,7 +71,7 @@ index 45dfd437feb3..ae67e409f523 100644
  
  	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
  	if (!priv)
-@@ -141,37 +127,19 @@ static int stm32_lptim_trigger_probe(struct platform_device *pdev)
+@@ -141,37 +127,19 @@ static int stm32_lptim_trigger_probe(str
  	priv->dev = &pdev->dev;
  	priv->triggers = lptim_cfg->triggers[index];
  
@@ -115,6 +113,3 @@ index 45dfd437feb3..ae67e409f523 100644
  	.driver = {
  		.name = "stm32-lptimer-trigger",
  		.of_match_table = stm32_lptim_trig_of_match,
--- 
-2.50.1
-

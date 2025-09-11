@@ -20,11 +20,9 @@ Tested-by: Alain VOLMAT <alain.volmat@st.com>
  arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-index 6502d97cb7ed..a8da85304d79 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-@@ -311,13 +311,12 @@ goodix: goodix-ts@5d {
+@@ -311,13 +311,12 @@
  		status = "okay" ;
  	};
  
@@ -39,6 +37,3 @@ index 6502d97cb7ed..a8da85304d79 100644
  
  		port {
  			imx335_ep: endpoint {
--- 
-2.50.1
-

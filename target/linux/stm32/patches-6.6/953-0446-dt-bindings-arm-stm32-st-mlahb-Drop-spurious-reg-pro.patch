@@ -23,8 +23,6 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml b/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml
-index d2dce238ff5d..3e996346b264 100644
 --- a/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml
 +++ b/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml
 @@ -54,11 +54,10 @@ unevaluatedProperties: false
@@ -40,6 +38,3 @@ index d2dce238ff5d..3e996346b264 100644
        ranges;
        dma-ranges = <0x00000000 0x38000000 0x10000>,
                     <0x10000000 0x10000000 0x60000>,
--- 
-2.50.1
-

@@ -17,8 +17,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  include/dt-bindings/reset/st,stm32mp21-rcc.h | 1 -
  2 files changed, 2 deletions(-)
 
-diff --git a/include/dt-bindings/clock/st,stm32mp21-rcc.h b/include/dt-bindings/clock/st,stm32mp21-rcc.h
-index 9068ef8ea130..be330ec345f6 100644
 --- a/include/dt-bindings/clock/st,stm32mp21-rcc.h
 +++ b/include/dt-bindings/clock/st,stm32mp21-rcc.h
 @@ -143,7 +143,6 @@
@@ -29,8 +27,6 @@ index 9068ef8ea130..be330ec345f6 100644
  #define CK_BUS_RTC		124
  #define CK_BUS_LPUART1		125
  #define CK_BUS_LPTIM3		126
-diff --git a/include/dt-bindings/reset/st,stm32mp21-rcc.h b/include/dt-bindings/reset/st,stm32mp21-rcc.h
-index bb9d3cef019c..b412a8bfabe9 100644
 --- a/include/dt-bindings/reset/st,stm32mp21-rcc.h
 +++ b/include/dt-bindings/reset/st,stm32mp21-rcc.h
 @@ -122,7 +122,6 @@
@@ -41,6 +37,3 @@ index bb9d3cef019c..b412a8bfabe9 100644
  #define IWDG1_SYS_R	116
  #define IWDG2_SYS_R	117
  #define IWDG3_SYS_R	118
--- 
-2.50.1
-

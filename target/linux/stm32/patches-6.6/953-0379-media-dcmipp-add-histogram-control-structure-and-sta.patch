@@ -23,8 +23,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  include/uapi/linux/stm32-dcmipp-config.h | 69 ++++++++++++++++++++++++
  1 file changed, 69 insertions(+)
 
-diff --git a/include/uapi/linux/stm32-dcmipp-config.h b/include/uapi/linux/stm32-dcmipp-config.h
-index 85b4cf731192..9b20f2988a3f 100644
 --- a/include/uapi/linux/stm32-dcmipp-config.h
 +++ b/include/uapi/linux/stm32-dcmipp-config.h
 @@ -21,6 +21,8 @@
@@ -36,11 +34,10 @@ index 85b4cf731192..9b20f2988a3f 100644
  
  /**
   * struct stm32_dcmipp_isp_bpr_cfg - STM32 DCMIPP ISP bad pixel removal
-@@ -138,6 +140,68 @@ struct stm32_dcmipp_isp_ce_cfg {
- 	__u8 lum[9];
+@@ -139,6 +141,68 @@ struct stm32_dcmipp_isp_ce_cfg {
  };
  
-+/**
+ /**
 + * struct stm32_dcmipp_isp_histo_cfg - STM32 DCMIPP ISP histogram output
 + *
 + * @left: left start (in pixel) of histogram area
@@ -102,9 +99,10 @@ index 85b4cf731192..9b20f2988a3f 100644
 +	__u8 src;
 +};
 +
- /**
++/**
   * struct stm32_dcmipp_isp_ctrls_cfg - STM32 DCMIPP ISP Controls
   *
+  * @bpr_cfg: configuration of the bad pixel removal block
 @@ -147,6 +211,7 @@ struct stm32_dcmipp_isp_ce_cfg {
   * @dm_cfg: configuration of the demosaicing filters block
   * @cc_cfg: configuration of the color conversion block
@@ -135,6 +133,3 @@ index 85b4cf731192..9b20f2988a3f 100644
  };
  
  #endif
--- 
-2.50.1
-

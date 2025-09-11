@@ -9,11 +9,9 @@ This reverts commit b0a3c915529efeb7a01d9ee672372fa760357511.
  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index bcfec3bbec3e..90009ee3ac0e 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -3681,7 +3681,6 @@ static int stmmac_request_irq_single(struct net_device *dev)
+@@ -3697,7 +3697,6 @@ static int stmmac_request_irq_single(str
  	/* Request the Wake IRQ in case of another line
  	 * is used for WoL
  	 */
@@ -21,6 +19,3 @@ index bcfec3bbec3e..90009ee3ac0e 100644
  	if (priv->wol_irq > 0 && priv->wol_irq != dev->irq) {
  		ret = request_irq(priv->wol_irq, stmmac_interrupt,
  				  IRQF_SHARED, dev->name, dev);
--- 
-2.50.1
-

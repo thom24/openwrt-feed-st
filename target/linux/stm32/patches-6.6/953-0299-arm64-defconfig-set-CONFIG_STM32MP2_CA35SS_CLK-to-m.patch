@@ -15,8 +15,6 @@ Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  arch/arm64/configs/fragment-02-defconfig-addons.config | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/configs/fragment-02-defconfig-addons.config b/arch/arm64/configs/fragment-02-defconfig-addons.config
-index 90567539507d..4e660aad4cbd 100644
 --- a/arch/arm64/configs/fragment-02-defconfig-addons.config
 +++ b/arch/arm64/configs/fragment-02-defconfig-addons.config
 @@ -3,6 +3,7 @@ CONFIG_BACKLIGHT_CLASS_DEVICE=y
@@ -27,6 +25,3 @@ index 90567539507d..4e660aad4cbd 100644
  CONFIG_CORESIGHT=y
  CONFIG_CORESIGHT_CPU_DEBUG=y
  CONFIG_CORESIGHT_CTI=y
--- 
-2.50.1
-

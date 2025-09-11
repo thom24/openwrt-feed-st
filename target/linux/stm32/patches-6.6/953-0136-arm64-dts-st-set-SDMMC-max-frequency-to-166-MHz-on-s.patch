@@ -18,11 +18,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp251.dtsi | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 14555db35555..3140d5436ebf 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -2238,7 +2238,7 @@ sdmmc1: mmc@48220000 {
+@@ -2238,7 +2238,7 @@
  				resets = <&rcc SDMMC1_R>;
  				cap-sd-highspeed;
  				cap-mmc-highspeed;
@@ -31,7 +29,7 @@ index 14555db35555..3140d5436ebf 100644
  				access-controllers = <&rifsc 76>;
  				power-domains = <&CLUSTER_PD>;
  				status = "disabled";
-@@ -2254,7 +2254,7 @@ sdmmc2: mmc@48230000 {
+@@ -2254,7 +2254,7 @@
  				resets = <&rcc SDMMC2_R>;
  				cap-sd-highspeed;
  				cap-mmc-highspeed;
@@ -40,7 +38,7 @@ index 14555db35555..3140d5436ebf 100644
  				access-controllers = <&rifsc 77>;
  				power-domains = <&CLUSTER_PD>;
  				status = "disabled";
-@@ -2270,7 +2270,7 @@ sdmmc3: mmc@48240000 {
+@@ -2270,7 +2270,7 @@
  				resets = <&rcc SDMMC3_R>;
  				cap-sd-highspeed;
  				cap-mmc-highspeed;
@@ -49,6 +47,3 @@ index 14555db35555..3140d5436ebf 100644
  				access-controllers = <&rifsc 78>;
  				power-domains = <&CLUSTER_PD>;
  				status = "disabled";
--- 
-2.50.1
-

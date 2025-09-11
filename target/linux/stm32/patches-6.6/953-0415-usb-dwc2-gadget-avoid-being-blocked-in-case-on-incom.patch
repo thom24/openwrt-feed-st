@@ -43,8 +43,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/usb/dwc2/gadget.c | 40 ++++++++++++++++++++++++++++++---------
  2 files changed, 32 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index 6756456fea09..ec26989d125c 100644
 --- a/drivers/usb/dwc2/core.h
 +++ b/drivers/usb/dwc2/core.h
 @@ -1101,6 +1101,7 @@ struct dwc2_hsotg {
@@ -55,11 +53,9 @@ index 6756456fea09..ec26989d125c 100644
  	struct timer_list wkp_timer;
  	enum dwc2_lx_state lx_state;
  	struct dwc2_gregs_backup gr_backup;
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 3a47cbdc448d..b52bc79820c7 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -3037,6 +3037,20 @@ static void dwc2_gadget_handle_nak(struct dwc2_hsotg_ep *hs_ep)
+@@ -3037,6 +3037,20 @@ static void dwc2_gadget_handle_nak(struc
  static void kill_all_requests(struct dwc2_hsotg *hsotg,
  			      struct dwc2_hsotg_ep *ep,
  			      int result);
@@ -80,7 +76,7 @@ index 3a47cbdc448d..b52bc79820c7 100644
  /**
   * dwc2_hsotg_epint - handle an in/out endpoint interrupt
   * @hsotg: The driver state
-@@ -3084,16 +3098,20 @@ static void dwc2_hsotg_epint(struct dwc2_hsotg *hsotg, unsigned int idx,
+@@ -3084,16 +3098,20 @@ static void dwc2_hsotg_epint(struct dwc2
  
  		if (!(dwc2_readl(hsotg, epctl_reg) & DXEPCTL_EPENA)) {
  			/*
@@ -110,7 +106,7 @@ index 3a47cbdc448d..b52bc79820c7 100644
  		}
  	}
  
-@@ -3143,6 +3161,9 @@ static void dwc2_hsotg_epint(struct dwc2_hsotg *hsotg, unsigned int idx,
+@@ -3143,6 +3161,9 @@ static void dwc2_hsotg_epint(struct dwc2
  		dev_dbg(hsotg->dev, "%s: Setup/Timeout\n",  __func__);
  
  		if (using_dma(hsotg) && idx == 0) {
@@ -120,7 +116,7 @@ index 3a47cbdc448d..b52bc79820c7 100644
  			/*
  			 * this is the notification we've received a
  			 * setup packet. In non-DMA mode we'd get this
-@@ -5194,6 +5215,7 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
+@@ -5194,6 +5215,7 @@ int dwc2_gadget_init(struct dwc2_hsotg *
  		return -ENOMEM;
  	}
  	INIT_WORK(&hsotg->wf_gadget, dwc2_gadget_remote_wkup_change);
@@ -128,6 +124,3 @@ index 3a47cbdc448d..b52bc79820c7 100644
  
  	/* setup endpoint information */
  
--- 
-2.50.1
-

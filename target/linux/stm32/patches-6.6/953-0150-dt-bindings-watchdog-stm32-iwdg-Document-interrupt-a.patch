@@ -23,8 +23,6 @@ Tested-by: Clement LE GOFFIC <clement.legoffic@foss.st.com>
  .../devicetree/bindings/watchdog/st,stm32-iwdg.yaml         | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml b/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml
-index 6b13bfc11e11..86bd39d50850 100644
 --- a/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml
 +++ b/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml
 @@ -36,6 +36,12 @@ properties:
@@ -40,6 +38,3 @@ index 6b13bfc11e11..86bd39d50850 100644
  required:
    - compatible
    - reg
--- 
-2.50.1
-

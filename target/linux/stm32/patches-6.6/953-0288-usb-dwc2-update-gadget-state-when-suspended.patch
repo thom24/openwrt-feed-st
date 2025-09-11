@@ -17,8 +17,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/usb/dwc2/core_intr.c | 10 ++++++++++
  2 files changed, 12 insertions(+)
 
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index b3222799b343..7e4e0042ee53 100644
 --- a/drivers/usb/dwc2/core.h
 +++ b/drivers/usb/dwc2/core.h
 @@ -873,6 +873,7 @@ struct dwc2_hregs_backup {
@@ -37,11 +35,9 @@ index b3222799b343..7e4e0042ee53 100644
  	unsigned int reset_phy_on_wake:1;
  	unsigned int need_phy_for_wake:1;
  	unsigned int phy_off_for_suspend:1;
-diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
-index ccacc18e5d63..3bb7bf90c145 100644
 --- a/drivers/usb/dwc2/core_intr.c
 +++ b/drivers/usb/dwc2/core_intr.c
-@@ -383,6 +383,7 @@ void dwc2_wakeup_from_lpm_l1(struct dwc2_hsotg *hsotg, bool remotewakeup)
+@@ -383,6 +383,7 @@ void dwc2_wakeup_from_lpm_l1(struct dwc2
  		}
  
  		/* Inform gadget to exit from L1 */
@@ -49,7 +45,7 @@ index ccacc18e5d63..3bb7bf90c145 100644
  		call_gadget(hsotg, resume);
  		/* Change to L0 state */
  		hsotg->lx_state = DWC2_L0;
-@@ -441,6 +442,7 @@ static void dwc2_handle_wakeup_detected_intr(struct dwc2_hsotg *hsotg)
+@@ -441,6 +442,7 @@ static void dwc2_handle_wakeup_detected_
  
  			/* Change to L0 state, when no_clock_gating == true */
  			hsotg->lx_state = DWC2_L0;
@@ -57,7 +53,7 @@ index ccacc18e5d63..3bb7bf90c145 100644
  			call_gadget(hsotg, resume);
  		} else {
  			/* Change to L0 state */
-@@ -585,6 +587,9 @@ static void dwc2_handle_usb_suspend_intr(struct dwc2_hsotg *hsotg)
+@@ -585,6 +587,9 @@ static void dwc2_handle_usb_suspend_intr
  			 */
  			hsotg->lx_state = DWC2_L2;
  
@@ -67,7 +63,7 @@ index ccacc18e5d63..3bb7bf90c145 100644
  			/* Call gadget suspend callback */
  			call_gadget(hsotg, suspend);
  		}
-@@ -661,6 +666,9 @@ static void dwc2_handle_lpm_intr(struct dwc2_hsotg *hsotg)
+@@ -661,6 +666,9 @@ static void dwc2_handle_lpm_intr(struct
  			dev_dbg(hsotg->dev,
  				"Core is in L1 sleep glpmcfg=%08x\n", glpmcfg);
  
@@ -77,7 +73,7 @@ index ccacc18e5d63..3bb7bf90c145 100644
  			/* Inform gadget that we are in L1 state */
  			call_gadget(hsotg, suspend);
  		}
-@@ -812,6 +820,8 @@ static int dwc2_handle_gpwrdn_intr(struct dwc2_hsotg *hsotg)
+@@ -812,6 +820,8 @@ static int dwc2_handle_gpwrdn_intr(struc
  				if (ret)
  					dev_err(hsotg->dev,
  						"exit hibernation failed.\n");
@@ -86,6 +82,3 @@ index ccacc18e5d63..3bb7bf90c145 100644
  				call_gadget(hsotg, resume);
  			} else {
  				ret = dwc2_exit_hibernation(hsotg, 1, 0, 1);
--- 
-2.50.1
-

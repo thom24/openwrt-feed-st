@@ -18,11 +18,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/usb/dwc2/platform.c |  2 +-
  3 files changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index 75b3a7154c90..b3222799b343 100644
 --- a/drivers/usb/dwc2/core.h
 +++ b/drivers/usb/dwc2/core.h
-@@ -1419,6 +1419,7 @@ int stm32mp2_usb2phy_usb_chg_psy_register(struct dwc2_hsotg *hsotg);
+@@ -1419,6 +1419,7 @@ int stm32mp2_usb2phy_usb_chg_psy_registe
  #if IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) || \
  	IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)
  int dwc2_hsotg_remove(struct dwc2_hsotg *hsotg);
@@ -30,7 +28,7 @@ index 75b3a7154c90..b3222799b343 100644
  int dwc2_hsotg_suspend(struct dwc2_hsotg *dwc2);
  int dwc2_hsotg_resume(struct dwc2_hsotg *dwc2);
  int dwc2_gadget_init(struct dwc2_hsotg *hsotg);
-@@ -1451,6 +1452,8 @@ static inline void dwc2_clear_fifo_map(struct dwc2_hsotg *hsotg)
+@@ -1451,6 +1452,8 @@ static inline void dwc2_clear_fifo_map(s
  #else
  static inline int dwc2_hsotg_remove(struct dwc2_hsotg *dwc2)
  { return 0; }
@@ -39,11 +37,9 @@ index 75b3a7154c90..b3222799b343 100644
  static inline int dwc2_hsotg_suspend(struct dwc2_hsotg *dwc2)
  { return 0; }
  static inline int dwc2_hsotg_resume(struct dwc2_hsotg *dwc2)
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 56402b5ea771..62b6bc195769 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -5180,6 +5180,18 @@ int dwc2_hsotg_remove(struct dwc2_hsotg *hsotg)
+@@ -5180,6 +5180,18 @@ int dwc2_hsotg_remove(struct dwc2_hsotg
  	return 0;
  }
  
@@ -62,11 +58,9 @@ index 56402b5ea771..62b6bc195769 100644
  int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
  {
  	unsigned long flags;
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index 8b94557f0849..91b54d2822bf 100644
 --- a/drivers/usb/dwc2/platform.c
 +++ b/drivers/usb/dwc2/platform.c
-@@ -962,7 +962,7 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+@@ -962,7 +962,7 @@ static int __maybe_unused dwc2_suspend(s
  		ret = __dwc2_lowlevel_hw_disable(dwc2);
  
  	if (dwc2->ll_hw_enabled &&
@@ -75,6 +69,3 @@ index 8b94557f0849..91b54d2822bf 100644
  		ret = __dwc2_lowlevel_hw_disable(dwc2);
  		dwc2->phy_off_for_suspend = true;
  	}
--- 
-2.50.1
-

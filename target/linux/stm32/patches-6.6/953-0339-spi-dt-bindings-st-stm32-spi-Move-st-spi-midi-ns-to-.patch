@@ -27,8 +27,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  .../devicetree/bindings/spi/st,stm32-spi.yaml        | 12 ------------
  2 files changed, 5 insertions(+), 12 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-index 782a014b63a7..c0c578444feb 100644
 --- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
 +++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
 @@ -113,6 +113,11 @@ properties:
@@ -43,8 +41,6 @@ index 782a014b63a7..c0c578444feb 100644
  # The controller specific properties go here.
  allOf:
    - $ref: cdns,qspi-nor-peripheral-props.yaml#
-diff --git a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-index 88def4ea282a..dd9ad6682b27 100644
 --- a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
 +++ b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
 @@ -26,7 +26,6 @@ allOf:
@@ -73,6 +69,3 @@ index 88def4ea282a..dd9ad6682b27 100644
  required:
    - compatible
    - reg
--- 
-2.50.1
-

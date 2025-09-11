@@ -18,11 +18,9 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index c1a8afe6270f..0c2e3d40d75a 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -474,6 +474,7 @@ &ipcc2 {
+@@ -474,6 +474,7 @@
  
  /* use LPTIMER with tick broadcast for suspend mode */
  &lptimer3 {
@@ -30,6 +28,3 @@ index c1a8afe6270f..0c2e3d40d75a 100644
  	status = "okay";
  	timer {
  		status = "okay";
--- 
-2.50.1
-

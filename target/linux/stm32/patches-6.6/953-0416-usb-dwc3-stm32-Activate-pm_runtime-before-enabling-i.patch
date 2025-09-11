@@ -22,11 +22,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/usb/dwc3/dwc3-stm32.c | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-stm32.c b/drivers/usb/dwc3/dwc3-stm32.c
-index 85fd649bd48f..b5ce1cc088c3 100644
 --- a/drivers/usb/dwc3/dwc3-stm32.c
 +++ b/drivers/usb/dwc3/dwc3-stm32.c
-@@ -190,18 +190,18 @@ static int stm32_dwc3_probe(struct platform_device *pdev)
+@@ -190,18 +190,18 @@ static int stm32_dwc3_probe(struct platf
  		device_set_wakeup_capable(dev, true);
  	}
  
@@ -50,6 +48,3 @@ index 85fd649bd48f..b5ce1cc088c3 100644
  
  	platform_set_drvdata(pdev, dwc3_data);
  
--- 
-2.50.1
-

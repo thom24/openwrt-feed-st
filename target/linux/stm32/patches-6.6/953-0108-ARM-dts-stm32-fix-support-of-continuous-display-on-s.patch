@@ -14,11 +14,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm/boot/dts/st/stm32mp135f-dk.dts | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index 511692581eb0..237139234da1 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -113,6 +113,7 @@ panel_rgb: panel-rgb {
+@@ -113,6 +113,7 @@
  		backlight = <&panel_backlight>;
  		power-supply = <&scmi_v3v3_sw>;
  		data-mapping = "bgr666";
@@ -26,6 +24,3 @@ index 511692581eb0..237139234da1 100644
  		status = "okay";
  
  		width-mm = <105>;
--- 
-2.50.1
-

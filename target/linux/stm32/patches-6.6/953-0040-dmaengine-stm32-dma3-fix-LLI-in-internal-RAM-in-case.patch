@@ -21,11 +21,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/dma/stm32/stm32-dma3.c | 25 ++++++++++++++-----------
  1 file changed, 14 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
-index 1d615b8be418..863304450932 100644
 --- a/drivers/dma/stm32/stm32-dma3.c
 +++ b/drivers/dma/stm32/stm32-dma3.c
-@@ -632,6 +632,7 @@ static struct stm32_dma3_swdesc *stm32_dma3_chan_desc_alloc(struct stm32_dma3_ch
+@@ -632,6 +632,7 @@ static struct stm32_dma3_swdesc *stm32_d
  	struct stm32_dma3_ddata *ddata = to_stm32_dma3_ddata(chan);
  	struct stm32_dma3_swdesc *swdesc;
  	dma_addr_t base_addr;
@@ -33,7 +31,7 @@ index 1d615b8be418..863304450932 100644
  	int ret;
  
  	/*
-@@ -661,13 +662,14 @@ static struct stm32_dma3_swdesc *stm32_dma3_chan_desc_alloc(struct stm32_dma3_ch
+@@ -661,13 +662,14 @@ static struct stm32_dma3_swdesc *stm32_d
  	 * Force using the second port (hopefully AHB) if addresses are remapped on AXI,
  	 * and LLI are in internal RAM.
  	 */
@@ -53,7 +51,7 @@ index 1d615b8be418..863304450932 100644
  		} else { /* We should not enter this condition */
  			dev_err(chan2dev(chan),
  				"Address remapping enabled on AXI port, %pad unreachable for LL\n",
-@@ -678,13 +680,13 @@ static struct stm32_dma3_swdesc *stm32_dma3_chan_desc_alloc(struct stm32_dma3_ch
+@@ -678,13 +680,13 @@ static struct stm32_dma3_swdesc *stm32_d
  	}
  
  	/* Set LL allocated port */
@@ -70,7 +68,7 @@ index 1d615b8be418..863304450932 100644
  		dev_dbg(chan2dev(chan), "Configured LL base=%pap, real LL base=%pap\n",
  			&base_addr, &swdesc->lli[0].hwdesc_addr);
  
-@@ -751,7 +753,7 @@ static void stm32_dma3_chan_prep_hwdesc(struct stm32_dma3_chan *chan,
+@@ -751,7 +753,7 @@ static void stm32_dma3_chan_prep_hwdesc(
  	struct device *client = chan->vchan.chan.slave;
  	struct stm32_dma3_hwdesc *hwdesc;
  	dma_addr_t next_lli;
@@ -79,7 +77,7 @@ index 1d615b8be418..863304450932 100644
  
  	hwdesc = swdesc->lli[curr].hwdesc;
  	hwdesc->ctr1 = ctr1;
-@@ -760,14 +762,15 @@ static void stm32_dma3_chan_prep_hwdesc(struct stm32_dma3_chan *chan,
+@@ -760,14 +762,15 @@ static void stm32_dma3_chan_prep_hwdesc(
  	hwdesc->csar = stm32_dma3_translate_addr(ddata, FIELD_GET(CTR1_SAP, ctr1), client, src);
  	hwdesc->cdar = stm32_dma3_translate_addr(ddata, FIELD_GET(CTR1_DAP, ctr1), client, dst);
  
@@ -97,6 +95,3 @@ index 1d615b8be418..863304450932 100644
  						     swdesc->lli[next].hwdesc_addr);
  	}
  
--- 
-2.50.1
-

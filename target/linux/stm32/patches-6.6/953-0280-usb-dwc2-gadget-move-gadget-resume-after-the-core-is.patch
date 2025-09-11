@@ -22,11 +22,9 @@ Tested-by: Christian BRUEL <christian.bruel@foss.st.com>
  drivers/usb/dwc2/core_intr.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
-index 35f3b5362120..ccacc18e5d63 100644
 --- a/drivers/usb/dwc2/core_intr.c
 +++ b/drivers/usb/dwc2/core_intr.c
-@@ -439,6 +439,8 @@ static void dwc2_handle_wakeup_detected_intr(struct dwc2_hsotg *hsotg)
+@@ -439,6 +439,8 @@ static void dwc2_handle_wakeup_detected_
  			    !hsotg->params.no_clock_gating)
  				dwc2_gadget_exit_clock_gating(hsotg, 0);
  
@@ -35,6 +33,3 @@ index 35f3b5362120..ccacc18e5d63 100644
  			call_gadget(hsotg, resume);
  		} else {
  			/* Change to L0 state */
--- 
-2.50.1
-

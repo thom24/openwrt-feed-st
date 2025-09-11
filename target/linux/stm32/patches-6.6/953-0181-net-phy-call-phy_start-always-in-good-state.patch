@@ -13,11 +13,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/net/phy/phy.c | 5 ++++-
  1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/phy/phy.c b/drivers/net/phy/phy.c
-index df54c137c5f5..9d14cb87518e 100644
 --- a/drivers/net/phy/phy.c
 +++ b/drivers/net/phy/phy.c
-@@ -1411,7 +1411,10 @@ void phy_start(struct phy_device *phydev)
+@@ -1411,7 +1411,10 @@ void phy_start(struct phy_device *phydev
  {
  	mutex_lock(&phydev->lock);
  
@@ -29,6 +27,3 @@ index df54c137c5f5..9d14cb87518e 100644
  		WARN(1, "called from state %s\n",
  		     phy_state_to_str(phydev->state));
  		goto out;
--- 
-2.50.1
-

@@ -16,11 +16,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp231.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index 08b816a70ed6..c4e6600c746d 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -1578,7 +1578,7 @@ channel@18 {
+@@ -1578,7 +1578,7 @@
  			};
  
  			mdf1: mdf@404d0000 {
@@ -29,6 +27,3 @@ index 08b816a70ed6..c4e6600c746d 100644
  				ranges = <0 0x404d0000 0x1000>;
  				reg = <0x404d0000 0x8>, <0x404d0ff0 0x10>;
  				#address-cells = <1>;
--- 
-2.50.1
-

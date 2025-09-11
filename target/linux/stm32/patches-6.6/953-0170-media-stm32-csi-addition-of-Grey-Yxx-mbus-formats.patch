@@ -17,11 +17,9 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  drivers/media/platform/st/stm32/stm32-csi.c | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-csi.c b/drivers/media/platform/st/stm32/stm32-csi.c
-index 8138dcc34771..12d231465569 100644
 --- a/drivers/media/platform/st/stm32/stm32-csi.c
 +++ b/drivers/media/platform/st/stm32/stm32-csi.c
-@@ -218,6 +218,12 @@ static const struct stm32_csi_fmts stm32_csi_formats[] = {
+@@ -218,6 +218,12 @@ static const struct stm32_csi_fmts stm32
  	FMT_MBUS_DT_DTFMT_BPP(YVYU8_1X16, YUV422_8B, BPP8, 8),
  	FMT_MBUS_DT_DTFMT_BPP(VYUY8_1X16, YUV422_8B, BPP8, 8),
  
@@ -34,6 +32,3 @@ index 8138dcc34771..12d231465569 100644
  	/* Raw Bayer */
  	/* 8 bit */
  	FMT_MBUS_DT_DTFMT_BPP(SBGGR8_1X8, RAW8, BPP8, 8),
--- 
-2.50.1
-

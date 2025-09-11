@@ -20,11 +20,9 @@ Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
  drivers/char/hw_random/stm32-rng.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
-index 1ab76ef63be1..f1f219de2dcb 100644
 --- a/drivers/char/hw_random/stm32-rng.c
 +++ b/drivers/char/hw_random/stm32-rng.c
-@@ -542,6 +542,8 @@ static int __maybe_unused stm32_rng_resume(struct device *dev)
+@@ -542,6 +542,8 @@ static int __maybe_unused stm32_rng_resu
  		writel_relaxed(reg, priv->base + RNG_CR);
  	}
  
@@ -33,6 +31,3 @@ index 1ab76ef63be1..f1f219de2dcb 100644
  	clk_disable_unprepare(priv->clk);
  
  	return 0;
--- 
-2.50.1
-

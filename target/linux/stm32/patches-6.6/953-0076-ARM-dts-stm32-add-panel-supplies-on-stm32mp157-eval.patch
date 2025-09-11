@@ -16,11 +16,9 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/418876
  arch/arm/boot/dts/st/stm32mp157f-ev1.dts | 2 ++
  2 files changed, 4 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
-index 0fb210e9a795..dcf64bce048b 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
-@@ -329,6 +329,8 @@ panel_dsi: panel@0 {
+@@ -329,6 +329,8 @@
  		reset-gpios = <&gpiof 15 GPIO_ACTIVE_LOW>;
  		backlight = <&panel_backlight>;
  		power-supply = <&v3v3>;
@@ -29,11 +27,9 @@ index 0fb210e9a795..dcf64bce048b 100644
  		default-on;
  		status = "okay";
  
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-index 69a8b04cda74..6677d518cde3 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-@@ -330,6 +330,8 @@ panel_dsi: panel@0 {
+@@ -330,6 +330,8 @@
  		reset-gpios = <&gpiof 15 GPIO_ACTIVE_LOW>;
  		backlight = <&panel_backlight>;
  		power-supply = <&v3v3>;
@@ -42,6 +38,3 @@ index 69a8b04cda74..6677d518cde3 100644
  		default-on;
  		status = "okay";
  
--- 
-2.50.1
-

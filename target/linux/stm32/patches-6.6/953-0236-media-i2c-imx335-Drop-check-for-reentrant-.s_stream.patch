@@ -29,8 +29,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/media/i2c/imx335.c | 9 ---------
  1 file changed, 9 deletions(-)
 
-diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
-index 01b1e24fabdc..59cb031c55b3 100644
 --- a/drivers/media/i2c/imx335.c
 +++ b/drivers/media/i2c/imx335.c
 @@ -135,7 +135,6 @@ struct imx335_mode {
@@ -49,7 +47,7 @@ index 01b1e24fabdc..59cb031c55b3 100644
  	u32 cur_mbus_code;
  };
  
-@@ -821,11 +819,6 @@ static int imx335_set_stream(struct v4l2_subdev *sd, int enable)
+@@ -821,11 +819,6 @@ static int imx335_set_stream(struct v4l2
  
  	mutex_lock(&imx335->mutex);
  
@@ -61,7 +59,7 @@ index 01b1e24fabdc..59cb031c55b3 100644
  	if (enable) {
  		ret = pm_runtime_resume_and_get(imx335->dev);
  		if (ret)
-@@ -839,8 +832,6 @@ static int imx335_set_stream(struct v4l2_subdev *sd, int enable)
+@@ -839,8 +832,6 @@ static int imx335_set_stream(struct v4l2
  		pm_runtime_put(imx335->dev);
  	}
  
@@ -70,6 +68,3 @@ index 01b1e24fabdc..59cb031c55b3 100644
  	mutex_unlock(&imx335->mutex);
  
  	return 0;
--- 
-2.50.1
-

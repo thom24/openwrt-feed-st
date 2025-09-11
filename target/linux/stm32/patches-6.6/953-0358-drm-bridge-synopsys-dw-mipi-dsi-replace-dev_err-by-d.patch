@@ -16,11 +16,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
-index b053954172e1..300b4fb7ce65 100644
 --- a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
 +++ b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
-@@ -432,7 +432,7 @@ static int dw_mipi_dsi_gen_pkt_hdr_write(struct dw_mipi_dsi *dsi, u32 hdr_val)
+@@ -432,7 +432,7 @@ static int dw_mipi_dsi_gen_pkt_hdr_write
  				 val, !(val & GEN_CMD_FULL), 1000,
  				 CMD_PKT_STATUS_TIMEOUT_US);
  	if (ret) {
@@ -29,7 +27,7 @@ index b053954172e1..300b4fb7ce65 100644
  		return ret;
  	}
  
-@@ -443,7 +443,7 @@ static int dw_mipi_dsi_gen_pkt_hdr_write(struct dw_mipi_dsi *dsi, u32 hdr_val)
+@@ -443,7 +443,7 @@ static int dw_mipi_dsi_gen_pkt_hdr_write
  				 val, (val & mask) == mask,
  				 1000, CMD_PKT_STATUS_TIMEOUT_US);
  	if (ret) {
@@ -38,6 +36,3 @@ index b053954172e1..300b4fb7ce65 100644
  		return ret;
  	}
  
--- 
-2.50.1
-

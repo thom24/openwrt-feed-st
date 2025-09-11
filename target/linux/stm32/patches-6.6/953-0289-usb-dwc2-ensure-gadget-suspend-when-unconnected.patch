@@ -19,11 +19,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/usb/dwc2/platform.c | 25 +++++++++++++++++++------
  1 file changed, 19 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index 91b54d2822bf..9505c5b32645 100644
 --- a/drivers/usb/dwc2/platform.c
 +++ b/drivers/usb/dwc2/platform.c
-@@ -913,13 +913,26 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+@@ -913,13 +913,26 @@ static int __maybe_unused dwc2_suspend(s
  	if (is_device_mode) {
  		/*
  		 * Handle the case when bus has been suspended prior to platform suspend.
@@ -56,6 +54,3 @@ index 91b54d2822bf..9505c5b32645 100644
  
  		dwc2_hsotg_suspend(dwc2);
  	}
--- 
-2.50.1
-

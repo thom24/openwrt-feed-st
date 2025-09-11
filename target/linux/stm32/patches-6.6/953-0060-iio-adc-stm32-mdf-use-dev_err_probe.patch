@@ -17,11 +17,9 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  drivers/iio/adc/stm32-mdf-adc.c | 29 ++++++++++-------------------
  1 file changed, 10 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/iio/adc/stm32-mdf-adc.c b/drivers/iio/adc/stm32-mdf-adc.c
-index 03b3f5239bce..165c26d90f72 100644
 --- a/drivers/iio/adc/stm32-mdf-adc.c
 +++ b/drivers/iio/adc/stm32-mdf-adc.c
-@@ -1255,19 +1255,15 @@ static int stm32_mdf_adc_chan_init(struct iio_dev *indio_dev, struct iio_chan_sp
+@@ -1255,19 +1255,15 @@ static int stm32_mdf_adc_chan_init(struc
  
  		ret = stm32_mdf_adc_chan_init_one(indio_dev, child, &channels[chan_idx], chan_idx);
  		if (ret < 0) {
@@ -44,7 +42,7 @@ index 03b3f5239bce..165c26d90f72 100644
  }
  
  static int stm32_mdf_set_watermark(struct iio_dev *indio_dev, unsigned int val)
-@@ -1525,18 +1521,15 @@ static int stm32_mdf_audio_init(struct device *dev, struct iio_dev *indio_dev)
+@@ -1525,18 +1521,15 @@ static int stm32_mdf_audio_init(struct d
  		return -ENOMEM;
  
  	ret = stm32_mdf_adc_chan_init(indio_dev, ch);
@@ -68,7 +66,7 @@ index 03b3f5239bce..165c26d90f72 100644
  
  	ret =  stm32_mdf_adc_filter_set_mode(adc, true);
  	if (ret)
-@@ -1576,10 +1569,8 @@ static int stm32_mdf_adc_init(struct device *dev, struct iio_dev *indio_dev)
+@@ -1576,10 +1569,8 @@ static int stm32_mdf_adc_init(struct dev
  			return -ENOMEM;
  
  		ret = stm32_mdf_adc_chan_init(indio_dev, ch);
@@ -81,6 +79,3 @@ index 03b3f5239bce..165c26d90f72 100644
  	}
  
  	indio_dev->num_channels = num_ch;
--- 
-2.50.1
-

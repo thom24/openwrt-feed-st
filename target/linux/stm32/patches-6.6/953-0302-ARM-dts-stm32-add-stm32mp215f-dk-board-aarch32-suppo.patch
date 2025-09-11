@@ -20,8 +20,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  2 files changed, 19 insertions(+)
  create mode 100644 arch/arm/boot/dts/st/stm32mp215f-dk.dts
 
-diff --git a/arch/arm/boot/dts/st/Makefile b/arch/arm/boot/dts/st/Makefile
-index 74036ab16a43..f4426da153f4 100644
 --- a/arch/arm/boot/dts/st/Makefile
 +++ b/arch/arm/boot/dts/st/Makefile
 @@ -81,6 +81,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
@@ -32,9 +30,6 @@ index 74036ab16a43..f4426da153f4 100644
  	stm32mp257f-ev1.dtb
  
  dtb-$(CONFIG_ARCH_U8500) += \
-diff --git a/arch/arm/boot/dts/st/stm32mp215f-dk.dts b/arch/arm/boot/dts/st/stm32mp215f-dk.dts
-new file mode 100644
-index 000000000000..181b860ffc4b
 --- /dev/null
 +++ b/arch/arm/boot/dts/st/stm32mp215f-dk.dts
 @@ -0,0 +1,18 @@
@@ -56,6 +51,3 @@ index 000000000000..181b860ffc4b
 +		arm,cpu-registers-not-fw-configured;
 +	};
 +};
--- 
-2.50.1
-

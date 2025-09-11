@@ -20,8 +20,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/clk/stm32/clk-stm32mp21.c | 3 ++-
  2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/stm32/Kconfig b/drivers/clk/stm32/Kconfig
-index 650a33518a90..d81cec0c3b12 100644
 --- a/drivers/clk/stm32/Kconfig
 +++ b/drivers/clk/stm32/Kconfig
 @@ -27,7 +27,7 @@ config COMMON_CLK_STM32MP157
@@ -33,8 +31,6 @@ index 650a33518a90..d81cec0c3b12 100644
  	select COMMON_CLK_REGMAP
  	default y
  	help
-diff --git a/drivers/clk/stm32/clk-stm32mp21.c b/drivers/clk/stm32/clk-stm32mp21.c
-index 4d15ac6e792b..a5de53bff9b6 100644
 --- a/drivers/clk/stm32/clk-stm32mp21.c
 +++ b/drivers/clk/stm32/clk-stm32mp21.c
 @@ -4,6 +4,7 @@
@@ -45,7 +41,7 @@ index 4d15ac6e792b..a5de53bff9b6 100644
  #include <linux/bus/stm32_firewall_device.h>
  #include <linux/clk.h>
  #include <linux/of_address.h>
-@@ -1843,7 +1844,7 @@ static unsigned long clk_get_pll_fvco(struct clk_stm32_clock_data *data, u32 off
+@@ -1843,7 +1844,7 @@ static unsigned long clk_get_pll_fvco(st
  	void __iomem *pllxcfgr1 = data->base + offset_base;
  	void __iomem *pllxcfgr2 = pllxcfgr1 + RCC_OFFSET_PLLXCFGR2;
  	void __iomem *pllxcfgr3 = pllxcfgr1 + RCC_OFFSET_PLLXCFGR3;
@@ -54,6 +50,3 @@ index 4d15ac6e792b..a5de53bff9b6 100644
  	u32 fracin, fbdiv, refdiv;
  
  	fracin = readl(pllxcfgr3) & RCC_PLLxCFGR3_FRACIN_MASK;
--- 
-2.50.1
-

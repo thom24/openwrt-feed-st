@@ -22,11 +22,9 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  arch/arm/boot/dts/st/stm32mp157f-ev1.dts | 56 ++++++++++++++++--------
  4 files changed, 152 insertions(+), 72 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157a-ev1.dts b/arch/arm/boot/dts/st/stm32mp157a-ev1.dts
-index f70d077207a5..2a4d941fc450 100644
 --- a/arch/arm/boot/dts/st/stm32mp157a-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157a-ev1.dts
-@@ -223,13 +223,18 @@ &dfsdm {
+@@ -223,13 +223,18 @@
  
  	dfsdm0: filter@0 {
  		compatible = "st,stm32-dfsdm-dmic";
@@ -49,7 +47,7 @@ index f70d077207a5..2a4d941fc450 100644
  		asoc_pdm0: dfsdm-dai {
  			compatible = "st,stm32h7-dfsdm-dai";
  			#sound-dai-cells = <0>;
-@@ -246,14 +251,19 @@ dfsdm_endpoint0: endpoint {
+@@ -246,14 +251,19 @@
  
  	dfsdm1: filter@1 {
  		compatible = "st,stm32-dfsdm-dmic";
@@ -74,7 +72,7 @@ index f70d077207a5..2a4d941fc450 100644
  		asoc_pdm1: dfsdm-dai {
  			compatible = "st,stm32h7-dfsdm-dai";
  			#sound-dai-cells = <0>;
-@@ -270,14 +280,19 @@ dfsdm_endpoint1: endpoint {
+@@ -270,14 +280,19 @@
  
  	dfsdm2: filter@2 {
  		compatible = "st,stm32-dfsdm-dmic";
@@ -99,7 +97,7 @@ index f70d077207a5..2a4d941fc450 100644
  		asoc_pdm2: dfsdm-dai {
  			compatible = "st,stm32h7-dfsdm-dai";
  			#sound-dai-cells = <0>;
-@@ -294,13 +309,18 @@ dfsdm_endpoint2: endpoint {
+@@ -294,13 +309,18 @@
  
  	dfsdm3: filter@3 {
  		compatible = "st,stm32-dfsdm-dmic";
@@ -122,11 +120,9 @@ index f70d077207a5..2a4d941fc450 100644
  		asoc_pdm3: dfsdm-dai {
  			compatible = "st,stm32h7-dfsdm-dai";
  			#sound-dai-cells = <0>;
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
-index dcf64bce048b..23f863ac8fa2 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
-@@ -224,13 +224,18 @@ &dfsdm {
+@@ -224,13 +224,18 @@
  
  	dfsdm0: filter@0 {
  		compatible = "st,stm32-dfsdm-dmic";
@@ -149,7 +145,7 @@ index dcf64bce048b..23f863ac8fa2 100644
  		asoc_pdm0: dfsdm-dai {
  			compatible = "st,stm32h7-dfsdm-dai";
  			#sound-dai-cells = <0>;
-@@ -247,14 +252,19 @@ dfsdm_endpoint0: endpoint {
+@@ -247,14 +252,19 @@
  
  	dfsdm1: filter@1 {
  		compatible = "st,stm32-dfsdm-dmic";
@@ -174,7 +170,7 @@ index dcf64bce048b..23f863ac8fa2 100644
  		asoc_pdm1: dfsdm-dai {
  			compatible = "st,stm32h7-dfsdm-dai";
  			#sound-dai-cells = <0>;
-@@ -271,14 +281,19 @@ dfsdm_endpoint1: endpoint {
+@@ -271,14 +281,19 @@
  
  	dfsdm2: filter@2 {
  		compatible = "st,stm32-dfsdm-dmic";
@@ -199,7 +195,7 @@ index dcf64bce048b..23f863ac8fa2 100644
  		asoc_pdm2: dfsdm-dai {
  			compatible = "st,stm32h7-dfsdm-dai";
  			#sound-dai-cells = <0>;
-@@ -295,13 +310,18 @@ dfsdm_endpoint2: endpoint {
+@@ -295,13 +310,18 @@
  
  	dfsdm3: filter@3 {
  		compatible = "st,stm32-dfsdm-dmic";
@@ -222,11 +218,9 @@ index dcf64bce048b..23f863ac8fa2 100644
  		asoc_pdm3: dfsdm-dai {
  			compatible = "st,stm32h7-dfsdm-dai";
  			#sound-dai-cells = <0>;
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-index 78c790bdfcfd..5a097af86422 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-@@ -223,13 +223,18 @@ &dfsdm {
+@@ -223,13 +223,18 @@
  
  	dfsdm0: filter@0 {
  		compatible = "st,stm32-dfsdm-dmic";
@@ -249,7 +243,7 @@ index 78c790bdfcfd..5a097af86422 100644
  		asoc_pdm0: dfsdm-dai {
  			compatible = "st,stm32h7-dfsdm-dai";
  			#sound-dai-cells = <0>;
-@@ -246,14 +251,19 @@ dfsdm_endpoint0: endpoint {
+@@ -246,14 +251,19 @@
  
  	dfsdm1: filter@1 {
  		compatible = "st,stm32-dfsdm-dmic";
@@ -274,7 +268,7 @@ index 78c790bdfcfd..5a097af86422 100644
  		asoc_pdm1: dfsdm-dai {
  			compatible = "st,stm32h7-dfsdm-dai";
  			#sound-dai-cells = <0>;
-@@ -270,14 +280,19 @@ dfsdm_endpoint1: endpoint {
+@@ -270,14 +280,19 @@
  
  	dfsdm2: filter@2 {
  		compatible = "st,stm32-dfsdm-dmic";
@@ -299,7 +293,7 @@ index 78c790bdfcfd..5a097af86422 100644
  		asoc_pdm2: dfsdm-dai {
  			compatible = "st,stm32h7-dfsdm-dai";
  			#sound-dai-cells = <0>;
-@@ -294,13 +309,18 @@ dfsdm_endpoint2: endpoint {
+@@ -294,13 +309,18 @@
  
  	dfsdm3: filter@3 {
  		compatible = "st,stm32-dfsdm-dmic";
@@ -322,11 +316,9 @@ index 78c790bdfcfd..5a097af86422 100644
  		asoc_pdm3: dfsdm-dai {
  			compatible = "st,stm32h7-dfsdm-dai";
  			#sound-dai-cells = <0>;
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-index 6677d518cde3..f21c875a1531 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-@@ -225,13 +225,18 @@ &dfsdm {
+@@ -225,13 +225,18 @@
  
  	dfsdm0: filter@0 {
  		compatible = "st,stm32-dfsdm-dmic";
@@ -349,7 +341,7 @@ index 6677d518cde3..f21c875a1531 100644
  		asoc_pdm0: dfsdm-dai {
  			compatible = "st,stm32h7-dfsdm-dai";
  			#sound-dai-cells = <0>;
-@@ -248,14 +253,19 @@ dfsdm_endpoint0: endpoint {
+@@ -248,14 +253,19 @@
  
  	dfsdm1: filter@1 {
  		compatible = "st,stm32-dfsdm-dmic";
@@ -374,7 +366,7 @@ index 6677d518cde3..f21c875a1531 100644
  		asoc_pdm1: dfsdm-dai {
  			compatible = "st,stm32h7-dfsdm-dai";
  			#sound-dai-cells = <0>;
-@@ -272,14 +282,19 @@ dfsdm_endpoint1: endpoint {
+@@ -272,14 +282,19 @@
  
  	dfsdm2: filter@2 {
  		compatible = "st,stm32-dfsdm-dmic";
@@ -399,7 +391,7 @@ index 6677d518cde3..f21c875a1531 100644
  		asoc_pdm2: dfsdm-dai {
  			compatible = "st,stm32h7-dfsdm-dai";
  			#sound-dai-cells = <0>;
-@@ -296,13 +311,18 @@ dfsdm_endpoint2: endpoint {
+@@ -296,13 +311,18 @@
  
  	dfsdm3: filter@3 {
  		compatible = "st,stm32-dfsdm-dmic";
@@ -422,6 +414,3 @@ index 6677d518cde3..f21c875a1531 100644
  		asoc_pdm3: dfsdm-dai {
  			compatible = "st,stm32h7-dfsdm-dai";
  			#sound-dai-cells = <0>;
--- 
-2.50.1
-

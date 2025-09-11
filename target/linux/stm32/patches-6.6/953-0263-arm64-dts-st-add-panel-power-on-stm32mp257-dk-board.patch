@@ -14,11 +14,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index e7f9e59b2020..f05dafbc9d12 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -165,6 +165,7 @@ panel_lvds: panel-lvds {
+@@ -165,6 +165,7 @@
  		compatible = "edt,etml0700z9ndha", "panel-lvds";
  		enable-gpios = <&gpioi 4 GPIO_ACTIVE_HIGH>;
  		backlight = <&panel_lvds_backlight>;
@@ -26,6 +24,3 @@ index e7f9e59b2020..f05dafbc9d12 100644
  		default-on;
  		status = "okay";
  
--- 
-2.50.1
-

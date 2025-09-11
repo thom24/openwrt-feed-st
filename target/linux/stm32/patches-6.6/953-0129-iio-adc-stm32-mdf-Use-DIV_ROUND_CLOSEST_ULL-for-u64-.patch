@@ -18,11 +18,9 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/iio/adc/stm32-mdf-adc.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/adc/stm32-mdf-adc.c b/drivers/iio/adc/stm32-mdf-adc.c
-index c87edf865a77..fc7eb518034a 100644
 --- a/drivers/iio/adc/stm32-mdf-adc.c
 +++ b/drivers/iio/adc/stm32-mdf-adc.c
-@@ -684,11 +684,11 @@ static int stm32_mdf_adc_set_filters_config(struct iio_dev *indio_dev, unsigned
+@@ -684,11 +684,11 @@ static int stm32_mdf_adc_set_filters_con
  
  	if (gain_lin > 0) {
  		max *= gain_lin;
@@ -37,6 +35,3 @@ index c87edf865a77..fc7eb518034a 100644
  	}
  
  	adc->dflt_max = max;
--- 
-2.50.1
-

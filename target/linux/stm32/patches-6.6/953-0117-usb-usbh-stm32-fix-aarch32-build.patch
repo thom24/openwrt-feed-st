@@ -23,8 +23,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/usb/host/usbh-stm32.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/host/usbh-stm32.c b/drivers/usb/host/usbh-stm32.c
-index d4b1776f0c20..a3b516c804d1 100644
 --- a/drivers/usb/host/usbh-stm32.c
 +++ b/drivers/usb/host/usbh-stm32.c
 @@ -7,6 +7,7 @@
@@ -35,6 +33,3 @@ index d4b1776f0c20..a3b516c804d1 100644
  #include <linux/usb.h>
  #include <linux/pinctrl/consumer.h>
  #include <linux/mfd/syscon.h>
--- 
-2.50.1
-

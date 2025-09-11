@@ -18,11 +18,9 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index 7da7a37f4c2b..d0c8d34b0224 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -2713,6 +2713,7 @@ dcmipp: dcmipp@48030000 {
+@@ -2713,6 +2713,7 @@
  			clocks = <&rcc CK_BUS_DCMIPP>, <&rcc CK_KER_CSI>;
  			clock-names = "kclk", "mclk";
  			access-controllers = <&rifsc 87>;
@@ -30,6 +28,3 @@ index 7da7a37f4c2b..d0c8d34b0224 100644
  			status = "disabled";
  		};
  
--- 
-2.50.1
-

@@ -15,9 +15,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  1 file changed, 46 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/soc/st/stm32mp-pm-domain.yaml
 
-diff --git a/Documentation/devicetree/bindings/soc/st/stm32mp-pm-domain.yaml b/Documentation/devicetree/bindings/soc/st/stm32mp-pm-domain.yaml
-new file mode 100644
-index 000000000000..e0abc325db17
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/soc/st/stm32mp-pm-domain.yaml
 @@ -0,0 +1,46 @@
@@ -67,6 +64,3 @@ index 000000000000..e0abc325db17
 +      #power-domain-cells = <0>;
 +      power-domains = <&CLUSTER_PD>;
 +    };
--- 
-2.50.1
-

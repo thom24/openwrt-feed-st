@@ -26,11 +26,9 @@ Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
  .../st/stm32/stm32-dcmipp/dcmipp-pixelproc.c     | 12 ++++++------
  6 files changed, 31 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-index 4793b9cdfccf..4f1b9f055c28 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-@@ -219,9 +219,9 @@ static void dcmipp_byteproc_adjust_fmt_crop(struct dcmipp_byteproc_device *bytep
+@@ -219,9 +219,9 @@ static void dcmipp_byteproc_adjust_fmt_c
  	}
  
  	fmt->width = clamp_t(u32, fmt->width, DCMIPP_FRAME_MIN_WIDTH,
@@ -42,8 +40,6 @@ index 4793b9cdfccf..4f1b9f055c28 100644
  
  	if (fmt->field == V4L2_FIELD_ANY || fmt->field == V4L2_FIELD_ALTERNATE)
  		fmt->field = fmt_default.field;
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
-index a779c4a17e5d..d02fa90fe69b 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
 @@ -20,10 +20,20 @@
@@ -70,11 +66,9 @@ index a779c4a17e5d..d02fa90fe69b 100644
  
  #define DCMIPP_FMT_WIDTH_DEFAULT  640
  #define DCMIPP_FMT_HEIGHT_DEFAULT 480
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
-index 40f432f44510..e221eeee9b77 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
-@@ -269,9 +269,9 @@ static void dcmipp_inp_adjust_fmt(struct dcmipp_inp_device *inp,
+@@ -269,9 +269,9 @@ static void dcmipp_inp_adjust_fmt(struct
  		fmt->code = fmt_default.code;
  
  	fmt->width = clamp_t(u32, fmt->width, DCMIPP_FRAME_MIN_WIDTH,
@@ -86,11 +80,9 @@ index 40f432f44510..e221eeee9b77 100644
  
  	if (fmt->field == V4L2_FIELD_ANY || fmt->field == V4L2_FIELD_ALTERNATE)
  		fmt->field = fmt_default.field;
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
-index eb72b504dd82..c9bc6dc25de1 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
-@@ -170,9 +170,9 @@ static void dcmipp_isp_adjust_fmt(struct v4l2_mbus_framefmt *fmt, u32 pad)
+@@ -170,9 +170,9 @@ static void dcmipp_isp_adjust_fmt(struct
  					  ISP_MEDIA_BUS_SINK_FMT_DEFAULT;
  
  	fmt->width = clamp_t(u32, fmt->width, DCMIPP_FRAME_MIN_WIDTH,
@@ -102,7 +94,7 @@ index eb72b504dd82..c9bc6dc25de1 100644
  
  	if (fmt->field == V4L2_FIELD_ANY || fmt->field == V4L2_FIELD_ALTERNATE)
  		fmt->field = V4L2_FIELD_NONE;
-@@ -242,9 +242,9 @@ static int dcmipp_isp_enum_frame_size(struct v4l2_subdev *sd,
+@@ -242,9 +242,9 @@ static int dcmipp_isp_enum_frame_size(st
  		return -EINVAL;
  
  	fse->min_width = DCMIPP_FRAME_MIN_WIDTH;
@@ -114,11 +106,9 @@ index eb72b504dd82..c9bc6dc25de1 100644
  
  	return 0;
  }
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
-index dcf63987b26f..af3621be4bf8 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
-@@ -317,12 +317,12 @@ static int dcmipp_pixelcap_try_fmt_vid_cap(struct file *file, void *priv,
+@@ -317,12 +317,12 @@ static int dcmipp_pixelcap_try_fmt_vid_c
  	in_w = format->width;
  	in_h = format->height;
  	format->width = clamp_t(u32, format->width, DCMIPP_FRAME_MIN_WIDTH,
@@ -133,7 +123,7 @@ index dcf63987b26f..af3621be4bf8 100644
  	if (format->width != in_w || format->height != in_h)
  		dev_dbg(vcap->dev,
  			"resolution updated: %dx%d -> %dx%d\n",
-@@ -435,9 +435,9 @@ static int dcmipp_pixelcap_enum_framesizes(struct file *file, void *fh,
+@@ -435,9 +435,9 @@ static int dcmipp_pixelcap_enum_framesiz
  
  	fsize->type = V4L2_FRMSIZE_TYPE_CONTINUOUS;
  	fsize->stepwise.min_width = DCMIPP_FRAME_MIN_WIDTH;
@@ -145,11 +135,9 @@ index dcf63987b26f..af3621be4bf8 100644
  	fsize->stepwise.step_width = 1;
  	fsize->stepwise.step_height = 1;
  
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
-index 96b5e476d8a4..b2539450abaa 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
-@@ -530,9 +530,9 @@ static void dcmipp_pixelproc_adjust_fmt(struct dcmipp_pixelproc_device *pixelpro
+@@ -530,9 +530,9 @@ static void dcmipp_pixelproc_adjust_fmt(
  		fmt->code = PIXELPROC_MEDIA_BUS_FMT_DEFAULT;
  
  	fmt->width = clamp_t(u32, fmt->width, DCMIPP_FRAME_MIN_WIDTH,
@@ -161,7 +149,7 @@ index 96b5e476d8a4..b2539450abaa 100644
  
  	if (fmt->field == V4L2_FIELD_ANY || fmt->field == V4L2_FIELD_ALTERNATE)
  		fmt->field = V4L2_FIELD_NONE;
-@@ -618,9 +618,9 @@ static int dcmipp_pixelproc_enum_frame_size(struct v4l2_subdev *sd,
+@@ -618,9 +618,9 @@ static int dcmipp_pixelproc_enum_frame_s
  		return -EINVAL;
  
  	fse->min_width = DCMIPP_FRAME_MIN_WIDTH;
@@ -173,7 +161,7 @@ index 96b5e476d8a4..b2539450abaa 100644
  
  	return 0;
  }
-@@ -818,8 +818,8 @@ dcmipp_pixelproc_enum_frame_interval(struct v4l2_subdev *sd,
+@@ -818,8 +818,8 @@ dcmipp_pixelproc_enum_frame_interval(str
  
  	if (fie->pad > 1 ||
  	    fie->index >= (IS_SRC(fie->pad) ? ARRAY_SIZE(dcmipp_frates) : 1) ||
@@ -184,6 +172,3 @@ index 96b5e476d8a4..b2539450abaa 100644
  		return -EINVAL;
  
  	if (IS_SINK(fie->pad)) {
--- 
-2.50.1
-

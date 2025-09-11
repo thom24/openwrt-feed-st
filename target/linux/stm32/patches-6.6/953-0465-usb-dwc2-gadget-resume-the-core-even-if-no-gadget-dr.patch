@@ -17,11 +17,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/usb/dwc2/gadget.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index b52bc79820c7..c4455dde7e3b 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -5320,19 +5320,19 @@ int dwc2_hsotg_resume(struct dwc2_hsotg *hsotg)
+@@ -5320,19 +5320,19 @@ int dwc2_hsotg_resume(struct dwc2_hsotg
  	if (!hsotg->gadget_off_for_suspend)
  		return 0;
  
@@ -44,6 +42,3 @@ index b52bc79820c7..c4455dde7e3b 100644
  
  	return 0;
  }
--- 
-2.50.1
-

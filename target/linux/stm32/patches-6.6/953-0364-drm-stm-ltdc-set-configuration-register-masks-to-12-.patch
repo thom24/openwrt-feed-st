@@ -17,12 +17,10 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/stm/ltdc.h |  1 +
  2 files changed, 60 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-index 443ed4b04f74..0b0bb12b76ab 100644
 --- a/drivers/gpu/drm/stm/ltdc.c
 +++ b/drivers/gpu/drm/stm/ltdc.c
-@@ -127,17 +127,14 @@
- #define LTDC_L1FPF1R	(ldev->caps.layer_regs[30])	/* L1 Flexible Pixel Format 1 */
+@@ -113,17 +113,14 @@
+ #define LTDC_L1FPF1R	(ldev->caps.layer_regs[24])	/* L1 Flexible Pixel Format 1 */
  
  /* Bit definitions */
 -#define SSCR_VSH	GENMASK(10, 0)	/* Vertical Synchronization Height */
@@ -46,8 +44,8 @@ index 443ed4b04f74..0b0bb12b76ab 100644
 +#define TWCR_TOTALW	(ldev->caps.conf_regs[7])	/* TOTAL Width */
  
  #define GCR_LTDCEN	BIT(0)		/* LTDC ENable */
- #define GCR_ROTEN	BIT(2)		/* ROTation ENable */
-@@ -495,6 +492,28 @@ static const u32 ltdc_layer_regs_a2[] = {
+ #define GCR_DEN		BIT(16)		/* Dither ENable */
+@@ -457,6 +454,28 @@ static const u32 ltdc_layer_regs_a2[] =
  	0x178	/* L1 Flexible Pixel Format 1 */
  };
  
@@ -76,7 +74,7 @@ index 443ed4b04f74..0b0bb12b76ab 100644
  static const u64 ltdc_format_modifiers[] = {
  	DRM_FORMAT_MOD_LINEAR,
  	DRM_FORMAT_MOD_INVALID
-@@ -2301,9 +2320,36 @@ static int ltdc_get_caps(struct drm_device *ddev)
+@@ -1830,9 +1849,36 @@ static int ltdc_get_caps(struct drm_devi
  
  	switch (ldev->caps.hw_version) {
  	case HWVER_10200:
@@ -113,7 +111,7 @@ index 443ed4b04f74..0b0bb12b76ab 100644
  		ldev->caps.pix_fmt_hw = ltdc_pix_fmt_a0;
  		ldev->caps.pix_fmt_drm = ltdc_drm_fmt_a0;
  		ldev->caps.pix_fmt_nb = ARRAY_SIZE(ltdc_drm_fmt_a0);
-@@ -2316,8 +2362,6 @@ static int ltdc_get_caps(struct drm_device *ddev)
+@@ -1845,8 +1891,6 @@ static int ltdc_get_caps(struct drm_devi
  		 * does not work on 2nd layer.
  		 */
  		ldev->caps.non_alpha_only_l1 = true;
@@ -122,7 +120,7 @@ index 443ed4b04f74..0b0bb12b76ab 100644
  		ldev->caps.nb_irq = 2;
  		ldev->caps.ycbcr_input = false;
  		ldev->caps.ycbcr_output = false;
-@@ -2331,6 +2375,7 @@ static int ltdc_get_caps(struct drm_device *ddev)
+@@ -1859,6 +1903,7 @@ static int ltdc_get_caps(struct drm_devi
  	case HWVER_20101:
  		ldev->caps.layer_ofs = LAY_OFS_0;
  		ldev->caps.layer_regs = ltdc_layer_regs_a1;
@@ -130,7 +128,7 @@ index 443ed4b04f74..0b0bb12b76ab 100644
  		ldev->caps.pix_fmt_hw = ltdc_pix_fmt_a1;
  		ldev->caps.pix_fmt_drm = ltdc_drm_fmt_a1;
  		ldev->caps.pix_fmt_nb = ARRAY_SIZE(ltdc_drm_fmt_a1);
-@@ -2351,6 +2396,7 @@ static int ltdc_get_caps(struct drm_device *ddev)
+@@ -1878,6 +1923,7 @@ static int ltdc_get_caps(struct drm_devi
  	case HWVER_40101:
  		ldev->caps.layer_ofs = LAY_OFS_1;
  		ldev->caps.layer_regs = ltdc_layer_regs_a2;
@@ -138,11 +136,9 @@ index 443ed4b04f74..0b0bb12b76ab 100644
  		ldev->caps.pix_fmt_hw = ltdc_pix_fmt_a2;
  		ldev->caps.pix_fmt_drm = ltdc_drm_fmt_a2;
  		ldev->caps.pix_fmt_nb = ARRAY_SIZE(ltdc_drm_fmt_a2);
-diff --git a/drivers/gpu/drm/stm/ltdc.h b/drivers/gpu/drm/stm/ltdc.h
-index 356033af6b9b..ecbce35bf7b9 100644
 --- a/drivers/gpu/drm/stm/ltdc.h
 +++ b/drivers/gpu/drm/stm/ltdc.h
-@@ -21,6 +21,7 @@ struct ltdc_caps {
+@@ -16,6 +16,7 @@ struct ltdc_caps {
  	u32 nb_layers;		/* number of supported layers */
  	u32 layer_ofs;		/* layer offset for applicable regs */
  	const u32 *layer_regs;	/* layer register offset */
@@ -150,6 +146,3 @@ index 356033af6b9b..ecbce35bf7b9 100644
  	u32 bus_width;		/* bus width (32 or 64 bits) */
  	const u32 *pix_fmt_hw;	/* supported hw pixel formats */
  	const u32 *pix_fmt_drm;	/* supported drm pixel formats */
--- 
-2.50.1
-

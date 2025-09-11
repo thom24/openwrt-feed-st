@@ -21,8 +21,6 @@ Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
  include/uapi/linux/stm32-dcmipp-config.h                       | 3 +++
  2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
-index b2539450abaa..f9b3fba694b4 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
 @@ -17,6 +17,7 @@
@@ -33,7 +31,7 @@ index b2539450abaa..f9b3fba694b4 100644
  
  #define DCMIPP_P1FCTCR	0x900
  #define DCMIPP_P2FCTCR	0xD00
-@@ -463,8 +464,6 @@ static const struct v4l2_rect crop_min = {
+@@ -463,8 +464,6 @@ static const struct v4l2_rect crop_min =
  /*
   * Functions handling controls
   */
@@ -42,8 +40,6 @@ index b2539450abaa..f9b3fba694b4 100644
  static int dcmipp_pixelproc_s_ctrl(struct v4l2_ctrl *ctrl)
  {
  	struct dcmipp_pixelproc_device *pixelproc =
-diff --git a/include/uapi/linux/stm32-dcmipp-config.h b/include/uapi/linux/stm32-dcmipp-config.h
-index 9b20f2988a3f..d4adee54064d 100644
 --- a/include/uapi/linux/stm32-dcmipp-config.h
 +++ b/include/uapi/linux/stm32-dcmipp-config.h
 @@ -9,6 +9,9 @@
@@ -56,6 +52,3 @@ index 9b20f2988a3f..d4adee54064d 100644
  /* Bad Pixel Removal */
  #define STM32_DCMIPP_ISP_BPR		(1U << 0)
  /* Black Level Correction */
--- 
-2.50.1
-

@@ -20,8 +20,6 @@ Tested-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
  Documentation/devicetree/bindings/net/stm32-ttt.yaml | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/net/stm32-ttt.yaml b/Documentation/devicetree/bindings/net/stm32-ttt.yaml
-index db70a4a4baaa..02050c6ee76a 100644
 --- a/Documentation/devicetree/bindings/net/stm32-ttt.yaml
 +++ b/Documentation/devicetree/bindings/net/stm32-ttt.yaml
 @@ -2,8 +2,8 @@
@@ -35,6 +33,3 @@ index db70a4a4baaa..02050c6ee76a 100644
  
  title: STMicroelectronics STM32 TSN switch glue layer controller
  
--- 
-2.50.1
-

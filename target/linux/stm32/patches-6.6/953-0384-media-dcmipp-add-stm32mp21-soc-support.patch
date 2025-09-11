@@ -20,11 +20,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  .../platform/st/stm32/stm32-dcmipp/dcmipp-core.c  | 15 +++++++++++++++
  1 file changed, 15 insertions(+)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
-index aecf7e5feb15..a891e5da83b0 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
-@@ -184,6 +184,20 @@ static const struct dcmipp_pipeline_config stm32mp25_pipe_cfg = {
+@@ -184,6 +184,20 @@ static const struct dcmipp_pipeline_conf
  	.pipe_nb	= 3
  };
  
@@ -45,7 +43,7 @@ index aecf7e5feb15..a891e5da83b0 100644
  #define LINK_FLAG_TO_STR(f) ((f) == 0 ? "" :\
  			     (f) == MEDIA_LNK_FL_ENABLED ? "ENABLED" :\
  			     (f) == MEDIA_LNK_FL_IMMUTABLE ? "IMMUTABLE" :\
-@@ -262,6 +276,7 @@ static int dcmipp_create_subdevs(struct dcmipp_device *dcmipp)
+@@ -262,6 +276,7 @@ err_init_entity:
  
  static const struct of_device_id dcmipp_of_match[] = {
  	{ .compatible = "st,stm32mp13-dcmipp", .data = &stm32mp13_pipe_cfg },
@@ -53,6 +51,3 @@ index aecf7e5feb15..a891e5da83b0 100644
  	{ .compatible = "st,stm32mp25-dcmipp", .data = &stm32mp25_pipe_cfg },
  	{ /* end node */ },
  };
--- 
-2.50.1
-

@@ -17,8 +17,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  Documentation/devicetree/bindings/i3c/st,stm32-i3c.yaml | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/i3c/st,stm32-i3c.yaml b/Documentation/devicetree/bindings/i3c/st,stm32-i3c.yaml
-index 49191851be44..4524e880e5c7 100644
 --- a/Documentation/devicetree/bindings/i3c/st,stm32-i3c.yaml
 +++ b/Documentation/devicetree/bindings/i3c/st,stm32-i3c.yaml
 @@ -10,7 +10,7 @@ maintainers:
@@ -37,6 +35,3 @@ index 49191851be44..4524e880e5c7 100644
 -    };
 \ No newline at end of file
 +    };
--- 
-2.50.1
-

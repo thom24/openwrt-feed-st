@@ -41,11 +41,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 34 +++++++++++++++++++++++
  1 file changed, 34 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-index 27e0448ac37a..558774a6276f 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-@@ -190,6 +190,40 @@ sound {
+@@ -190,6 +190,40 @@
  		dais = <&mdf1_port0 &mdf1_port1>;
  		status = "okay";
  	};
@@ -86,6 +84,3 @@ index 27e0448ac37a..558774a6276f 100644
  };
  
  &a35ss_syscfg {
--- 
-2.50.1
-

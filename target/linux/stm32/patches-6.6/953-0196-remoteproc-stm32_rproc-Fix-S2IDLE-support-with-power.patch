@@ -22,11 +22,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/remoteproc/stm32_rproc.c | 11 ++++++++---
  1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index d7acf0c02631..d21f22164814 100644
 --- a/drivers/remoteproc/stm32_rproc.c
 +++ b/drivers/remoteproc/stm32_rproc.c
-@@ -1334,9 +1334,14 @@ static int stm32_rproc_suspend(struct device *dev)
+@@ -1334,9 +1334,14 @@ static int stm32_rproc_suspend(struct de
  	if (rproc->state == RPROC_CRASHED)
  		return -EBUSY;
  
@@ -44,6 +42,3 @@ index d7acf0c02631..d21f22164814 100644
  
  	if (device_may_wakeup(dev))
  		return enable_irq_wake(ddata->wdg_irq);
--- 
-2.50.1
-

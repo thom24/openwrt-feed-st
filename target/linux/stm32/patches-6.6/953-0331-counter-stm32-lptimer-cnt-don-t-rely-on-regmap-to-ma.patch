@@ -34,11 +34,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/counter/stm32-lptimer-cnt.c | 58 ++++++++++++++++++++++-------
  1 file changed, 45 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/counter/stm32-lptimer-cnt.c b/drivers/counter/stm32-lptimer-cnt.c
-index 5a50f1ac4390..95deb333e457 100644
 --- a/drivers/counter/stm32-lptimer-cnt.c
 +++ b/drivers/counter/stm32-lptimer-cnt.c
-@@ -35,10 +35,18 @@ static int stm32_lptim_is_enabled(struct stm32_lptim_cnt *priv)
+@@ -35,10 +35,18 @@ static int stm32_lptim_is_enabled(struct
  	u32 val;
  	int ret;
  
@@ -57,7 +55,7 @@ index 5a50f1ac4390..95deb333e457 100644
  	return FIELD_GET(STM32_LPTIM_ENABLE, val);
  }
  
-@@ -48,12 +56,11 @@ static int stm32_lptim_set_enable_state(struct stm32_lptim_cnt *priv,
+@@ -48,12 +56,11 @@ static int stm32_lptim_set_enable_state(
  	int ret;
  	u32 val;
  
@@ -74,7 +72,7 @@ index 5a50f1ac4390..95deb333e457 100644
  		ret = pm_runtime_put_sync_suspend(priv->dev);
  		if (ret < 0)
  			return ret;
-@@ -64,28 +71,32 @@ static int stm32_lptim_set_enable_state(struct stm32_lptim_cnt *priv,
+@@ -64,28 +71,32 @@ static int stm32_lptim_set_enable_state(
  
  	ret = pm_runtime_resume_and_get(priv->dev);
  	if (ret)
@@ -112,7 +110,7 @@ index 5a50f1ac4390..95deb333e457 100644
  
  	priv->enabled = true;
  
-@@ -93,10 +104,10 @@ static int stm32_lptim_set_enable_state(struct stm32_lptim_cnt *priv,
+@@ -93,10 +104,10 @@ static int stm32_lptim_set_enable_state(
  	return regmap_update_bits(priv->regmap, STM32_LPTIM_CR,
  				  STM32_LPTIM_CNTSTRT, STM32_LPTIM_CNTSTRT);
  
@@ -125,7 +123,7 @@ index 5a50f1ac4390..95deb333e457 100644
  
  	return ret;
  }
-@@ -106,6 +117,7 @@ static int stm32_lptim_setup(struct stm32_lptim_cnt *priv, int enable)
+@@ -106,6 +117,7 @@ static int stm32_lptim_setup(struct stm3
  	u32 mask = STM32_LPTIM_ENC | STM32_LPTIM_COUNTMODE |
  		   STM32_LPTIM_CKPOL | STM32_LPTIM_PRESC;
  	u32 val;
@@ -133,7 +131,7 @@ index 5a50f1ac4390..95deb333e457 100644
  
  	/* Setup LP timer encoder/counter and polarity, without prescaler */
  	if (priv->quadrature_mode)
-@@ -114,7 +126,17 @@ static int stm32_lptim_setup(struct stm32_lptim_cnt *priv, int enable)
+@@ -114,7 +126,17 @@ static int stm32_lptim_setup(struct stm3
  		val = enable ? STM32_LPTIM_COUNTMODE : 0;
  	val |= FIELD_PREP(STM32_LPTIM_CKPOL, enable ? priv->polarity : 0);
  
@@ -152,7 +150,7 @@ index 5a50f1ac4390..95deb333e457 100644
  }
  
  /*
-@@ -154,7 +176,17 @@ static int stm32_lptim_cnt_read(struct counter_device *counter,
+@@ -154,7 +176,17 @@ static int stm32_lptim_cnt_read(struct c
  	u32 cnt;
  	int ret;
  
@@ -170,6 +168,3 @@ index 5a50f1ac4390..95deb333e457 100644
  	if (ret)
  		return ret;
  
--- 
-2.50.1
-

@@ -17,8 +17,6 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  drivers/iio/adc/stm32-mdf-adc.c | 64 ++++++++++++++-------------------
  1 file changed, 27 insertions(+), 37 deletions(-)
 
-diff --git a/drivers/iio/adc/stm32-mdf-adc.c b/drivers/iio/adc/stm32-mdf-adc.c
-index 7ee3b5588926..7979a77a5379 100644
 --- a/drivers/iio/adc/stm32-mdf-adc.c
 +++ b/drivers/iio/adc/stm32-mdf-adc.c
 @@ -51,6 +51,7 @@ struct stm32_mdf_dev_data {
@@ -45,7 +43,7 @@ index 7ee3b5588926..7979a77a5379 100644
  	struct stm32_mdf_adc_chan *channels;
  	const struct stm32_mdf_dev_data *dev_data;
  	struct stm32_mdf_sitf *sitf;
-@@ -1021,17 +1020,15 @@ static int stm32_mdf_adc_postenable(struct iio_dev *indio_dev)
+@@ -1021,17 +1020,15 @@ static int stm32_mdf_adc_postenable(stru
  	/* Reset adc buffer index */
  	adc->bufi = 0;
  
@@ -70,7 +68,7 @@ index 7ee3b5588926..7979a77a5379 100644
  	}
  
  	ret = stm32_mdf_adc_start_mdf(indio_dev);
-@@ -1072,11 +1069,9 @@ static int stm32_mdf_adc_postenable(struct iio_dev *indio_dev)
+@@ -1072,11 +1069,9 @@ err_dma:
  	stm32_mdf_adc_stop_mdf(indio_dev);
  err_start:
  	i = 0;
@@ -85,7 +83,7 @@ index 7ee3b5588926..7979a77a5379 100644
  	}
  
  	return ret;
-@@ -1098,11 +1093,9 @@ static int stm32_mdf_adc_predisable(struct iio_dev *indio_dev)
+@@ -1098,11 +1093,9 @@ static int stm32_mdf_adc_predisable(stru
  
  	stm32_mdf_adc_stop_mdf(indio_dev);
  
@@ -100,7 +98,7 @@ index 7ee3b5588926..7979a77a5379 100644
  	}
  
  	return 0;
-@@ -1222,7 +1215,7 @@ static int stm32_mdf_channel_parse_of(struct iio_dev *indio_dev, struct fwnode_h
+@@ -1222,7 +1215,7 @@ static int stm32_mdf_channel_parse_of(st
  		if (IS_ERR(backend))
  			return dev_err_probe(&indio_dev->dev, PTR_ERR(backend),
  					     "Failed to get backend\n");
@@ -109,7 +107,7 @@ index 7ee3b5588926..7979a77a5379 100644
  	}
  
  	return ret;
-@@ -1392,8 +1385,8 @@ static int stm32_mdf_adc_read_raw(struct iio_dev *indio_dev, struct iio_chan_spe
+@@ -1392,8 +1385,8 @@ static int stm32_mdf_adc_read_raw(struct
  		if (ret)
  			return ret;
  
@@ -120,7 +118,7 @@ index 7ee3b5588926..7979a77a5379 100644
  			if (ret)
  				goto err_release_direct_mode;
  		}
-@@ -1402,8 +1395,8 @@ static int stm32_mdf_adc_read_raw(struct iio_dev *indio_dev, struct iio_chan_spe
+@@ -1402,8 +1395,8 @@ static int stm32_mdf_adc_read_raw(struct
  		if (ret)
  			goto err_backend_disable;
  
@@ -131,7 +129,7 @@ index 7ee3b5588926..7979a77a5379 100644
  
  		iio_device_release_direct_mode(indio_dev);
  
-@@ -1424,8 +1417,9 @@ static int stm32_mdf_adc_read_raw(struct iio_dev *indio_dev, struct iio_chan_spe
+@@ -1424,8 +1417,9 @@ static int stm32_mdf_adc_read_raw(struct
  		 * max_dflt = D^N * gain_lin * gain_rsflt
  		 * scale = Vref * max / dflt_max
  		 */
@@ -143,7 +141,7 @@ index 7ee3b5588926..7979a77a5379 100644
  			if (ret < 0)
  				return ret;
  
-@@ -1441,8 +1435,9 @@ static int stm32_mdf_adc_read_raw(struct iio_dev *indio_dev, struct iio_chan_spe
+@@ -1441,8 +1435,9 @@ static int stm32_mdf_adc_read_raw(struct
  		return IIO_VAL_FRACTIONAL_LOG2;
  
  	case IIO_CHAN_INFO_OFFSET:
@@ -155,7 +153,7 @@ index 7ee3b5588926..7979a77a5379 100644
  			if (ret < 0)
  				return ret;
  
-@@ -1459,8 +1454,8 @@ static int stm32_mdf_adc_read_raw(struct iio_dev *indio_dev, struct iio_chan_spe
+@@ -1459,8 +1454,8 @@ static int stm32_mdf_adc_read_raw(struct
  	return -EINVAL;
  
  err_backend_disable:
@@ -166,7 +164,7 @@ index 7ee3b5588926..7979a77a5379 100644
  err_release_direct_mode:
  	iio_device_release_direct_mode(indio_dev);
  
-@@ -1601,11 +1596,6 @@ static int stm32_mdf_adc_init(struct device *dev, struct iio_dev *indio_dev)
+@@ -1601,11 +1596,6 @@ static int stm32_mdf_adc_init(struct dev
  		if (!adc->channels)
  			return -ENOMEM;
  
@@ -178,6 +176,3 @@ index 7ee3b5588926..7979a77a5379 100644
  		ret = stm32_mdf_adc_chan_init(indio_dev, ch);
  		if (ret < 0)
  			return dev_err_probe(&indio_dev->dev, ret, "Channels init failed\n");
--- 
-2.50.1
-

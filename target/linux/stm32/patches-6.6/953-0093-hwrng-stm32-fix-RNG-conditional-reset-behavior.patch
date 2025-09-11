@@ -23,8 +23,6 @@ Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
  drivers/char/hw_random/stm32-rng.c | 11 +++--------
  1 file changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
-index f2f5f1eac3ae..d5a0c90d7ba7 100644
 --- a/drivers/char/hw_random/stm32-rng.c
 +++ b/drivers/char/hw_random/stm32-rng.c
 @@ -95,9 +95,8 @@ struct stm32_rng_private {
@@ -39,7 +37,7 @@ index f2f5f1eac3ae..d5a0c90d7ba7 100644
   * 3. If SECS was set in step 1 (no auto-reset) wait for SECS to be
   * cleared by RNG. The random number generation is now back to normal.
   */
-@@ -125,10 +124,6 @@ static int stm32_rng_conceal_seed_error_cond_reset(struct stm32_rng_private *pri
+@@ -125,10 +124,6 @@ static int stm32_rng_conceal_seed_error_
  		return err;
  	}
  
@@ -50,7 +48,7 @@ index f2f5f1eac3ae..d5a0c90d7ba7 100644
  	err = readl_relaxed_poll_timeout_atomic(priv->base + RNG_SR, sr, !(sr & RNG_SR_SECS), 10,
  						100000);
  	if (err) {
-@@ -534,7 +529,7 @@ static const struct stm32_rng_data stm32mp21_rng_data = {
+@@ -534,7 +529,7 @@ static const struct stm32_rng_data stm32
  	.max_clock_rate = 48000000,
  	.nb_clock = 2,
  	.cr = 0x00800D00,
@@ -59,6 +57,3 @@ index f2f5f1eac3ae..d5a0c90d7ba7 100644
  	.htcr = 0xAAC7,
  };
  
--- 
-2.50.1
-

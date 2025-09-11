@@ -18,8 +18,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm/configs/mp2-fragment-04-multiv7-addons.config | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/configs/mp2-fragment-04-multiv7-addons.config b/arch/arm/configs/mp2-fragment-04-multiv7-addons.config
-index f5bc34dfe24e..ba819395a02f 100644
 --- a/arch/arm/configs/mp2-fragment-04-multiv7-addons.config
 +++ b/arch/arm/configs/mp2-fragment-04-multiv7-addons.config
 @@ -1,3 +1,4 @@
@@ -28,6 +26,3 @@ index f5bc34dfe24e..ba819395a02f 100644
 -
 +CONFIG_IKCONFIG=y
 +CONFIG_IKCONFIG_PROC=y
--- 
-2.50.1
-

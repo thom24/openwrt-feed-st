@@ -16,11 +16,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/stm/lvds.c | 35 -----------------------------------
  1 file changed, 35 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
-index 6b33641e828e..a9fe8727480b 100644
 --- a/drivers/gpu/drm/stm/lvds.c
 +++ b/drivers/gpu/drm/stm/lvds.c
-@@ -1053,10 +1053,7 @@ static int lvds_probe(struct platform_device *pdev)
+@@ -1053,10 +1053,7 @@ static int lvds_probe(struct platform_de
  	struct device_node *port1, *port2, *remote;
  	struct device *dev = &pdev->dev;
  	struct reset_control *rstc;
@@ -31,7 +29,7 @@ index 6b33641e828e..a9fe8727480b 100644
  	int ret, dual_link;
  
  	dev_dbg(dev, "Probing LVDS driver...\n");
-@@ -1201,38 +1198,6 @@ static int lvds_probe(struct platform_device *pdev)
+@@ -1201,38 +1198,6 @@ static int lvds_probe(struct platform_de
  	drm_bridge_add(&lvds->lvds_bridge);
  	platform_set_drvdata(pdev, lvds);
  
@@ -70,6 +68,3 @@ index 6b33641e828e..a9fe8727480b 100644
  	return 0;
  }
  
--- 
-2.50.1
-

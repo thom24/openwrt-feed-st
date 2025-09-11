@@ -22,8 +22,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/usb/dwc2/platform.c | 188 ++++++++++++++++++++++++++++++++++++
  5 files changed, 216 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index 9da9d436314b..397e2cd9f3be 100644
 --- a/drivers/usb/dwc2/core.h
 +++ b/drivers/usb/dwc2/core.h
 @@ -10,6 +10,7 @@
@@ -54,7 +52,7 @@ index 9da9d436314b..397e2cd9f3be 100644
  };
  
  /* Normal architectures just use readl/write */
-@@ -1402,6 +1409,8 @@ void dwc2_drd_exit(struct dwc2_hsotg *hsotg);
+@@ -1402,6 +1409,8 @@ void dwc2_drd_exit(struct dwc2_hsotg *hs
  void dwc2_dump_dev_registers(struct dwc2_hsotg *hsotg);
  void dwc2_dump_host_registers(struct dwc2_hsotg *hsotg);
  void dwc2_dump_global_registers(struct dwc2_hsotg *hsotg);
@@ -63,11 +61,9 @@ index 9da9d436314b..397e2cd9f3be 100644
  
  /* Gadget defines */
  #if IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) || \
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index a9152185f221..ad37eda68129 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -4712,6 +4712,7 @@ static int dwc2_hsotg_pullup(struct usb_gadget *gadget, int is_on)
+@@ -4713,6 +4713,7 @@ static int dwc2_hsotg_pullup(struct usb_
  {
  	struct dwc2_hsotg *hsotg = to_hsotg(gadget);
  	unsigned long flags;
@@ -75,7 +71,7 @@ index a9152185f221..ad37eda68129 100644
  
  	dev_dbg(hsotg->dev, "%s: is_on: %d op_state: %d\n", __func__, is_on,
  		hsotg->op_state);
-@@ -4722,6 +4723,12 @@ static int dwc2_hsotg_pullup(struct usb_gadget *gadget, int is_on)
+@@ -4723,6 +4724,12 @@ static int dwc2_hsotg_pullup(struct usb_
  		return 0;
  	}
  
@@ -88,8 +84,6 @@ index a9152185f221..ad37eda68129 100644
  	spin_lock_irqsave(&hsotg->lock, flags);
  	if (is_on) {
  		hsotg->enabled = 1;
-diff --git a/drivers/usb/dwc2/hw.h b/drivers/usb/dwc2/hw.h
-index 8be7c84cf617..65dfd555bdc4 100644
 --- a/drivers/usb/dwc2/hw.h
 +++ b/drivers/usb/dwc2/hw.h
 @@ -204,11 +204,18 @@
@@ -115,11 +109,9 @@ index 8be7c84cf617..65dfd555bdc4 100644
  #define STM32_SYSCFG_OTGARCR_OFFSET_AREN_MASK	BIT(0)
  
  #define GUID				HSOTG_REG(0x003c)
-diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-index be22d4202966..1b0b8eee2ad8 100644
 --- a/drivers/usb/dwc2/params.c
 +++ b/drivers/usb/dwc2/params.c
-@@ -284,6 +284,7 @@ static void dwc2_set_stm32mp21_hsotg_params(struct dwc2_hsotg *hsotg)
+@@ -284,6 +284,7 @@ static void dwc2_set_stm32mp21_hsotg_par
  	p->hird_threshold_en = false;
  	p->activate_stm32_bvaloval_en = true;
  	p->activate_stm32_otgarcr_en = true;
@@ -127,8 +119,6 @@ index be22d4202966..1b0b8eee2ad8 100644
  }
  
  const struct of_device_id dwc2_of_match_table[] = {
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index f42e9fdc9f42..8b94557f0849 100644
 --- a/drivers/usb/dwc2/platform.c
 +++ b/drivers/usb/dwc2/platform.c
 @@ -28,6 +28,188 @@
@@ -320,7 +310,7 @@ index f42e9fdc9f42..8b94557f0849 100644
  /*
   * Check the dr_mode against the module configuration and hardware
   * capabilities.
-@@ -633,6 +815,12 @@ static int dwc2_driver_probe(struct platform_device *dev)
+@@ -633,6 +815,12 @@ static int dwc2_driver_probe(struct plat
  		hsotg->gadget_enabled = 1;
  	}
  
@@ -333,6 +323,3 @@ index f42e9fdc9f42..8b94557f0849 100644
  	/*
  	 * If we need PHY for wakeup we must be wakeup capable.
  	 * When we have a device that can wake without the PHY we
--- 
-2.50.1
-

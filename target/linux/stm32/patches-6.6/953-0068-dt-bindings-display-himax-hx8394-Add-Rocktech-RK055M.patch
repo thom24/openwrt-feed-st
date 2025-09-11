@@ -15,8 +15,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  .../bindings/display/panel/himax,hx8394.yaml  | 20 ++++++++++++++-----
  1 file changed, 15 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml b/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
-index ffb35288ffbb..fd14fce107d2 100644
 --- a/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
 +++ b/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
 @@ -15,17 +15,16 @@ description:
@@ -67,6 +65,3 @@ index ffb35288ffbb..fd14fce107d2 100644
  examples:
    - |
      #include <dt-bindings/gpio/gpio.h>
--- 
-2.50.1
-

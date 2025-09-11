@@ -23,11 +23,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
-index f8a1390dbf2d..654cc1dd785c 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
-@@ -918,6 +918,7 @@ static void dcmipp_statcap_update_local_buf(struct dcmipp_statcap_device *vcap)
+@@ -918,6 +918,7 @@ static void dcmipp_statcap_update_local_
  	case AV_READ:
  		/* State used for the AVERAGE PRE capture mode */
  		dcmipp_statcap_read_avg_stats(vcap);
@@ -35,7 +33,7 @@ index f8a1390dbf2d..654cc1dd785c 100644
  		break;
  
  	default:
-@@ -942,7 +943,6 @@ static void dcmipp_statcap_update_local_buf(struct dcmipp_statcap_device *vcap)
+@@ -942,7 +943,6 @@ static void dcmipp_statcap_update_local_
  			vcap->capture_state = PHY_AV_RGB;
  		} else if (vcap->capture_state == PHY_AV_RGB) {
  			vcap->capture_state = AV_READ;
@@ -43,6 +41,3 @@ index f8a1390dbf2d..654cc1dd785c 100644
  		}
  		break;
  	}
--- 
-2.50.1
-

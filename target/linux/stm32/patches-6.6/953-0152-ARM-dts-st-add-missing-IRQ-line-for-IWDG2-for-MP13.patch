@@ -18,11 +18,9 @@ Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
  arch/arm/boot/dts/st/stm32mp131.dtsi | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index e555717c0048..2094a4553583 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -1134,6 +1134,7 @@ usbh_ehci: usb@5800d000 {
+@@ -1134,6 +1134,7 @@
  		iwdg2: watchdog@5a002000 {
  			compatible = "st,stm32mp1-iwdg";
  			reg = <0x5a002000 0x400>;
@@ -30,6 +28,3 @@ index e555717c0048..2094a4553583 100644
  			clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
  			clock-names = "pclk", "lsi";
  			status = "disabled";
--- 
-2.50.1
-

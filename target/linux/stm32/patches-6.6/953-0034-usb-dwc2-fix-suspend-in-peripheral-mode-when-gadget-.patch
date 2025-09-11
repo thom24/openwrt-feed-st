@@ -43,11 +43,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/usb/dwc2/platform.c | 31 ++++++++++++++++++++++++++++++-
  1 file changed, 30 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index c67faabbf8af..58503ad84a9d 100644
 --- a/drivers/usb/dwc2/platform.c
 +++ b/drivers/usb/dwc2/platform.c
-@@ -695,9 +695,23 @@ static int dwc2_driver_probe(struct platform_device *dev)
+@@ -695,9 +695,23 @@ error:
  static int __maybe_unused dwc2_suspend(struct device *dev)
  {
  	struct dwc2_hsotg *dwc2 = dev_get_drvdata(dev);
@@ -72,7 +70,7 @@ index c67faabbf8af..58503ad84a9d 100644
  	if (is_device_mode) {
  		/*
  		 * Handle the case when bus has been suspended prior to platform suspend.
-@@ -745,6 +759,10 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+@@ -745,6 +759,10 @@ static int __maybe_unused dwc2_suspend(s
  		regulator_disable(dwc2->usb33d);
  	}
  
@@ -83,7 +81,7 @@ index c67faabbf8af..58503ad84a9d 100644
  	if (dwc2->ll_hw_enabled &&
  	    (is_device_mode || dwc2_host_can_poweroff_phy(dwc2))) {
  		ret = __dwc2_lowlevel_hw_disable(dwc2);
-@@ -760,11 +778,18 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+@@ -760,11 +778,18 @@ static int __maybe_unused dwc2_suspend(s
  static int __maybe_unused dwc2_resume(struct device *dev)
  {
  	struct dwc2_hsotg *dwc2 = dev_get_drvdata(dev);
@@ -102,7 +100,7 @@ index c67faabbf8af..58503ad84a9d 100644
  	if (dev->dma_range_map && dwc2->params.activate_stm32_otgarcr_en) {
  		regmap_set_bits(dwc2->params.stm32_regmap,
  				dwc2->params.stm32_syscfg_otgarcr_reg_off,
-@@ -826,6 +851,10 @@ static int __maybe_unused dwc2_resume(struct device *dev)
+@@ -826,6 +851,10 @@ static int __maybe_unused dwc2_resume(st
  	if (dwc2_is_device_mode(dwc2))
  		ret = dwc2_hsotg_resume(dwc2);
  
@@ -113,6 +111,3 @@ index c67faabbf8af..58503ad84a9d 100644
  	return ret;
  }
  
--- 
-2.50.1
-

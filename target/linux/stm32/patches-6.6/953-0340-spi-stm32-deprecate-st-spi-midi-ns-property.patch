@@ -24,8 +24,6 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/spi/spi-stm32.c                       | 23 +++++++++++++++----
  2 files changed, 20 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-index c0c578444feb..140d5e7d9a7b 100644
 --- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
 +++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
 @@ -114,6 +114,7 @@ properties:
@@ -36,8 +34,6 @@ index c0c578444feb..140d5e7d9a7b 100644
      description: |
        Only for STM32H7, (Master Inter-Data Idleness) minimum time
        delay in nanoseconds inserted between two consecutive data frames.
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index c756ceed880c..8d33b38038c7 100644
 --- a/drivers/spi/spi-stm32.c
 +++ b/drivers/spi/spi-stm32.c
 @@ -278,7 +278,7 @@ struct stm32_spi_cfg {
@@ -49,7 +45,7 @@ index c756ceed880c..8d33b38038c7 100644
  	int (*set_number_of_data)(struct stm32_spi *spi, u32 length);
  	void (*transfer_one_dma_start)(struct stm32_spi *spi);
  	void (*dma_rx_cb)(void *data);
-@@ -1802,11 +1802,26 @@ static int stm32h7_spi_set_mode(struct stm32_spi *spi, unsigned int comm_type)
+@@ -1802,11 +1802,26 @@ static int stm32h7_spi_set_mode(struct s
   * stm32h7_spi_data_idleness - configure minimum time delay inserted between two
   *			       consecutive data frames in master mode
   * @spi: pointer to the spi controller data structure
@@ -78,7 +74,7 @@ index c756ceed880c..8d33b38038c7 100644
  
  	cfg2_clrb |= STM32H7_SPI_CFG2_MIDI;
  	if ((len > 1) && (spi->cur_midi > 0)) {
-@@ -1898,7 +1913,7 @@ static int stm32_spi_transfer_one_setup(struct stm32_spi *spi,
+@@ -1898,7 +1913,7 @@ static int stm32_spi_transfer_one_setup(
  	spi->cur_comm = comm_type;
  
  	if (STM32_SPI_MASTER_MODE(spi) && spi->cfg->set_data_idleness)
@@ -87,6 +83,3 @@ index c756ceed880c..8d33b38038c7 100644
  
  	if (spi->cur_bpw <= 8)
  		nb_words = transfer->len;
--- 
-2.50.1
-

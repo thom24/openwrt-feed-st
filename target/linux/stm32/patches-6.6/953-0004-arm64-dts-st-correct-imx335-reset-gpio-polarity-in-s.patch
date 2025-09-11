@@ -14,11 +14,9 @@ Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index 76dbcfbc95a9..5cc94cf71b23 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -420,7 +420,7 @@ imx335: imx335@1a {
+@@ -420,7 +420,7 @@
  		avdd-supply = <&imx335_2v9>;
  		ovdd-supply = <&imx335_1v8>;
  		dvdd-supply = <&imx335_1v2>;
@@ -27,6 +25,3 @@ index 76dbcfbc95a9..5cc94cf71b23 100644
  		powerdown-gpios = <&gpiob 11 (GPIO_ACTIVE_HIGH | GPIO_PUSH_PULL)>;
  		status = "okay";
  
--- 
-2.50.1
-

@@ -22,11 +22,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-index 793f67b8aa4a..f920bd050a23 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-@@ -456,7 +456,7 @@ asoc_pdm0: mdf-dai {
+@@ -456,7 +456,7 @@
  			compatible = "st,stm32mp25-mdf-dai";
  			#sound-dai-cells = <0>;
  			io-channels = <&filter0 0>;
@@ -35,7 +33,7 @@ index 793f67b8aa4a..f920bd050a23 100644
  			status = "okay";
  			mdf1_port0: port {
  				mdf_endpoint0: endpoint {
-@@ -483,7 +483,7 @@ asoc_pdm1: mdf-dai {
+@@ -483,7 +483,7 @@
  			compatible = "st,stm32mp25-mdf-dai";
  			#sound-dai-cells = <0>;
  			io-channels = <&filter1 0>;
@@ -44,6 +42,3 @@ index 793f67b8aa4a..f920bd050a23 100644
  			status = "okay";
  
  			mdf1_port1: port {
--- 
-2.50.1
-

@@ -21,8 +21,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/mailbox/mailbox-client_cdev.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/mailbox/mailbox-client_cdev.c b/drivers/mailbox/mailbox-client_cdev.c
-index 2d9178589e37..d159c59655e2 100644
 --- a/drivers/mailbox/mailbox-client_cdev.c
 +++ b/drivers/mailbox/mailbox-client_cdev.c
 @@ -6,6 +6,7 @@
@@ -33,6 +31,3 @@ index 2d9178589e37..d159c59655e2 100644
  #include <linux/io.h>
  #include <linux/kernel.h>
  #include <linux/mailbox_client.h>
--- 
-2.50.1
-

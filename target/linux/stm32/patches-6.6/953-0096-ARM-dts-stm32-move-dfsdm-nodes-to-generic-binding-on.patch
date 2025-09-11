@@ -19,11 +19,9 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  .../dts/st/stm32mp135f-dk-a7-examples.dts     | 28 +++++++++++++------
  1 file changed, 19 insertions(+), 9 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk-a7-examples.dts b/arch/arm/boot/dts/st/stm32mp135f-dk-a7-examples.dts
-index 85c9e577ed19..ea9918ef2a45 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk-a7-examples.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk-a7-examples.dts
-@@ -64,13 +64,18 @@ &dfsdm {
+@@ -64,13 +64,18 @@
  
  	dfsdm0: filter@0 {
  		compatible = "st,stm32-dfsdm-dmic";
@@ -46,7 +44,7 @@ index 85c9e577ed19..ea9918ef2a45 100644
  		asoc_pdm0: dfsdm-dai {
  			compatible = "st,stm32h7-dfsdm-dai";
  			#sound-dai-cells = <0>;
-@@ -87,14 +92,19 @@ dfsdm_endpoint0: endpoint {
+@@ -87,14 +92,19 @@
  
  	dfsdm1: filter@1 {
  		compatible = "st,stm32-dfsdm-dmic";
@@ -71,6 +69,3 @@ index 85c9e577ed19..ea9918ef2a45 100644
  		asoc_pdm1: dfsdm-dai {
  			compatible = "st,stm32h7-dfsdm-dai";
  			#sound-dai-cells = <0>;
--- 
-2.50.1
-

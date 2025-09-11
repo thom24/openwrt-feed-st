@@ -23,8 +23,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  .../bindings/perf/stm32-ddrperfm-pmu.yaml     | 49 ++++++++++---------
  1 file changed, 26 insertions(+), 23 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/perf/stm32-ddrperfm-pmu.yaml b/Documentation/devicetree/bindings/perf/stm32-ddrperfm-pmu.yaml
-index 318cf5aac4f4..3f8f029dc4ed 100644
 --- a/Documentation/devicetree/bindings/perf/stm32-ddrperfm-pmu.yaml
 +++ b/Documentation/devicetree/bindings/perf/stm32-ddrperfm-pmu.yaml
 @@ -1,13 +1,13 @@
@@ -108,6 +106,3 @@ index 318cf5aac4f4..3f8f029dc4ed 100644
 +      };
      };
  ...
--- 
-2.50.1
-

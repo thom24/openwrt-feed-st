@@ -20,11 +20,9 @@ Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
  drivers/char/hw_random/stm32-rng.c | 9 ++++++++-
  1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
-index a9df329aa031..9c630623c53d 100644
 --- a/drivers/char/hw_random/stm32-rng.c
 +++ b/drivers/char/hw_random/stm32-rng.c
-@@ -575,6 +575,7 @@ static int stm32_rng_probe(struct platform_device *ofdev)
+@@ -575,6 +575,7 @@ static int stm32_rng_probe(struct platfo
  	struct device_node *np = ofdev->dev.of_node;
  	struct stm32_rng_private *priv;
  	struct resource *res;
@@ -32,7 +30,7 @@ index a9df329aa031..9c630623c53d 100644
  
  	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
  	if (!priv)
-@@ -624,7 +625,13 @@ static int stm32_rng_probe(struct platform_device *ofdev)
+@@ -624,7 +625,13 @@ static int stm32_rng_probe(struct platfo
  	pm_runtime_use_autosuspend(dev);
  	pm_runtime_enable(dev);
  
@@ -47,6 +45,3 @@ index a9df329aa031..9c630623c53d 100644
  }
  
  static struct platform_driver stm32_rng_driver = {
--- 
-2.50.1
-

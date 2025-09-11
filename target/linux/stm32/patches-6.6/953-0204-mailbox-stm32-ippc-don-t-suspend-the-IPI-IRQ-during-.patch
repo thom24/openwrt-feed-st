@@ -15,11 +15,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/mailbox/stm32-ipcc.c | 9 ++++++++-
  1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mailbox/stm32-ipcc.c b/drivers/mailbox/stm32-ipcc.c
-index 611ca914e24e..72fa4e13b2c9 100644
 --- a/drivers/mailbox/stm32-ipcc.c
 +++ b/drivers/mailbox/stm32-ipcc.c
-@@ -375,7 +375,8 @@ static int stm32_ipcc_probe(struct platform_device *pdev)
+@@ -375,7 +375,8 @@ static int stm32_ipcc_probe(struct platf
  		}
  
  		ret = devm_request_threaded_irq(dev, ipcc->irqs[i], NULL,
@@ -29,7 +27,7 @@ index 611ca914e24e..72fa4e13b2c9 100644
  						dev_name(dev), ipcc);
  		if (ret) {
  			dev_err(dev, "failed to request irq %lu (%d)\n", i, ret);
-@@ -501,6 +502,9 @@ static int stm32_ipcc_suspend(struct device *dev)
+@@ -501,6 +502,9 @@ static int stm32_ipcc_suspend(struct dev
  	ipcc->xmr = readl_relaxed(ipcc->reg_proc + IPCC_XMR);
  	ipcc->xcr = readl_relaxed(ipcc->reg_proc + IPCC_XCR);
  
@@ -39,7 +37,7 @@ index 611ca914e24e..72fa4e13b2c9 100644
  	return 0;
  }
  
-@@ -511,6 +515,9 @@ static int stm32_ipcc_resume(struct device *dev)
+@@ -511,6 +515,9 @@ static int stm32_ipcc_resume(struct devi
  	writel_relaxed(ipcc->xmr, ipcc->reg_proc + IPCC_XMR);
  	writel_relaxed(ipcc->xcr, ipcc->reg_proc + IPCC_XCR);
  
@@ -49,6 +47,3 @@ index 611ca914e24e..72fa4e13b2c9 100644
  	return 0;
  }
  #endif
--- 
-2.50.1
-

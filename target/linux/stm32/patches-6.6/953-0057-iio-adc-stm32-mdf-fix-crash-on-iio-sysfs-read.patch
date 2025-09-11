@@ -20,11 +20,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/iio/adc/stm32-mdf-adc.c | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/iio/adc/stm32-mdf-adc.c b/drivers/iio/adc/stm32-mdf-adc.c
-index c7e433a59176..e2dedf5f5081 100644
 --- a/drivers/iio/adc/stm32-mdf-adc.c
 +++ b/drivers/iio/adc/stm32-mdf-adc.c
-@@ -1218,10 +1218,8 @@ static int stm32_mdf_adc_chan_init_one(struct iio_dev *indio_dev, struct fwnode_
+@@ -1218,10 +1218,8 @@ static int stm32_mdf_adc_chan_init_one(s
  		ch->scan_type.shift = 8;
  	}
  
@@ -36,6 +34,3 @@ index c7e433a59176..e2dedf5f5081 100644
  
  	ch->info_mask_shared_by_all = BIT(IIO_CHAN_INFO_SAMP_FREQ);
  	ch->scan_type.sign = 's';
--- 
-2.50.1
-

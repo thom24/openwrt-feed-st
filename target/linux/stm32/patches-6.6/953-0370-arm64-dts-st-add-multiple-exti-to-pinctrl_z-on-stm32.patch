@@ -14,11 +14,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp251.dtsi | 9 +++++++++
  1 file changed, 9 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 0631b9cc7a8e..0eb853688363 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -2950,6 +2950,15 @@ pinctrl_z: pinctrl@46200000 {
+@@ -2950,6 +2950,15 @@
  			compatible = "st,stm32mp257-z-pinctrl";
  			ranges = <0 0x46200000 0x400>;
  			interrupt-parent = <&exti1>;
@@ -34,6 +32,3 @@ index 0631b9cc7a8e..0eb853688363 100644
  
  			gpioz: gpio@46200000 {
  				gpio-controller;
--- 
-2.50.1
-

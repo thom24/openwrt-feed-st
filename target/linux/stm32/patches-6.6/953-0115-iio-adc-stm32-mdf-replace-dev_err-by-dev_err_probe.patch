@@ -12,11 +12,9 @@ Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
  drivers/iio/adc/stm32-mdf-adc.c | 14 ++++++--------
  1 file changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/iio/adc/stm32-mdf-adc.c b/drivers/iio/adc/stm32-mdf-adc.c
-index 648298d1deca..c87edf865a77 100644
 --- a/drivers/iio/adc/stm32-mdf-adc.c
 +++ b/drivers/iio/adc/stm32-mdf-adc.c
-@@ -1550,14 +1550,14 @@ static int stm32_mdf_audio_init(struct device *dev, struct iio_dev *indio_dev)
+@@ -1550,14 +1550,14 @@ static int stm32_mdf_audio_init(struct d
  
  	ret = stm32_mdf_adc_chan_init(indio_dev, ch);
  	if (ret < 0)
@@ -33,7 +31,7 @@ index 648298d1deca..c87edf865a77 100644
  
  	ret =  stm32_mdf_adc_filter_set_mode(adc, true);
  	if (ret)
-@@ -1598,7 +1598,7 @@ static int stm32_mdf_adc_init(struct device *dev, struct iio_dev *indio_dev)
+@@ -1598,7 +1598,7 @@ static int stm32_mdf_adc_init(struct dev
  
  		ret = stm32_mdf_adc_chan_init(indio_dev, ch);
  		if (ret < 0)
@@ -42,7 +40,7 @@ index 648298d1deca..c87edf865a77 100644
  	}
  
  	indio_dev->num_channels = num_ch;
-@@ -1931,10 +1931,8 @@ static int stm32_mdf_adc_probe(struct platform_device *pdev)
+@@ -1931,10 +1931,8 @@ static int stm32_mdf_adc_probe(struct pl
  		return dev_err_probe(dev, irq, "Failed to get IRQ\n");
  
  	ret = devm_request_irq(dev, irq, stm32_mdf_irq, 0, pdev->name, iio);
@@ -55,7 +53,7 @@ index 648298d1deca..c87edf865a77 100644
  
  	ret = stm32_mdf_adc_parse_of(pdev, adc);
  	if (ret < 0)
-@@ -1955,7 +1953,7 @@ static int stm32_mdf_adc_probe(struct platform_device *pdev)
+@@ -1955,7 +1953,7 @@ static int stm32_mdf_adc_probe(struct pl
  	if (!MDF_IS_INTERLEAVED_FILT_NOT_0(adc)) {
  		ret = iio_device_register(iio);
  		if (ret < 0) {
@@ -64,6 +62,3 @@ index 648298d1deca..c87edf865a77 100644
  			goto err_cleanup;
  		}
  	}
--- 
-2.50.1
-

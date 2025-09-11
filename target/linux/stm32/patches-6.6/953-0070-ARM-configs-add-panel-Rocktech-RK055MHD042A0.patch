@@ -14,8 +14,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm/configs/fragment-02-multiv7_addons.config | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/configs/fragment-02-multiv7_addons.config b/arch/arm/configs/fragment-02-multiv7_addons.config
-index 48383caa1e84..7b6e480cb84a 100644
 --- a/arch/arm/configs/fragment-02-multiv7_addons.config
 +++ b/arch/arm/configs/fragment-02-multiv7_addons.config
 @@ -13,6 +13,7 @@ CONFIG_DEBUG_PREEMPT=y
@@ -26,6 +24,3 @@ index 48383caa1e84..7b6e480cb84a 100644
  CONFIG_DRM_PANEL_ORISETECH_OTM8009A=y
  CONFIG_DRM_PANEL_RAYDIUM_RM68200=y
  CONFIG_DRM_PANEL_ROCKTECH_HX8394=y
--- 
-2.50.1
-

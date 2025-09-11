@@ -23,11 +23,9 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/452013
  drivers/irqchip/irq-stm32mp-exti.c | 21 ++++-----------------
  1 file changed, 4 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/irqchip/irq-stm32mp-exti.c b/drivers/irqchip/irq-stm32mp-exti.c
-index f54fe6b41e4c..22396c5319e5 100644
 --- a/drivers/irqchip/irq-stm32mp-exti.c
 +++ b/drivers/irqchip/irq-stm32mp-exti.c
-@@ -316,9 +316,6 @@ static void stm32mp_chip_resume(struct stm32mp_exti_chip_data *chip_data,
+@@ -316,9 +316,6 @@ static void stm32mp_chip_resume(struct s
  	val &= ~wake_active;
  	val |= mask_cache;
  	writel_relaxed(val, base + bank->imr_ofst);
@@ -37,7 +35,7 @@ index f54fe6b41e4c..22396c5319e5 100644
  }
  
  /* directly set the target bit without reading first. */
-@@ -369,10 +366,6 @@ static void stm32mp_exti_eoi(struct irq_data *d)
+@@ -369,10 +366,6 @@ static void stm32mp_exti_eoi(struct irq_
  	stm32mp_exti_write_bit(d, bank->rpr_ofst);
  	stm32mp_exti_write_bit(d, bank->fpr_ofst);
  
@@ -48,7 +46,7 @@ index f54fe6b41e4c..22396c5319e5 100644
  	chip_data->mask_cache |= stm32mp_exti_set_bit(d, bank->imr_ofst);
  
  	raw_spin_unlock(&chip_data->rlock);
-@@ -387,11 +380,6 @@ static void stm32mp_exti_mask(struct irq_data *d)
+@@ -387,11 +380,6 @@ static void stm32mp_exti_mask(struct irq
  
  	raw_spin_lock(&chip_data->rlock);
  	chip_data->mask_cache &= ~stm32mp_exti_clr_bit(d, bank->imr_ofst);
@@ -60,7 +58,7 @@ index f54fe6b41e4c..22396c5319e5 100644
  	raw_spin_unlock(&chip_data->rlock);
  
  	irq_chip_mask_parent(d);
-@@ -403,11 +391,6 @@ static void stm32mp_exti_unmask(struct irq_data *d)
+@@ -403,11 +391,6 @@ static void stm32mp_exti_unmask(struct i
  	const struct stm32mp_exti_bank *bank = chip_data->reg_bank;
  
  	raw_spin_lock(&chip_data->rlock);
@@ -72,7 +70,7 @@ index f54fe6b41e4c..22396c5319e5 100644
  	chip_data->mask_cache |= stm32mp_exti_set_bit(d, bank->imr_ofst);
  	raw_spin_unlock(&chip_data->rlock);
  
-@@ -933,6 +916,8 @@ static int stm32mp_exti_probe(struct platform_device *pdev)
+@@ -933,6 +916,8 @@ static int stm32mp_exti_probe(struct pla
  	if (ret)
  		return ret;
  
@@ -81,7 +79,7 @@ index f54fe6b41e4c..22396c5319e5 100644
  	if (of_property_read_bool(np, "interrupts-extended"))
  		host_data->dt_has_irqs_desc = true;
  
-@@ -972,6 +957,8 @@ static int stm32mp_exti_probe(struct platform_device *pdev)
+@@ -972,6 +957,8 @@ static int stm32mp_exti_probe(struct pla
  		ret = devm_add_action_or_reset(dev, stm32mp_exti_remove_irq, domain);
  		if (ret)
  			return ret;
@@ -90,6 +88,3 @@ index f54fe6b41e4c..22396c5319e5 100644
  	}
  
  	devm_pm_runtime_enable(dev);
--- 
-2.50.1
-

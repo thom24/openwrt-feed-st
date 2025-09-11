@@ -21,11 +21,9 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/pci/controller/dwc/pcie-stm32.c | 15 ++++++++++++---
  1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/pci/controller/dwc/pcie-stm32.c b/drivers/pci/controller/dwc/pcie-stm32.c
-index 8187d4bce760..96976d8c57c8 100644
 --- a/drivers/pci/controller/dwc/pcie-stm32.c
 +++ b/drivers/pci/controller/dwc/pcie-stm32.c
-@@ -242,6 +242,14 @@ static irqreturn_t stm32_pcie_aer_msi_irq_handler(int irq, void *priv)
+@@ -242,6 +242,14 @@ static irqreturn_t stm32_pcie_aer_msi_ir
  	struct stm32_pcie *stm32_pcie = priv;
  
  	regmap_write(stm32_pcie->regmap, SYSCFG_PCIEAERRCMSICR, 1);
@@ -40,7 +38,7 @@ index 8187d4bce760..96976d8c57c8 100644
  	regmap_write(stm32_pcie->regmap, SYSCFG_PCIEAERRCMSICR, 0);
  
  	return IRQ_HANDLED;
-@@ -304,9 +312,10 @@ static int stm32_add_pcie_port(struct stm32_pcie *stm32_pcie,
+@@ -304,9 +312,10 @@ static int stm32_add_pcie_port(struct st
  		}
  
  		if (stm32_pcie->aer_irq) {
@@ -54,6 +52,3 @@ index 8187d4bce760..96976d8c57c8 100644
  			if (ret < 0) {
  				dev_err(dev, "failed to request AER MSI IRQ %d\n",
  					stm32_pcie->aer_irq);
--- 
-2.50.1
-

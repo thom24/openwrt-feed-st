@@ -16,8 +16,6 @@ Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
  .../bindings/display/st,stm32-lvds.yaml          | 16 ++++++++++++++--
  1 file changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/display/st,stm32-lvds.yaml b/Documentation/devicetree/bindings/display/st,stm32-lvds.yaml
-index a6383858cd2c..0b15c600b9cc 100644
 --- a/Documentation/devicetree/bindings/display/st,stm32-lvds.yaml
 +++ b/Documentation/devicetree/bindings/display/st,stm32-lvds.yaml
 @@ -68,6 +68,12 @@ properties:
@@ -52,6 +50,3 @@ index a6383858cd2c..0b15c600b9cc 100644
      };
  
 -...
--- 
-2.50.1
-

@@ -24,8 +24,6 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  tools/spi/spidev_test.c | 11 +++++++++--
  1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/tools/spi/spidev_test.c b/tools/spi/spidev_test.c
-index 9179942d7f15..f2135d619a0b 100644
 --- a/tools/spi/spidev_test.c
 +++ b/tools/spi/spidev_test.c
 @@ -42,6 +42,7 @@ static char *input_file;
@@ -36,7 +34,7 @@ index 9179942d7f15..f2135d619a0b 100644
  static int verbose;
  static int transfer_size;
  static int iterations;
-@@ -124,6 +125,7 @@ static void transfer(int fd, uint8_t const *tx, uint8_t const *rx, size_t len)
+@@ -124,6 +125,7 @@ static void transfer(int fd, uint8_t con
  		.rx_buf = (unsigned long)rx,
  		.len = len,
  		.delay_usecs = delay,
@@ -44,7 +42,7 @@ index 9179942d7f15..f2135d619a0b 100644
  		.speed_hz = speed,
  		.bits_per_word = bits,
  	};
-@@ -172,11 +174,12 @@ static void transfer(int fd, uint8_t const *tx, uint8_t const *rx, size_t len)
+@@ -172,11 +174,12 @@ static void transfer(int fd, uint8_t con
  
  static void print_usage(const char *prog)
  {
@@ -58,7 +56,7 @@ index 9179942d7f15..f2135d619a0b 100644
  		 "  -l --loop           loopback\n"
  		 "spi mode:\n"
  		 "  -H --cpha           clock phase\n"
-@@ -213,6 +216,7 @@ static void parse_opts(int argc, char *argv[])
+@@ -213,6 +216,7 @@ static void parse_opts(int argc, char *a
  			{ "device",        1, 0, 'D' },
  			{ "speed",         1, 0, 's' },
  			{ "delay",         1, 0, 'd' },
@@ -66,7 +64,7 @@ index 9179942d7f15..f2135d619a0b 100644
  			{ "loop",          0, 0, 'l' },
  			{ "cpha",          0, 0, 'H' },
  			{ "cpol",          0, 0, 'O' },
-@@ -237,7 +241,7 @@ static void parse_opts(int argc, char *argv[])
+@@ -237,7 +241,7 @@ static void parse_opts(int argc, char *a
  		};
  		int c;
  
@@ -75,7 +73,7 @@ index 9179942d7f15..f2135d619a0b 100644
  				lopts, NULL);
  
  		if (c == -1)
-@@ -253,6 +257,9 @@ static void parse_opts(int argc, char *argv[])
+@@ -253,6 +257,9 @@ static void parse_opts(int argc, char *a
  		case 'd':
  			delay = atoi(optarg);
  			break;
@@ -85,6 +83,3 @@ index 9179942d7f15..f2135d619a0b 100644
  		case 'b':
  			bits = atoi(optarg);
  			break;
--- 
-2.50.1
-

@@ -20,11 +20,9 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/dma/stm32/stm32-mdma.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/dma/stm32/stm32-mdma.c b/drivers/dma/stm32/stm32-mdma.c
-index 1aae3a33760c..1f71622524a2 100644
 --- a/drivers/dma/stm32/stm32-mdma.c
 +++ b/drivers/dma/stm32/stm32-mdma.c
-@@ -732,7 +732,7 @@ static int stm32_mdma_setup_xfer(struct stm32_mdma_chan *chan,
+@@ -732,7 +732,7 @@ static int stm32_mdma_setup_xfer(struct
  	struct stm32_mdma_chan_config *chan_config = &chan->chan_config;
  	struct scatterlist *sg;
  	dma_addr_t src_addr, dst_addr;
@@ -33,6 +31,3 @@ index 1aae3a33760c..1f71622524a2 100644
  	int i, ret = 0;
  
  	if (chan_config->m2m_hw)
--- 
-2.50.1
-

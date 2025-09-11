@@ -17,11 +17,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/pwm/pwm-stm32-lp.c | 56 ++++++++++++++++++--------------------
  1 file changed, 27 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/pwm/pwm-stm32-lp.c b/drivers/pwm/pwm-stm32-lp.c
-index 7de64a41fea3..884911d443a6 100644
 --- a/drivers/pwm/pwm-stm32-lp.c
 +++ b/drivers/pwm/pwm-stm32-lp.c
-@@ -43,10 +43,10 @@ static int stm32_pwm_lp_update_allowed(struct stm32_pwm_lp *priv, int channel)
+@@ -43,10 +43,10 @@ static int stm32_pwm_lp_update_allowed(s
  	if (!priv->num_cc_chans)
  		return true;
  
@@ -34,7 +32,7 @@ index 7de64a41fea3..884911d443a6 100644
  
  	/* More than one channel enabled: enable, prescaler or ARR value can't be changed */
  	if (bitmap_weight(&ccmr, sizeof(u32) * BITS_PER_BYTE) > 1)
-@@ -57,9 +57,9 @@ static int stm32_pwm_lp_update_allowed(struct stm32_pwm_lp *priv, int channel)
+@@ -57,9 +57,9 @@ static int stm32_pwm_lp_update_allowed(s
  	 * report if enable, prescaler or ARR value can be changed.
  	 */
  	if (channel)
@@ -46,7 +44,7 @@ index 7de64a41fea3..884911d443a6 100644
  }
  
  static int stm32_pwm_lp_compare_channel_apply(struct stm32_pwm_lp *priv, int channel,
-@@ -73,25 +73,25 @@ static int stm32_pwm_lp_compare_channel_apply(struct stm32_pwm_lp *priv, int cha
+@@ -73,25 +73,25 @@ static int stm32_pwm_lp_compare_channel_
  	if (!priv->num_cc_chans)
  		return 0;
  
@@ -59,13 +57,14 @@ index 7de64a41fea3..884911d443a6 100644
 -		/* Must disable CC channel (CCxE) to modify polarity (CCxP), then reenable */
 -		reenable = (enable && FIELD_GET(STM32MP25_LPTIM_CC2E, ccmr1)) &&
 -			(polarity != FIELD_GET(STM32MP25_LPTIM_CC2P, ccmr1));
-+		/* Must disable CC channel (CCxE) to modify polarity (CCxP), then re-enable */
-+		reenable = (enable && FIELD_GET(STM32_LPTIM_CC2E, ccmr1)) &&
-+			(polarity != FIELD_GET(STM32_LPTIM_CC2P, ccmr1));
- 
+-
 -		mask = STM32MP25_LPTIM_CC2SEL | STM32MP25_LPTIM_CC2E | STM32MP25_LPTIM_CC2P;
 -		val = FIELD_PREP(STM32MP25_LPTIM_CC2P, polarity);
 -		val |= FIELD_PREP(STM32MP25_LPTIM_CC2E, enable);
++		/* Must disable CC channel (CCxE) to modify polarity (CCxP), then re-enable */
++		reenable = (enable && FIELD_GET(STM32_LPTIM_CC2E, ccmr1)) &&
++			(polarity != FIELD_GET(STM32_LPTIM_CC2P, ccmr1));
++
 +		mask = STM32_LPTIM_CC2SEL | STM32_LPTIM_CC2E | STM32_LPTIM_CC2P;
 +		val = FIELD_PREP(STM32_LPTIM_CC2P, polarity);
 +		val |= FIELD_PREP(STM32_LPTIM_CC2E, enable);
@@ -84,7 +83,7 @@ index 7de64a41fea3..884911d443a6 100644
  	}
  
  	if (reenable) {
-@@ -99,8 +99,8 @@ static int stm32_pwm_lp_compare_channel_apply(struct stm32_pwm_lp *priv, int cha
+@@ -99,8 +99,8 @@ static int stm32_pwm_lp_compare_channel_
  		unsigned long rate;
  		unsigned int delay_us;
  
@@ -95,7 +94,7 @@ index 7de64a41fea3..884911d443a6 100644
  		if (ret)
  			return ret;
  		/*
-@@ -118,7 +118,7 @@ static int stm32_pwm_lp_compare_channel_apply(struct stm32_pwm_lp *priv, int cha
+@@ -118,7 +118,7 @@ static int stm32_pwm_lp_compare_channel_
  		usleep_range(delay_us, delay_us * 2);
  	}
  
@@ -104,7 +103,7 @@ index 7de64a41fea3..884911d443a6 100644
  }
  
  static int stm32_pwm_lp_apply(struct pwm_chip *chip, struct pwm_device *pwm,
-@@ -142,7 +142,7 @@ static int stm32_pwm_lp_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+@@ -142,7 +142,7 @@ static int stm32_pwm_lp_apply(struct pwm
  			if (ret)
  				return ret;
  			ret = regmap_write(priv->regmap, pwm->hwpwm ?
@@ -113,7 +112,7 @@ index 7de64a41fea3..884911d443a6 100644
  			if (ret)
  				return ret;
  
-@@ -252,7 +252,7 @@ static int stm32_pwm_lp_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+@@ -252,7 +252,7 @@ static int stm32_pwm_lp_apply(struct pwm
  		goto err;
  
  	/* Write CMP/CCRx register and ensure it's been properly written */
@@ -122,7 +121,7 @@ index 7de64a41fea3..884911d443a6 100644
  			   prd - (1 + dty));
  	if (ret)
  		goto err;
-@@ -308,11 +308,11 @@ static int stm32_pwm_lp_get_state(struct pwm_chip *chip,
+@@ -308,11 +308,11 @@ static int stm32_pwm_lp_get_state(struct
  	enabled = !!FIELD_GET(STM32_LPTIM_ENABLE, val);
  	if (priv->num_cc_chans) {
  		/* There's a CC chan, need to also check if it's enabled */
@@ -137,7 +136,7 @@ index 7de64a41fea3..884911d443a6 100644
  	}
  	state->enabled = enabled;
  
-@@ -327,9 +327,9 @@ static int stm32_pwm_lp_get_state(struct pwm_chip *chip,
+@@ -327,9 +327,9 @@ static int stm32_pwm_lp_get_state(struct
  	presc = FIELD_GET(STM32_LPTIM_PRESC, val);
  	if (priv->num_cc_chans) {
  		if (pwm->hwpwm)
@@ -149,7 +148,7 @@ index 7de64a41fea3..884911d443a6 100644
  	} else {
  		state->polarity = FIELD_GET(STM32_LPTIM_WAVPOL, val);
  	}
-@@ -339,7 +339,7 @@ static int stm32_pwm_lp_get_state(struct pwm_chip *chip,
+@@ -339,7 +339,7 @@ static int stm32_pwm_lp_get_state(struct
  	tmp = (tmp << presc) * NSEC_PER_SEC;
  	state->period = DIV_ROUND_CLOSEST_ULL(tmp, rate);
  
@@ -158,7 +157,7 @@ index 7de64a41fea3..884911d443a6 100644
  	tmp = prd - val;
  	tmp = (tmp << presc) * NSEC_PER_SEC;
  	state->duty_cycle = DIV_ROUND_CLOSEST_ULL(tmp, rate);
-@@ -440,8 +440,6 @@ static const struct dev_pm_ops stm32_pwm_lp_pm_ops = {
+@@ -440,8 +440,6 @@ static const struct dev_pm_ops stm32_pwm
  
  static const struct of_device_id stm32_pwm_lp_of_match[] = {
  	{ .compatible = "st,stm32-pwm-lp", },
@@ -167,6 +166,3 @@ index 7de64a41fea3..884911d443a6 100644
  	{},
  };
  MODULE_DEVICE_TABLE(of, stm32_pwm_lp_of_match);
--- 
-2.50.1
-

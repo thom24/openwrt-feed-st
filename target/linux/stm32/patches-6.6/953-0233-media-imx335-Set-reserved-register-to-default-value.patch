@@ -33,11 +33,9 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  drivers/media/i2c/imx335.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
-index 32046a6b2425..3f4d841e7d6b 100644
 --- a/drivers/media/i2c/imx335.c
 +++ b/drivers/media/i2c/imx335.c
-@@ -256,7 +256,7 @@ static const struct imx335_reg mode_2592x1940_regs[] = {
+@@ -256,7 +256,7 @@ static const struct imx335_reg mode_2592
  	{0x3794, 0x7a},
  	{0x3796, 0xa1},
  	{0x37b0, 0x36},
@@ -46,6 +44,3 @@ index 32046a6b2425..3f4d841e7d6b 100644
  };
  
  static const struct imx335_reg raw10_framefmt_regs[] = {
--- 
-2.50.1
-

@@ -14,11 +14,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  .../net/ethernet/stmicro/stmmac/stmmac_main.c | 32 ++++++++++++-------
  1 file changed, 20 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 90009ee3ac0e..9558ee3b8624 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -7746,6 +7746,8 @@ int stmmac_suspend(struct device *dev)
+@@ -7772,6 +7772,8 @@ int stmmac_suspend(struct device *dev)
  		return 0;
  	}
  
@@ -27,7 +25,7 @@ index 90009ee3ac0e..9558ee3b8624 100644
  	mutex_lock(&priv->lock);
  
  	netif_device_detach(ndev);
-@@ -7771,22 +7773,20 @@ int stmmac_suspend(struct device *dev)
+@@ -7797,22 +7799,20 @@ int stmmac_suspend(struct device *dev)
  		stmmac_pmt(priv, priv->hw, priv->wolopts);
  		priv->irq_wake = 1;
  	} else {
@@ -58,7 +56,7 @@ index 90009ee3ac0e..9558ee3b8624 100644
  	if (priv->dma_cap.fpesel) {
  		/* Disable FPE */
  		stmmac_fpe_configure(priv, priv->ioaddr,
-@@ -7884,9 +7884,15 @@ int stmmac_resume(struct device *dev)
+@@ -7910,9 +7910,15 @@ int stmmac_resume(struct device *dev)
  			return ret;
  	}
  
@@ -76,7 +74,7 @@ index 90009ee3ac0e..9558ee3b8624 100644
  	mutex_lock(&priv->lock);
  
  	stmmac_reset_queues_param(priv);
-@@ -7911,6 +7917,8 @@ int stmmac_resume(struct device *dev)
+@@ -7937,6 +7943,8 @@ int stmmac_resume(struct device *dev)
  
  	rtnl_unlock();
  
@@ -85,6 +83,3 @@ index 90009ee3ac0e..9558ee3b8624 100644
  	netif_device_attach(ndev);
  
  	return 0;
--- 
-2.50.1
-

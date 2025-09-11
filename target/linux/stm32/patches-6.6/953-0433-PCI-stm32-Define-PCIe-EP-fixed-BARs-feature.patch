@@ -21,11 +21,9 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/pci/controller/dwc/pcie-stm32-ep.c | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/drivers/pci/controller/dwc/pcie-stm32-ep.c b/drivers/pci/controller/dwc/pcie-stm32-ep.c
-index 4e2870b89046..ff74de50f767 100644
 --- a/drivers/pci/controller/dwc/pcie-stm32-ep.c
 +++ b/drivers/pci/controller/dwc/pcie-stm32-ep.c
-@@ -148,6 +148,12 @@ static const struct pci_epc_features stm32_pcie_epc_features = {
+@@ -148,6 +148,12 @@ static const struct pci_epc_features stm
  	.force_core_init = true,
  	.core_init_notifier = true,
  	.msi_capable = true,
@@ -38,6 +36,3 @@ index 4e2870b89046..ff74de50f767 100644
  	.align = SZ_64K,
  };
  
--- 
-2.50.1
-

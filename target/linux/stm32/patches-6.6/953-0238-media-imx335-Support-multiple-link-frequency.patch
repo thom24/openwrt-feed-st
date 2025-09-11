@@ -27,8 +27,6 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  drivers/media/i2c/imx335.c | 84 +++++++++++++++++++++++++++++++-------
  1 file changed, 70 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
-index 3d7aba73479d..5a67e7cfde1f 100644
 --- a/drivers/media/i2c/imx335.c
 +++ b/drivers/media/i2c/imx335.c
 @@ -49,7 +49,9 @@
@@ -42,7 +40,7 @@ index 3d7aba73479d..5a67e7cfde1f 100644
  #define IMX335_NUM_DATA_LANES	4
  
  #define IMX335_REG_MIN		0x00
-@@ -99,7 +101,6 @@ static const char * const imx335_supply_name[] = {
+@@ -99,7 +101,6 @@ static const char * const imx335_supply_
   * @vblank_min: Minimum vertical blanking in lines
   * @vblank_max: Maximum vertical blanking in lines
   * @pclk: Sensor pixel clock
@@ -75,7 +73,7 @@ index 3d7aba73479d..5a67e7cfde1f 100644
  	{0x3018, 0x04},
  	{0x302c, 0x3c},
  	{0x302e, 0x20},
-@@ -180,10 +174,6 @@ static const struct imx335_reg mode_2592x1940_regs[] = {
+@@ -180,10 +174,6 @@ static const struct imx335_reg mode_2592
  	{0x3074, 0xc8},
  	{0x3076, 0x28},
  	{0x304c, 0x00},
@@ -86,7 +84,7 @@ index 3d7aba73479d..5a67e7cfde1f 100644
  	{0x31a1, 0x00},
  	{0x3288, 0x21},
  	{0x328a, 0x02},
-@@ -269,6 +259,65 @@ static const struct imx335_reg raw12_framefmt_regs[] = {
+@@ -269,6 +259,65 @@ static const struct imx335_reg raw12_fra
  	{0x341d, 0x00},
  };
  
@@ -152,7 +150,7 @@ index 3d7aba73479d..5a67e7cfde1f 100644
  static const u32 imx335_mbus_codes[] = {
  	MEDIA_BUS_FMT_SRGGB12_1X12,
  	MEDIA_BUS_FMT_SRGGB10_1X10,
-@@ -283,7 +332,6 @@ static const struct imx335_mode supported_mode = {
+@@ -283,7 +332,6 @@ static const struct imx335_mode supporte
  	.vblank_min = 2560,
  	.vblank_max = 133060,
  	.pclk = 396000000,
@@ -160,7 +158,7 @@ index 3d7aba73479d..5a67e7cfde1f 100644
  	.reg_list = {
  		.num_of_regs = ARRAY_SIZE(mode_2592x1940_regs),
  		.regs = mode_2592x1940_regs,
-@@ -766,6 +814,14 @@ static int imx335_start_streaming(struct imx335 *imx335)
+@@ -766,6 +814,14 @@ static int imx335_start_streaming(struct
  	const struct imx335_reg_list *reg_list;
  	int ret;
  
@@ -175,6 +173,3 @@ index 3d7aba73479d..5a67e7cfde1f 100644
  	/* Write sensor mode registers */
  	reg_list = &imx335->cur_mode->reg_list;
  	ret = imx335_write_regs(imx335, reg_list->regs,
--- 
-2.50.1
-

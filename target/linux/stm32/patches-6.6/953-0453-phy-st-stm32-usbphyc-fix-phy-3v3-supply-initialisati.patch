@@ -35,8 +35,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/phy/st/phy-stm32-usbphyc.c | 18 ++++++++++++++++++
  1 file changed, 18 insertions(+)
 
-diff --git a/drivers/phy/st/phy-stm32-usbphyc.c b/drivers/phy/st/phy-stm32-usbphyc.c
-index a11a85783621..e8364e80874f 100644
 --- a/drivers/phy/st/phy-stm32-usbphyc.c
 +++ b/drivers/phy/st/phy-stm32-usbphyc.c
 @@ -153,6 +153,7 @@ struct stm32_usbphyc {
@@ -47,7 +45,7 @@ index a11a85783621..e8364e80874f 100644
  	atomic_t n_pll_cons;
  	struct clk_hw clk48_hw;
  	int switch_setup;
-@@ -180,8 +181,14 @@ static int stm32_usbphyc_regulators_enable(struct stm32_usbphyc *usbphyc)
+@@ -180,8 +181,14 @@ static int stm32_usbphyc_regulators_enab
  	if (ret)
  		goto vdda1v1_disable;
  
@@ -62,7 +60,7 @@ index a11a85783621..e8364e80874f 100644
  vdda1v1_disable:
  	regulator_disable(usbphyc->vdda1v1);
  
-@@ -192,6 +199,10 @@ static int stm32_usbphyc_regulators_disable(struct stm32_usbphyc *usbphyc)
+@@ -192,6 +199,10 @@ static int stm32_usbphyc_regulators_disa
  {
  	int ret;
  
@@ -73,7 +71,7 @@ index a11a85783621..e8364e80874f 100644
  	ret = regulator_disable(usbphyc->vdda1v8);
  	if (ret)
  		return ret;
-@@ -704,6 +715,13 @@ static int stm32_usbphyc_probe(struct platform_device *pdev)
+@@ -704,6 +715,13 @@ static int stm32_usbphyc_probe(struct pl
  		goto clk_disable;
  	}
  
@@ -87,6 +85,3 @@ index a11a85783621..e8364e80874f 100644
  	for_each_child_of_node(np, child) {
  		struct stm32_usbphyc_phy *usbphyc_phy;
  		struct phy *phy;
--- 
-2.50.1
-

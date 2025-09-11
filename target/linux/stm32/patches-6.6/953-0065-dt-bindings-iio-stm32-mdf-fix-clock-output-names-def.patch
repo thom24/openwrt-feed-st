@@ -19,8 +19,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  .../bindings/iio/adc/st,stm32-mdf-adc.yaml           | 12 +++++++++---
  1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-mdf-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-mdf-adc.yaml
-index 0e40e74536ab..749caf76d293 100644
 --- a/Documentation/devicetree/bindings/iio/adc/st,stm32-mdf-adc.yaml
 +++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-mdf-adc.yaml
 @@ -39,9 +39,15 @@ properties:
@@ -42,6 +40,3 @@ index 0e40e74536ab..749caf76d293 100644
  
    clock-frequency:
      description: |
--- 
-2.50.1
-

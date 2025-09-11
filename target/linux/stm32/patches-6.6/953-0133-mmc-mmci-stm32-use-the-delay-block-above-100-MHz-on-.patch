@@ -19,8 +19,6 @@ Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
  drivers/mmc/host/mmci_stm32_sdmmc.c | 10 +++++++---
  1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/mmc/host/mmci_stm32_sdmmc.c b/drivers/mmc/host/mmci_stm32_sdmmc.c
-index fbbf05befead..29ad3001f006 100644
 --- a/drivers/mmc/host/mmci_stm32_sdmmc.c
 +++ b/drivers/mmc/host/mmci_stm32_sdmmc.c
 @@ -80,6 +80,7 @@ struct sdmmc_dlyb {
@@ -31,7 +29,7 @@ index fbbf05befead..29ad3001f006 100644
  	struct sdmmc_tuning_ops *ops;
  };
  
-@@ -682,7 +683,7 @@ static int sdmmc_execute_tuning(struct mmc_host *mmc, u32 opcode)
+@@ -682,7 +683,7 @@ static int sdmmc_execute_tuning(struct m
  
  	if ((host->mmc->ios.timing != MMC_TIMING_UHS_SDR104 &&
  	     host->mmc->ios.timing != MMC_TIMING_MMC_HS200) ||
@@ -40,7 +38,7 @@ index fbbf05befead..29ad3001f006 100644
  		return 0;
  
  	if (!dlyb || !dlyb->base)
-@@ -793,10 +794,13 @@ void sdmmc_variant_init(struct mmci_host *host)
+@@ -793,10 +794,13 @@ void sdmmc_variant_init(struct mmci_host
  		return;
  
  	dlyb->base = base_dlyb;
@@ -56,6 +54,3 @@ index fbbf05befead..29ad3001f006 100644
  
  	host->variant_priv = dlyb;
  	host->mmc_ops->execute_tuning = sdmmc_execute_tuning;
--- 
-2.50.1
-

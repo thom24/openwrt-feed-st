@@ -18,11 +18,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/pci/controller/dwc/pcie-stm32.c | 20 --------------------
  1 file changed, 20 deletions(-)
 
-diff --git a/drivers/pci/controller/dwc/pcie-stm32.c b/drivers/pci/controller/dwc/pcie-stm32.c
-index 0800617e2b93..8187d4bce760 100644
 --- a/drivers/pci/controller/dwc/pcie-stm32.c
 +++ b/drivers/pci/controller/dwc/pcie-stm32.c
-@@ -571,26 +571,6 @@ static void quirk_stm32_pcie_limit_mrrs(struct pci_dev *pci)
+@@ -571,26 +571,6 @@ static void quirk_stm32_pcie_limit_mrrs(
  DECLARE_PCI_FIXUP_HEADER(PCI_ANY_ID, PCI_ANY_ID,
  			 quirk_stm32_pcie_limit_mrrs);
  
@@ -49,6 +47,3 @@ index 0800617e2b93..8187d4bce760 100644
  module_platform_driver(stm32_pcie_driver);
  MODULE_DESCRIPTION("STM32MP25 PCIe Controller driver");
  MODULE_LICENSE("GPL");
--- 
-2.50.1
-

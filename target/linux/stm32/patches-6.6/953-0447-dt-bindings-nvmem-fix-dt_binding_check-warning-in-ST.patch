@@ -21,8 +21,6 @@ Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
  .../devicetree/bindings/nvmem/st,stm32-tamp-nvram.yaml          | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/nvmem/st,stm32-tamp-nvram.yaml b/Documentation/devicetree/bindings/nvmem/st,stm32-tamp-nvram.yaml
-index 8f4dc7649f74..93be57f0bf0a 100644
 --- a/Documentation/devicetree/bindings/nvmem/st,stm32-tamp-nvram.yaml
 +++ b/Documentation/devicetree/bindings/nvmem/st,stm32-tamp-nvram.yaml
 @@ -14,7 +14,7 @@ maintainers:
@@ -34,6 +32,3 @@ index 8f4dc7649f74..93be57f0bf0a 100644
  
  properties:
    compatible:
--- 
-2.50.1
-

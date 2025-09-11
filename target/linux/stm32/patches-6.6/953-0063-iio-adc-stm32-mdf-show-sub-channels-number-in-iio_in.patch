@@ -20,11 +20,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/iio/adc/stm32-mdf-adc.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iio/adc/stm32-mdf-adc.c b/drivers/iio/adc/stm32-mdf-adc.c
-index 7979a77a5379..648298d1deca 100644
 --- a/drivers/iio/adc/stm32-mdf-adc.c
 +++ b/drivers/iio/adc/stm32-mdf-adc.c
-@@ -1115,7 +1115,7 @@ static ssize_t stm32_mdf_adc_audio_get_channels(struct iio_dev *indio_dev, uintp
+@@ -1115,7 +1115,7 @@ static ssize_t stm32_mdf_adc_audio_get_c
  	if (MDF_IS_FILTER0(adc) && adc->mdf->nb_interleave)
  		sub_channels_nb = adc->mdf->nb_interleave;
  
@@ -33,6 +31,3 @@ index 7979a77a5379..648298d1deca 100644
  }
  
  /*
--- 
-2.50.1
-

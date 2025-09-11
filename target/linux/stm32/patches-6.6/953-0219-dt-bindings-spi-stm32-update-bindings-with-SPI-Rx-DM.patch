@@ -21,8 +21,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  .../devicetree/bindings/spi/st,stm32-spi.yaml | 39 ++++++++++++++++++-
  1 file changed, 37 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-index c7593fed165a..88def4ea282a 100644
 --- a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
 +++ b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
 @@ -27,6 +27,29 @@ allOf:
@@ -86,6 +84,3 @@ index c7593fed165a..88def4ea282a 100644
  
    access-controllers:
      minItems: 1
--- 
-2.50.1
-

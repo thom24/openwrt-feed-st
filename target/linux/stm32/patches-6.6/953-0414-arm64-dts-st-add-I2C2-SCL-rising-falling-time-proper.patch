@@ -19,11 +19,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-index 9ae18794d060..5450a2a7dd3c 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-@@ -329,6 +329,8 @@ &i2c2 {
+@@ -329,6 +329,8 @@
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&i2c2_pins_a>;
  	pinctrl-1 = <&i2c2_sleep_pins_a>;
@@ -32,6 +30,3 @@ index 9ae18794d060..5450a2a7dd3c 100644
  	status = "okay";
  
  	goodix: goodix-ts@5d {
--- 
-2.50.1
-

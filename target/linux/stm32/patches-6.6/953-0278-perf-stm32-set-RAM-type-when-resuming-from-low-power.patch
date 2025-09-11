@@ -21,8 +21,6 @@ Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
  drivers/perf/stm32_ddr_pmu.c | 23 +++++++++++++++++++----
  1 file changed, 19 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/perf/stm32_ddr_pmu.c b/drivers/perf/stm32_ddr_pmu.c
-index 1b7666c0edd2..75418120a98b 100644
 --- a/drivers/perf/stm32_ddr_pmu.c
 +++ b/drivers/perf/stm32_ddr_pmu.c
 @@ -105,6 +105,7 @@ struct stm32_ddr_pmu {
@@ -33,7 +31,7 @@ index 1b7666c0edd2..75418120a98b 100644
  	struct list_head counters[];
  };
  
-@@ -758,9 +759,7 @@ static int stm32_ddr_pmu_device_probe(struct platform_device *pdev)
+@@ -758,9 +759,7 @@ static int stm32_ddr_pmu_device_probe(st
  	}
  
  	if (pmu->cfg->regs->dram_inf.reg) {
@@ -44,7 +42,7 @@ index 1b7666c0edd2..75418120a98b 100644
  		if (ret) {
  			dev_err(&pdev->dev, "Missing device-tree property 'st,dram-type'\n");
  			perf_pmu_unregister(&pmu->pmu);
-@@ -768,7 +767,7 @@ static int stm32_ddr_pmu_device_probe(struct platform_device *pdev)
+@@ -768,7 +767,7 @@ static int stm32_ddr_pmu_device_probe(st
  			return ret;
  		}
  
@@ -53,7 +51,7 @@ index 1b7666c0edd2..75418120a98b 100644
  	}
  
  	clk_disable(pmu->clk);
-@@ -788,6 +787,17 @@ static void stm32_ddr_pmu_device_remove(struct platform_device *pdev)
+@@ -788,6 +787,17 @@ static void stm32_ddr_pmu_device_remove(
  	perf_pmu_unregister(&stm32_ddr_pmu->pmu);
  }
  
@@ -71,7 +69,7 @@ index 1b7666c0edd2..75418120a98b 100644
  static const struct stm32_ddr_pmu_regspec stm32mp1_ddr_pmu_regspec = {
  	.stop =		{ DDRPERFM_CTRL, CTRL_STOP },
  	.start =	{ DDRPERFM_CTRL, CTRL_START },
-@@ -846,6 +856,10 @@ static const struct stm32_ddr_pmu_cfg stm32mp2_ddr_pmu_cfg = {
+@@ -846,6 +856,10 @@ static const struct stm32_ddr_pmu_cfg st
  	.get_counter = stm32_ddr_pmu_get_event_counter_mp2,
  };
  
@@ -82,7 +80,7 @@ index 1b7666c0edd2..75418120a98b 100644
  static const struct of_device_id stm32_ddr_pmu_of_match[] = {
  	{ .compatible = "st,stm32-ddr-pmu", .data = &stm32mp_ddr_pmu_cfg },
  	{ .compatible = "st,stm32mp25-ddr-pmu", .data = &stm32mp2_ddr_pmu_cfg },
-@@ -856,6 +870,7 @@ MODULE_DEVICE_TABLE(of, stm32_ddr_pmu_of_match);
+@@ -856,6 +870,7 @@ MODULE_DEVICE_TABLE(of, stm32_ddr_pmu_of
  static struct platform_driver stm32_ddr_pmu_driver = {
  	.driver = {
  		.name	= "stm32-ddr-pmu",
@@ -90,6 +88,3 @@ index 1b7666c0edd2..75418120a98b 100644
  		.of_match_table = of_match_ptr(stm32_ddr_pmu_of_match),
  	},
  	.probe = stm32_ddr_pmu_device_probe,
--- 
-2.50.1
-

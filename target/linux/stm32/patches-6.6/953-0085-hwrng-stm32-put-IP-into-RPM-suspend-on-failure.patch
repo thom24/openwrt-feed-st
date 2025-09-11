@@ -21,11 +21,9 @@ Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
  drivers/char/hw_random/stm32-rng.c | 7 +++++--
  1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
-index a2669ccf71e6..dd4f66b1b47f 100644
 --- a/drivers/char/hw_random/stm32-rng.c
 +++ b/drivers/char/hw_random/stm32-rng.c
-@@ -223,7 +223,8 @@ static int stm32_rng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+@@ -223,7 +223,8 @@ static int stm32_rng_read(struct hwrng *
  				if (err && i > RNG_NB_RECOVER_TRIES) {
  					dev_err((struct device *)priv->rng.priv,
  						"Couldn't recover from seed error\n");
@@ -35,7 +33,7 @@ index a2669ccf71e6..dd4f66b1b47f 100644
  				}
  
  				continue;
-@@ -241,7 +242,8 @@ static int stm32_rng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+@@ -241,7 +242,8 @@ static int stm32_rng_read(struct hwrng *
  			if (err && i > RNG_NB_RECOVER_TRIES) {
  				dev_err((struct device *)priv->rng.priv,
  					"Couldn't recover from seed error");
@@ -45,7 +43,7 @@ index a2669ccf71e6..dd4f66b1b47f 100644
  			}
  
  			continue;
-@@ -253,6 +255,7 @@ static int stm32_rng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+@@ -253,6 +255,7 @@ static int stm32_rng_read(struct hwrng *
  		max -= sizeof(u32);
  	}
  
@@ -53,6 +51,3 @@ index a2669ccf71e6..dd4f66b1b47f 100644
  	pm_runtime_mark_last_busy((struct device *) priv->rng.priv);
  	pm_runtime_put_sync_autosuspend((struct device *) priv->rng.priv);
  
--- 
-2.50.1
-

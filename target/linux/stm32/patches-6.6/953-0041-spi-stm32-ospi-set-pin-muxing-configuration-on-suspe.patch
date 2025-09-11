@@ -17,11 +17,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/spi/spi-stm32-ospi.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
-index 084b420d2e11..1969c16fa587 100644
 --- a/drivers/spi/spi-stm32-ospi.c
 +++ b/drivers/spi/spi-stm32-ospi.c
-@@ -1167,7 +1167,7 @@ static int __maybe_unused stm32_ospi_suspend(struct device *dev)
+@@ -1167,7 +1167,7 @@ static int __maybe_unused stm32_ospi_sus
  	struct stm32_ospi *ospi = dev_get_drvdata(dev);
  	struct stm32_omi *omi = ospi->omi;
  
@@ -30,7 +28,7 @@ index 084b420d2e11..1969c16fa587 100644
  
  	return pm_runtime_force_suspend(omi->dev);
  }
-@@ -1183,7 +1183,7 @@ static int __maybe_unused stm32_ospi_resume(struct device *dev)
+@@ -1183,7 +1183,7 @@ static int __maybe_unused stm32_ospi_res
  	if (ret < 0)
  		return ret;
  
@@ -39,6 +37,3 @@ index 084b420d2e11..1969c16fa587 100644
  
  	ret = pm_runtime_resume_and_get(omi->dev);
  	if (ret < 0)
--- 
-2.50.1
-

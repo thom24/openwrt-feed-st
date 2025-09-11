@@ -28,11 +28,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/dma/stm32/stm32-dma3.c | 57 ++++++++++++++++++++++++----------
  1 file changed, 40 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
-index f6c0c45a3356..2aa38427a190 100644
 --- a/drivers/dma/stm32/stm32-dma3.c
 +++ b/drivers/dma/stm32/stm32-dma3.c
-@@ -632,6 +632,38 @@ static int stm32_dma3_lli_pool_dma_alloc(struct stm32_dma3_ddata *ddata, struct
+@@ -632,6 +632,38 @@ err_pool_free:
  	return -ENOMEM;
  }
  
@@ -71,7 +69,7 @@ index f6c0c45a3356..2aa38427a190 100644
  static struct stm32_dma3_swdesc *stm32_dma3_chan_desc_alloc(struct stm32_dma3_chan *chan, u32 count)
  {
  	struct stm32_dma3_ddata *ddata = to_stm32_dma3_ddata(chan);
-@@ -664,24 +696,18 @@ static struct stm32_dma3_swdesc *stm32_dma3_chan_desc_alloc(struct stm32_dma3_ch
+@@ -664,24 +696,18 @@ static struct stm32_dma3_swdesc *stm32_d
  	swdesc->lli_size = count;
  
  	/*
@@ -104,7 +102,7 @@ index f6c0c45a3356..2aa38427a190 100644
  	}
  
  	/* Set LL allocated port */
-@@ -691,9 +717,6 @@ static struct stm32_dma3_swdesc *stm32_dma3_chan_desc_alloc(struct stm32_dma3_ch
+@@ -691,9 +717,6 @@ static struct stm32_dma3_swdesc *stm32_d
  	base_addr = stm32_dma3_translate_addr(ddata, lap, ddata2dev(ddata),
  					      swdesc->lli[0].hwdesc_addr);
  	writel_relaxed(base_addr & CLBAR_LBA, ddata->base + STM32_DMA3_CLBAR(chan->id));
@@ -114,6 +112,3 @@ index f6c0c45a3356..2aa38427a190 100644
  
  	return swdesc;
  }
--- 
-2.50.1
-

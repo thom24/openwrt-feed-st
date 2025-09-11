@@ -15,11 +15,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm/boot/dts/st/stm32mp157d-ev1.dts | 6 +++++-
  1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-index 22410107f594..4631832ee824 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-@@ -29,7 +29,7 @@ chosen {
+@@ -29,7 +29,7 @@
  
  		framebuffer {
  			compatible = "simple-framebuffer";
@@ -28,7 +26,7 @@ index 22410107f594..4631832ee824 100644
  			status = "disabled";
  		};
  	};
-@@ -134,6 +134,7 @@ panel_backlight: panel-backlight {
+@@ -134,6 +134,7 @@
  		compatible = "gpio-backlight";
  		gpios = <&gpiod 13 GPIO_ACTIVE_LOW>;
  		default-on;
@@ -36,7 +34,7 @@ index 22410107f594..4631832ee824 100644
  		status = "okay";
  	};
  
-@@ -339,6 +340,7 @@ dfsdm_endpoint3: endpoint {
+@@ -339,6 +340,7 @@
  &dsi {
  	#address-cells = <1>;
  	#size-cells = <0>;
@@ -44,7 +42,7 @@ index 22410107f594..4631832ee824 100644
  	status = "okay";
  
  	panel_dsi: panel@0 {
-@@ -349,6 +351,7 @@ panel_dsi: panel@0 {
+@@ -349,6 +351,7 @@
  		power-supply = <&v3v3>;
  		vcc-supply = <&v3v3>;
  		iovcc-supply = <&v3v3>;
@@ -52,7 +50,7 @@ index 22410107f594..4631832ee824 100644
  		status = "okay";
  
  		port {
-@@ -547,6 +550,7 @@ &i2c5 {
+@@ -547,6 +550,7 @@
  };
  
  &ltdc {
@@ -60,6 +58,3 @@ index 22410107f594..4631832ee824 100644
  	status = "okay";
  
  	port {
--- 
-2.50.1
-

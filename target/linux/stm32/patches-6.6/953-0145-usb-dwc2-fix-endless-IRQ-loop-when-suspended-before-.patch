@@ -21,11 +21,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/usb/dwc2/core_intr.c | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
-index b9cb876e5952..35f3b5362120 100644
 --- a/drivers/usb/dwc2/core_intr.c
 +++ b/drivers/usb/dwc2/core_intr.c
-@@ -112,6 +112,12 @@ static void dwc2_handle_otg_intr(struct dwc2_hsotg *hsotg)
+@@ -112,6 +112,12 @@ static void dwc2_handle_otg_intr(struct
  					"Device Not Connected/Responding!\n");
  			}
  
@@ -38,6 +36,3 @@ index b9cb876e5952..35f3b5362120 100644
  			/*
  			 * If Session End Detected the B-Cable has been
  			 * disconnected
--- 
-2.50.1
-

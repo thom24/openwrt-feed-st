@@ -18,11 +18,9 @@ Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp251.dtsi | 2 +-
  3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index 7af05e3f45ef1..c95f9309ab548 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -184,7 +184,7 @@ scmi_vdda18adc: regulator@7 {
+@@ -184,7 +184,7 @@
  	};
  
  	intc: interrupt-controller@4ac00000 {
@@ -31,11 +29,9 @@ index 7af05e3f45ef1..c95f9309ab548 100644
  		#interrupt-cells = <3>;
  		interrupt-controller;
  		interrupt-parent = <&intc>;
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index c4e6600c746d7..4209219a5d13d 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -198,7 +198,7 @@ scmi_vdda18adc: regulator@7 {
+@@ -198,7 +198,7 @@
  	};
  
  	intc: interrupt-controller@4ac00000 {
@@ -44,11 +40,9 @@ index c4e6600c746d7..4209219a5d13d 100644
  		#interrupt-cells = <3>;
  		interrupt-controller;
  		interrupt-parent = <&intc>;
-diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 8b5276aca3699..d62a7b8e84087 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -198,7 +198,7 @@ scmi_vdda18adc: regulator@7 {
+@@ -198,7 +198,7 @@
  	};
  
  	intc: interrupt-controller@4ac00000 {
@@ -57,6 +51,3 @@ index 8b5276aca3699..d62a7b8e84087 100644
  		#interrupt-cells = <3>;
  		interrupt-controller;
  		interrupt-parent = <&intc>;
--- 
-2.51.0
-

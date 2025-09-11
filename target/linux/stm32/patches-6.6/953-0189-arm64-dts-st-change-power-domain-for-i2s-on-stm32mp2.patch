@@ -21,11 +21,9 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  arch/arm64/boot/dts/st/stm32mp231.dtsi | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index 18f563a799cc..1ccb16070ccf 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -814,7 +814,7 @@ i2s2: audio-controller@400b0000 {
+@@ -814,7 +814,7 @@
  					<&hpdma 52 0x43 0x21>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 23>;
@@ -34,7 +32,7 @@ index 18f563a799cc..1ccb16070ccf 100644
  				status = "disabled";
  			};
  
-@@ -846,7 +846,7 @@ i2s3: audio-controller@400c0000 {
+@@ -846,7 +846,7 @@
  					<&hpdma 54 0x43 0x21>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 24>;
@@ -43,7 +41,7 @@ index 18f563a799cc..1ccb16070ccf 100644
  				status = "disabled";
  			};
  
-@@ -1169,7 +1169,7 @@ i2s1: audio-controller@40230000 {
+@@ -1169,7 +1169,7 @@
  					<&hpdma 50 0x43 0x21>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 22>;
@@ -52,6 +50,3 @@ index 18f563a799cc..1ccb16070ccf 100644
  				status = "disabled";
  			};
  
--- 
-2.50.1
-

@@ -17,8 +17,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/nvmem/stm32-romem.c | 56 +++++++++++++++++++++++++++++++++++--
  1 file changed, 54 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/nvmem/stm32-romem.c b/drivers/nvmem/stm32-romem.c
-index 82879b1c9eb93..00bd139166f6a 100644
 --- a/drivers/nvmem/stm32-romem.c
 +++ b/drivers/nvmem/stm32-romem.c
 @@ -11,6 +11,7 @@
@@ -57,7 +55,7 @@ index 82879b1c9eb93..00bd139166f6a 100644
  	struct nvmem_config cfg;
  	u8 lower;
  	struct tee_context *ctx;
-@@ -91,7 +106,14 @@ static int stm32_bsec_read(void *context, unsigned int offset, void *buf,
+@@ -91,7 +106,14 @@ static int stm32_bsec_read(void *context
  	for (i = roffset; (i < roffset + rbytes); i += 4) {
  		u32 otp = i >> 2;
  
@@ -73,7 +71,7 @@ index 82879b1c9eb93..00bd139166f6a 100644
  			/* read lower data from shadow registers */
  			val = readl_relaxed(
  				priv->base + STM32MP15_BSEC_DATA0 + i);
-@@ -101,7 +123,7 @@ static int stm32_bsec_read(void *context, unsigned int offset, void *buf,
+@@ -101,7 +123,7 @@ static int stm32_bsec_read(void *context
  			if (ret) {
  				dev_err(dev, "Can't read data%d (%d)\n", otp,
  					ret);
@@ -82,7 +80,7 @@ index 82879b1c9eb93..00bd139166f6a 100644
  			}
  		}
  		/* skip first bytes in case of unaligned read */
-@@ -116,6 +138,10 @@ static int stm32_bsec_read(void *context, unsigned int offset, void *buf,
+@@ -116,6 +138,10 @@ static int stm32_bsec_read(void *context
  	}
  
  	return 0;
@@ -93,7 +91,7 @@ index 82879b1c9eb93..00bd139166f6a 100644
  }
  
  static int stm32_bsec_write(void *context, unsigned int offset, void *buf,
-@@ -219,8 +245,33 @@ static int stm32_romem_probe(struct platform_device *pdev)
+@@ -219,8 +245,33 @@ static int stm32_romem_probe(struct plat
  		priv->cfg.size = resource_size(res);
  		priv->cfg.reg_read = stm32_romem_read;
  	} else {
@@ -127,7 +125,7 @@ index 82879b1c9eb93..00bd139166f6a 100644
  		if (cfg->ta || optee_presence_check()) {
  			rc = stm32_bsec_optee_ta_open(&priv->ctx);
  			if (rc) {
-@@ -246,6 +297,7 @@ static int stm32_romem_probe(struct platform_device *pdev)
+@@ -246,6 +297,7 @@ static int stm32_romem_probe(struct plat
  		}
  	}
  
@@ -135,6 +133,3 @@ index 82879b1c9eb93..00bd139166f6a 100644
  	return PTR_ERR_OR_ZERO(devm_nvmem_register(dev, &priv->cfg));
  }
  
--- 
-2.51.0
-

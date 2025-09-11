@@ -21,11 +21,9 @@ Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
  drivers/mmc/core/sdio.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mmc/core/sdio.c b/drivers/mmc/core/sdio.c
-index cb87e8273779..ea4dee396347 100644
 --- a/drivers/mmc/core/sdio.c
 +++ b/drivers/mmc/core/sdio.c
-@@ -739,7 +739,8 @@ static int mmc_sdio_init_card(struct mmc_host *host, u32 ocr,
+@@ -739,7 +739,8 @@ try_again:
  	 * try to init uhs card. sdio_read_cccr will take over this task
  	 * to make sure which speed mode should work.
  	 */
@@ -35,6 +33,3 @@ index cb87e8273779..ea4dee396347 100644
  		err = mmc_set_uhs_voltage(host, ocr_card);
  		if (err == -EAGAIN) {
  			mmc_sdio_pre_init(host, ocr_card, card);
--- 
-2.50.1
-

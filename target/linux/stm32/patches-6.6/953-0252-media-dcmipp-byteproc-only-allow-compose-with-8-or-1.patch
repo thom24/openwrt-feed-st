@@ -20,11 +20,9 @@ Tested-by: Hugues FRUCHET <hugues.fruchet@st.com>
  .../platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c | 12 +++++++++++-
  1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-index f7a13a4b1dea..c830795ad495 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-@@ -137,6 +137,8 @@ static void dcmipp_byteproc_adjust_crop(struct v4l2_rect *r,
+@@ -137,6 +137,8 @@ static void dcmipp_byteproc_adjust_crop(
  static void dcmipp_byteproc_adjust_compose(struct v4l2_rect *r,
  					   const struct v4l2_mbus_framefmt *fmt)
  {
@@ -33,7 +31,7 @@ index f7a13a4b1dea..c830795ad495 100644
  	r->top = 0;
  	r->left = 0;
  
-@@ -148,6 +150,14 @@ static void dcmipp_byteproc_adjust_compose(struct v4l2_rect *r,
+@@ -148,6 +150,14 @@ static void dcmipp_byteproc_adjust_compo
  		return;
  	}
  
@@ -48,7 +46,7 @@ index f7a13a4b1dea..c830795ad495 100644
  	/* Adjust height - we can only perform 1/2 decimation */
  	if (r->height <= (fmt->height / 2))
  		r->height = fmt->height / 2;
-@@ -155,7 +165,7 @@ static void dcmipp_byteproc_adjust_compose(struct v4l2_rect *r,
+@@ -155,7 +165,7 @@ static void dcmipp_byteproc_adjust_compo
  		r->height = fmt->height;
  
  	/* Adjust width /2 or /4 for 8bits formats and /2 for 16bits formats */
@@ -57,6 +55,3 @@ index f7a13a4b1dea..c830795ad495 100644
  		r->width = fmt->width / 4;
  	else if (r->width <= (fmt->width / 2))
  		r->width = fmt->width / 2;
--- 
-2.50.1
-

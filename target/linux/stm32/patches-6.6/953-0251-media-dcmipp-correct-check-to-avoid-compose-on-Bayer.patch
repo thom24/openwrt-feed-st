@@ -20,11 +20,9 @@ Domain-Review: Hugues FRUCHET <hugues.fruchet@st.com>
  .../media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c | 7 ++-----
  1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-index 7212924ca59a..f7a13a4b1dea 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-@@ -141,11 +141,8 @@ static void dcmipp_byteproc_adjust_compose(struct v4l2_rect *r,
+@@ -141,11 +141,8 @@ static void dcmipp_byteproc_adjust_compo
  	r->left = 0;
  
  	/* Compose is not possible for JPEG or Bayer formats */
@@ -38,6 +36,3 @@ index 7212924ca59a..f7a13a4b1dea 100644
  		r->width = fmt->width;
  		r->height = fmt->height;
  		return;
--- 
-2.50.1
-

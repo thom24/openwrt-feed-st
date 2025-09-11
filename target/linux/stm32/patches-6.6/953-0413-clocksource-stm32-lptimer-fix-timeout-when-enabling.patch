@@ -22,8 +22,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/clocksource/timer-stm32-lp.c | 14 ++++++++++++--
  1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clocksource/timer-stm32-lp.c b/drivers/clocksource/timer-stm32-lp.c
-index 8f370c3a00b9..815abee7ce4a 100644
 --- a/drivers/clocksource/timer-stm32-lp.c
 +++ b/drivers/clocksource/timer-stm32-lp.c
 @@ -5,6 +5,7 @@
@@ -34,7 +32,7 @@ index 8f370c3a00b9..815abee7ce4a 100644
  #include <linux/clk.h>
  #include <linux/clockchips.h>
  #include <linux/interrupt.h>
-@@ -63,8 +64,17 @@ static int stm32mp25_clkevent_lp_set_evt(struct stm32_lp_private *priv, unsigned
+@@ -63,8 +64,17 @@ static int stm32mp25_clkevent_lp_set_evt
  	int ret;
  	u32 val;
  
@@ -54,6 +52,3 @@ index 8f370c3a00b9..815abee7ce4a 100644
  	/* set next event counter */
  	regmap_write(priv->reg, STM32_LPTIM_ARR, evt);
  	/* enable ARR interrupt */
--- 
-2.50.1
-

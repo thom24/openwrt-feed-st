@@ -23,11 +23,9 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  .../st/stm32/stm32-dcmipp/dcmipp-input.c       | 18 ++++++++++++++++--
  1 file changed, 16 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
-index f5d112982585..9205936c2344 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
-@@ -394,8 +394,22 @@ static int dcmipp_inp_configure_parallel(struct dcmipp_inp_device *inp,
+@@ -394,8 +394,22 @@ static int dcmipp_inp_configure_parallel
  	val |= vpix->prcr_format << DCMIPP_PRCR_FORMAT_SHIFT;
  
  	/* swap cycles */
@@ -52,6 +50,3 @@ index f5d112982585..9205936c2344 100644
  
  	reg_write(inp, DCMIPP_PRCR, val);
  
--- 
-2.50.1
-

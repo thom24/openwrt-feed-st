@@ -26,11 +26,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/pwm/pwm-stm32.c | 42 +++++++++++++++++++++++++++++++++++++++++
  1 file changed, 42 insertions(+)
 
-diff --git a/drivers/pwm/pwm-stm32.c b/drivers/pwm/pwm-stm32.c
-index f3130ad0f0fe..8b7879d80e5b 100644
 --- a/drivers/pwm/pwm-stm32.c
 +++ b/drivers/pwm/pwm-stm32.c
-@@ -494,9 +494,51 @@ static int stm32_pwm_apply_locked(struct pwm_chip *chip, struct pwm_device *pwm,
+@@ -494,9 +494,51 @@ static int stm32_pwm_apply_locked(struct
  	return ret;
  }
  
@@ -82,6 +80,3 @@ index f3130ad0f0fe..8b7879d80e5b 100644
  	.capture = IS_ENABLED(CONFIG_DMA_ENGINE) ? stm32_pwm_capture : NULL,
  };
  
--- 
-2.50.1
-

@@ -17,11 +17,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/clk/stm32/stm32mp21_rcc.h |  6 ------
  2 files changed, 16 deletions(-)
 
-diff --git a/drivers/clk/stm32/clk-stm32mp21.c b/drivers/clk/stm32/clk-stm32mp21.c
-index a5de53bff9b6..e8301018fcca 100644
 --- a/drivers/clk/stm32/clk-stm32mp21.c
 +++ b/drivers/clk/stm32/clk-stm32mp21.c
-@@ -208,7 +208,6 @@ static const struct stm32_mux_cfg stm32mp21_muxes[MUX_NB] = {
+@@ -208,7 +208,6 @@ static const struct stm32_mux_cfg stm32m
  enum enum_gate_cfg {
  	GATE_ADC1,
  	GATE_ADC2,
@@ -29,7 +27,7 @@ index a5de53bff9b6..e8301018fcca 100644
  	GATE_CRC,
  	GATE_CRYP1,
  	GATE_CRYP2,
-@@ -364,7 +363,6 @@ static const struct stm32_gate_cfg stm32mp21_gates[GATE_NB] = {
+@@ -364,7 +363,6 @@ static const struct stm32_gate_cfg stm32
  	GATE_CFG(GATE_CRC,		RCC_CRCCFGR,		1,	0),
  	GATE_CFG(GATE_CRYP1,		RCC_CRYP1CFGR,		1,	0),
  	GATE_CFG(GATE_CRYP2,		RCC_CRYP2CFGR,		1,	0),
@@ -37,7 +35,7 @@ index a5de53bff9b6..e8301018fcca 100644
  	GATE_CFG(GATE_CSI,		RCC_CSICFGR,		1,	0),
  	GATE_CFG(GATE_DCMIPP,		RCC_DCMIPPCFGR,		1,	0),
  	GATE_CFG(GATE_DCMIPSSI,		RCC_DCMIPSSICFGR,	1,	0),
-@@ -631,11 +629,6 @@ static struct clk_stm32_gate ck_icn_p_cryp2 = {
+@@ -631,11 +629,6 @@ static struct clk_stm32_gate ck_icn_p_cr
  	.hw.init = CLK_HW_INIT_INDEX("ck_icn_p_cryp2", ICN_LS_MCU, &clk_stm32_gate_ops, 0),
  };
  
@@ -49,7 +47,7 @@ index a5de53bff9b6..e8301018fcca 100644
  /* DBG & TRACE*/
  /* Trace and debug clocks are managed by SCMI */
  
-@@ -1461,7 +1454,6 @@ static const struct clock_config stm32mp21_clock_cfg[] = {
+@@ -1461,7 +1454,6 @@ static const struct clock_config stm32mp
  	STM32_GATE_CFG(CK_BUS_RNG2, ck_icn_p_rng2, SEC_RIFSC(93)),
  	STM32_GATE_CFG(CK_BUS_CRYP1, ck_icn_p_cryp1, SEC_RIFSC(98)),
  	STM32_GATE_CFG(CK_BUS_CRYP2, ck_icn_p_cryp2, SEC_RIFSC(99)),
@@ -57,7 +55,7 @@ index a5de53bff9b6..e8301018fcca 100644
  	STM32_GATE_CFG(CK_BUS_SAES, ck_icn_p_saes, SEC_RIFSC(95)),
  	STM32_GATE_CFG(CK_BUS_PKA, ck_icn_p_pka, SEC_RIFSC(94)),
  	STM32_GATE_CFG(CK_BUS_LPUART1, ck_icn_p_lpuart1, SEC_RIFSC(40)),
-@@ -2229,7 +2221,6 @@ CS_GATE(ck_icn_p_rng1, ck_icn_ls_mcu, GATE_RNG1);
+@@ -2229,7 +2221,6 @@ CS_GATE(ck_icn_p_rng1, ck_icn_ls_mcu, GA
  CS_GATE(ck_icn_p_rng2, ck_icn_ls_mcu, GATE_RNG1);
  CS_GATE(ck_icn_p_cryp1, ck_icn_ls_mcu, GATE_CRYP1);
  CS_GATE(ck_icn_p_cryp2, ck_icn_ls_mcu, GATE_CRYP2);
@@ -65,7 +63,7 @@ index a5de53bff9b6..e8301018fcca 100644
  CS_GATE(ck_icn_p_saes, ck_icn_ls_mcu, GATE_SAES);
  CS_GATE(ck_icn_p_pka, ck_icn_ls_mcu, GATE_PKA);
  CS_GATE(ck_icn_p_gpioa, ck_icn_ls_mcu, GATE_GPIOA);
-@@ -2536,7 +2527,6 @@ static struct clk_summary *stm32mp21_clock_summary[] = {
+@@ -2536,7 +2527,6 @@ static struct clk_summary *stm32mp21_clo
  	CS_CLOCK(ck_icn_p_rng2),
  	CS_CLOCK(ck_icn_p_cryp1),
  	CS_CLOCK(ck_icn_p_cryp2),
@@ -73,8 +71,6 @@ index a5de53bff9b6..e8301018fcca 100644
  	CS_CLOCK(ck_icn_p_saes),
  	CS_CLOCK(ck_icn_p_pka),
  	CS_CLOCK(ck_icn_p_gpioa),
-diff --git a/drivers/clk/stm32/stm32mp21_rcc.h b/drivers/clk/stm32/stm32mp21_rcc.h
-index 2cc50e39c1d6..b2d5bdcb734a 100644
 --- a/drivers/clk/stm32/stm32mp21_rcc.h
 +++ b/drivers/clk/stm32/stm32mp21_rcc.h
 @@ -393,7 +393,6 @@
@@ -97,6 +93,3 @@ index 2cc50e39c1d6..b2d5bdcb734a 100644
  /* RCC_IWDG1CFGR register fields */
  #define RCC_IWDG1CFGR_IWDG1EN			BIT(1)
  #define RCC_IWDG1CFGR_IWDG1LPEN			BIT(2)
--- 
-2.50.1
-

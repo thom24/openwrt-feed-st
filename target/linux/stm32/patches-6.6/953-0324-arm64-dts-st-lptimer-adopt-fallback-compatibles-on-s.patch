@@ -18,11 +18,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp231.dtsi | 50 +++++++++++++-------------
  1 file changed, 25 insertions(+), 25 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index d6a253ec28b9..a8527a74b4c2 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -737,7 +737,7 @@ timer@13 {
+@@ -737,7 +737,7 @@
  			};
  
  			lptimer1: timer@40090000 {
@@ -31,7 +29,7 @@ index d6a253ec28b9..a8527a74b4c2 100644
  				reg = <0x40090000 0x400>;
  				interrupts-extended = <&exti1 47 IRQ_TYPE_LEVEL_HIGH>;
  				clocks = <&rcc CK_KER_LPTIM1>;
-@@ -750,30 +750,30 @@ lptimer1: timer@40090000 {
+@@ -750,30 +750,30 @@
  				status = "disabled";
  
  				counter {
@@ -67,7 +65,7 @@ index d6a253ec28b9..a8527a74b4c2 100644
  				reg = <0x400a0000 0x400>;
  				interrupts-extended = <&exti1 48 IRQ_TYPE_LEVEL_HIGH>;
  				clocks = <&rcc CK_KER_LPTIM2>;
-@@ -786,23 +786,23 @@ lptimer2: timer@400a0000 {
+@@ -786,23 +786,23 @@
  				status = "disabled";
  
  				counter {
@@ -95,7 +93,7 @@ index d6a253ec28b9..a8527a74b4c2 100644
  					reg = <1>;
  					status = "disabled";
  				};
-@@ -1801,7 +1801,7 @@ i2c8: i2c@46040000 {
+@@ -1801,7 +1801,7 @@
  			};
  
  			lptimer3: timer@46050000 {
@@ -104,7 +102,7 @@ index d6a253ec28b9..a8527a74b4c2 100644
  				reg = <0x46050000 0x400>;
  				interrupts-extended = <&exti2 29 IRQ_TYPE_LEVEL_HIGH>;
  				clocks = <&rcc CK_KER_LPTIM3>;
-@@ -1813,30 +1813,30 @@ lptimer3: timer@46050000 {
+@@ -1813,30 +1813,30 @@
  				status = "disabled";
  
  				counter {
@@ -140,7 +138,7 @@ index d6a253ec28b9..a8527a74b4c2 100644
  				reg = <0x46060000 0x400>;
  				interrupts-extended = <&exti2 30 IRQ_TYPE_LEVEL_HIGH>;
  				clocks = <&rcc CK_KER_LPTIM4>;
-@@ -1848,30 +1848,30 @@ lptimer4: timer@46060000 {
+@@ -1848,30 +1848,30 @@
  				status = "disabled";
  
  				counter {
@@ -176,7 +174,7 @@ index d6a253ec28b9..a8527a74b4c2 100644
  				reg = <0x46070000 0x400>;
  				interrupts-extended = <&exti2 31 IRQ_TYPE_LEVEL_HIGH>;
  				clocks = <&rcc CK_KER_LPTIM5>;
-@@ -1883,23 +1883,23 @@ lptimer5: timer@46070000 {
+@@ -1883,23 +1883,23 @@
  				status = "disabled";
  
  				counter {
@@ -204,6 +202,3 @@ index d6a253ec28b9..a8527a74b4c2 100644
  					reg = <4>;
  					status = "disabled";
  				};
--- 
-2.50.1
-

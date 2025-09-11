@@ -21,11 +21,9 @@ Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
  drivers/crypto/stm32/stm32-hash.c | 2 --
  1 file changed, 2 deletions(-)
 
-diff --git a/drivers/crypto/stm32/stm32-hash.c b/drivers/crypto/stm32/stm32-hash.c
-index 73daa40e3723..184505fac2dc 100644
 --- a/drivers/crypto/stm32/stm32-hash.c
 +++ b/drivers/crypto/stm32/stm32-hash.c
-@@ -733,8 +733,6 @@ static int stm32_hash_dma_send(struct stm32_hash_dev *hdev)
+@@ -733,8 +733,6 @@ static int stm32_hash_dma_send(struct st
  			len += sizeof(u32);
  		}
  
@@ -34,6 +32,3 @@ index 73daa40e3723..184505fac2dc 100644
  		bufcnt += sg[0].length;
  		dma_unmap_sg(hdev->dev, sg, 1, DMA_TO_DEVICE);
  
--- 
-2.50.1
-

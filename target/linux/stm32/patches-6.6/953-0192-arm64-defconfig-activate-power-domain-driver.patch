@@ -14,8 +14,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/configs/fragment-02-defconfig-addons.config | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/configs/fragment-02-defconfig-addons.config b/arch/arm64/configs/fragment-02-defconfig-addons.config
-index f4809c68ce7b..5bb092a86b03 100644
 --- a/arch/arm64/configs/fragment-02-defconfig-addons.config
 +++ b/arch/arm64/configs/fragment-02-defconfig-addons.config
 @@ -96,6 +96,7 @@ CONFIG_SND_SOC_WM8994=m
@@ -26,6 +24,3 @@ index f4809c68ce7b..5bb092a86b03 100644
  CONFIG_STM32_ADC=m
  CONFIG_STM32_ADC_CORE=m
  CONFIG_STM32_DMA3=y
--- 
-2.50.1
-

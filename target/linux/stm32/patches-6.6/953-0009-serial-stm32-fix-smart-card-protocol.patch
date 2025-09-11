@@ -18,11 +18,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/tty/serial/stm32-usart.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 89c36ddea304..709d756d3c28 100644
 --- a/drivers/tty/serial/stm32-usart.c
 +++ b/drivers/tty/serial/stm32-usart.c
-@@ -1087,6 +1087,8 @@ static irqreturn_t stm32_usart_interrupt(int irq, void *ptr)
+@@ -1087,6 +1087,8 @@ static irqreturn_t stm32_usart_interrupt
  		}
  		/* Discard rx which contains tx echo */
  		stm32_usart_set_bits(port, ofs->rqr, USART_RQR_RXFRQ);
@@ -31,6 +29,3 @@ index 89c36ddea304..709d756d3c28 100644
  	} else {
  		/*
  		 * rx errors in dma mode has to be handled ASAP to avoid overrun as the DMA request
--- 
-2.50.1
-

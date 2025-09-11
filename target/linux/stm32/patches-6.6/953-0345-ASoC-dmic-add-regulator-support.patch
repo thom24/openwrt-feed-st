@@ -19,8 +19,6 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  sound/soc/codecs/dmic.c | 23 ++++++++++++++++++++++-
  1 file changed, 22 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/dmic.c b/sound/soc/codecs/dmic.c
-index 4fd6f97e5a49..e85241dfd950 100644
 --- a/sound/soc/codecs/dmic.c
 +++ b/sound/soc/codecs/dmic.c
 @@ -9,6 +9,7 @@
@@ -39,7 +37,7 @@ index 4fd6f97e5a49..e85241dfd950 100644
  	int wakeup_delay;
  	/* Delay after DMIC mode switch */
  	int modeswitch_delay;
-@@ -55,22 +57,33 @@ static int dmic_aif_event(struct snd_soc_dapm_widget *w,
+@@ -55,22 +57,33 @@ static int dmic_aif_event(struct snd_soc
  			  struct snd_kcontrol *kcontrol, int event) {
  	struct snd_soc_component *component = snd_soc_dapm_to_component(w->dapm);
  	struct dmic *dmic = snd_soc_component_get_drvdata(component);
@@ -74,7 +72,7 @@ index 4fd6f97e5a49..e85241dfd950 100644
  }
  
  static struct snd_soc_dai_driver dmic_dai = {
-@@ -98,6 +111,14 @@ static int dmic_component_probe(struct snd_soc_component *component)
+@@ -98,6 +111,14 @@ static int dmic_component_probe(struct s
  	if (!dmic)
  		return -ENOMEM;
  
@@ -89,6 +87,3 @@ index 4fd6f97e5a49..e85241dfd950 100644
  	dmic->gpio_en = devm_gpiod_get_optional(component->dev,
  						"dmicen", GPIOD_OUT_LOW);
  	if (IS_ERR(dmic->gpio_en))
--- 
-2.50.1
-

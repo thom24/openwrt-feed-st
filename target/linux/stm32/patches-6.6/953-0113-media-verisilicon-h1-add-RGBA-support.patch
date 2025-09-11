@@ -18,11 +18,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  .../platform/verisilicon/stm32mp25_vpu_hw.c   | 20 +++++++++++++++++++
  2 files changed, 28 insertions(+)
 
-diff --git a/drivers/media/platform/verisilicon/hantro_h1.c b/drivers/media/platform/verisilicon/hantro_h1.c
-index 88f9f7e65729..2d0cbbdfd916 100644
 --- a/drivers/media/platform/verisilicon/hantro_h1.c
 +++ b/drivers/media/platform/verisilicon/hantro_h1.c
-@@ -142,10 +142,14 @@ static inline bool is_rgb16(struct v4l2_pix_format_mplane *fmt)
+@@ -142,10 +142,14 @@ static inline bool is_rgb16(struct v4l2_
  static inline bool is_rgb32(struct v4l2_pix_format_mplane *fmt)
  {
  	return ((fmt->pixelformat == V4L2_PIX_FMT_XBGR32) ||
@@ -37,7 +35,7 @@ index 88f9f7e65729..2d0cbbdfd916 100644
  		(fmt->pixelformat == V4L2_PIX_FMT_RGB32));
  };
  
-@@ -195,6 +199,7 @@ static inline u32 to_cconv_mask(struct v4l2_pix_format_mplane *fmt)
+@@ -195,6 +199,7 @@ static inline u32 to_cconv_mask(struct v
  		break;
  
  	case V4L2_PIX_FMT_XBGR32:
@@ -45,7 +43,7 @@ index 88f9f7e65729..2d0cbbdfd916 100644
  	case V4L2_PIX_FMT_BGR32:
  		/*
  		 * <MSB>                      <LSB>
-@@ -210,6 +215,7 @@ static inline u32 to_cconv_mask(struct v4l2_pix_format_mplane *fmt)
+@@ -210,6 +215,7 @@ static inline u32 to_cconv_mask(struct v
  		break;
  
  	case V4L2_PIX_FMT_RGBX32:
@@ -53,7 +51,7 @@ index 88f9f7e65729..2d0cbbdfd916 100644
  		/*
  		 * <MSB>                      <LSB>
  		 * XXXXXXXXBBBBBBBBGGGGGGGGRRRRRRRR
-@@ -224,6 +230,7 @@ static inline u32 to_cconv_mask(struct v4l2_pix_format_mplane *fmt)
+@@ -224,6 +230,7 @@ static inline u32 to_cconv_mask(struct v
  		break;
  
  	case V4L2_PIX_FMT_BGRX32:
@@ -61,7 +59,7 @@ index 88f9f7e65729..2d0cbbdfd916 100644
  		/*
  		 * <MSB>                      <LSB>
  		 * RRRRRRRRGGGGGGGGBBBBBBBBXXXXXXXX
-@@ -238,6 +245,7 @@ static inline u32 to_cconv_mask(struct v4l2_pix_format_mplane *fmt)
+@@ -238,6 +245,7 @@ static inline u32 to_cconv_mask(struct v
  		break;
  
  	case V4L2_PIX_FMT_XRGB32:
@@ -69,42 +67,39 @@ index 88f9f7e65729..2d0cbbdfd916 100644
  	case V4L2_PIX_FMT_RGB32:
  		/*
  		 * <MSB>                      <LSB>
-diff --git a/drivers/media/platform/verisilicon/stm32mp25_vpu_hw.c b/drivers/media/platform/verisilicon/stm32mp25_vpu_hw.c
-index 0218e6ff3ca0..53474d5901b6 100644
 --- a/drivers/media/platform/verisilicon/stm32mp25_vpu_hw.c
 +++ b/drivers/media/platform/verisilicon/stm32mp25_vpu_hw.c
-@@ -113,6 +113,11 @@ static const struct hantro_fmt stm32mp25_venc_fmts[] = {
- 		.codec_mode = HANTRO_MODE_NONE,
+@@ -114,6 +114,11 @@ static const struct hantro_fmt stm32mp25
  		.enc_fmt = ROCKCHIP_VPU_ENC_FMT_RGB888,
  	},
-+	{
+ 	{
 +		.fourcc = V4L2_PIX_FMT_ABGR32,
 +		.codec_mode = HANTRO_MODE_NONE,
 +		.enc_fmt = ROCKCHIP_VPU_ENC_FMT_RGB888,
 +	},
- 	{
++	{
  		.fourcc = V4L2_PIX_FMT_BGR32,
  		.codec_mode = HANTRO_MODE_NONE,
-@@ -123,16 +128,31 @@ static const struct hantro_fmt stm32mp25_venc_fmts[] = {
- 		.codec_mode = HANTRO_MODE_NONE,
+ 		.enc_fmt = ROCKCHIP_VPU_ENC_FMT_RGB888,
+@@ -124,15 +129,30 @@ static const struct hantro_fmt stm32mp25
  		.enc_fmt = ROCKCHIP_VPU_ENC_FMT_RGB888,
  	},
-+	{
+ 	{
 +		.fourcc = V4L2_PIX_FMT_RGBA32,
 +		.codec_mode = HANTRO_MODE_NONE,
 +		.enc_fmt = ROCKCHIP_VPU_ENC_FMT_RGB888,
 +	},
- 	{
++	{
  		.fourcc = V4L2_PIX_FMT_BGRX32,
  		.codec_mode = HANTRO_MODE_NONE,
  		.enc_fmt = ROCKCHIP_VPU_ENC_FMT_RGB888,
  	},
-+	{
+ 	{
 +		.fourcc = V4L2_PIX_FMT_BGRA32,
 +		.codec_mode = HANTRO_MODE_NONE,
 +		.enc_fmt = ROCKCHIP_VPU_ENC_FMT_RGB888,
 +	},
- 	{
++	{
  		.fourcc = V4L2_PIX_FMT_XRGB32,
  		.codec_mode = HANTRO_MODE_NONE,
  		.enc_fmt = ROCKCHIP_VPU_ENC_FMT_RGB888,
@@ -117,6 +112,3 @@ index 0218e6ff3ca0..53474d5901b6 100644
  	{
  		.fourcc = V4L2_PIX_FMT_RGB32,
  		.codec_mode = HANTRO_MODE_NONE,
--- 
-2.50.1
-

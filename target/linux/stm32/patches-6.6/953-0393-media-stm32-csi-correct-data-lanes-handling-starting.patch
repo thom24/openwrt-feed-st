@@ -21,11 +21,9 @@ Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
  drivers/media/platform/st/stm32/stm32-csi.c | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-csi.c b/drivers/media/platform/st/stm32/stm32-csi.c
-index 16667001b475..7e11dd272f62 100644
 --- a/drivers/media/platform/st/stm32/stm32-csi.c
 +++ b/drivers/media/platform/st/stm32/stm32-csi.c
-@@ -375,12 +375,12 @@ static int stm32_csi_setup_lane_merger(struct stm32_csi_dev *csi2priv)
+@@ -375,12 +375,12 @@ static int stm32_csi_setup_lane_merger(s
  
  	for (i = 0; i < csi2priv->num_lanes; i++) {
  		/* Check that lane ID is < max number of lane */
@@ -40,7 +38,7 @@ index 16667001b475..7e11dd272f62 100644
  			   STM32_CSI_LMCFGR_DL0MAP_SHIFT));
  	}
  
-@@ -506,10 +506,10 @@ static int stm32_csi_start(struct stm32_csi_dev *csi2priv)
+@@ -506,10 +506,10 @@ static int stm32_csi_start(struct stm32_
  
  	/* Prepare lanes related configuration bits */
  	for (i = 0; i < csi2priv->num_lanes; i++) {
@@ -53,6 +51,3 @@ index 16667001b475..7e11dd272f62 100644
  			lanes_ie |= STM32_CSI_SR1_DL1_ERRORS;
  			lanes_en |= STM32_CSI_PCR_DL1EN;
  		}
--- 
-2.50.1
-

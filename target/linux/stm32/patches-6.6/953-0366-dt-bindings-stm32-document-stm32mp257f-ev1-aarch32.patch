@@ -16,8 +16,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  Documentation/devicetree/bindings/arm/stm32/stm32.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
-index 7268897d9bdf..9ce5e3302c8f 100644
 --- a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
 +++ b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
 @@ -176,6 +176,7 @@ properties:
@@ -28,6 +26,3 @@ index 7268897d9bdf..9ce5e3302c8f 100644
            - const: st,stm32mp257
  
        - description: ST STM32MP235 based Boards
--- 
-2.50.1
-

@@ -17,11 +17,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 9 ---------
  1 file changed, 9 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index 60c8bc1f376a..3e1cffe73ebc 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -58,14 +58,6 @@ LP_STOP1: domain-lp-stop1 {
+@@ -58,14 +58,6 @@
  				exit-latency-us = <600>;
  				min-residency-us = <2000>;
  			};
@@ -36,7 +34,7 @@ index 60c8bc1f376a..3e1cffe73ebc 100644
  		};
  	};
  
-@@ -220,7 +212,6 @@ cluster_pd: power-domain-cluster {
+@@ -220,7 +212,6 @@
  
  		ret_pd: power-domain-retention {
  			#power-domain-cells = <0>;
@@ -44,6 +42,3 @@ index 60c8bc1f376a..3e1cffe73ebc 100644
  		};
  	};
  
--- 
-2.50.1
-

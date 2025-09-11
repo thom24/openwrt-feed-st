@@ -26,8 +26,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  sound/soc/stm/stm32_i2s.c | 34 +++++++++++++++++++++++-----------
  1 file changed, 23 insertions(+), 11 deletions(-)
 
-diff --git a/sound/soc/stm/stm32_i2s.c b/sound/soc/stm/stm32_i2s.c
-index 808f8a1c38bb..58fdd4bb36a2 100644
 --- a/sound/soc/stm/stm32_i2s.c
 +++ b/sound/soc/stm/stm32_i2s.c
 @@ -222,6 +222,7 @@ enum i2s_datlen {
@@ -46,7 +44,7 @@ index 808f8a1c38bb..58fdd4bb36a2 100644
  	unsigned int mclk_rate;
  	unsigned int fmt;
  	unsigned int divider;
-@@ -750,45 +752,54 @@ static int stm32_i2s_set_sysclk(struct snd_soc_dai *cpu_dai,
+@@ -750,45 +752,54 @@ static int stm32_i2s_set_sysclk(struct s
  		freq, STM32_I2S_IS_MASTER(i2s) ? "master" : "slave",
  		dir ? "output" : "input");
  
@@ -112,7 +110,7 @@ index 808f8a1c38bb..58fdd4bb36a2 100644
  	return ret;
  }
  
-@@ -1286,6 +1297,7 @@ static int stm32_i2s_probe(struct platform_device *pdev)
+@@ -1286,6 +1297,7 @@ static int stm32_i2s_probe(struct platfo
  	i2s->pdev = pdev;
  	i2s->ms_flg = I2S_MS_NOT_SET;
  	spin_lock_init(&i2s->lock_fd);
@@ -120,6 +118,3 @@ index 808f8a1c38bb..58fdd4bb36a2 100644
  	spin_lock_init(&i2s->irq_lock);
  	platform_set_drvdata(pdev, i2s);
  
--- 
-2.50.1
-

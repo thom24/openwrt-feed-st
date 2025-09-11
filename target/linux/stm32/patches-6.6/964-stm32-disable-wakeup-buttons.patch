@@ -1,4 +1,4 @@
-From 3087bdc922889e2ba6888f44f38fe2bca5e46a78 Mon Sep 17 00:00:00 2001
+From 1cb614cb4ac361b76b6661b9115e22900d8939b7 Mon Sep 17 00:00:00 2001
 From: Thomas Richard <thomas.richard@bootlin.com>
 Date: Tue, 21 Jan 2025 15:29:09 +0100
 Subject: [PATCH] stm32: disable wakeup buttons
@@ -15,7 +15,7 @@ Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
 
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -83,6 +83,7 @@
+@@ -85,6 +85,7 @@
  			label = "wake-up";
  			linux,code = <KEY_WAKEUP>;
  			interrupts-extended = <&optee 0>;
@@ -25,10 +25,10 @@ Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
  
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -102,7 +102,7 @@
- 			label = "wake-up";
+@@ -105,7 +105,7 @@
  			linux,code = <KEY_WAKEUP>;
  			interrupts-extended = <&optee 0>;
+ 			wakeup-source;
 -			status = "okay";
 +			status = "disabled";
  		};

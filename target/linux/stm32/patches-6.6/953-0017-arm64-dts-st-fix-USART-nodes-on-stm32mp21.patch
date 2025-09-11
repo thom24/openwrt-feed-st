@@ -19,11 +19,9 @@ Tested-by: Pascal PAILLET <p.paillet@st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 21 ++++++++++++++-------
  1 file changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index 20dbbabc7268..326c480af60b 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -786,52 +786,56 @@ spdifrx: audio-controller@400d0000 {
+@@ -786,52 +786,56 @@
  			usart2: serial@400e0000 {
  				compatible = "st,stm32h7-uart";
  				reg = <0x400e0000 0x0 0x400>;
@@ -84,7 +82,7 @@ index 20dbbabc7268..326c480af60b 100644
  				status = "disabled";
  			};
  
-@@ -1028,13 +1032,14 @@ timer@7 {
+@@ -1028,13 +1032,14 @@
  			usart6: serial@40220000 {
  				compatible = "st,stm32h7-uart";
  				reg = <0x40220000 0x0 0x400>;
@@ -100,7 +98,7 @@ index 20dbbabc7268..326c480af60b 100644
  				status = "disabled";
  			};
  
-@@ -1309,13 +1314,14 @@ sai3b: audio-controller@502b0024 {
+@@ -1309,13 +1314,14 @@
  			usart1: serial@40330000 {
  				compatible = "st,stm32h7-uart";
  				reg = <0x40330000 0x0 0x400>;
@@ -116,7 +114,7 @@ index 20dbbabc7268..326c480af60b 100644
  				status = "disabled";
  			};
  
-@@ -1439,12 +1445,13 @@ filter3: filter@204 {
+@@ -1439,12 +1445,13 @@
  			uart7: serial@40370000 {
  				compatible = "st,stm32h7-uart";
  				reg = <0x40370000 0x0 0x400>;
@@ -131,6 +129,3 @@ index 20dbbabc7268..326c480af60b 100644
  				status = "disabled";
  			};
  
--- 
-2.50.1
-

@@ -27,11 +27,9 @@ Tested-by: Jerome BESNARD <jerome.besnard@st.com>
  drivers/irqchip/irq-stm32mp-exti.c | 44 ++++++++++++++++++------------
  1 file changed, 27 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/irqchip/irq-stm32mp-exti.c b/drivers/irqchip/irq-stm32mp-exti.c
-index 18d0814938d5..aa20d754138f 100644
 --- a/drivers/irqchip/irq-stm32mp-exti.c
 +++ b/drivers/irqchip/irq-stm32mp-exti.c
-@@ -280,16 +280,21 @@ static int stm32mp_exti_convert_type(struct irq_data *d,
+@@ -280,16 +280,21 @@ static int stm32mp_exti_convert_type(str
  }
  
  static void stm32mp_chip_suspend(struct stm32mp_exti_chip_data *chip_data,
@@ -55,7 +53,7 @@ index 18d0814938d5..aa20d754138f 100644
  
  	/* wakeup for IRQ power domain for S2IDLE */
  	if (wake_active)
-@@ -297,16 +302,21 @@ static void stm32mp_chip_suspend(struct stm32mp_exti_chip_data *chip_data,
+@@ -297,16 +302,21 @@ static void stm32mp_chip_suspend(struct
  }
  
  static void stm32mp_chip_resume(struct stm32mp_exti_chip_data *chip_data,
@@ -79,7 +77,7 @@ index 18d0814938d5..aa20d754138f 100644
  
  	if (mask_cache)
  		pm_runtime_get(chip_data->host_data->dev);
-@@ -326,26 +336,28 @@ static inline u32 stm32mp_exti_set_bit(struct irq_data *d, u32 reg)
+@@ -326,26 +336,28 @@ static inline u32 stm32mp_exti_set_bit(s
  {
  	struct stm32mp_exti_chip_data *chip_data = irq_data_get_irq_chip_data(d);
  	void __iomem *base = chip_data->host_data->base;
@@ -114,7 +112,7 @@ index 18d0814938d5..aa20d754138f 100644
  }
  
  static void stm32mp_exti_eoi(struct irq_data *d)
-@@ -362,7 +374,7 @@ static void stm32mp_exti_eoi(struct irq_data *d)
+@@ -362,7 +374,7 @@ static void stm32mp_exti_eoi(struct irq_
  	if (!chip_data->mask_cache)
  		pm_runtime_get(chip_data->host_data->dev);
  
@@ -123,7 +121,7 @@ index 18d0814938d5..aa20d754138f 100644
  
  	raw_spin_unlock(&chip_data->rlock);
  
-@@ -375,7 +387,7 @@ static void stm32mp_exti_mask(struct irq_data *d)
+@@ -375,7 +387,7 @@ static void stm32mp_exti_mask(struct irq
  	const struct stm32mp_exti_bank *bank = chip_data->reg_bank;
  
  	raw_spin_lock(&chip_data->rlock);
@@ -132,7 +130,7 @@ index 18d0814938d5..aa20d754138f 100644
  
  	/* power domain is OFF when IMR becomes 0 */
  	if (!chip_data->mask_cache)
-@@ -397,7 +409,7 @@ static void stm32mp_exti_unmask(struct irq_data *d)
+@@ -397,7 +409,7 @@ static void stm32mp_exti_unmask(struct i
  	if (!chip_data->mask_cache)
  		pm_runtime_get(chip_data->host_data->dev);
  
@@ -141,7 +139,7 @@ index 18d0814938d5..aa20d754138f 100644
  	raw_spin_unlock(&chip_data->rlock);
  
  	irq_chip_unmask_parent(d);
-@@ -470,7 +482,7 @@ static int stm32mp_exti_suspend(struct device *dev)
+@@ -470,7 +482,7 @@ static int stm32mp_exti_suspend(struct d
  
  	for (i = 0; i < host_data->drv_data->bank_nr; i++) {
  		chip_data = &host_data->chips_data[i];
@@ -150,7 +148,7 @@ index 18d0814938d5..aa20d754138f 100644
  	}
  
  	return 0;
-@@ -505,7 +517,7 @@ static int stm32mp_exti_resume(struct device *dev)
+@@ -505,7 +517,7 @@ static int stm32mp_exti_resume(struct de
  	stm32mp_exti_resume_gpio_mux(host_data);
  	for (i = 0; i < host_data->drv_data->bank_nr; i++) {
  		chip_data = &host_data->chips_data[i];
@@ -159,7 +157,7 @@ index 18d0814938d5..aa20d754138f 100644
  	}
  
  	return 0;
-@@ -534,7 +546,6 @@ static struct irq_chip stm32mp_exti_chip = {
+@@ -534,7 +546,6 @@ static struct irq_chip stm32mp_exti_chip
  	.irq_retrigger		= stm32mp_exti_retrigger,
  	.irq_set_type		= stm32mp_exti_set_type,
  	.irq_set_wake		= stm32mp_exti_set_wake,
@@ -167,7 +165,7 @@ index 18d0814938d5..aa20d754138f 100644
  	.irq_set_affinity	= IS_ENABLED(CONFIG_SMP) ? irq_chip_set_affinity_parent : NULL,
  };
  
-@@ -549,7 +560,6 @@ static struct irq_chip stm32mp_exti_chip_direct = {
+@@ -549,7 +560,6 @@ static struct irq_chip stm32mp_exti_chip
  	.irq_retrigger		= irq_chip_retrigger_hierarchy,
  	.irq_set_type		= irq_chip_set_type_parent,
  	.irq_set_wake		= stm32mp_exti_set_wake,
@@ -175,6 +173,3 @@ index 18d0814938d5..aa20d754138f 100644
  	.irq_set_affinity	= IS_ENABLED(CONFIG_SMP) ? irq_chip_set_affinity_parent : NULL,
  };
  
--- 
-2.50.1
-

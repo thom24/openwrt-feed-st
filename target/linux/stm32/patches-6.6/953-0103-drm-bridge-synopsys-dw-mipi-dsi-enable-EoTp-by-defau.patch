@@ -25,11 +25,9 @@ Reviewed-by: Yannick FERTRE <yannick.fertre@foss.st.com>
  drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c | 7 ++++++-
  1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
-index 4b4ce38af3b4..b053954172e1 100644
 --- a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
 +++ b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
-@@ -709,7 +709,12 @@ static void dw_mipi_dsi_dpi_config(struct dw_mipi_dsi *dsi,
+@@ -709,7 +709,12 @@ static void dw_mipi_dsi_dpi_config(struc
  
  static void dw_mipi_dsi_packet_handler_config(struct dw_mipi_dsi *dsi)
  {
@@ -43,6 +41,3 @@ index 4b4ce38af3b4..b053954172e1 100644
  }
  
  static void dw_mipi_dsi_video_packet_config(struct dw_mipi_dsi *dsi,
--- 
-2.50.1
-

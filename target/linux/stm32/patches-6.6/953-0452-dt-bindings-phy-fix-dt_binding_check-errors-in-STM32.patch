@@ -23,8 +23,6 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  .../devicetree/bindings/phy/st,stm32-usb2phy.yaml         | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml b/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml
-index 1c50a305578f..81b1605dcd94 100644
 --- a/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml
 +++ b/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml
 @@ -1,8 +1,8 @@
@@ -56,6 +54,3 @@ index 1c50a305578f..81b1605dcd94 100644
      description: Phandle to the STM32-MPU System Controller DT node
                   <syscon-handle cr-offset>
  
--- 
-2.50.1
-

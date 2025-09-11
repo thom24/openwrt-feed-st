@@ -17,11 +17,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp231.dtsi | 22 ----------------------
  1 file changed, 22 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index 9613f1606e5e..d6a253ec28b9 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -2550,28 +2550,6 @@ gpioi: gpio@442c0000 {
+@@ -2550,28 +2550,6 @@
  				st,bank-name = "GPIOI";
  				status = "disabled";
  			};
@@ -50,6 +48,3 @@ index 9613f1606e5e..d6a253ec28b9 100644
  		};
  
  		rtc: rtc@46000000 {
--- 
-2.50.1
-

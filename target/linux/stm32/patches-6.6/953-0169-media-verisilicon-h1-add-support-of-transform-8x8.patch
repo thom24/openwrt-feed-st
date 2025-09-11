@@ -18,11 +18,9 @@ Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
  drivers/media/platform/verisilicon/hantro_h1_h264_enc.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/platform/verisilicon/hantro_h1_h264_enc.c b/drivers/media/platform/verisilicon/hantro_h1_h264_enc.c
-index 51fddf03862a..4122084e4f13 100644
 --- a/drivers/media/platform/verisilicon/hantro_h1_h264_enc.c
 +++ b/drivers/media/platform/verisilicon/hantro_h1_h264_enc.c
-@@ -143,6 +143,8 @@ static void hantro_h1_h264_enc_set_params(struct hantro_dev *vpu, struct hantro_
+@@ -143,6 +143,8 @@ static void hantro_h1_h264_enc_set_param
  		| H1_REG_ENC_CTRL2_INTRA16X16_MODE(h264_intra16_favor[qp]);
  	if (params->flags & V4L2_H264_ENCODE_FLAG_ENTROPY_CABAC)
  		reg |= H1_REG_ENC_CTRL2_ENTROPY_CABAC;
@@ -31,6 +29,3 @@ index 51fddf03862a..4122084e4f13 100644
  	vepu_write_relaxed(vpu, reg, H1_REG_ENC_CTRL2);
  
  	reg = H1_REG_ENC_CTRL3_MV_PENALTY_1P(h264_diff_mv_penalty[qp])
--- 
-2.50.1
-

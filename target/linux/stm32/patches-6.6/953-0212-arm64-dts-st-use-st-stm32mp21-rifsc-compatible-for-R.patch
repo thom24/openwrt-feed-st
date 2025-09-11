@@ -21,11 +21,9 @@ Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index 6ef908388f9f..8d1db320e585 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -381,7 +381,7 @@ ipcc1: mailbox@40490000 {
+@@ -381,7 +381,7 @@
  		};
  
  		rifsc: bus@42080000 {
@@ -34,6 +32,3 @@ index 6ef908388f9f..8d1db320e585 100644
  			reg = <0x42080000 0x0 0x1000>;
  			#address-cells = <1>;
  			#size-cells = <2>;
--- 
-2.50.1
-

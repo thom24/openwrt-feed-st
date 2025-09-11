@@ -30,11 +30,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index 748f66f9decf..dd0b64a3c20e 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -201,6 +201,7 @@ timer {
+@@ -201,6 +201,7 @@
  	usb2_phy1: usb2-phy1 {
  		compatible      = "st,stm32mp21-usb2phy";
  		#phy-cells      = <0>;
@@ -42,6 +40,3 @@ index 748f66f9decf..dd0b64a3c20e 100644
  		st,syscfg       = <&syscfg 0x2400>;
  		clocks          = <&rcc CK_KER_USB2PHY1>;
  		resets          = <&rcc USB2PHY1_R>;
--- 
-2.50.1
-

@@ -20,8 +20,6 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/pinctrl/stm32/Kconfig | 7 ++++---
  1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/pinctrl/stm32/Kconfig b/drivers/pinctrl/stm32/Kconfig
-index ef6d6cfc00cd..880896e79f4e 100644
 --- a/drivers/pinctrl/stm32/Kconfig
 +++ b/drivers/pinctrl/stm32/Kconfig
 @@ -55,13 +55,13 @@ config PINCTRL_STM32MP157
@@ -50,6 +48,3 @@ index ef6d6cfc00cd..880896e79f4e 100644
  	select PINMUX
  	select GENERIC_PINCONF
  	select GPIOLIB
--- 
-2.50.1
-

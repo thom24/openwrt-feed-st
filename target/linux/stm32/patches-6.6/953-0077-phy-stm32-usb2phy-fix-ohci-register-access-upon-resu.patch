@@ -21,11 +21,9 @@ Domain-Review: Ram DAYAL <ram.dayal@st.com>
  drivers/phy/st/phy-stm32-usb2phy.c | 15 +++++++++++++++
  1 file changed, 15 insertions(+)
 
-diff --git a/drivers/phy/st/phy-stm32-usb2phy.c b/drivers/phy/st/phy-stm32-usb2phy.c
-index 5ceafe4df253..a4c98e8ba884 100644
 --- a/drivers/phy/st/phy-stm32-usb2phy.c
 +++ b/drivers/phy/st/phy-stm32-usb2phy.c
-@@ -250,6 +250,21 @@ static int stm32_usb2phy_enable(struct stm32_usb2phy *phy_dev)
+@@ -250,6 +250,21 @@ static int stm32_usb2phy_enable(struct s
  		return ret;
  	}
  
@@ -47,6 +45,3 @@ index 5ceafe4df253..a4c98e8ba884 100644
  	if (phy_dev->mask_trim1) {
  		ret = regmap_update_bits(phy_dev->regmap, phy_dev->hw_data->trim1_offset,
  					 phy_dev->mask_trim1, phy_dev->value_trim1);
--- 
-2.50.1
-

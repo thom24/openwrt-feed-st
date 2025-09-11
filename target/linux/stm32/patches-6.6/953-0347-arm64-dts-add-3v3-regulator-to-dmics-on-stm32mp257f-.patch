@@ -16,11 +16,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index 0c2e3d40d75a..b8065f6dc229 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -59,6 +59,7 @@ dmic0: dmic-0 {
+@@ -59,6 +59,7 @@
  		compatible = "dmic-codec";
  		#sound-dai-cells = <1>;
  		sound-name-prefix = "dmic0";
@@ -28,7 +26,7 @@ index 0c2e3d40d75a..b8065f6dc229 100644
  		status = "okay";
  
  		port {
-@@ -72,6 +73,7 @@ dmic1: dmic-1 {
+@@ -72,6 +73,7 @@
  		compatible = "dmic-codec";
  		#sound-dai-cells = <1>;
  		sound-name-prefix = "dmic1";
@@ -36,6 +34,3 @@ index 0c2e3d40d75a..b8065f6dc229 100644
  		status = "okay";
  
  		port {
--- 
-2.50.1
-

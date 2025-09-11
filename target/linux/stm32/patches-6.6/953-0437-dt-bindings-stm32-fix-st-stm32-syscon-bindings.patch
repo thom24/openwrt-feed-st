@@ -17,8 +17,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  .../devicetree/bindings/arm/stm32/st,stm32-syscon.yaml        | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
-index d066187ddbc5..71061bdf0a76 100644
 --- a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
 +++ b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
 @@ -1,8 +1,8 @@
@@ -32,6 +30,3 @@ index d066187ddbc5..71061bdf0a76 100644
  
  title: STMicroelectronics STM32 Platforms System Controller
  
--- 
-2.50.1
-

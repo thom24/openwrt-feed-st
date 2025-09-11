@@ -21,11 +21,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/phy/st/phy-stm32-usb2phy.c | 10 +++++++---
  1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/phy/st/phy-stm32-usb2phy.c b/drivers/phy/st/phy-stm32-usb2phy.c
-index f4a9efc876aa..d233ee0ea6d2 100644
 --- a/drivers/phy/st/phy-stm32-usb2phy.c
 +++ b/drivers/phy/st/phy-stm32-usb2phy.c
-@@ -400,12 +400,16 @@ static int stm32_usb2phy_set_mode(struct phy *phy, enum phy_mode mode, int submo
+@@ -400,12 +400,16 @@ static int stm32_usb2phy_set_mode(struct
  
  	switch (mode) {
  	case PHY_MODE_USB_HOST:
@@ -44,7 +42,7 @@ index f4a9efc876aa..d233ee0ea6d2 100644
  		else {
  			if (submode == USB_ROLE_NONE) {
  				ret = regmap_update_bits(phy_dev->regmap,
-@@ -434,7 +438,7 @@ static int stm32_usb2phy_set_mode(struct phy *phy, enum phy_mode mode, int submo
+@@ -434,7 +438,7 @@ static int stm32_usb2phy_set_mode(struct
  			ret = regmap_update_bits(phy_dev->regmap,
  						 phy_data->cr_offset,
  						 SYSCFG_USB2PHY2CR_USB2PHY2CMN_MASK,
@@ -53,6 +51,3 @@ index f4a9efc876aa..d233ee0ea6d2 100644
  		else {
  			if (submode == USB_ROLE_NONE) {
  				ret = regmap_update_bits(phy_dev->regmap,
--- 
-2.50.1
-

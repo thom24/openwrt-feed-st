@@ -22,11 +22,9 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  drivers/media/platform/st/stm32/stm32-csi.c | 26 +++++++++++++++------
  1 file changed, 19 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-csi.c b/drivers/media/platform/st/stm32/stm32-csi.c
-index 75f76ec36d73..3497a5152cd2 100644
 --- a/drivers/media/platform/st/stm32/stm32-csi.c
 +++ b/drivers/media/platform/st/stm32/stm32-csi.c
-@@ -366,19 +366,31 @@ struct stm32_csi_dev *v4l2_subdev_to_csi2priv(struct v4l2_subdev *subdev)
+@@ -366,19 +366,31 @@ struct stm32_csi_dev *v4l2_subdev_to_csi
  
  static int stm32_csi_setup_lane_merger(struct stm32_csi_dev *csi2priv)
  {
@@ -65,6 +63,3 @@ index 75f76ec36d73..3497a5152cd2 100644
  		}
  		lmcfgr |= (csi2priv->lanes[i] << ((i * 4) +
  			   STM32_CSI_LMCFGR_DL0MAP_SHIFT));
--- 
-2.50.1
-

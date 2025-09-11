@@ -17,11 +17,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/phy/st/phy-stm32-usb2phy.c | 19 ++++++++++++++++---
  1 file changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/phy/st/phy-stm32-usb2phy.c b/drivers/phy/st/phy-stm32-usb2phy.c
-index d233ee0ea6d2..ba00ec5718f7 100644
 --- a/drivers/phy/st/phy-stm32-usb2phy.c
 +++ b/drivers/phy/st/phy-stm32-usb2phy.c
-@@ -527,9 +527,12 @@ static int stm32_usb2phy_phy_power_on(struct phy *phy)
+@@ -527,9 +527,12 @@ static int stm32_usb2phy_phy_power_on(st
  	struct stm32_usb2phy *phy_dev = phy_get_drvdata(phy);
  	struct device *dev = &phy->dev;
  
@@ -35,7 +33,7 @@ index d233ee0ea6d2..ba00ec5718f7 100644
  
  	if (phy_dev->vbus)
  		return regulator_enable(phy_dev->vbus);
-@@ -542,9 +545,12 @@ static int stm32_usb2phy_phy_power_off(struct phy *phy)
+@@ -542,9 +545,12 @@ static int stm32_usb2phy_phy_power_off(s
  	struct stm32_usb2phy *phy_dev = phy_get_drvdata(phy);
  	struct device *dev = &phy->dev;
  
@@ -49,7 +47,7 @@ index d233ee0ea6d2..ba00ec5718f7 100644
  
  	if (phy_dev->vbus)
  		return regulator_disable(phy_dev->vbus);
-@@ -782,6 +788,11 @@ static int stm32_usb2phy_tuning(struct phy *phy)
+@@ -782,6 +788,11 @@ static int stm32_usb2phy_tuning(struct p
  
  static irqreturn_t stm32_usb2phy_irq_wakeup_handler(int irq, void *dev_id)
  {
@@ -61,7 +59,7 @@ index d233ee0ea6d2..ba00ec5718f7 100644
  	return IRQ_HANDLED;
  }
  
-@@ -841,10 +852,12 @@ static int stm32_usb2phy_probe(struct platform_device *pdev)
+@@ -841,10 +852,12 @@ static int stm32_usb2phy_probe(struct pl
  
  		ret = devm_request_threaded_irq(dev, phy_dev->wakeirq, NULL,
  						stm32_usb2phy_irq_wakeup_handler, IRQF_ONESHOT,
@@ -75,6 +73,3 @@ index d233ee0ea6d2..ba00ec5718f7 100644
  	}
  
  	phy_dev->hw_data = stm32_usb2phy_get_hwdata(dev, phycr);
--- 
-2.50.1
-

@@ -21,11 +21,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  .../platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c    | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
-index 4279c7b4a827..472f6083e2b7 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
-@@ -508,11 +508,6 @@ static void dcmipp_bytecap_stop_streaming(struct vb2_queue *vq)
+@@ -508,11 +508,6 @@ static void dcmipp_bytecap_stop_streamin
  	int ret;
  	u32 status;
  
@@ -37,7 +35,7 @@ index 4279c7b4a827..472f6083e2b7 100644
  	/* Disable interruptions */
  	spin_lock(&vcap->vdev.v4l2_dev->lock);
  	reg_clear(vcap, DCMIPP_CMIER, vcap->cmier);
-@@ -532,6 +527,11 @@ static void dcmipp_bytecap_stop_streaming(struct vb2_queue *vq)
+@@ -532,6 +527,11 @@ static void dcmipp_bytecap_stop_streamin
  	/* Disable pipe */
  	reg_clear(vcap, DCMIPP_P0FSCR, DCMIPP_P0FSCR_PIPEN);
  
@@ -49,6 +47,3 @@ index 4279c7b4a827..472f6083e2b7 100644
  	spin_lock_irq(&vcap->irqlock);
  
  	/* Return all queued buffers to vb2 in ERROR state */
--- 
-2.50.1
-

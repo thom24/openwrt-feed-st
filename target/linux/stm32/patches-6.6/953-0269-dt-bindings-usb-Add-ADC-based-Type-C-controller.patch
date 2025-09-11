@@ -17,9 +17,6 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  1 file changed, 62 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/usb/adc-usb-c-connector.yaml
 
-diff --git a/Documentation/devicetree/bindings/usb/adc-usb-c-connector.yaml b/Documentation/devicetree/bindings/usb/adc-usb-c-connector.yaml
-new file mode 100644
-index 000000000000..100b73303c82
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/usb/adc-usb-c-connector.yaml
 @@ -0,0 +1,62 @@
@@ -85,6 +82,3 @@ index 000000000000..100b73303c82
 +            };
 +        };
 +    };
--- 
-2.50.1
-

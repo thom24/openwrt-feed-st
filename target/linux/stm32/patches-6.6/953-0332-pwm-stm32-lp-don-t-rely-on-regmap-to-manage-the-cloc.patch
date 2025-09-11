@@ -33,11 +33,9 @@ Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
  drivers/pwm/pwm-stm32-lp.c | 35 ++++++++++++++++++++++-------------
  1 file changed, 22 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/pwm/pwm-stm32-lp.c b/drivers/pwm/pwm-stm32-lp.c
-index 884911d443a6..bfc0bd7759f3 100644
 --- a/drivers/pwm/pwm-stm32-lp.c
 +++ b/drivers/pwm/pwm-stm32-lp.c
-@@ -188,9 +188,16 @@ static int stm32_pwm_lp_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+@@ -188,9 +188,16 @@ static int stm32_pwm_lp_apply(struct pwm
  	dty = prd * state->duty_cycle;
  	dty = DIV_ROUND_CLOSEST_ULL(dty, state->period);
  
@@ -55,7 +53,7 @@ index 884911d443a6..bfc0bd7759f3 100644
  
  	/*
  	 * When there are several channels, they share the same prescaler and reload value.
-@@ -199,17 +206,12 @@ static int stm32_pwm_lp_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+@@ -199,17 +206,12 @@ static int stm32_pwm_lp_apply(struct pwm
  	if (!stm32_pwm_lp_update_allowed(priv, pwm->hwpwm)) {
  		ret = regmap_read(priv->regmap, STM32_LPTIM_ARR, &arr);
  		if (ret)
@@ -78,7 +76,7 @@ index 884911d443a6..bfc0bd7759f3 100644
  	}
  
  	if ((FIELD_GET(STM32_LPTIM_PRESC, cfgr) != presc) ||
-@@ -304,6 +306,11 @@ static int stm32_pwm_lp_get_state(struct pwm_chip *chip,
+@@ -304,6 +306,11 @@ static int stm32_pwm_lp_get_state(struct
  	u64 tmp;
  	int ret;
  
@@ -90,7 +88,7 @@ index 884911d443a6..bfc0bd7759f3 100644
  	regmap_read(priv->regmap, STM32_LPTIM_CR, &val);
  	enabled = !!FIELD_GET(STM32_LPTIM_ENABLE, val);
  	if (priv->num_cc_chans) {
-@@ -319,8 +326,10 @@ static int stm32_pwm_lp_get_state(struct pwm_chip *chip,
+@@ -319,8 +326,10 @@ static int stm32_pwm_lp_get_state(struct
  	/* Keep PWM counter clock refcount in sync with PWM initial state */
  	if (state->enabled) {
  		ret = pm_runtime_resume_and_get(chip->dev);
@@ -102,7 +100,7 @@ index 884911d443a6..bfc0bd7759f3 100644
  	}
  
  	regmap_read(priv->regmap, STM32_LPTIM_CFGR, &val);
-@@ -344,7 +353,7 @@ static int stm32_pwm_lp_get_state(struct pwm_chip *chip,
+@@ -344,7 +353,7 @@ static int stm32_pwm_lp_get_state(struct
  	tmp = (tmp << presc) * NSEC_PER_SEC;
  	state->duty_cycle = DIV_ROUND_CLOSEST_ULL(tmp, rate);
  
@@ -111,6 +109,3 @@ index 884911d443a6..bfc0bd7759f3 100644
  }
  
  static const struct pwm_ops stm32_pwm_lp_ops = {
--- 
-2.50.1
-

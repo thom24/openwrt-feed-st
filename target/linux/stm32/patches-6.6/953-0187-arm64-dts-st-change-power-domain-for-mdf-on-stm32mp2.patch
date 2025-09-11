@@ -22,11 +22,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index d790a4bfda87..3e47af268efd 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -1393,7 +1393,7 @@ mdf1: mdf@404d0000 {
+@@ -1393,7 +1393,7 @@
  				resets = <&rcc MDF1_R>;
  				reset-names = "mdf";
  				access-controllers = <&rifsc 54>;
@@ -35,6 +33,3 @@ index d790a4bfda87..3e47af268efd 100644
  				status = "disabled";
  
  				sitf0: sitf@80 {
--- 
-2.50.1
-

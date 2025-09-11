@@ -42,11 +42,9 @@ Tested-by: Maxime MERE <maxime.mere@foss.st.com>
  drivers/char/hw_random/stm32-rng.c | 9 +++++++++
  1 file changed, 9 insertions(+)
 
-diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
-index dd4f66b1b47f..1bcea36a671d 100644
 --- a/drivers/char/hw_random/stm32-rng.c
 +++ b/drivers/char/hw_random/stm32-rng.c
-@@ -375,6 +375,8 @@ static int stm32_rng_init(struct hwrng *rng)
+@@ -375,6 +375,8 @@ static int stm32_rng_init(struct hwrng *
  		return -EINVAL;
  	}
  
@@ -55,7 +53,7 @@ index dd4f66b1b47f..1bcea36a671d 100644
  	return 0;
  }
  
-@@ -404,6 +406,11 @@ static int __maybe_unused stm32_rng_runtime_suspend(struct device *dev)
+@@ -404,6 +406,11 @@ static int __maybe_unused stm32_rng_runt
  static int __maybe_unused stm32_rng_suspend(struct device *dev)
  {
  	struct stm32_rng_private *priv = dev_get_drvdata(dev);
@@ -67,7 +65,7 @@ index dd4f66b1b47f..1bcea36a671d 100644
  
  	if (priv->data->has_cond_reset) {
  		priv->pm_conf.nscr = readl_relaxed(priv->base + RNG_NSCR);
-@@ -505,6 +512,8 @@ static int __maybe_unused stm32_rng_resume(struct device *dev)
+@@ -505,6 +512,8 @@ static int __maybe_unused stm32_rng_resu
  		writel_relaxed(reg, priv->base + RNG_CR);
  	}
  
@@ -76,6 +74,3 @@ index dd4f66b1b47f..1bcea36a671d 100644
  	return 0;
  }
  
--- 
-2.50.1
-

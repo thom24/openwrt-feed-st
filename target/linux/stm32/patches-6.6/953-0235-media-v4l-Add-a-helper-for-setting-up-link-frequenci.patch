@@ -26,11 +26,9 @@ Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
  include/media/v4l2-common.h           | 25 ++++++++++++++
  2 files changed, 72 insertions(+)
 
-diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-index 174551dd53db..0bd9d21a2209 100644
 --- a/drivers/media/v4l2-core/v4l2-common.c
 +++ b/drivers/media/v4l2-core/v4l2-common.c
-@@ -586,3 +586,50 @@ u32 v4l2_fraction_to_interval(u32 numerator, u32 denominator)
+@@ -586,3 +586,50 @@ u32 v4l2_fraction_to_interval(u32 numera
  	return denominator ? numerator * multiplier / denominator : 0;
  }
  EXPORT_SYMBOL_GPL(v4l2_fraction_to_interval);
@@ -81,11 +79,9 @@ index 174551dd53db..0bd9d21a2209 100644
 +	return 0;
 +}
 +EXPORT_SYMBOL_GPL(v4l2_link_freq_to_bitmap);
-diff --git a/include/media/v4l2-common.h b/include/media/v4l2-common.h
-index d278836fd9cb..d5439399f414 100644
 --- a/include/media/v4l2-common.h
 +++ b/include/media/v4l2-common.h
-@@ -547,6 +547,31 @@ void v4l2_simplify_fraction(u32 *numerator, u32 *denominator,
+@@ -547,6 +547,31 @@ void v4l2_simplify_fraction(u32 *numerat
  		unsigned int n_terms, unsigned int threshold);
  u32 v4l2_fraction_to_interval(u32 numerator, u32 denominator);
  
@@ -117,6 +113,3 @@ index d278836fd9cb..d5439399f414 100644
  static inline u64 v4l2_buffer_get_timestamp(const struct v4l2_buffer *buf)
  {
  	/*
--- 
-2.50.1
-

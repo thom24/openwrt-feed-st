@@ -19,8 +19,6 @@ Tested-by: Alain VOLMAT <alain.volmat@st.com>
  Documentation/devicetree/bindings/media/st,stm32-csi.yaml | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/media/st,stm32-csi.yaml b/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
-index 6b7f01b99a1d..23781f850a4d 100644
 --- a/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
 +++ b/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
 @@ -98,7 +98,7 @@ examples:
@@ -32,6 +30,3 @@ index 6b7f01b99a1d..23781f850a4d 100644
                      bus-type = <MEDIA_BUS_TYPE_CSI2_DPHY>;
                  };
              };
--- 
-2.50.1
-

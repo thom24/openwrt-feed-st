@@ -17,11 +17,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/dma/stm32/stm32-dma3.c | 38 ++++++++++++++++++++--------------
  1 file changed, 22 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
-index 863304450932..f6c0c45a3356 100644
 --- a/drivers/dma/stm32/stm32-dma3.c
 +++ b/drivers/dma/stm32/stm32-dma3.c
-@@ -346,6 +346,11 @@ static struct device *chan2dev(struct stm32_dma3_chan *chan)
+@@ -346,6 +346,11 @@ static struct device *chan2dev(struct st
  	return &chan->vchan.chan.dev->device;
  }
  
@@ -33,7 +31,7 @@ index 863304450932..f6c0c45a3356 100644
  #ifdef CONFIG_DEBUG_FS
  #include <linux/debugfs.h>
  static void stm32_dma3_dbg_summary_show(struct seq_file *s, struct dma_device *dma_dev)
-@@ -375,7 +380,7 @@ static dma_addr_t stm32_dma3_translate_addr(struct stm32_dma3_ddata *ddata, u32
+@@ -375,7 +380,7 @@ static dma_addr_t stm32_dma3_translate_a
  					    struct device *client, dma_addr_t dma_addr)
  {
  	const struct bus_dma_region *dma_map = client ? client->dma_range_map : NULL;
@@ -42,7 +40,7 @@ index 863304450932..f6c0c45a3356 100644
  
  	/* No HW translation, no need to check address */
  	if (!ddata->axi_addr_offset)
-@@ -609,7 +614,7 @@ static int stm32_dma3_lli_pool_dma_alloc(struct stm32_dma3_ddata *ddata, struct
+@@ -609,7 +614,7 @@ gen_pool_free:
  
  from_dma_pool:
  	if (ddata->gen_pool)
@@ -51,7 +49,7 @@ index 863304450932..f6c0c45a3356 100644
  
  	/* Allocate LLIs in dma_pool */
  	for (i = 0; i < count; i++) {
-@@ -683,7 +688,7 @@ static struct stm32_dma3_swdesc *stm32_dma3_chan_desc_alloc(struct stm32_dma3_ch
+@@ -683,7 +688,7 @@ static struct stm32_dma3_swdesc *stm32_d
  	swdesc->ccr = FIELD_PREP(CCR_LAP, lap);
  
  	/* Set LL base address */
@@ -60,7 +58,7 @@ index 863304450932..f6c0c45a3356 100644
  					      swdesc->lli[0].hwdesc_addr);
  	writel_relaxed(base_addr & CLBAR_LBA, ddata->base + STM32_DMA3_CLBAR(chan->id));
  	if (ddata->axi_addr_offset && base_addr != swdesc->lli[0].hwdesc_addr)
-@@ -765,12 +770,12 @@ static void stm32_dma3_chan_prep_hwdesc(struct stm32_dma3_chan *chan,
+@@ -765,12 +770,12 @@ static void stm32_dma3_chan_prep_hwdesc(
  	lap = FIELD_GET(CCR_LAP, swdesc->ccr);
  	if (is_last) {
  		if (is_cyclic)
@@ -75,7 +73,7 @@ index 863304450932..f6c0c45a3356 100644
  						     swdesc->lli[next].hwdesc_addr);
  	}
  
-@@ -1432,7 +1437,7 @@ static int stm32_dma3_alloc_chan_resources(struct dma_chan *c)
+@@ -1432,7 +1437,7 @@ static int stm32_dma3_alloc_chan_resourc
  	 */
  	chan->dma_config.direction = DMA_TRANS_NONE;
  
@@ -84,7 +82,7 @@ index 863304450932..f6c0c45a3356 100644
  	if (ret < 0)
  		return ret;
  
-@@ -1453,7 +1458,7 @@ static int stm32_dma3_alloc_chan_resources(struct dma_chan *c)
+@@ -1453,7 +1458,7 @@ static int stm32_dma3_alloc_chan_resourc
  	return 0;
  
  err_put_sync:
@@ -93,7 +91,7 @@ index 863304450932..f6c0c45a3356 100644
  
  	return ret;
  }
-@@ -1476,7 +1481,7 @@ static void stm32_dma3_free_chan_resources(struct dma_chan *c)
+@@ -1476,7 +1481,7 @@ static void stm32_dma3_free_chan_resourc
  	if (chan->semaphore_mode)
  		stm32_dma3_put_chan_sem(chan);
  
@@ -102,7 +100,7 @@ index 863304450932..f6c0c45a3356 100644
  
  	/* Reset configuration */
  	memset(&chan->dt_config, 0, sizeof(chan->dt_config));
-@@ -1937,11 +1942,11 @@ static bool stm32_dma3_filter_fn(struct dma_chan *c, void *fn_param)
+@@ -1937,11 +1942,11 @@ static bool stm32_dma3_filter_fn(struct
  		if (!(mask & BIT(chan->id)))
  			return false;
  
@@ -116,7 +114,7 @@ index 863304450932..f6c0c45a3356 100644
  
  	/* Check if chan is free */
  	if (semcr & CSEMCR_SEM_MUTEX)
-@@ -1963,7 +1968,7 @@ static struct dma_chan *stm32_dma3_of_xlate(struct of_phandle_args *dma_spec, st
+@@ -1963,7 +1968,7 @@ static struct dma_chan *stm32_dma3_of_xl
  	struct dma_chan *c;
  
  	if (dma_spec->args_count < 3) {
@@ -125,7 +123,7 @@ index 863304450932..f6c0c45a3356 100644
  		return NULL;
  	}
  
-@@ -1972,14 +1977,14 @@ static struct dma_chan *stm32_dma3_of_xlate(struct of_phandle_args *dma_spec, st
+@@ -1972,14 +1977,14 @@ static struct dma_chan *stm32_dma3_of_xl
  	conf.tr_conf = dma_spec->args[2];
  
  	if (conf.req_line >= ddata->dma_requests) {
@@ -142,7 +140,7 @@ index 863304450932..f6c0c45a3356 100644
  		return NULL;
  	}
  
-@@ -2021,6 +2026,7 @@ static int stm32_dma3_get_axi_port_config(struct platform_device *pdev,
+@@ -2021,6 +2026,7 @@ static int stm32_dma3_get_axi_port_confi
  
  static u32 stm32_dma3_check_rif(struct stm32_dma3_ddata *ddata)
  {
@@ -150,7 +148,7 @@ index 863304450932..f6c0c45a3356 100644
  	u32 chan_reserved, mask = 0, i, ccidcfgr, invalid_cid = 0;
  
  	/* Reserve Secure channels */
-@@ -2032,7 +2038,7 @@ static u32 stm32_dma3_check_rif(struct stm32_dma3_ddata *ddata)
+@@ -2032,7 +2038,7 @@ static u32 stm32_dma3_check_rif(struct s
  	 * In case CID filtering is not configured, dma-channel-mask property can be used to
  	 * specify available DMA channels to the kernel.
  	 */
@@ -159,7 +157,7 @@ index 863304450932..f6c0c45a3356 100644
  
  	/* Reserve !CID-filtered not in dma-channel-mask, static CID != CID1, CID1 not allowed */
  	for (i = 0; i < ddata->dma_channels; i++) {
-@@ -2052,7 +2058,7 @@ static u32 stm32_dma3_check_rif(struct stm32_dma3_ddata *ddata)
+@@ -2052,7 +2058,7 @@ static u32 stm32_dma3_check_rif(struct s
  				ddata->chans[i].semaphore_mode = true;
  			}
  		}
@@ -168,7 +166,7 @@ index 863304450932..f6c0c45a3356 100644
  			!(ccidcfgr & CCIDCFGR_CFEN) ? "!CID-filtered" :
  			ddata->chans[i].semaphore_mode ? "Semaphore" : "Static CID",
  			(chan_reserved & BIT(i)) ? "denied" :
-@@ -2060,7 +2066,7 @@ static u32 stm32_dma3_check_rif(struct stm32_dma3_ddata *ddata)
+@@ -2060,7 +2066,7 @@ static u32 stm32_dma3_check_rif(struct s
  	}
  
  	if (invalid_cid)
@@ -177,6 +175,3 @@ index 863304450932..f6c0c45a3356 100644
  			 ddata->dma_channels, &invalid_cid);
  
  	return chan_reserved;
--- 
-2.50.1
-

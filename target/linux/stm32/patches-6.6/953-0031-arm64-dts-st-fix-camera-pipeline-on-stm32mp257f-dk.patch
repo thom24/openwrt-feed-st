@@ -18,11 +18,9 @@ Tested-by: Alain VOLMAT <alain.volmat@st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index 883da1609884..5010f67b54aa 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -131,7 +131,7 @@ hdmi_connector_in: endpoint {
+@@ -131,7 +131,7 @@
  		};
  	};
  
@@ -31,7 +29,7 @@ index 883da1609884..5010f67b54aa 100644
  		compatible = "regulator-fixed";
  		regulator-name = "imx335-avdd";
  		regulator-min-microvolt = <2900000>;
-@@ -139,7 +139,7 @@ imx335_2v9: imx335-2v9 {
+@@ -139,7 +139,7 @@
  		regulator-always-on;
  	};
  
@@ -40,7 +38,7 @@ index 883da1609884..5010f67b54aa 100644
  		compatible = "regulator-fixed";
  		regulator-name = "imx335-ovdd";
  		regulator-min-microvolt = <1800000>;
-@@ -147,7 +147,7 @@ imx335_1v8: imx335-1v8 {
+@@ -147,7 +147,7 @@
  		regulator-always-on;
  	};
  
@@ -49,6 +47,3 @@ index 883da1609884..5010f67b54aa 100644
  		compatible = "regulator-fixed";
  		regulator-name = "imx335-dvdd";
  		regulator-min-microvolt = <1200000>;
--- 
-2.50.1
-

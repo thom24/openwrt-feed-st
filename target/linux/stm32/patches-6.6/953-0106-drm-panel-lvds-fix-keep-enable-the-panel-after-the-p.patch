@@ -14,8 +14,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/panel/panel-lvds.c | 42 +++++++++++++++++++++++++++---
  1 file changed, 38 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-lvds.c b/drivers/gpu/drm/panel/panel-lvds.c
-index 2520b4dc49a6..54cd674f604c 100644
 --- a/drivers/gpu/drm/panel/panel-lvds.c
 +++ b/drivers/gpu/drm/panel/panel-lvds.c
 @@ -33,6 +33,7 @@ struct panel_lvds {
@@ -26,7 +24,7 @@ index 2520b4dc49a6..54cd674f604c 100644
  
  	struct regulator *supply;
  
-@@ -51,12 +52,17 @@ static int panel_lvds_unprepare(struct drm_panel *panel)
+@@ -51,12 +52,17 @@ static int panel_lvds_unprepare(struct d
  {
  	struct panel_lvds *lvds = to_panel_lvds(panel);
  
@@ -44,7 +42,7 @@ index 2520b4dc49a6..54cd674f604c 100644
  	return 0;
  }
  
-@@ -64,6 +70,9 @@ static int panel_lvds_prepare(struct drm_panel *panel)
+@@ -64,6 +70,9 @@ static int panel_lvds_prepare(struct drm
  {
  	struct panel_lvds *lvds = to_panel_lvds(panel);
  
@@ -54,7 +52,7 @@ index 2520b4dc49a6..54cd674f604c 100644
  	if (lvds->supply) {
  		int err;
  
-@@ -78,6 +87,8 @@ static int panel_lvds_prepare(struct drm_panel *panel)
+@@ -78,6 +87,8 @@ static int panel_lvds_prepare(struct drm
  	if (lvds->enable_gpio)
  		gpiod_set_value_cansleep(lvds->enable_gpio, 1);
  
@@ -63,7 +61,7 @@ index 2520b4dc49a6..54cd674f604c 100644
  	return 0;
  }
  
-@@ -189,8 +200,12 @@ static int panel_lvds_probe(struct platform_device *pdev)
+@@ -189,8 +200,12 @@ static int panel_lvds_probe(struct platf
  	}
  
  	/* Get GPIOs and backlight controller. */
@@ -78,7 +76,7 @@ index 2520b4dc49a6..54cd674f604c 100644
  	if (IS_ERR(lvds->enable_gpio)) {
  		ret = PTR_ERR(lvds->enable_gpio);
  		dev_err(lvds->dev, "failed to request %s GPIO: %d\n",
-@@ -198,8 +213,12 @@ static int panel_lvds_probe(struct platform_device *pdev)
+@@ -198,8 +213,12 @@ static int panel_lvds_probe(struct platf
  		return ret;
  	}
  
@@ -93,7 +91,7 @@ index 2520b4dc49a6..54cd674f604c 100644
  	if (IS_ERR(lvds->reset_gpio)) {
  		ret = PTR_ERR(lvds->reset_gpio);
  		dev_err(lvds->dev, "failed to request %s GPIO: %d\n",
-@@ -222,6 +241,21 @@ static int panel_lvds_probe(struct platform_device *pdev)
+@@ -222,6 +241,21 @@ static int panel_lvds_probe(struct platf
  	if (ret)
  		return ret;
  
@@ -115,6 +113,3 @@ index 2520b4dc49a6..54cd674f604c 100644
  	drm_panel_add(&lvds->panel);
  
  	dev_set_drvdata(lvds->dev, lvds);
--- 
-2.50.1
-

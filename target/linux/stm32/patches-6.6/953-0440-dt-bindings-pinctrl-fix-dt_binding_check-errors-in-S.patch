@@ -22,8 +22,6 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  .../pinctrl/st,stm32-pinctrl-hdp.yaml         | 30 ++++++++++---------
  1 file changed, 16 insertions(+), 14 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl-hdp.yaml b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl-hdp.yaml
-index 62a97b00c565..be5596c9e2b8 100644
 --- a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl-hdp.yaml
 +++ b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl-hdp.yaml
 @@ -24,6 +24,17 @@ properties:
@@ -93,6 +91,3 @@ index 62a97b00c565..be5596c9e2b8 100644
          pins = "hdp2";
          function = HDP2_GPOVAL_2;
        };
--- 
-2.50.1
-

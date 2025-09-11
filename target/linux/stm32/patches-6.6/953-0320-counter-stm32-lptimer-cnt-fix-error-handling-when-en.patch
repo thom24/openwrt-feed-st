@@ -29,11 +29,9 @@ Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
  drivers/counter/stm32-lptimer-cnt.c | 8 ++------
  1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/counter/stm32-lptimer-cnt.c b/drivers/counter/stm32-lptimer-cnt.c
-index bc9d06971caa6..c68e9339b68cb 100644
 --- a/drivers/counter/stm32-lptimer-cnt.c
 +++ b/drivers/counter/stm32-lptimer-cnt.c
-@@ -62,7 +62,7 @@ static int stm32_lptim_set_enable_state(struct stm32_lptim_cnt *priv,
+@@ -62,7 +62,7 @@ static int stm32_lptim_set_enable_state(
  		return 0;
  	}
  
@@ -42,7 +40,7 @@ index bc9d06971caa6..c68e9339b68cb 100644
  	if (ret)
  		goto disable_cnt;
  
-@@ -87,10 +87,6 @@ static int stm32_lptim_set_enable_state(struct stm32_lptim_cnt *priv,
+@@ -87,10 +87,6 @@ static int stm32_lptim_set_enable_state(
  	if (ret)
  		goto disable_clk;
  
@@ -53,7 +51,7 @@ index bc9d06971caa6..c68e9339b68cb 100644
  	priv->enabled = true;
  
  	/* Start LP timer in continuous mode */
-@@ -98,7 +94,7 @@ static int stm32_lptim_set_enable_state(struct stm32_lptim_cnt *priv,
+@@ -98,7 +94,7 @@ static int stm32_lptim_set_enable_state(
  				  STM32_LPTIM_CNTSTRT, STM32_LPTIM_CNTSTRT);
  
  disable_clk:
@@ -62,6 +60,3 @@ index bc9d06971caa6..c68e9339b68cb 100644
  disable_cnt:
  	regmap_write(priv->regmap, STM32_LPTIM_CR, 0);
  
--- 
-2.51.0
-

@@ -20,8 +20,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  include/linux/bus/stm32_firewall.h | 14 ++++++++++++++
  1 file changed, 14 insertions(+)
 
-diff --git a/include/linux/bus/stm32_firewall.h b/include/linux/bus/stm32_firewall.h
-index 4949792cd01d..5a429c818063 100644
 --- a/include/linux/bus/stm32_firewall.h
 +++ b/include/linux/bus/stm32_firewall.h
 @@ -52,6 +52,8 @@ struct stm32_firewall_controller {
@@ -33,7 +31,7 @@ index 4949792cd01d..5a429c818063 100644
  /**
   * stm32_firewall_controller_register - Register a firewall controller to the STM32 firewall
   *					framework
-@@ -68,4 +70,16 @@ int stm32_firewall_controller_register(struct stm32_firewall_controller *firewal
+@@ -68,4 +70,16 @@ int stm32_firewall_controller_register(s
   */
  void stm32_firewall_controller_unregister(struct stm32_firewall_controller *firewall_controller);
  
@@ -50,6 +48,3 @@ index 4949792cd01d..5a429c818063 100644
 +
 +#endif/* IS_ENABLED(CONFIG_STM32_FIREWALL) */
  #endif /* _STM32_FIREWALL_H */
--- 
-2.50.1
-

@@ -15,11 +15,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/stm/lvds.c | 15 +++++++++++----
  1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
-index a0dd279488da..d4ba3224bf3b 100644
 --- a/drivers/gpu/drm/stm/lvds.c
 +++ b/drivers/gpu/drm/stm/lvds.c
-@@ -556,6 +556,7 @@ static int lvds_pixel_clk_enable(struct clk_hw *hw)
+@@ -556,6 +556,7 @@ static int lvds_pixel_clk_enable(struct
  	struct drm_device *drm = lvds->lvds_bridge.dev;
  	struct lvds_phy_info *phy;
  	int ret;
@@ -27,7 +25,7 @@ index a0dd279488da..d4ba3224bf3b 100644
  
  	ret = clk_prepare_enable(lvds->pclk);
  	if (ret) {
-@@ -573,10 +574,13 @@ static int lvds_pixel_clk_enable(struct clk_hw *hw)
+@@ -573,10 +574,13 @@ static int lvds_pixel_clk_enable(struct
  	/* In case we are operating in dual link the second PHY is set before the primary PHY. */
  	if (lvds->secondary) {
  		phy = lvds->secondary;
@@ -43,7 +41,7 @@ index a0dd279488da..d4ba3224bf3b 100644
  
  		ret = lvds_pll_enable(lvds, phy);
  		if (ret) {
-@@ -587,10 +591,13 @@ static int lvds_pixel_clk_enable(struct clk_hw *hw)
+@@ -587,10 +591,13 @@ static int lvds_pixel_clk_enable(struct
  
  	if (lvds->primary) {
  		phy = lvds->primary;
@@ -59,6 +57,3 @@ index a0dd279488da..d4ba3224bf3b 100644
  
  		ret = lvds_pll_enable(lvds, phy);
  		if (ret) {
--- 
-2.50.1
-

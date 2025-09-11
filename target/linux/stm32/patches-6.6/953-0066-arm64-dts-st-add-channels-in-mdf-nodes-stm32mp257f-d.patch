@@ -16,11 +16,9 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 14 ++++++++++++++
  1 file changed, 14 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index a6e555c90d6d..40cc86d9e401 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -619,11 +619,18 @@ sitf6: sitf@380 {
+@@ -619,11 +619,18 @@
  	};
  
  	filter0: filter@84  {
@@ -39,7 +37,7 @@ index a6e555c90d6d..40cc86d9e401 100644
  		asoc_pdm0: mdf-dai {
  			compatible = "st,stm32mp25-mdf-dai";
  			#sound-dai-cells = <0>;
-@@ -640,11 +647,18 @@ mdf_endpoint0: endpoint {
+@@ -640,11 +647,18 @@
  	};
  
  	filter1: filter@104  {
@@ -58,6 +56,3 @@ index a6e555c90d6d..40cc86d9e401 100644
  		asoc_pdm1: mdf-dai {
  			compatible = "st,stm32mp25-mdf-dai";
  			#sound-dai-cells = <0>;
--- 
-2.50.1
-

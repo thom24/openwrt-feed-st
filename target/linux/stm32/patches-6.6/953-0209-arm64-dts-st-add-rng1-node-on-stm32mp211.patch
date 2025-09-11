@@ -14,11 +14,9 @@ Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 11 +++++++++++
  1 file changed, 11 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index c1ec3872aba0..6ef908388f9f 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -1627,6 +1627,17 @@ hash1: hash@42030400 {
+@@ -1627,6 +1627,17 @@
  				status = "disabled";
  			};
  
@@ -36,6 +34,3 @@ index c1ec3872aba0..6ef908388f9f 100644
  			iwdg1: watchdog@44010000 {
  				compatible = "st,stm32mp1-iwdg";
  				reg = <0x44010000 0x0 0x400>;
--- 
-2.50.1
-

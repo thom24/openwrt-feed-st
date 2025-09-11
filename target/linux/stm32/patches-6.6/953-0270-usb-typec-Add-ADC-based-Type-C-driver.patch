@@ -24,8 +24,6 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  3 files changed, 467 insertions(+)
  create mode 100644 drivers/usb/typec/adc_typec.c
 
-diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
-index 2f80c2792dbd..ca5a2afcba38 100644
 --- a/drivers/usb/typec/Kconfig
 +++ b/drivers/usb/typec/Kconfig
 @@ -52,6 +52,17 @@ source "drivers/usb/typec/ucsi/Kconfig"
@@ -46,8 +44,6 @@ index 2f80c2792dbd..ca5a2afcba38 100644
  config TYPEC_ANX7411
  	tristate "Analogix ANX7411 Type-C DRP Port controller driver"
  	depends on I2C
-diff --git a/drivers/usb/typec/Makefile b/drivers/usb/typec/Makefile
-index 7a368fea61bc..47a32ba951e9 100644
 --- a/drivers/usb/typec/Makefile
 +++ b/drivers/usb/typec/Makefile
 @@ -2,6 +2,7 @@
@@ -58,9 +54,6 @@ index 7a368fea61bc..47a32ba951e9 100644
  obj-$(CONFIG_TYPEC)		+= altmodes/
  obj-$(CONFIG_TYPEC_TCPM)	+= tcpm/
  obj-$(CONFIG_TYPEC_UCSI)	+= ucsi/
-diff --git a/drivers/usb/typec/adc_typec.c b/drivers/usb/typec/adc_typec.c
-new file mode 100644
-index 000000000000..47b3c2ce2a2f
 --- /dev/null
 +++ b/drivers/usb/typec/adc_typec.c
 @@ -0,0 +1,455 @@
@@ -519,6 +512,3 @@ index 000000000000..47b3c2ce2a2f
 +MODULE_AUTHOR("Ram Dayal <ram.dayal@st.com>");
 +MODULE_DESCRIPTION("Type-C Driver with ADC Monitoring and Power Profiles");
 +MODULE_LICENSE("GPL");
--- 
-2.50.1
-

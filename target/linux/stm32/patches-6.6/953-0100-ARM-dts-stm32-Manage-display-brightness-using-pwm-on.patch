@@ -22,11 +22,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp135f-dk.dts     | 22 +++++++++++++++++----
  2 files changed, 33 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
-index 33416738a345..08042e87b1bb 100644
 --- a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
-@@ -276,6 +276,21 @@ pins {
+@@ -276,6 +276,21 @@
  		};
  	};
  
@@ -48,8 +46,6 @@ index 33416738a345..08042e87b1bb 100644
  	pwm3_pins_a: pwm3-0 {
  		pins {
  			pinmux = <STM32_PINMUX('B', 1, AF2)>; /* TIM3_CH4 */
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index d3b47650d7e0..511692581eb0 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 @@ -9,6 +9,7 @@
@@ -60,7 +56,7 @@ index d3b47650d7e0..511692581eb0 100644
  #include <dt-bindings/rtc/rtc-stm32.h>
  #include "stm32mp135.dtsi"
  #include "stm32mp13xf.dtsi"
-@@ -99,10 +100,10 @@ led-blue {
+@@ -99,10 +100,10 @@
  	};
  
  	panel_backlight: panel-backlight {
@@ -75,7 +71,7 @@ index d3b47650d7e0..511692581eb0 100644
  		status = "okay";
  	};
  
-@@ -514,6 +515,19 @@ &spi5 {
+@@ -514,6 +515,19 @@
  	status = "disabled";
  };
  
@@ -95,6 +91,3 @@ index d3b47650d7e0..511692581eb0 100644
  &timers3 {
  	/delete-property/dmas;
  	/delete-property/dma-names;
--- 
-2.50.1
-

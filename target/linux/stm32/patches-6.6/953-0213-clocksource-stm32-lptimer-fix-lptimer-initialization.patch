@@ -19,11 +19,9 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/clocksource/timer-stm32-lp.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clocksource/timer-stm32-lp.c b/drivers/clocksource/timer-stm32-lp.c
-index 2664d171f555..58b0e9427288 100644
 --- a/drivers/clocksource/timer-stm32-lp.c
 +++ b/drivers/clocksource/timer-stm32-lp.c
-@@ -208,10 +208,10 @@ static int stm32_clkevent_lp_probe(struct platform_device *pdev)
+@@ -208,10 +208,10 @@ static int stm32_clkevent_lp_probe(struc
  
  	stm32_clkevent_lp_set_prescaler(priv, &rate);
  
@@ -36,6 +34,3 @@ index 2664d171f555..58b0e9427288 100644
  	return 0;
  
  out_clk_disable:
--- 
-2.50.1
-

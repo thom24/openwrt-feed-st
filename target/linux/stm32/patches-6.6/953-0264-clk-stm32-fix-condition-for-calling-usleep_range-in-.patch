@@ -17,11 +17,9 @@ Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  drivers/clk/stm32/reset-stm32.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/stm32/reset-stm32.c b/drivers/clk/stm32/reset-stm32.c
-index 24b9d54b8388..6a405a77b911 100644
 --- a/drivers/clk/stm32/reset-stm32.c
 +++ b/drivers/clk/stm32/reset-stm32.c
-@@ -145,7 +145,7 @@ static int stm32_reset(struct reset_controller_dev *rcdev, unsigned long id)
+@@ -145,7 +145,7 @@ static int stm32_reset(struct reset_cont
  	if (ret)
  		return ret;
  
@@ -30,6 +28,3 @@ index 24b9d54b8388..6a405a77b911 100644
  		usleep_range(data->reset_us, data->reset_us * 2);
  
  	ret = stm32_reset_deassert(rcdev, id);
--- 
-2.50.1
-

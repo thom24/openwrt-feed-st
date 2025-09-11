@@ -20,8 +20,6 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  sound/soc/stm/stm32_sai_sub.c | 34 +++++++++++++++++++++++++---------
  1 file changed, 25 insertions(+), 9 deletions(-)
 
-diff --git a/sound/soc/stm/stm32_sai_sub.c b/sound/soc/stm/stm32_sai_sub.c
-index e8bf56fb6ec4..1d3cb4cf7280 100644
 --- a/sound/soc/stm/stm32_sai_sub.c
 +++ b/sound/soc/stm/stm32_sai_sub.c
 @@ -132,7 +132,8 @@ struct stm32_sai_sub_data {
@@ -46,7 +44,7 @@ index e8bf56fb6ec4..1d3cb4cf7280 100644
  static bool stm32_sai_sub_readable_reg(struct device *dev, unsigned int reg)
  {
  	switch (reg) {
-@@ -379,7 +385,7 @@ static bool stm32_sai_rate_accurate(unsigned int max_rate, unsigned int rate)
+@@ -379,7 +385,7 @@ static bool stm32_sai_rate_accurate(unsi
  }
  
  static int stm32_sai_set_parent_clk(struct stm32_sai_sub_data *sai,
@@ -55,7 +53,7 @@ index e8bf56fb6ec4..1d3cb4cf7280 100644
  {
  	struct platform_device *pdev = sai->pdev;
  	struct clk *parent_clk = sai->pdata->clk_x8k;
-@@ -406,10 +412,10 @@ static void stm32_sai_put_parent_rate(struct stm32_sai_sub_data *sai)
+@@ -406,10 +412,10 @@ static void stm32_sai_put_parent_rate(st
  }
  
  static int stm32_sai_set_parent_rate(struct stm32_sai_sub_data *sai,
@@ -68,7 +66,7 @@ index e8bf56fb6ec4..1d3cb4cf7280 100644
  	int div, ret;
  
  	/*
-@@ -428,8 +434,18 @@ static int stm32_sai_set_parent_rate(struct stm32_sai_sub_data *sai,
+@@ -428,8 +434,18 @@ static int stm32_sai_set_parent_rate(str
  	else
  		sai_ck_max_rate = SAI_MAX_SAMPLE_RATE_8K * 256;
  
@@ -89,7 +87,7 @@ index e8bf56fb6ec4..1d3cb4cf7280 100644
  
  	/*
  	 * Request exclusivity, as the clock is shared by SAI sub-blocks and by
-@@ -472,7 +488,7 @@ static int stm32_sai_set_parent_rate(struct stm32_sai_sub_data *sai,
+@@ -472,7 +488,7 @@ static int stm32_sai_set_parent_rate(str
  		/* Try a lower frequency */
  		div++;
  		sai_ck_rate = sai_ck_max_rate / div;
@@ -98,7 +96,7 @@ index e8bf56fb6ec4..1d3cb4cf7280 100644
  
  	/* No accurate rate found */
  	dev_err(&pdev->dev, "Failed to find an accurate rate");
-@@ -686,7 +702,7 @@ static int stm32_sai_set_sysclk(struct snd_soc_dai *cpu_dai,
+@@ -686,7 +702,7 @@ static int stm32_sai_set_sysclk(struct s
  		}
  
  		/* If master clock is used, configure SAI kernel clock now */
@@ -107,7 +105,7 @@ index e8bf56fb6ec4..1d3cb4cf7280 100644
  		if (ret)
  			return ret;
  
-@@ -1110,7 +1126,7 @@ static int stm32_sai_configure_clock(struct snd_soc_dai *cpu_dai,
+@@ -1110,7 +1126,7 @@ static int stm32_sai_configure_clock(str
  	int ret;
  
  	if (!sai->sai_mclk) {
@@ -116,6 +114,3 @@ index e8bf56fb6ec4..1d3cb4cf7280 100644
  		if (ret)
  			return ret;
  	}
--- 
-2.50.1
-

@@ -19,11 +19,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/tty/serial/stm32-usart.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index f975a8454a1e..e7d30a278e7b 100644
 --- a/drivers/tty/serial/stm32-usart.c
 +++ b/drivers/tty/serial/stm32-usart.c
-@@ -1208,7 +1208,7 @@ static void stm32_usart_flush_buffer(struct uart_port *port)
+@@ -1208,7 +1208,7 @@ static void stm32_usart_flush_buffer(str
  {
  	struct stm32_port *stm32_port = to_stm32_port(port);
  
@@ -32,6 +30,3 @@ index f975a8454a1e..e7d30a278e7b 100644
  		stm32_usart_tx_dma_terminate(stm32_port);
  }
  
--- 
-2.50.1
-

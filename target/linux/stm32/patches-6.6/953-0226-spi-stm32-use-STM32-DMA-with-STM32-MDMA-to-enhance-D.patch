@@ -33,8 +33,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/spi/spi-stm32.c | 253 ++++++++++++++++++++++++++++++++++++----
  1 file changed, 229 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index d9e57a3cd9b7..c756ceed880c 100644
 --- a/drivers/spi/spi-stm32.c
 +++ b/drivers/spi/spi-stm32.c
 @@ -9,7 +9,9 @@
@@ -72,7 +70,7 @@ index d9e57a3cd9b7..c756ceed880c 100644
  };
  
  static const struct stm32_spi_regspec stm32f4_spi_regspec = {
-@@ -800,8 +813,11 @@ static void stm32h7_spi_disable(struct stm32_spi *spi)
+@@ -800,8 +813,11 @@ static void stm32h7_spi_disable(struct s
  
  	if (spi->cur_usedma && spi->dma_tx)
  		dmaengine_terminate_async(spi->dma_tx);
@@ -85,7 +83,7 @@ index d9e57a3cd9b7..c756ceed880c 100644
  
  	stm32_spi_clr_bits(spi, STM32H7_SPI_CR1, STM32H7_SPI_CR1_SPE);
  
-@@ -1013,10 +1029,13 @@ static irqreturn_t stm32h7_spi_irq_thread(int irq, void *dev_id)
+@@ -1013,10 +1029,13 @@ static irqreturn_t stm32h7_spi_irq_threa
  	}
  
  	if (sr & STM32H7_SPI_SR_EOT) {
@@ -100,7 +98,7 @@ index d9e57a3cd9b7..c756ceed880c 100644
  			end = true;
  	}
  
-@@ -1033,6 +1052,11 @@ static irqreturn_t stm32h7_spi_irq_thread(int irq, void *dev_id)
+@@ -1033,6 +1052,11 @@ static irqreturn_t stm32h7_spi_irq_threa
  	spin_unlock_irqrestore(&spi->lock, flags);
  
  	if (end) {
@@ -112,7 +110,7 @@ index d9e57a3cd9b7..c756ceed880c 100644
  		stm32h7_spi_disable(spi);
  		spi_finalize_current_transfer(ctrl);
  	}
-@@ -1370,6 +1394,8 @@ static void stm32h7_spi_transfer_one_dma_start(struct stm32_spi *spi)
+@@ -1370,6 +1394,8 @@ static void stm32h7_spi_transfer_one_dma
  	/* Enable the interrupts */
  	if (spi->cur_comm == SPI_SIMPLEX_TX || spi->cur_comm == SPI_3WIRE_TX)
  		ier |= STM32H7_SPI_IER_EOTIE | STM32H7_SPI_IER_TXTFIE;
@@ -121,11 +119,10 @@ index d9e57a3cd9b7..c756ceed880c 100644
  
  	stm32_spi_set_bits(spi, STM32H7_SPI_IER, ier);
  
-@@ -1379,6 +1405,119 @@ static void stm32h7_spi_transfer_one_dma_start(struct stm32_spi *spi)
- 		stm32_spi_set_bits(spi, STM32H7_SPI_CR1, STM32H7_SPI_CR1_CSTART);
+@@ -1380,6 +1406,119 @@ static void stm32h7_spi_transfer_one_dma
  }
  
-+/**
+ /**
 + * stm32_spi_prepare_rx_dma_mdma_chaining - Prepare RX DMA and MDMA chaining
 + * @spi: pointer to the spi controller data structure
 + * @xfer: pointer to the spi transfer
@@ -238,10 +235,11 @@ index d9e57a3cd9b7..c756ceed880c 100644
 +	return 0;
 +}
 +
- /**
++/**
   * stm32_spi_transfer_one_dma - transfer a single spi_transfer using DMA
   * @spi: pointer to the spi controller data structure
-@@ -1390,38 +1529,43 @@ static void stm32h7_spi_transfer_one_dma_start(struct stm32_spi *spi)
+  * @xfer: pointer to the spi_transfer structure
+@@ -1390,38 +1529,43 @@ static void stm32h7_spi_transfer_one_dma
  static int stm32_spi_transfer_one_dma(struct stm32_spi *spi,
  				      struct spi_transfer *xfer)
  {
@@ -305,7 +303,7 @@ index d9e57a3cd9b7..c756ceed880c 100644
  	}
  
  	if ((spi->tx_buf && spi->dma_tx && !tx_dma_desc) ||
-@@ -1432,9 +1576,25 @@ static int stm32_spi_transfer_one_dma(struct stm32_spi *spi,
+@@ -1432,9 +1576,25 @@ static int stm32_spi_transfer_one_dma(st
  		goto dma_desc_error;
  
  	if (rx_dma_desc) {
@@ -333,7 +331,7 @@ index d9e57a3cd9b7..c756ceed880c 100644
  		if (dma_submit_error(dmaengine_submit(rx_dma_desc))) {
  			dev_err(spi->dev, "Rx DMA submit failed\n");
  			goto dma_desc_error;
-@@ -1469,6 +1629,8 @@ static int stm32_spi_transfer_one_dma(struct stm32_spi *spi,
+@@ -1469,6 +1629,8 @@ static int stm32_spi_transfer_one_dma(st
  	return 1;
  
  dma_submit_error:
@@ -342,7 +340,7 @@ index d9e57a3cd9b7..c756ceed880c 100644
  	if (spi->dma_rx)
  		dmaengine_terminate_sync(spi->dma_rx);
  
-@@ -1480,6 +1642,9 @@ static int stm32_spi_transfer_one_dma(struct stm32_spi *spi,
+@@ -1480,6 +1642,9 @@ dma_desc_error:
  
  	dev_info(spi->dev, "DMA issue: fall back to irq transfer\n");
  
@@ -352,7 +350,7 @@ index d9e57a3cd9b7..c756ceed880c 100644
  	spi->cur_usedma = false;
  	return spi->cfg->transfer_one_irq(spi);
  }
-@@ -1834,6 +1999,9 @@ static int stm32_spi_unprepare_msg(struct spi_controller *ctrl,
+@@ -1834,6 +1999,9 @@ static int stm32_spi_unprepare_msg(struc
  
  	spi->cfg->disable(spi);
  
@@ -362,7 +360,7 @@ index d9e57a3cd9b7..c756ceed880c 100644
  	return 0;
  }
  
-@@ -2163,6 +2331,33 @@ static int stm32_spi_probe(struct platform_device *pdev)
+@@ -2163,6 +2331,33 @@ static int stm32_spi_probe(struct platfo
  	if (spi->dma_tx || spi->dma_rx)
  		ctrl->can_dma = stm32_spi_can_dma;
  
@@ -396,7 +394,7 @@ index d9e57a3cd9b7..c756ceed880c 100644
  	pm_runtime_set_autosuspend_delay(&pdev->dev,
  					 STM32_SPI_AUTOSUSPEND_DELAY);
  	pm_runtime_use_autosuspend(&pdev->dev);
-@@ -2190,6 +2385,11 @@ static int stm32_spi_probe(struct platform_device *pdev)
+@@ -2190,6 +2385,11 @@ err_pm_disable:
  	pm_runtime_put_noidle(&pdev->dev);
  	pm_runtime_set_suspended(&pdev->dev);
  	pm_runtime_dont_use_autosuspend(&pdev->dev);
@@ -408,7 +406,7 @@ index d9e57a3cd9b7..c756ceed880c 100644
  err_dma_release:
  	if (spi->dma_tx)
  		dma_release_channel(spi->dma_tx);
-@@ -2220,6 +2420,11 @@ static void stm32_spi_remove(struct platform_device *pdev)
+@@ -2220,6 +2420,11 @@ static void stm32_spi_remove(struct plat
  		dma_release_channel(ctrl->dma_tx);
  	if (ctrl->dma_rx)
  		dma_release_channel(ctrl->dma_rx);
@@ -420,6 +418,3 @@ index d9e57a3cd9b7..c756ceed880c 100644
  
  	clk_disable_unprepare(spi->clk);
  
--- 
-2.50.1
-

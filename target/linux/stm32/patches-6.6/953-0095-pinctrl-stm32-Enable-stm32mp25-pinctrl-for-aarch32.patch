@@ -16,8 +16,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/pinctrl/stm32/Kconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/stm32/Kconfig b/drivers/pinctrl/stm32/Kconfig
-index 253d80f2e4ed..ef6d6cfc00cd 100644
 --- a/drivers/pinctrl/stm32/Kconfig
 +++ b/drivers/pinctrl/stm32/Kconfig
 @@ -67,7 +67,7 @@ config PINCTRL_STM32MP235
@@ -29,6 +27,3 @@ index 253d80f2e4ed..ef6d6cfc00cd 100644
  	select PINCTRL_STM32
  
  config PINCTRL_STM32_HDP
--- 
-2.50.1
-

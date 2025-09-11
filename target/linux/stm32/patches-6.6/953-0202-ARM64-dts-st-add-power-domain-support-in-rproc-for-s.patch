@@ -26,11 +26,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index b617b47a057c..fccf708d27d4 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -2772,6 +2772,8 @@ m33_rproc: m33@0 {
+@@ -2772,6 +2772,8 @@
  			interrupts = <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>;
  			nvmem-cells = <&rsc_tbl_addr>, <&rsc_tbl_size>;
  			nvmem-cell-names = "rsc-tbl-addr", "rsc-tbl-size";
@@ -39,6 +37,3 @@ index b617b47a057c..fccf708d27d4 100644
  
  			status = "disabled";
  		};
--- 
-2.50.1
-

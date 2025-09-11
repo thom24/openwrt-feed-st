@@ -24,8 +24,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  include/linux/bus/stm32_firewall.h | 12 -------
  4 files changed, 113 insertions(+), 69 deletions(-)
 
-diff --git a/drivers/bus/stm32_etzpc.c b/drivers/bus/stm32_etzpc.c
-index 4918a14e507e..3b6aa421245a 100644
 --- a/drivers/bus/stm32_etzpc.c
 +++ b/drivers/bus/stm32_etzpc.c
 @@ -6,6 +6,7 @@
@@ -44,7 +42,7 @@ index 4918a14e507e..3b6aa421245a 100644
  #include <linux/types.h>
  
  /*
-@@ -69,6 +71,59 @@ static void stm32_etzpc_release_access(struct stm32_firewall_controller *ctrl __
+@@ -69,6 +71,59 @@ static void stm32_etzpc_release_access(s
  {
  }
  
@@ -104,7 +102,7 @@ index 4918a14e507e..3b6aa421245a 100644
  static int stm32_etzpc_probe(struct platform_device *pdev)
  {
  	struct stm32_firewall_controller *etzpc_controller;
-@@ -109,7 +164,7 @@ static int stm32_etzpc_probe(struct platform_device *pdev)
+@@ -109,7 +164,7 @@ static int stm32_etzpc_probe(struct plat
  		return rc;
  	}
  
@@ -113,11 +111,9 @@ index 4918a14e507e..3b6aa421245a 100644
  	if (rc) {
  		dev_err(etzpc_controller->dev, "Couldn't populate ETZPC bus: %d",
  			rc);
-diff --git a/drivers/bus/stm32_firewall.c b/drivers/bus/stm32_firewall.c
-index ef4988054b44..f028ba177cd8 100644
 --- a/drivers/bus/stm32_firewall.c
 +++ b/drivers/bus/stm32_firewall.c
-@@ -236,58 +236,3 @@ void stm32_firewall_controller_unregister(struct stm32_firewall_controller *fire
+@@ -236,58 +236,3 @@ void stm32_firewall_controller_unregiste
  			 firewall_controller->name);
  }
  EXPORT_SYMBOL_GPL(stm32_firewall_controller_unregister);
@@ -176,8 +172,6 @@ index ef4988054b44..f028ba177cd8 100644
 -	return 0;
 -}
 -EXPORT_SYMBOL_GPL(stm32_firewall_populate_bus);
-diff --git a/drivers/bus/stm32_rifsc.c b/drivers/bus/stm32_rifsc.c
-index 52fe233bcbe3..a16fd7999cc0 100644
 --- a/drivers/bus/stm32_rifsc.c
 +++ b/drivers/bus/stm32_rifsc.c
 @@ -18,6 +18,7 @@
@@ -188,7 +182,7 @@ index 52fe233bcbe3..a16fd7999cc0 100644
  
  /*
   * RIFSC offset register
-@@ -575,6 +576,61 @@ static void stm32_rifsc_release_access(struct stm32_firewall_controller *ctrl, u
+@@ -575,6 +576,61 @@ static void stm32_rifsc_release_access(s
  	stm32_rif_release_semaphore(ctrl, firewall_id);
  }
  
@@ -250,7 +244,7 @@ index 52fe233bcbe3..a16fd7999cc0 100644
  static int stm32_rifsc_probe(struct platform_device *pdev)
  {
  	struct stm32_firewall_controller *rifsc_controller;
-@@ -657,7 +713,7 @@ static int stm32_rifsc_probe(struct platform_device *pdev)
+@@ -657,7 +713,7 @@ static int stm32_rifsc_probe(struct plat
  		return rc;
  	}
  
@@ -259,11 +253,9 @@ index 52fe233bcbe3..a16fd7999cc0 100644
  	if (rc) {
  		dev_err(rifsc_controller->dev, "Couldn't populate RIFSC bus: %d",
  			rc);
-diff --git a/include/linux/bus/stm32_firewall.h b/include/linux/bus/stm32_firewall.h
-index 401497fab35e..5d34a3725070 100644
 --- a/include/linux/bus/stm32_firewall.h
 +++ b/include/linux/bus/stm32_firewall.h
-@@ -70,16 +70,4 @@ int stm32_firewall_controller_register(struct stm32_firewall_controller *firewal
+@@ -70,16 +70,4 @@ int stm32_firewall_controller_register(s
   */
  void stm32_firewall_controller_unregister(struct stm32_firewall_controller *firewall_controller);
  
@@ -280,6 +272,3 @@ index 401497fab35e..5d34a3725070 100644
 -int stm32_firewall_populate_bus(struct stm32_firewall_controller *firewall_controller);
 -
  #endif /* _STM32_FIREWALL_H */
--- 
-2.50.1
-

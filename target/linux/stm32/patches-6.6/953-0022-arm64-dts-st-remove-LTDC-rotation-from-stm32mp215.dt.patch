@@ -15,11 +15,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp215.dtsi | 4 ----
  1 file changed, 4 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp215.dtsi b/arch/arm64/boot/dts/st/stm32mp215.dtsi
-index 8f25051bfe13..9d24dd816408 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp215.dtsi
-@@ -28,9 +28,5 @@ l3 {
+@@ -28,9 +28,5 @@
  			access-controllers = <&rifsc 120>;
  			access-controller-names = "l3";
  		};
@@ -29,6 +27,3 @@ index 8f25051bfe13..9d24dd816408 100644
 -		};
  	};
  };
--- 
-2.50.1
-

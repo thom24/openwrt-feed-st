@@ -17,11 +17,9 @@ Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
  drivers/media/platform/st/stm32/stm32-csi.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-csi.c b/drivers/media/platform/st/stm32/stm32-csi.c
-index 13ea4d463e00..8138dcc34771 100644
 --- a/drivers/media/platform/st/stm32/stm32-csi.c
 +++ b/drivers/media/platform/st/stm32/stm32-csi.c
-@@ -483,7 +483,7 @@ static int stm32_csi_start(struct stm32_csi_dev *csi2priv)
+@@ -483,7 +483,7 @@ static int stm32_csi_start(struct stm32_
  
  	/* MBPS is expressed in Mbps, hence link_freq / 100000 * 2 */
  	/* TODO - calcul below doesn't sound right, extra 0 ?? */
@@ -30,6 +28,3 @@ index 13ea4d463e00..8138dcc34771 100644
  	dev_dbg(csi2priv->dev, "Computed Mbps: %u\n", mbps);
  
  	for (phy_regs = snps_stm32mp25; phy_regs->mbps != 0; phy_regs++)
--- 
-2.50.1
-

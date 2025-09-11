@@ -20,11 +20,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/bus/stm32_rifsc.c | 11 ++++++++++-
  1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/bus/stm32_rifsc.c b/drivers/bus/stm32_rifsc.c
-index 21ea5f88072a..52fe233bcbe3 100644
 --- a/drivers/bus/stm32_rifsc.c
 +++ b/drivers/bus/stm32_rifsc.c
-@@ -456,6 +456,11 @@ static int stm32_rifsc_register_debugfs(struct stm32_firewall_controller *contro
+@@ -456,6 +456,11 @@ static int stm32_rifsc_register_debugfs(
  
  	return 0;
  }
@@ -36,7 +34,7 @@ index 21ea5f88072a..52fe233bcbe3 100644
  #endif /* CONFIG_DEBUG_FS */
  
  static bool stm32_rifsc_is_semaphore_available(void __iomem *addr)
-@@ -659,7 +664,11 @@ static int stm32_rifsc_probe(struct platform_device *pdev)
+@@ -659,7 +664,11 @@ static int stm32_rifsc_probe(struct plat
  		return rc;
  	}
  
@@ -49,6 +47,3 @@ index 21ea5f88072a..52fe233bcbe3 100644
  
  	/* Populate all allowed nodes */
  	return of_platform_populate(np, NULL, NULL, &pdev->dev);
--- 
-2.50.1
-

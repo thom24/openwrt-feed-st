@@ -20,8 +20,6 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  Documentation/devicetree/bindings/sound/dmic-codec.yaml | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/sound/dmic-codec.yaml b/Documentation/devicetree/bindings/sound/dmic-codec.yaml
-index 59ef0cf6b6e5..cc3c84dd4c26 100644
 --- a/Documentation/devicetree/bindings/sound/dmic-codec.yaml
 +++ b/Documentation/devicetree/bindings/sound/dmic-codec.yaml
 @@ -19,6 +19,9 @@ properties:
@@ -34,6 +32,3 @@ index 59ef0cf6b6e5..cc3c84dd4c26 100644
    dmicen-gpios:
      description: GPIO specifier for DMIC to control start and stop
      maxItems: 1
--- 
-2.50.1
-

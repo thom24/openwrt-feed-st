@@ -29,11 +29,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/cpuidle/cpuidle-psci-domain.c | 6 ++++--
  1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-index b88af1262f1a..f2bd861a1605 100644
 --- a/drivers/cpuidle/cpuidle-psci-domain.c
 +++ b/drivers/cpuidle/cpuidle-psci-domain.c
-@@ -68,10 +68,12 @@ static int psci_pd_init(struct device_node *np, bool use_osi)
+@@ -68,10 +68,12 @@ static int psci_pd_init(struct device_no
  	 * Allow power off when OSI has been successfully enabled.
  	 * PREEMPT_RT is not yet ready to enter domain idle states.
  	 */
@@ -48,6 +46,3 @@ index b88af1262f1a..f2bd861a1605 100644
  
  	/* Use governor for CPU PM domains if it has some states to manage. */
  	pd_gov = pd->states ? &pm_domain_cpu_gov : NULL;
--- 
-2.50.1
-

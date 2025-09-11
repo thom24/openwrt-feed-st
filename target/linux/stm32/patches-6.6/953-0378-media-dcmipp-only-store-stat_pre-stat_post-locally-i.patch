@@ -21,8 +21,6 @@ Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
  .../st/stm32/stm32-dcmipp/dcmipp-statcap.c    | 29 ++++++++++++-------
  1 file changed, 18 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
-index 04d5ee735319..ad08b08f8280 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
 @@ -121,7 +121,10 @@ struct dcmipp_statcap_device {
@@ -37,7 +35,7 @@ index 04d5ee735319..ad08b08f8280 100644
  };
  
  static int dcmipp_statcap_querycap(struct file *file, void *priv,
-@@ -579,7 +582,9 @@ static void dcmipp_statcap_buffer_done(struct dcmipp_statcap_device *vcap,
+@@ -579,7 +582,9 @@ static void dcmipp_statcap_buffer_done(s
  	struct stm32_dcmipp_stat_buf *stat_buf;
  
  	stat_buf = (struct stm32_dcmipp_stat_buf *)vb2_plane_vaddr(&dcmipp_buf->vb.vb2_buf, 0);
@@ -48,7 +46,7 @@ index 04d5ee735319..ad08b08f8280 100644
  
  	/* Send buffer */
  	vb2_set_plane_payload(&dcmipp_buf->vb.vb2_buf, 0,
-@@ -598,11 +603,11 @@ static u32 dcmipp_statcap_get_src(u32 location,
+@@ -598,11 +603,11 @@ static u32 dcmipp_statcap_get_src(u32 lo
  static void dcmipp_statcap_read_avg_stats(struct dcmipp_statcap_device *vcap)
  {
  	struct stm32_dcmipp_stat_avr_bins *avr_bins =
@@ -63,7 +61,7 @@ index 04d5ee735319..ad08b08f8280 100644
  		avr_bins->average_RGB[i] = reg_read(vcap, DCMIPP_P1STXSR(i));
  		/* Normalize values */
  		avr_bins->average_RGB[i] <<= 8;
-@@ -626,13 +631,13 @@ static void dcmipp_statcap_read_avg_stats(struct dcmipp_statcap_device *vcap)
+@@ -626,13 +631,13 @@ static void dcmipp_statcap_read_avg_stat
  static void dcmipp_statcap_update_local_buf(struct dcmipp_statcap_device *vcap)
  {
  	struct stm32_dcmipp_stat_avr_bins *avr_bins =
@@ -81,7 +79,7 @@ index 04d5ee735319..ad08b08f8280 100644
  
  	/*
  	 * This is the core function for statistic extraction, within the
-@@ -646,7 +651,9 @@ static void dcmipp_statcap_update_local_buf(struct dcmipp_statcap_device *vcap)
+@@ -646,7 +651,9 @@ static void dcmipp_statcap_update_local_
  	switch (vcap->capture_state) {
  	case COLD_START:
  		vcap->stat_ready = false;
@@ -92,7 +90,7 @@ index 04d5ee735319..ad08b08f8280 100644
  		/*
  		 * All stats profile starts from the PRE statistics, except the
  		 * AVERAGE POST
-@@ -679,7 +686,7 @@ static void dcmipp_statcap_update_local_buf(struct dcmipp_statcap_device *vcap)
+@@ -679,7 +686,7 @@ static void dcmipp_statcap_update_local_
  		if (vcap->prev_capture_state == PHY_BIN_3_SHA_AV_RGB) {
  			/* The data capture refer to the previous location */
  			avr_bins = !(vcap->stat_location == DCMIPP_P1STXCR_SRC_LOC_PRE) ?
@@ -101,6 +99,3 @@ index 04d5ee735319..ad08b08f8280 100644
  			/* Accumulators contains the 4th set of BINS */
  			for (i = 0; i < 3; i++)
  				avr_bins->bins[i + 9] = reg_read(vcap, DCMIPP_P1STXSR(i));
--- 
-2.50.1
-

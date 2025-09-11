@@ -16,8 +16,6 @@ Reviewed-by: Ram DAYAL <ram.dayal@st.com>
  Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml b/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml
-index 348fda52d711..1c50a305578f 100644
 --- a/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml
 +++ b/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml
 @@ -43,6 +43,12 @@ properties:
@@ -33,6 +31,3 @@ index 348fda52d711..1c50a305578f 100644
    st,pll-ipath-tune:
      $ref: /schemas/types.yaml#/definitions/uint8
      description: PLL Integral Path Tune
--- 
-2.50.1
-

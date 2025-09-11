@@ -25,8 +25,6 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  drivers/media/i2c/imx335.c | 36 ++++++++++++++++++------------------
  1 file changed, 18 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
-index 59cb031c55b3..3d7aba73479d 100644
 --- a/drivers/media/i2c/imx335.c
 +++ b/drivers/media/i2c/imx335.c
 @@ -49,7 +49,7 @@
@@ -54,7 +52,7 @@ index 59cb031c55b3..3d7aba73479d 100644
  	u32 cur_mbus_code;
  };
  
-@@ -406,7 +408,8 @@ static int imx335_update_controls(struct imx335 *imx335,
+@@ -406,7 +408,8 @@ static int imx335_update_controls(struct
  {
  	int ret;
  
@@ -64,7 +62,7 @@ index 59cb031c55b3..3d7aba73479d 100644
  	if (ret)
  		return ret;
  
-@@ -692,6 +695,13 @@ static int imx335_init_pad_cfg(struct v4l2_subdev *sd,
+@@ -692,6 +695,13 @@ static int imx335_init_pad_cfg(struct v4
  	fmt.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
  	imx335_fill_pad_format(imx335, &supported_mode, &fmt);
  
@@ -78,7 +76,7 @@ index 59cb031c55b3..3d7aba73479d 100644
  	return imx335_set_pad_format(sd, sd_state, &fmt);
  }
  
-@@ -949,19 +959,10 @@ static int imx335_parse_hw_config(struct imx335 *imx335)
+@@ -949,19 +959,10 @@ static int imx335_parse_hw_config(struct
  		goto done_endpoint_free;
  	}
  
@@ -102,7 +100,7 @@ index 59cb031c55b3..3d7aba73479d 100644
  
  done_endpoint_free:
  	v4l2_fwnode_endpoint_free(&bus_cfg);
-@@ -1115,9 +1116,8 @@ static int imx335_init_controls(struct imx335 *imx335)
+@@ -1114,9 +1115,8 @@ static int imx335_init_controls(struct i
  	imx335->link_freq_ctrl = v4l2_ctrl_new_int_menu(ctrl_hdlr,
  							&imx335_ctrl_ops,
  							V4L2_CID_LINK_FREQ,
@@ -114,6 +112,3 @@ index 59cb031c55b3..3d7aba73479d 100644
  							link_freq);
  	if (imx335->link_freq_ctrl)
  		imx335->link_freq_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
--- 
-2.50.1
-

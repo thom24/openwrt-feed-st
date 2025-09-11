@@ -20,11 +20,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm/boot/dts/st/stm32mp131.dtsi | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index a28680e3c08d..471ac5183857 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -1358,8 +1358,9 @@ spi5: spi@4c003000 {
+@@ -1358,8 +1358,9 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				dmas = <&dmamux1 85 0x400 0x01>,
@@ -36,6 +34,3 @@ index a28680e3c08d..471ac5183857 100644
  				access-controllers = <&etzpc 19>;
  				status = "disabled";
  			};
--- 
-2.50.1
-

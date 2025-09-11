@@ -34,11 +34,9 @@ Tested-by: Alain VOLMAT <alain.volmat@st.com>
  drivers/media/i2c/imx335.c | 35 ++++++++++++++++++++---------------
  1 file changed, 20 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
-index 5a67e7cfde1f..efc7d200ed47 100644
 --- a/drivers/media/i2c/imx335.c
 +++ b/drivers/media/i2c/imx335.c
-@@ -528,26 +528,31 @@ static int imx335_set_ctrl(struct v4l2_ctrl *ctrl)
+@@ -528,26 +528,31 @@ static int imx335_set_ctrl(struct v4l2_c
  	u32 exposure;
  	int ret;
  
@@ -83,7 +81,7 @@ index 5a67e7cfde1f..efc7d200ed47 100644
  		exposure = ctrl->val;
  		analog_gain = imx335->again_ctrl->val;
  
-@@ -556,14 +561,14 @@ static int imx335_set_ctrl(struct v4l2_ctrl *ctrl)
+@@ -556,14 +561,14 @@ static int imx335_set_ctrl(struct v4l2_c
  
  		ret = imx335_update_exp_gain(imx335, exposure, analog_gain);
  
@@ -100,6 +98,3 @@ index 5a67e7cfde1f..efc7d200ed47 100644
  	return ret;
  }
  
--- 
-2.50.1
-

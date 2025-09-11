@@ -27,11 +27,9 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  .../st/stm32/stm32-dcmipp/dcmipp-isp.c        | 32 +++++++++++++++++++
  1 file changed, 32 insertions(+)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
-index c9bc6dc25de1..cd5dae8add66 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
-@@ -516,6 +516,35 @@ static void dcmipp_isp_config_decimation(struct dcmipp_isp_device *isp,
+@@ -516,6 +516,35 @@ static void dcmipp_isp_config_decimation
  	reg_write(isp, DCMIPP_P1DECR, decr);
  }
  
@@ -67,7 +65,7 @@ index c9bc6dc25de1..cd5dae8add66 100644
  static int dcmipp_isp_s_stream(struct v4l2_subdev *sd, int enable)
  {
  	struct dcmipp_isp_device *isp = v4l2_get_subdevdata(sd);
-@@ -556,6 +585,9 @@ static int dcmipp_isp_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -556,6 +585,9 @@ static int dcmipp_isp_s_stream(struct v4
  
  		/* Configure Demosaicing */
  		dcmipp_isp_config_demosaicing(isp, sink_fmt);
@@ -77,6 +75,3 @@ index c9bc6dc25de1..cd5dae8add66 100644
  	} else {
  		if (isp->usecnt > 1)
  			goto out;
--- 
-2.50.1
-

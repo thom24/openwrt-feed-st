@@ -22,11 +22,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/counter/stm32-timer-cnt.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/drivers/counter/stm32-timer-cnt.c b/drivers/counter/stm32-timer-cnt.c
-index 823062603f0e..8c86c84b7b81 100644
 --- a/drivers/counter/stm32-timer-cnt.c
 +++ b/drivers/counter/stm32-timer-cnt.c
-@@ -146,6 +146,9 @@ static int stm32_count_function_write(struct counter_device *counter,
+@@ -146,6 +146,9 @@ static int stm32_count_function_write(st
  
  	regmap_update_bits(priv->regmap, TIM_SMCR, TIM_SMCR_SMS, sms);
  
@@ -36,6 +34,3 @@ index 823062603f0e..8c86c84b7b81 100644
  	/* Make sure that registers are updated */
  	regmap_update_bits(priv->regmap, TIM_EGR, TIM_EGR_UG, TIM_EGR_UG);
  
--- 
-2.50.1
-

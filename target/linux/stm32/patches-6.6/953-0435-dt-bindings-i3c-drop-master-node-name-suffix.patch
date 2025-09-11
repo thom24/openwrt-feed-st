@@ -24,8 +24,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  Documentation/devicetree/bindings/i3c/snps,dw-i3c-master.yaml | 2 +-
  6 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/i3c/aspeed,ast2600-i3c.yaml b/Documentation/devicetree/bindings/i3c/aspeed,ast2600-i3c.yaml
-index fcc3dbff9c9a..47be5d9a32d4 100644
 --- a/Documentation/devicetree/bindings/i3c/aspeed,ast2600-i3c.yaml
 +++ b/Documentation/devicetree/bindings/i3c/aspeed,ast2600-i3c.yaml
 @@ -57,7 +57,7 @@ examples:
@@ -37,8 +35,6 @@ index fcc3dbff9c9a..47be5d9a32d4 100644
          compatible = "aspeed,ast2600-i3c";
          reg = <0x2000 0x1000>;
          #address-cells = <3>;
-diff --git a/Documentation/devicetree/bindings/i3c/cdns,i3c-master.yaml b/Documentation/devicetree/bindings/i3c/cdns,i3c-master.yaml
-index cc40d25358ec..cad6d53d0e2e 100644
 --- a/Documentation/devicetree/bindings/i3c/cdns,i3c-master.yaml
 +++ b/Documentation/devicetree/bindings/i3c/cdns,i3c-master.yaml
 @@ -41,7 +41,7 @@ unevaluatedProperties: false
@@ -50,8 +46,6 @@ index cc40d25358ec..cad6d53d0e2e 100644
          compatible = "cdns,i3c-master";
          clocks = <&coreclock>, <&i3csysclock>;
          clock-names = "pclk", "sysclk";
-diff --git a/Documentation/devicetree/bindings/i3c/i3c.yaml b/Documentation/devicetree/bindings/i3c/i3c.yaml
-index ab69f4115de4..073e620a8de2 100644
 --- a/Documentation/devicetree/bindings/i3c/i3c.yaml
 +++ b/Documentation/devicetree/bindings/i3c/i3c.yaml
 @@ -17,7 +17,7 @@ description: |
@@ -72,8 +66,6 @@ index ab69f4115de4..073e620a8de2 100644
          compatible = "cdns,i3c-master";
          clocks = <&coreclock>, <&i3csysclock>;
          clock-names = "pclk", "sysclk";
-diff --git a/Documentation/devicetree/bindings/i3c/mipi-i3c-hci.yaml b/Documentation/devicetree/bindings/i3c/mipi-i3c-hci.yaml
-index 5dda8cb44cdb..39bb1a1784c9 100644
 --- a/Documentation/devicetree/bindings/i3c/mipi-i3c-hci.yaml
 +++ b/Documentation/devicetree/bindings/i3c/mipi-i3c-hci.yaml
 @@ -43,7 +43,7 @@ unevaluatedProperties: false
@@ -85,8 +77,6 @@ index 5dda8cb44cdb..39bb1a1784c9 100644
        compatible = "mipi-i3c-hci";
        reg = <0xa0000000 0x2000>;
        interrupts = <89>;
-diff --git a/Documentation/devicetree/bindings/i3c/silvaco,i3c-master.yaml b/Documentation/devicetree/bindings/i3c/silvaco,i3c-master.yaml
-index 133855f11b4f..c56ff77677f1 100644
 --- a/Documentation/devicetree/bindings/i3c/silvaco,i3c-master.yaml
 +++ b/Documentation/devicetree/bindings/i3c/silvaco,i3c-master.yaml
 @@ -48,7 +48,7 @@ unevaluatedProperties: false
@@ -98,8 +88,6 @@ index 133855f11b4f..c56ff77677f1 100644
          compatible = "silvaco,i3c-master-v1";
          clocks = <&zynqmp_clk 71>, <&fclk>, <&sclk>;
          clock-names = "pclk", "fast_clk", "slow_clk";
-diff --git a/Documentation/devicetree/bindings/i3c/snps,dw-i3c-master.yaml b/Documentation/devicetree/bindings/i3c/snps,dw-i3c-master.yaml
-index 7a76fd32962a..c0e805e531be 100644
 --- a/Documentation/devicetree/bindings/i3c/snps,dw-i3c-master.yaml
 +++ b/Documentation/devicetree/bindings/i3c/snps,dw-i3c-master.yaml
 @@ -35,7 +35,7 @@ unevaluatedProperties: false
@@ -111,6 +99,3 @@ index 7a76fd32962a..c0e805e531be 100644
          compatible = "snps,dw-i3c-master-1.00a";
          #address-cells = <3>;
          #size-cells = <0>;
--- 
-2.50.1
-

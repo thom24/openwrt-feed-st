@@ -13,11 +13,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/panel/panel-raydium-rm68200.c | 28 +++++++++++++------
  1 file changed, 20 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-raydium-rm68200.c b/drivers/gpu/drm/panel/panel-raydium-rm68200.c
-index f67f08c8cae8..c06d828de94c 100644
 --- a/drivers/gpu/drm/panel/panel-raydium-rm68200.c
 +++ b/drivers/gpu/drm/panel/panel-raydium-rm68200.c
-@@ -277,7 +277,6 @@ static int rm68200_unprepare(struct drm_panel *panel)
+@@ -277,7 +277,6 @@ static int rm68200_unprepare(struct drm_
  	if (ret)
  		dev_warn(panel->dev, "failed to enter sleep mode: %d\n", ret);
  
@@ -25,7 +23,7 @@ index f67f08c8cae8..c06d828de94c 100644
  	pm_runtime_mark_last_busy(panel->dev);
  	ret = pm_runtime_put_autosuspend(panel->dev);
  	if (ret < 0)
-@@ -397,7 +396,11 @@ static int rm68200_probe(struct mipi_dsi_device *dsi)
+@@ -397,7 +396,11 @@ static int rm68200_probe(struct mipi_dsi
  	if (!ctx)
  		return -ENOMEM;
  
@@ -38,7 +36,7 @@ index f67f08c8cae8..c06d828de94c 100644
  	if (IS_ERR(ctx->reset_gpio))
  		return dev_err_probe(dev, PTR_ERR(ctx->reset_gpio),
  				     "cannot get reset GPIO\n");
-@@ -417,16 +420,19 @@ static int rm68200_probe(struct mipi_dsi_device *dsi)
+@@ -417,16 +420,19 @@ static int rm68200_probe(struct mipi_dsi
  			  MIPI_DSI_MODE_LPM | MIPI_DSI_CLOCK_NON_CONTINUOUS;
  
  	pm_runtime_enable(ctx->dev);
@@ -63,7 +61,7 @@ index f67f08c8cae8..c06d828de94c 100644
  
  	ret = drm_panel_of_backlight(&ctx->panel);
  	if (ret)
-@@ -438,10 +444,16 @@ static int rm68200_probe(struct mipi_dsi_device *dsi)
+@@ -438,10 +444,16 @@ static int rm68200_probe(struct mipi_dsi
  	if (ret < 0) {
  		dev_err(dev, "mipi_dsi_attach() failed: %d\n", ret);
  		drm_panel_remove(&ctx->panel);
@@ -81,6 +79,3 @@ index f67f08c8cae8..c06d828de94c 100644
  }
  
  static void rm68200_remove(struct mipi_dsi_device *dsi)
--- 
-2.50.1
-

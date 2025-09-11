@@ -19,8 +19,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  .../devicetree/bindings/bus/st,stm32mp25-rifsc.yaml       | 8 ++++++--
  1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml b/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
-index b179fd5f580c..b4b3680d517d 100644
 --- a/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
 +++ b/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
 @@ -33,14 +33,18 @@ select:
@@ -44,6 +42,3 @@ index b179fd5f580c..b4b3680d517d 100644
        - const: simple-bus
  
    reg:
--- 
-2.50.1
-

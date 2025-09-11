@@ -21,11 +21,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
-index 4d0f949d8d91..1fe079a2b188 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
-@@ -525,6 +525,9 @@ static void dcmipp_bytecap_stop_streaming(struct vb2_queue *vq)
+@@ -525,6 +525,9 @@ static void dcmipp_bytecap_stop_streamin
  	/* Disable pipe */
  	reg_clear(vcap, DCMIPP_P0FSCR, DCMIPP_P0FSCR_PIPEN);
  
@@ -35,6 +33,3 @@ index 4d0f949d8d91..1fe079a2b188 100644
  	dcmipp_pipeline_s_stream(vcap, 0);
  
  	/* Stop the media pipeline */
--- 
-2.50.1
-

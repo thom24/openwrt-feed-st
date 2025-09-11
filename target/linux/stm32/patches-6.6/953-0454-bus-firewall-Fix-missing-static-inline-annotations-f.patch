@@ -27,11 +27,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  include/linux/bus/stm32_firewall_device.h | 14 +++++++++-----
  1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/bus/stm32_firewall_device.h b/include/linux/bus/stm32_firewall_device.h
-index bbbee0b24ea8..eaa7a3f54450 100644
 --- a/include/linux/bus/stm32_firewall_device.h
 +++ b/include/linux/bus/stm32_firewall_device.h
-@@ -114,26 +114,30 @@ void stm32_firewall_release_access_by_id(struct stm32_firewall *firewall, u32 su
+@@ -114,26 +114,30 @@ void stm32_firewall_release_access_by_id
  
  #else /* CONFIG_STM32_FIREWALL */
  
@@ -67,6 +65,3 @@ index bbbee0b24ea8..eaa7a3f54450 100644
  {
  }
  
--- 
-2.50.1
-

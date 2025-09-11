@@ -16,11 +16,9 @@ Reviewed-by: Francois CHOLEAU <francois.choleau@st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index f449b5e21c0a..1f7b8344ce2f 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -22,6 +22,8 @@ cpu0: cpu@0 {
+@@ -22,6 +22,8 @@
  			device_type = "cpu";
  			reg = <0>;
  			enable-method = "psci";
@@ -29,7 +27,7 @@ index f449b5e21c0a..1f7b8344ce2f 100644
  			power-domains = <&CPU_PD0>;
  			power-domain-names = "psci";
  			#cooling-cells = <2>;
-@@ -130,6 +132,11 @@ scmi: scmi {
+@@ -130,6 +132,11 @@
  			#size-cells = <0>;
  			linaro,optee-channel-id = <0>;
  
@@ -41,6 +39,3 @@ index f449b5e21c0a..1f7b8344ce2f 100644
  			scmi_clk: protocol@14 {
  				reg = <0x14>;
  				#clock-cells = <1>;
--- 
-2.50.1
-

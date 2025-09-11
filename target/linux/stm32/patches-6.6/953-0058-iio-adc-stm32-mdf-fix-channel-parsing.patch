@@ -20,11 +20,9 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  drivers/iio/adc/stm32-mdf-adc.c | 16 ++++++++++------
  1 file changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/iio/adc/stm32-mdf-adc.c b/drivers/iio/adc/stm32-mdf-adc.c
-index e2dedf5f5081..2deeb29bc24b 100644
 --- a/drivers/iio/adc/stm32-mdf-adc.c
 +++ b/drivers/iio/adc/stm32-mdf-adc.c
-@@ -1206,13 +1206,13 @@ static int stm32_mdf_adc_chan_init_one(struct iio_dev *indio_dev, struct fwnode_
+@@ -1206,13 +1206,13 @@ static int stm32_mdf_adc_chan_init_one(s
  	ch->indexed = 1;
  	ch->scan_index = idx;
  
@@ -44,7 +42,7 @@ index e2dedf5f5081..2deeb29bc24b 100644
  		ch->info_mask_separate = BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_SCALE) |
  					 BIT(IIO_CHAN_INFO_OFFSET);
  		ch->scan_type.shift = 8;
-@@ -1235,6 +1235,10 @@ static int stm32_mdf_adc_chan_init(struct iio_dev *indio_dev, struct iio_chan_sp
+@@ -1235,6 +1235,10 @@ static int stm32_mdf_adc_chan_init(struc
  	int chan_idx = 0, ret;
  
  	device_for_each_child_node(indio_dev->dev.parent, child) {
@@ -55,6 +53,3 @@ index e2dedf5f5081..2deeb29bc24b 100644
  		ret = stm32_mdf_adc_chan_init_one(indio_dev, child, &channels[chan_idx], chan_idx);
  		if (ret < 0) {
  			dev_err(&indio_dev->dev, "Channels [%d] init failed\n", chan_idx);
--- 
-2.50.1
-

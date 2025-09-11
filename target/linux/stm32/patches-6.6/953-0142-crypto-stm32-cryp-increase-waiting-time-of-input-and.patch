@@ -23,11 +23,9 @@ Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
  drivers/crypto/stm32/stm32-cryp.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/crypto/stm32/stm32-cryp.c b/drivers/crypto/stm32/stm32-cryp.c
-index c995c608e14b..84a58600ad24 100644
 --- a/drivers/crypto/stm32/stm32-cryp.c
 +++ b/drivers/crypto/stm32/stm32-cryp.c
-@@ -333,7 +333,7 @@ static inline int stm32_cryp_wait_input(struct stm32_cryp *cryp)
+@@ -333,7 +333,7 @@ static inline int stm32_cryp_wait_input(
  	u32 status;
  
  	return readl_relaxed_poll_timeout_atomic(cryp->regs + cryp->caps->sr, status,
@@ -36,7 +34,7 @@ index c995c608e14b..84a58600ad24 100644
  }
  
  static inline int stm32_cryp_wait_output(struct stm32_cryp *cryp)
-@@ -341,7 +341,7 @@ static inline int stm32_cryp_wait_output(struct stm32_cryp *cryp)
+@@ -341,7 +341,7 @@ static inline int stm32_cryp_wait_output
  	u32 status;
  
  	return readl_relaxed_poll_timeout_atomic(cryp->regs + cryp->caps->sr, status,
@@ -45,6 +43,3 @@ index c995c608e14b..84a58600ad24 100644
  }
  
  static inline void stm32_cryp_key_read_enable(struct stm32_cryp *cryp)
--- 
-2.50.1
-

@@ -13,11 +13,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/panel/panel-simple.c | 15 +++++++++++++--
  1 file changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
-index f90da0ba29bb..839eca8750ce 100644
 --- a/drivers/gpu/drm/panel/panel-simple.c
 +++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -594,8 +594,11 @@ static int panel_simple_probe(struct device *dev, const struct panel_desc *desc)
+@@ -594,8 +594,11 @@ static int panel_simple_probe(struct dev
  	if (IS_ERR(panel->supply))
  		return PTR_ERR(panel->supply);
  
@@ -31,7 +29,7 @@ index f90da0ba29bb..839eca8750ce 100644
  	if (IS_ERR(panel->enable_gpio))
  		return dev_err_probe(dev, PTR_ERR(panel->enable_gpio),
  				     "failed to request GPIO\n");
-@@ -694,6 +697,14 @@ static int panel_simple_probe(struct device *dev, const struct panel_desc *desc)
+@@ -694,6 +697,14 @@ static int panel_simple_probe(struct dev
  
  	drm_panel_init(&panel->base, dev, &panel_simple_funcs, connector_type);
  
@@ -46,6 +44,3 @@ index f90da0ba29bb..839eca8750ce 100644
  	err = drm_panel_of_backlight(&panel->base);
  	if (err) {
  		dev_err_probe(dev, err, "Could not find backlight\n");
--- 
-2.50.1
-

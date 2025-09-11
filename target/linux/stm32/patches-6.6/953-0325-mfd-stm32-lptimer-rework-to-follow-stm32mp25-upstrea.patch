@@ -23,11 +23,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  include/linux/mfd/stm32-lptimer.h | 34 +++++++++++++++++++++----------
  2 files changed, 35 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/mfd/stm32-lptimer.c b/drivers/mfd/stm32-lptimer.c
-index 9fc94122ffb2..eb3c1517603d 100644
 --- a/drivers/mfd/stm32-lptimer.c
 +++ b/drivers/mfd/stm32-lptimer.c
-@@ -51,36 +51,32 @@ static int stm32_lptimer_detect_encoder(struct stm32_lptimer *ddata)
+@@ -51,36 +51,32 @@ static int stm32_lptimer_detect_encoder(
  	return 0;
  }
  
@@ -75,7 +73,7 @@ index 9fc94122ffb2..eb3c1517603d 100644
  
  	return 0;
  }
-@@ -109,7 +105,7 @@ static int stm32_lptimer_probe(struct platform_device *pdev)
+@@ -109,7 +105,7 @@ static int stm32_lptimer_probe(struct pl
  	if (IS_ERR(ddata->clk))
  		return PTR_ERR(ddata->clk);
  
@@ -84,7 +82,7 @@ index 9fc94122ffb2..eb3c1517603d 100644
  	if (ret)
  		return ret;
  
-@@ -124,8 +120,6 @@ static int stm32_lptimer_probe(struct platform_device *pdev)
+@@ -124,8 +120,6 @@ static int stm32_lptimer_probe(struct pl
  
  static const struct of_device_id stm32_lptimer_of_match[] = {
  	{ .compatible = "st,stm32-lptimer", },
@@ -93,8 +91,6 @@ index 9fc94122ffb2..eb3c1517603d 100644
  	{},
  };
  MODULE_DEVICE_TABLE(of, stm32_lptimer_of_match);
-diff --git a/include/linux/mfd/stm32-lptimer.h b/include/linux/mfd/stm32-lptimer.h
-index a73dff0cb9ef..1a6927605c55 100644
 --- a/include/linux/mfd/stm32-lptimer.h
 +++ b/include/linux/mfd/stm32-lptimer.h
 @@ -17,23 +17,27 @@
@@ -174,6 +170,3 @@ index a73dff0cb9ef..1a6927605c55 100644
  };
  
  #endif
--- 
-2.50.1
-

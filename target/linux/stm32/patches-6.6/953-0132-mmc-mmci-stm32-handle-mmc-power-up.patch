@@ -18,11 +18,9 @@ Tested-by: Christophe KERELLO <christophe.kerello@st.com>
  drivers/mmc/host/mmci_stm32_sdmmc.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mmc/host/mmci_stm32_sdmmc.c b/drivers/mmc/host/mmci_stm32_sdmmc.c
-index 70ca2837b909..fbbf05befead 100644
 --- a/drivers/mmc/host/mmci_stm32_sdmmc.c
 +++ b/drivers/mmc/host/mmci_stm32_sdmmc.c
-@@ -411,7 +411,8 @@ static void mmci_sdmmc_set_pwrreg(struct mmci_host *host, unsigned int pwr)
+@@ -411,7 +411,8 @@ static void mmci_sdmmc_set_pwrreg(struct
  	if (dlyb && dlyb->ops->set_input_ck)
  		dlyb->ops->set_input_ck(dlyb);
  
@@ -32,6 +30,3 @@ index 70ca2837b909..fbbf05befead 100644
  		/* Only a reset could power-off sdmmc */
  		reset_control_assert(host->rst);
  		udelay(2);
--- 
-2.50.1
-

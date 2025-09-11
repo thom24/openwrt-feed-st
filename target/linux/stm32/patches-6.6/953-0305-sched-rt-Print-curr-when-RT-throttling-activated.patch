@@ -25,11 +25,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  kernel/sched/rt.c | 7 ++++---
  1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index b89223a97316..ccf1a4433feb 100644
 --- a/kernel/sched/rt.c
 +++ b/kernel/sched/rt.c
-@@ -999,7 +999,7 @@ static inline int rt_se_prio(struct sched_rt_entity *rt_se)
+@@ -999,7 +999,7 @@ static inline int rt_se_prio(struct sche
  	return rt_task_of(rt_se)->prio;
  }
  
@@ -38,7 +36,7 @@ index b89223a97316..ccf1a4433feb 100644
  {
  	u64 runtime = sched_rt_runtime(rt_rq);
  
-@@ -1023,7 +1023,8 @@ static int sched_rt_runtime_exceeded(struct rt_rq *rt_rq)
+@@ -1023,7 +1023,8 @@ static int sched_rt_runtime_exceeded(str
  		 */
  		if (likely(rt_b->rt_runtime)) {
  			rt_rq->rt_throttled = 1;
@@ -48,7 +46,7 @@ index b89223a97316..ccf1a4433feb 100644
  		} else {
  			/*
  			 * In case we did anyway, make it go away,
-@@ -1069,7 +1070,7 @@ static void update_curr_rt(struct rq *rq)
+@@ -1069,7 +1070,7 @@ static void update_curr_rt(struct rq *rq
  		if (sched_rt_runtime(rt_rq) != RUNTIME_INF) {
  			raw_spin_lock(&rt_rq->rt_runtime_lock);
  			rt_rq->rt_time += delta_exec;
@@ -57,6 +55,3 @@ index b89223a97316..ccf1a4433feb 100644
  			if (exceeded)
  				resched_curr(rq);
  			raw_spin_unlock(&rt_rq->rt_runtime_lock);
--- 
-2.50.1
-

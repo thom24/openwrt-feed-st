@@ -18,8 +18,6 @@ Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
  drivers/char/hw_random/stm32-rng.c | 24 +++++++++++++++++-------
  1 file changed, 17 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
-index 9e470f6b733e..1ab76ef63be1 100644
 --- a/drivers/char/hw_random/stm32-rng.c
 +++ b/drivers/char/hw_random/stm32-rng.c
 @@ -28,8 +28,7 @@
@@ -53,7 +51,7 @@ index 9e470f6b733e..1ab76ef63be1 100644
  /*
   * Extracts from the STM32 RNG specification when RNG supports CONDRST.
   *
-@@ -311,9 +317,10 @@ static int stm32_rng_init(struct hwrng *rng)
+@@ -311,9 +317,10 @@ static int stm32_rng_init(struct hwrng *
  	 */
  	if (priv->data->has_cond_reset && priv->data->cr) {
  		uint clock_div = stm32_rng_clock_freq_restrain(rng);
@@ -66,7 +64,7 @@ index 9e470f6b733e..1ab76ef63be1 100644
  		       (clock_div << RNG_CR_CLKDIV_SHIFT);
  		if (priv->ced)
  			reg &= ~RNG_CR_CED;
-@@ -551,15 +558,17 @@ static const struct stm32_rng_data stm32mp25_rng_data = {
+@@ -551,15 +558,17 @@ static const struct stm32_rng_data stm32
  	.has_cond_reset = true,
  	.max_clock_rate = 48000000,
  	.nb_clock = 2,
@@ -87,7 +85,7 @@ index 9e470f6b733e..1ab76ef63be1 100644
  	.cr = 0x00800D00,
  	.nscr = 0x01FF,
  	.htcr = 0xAAC7,
-@@ -569,6 +578,7 @@ static const struct stm32_rng_data stm32mp13_rng_data = {
+@@ -569,6 +578,7 @@ static const struct stm32_rng_data stm32
  	.has_cond_reset = true,
  	.max_clock_rate = 48000000,
  	.nb_clock = 1,
@@ -95,6 +93,3 @@ index 9e470f6b733e..1ab76ef63be1 100644
  	.cr = 0x00F00D00,
  	.nscr = 0x2B5BB,
  	.htcr = 0x969D,
--- 
-2.50.1
-

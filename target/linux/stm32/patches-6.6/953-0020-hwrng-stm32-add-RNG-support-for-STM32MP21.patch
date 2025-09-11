@@ -19,8 +19,6 @@ Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
  drivers/char/hw_random/stm32-rng.c | 16 +++++++++++++++-
  1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
-index ba2fbe88bc0c..a2669ccf71e6 100644
 --- a/drivers/char/hw_random/stm32-rng.c
 +++ b/drivers/char/hw_random/stm32-rng.c
 @@ -37,6 +37,7 @@
@@ -31,7 +29,7 @@ index ba2fbe88bc0c..a2669ccf71e6 100644
  
  #define RNG_DR			0x08
  
-@@ -361,7 +362,7 @@ static int stm32_rng_init(struct hwrng *rng)
+@@ -361,7 +362,7 @@ static int stm32_rng_init(struct hwrng *
  	err = readl_relaxed_poll_timeout_atomic(priv->base + RNG_SR, reg,
  						reg & RNG_SR_DRDY,
  						10, 100000);
@@ -40,7 +38,7 @@ index ba2fbe88bc0c..a2669ccf71e6 100644
  		if (priv->bus_clk)
  			clk_disable_unprepare(priv->bus_clk);
  		clk_disable_unprepare(priv->clk);
-@@ -520,6 +521,15 @@ static const struct stm32_rng_data stm32mp25_rng_data = {
+@@ -520,6 +521,15 @@ static const struct stm32_rng_data stm32
  	.htcr = 0x969D,
  };
  
@@ -56,17 +54,14 @@ index ba2fbe88bc0c..a2669ccf71e6 100644
  static const struct stm32_rng_data stm32mp13_rng_data = {
  	.has_cond_reset = true,
  	.max_clock_rate = 48000000,
-@@ -540,6 +550,10 @@ static const struct of_device_id stm32_rng_match[] = {
- 		.compatible = "st,stm32mp25-rng",
+@@ -541,6 +551,10 @@ static const struct of_device_id stm32_r
  		.data = &stm32mp25_rng_data,
  	},
-+	{
+ 	{
 +		.compatible = "st,stm32mp21-rng",
 +		.data = &stm32mp21_rng_data,
 +	},
- 	{
++	{
  		.compatible = "st,stm32mp13-rng",
  		.data = &stm32mp13_rng_data,
--- 
-2.50.1
-
+ 	},

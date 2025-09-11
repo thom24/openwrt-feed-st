@@ -29,8 +29,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/media/i2c/imx335.c | 21 ++++++++++++++++++++-
  1 file changed, 20 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
-index e5cfccc4dd88..a06dd32f46fe 100644
 --- a/drivers/media/i2c/imx335.c
 +++ b/drivers/media/i2c/imx335.c
 @@ -21,6 +21,11 @@
@@ -61,7 +59,7 @@ index e5cfccc4dd88..a06dd32f46fe 100644
  	const struct imx335_mode *cur_mode;
  	struct mutex mutex;
  	unsigned long link_freq_bitmap;
-@@ -937,6 +944,11 @@ static int imx335_start_streaming(struct imx335 *imx335)
+@@ -937,6 +944,11 @@ static int imx335_start_streaming(struct
  		return ret;
  	}
  
@@ -73,7 +71,7 @@ index e5cfccc4dd88..a06dd32f46fe 100644
  	/* Setup handler will write actual exposure and gain */
  	ret =  __v4l2_ctrl_handler_setup(imx335->sd.ctrl_handler);
  	if (ret) {
-@@ -1106,7 +1118,14 @@ static int imx335_parse_hw_config(struct imx335 *imx335)
+@@ -1106,7 +1118,14 @@ static int imx335_parse_hw_config(struct
  	if (ret)
  		return ret;
  
@@ -89,6 +87,3 @@ index e5cfccc4dd88..a06dd32f46fe 100644
  		dev_err(imx335->dev,
  			"number of CSI2 data lanes %d is not supported\n",
  			bus_cfg.bus.mipi_csi2.num_data_lanes);
--- 
-2.50.1
-

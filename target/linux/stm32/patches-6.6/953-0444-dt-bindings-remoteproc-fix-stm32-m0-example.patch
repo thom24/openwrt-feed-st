@@ -20,8 +20,6 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  Documentation/devicetree/bindings/remoteproc/st,stm32-m0.yaml | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/st,stm32-m0.yaml b/Documentation/devicetree/bindings/remoteproc/st,stm32-m0.yaml
-index 0a459dcce1ff..d57f2d2b00ba 100644
 --- a/Documentation/devicetree/bindings/remoteproc/st,stm32-m0.yaml
 +++ b/Documentation/devicetree/bindings/remoteproc/st,stm32-m0.yaml
 @@ -72,7 +72,9 @@ additionalProperties: false
@@ -34,6 +32,3 @@ index 0a459dcce1ff..d57f2d2b00ba 100644
      m0_rproc: m0@0 {
        compatible = "st,stm32mp2-m0";
        reg = <0 0>;
--- 
-2.50.1
-

@@ -25,11 +25,9 @@ Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
  .../st/stm32/stm32-dcmipp/dcmipp-statcap.c    | 38 +++++++++----------
  1 file changed, 19 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
-index d583801f8cbc..0ee28a55a913 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
-@@ -631,27 +631,13 @@ static void dcmipp_statcap_read_avg_stats(struct dcmipp_statcap_device *vcap)
+@@ -631,27 +631,13 @@ static void dcmipp_statcap_read_avg_stat
  	}
  }
  
@@ -58,7 +56,7 @@ index d583801f8cbc..0ee28a55a913 100644
  	/* Read the bad pixel count stat and store it locally */
  	vcap->local_buf.bad_pixel_count = reg_read(vcap, DCMIPP_P1BPRSR) &
  						DCMIPP_P1BPRSR_BADCNT_MASK;
-@@ -776,10 +762,6 @@ static irqreturn_t dcmipp_statcap_irq_thread(int irq, void *arg)
+@@ -776,10 +762,6 @@ static irqreturn_t dcmipp_statcap_irq_th
  		break;
  	}
  
@@ -69,7 +67,7 @@ index d583801f8cbc..0ee28a55a913 100644
  	/* Update the capture_state & prev_capture_state */
  	switch (vcap->stat_profile) {
  	case V4L2_STAT_PROFILE_FULL:
-@@ -802,6 +784,24 @@ static irqreturn_t dcmipp_statcap_irq_thread(int irq, void *arg)
+@@ -802,6 +784,24 @@ static irqreturn_t dcmipp_statcap_irq_th
  		}
  		break;
  	}
@@ -94,6 +92,3 @@ index d583801f8cbc..0ee28a55a913 100644
  
  	spin_unlock_irq(&vcap->irqlock);
  
--- 
-2.50.1
-

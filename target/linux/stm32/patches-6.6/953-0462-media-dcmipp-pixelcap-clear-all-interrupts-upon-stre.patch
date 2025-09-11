@@ -22,11 +22,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
-index 876c069580f4..2397b8e84f63 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
-@@ -654,6 +654,9 @@ static void dcmipp_pixelcap_stop_streaming(struct vb2_queue *vq)
+@@ -654,6 +654,9 @@ static void dcmipp_pixelcap_stop_streami
  	/* Disable pipe */
  	reg_clear(vcap, DCMIPP_PxFSCR(vcap->pipe_id), DCMIPP_PxFSCR_PIPEN);
  
@@ -36,6 +34,3 @@ index 876c069580f4..2397b8e84f63 100644
  	dcmipp_pipeline_s_stream(vcap, 0);
  
  	/* Stop the media pipeline */
--- 
-2.50.1
-

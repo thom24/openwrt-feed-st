@@ -20,11 +20,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/bus/stm32_rifsc.c | 52 ++++++++++++++-------------------------
  1 file changed, 18 insertions(+), 34 deletions(-)
 
-diff --git a/drivers/bus/stm32_rifsc.c b/drivers/bus/stm32_rifsc.c
-index ad195c86bbad..022baa7ed46e 100644
 --- a/drivers/bus/stm32_rifsc.c
 +++ b/drivers/bus/stm32_rifsc.c
-@@ -695,34 +695,6 @@ static int stm32_rifsc_grant_access(struct stm32_firewall_controller *ctrl, u32
+@@ -695,34 +695,6 @@ static int stm32_rifsc_grant_access(stru
  	sec_reg_value = readl(rifsc_controller->mmio + RIFSC_RISC_SECCFGR0 + 0x4 * reg_id);
  	cid_reg_value = readl(rifsc_controller->mmio + RIFSC_RISC_PER0_CIDCFGR + 0x8 * firewall_id);
  
@@ -59,7 +57,7 @@ index ad195c86bbad..022baa7ed46e 100644
  	/* Check security configuration */
  	if (sec_reg_value & BIT(reg_offset)) {
  		dev_dbg(rifsc_controller->dev,
-@@ -730,19 +702,31 @@ static int stm32_rifsc_grant_access(struct stm32_firewall_controller *ctrl, u32
+@@ -730,19 +702,31 @@ skip_cid_check:
  		return -EACCES;
  	}
  
@@ -97,6 +95,3 @@ index ad195c86bbad..022baa7ed46e 100644
  	return 0;
  }
  
--- 
-2.50.1
-

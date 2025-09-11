@@ -26,8 +26,6 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  drivers/media/i2c/imx335.c | 102 ++++++++++++++++++++++++++++++++++++-
  1 file changed, 101 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
-index efc7d200ed47..e5cfccc4dd88 100644
 --- a/drivers/media/i2c/imx335.c
 +++ b/drivers/media/i2c/imx335.c
 @@ -45,6 +45,21 @@
@@ -91,7 +89,7 @@ index efc7d200ed47..e5cfccc4dd88 100644
  /* Sensor mode registers */
  static const struct imx335_reg mode_2592x1940_regs[] = {
  	{0x3000, 0x01},
-@@ -508,6 +555,49 @@ static int imx335_update_exp_gain(struct imx335 *imx335, u32 exposure, u32 gain)
+@@ -508,6 +555,49 @@ error_release_group_hold:
  	return ret;
  }
  
@@ -141,18 +139,18 @@ index efc7d200ed47..e5cfccc4dd88 100644
  /**
   * imx335_set_ctrl() - Set subdevice control
   * @ctrl: pointer to v4l2_ctrl structure
-@@ -561,6 +651,10 @@ static int imx335_set_ctrl(struct v4l2_ctrl *ctrl)
- 
+@@ -562,6 +652,10 @@ static int imx335_set_ctrl(struct v4l2_c
  		ret = imx335_update_exp_gain(imx335, exposure, analog_gain);
  
-+		break;
+ 		break;
 +	case V4L2_CID_TEST_PATTERN:
 +		ret = imx335_update_test_pattern(imx335, ctrl->val);
 +
- 		break;
++		break;
  	default:
  		dev_err(imx335->dev, "Invalid control %d\n", ctrl->id);
-@@ -1133,7 +1227,7 @@ static int imx335_init_controls(struct imx335 *imx335)
+ 		ret = -EINVAL;
+@@ -1132,7 +1226,7 @@ static int imx335_init_controls(struct i
  	u32 lpfr;
  	int ret;
  
@@ -161,7 +159,7 @@ index efc7d200ed47..e5cfccc4dd88 100644
  	if (ret)
  		return ret;
  
-@@ -1167,6 +1261,12 @@ static int imx335_init_controls(struct imx335 *imx335)
+@@ -1166,6 +1260,12 @@ static int imx335_init_controls(struct i
  						mode->vblank_max,
  						1, mode->vblank);
  
@@ -174,6 +172,3 @@ index efc7d200ed47..e5cfccc4dd88 100644
  	/* Read only controls */
  	imx335->pclk_ctrl = v4l2_ctrl_new_std(ctrl_hdlr,
  					      &imx335_ctrl_ops,
--- 
-2.50.1
-

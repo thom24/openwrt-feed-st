@@ -32,11 +32,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/clocksource/timer-stm32-lp.c | 61 +++++++++++++++++++++-------
  1 file changed, 47 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/clocksource/timer-stm32-lp.c b/drivers/clocksource/timer-stm32-lp.c
-index 2604653531a4..8f370c3a00b9 100644
 --- a/drivers/clocksource/timer-stm32-lp.c
 +++ b/drivers/clocksource/timer-stm32-lp.c
-@@ -40,6 +40,15 @@ to_priv(struct clock_event_device *clkevt)
+@@ -40,6 +40,15 @@ to_priv(struct clock_event_device *clkev
  static int stm32_clkevent_lp_shutdown(struct clock_event_device *clkevt)
  {
  	struct stm32_lp_private *priv = to_priv(clkevt);
@@ -52,7 +50,7 @@ index 2604653531a4..8f370c3a00b9 100644
  
  	regmap_write(priv->reg, STM32_LPTIM_CR, 0);
  	regmap_write(priv->reg, STM32_LPTIM_IER, 0);
-@@ -97,14 +106,6 @@ static int stm32_clkevent_lp_set_timer(unsigned long evt,
+@@ -97,14 +106,6 @@ static int stm32_clkevent_lp_set_timer(u
  	struct stm32_lp_private *priv = to_priv(clkevt);
  	int ret;
  
@@ -67,7 +65,7 @@ index 2604653531a4..8f370c3a00b9 100644
  	if (priv->version == STM32_LPTIM_VERR_23) {
  		ret = stm32mp25_clkevent_lp_set_evt(priv, evt);
  		if (ret)
-@@ -131,18 +132,54 @@ static int stm32_clkevent_lp_set_next_event(unsigned long evt,
+@@ -131,18 +132,54 @@ static int stm32_clkevent_lp_set_next_ev
  					   clockevent_state_periodic(clkevt));
  }
  
@@ -114,17 +112,17 @@ index 2604653531a4..8f370c3a00b9 100644
 +	ret = stm32_clkevent_lp_pm_runtime_get(clkevt);
 +	if (ret < 0)
 +		return ret;
- 
--	return stm32_clkevent_lp_set_timer(priv->period, clkevt, false);
++
 +	ret = stm32_clkevent_lp_set_timer(priv->period, clkevt, false);
 +	if (ret < 0)
 +		pm_runtime_put(priv->dev);
-+
+ 
+-	return stm32_clkevent_lp_set_timer(priv->period, clkevt, false);
 +	return ret;
  }
  
  static irqreturn_t stm32_clkevent_lp_irq_handler(int irq, void *dev_id)
-@@ -182,8 +219,6 @@ static void stm32_clkevent_lp_suspend(struct clock_event_device *clkevt)
+@@ -182,8 +219,6 @@ static void stm32_clkevent_lp_suspend(st
  
  	stm32_clkevent_lp_shutdown(clkevt);
  
@@ -133,7 +131,7 @@ index 2604653531a4..8f370c3a00b9 100644
  	/* balance clk_prepare_enable() from the probe */
  	clk_disable_unprepare(priv->clk);
  }
-@@ -266,8 +301,6 @@ static int stm32_clkevent_lp_probe(struct platform_device *pdev)
+@@ -266,8 +301,6 @@ static int stm32_clkevent_lp_probe(struc
  	if (ret)
  		return ret;
  
@@ -142,6 +140,3 @@ index 2604653531a4..8f370c3a00b9 100644
  	priv->dev = &pdev->dev;
  
  	stm32_clkevent_lp_init(priv, pdev->dev.parent->of_node, rate);
--- 
-2.50.1
-

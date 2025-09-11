@@ -27,8 +27,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/phy/st/phy-stm32-usb2phy.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/phy/st/phy-stm32-usb2phy.c b/drivers/phy/st/phy-stm32-usb2phy.c
-index a4c98e8ba884..f4a9efc876aa 100644
 --- a/drivers/phy/st/phy-stm32-usb2phy.c
 +++ b/drivers/phy/st/phy-stm32-usb2phy.c
 @@ -6,6 +6,7 @@
@@ -39,6 +37,3 @@ index a4c98e8ba884..f4a9efc876aa 100644
  #include <linux/clk.h>
  #include <linux/clk-provider.h>
  #include <linux/io.h>
--- 
-2.50.1
-

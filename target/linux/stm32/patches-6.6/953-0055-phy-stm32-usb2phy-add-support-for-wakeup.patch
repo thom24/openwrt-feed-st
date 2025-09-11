@@ -18,8 +18,6 @@ Reviewed-by: Ram DAYAL <ram.dayal@st.com>
  drivers/phy/st/phy-stm32-usb2phy.c | 31 ++++++++++++++++++++++++++++++
  1 file changed, 31 insertions(+)
 
-diff --git a/drivers/phy/st/phy-stm32-usb2phy.c b/drivers/phy/st/phy-stm32-usb2phy.c
-index 2d5c1adf0d0e..5ceafe4df253 100644
 --- a/drivers/phy/st/phy-stm32-usb2phy.c
 +++ b/drivers/phy/st/phy-stm32-usb2phy.c
 @@ -87,6 +87,7 @@ struct stm32_usb2phy {
@@ -30,7 +28,7 @@ index 2d5c1adf0d0e..5ceafe4df253 100644
  };
  
  enum stm32_usb2phy_mode {
-@@ -504,6 +505,11 @@ static int stm32_usb2phy_exit(struct phy *phy)
+@@ -504,6 +505,11 @@ static int stm32_usb2phy_exit(struct phy
  static int stm32_usb2phy_phy_power_on(struct phy *phy)
  {
  	struct stm32_usb2phy *phy_dev = phy_get_drvdata(phy);
@@ -42,7 +40,7 @@ index 2d5c1adf0d0e..5ceafe4df253 100644
  
  	if (phy_dev->vbus)
  		return regulator_enable(phy_dev->vbus);
-@@ -514,6 +520,11 @@ static int stm32_usb2phy_phy_power_on(struct phy *phy)
+@@ -514,6 +520,11 @@ static int stm32_usb2phy_phy_power_on(st
  static int stm32_usb2phy_phy_power_off(struct phy *phy)
  {
  	struct stm32_usb2phy *phy_dev = phy_get_drvdata(phy);
@@ -54,7 +52,7 @@ index 2d5c1adf0d0e..5ceafe4df253 100644
  
  	if (phy_dev->vbus)
  		return regulator_disable(phy_dev->vbus);
-@@ -749,6 +760,11 @@ static int stm32_usb2phy_tuning(struct phy *phy)
+@@ -749,6 +760,11 @@ static int stm32_usb2phy_tuning(struct p
  	return 0;
  }
  
@@ -66,7 +64,7 @@ index 2d5c1adf0d0e..5ceafe4df253 100644
  static int stm32_usb2phy_probe(struct platform_device *pdev)
  {
  	struct stm32_usb2phy *phy_dev;
-@@ -756,6 +772,7 @@ static int stm32_usb2phy_probe(struct platform_device *pdev)
+@@ -756,6 +772,7 @@ static int stm32_usb2phy_probe(struct pl
  	struct device_node *np = dev->of_node;
  	struct phy_provider *phy_provider;
  	struct phy *phy;
@@ -74,7 +72,7 @@ index 2d5c1adf0d0e..5ceafe4df253 100644
  	int ret;
  	u32 phycr;
  
-@@ -796,6 +813,20 @@ static int stm32_usb2phy_probe(struct platform_device *pdev)
+@@ -796,6 +813,20 @@ static int stm32_usb2phy_probe(struct pl
  		phy_dev->vdda18 = NULL;
  	}
  
@@ -95,6 +93,3 @@ index 2d5c1adf0d0e..5ceafe4df253 100644
  	phy_dev->hw_data = stm32_usb2phy_get_hwdata(dev, phycr);
  	if (!phy_dev->hw_data) {
  		dev_err(dev, "can't get matching stm32mp2_usb2_of_data\n");
--- 
-2.50.1
-

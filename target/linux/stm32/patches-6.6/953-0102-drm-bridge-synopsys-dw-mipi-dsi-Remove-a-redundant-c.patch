@@ -29,11 +29,9 @@ Reviewed-by: Yannick FERTRE <yannick.fertre@foss.st.com>
  drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c | 5 -----
  1 file changed, 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
-index 0d7394bb2c77..4b4ce38af3b4 100644
 --- a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
 +++ b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
-@@ -1081,11 +1081,6 @@ static int dw_mipi_dsi_bridge_attach(struct drm_bridge *bridge,
+@@ -1081,11 +1081,6 @@ static int dw_mipi_dsi_bridge_attach(str
  {
  	struct dw_mipi_dsi *dsi = bridge_to_dsi(bridge);
  
@@ -45,6 +43,3 @@ index 0d7394bb2c77..4b4ce38af3b4 100644
  	/* Set the encoder type as caller does not know it */
  	bridge->encoder->encoder_type = DRM_MODE_ENCODER_DSI;
  
--- 
-2.50.1
-

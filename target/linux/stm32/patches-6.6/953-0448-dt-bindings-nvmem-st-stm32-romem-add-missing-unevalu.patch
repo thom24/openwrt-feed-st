@@ -27,8 +27,6 @@ Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
  Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
-index cda4b0d86032..8f5365544e98 100644
 --- a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
 +++ b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
 @@ -17,6 +17,7 @@ maintainers:
@@ -48,6 +46,3 @@ index cda4b0d86032..8f5365544e98 100644
  
      properties:
        st,non-secure-otp:
--- 
-2.50.1
-

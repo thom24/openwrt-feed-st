@@ -19,11 +19,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp135f-dk.dts | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index 237139234da1..c892fb226887 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -37,6 +37,7 @@ chosen {
+@@ -37,6 +37,7 @@
  		framebuffer {
  			compatible = "simple-framebuffer";
  			clocks = <&rcc LTDC_PX>;
@@ -31,6 +29,3 @@ index 237139234da1..c892fb226887 100644
  			status = "disabled";
  		};
  	};
--- 
-2.50.1
-

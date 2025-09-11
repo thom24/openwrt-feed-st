@@ -14,11 +14,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/panel/panel-himax-hx8394.c | 121 ++++++++++++---------
  1 file changed, 72 insertions(+), 49 deletions(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-himax-hx8394.c b/drivers/gpu/drm/panel/panel-himax-hx8394.c
-index 028cae3c56ca..2087b8a96338 100644
 --- a/drivers/gpu/drm/panel/panel-himax-hx8394.c
 +++ b/drivers/gpu/drm/panel/panel-himax-hx8394.c
-@@ -218,79 +218,102 @@ static const struct hx8394_panel_desc hsd060bhw4_desc = {
+@@ -218,79 +218,102 @@ static const struct hx8394_panel_desc hs
  	.init_sequence = hsd060bhw4_init_sequence,
  };
  
@@ -170,6 +168,3 @@ index 028cae3c56ca..2087b8a96338 100644
  
  	return 0;
  }
--- 
-2.50.1
-

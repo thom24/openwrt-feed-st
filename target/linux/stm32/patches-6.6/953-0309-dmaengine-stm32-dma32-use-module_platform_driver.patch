@@ -18,11 +18,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/dma/stm32/stm32-dma3.c | 7 +------
  1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
-index 2aa38427a190..e5a7f8378b78 100644
 --- a/drivers/dma/stm32/stm32-dma3.c
 +++ b/drivers/dma/stm32/stm32-dma3.c
-@@ -2421,12 +2421,7 @@ static struct platform_driver stm32_dma3_driver = {
+@@ -2421,12 +2421,7 @@ static struct platform_driver stm32_dma3
  	},
  };
  
@@ -36,6 +34,3 @@ index 2aa38427a190..e5a7f8378b78 100644
  
  MODULE_DESCRIPTION("STM32 DMA3 controller driver");
  MODULE_AUTHOR("Amelie Delaunay <amelie.delaunay@foss.st.com>");
--- 
-2.50.1
-

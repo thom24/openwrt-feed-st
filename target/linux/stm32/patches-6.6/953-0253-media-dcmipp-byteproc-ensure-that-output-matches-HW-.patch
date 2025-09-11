@@ -25,8 +25,6 @@ Tested-by: Hugues FRUCHET <hugues.fruchet@st.com>
  .../st/stm32/stm32-dcmipp/dcmipp-byteproc.c   | 117 +++++++++++++-----
  1 file changed, 89 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-index c830795ad495..4793b9cdfccf 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
 @@ -37,6 +37,8 @@
@@ -38,17 +36,18 @@ index c830795ad495..4793b9cdfccf 100644
  struct dcmipp_byteproc_pix_map {
  	unsigned int code;
  	unsigned int bpp;
-@@ -126,12 +128,42 @@ static const struct v4l2_rect crop_min = {
+@@ -126,12 +128,42 @@ static const struct v4l2_rect crop_min =
  	.left = 0,
  };
  
 -static void dcmipp_byteproc_adjust_crop(struct v4l2_rect *r,
 -					struct v4l2_rect *compose)
+-{
 +static void dcmipp_byteproc_adjust_crop(struct dcmipp_byteproc_device *byteproc,
 +					struct v4l2_rect *r,
 +					struct v4l2_rect *compose,
 +					unsigned int bytesperpixel)
- {
++{
 +	u32 alignment = 1;
 +
 +	/* The pipe outputs in words hence the line byte length needs to be multiple of 4 */
@@ -83,7 +82,7 @@ index c830795ad495..4793b9cdfccf 100644
  }
  
  static void dcmipp_byteproc_adjust_compose(struct v4l2_rect *r,
-@@ -173,14 +205,18 @@ static void dcmipp_byteproc_adjust_compose(struct v4l2_rect *r,
+@@ -173,14 +205,18 @@ static void dcmipp_byteproc_adjust_compo
  		r->width = fmt->width;
  }
  
@@ -104,7 +103,7 @@ index c830795ad495..4793b9cdfccf 100644
  
  	fmt->width = clamp_t(u32, fmt->width, DCMIPP_FRAME_MIN_WIDTH,
  			     DCMIPP_FRAME_MAX_WIDTH) & ~1;
-@@ -191,6 +227,14 @@ static void dcmipp_byteproc_adjust_fmt(struct v4l2_mbus_framefmt *fmt)
+@@ -191,6 +227,14 @@ static void dcmipp_byteproc_adjust_fmt(s
  		fmt->field = fmt_default.field;
  
  	dcmipp_colorimetry_clamp(fmt);
@@ -119,7 +118,7 @@ index c830795ad495..4793b9cdfccf 100644
  }
  
  static int dcmipp_byteproc_init_cfg(struct v4l2_subdev *sd,
-@@ -274,7 +318,7 @@ static int dcmipp_byteproc_set_fmt(struct v4l2_subdev *sd,
+@@ -274,7 +318,7 @@ static int dcmipp_byteproc_set_fmt(struc
  				   struct v4l2_subdev_format *fmt)
  {
  	struct dcmipp_byteproc_device *byteproc = v4l2_get_subdevdata(sd);
@@ -128,7 +127,7 @@ index c830795ad495..4793b9cdfccf 100644
  	struct v4l2_rect *crop, *compose;
  
  	if (byteproc->streaming)
-@@ -290,15 +334,19 @@ static int dcmipp_byteproc_set_fmt(struct v4l2_subdev *sd,
+@@ -290,15 +334,19 @@ static int dcmipp_byteproc_set_fmt(struc
  		fmt->format.width = crop->width;
  		fmt->format.height = crop->height;
  	} else {
@@ -156,7 +155,7 @@ index c830795ad495..4793b9cdfccf 100644
  	*mf = fmt->format;
  
  	return 0;
-@@ -362,6 +410,7 @@ static int dcmipp_byteproc_set_selection(struct v4l2_subdev *sd,
+@@ -362,6 +410,7 @@ static int dcmipp_byteproc_set_selection
  					 struct v4l2_subdev_selection *s)
  {
  	struct dcmipp_byteproc_device *byteproc = v4l2_get_subdevdata(sd);
@@ -164,7 +163,7 @@ index c830795ad495..4793b9cdfccf 100644
  	struct v4l2_mbus_framefmt *mf;
  	struct v4l2_rect *crop, *compose;
  
-@@ -385,10 +434,11 @@ static int dcmipp_byteproc_set_selection(struct v4l2_subdev *sd,
+@@ -385,10 +434,11 @@ static int dcmipp_byteproc_set_selection
  
  	switch (s->target) {
  	case V4L2_SEL_TGT_CROP:
@@ -178,7 +177,7 @@ index c830795ad495..4793b9cdfccf 100644
  		mf->width = s->r.width;
  		mf->height = s->r.height;
  
-@@ -399,9 +449,12 @@ static int dcmipp_byteproc_set_selection(struct v4l2_subdev *sd,
+@@ -399,9 +449,12 @@ static int dcmipp_byteproc_set_selection
  		mf = v4l2_subdev_state_get_format(sd_state, 0);
  		dcmipp_byteproc_adjust_compose(&s->r, mf);
  		*compose = s->r;
@@ -192,7 +191,7 @@ index c830795ad495..4793b9cdfccf 100644
  		mf->width = s->r.width;
  		mf->height = s->r.height;
  
-@@ -465,6 +518,7 @@ static int dcmipp_byteproc_configure_scale_crop
+@@ -465,6 +518,7 @@ static int dcmipp_byteproc_configure_sca
  	struct v4l2_mbus_framefmt *sink_fmt;
  	u32 hprediv, vprediv;
  	struct v4l2_rect *compose, *crop;
@@ -200,7 +199,7 @@ index c830795ad495..4793b9cdfccf 100644
  	u32 val = 0;
  
  	state = v4l2_subdev_lock_and_get_active_state(&byteproc->sd);
-@@ -521,18 +575,25 @@ static int dcmipp_byteproc_configure_scale_crop
+@@ -521,18 +575,25 @@ static int dcmipp_byteproc_configure_sca
  			hprediv, vprediv);
  	}
  
@@ -238,6 +237,3 @@ index c830795ad495..4793b9cdfccf 100644
  
  	return 0;
  }
--- 
-2.50.1
-

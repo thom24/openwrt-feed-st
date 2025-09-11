@@ -20,8 +20,6 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  Documentation/devicetree/bindings/serial/st,stm32-uart.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml b/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
-index f15535998d83..fd098fbb1b68 100644
 --- a/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
 +++ b/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
 @@ -23,6 +23,7 @@ properties:
@@ -32,6 +30,3 @@ index f15535998d83..fd098fbb1b68 100644
      maxItems: 2
  
    resets:
--- 
-2.50.1
-

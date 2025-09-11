@@ -17,8 +17,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/irqchip/irq-stm32mp-exti.c | 62 ------------------------------
  1 file changed, 62 deletions(-)
 
-diff --git a/drivers/irqchip/irq-stm32mp-exti.c b/drivers/irqchip/irq-stm32mp-exti.c
-index aa20d754138f..f54fe6b41e4c 100644
 --- a/drivers/irqchip/irq-stm32mp-exti.c
 +++ b/drivers/irqchip/irq-stm32mp-exti.c
 @@ -19,7 +19,6 @@
@@ -29,7 +27,7 @@ index aa20d754138f..f54fe6b41e4c 100644
  #include <linux/pm_runtime.h>
  
  #include <dt-bindings/interrupt-controller/arm-gic.h>
-@@ -840,63 +839,6 @@ static void stm32mp_exti_check_rif(struct stm32mp_exti_host_data *host_data)
+@@ -840,63 +839,6 @@ static void stm32mp_exti_check_rif(struc
  	}
  }
  
@@ -93,7 +91,7 @@ index aa20d754138f..f54fe6b41e4c 100644
  static void stm32mp_exti_remove_irq(void *data)
  {
  	struct irq_domain *domain = data;
-@@ -1032,10 +974,6 @@ static int stm32mp_exti_probe(struct platform_device *pdev)
+@@ -1032,10 +974,6 @@ static int stm32mp_exti_probe(struct pla
  			return ret;
  	}
  
@@ -104,6 +102,3 @@ index aa20d754138f..f54fe6b41e4c 100644
  	devm_pm_runtime_enable(dev);
  
  	return 0;
--- 
-2.50.1
-

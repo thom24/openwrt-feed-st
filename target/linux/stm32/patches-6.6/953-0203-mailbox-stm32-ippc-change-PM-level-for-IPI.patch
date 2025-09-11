@@ -16,11 +16,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/mailbox/stm32-ipcc.c | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/mailbox/stm32-ipcc.c b/drivers/mailbox/stm32-ipcc.c
-index b437da4d7627..611ca914e24e 100644
 --- a/drivers/mailbox/stm32-ipcc.c
 +++ b/drivers/mailbox/stm32-ipcc.c
-@@ -515,8 +515,9 @@ static int stm32_ipcc_resume(struct device *dev)
+@@ -515,8 +515,9 @@ static int stm32_ipcc_resume(struct devi
  }
  #endif
  
@@ -32,6 +30,3 @@ index b437da4d7627..611ca914e24e 100644
  
  static const struct of_device_id stm32_ipcc_of_match[] = {
  	{ .compatible = "st,stm32mp1-ipcc" },
--- 
-2.50.1
-

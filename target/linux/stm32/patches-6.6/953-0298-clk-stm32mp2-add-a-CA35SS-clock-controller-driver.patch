@@ -20,8 +20,6 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  3 files changed, 264 insertions(+)
  create mode 100644 drivers/clk/stm32/clk-stm32mp2-ca35ss.c
 
-diff --git a/drivers/clk/stm32/Kconfig b/drivers/clk/stm32/Kconfig
-index 35fca3b08199..650a33518a90 100644
 --- a/drivers/clk/stm32/Kconfig
 +++ b/drivers/clk/stm32/Kconfig
 @@ -43,3 +43,11 @@ config COMMON_CLK_STM32MP257
@@ -36,20 +34,15 @@ index 35fca3b08199..650a33518a90 100644
 +      clock controller in STM32MP2 family provided by secure monitor
 +      (TF-A BL31). This driver uses SMC calls to scale the frequency.
 +      This driver can also be built as a module.
-diff --git a/drivers/clk/stm32/Makefile b/drivers/clk/stm32/Makefile
-index 950e9a2ef58d..3cdff80af616 100644
 --- a/drivers/clk/stm32/Makefile
 +++ b/drivers/clk/stm32/Makefile
-@@ -3,3 +3,5 @@ obj-$(CONFIG_COMMON_CLK_STM32MP157)	+= clk-stm32mp1.o reset-stm32.o
+@@ -3,3 +3,5 @@ obj-$(CONFIG_COMMON_CLK_STM32MP157)	+= c
  obj-$(CONFIG_COMMON_CLK_STM32MP215)	+= clk-stm32mp21.o clk-stm32-core.o reset-stm32.o
  obj-$(CONFIG_COMMON_CLK_STM32MP257)	+= clk-stm32mp25.o clk-stm32-core.o reset-stm32.o
  obj-$(CONFIG_COMMON_CLK_STM32MP257)	+= clk-stm32mp25-syscfg.o
 +
 +obj-${CONFIG_CLK_STM32MP2_CA35SS} += clk-stm32mp2-ca35ss.o
 \ No newline at end of file
-diff --git a/drivers/clk/stm32/clk-stm32mp2-ca35ss.c b/drivers/clk/stm32/clk-stm32mp2-ca35ss.c
-new file mode 100644
-index 000000000000..89b8fd51a865
 --- /dev/null
 +++ b/drivers/clk/stm32/clk-stm32mp2-ca35ss.c
 @@ -0,0 +1,254 @@
@@ -307,6 +300,3 @@ index 000000000000..89b8fd51a865
 +MODULE_DEVICE_TABLE(of, clk_stm32mp2_ca35ss_of_match);
 +MODULE_AUTHOR("Theo GOUREAU <theo.goureau@foss.st.com>");
 +MODULE_LICENSE("GPL");
--- 
-2.50.1
-

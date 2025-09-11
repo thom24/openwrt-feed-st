@@ -20,11 +20,9 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp251.dtsi | 18 +++++++++---------
  3 files changed, 27 insertions(+), 27 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index 2d7c2ff0a1ab..aebb608f31ba 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -36,8 +36,8 @@ CPU_PWRDN: cpu-power-down {
+@@ -36,8 +36,8 @@
  				compatible = "arm,idle-state";
  				arm,psci-suspend-param = <0x00000001>;
  				local-timer-stop;
@@ -35,7 +33,7 @@ index 2d7c2ff0a1ab..aebb608f31ba 100644
  				min-residency-us = <1000>;
  			};
  		};
-@@ -46,25 +46,25 @@ domain-idle-states {
+@@ -46,25 +46,25 @@
  			STOP1: domain-stop1 {
  				compatible = "domain-idle-state";
  				arm,psci-suspend-param = <0x00000011>;
@@ -68,11 +66,9 @@ index 2d7c2ff0a1ab..aebb608f31ba 100644
  			};
  		};
  	};
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index 5a4355cda3b8..9613f1606e5e 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -37,8 +37,8 @@ CPU_PWRDN: cpu-power-down {
+@@ -37,8 +37,8 @@
  				compatible = "arm,idle-state";
  				arm,psci-suspend-param = <0x00000001>;
  				local-timer-stop;
@@ -83,7 +79,7 @@ index 5a4355cda3b8..9613f1606e5e 100644
  				min-residency-us = <1000>;
  			};
  		};
-@@ -47,25 +47,25 @@ domain-idle-states {
+@@ -47,25 +47,25 @@
  			STOP1: domain-stop1 {
  				compatible = "domain-idle-state";
  				arm,psci-suspend-param = <0x00000011>;
@@ -116,11 +112,9 @@ index 5a4355cda3b8..9613f1606e5e 100644
  			};
  		};
  	};
-diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index a5029a182cfd..c694e2c5dabc 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -37,8 +37,8 @@ CPU_PWRDN: cpu-power-down {
+@@ -37,8 +37,8 @@
  				compatible = "arm,idle-state";
  				arm,psci-suspend-param = <0x00000001>;
  				local-timer-stop;
@@ -131,7 +125,7 @@ index a5029a182cfd..c694e2c5dabc 100644
  				min-residency-us = <1000>;
  			};
  		};
-@@ -47,25 +47,25 @@ domain-idle-states {
+@@ -47,25 +47,25 @@
  			STOP1: domain-stop1 {
  				compatible = "domain-idle-state";
  				arm,psci-suspend-param = <0x00000011>;
@@ -164,6 +158,3 @@ index a5029a182cfd..c694e2c5dabc 100644
  			};
  		};
  	};
--- 
-2.50.1
-

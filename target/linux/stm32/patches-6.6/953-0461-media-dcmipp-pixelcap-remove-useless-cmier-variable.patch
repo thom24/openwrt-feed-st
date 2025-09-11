@@ -22,8 +22,6 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  .../platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c      | 8 +++-----
  1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
-index b0ce4c9ea69d..876c069580f4 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcap.c
 @@ -184,7 +184,6 @@ struct dcmipp_pixelcap_device {
@@ -34,7 +32,7 @@ index b0ce4c9ea69d..876c069580f4 100644
  	u32 cmsr2;
  
  	struct {
-@@ -595,9 +594,8 @@ static int dcmipp_pixelcap_start_streaming(struct vb2_queue *vq,
+@@ -595,9 +594,8 @@ static int dcmipp_pixelcap_start_streami
  	dcmipp_start_capture(vcap, vcap->next);
  
  	/* Enable interruptions */
@@ -45,7 +43,7 @@ index b0ce4c9ea69d..876c069580f4 100644
  	spin_unlock(&vcap->vdev.v4l2_dev->lock);
  
  	vcap->state = DCMIPP_RUNNING;
-@@ -638,7 +636,7 @@ static void dcmipp_pixelcap_stop_streaming(struct vb2_queue *vq)
+@@ -638,7 +636,7 @@ static void dcmipp_pixelcap_stop_streami
  
  	/* Disable interruptions */
  	spin_lock(&vcap->vdev.v4l2_dev->lock);
@@ -54,7 +52,7 @@ index b0ce4c9ea69d..876c069580f4 100644
  	spin_unlock(&vcap->vdev.v4l2_dev->lock);
  
  	/* Stop capture */
-@@ -967,7 +965,7 @@ static irqreturn_t dcmipp_pixelcap_irq_callback(int irq, void *arg)
+@@ -967,7 +965,7 @@ static irqreturn_t dcmipp_pixelcap_irq_c
  			container_of(arg, struct dcmipp_pixelcap_device, ved);
  	struct dcmipp_ent_device *ved = arg;
  
@@ -63,6 +61,3 @@ index b0ce4c9ea69d..876c069580f4 100644
  	if (!vcap->cmsr2)
  		return IRQ_HANDLED;
  
--- 
-2.50.1
-

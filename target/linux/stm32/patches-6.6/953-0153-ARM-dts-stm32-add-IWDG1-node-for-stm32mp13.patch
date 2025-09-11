@@ -19,11 +19,9 @@ Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
  arch/arm/boot/dts/st/stm32mp131.dtsi | 9 +++++++++
  1 file changed, 9 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index 2094a4553583..ca1de15e5974 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -1148,6 +1148,15 @@ ddrperfm: perf@5a007000 {
+@@ -1148,6 +1148,15 @@
  			status = "disabled";
  		};
  
@@ -39,6 +37,3 @@ index 2094a4553583..ca1de15e5974 100644
  		rtc: rtc@5c004000 {
  			compatible = "st,stm32mp1-rtc";
  			reg = <0x5c004000 0x400>;
--- 
-2.50.1
-

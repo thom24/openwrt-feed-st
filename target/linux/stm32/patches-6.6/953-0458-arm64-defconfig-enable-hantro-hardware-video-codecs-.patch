@@ -17,8 +17,6 @@ Domain-Review: Hugues FRUCHET <hugues.fruchet@st.com>
  arch/arm64/configs/fragment-02-defconfig-addons.config | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/configs/fragment-02-defconfig-addons.config b/arch/arm64/configs/fragment-02-defconfig-addons.config
-index 0c98441954e3..76fd2362534d 100644
 --- a/arch/arm64/configs/fragment-02-defconfig-addons.config
 +++ b/arch/arm64/configs/fragment-02-defconfig-addons.config
 @@ -133,6 +133,7 @@ CONFIG_USB_HIDDEV=y
@@ -29,6 +27,3 @@ index 0c98441954e3..76fd2362534d 100644
  CONFIG_VIDEO_IMX335=m
  CONFIG_VIDEO_STM32_CSI=m
  CONFIG_VIDEO_STM32_DCMI=m
--- 
-2.50.1
-

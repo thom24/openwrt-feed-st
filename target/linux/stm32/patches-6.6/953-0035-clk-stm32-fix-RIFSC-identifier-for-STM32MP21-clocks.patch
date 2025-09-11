@@ -17,11 +17,9 @@ Domain-Review: Thomas BOURGOIN <thomas.bourgoin@foss.st.com>
  drivers/clk/stm32/clk-stm32mp21.c | 16 ++++++++--------
  1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/clk/stm32/clk-stm32mp21.c b/drivers/clk/stm32/clk-stm32mp21.c
-index d2fd5d389c79..f672ce2eb8d0 100644
 --- a/drivers/clk/stm32/clk-stm32mp21.c
 +++ b/drivers/clk/stm32/clk-stm32mp21.c
-@@ -1472,7 +1472,7 @@ static const struct clock_config stm32mp21_clock_cfg[] = {
+@@ -1472,7 +1472,7 @@ static const struct clock_config stm32mp
  	STM32_GATE_CFG(CK_BUS_SDMMC3, ck_icn_m_sdmmc3, SEC_RIFSC(78)),
  	STM32_GATE_CFG(CK_BUS_USBHOHCI, ck_icn_m_usbhohci, SEC_RIFSC(63)),
  	STM32_GATE_CFG(CK_BUS_USBHEHCI, ck_icn_m_usbhehci, SEC_RIFSC(63)),
@@ -30,7 +28,7 @@ index d2fd5d389c79..f672ce2eb8d0 100644
  	STM32_GATE_CFG(CK_BUS_TIM2, ck_icn_p_tim2, SEC_RIFSC(1)),
  	STM32_GATE_CFG(CK_BUS_TIM3, ck_icn_p_tim3, SEC_RIFSC(2)),
  	STM32_GATE_CFG(CK_BUS_TIM4, ck_icn_p_tim4, SEC_RIFSC(3)),
-@@ -1516,18 +1516,18 @@ static const struct clock_config stm32mp21_clock_cfg[] = {
+@@ -1516,18 +1516,18 @@ static const struct clock_config stm32mp
  	STM32_GATE_CFG(CK_BUS_SPI4, ck_icn_p_spi4, SEC_RIFSC(25)),
  	STM32_GATE_CFG(CK_BUS_SPI5, ck_icn_p_spi5, SEC_RIFSC(26)),
  	STM32_GATE_CFG(CK_BUS_SPI6, ck_icn_p_spi6, SEC_RIFSC(27)),
@@ -55,7 +53,7 @@ index d2fd5d389c79..f672ce2eb8d0 100644
  	STM32_GATE_CFG(CK_BUS_DDRPERFM, ck_icn_p_ddrperfm, SEC_RIFSC(67)),
  	STM32_GATE_CFG(CK_KER_TIM2, ck_ker_tim2, SEC_RIFSC(1)),
  	STM32_GATE_CFG(CK_KER_TIM3, ck_ker_tim3, SEC_RIFSC(2)),
-@@ -1600,7 +1600,7 @@ static const struct clock_config stm32mp21_clock_cfg[] = {
+@@ -1600,7 +1600,7 @@ static const struct clock_config stm32mp
  	STM32_COMPOSITE_CFG(CK_KER_ADC1, ck_ker_adc1, SEC_RIFSC(58)),
  	STM32_COMPOSITE_CFG(CK_KER_ADC2, ck_ker_adc2, SEC_RIFSC(59)),
  	STM32_COMPOSITE_CFG(CK_KER_USB2PHY1, ck_ker_usb2phy1, SEC_RIFSC(63)),
@@ -64,6 +62,3 @@ index d2fd5d389c79..f672ce2eb8d0 100644
  	STM32_COMPOSITE_CFG(CK_KER_DTS, ck_ker_dts, SEC_RIFSC(107)),
  	STM32_GATE_CFG(CK_KER_LTDC, ck_ker_ltdc, SEC_RIFSC(80)),
  };
--- 
-2.50.1
-

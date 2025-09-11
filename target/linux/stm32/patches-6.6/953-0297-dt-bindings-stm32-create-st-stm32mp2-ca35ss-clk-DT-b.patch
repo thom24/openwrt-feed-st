@@ -15,9 +15,6 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  1 file changed, 36 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/clock/st,stm32mp2-ca35ss-clk.yaml
 
-diff --git a/Documentation/devicetree/bindings/clock/st,stm32mp2-ca35ss-clk.yaml b/Documentation/devicetree/bindings/clock/st,stm32mp2-ca35ss-clk.yaml
-new file mode 100644
-index 000000000000..c95fad803b8b
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/clock/st,stm32mp2-ca35ss-clk.yaml
 @@ -0,0 +1,36 @@
@@ -57,6 +54,3 @@ index 000000000000..c95fad803b8b
 +        #clock-cells = <0>;
 +      };
 +...
--- 
-2.50.1
-

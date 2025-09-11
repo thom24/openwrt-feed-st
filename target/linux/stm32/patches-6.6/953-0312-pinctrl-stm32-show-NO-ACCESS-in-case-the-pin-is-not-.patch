@@ -18,11 +18,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/pinctrl/stm32/pinctrl-stm32.c | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
-index 3302e125adfe..b4eccd00744f 100644
 --- a/drivers/pinctrl/stm32/pinctrl-stm32.c
 +++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
-@@ -1608,8 +1608,10 @@ static void stm32_pconf_dbg_show(struct pinctrl_dev *pctldev,
+@@ -1608,8 +1608,10 @@ static void stm32_pconf_dbg_show(struct
  	bool val;
  
  	range = pinctrl_find_gpio_range_from_pin_nolock(pctldev, pin);
@@ -34,6 +32,3 @@ index 3302e125adfe..b4eccd00744f 100644
  
  	bank = gpiochip_get_data(range->gc);
  	offset = stm32_gpio_pin(pin);
--- 
-2.50.1
-

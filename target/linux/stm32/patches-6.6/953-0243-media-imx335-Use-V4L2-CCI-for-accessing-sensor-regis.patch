@@ -28,8 +28,6 @@ Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
  drivers/media/i2c/imx335.c | 596 +++++++++++++++++--------------------
  2 files changed, 267 insertions(+), 330 deletions(-)
 
-diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index 03dd3e0ab166..48523b48a235 100644
 --- a/drivers/media/i2c/Kconfig
 +++ b/drivers/media/i2c/Kconfig
 @@ -175,6 +175,7 @@ config VIDEO_IMX334
@@ -40,8 +38,6 @@ index 03dd3e0ab166..48523b48a235 100644
  	help
  	  This is a Video4Linux2 sensor driver for the Sony
  	  IMX335 camera.
-diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
-index fa806effd44d..9c8f9b229d4b 100644
 --- a/drivers/media/i2c/imx335.c
 +++ b/drivers/media/i2c/imx335.c
 @@ -11,62 +11,108 @@
@@ -114,16 +110,16 @@ index fa806effd44d..9c8f9b229d4b 100644
 +#define IMX335_AGAIN_MAX		240
 +#define IMX335_AGAIN_STEP		1
 +#define IMX335_AGAIN_DEFAULT		0
- 
--/* Group hold register */
--#define IMX335_REG_HOLD		0x3001
++
 +#define IMX335_REG_TPG_TESTCLKEN	CCI_REG8(0x3148)
 +
 +#define IMX335_REG_INCLKSEL1		CCI_REG16_LE(0x314c)
 +#define IMX335_REG_INCLKSEL2		CCI_REG8(0x315a)
 +#define IMX335_REG_INCLKSEL3		CCI_REG8(0x3168)
 +#define IMX335_REG_INCLKSEL4		CCI_REG8(0x316a)
-+
+ 
+-/* Group hold register */
+-#define IMX335_REG_HOLD		0x3001
 +#define IMX335_REG_MDBIT		CCI_REG8(0x319d)
 +#define IMX335_REG_SYSMODE		CCI_REG8(0x319e)
 +
@@ -201,11 +197,10 @@ index fa806effd44d..9c8f9b229d4b 100644
  /* IMX335 native and active pixel array size. */
  #define IMX335_NATIVE_WIDTH		2616U
  #define IMX335_NATIVE_HEIGHT		1964U
-@@ -85,16 +128,6 @@
- #define IMX335_PIXEL_ARRAY_WIDTH	2592U
+@@ -86,23 +129,13 @@
  #define IMX335_PIXEL_ARRAY_HEIGHT	1944U
  
--/**
+ /**
 - * struct imx335_reg - imx335 sensor register
 - * @address: Register address
 - * @val: Register value
@@ -215,10 +210,10 @@ index fa806effd44d..9c8f9b229d4b 100644
 -	u8 val;
 -};
 -
- /**
+-/**
   * struct imx335_reg_list - imx335 sensor register list
   * @num_of_regs: Number of registers in the list
-@@ -102,7 +135,7 @@ struct imx335_reg {
+  * @regs: Pointer to register list
   */
  struct imx335_reg_list {
  	u32 num_of_regs;
@@ -498,11 +493,10 @@ index fa806effd44d..9c8f9b229d4b 100644
  };
  
  static const s64 link_freq[] = {
-@@ -403,101 +433,6 @@ static inline struct imx335 *to_imx335(struct v4l2_subdev *subdev)
- 	return container_of(subdev, struct imx335, sd);
+@@ -404,101 +434,6 @@ static inline struct imx335 *to_imx335(s
  }
  
--/**
+ /**
 - * imx335_read_reg() - Read registers.
 - * @imx335: pointer to imx335 device
 - * @reg: register address
@@ -597,10 +591,11 @@ index fa806effd44d..9c8f9b229d4b 100644
 -	return 0;
 -}
 -
- /**
+-/**
   * imx335_update_controls() - Update control ranges based on streaming mode
   * @imx335: pointer to imx335 device
-@@ -534,7 +469,8 @@ static int imx335_update_controls(struct imx335 *imx335,
+  * @mode: pointer to imx335_mode sensor mode
+@@ -534,7 +469,8 @@ static int imx335_update_controls(struct
  static int imx335_update_exp_gain(struct imx335 *imx335, u32 exposure, u32 gain)
  {
  	u32 lpfr, shutter;
@@ -610,7 +605,7 @@ index fa806effd44d..9c8f9b229d4b 100644
  
  	lpfr = imx335->vblank + imx335->cur_mode->height;
  	shutter = lpfr - exposure;
-@@ -542,64 +478,55 @@ static int imx335_update_exp_gain(struct imx335 *imx335, u32 exposure, u32 gain)
+@@ -542,64 +478,55 @@ static int imx335_update_exp_gain(struct
  	dev_dbg(imx335->dev, "Set exp %u, analog gain %u, shutter %u, lpfr %u\n",
  		exposure, gain, shutter, lpfr);
  
@@ -707,7 +702,7 @@ index fa806effd44d..9c8f9b229d4b 100644
  	}
  
  	return ret;
-@@ -898,12 +825,14 @@ static int imx335_set_framefmt(struct imx335 *imx335)
+@@ -898,12 +825,14 @@ static int imx335_set_framefmt(struct im
  {
  	switch (imx335->cur_mbus_code) {
  	case MEDIA_BUS_FMT_SRGGB10_1X10:
@@ -726,7 +721,7 @@ index fa806effd44d..9c8f9b229d4b 100644
  	}
  
  	return -EINVAL;
-@@ -922,7 +851,8 @@ static int imx335_start_streaming(struct imx335 *imx335)
+@@ -922,7 +851,8 @@ static int imx335_start_streaming(struct
  
  	/* Setup PLL */
  	reg_list = &link_freq_reglist[__ffs(imx335->link_freq_bitmap)];
@@ -736,7 +731,7 @@ index fa806effd44d..9c8f9b229d4b 100644
  	if (ret) {
  		dev_err(imx335->dev, "%s failed to set plls\n", __func__);
  		return ret;
-@@ -930,8 +860,8 @@ static int imx335_start_streaming(struct imx335 *imx335)
+@@ -930,8 +860,8 @@ static int imx335_start_streaming(struct
  
  	/* Write sensor mode registers */
  	reg_list = &imx335->cur_mode->reg_list;
@@ -747,7 +742,7 @@ index fa806effd44d..9c8f9b229d4b 100644
  	if (ret) {
  		dev_err(imx335->dev, "fail to write initial registers\n");
  		return ret;
-@@ -945,7 +875,8 @@ static int imx335_start_streaming(struct imx335 *imx335)
+@@ -945,7 +875,8 @@ static int imx335_start_streaming(struct
  	}
  
  	/* Configure lanes */
@@ -757,7 +752,7 @@ index fa806effd44d..9c8f9b229d4b 100644
  	if (ret)
  		return ret;
  
-@@ -957,8 +888,8 @@ static int imx335_start_streaming(struct imx335 *imx335)
+@@ -957,8 +888,8 @@ static int imx335_start_streaming(struct
  	}
  
  	/* Start streaming */
@@ -768,7 +763,7 @@ index fa806effd44d..9c8f9b229d4b 100644
  	if (ret) {
  		dev_err(imx335->dev, "fail to start streaming\n");
  		return ret;
-@@ -978,8 +909,8 @@ static int imx335_start_streaming(struct imx335 *imx335)
+@@ -978,8 +909,8 @@ static int imx335_start_streaming(struct
   */
  static int imx335_stop_streaming(struct imx335 *imx335)
  {
@@ -779,7 +774,7 @@ index fa806effd44d..9c8f9b229d4b 100644
  }
  
  /**
-@@ -1030,14 +961,14 @@ static int imx335_set_stream(struct v4l2_subdev *sd, int enable)
+@@ -1030,14 +961,14 @@ error_unlock:
  static int imx335_detect(struct imx335 *imx335)
  {
  	int ret;
@@ -797,7 +792,7 @@ index fa806effd44d..9c8f9b229d4b 100644
  			IMX335_ID, val);
  		return -ENXIO;
  	}
-@@ -1347,6 +1278,11 @@ static int imx335_probe(struct i2c_client *client)
+@@ -1346,6 +1277,11 @@ static int imx335_probe(struct i2c_clien
  		return -ENOMEM;
  
  	imx335->dev = &client->dev;
@@ -809,6 +804,3 @@ index fa806effd44d..9c8f9b229d4b 100644
  
  	/* Initialize subdev */
  	v4l2_i2c_subdev_init(&imx335->sd, client, &imx335_subdev_ops);
--- 
-2.50.1
-

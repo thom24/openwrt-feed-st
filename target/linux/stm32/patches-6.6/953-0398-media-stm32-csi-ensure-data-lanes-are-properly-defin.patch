@@ -18,11 +18,9 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  drivers/media/platform/st/stm32/stm32-csi.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-csi.c b/drivers/media/platform/st/stm32/stm32-csi.c
-index 7e11dd272f62..75f76ec36d73 100644
 --- a/drivers/media/platform/st/stm32/stm32-csi.c
 +++ b/drivers/media/platform/st/stm32/stm32-csi.c
-@@ -968,7 +968,7 @@ static int stm32_csi_parse_dt(struct stm32_csi_dev *csi2priv)
+@@ -968,7 +968,7 @@ static int stm32_csi_parse_dt(struct stm
  	}
  
  	csi2priv->num_lanes = v4l2_ep.bus.mipi_csi2.num_data_lanes;
@@ -31,6 +29,3 @@ index 7e11dd272f62..75f76ec36d73 100644
  		dev_err(csi2priv->dev, "Unsupported number of data-lanes: %d\n",
  			csi2priv->num_lanes);
  		return -EINVAL;
--- 
-2.50.1
-

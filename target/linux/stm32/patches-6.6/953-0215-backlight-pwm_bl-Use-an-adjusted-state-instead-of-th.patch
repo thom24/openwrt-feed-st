@@ -32,11 +32,9 @@ Reviewed-by: Yannick FERTRE <yannick.fertre@foss.st.com>
  drivers/video/backlight/pwm_bl.c | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/video/backlight/pwm_bl.c b/drivers/video/backlight/pwm_bl.c
-index 35c716e9043c..d6466913cb49 100644
 --- a/drivers/video/backlight/pwm_bl.c
 +++ b/drivers/video/backlight/pwm_bl.c
-@@ -528,10 +528,9 @@ static int pwm_backlight_probe(struct platform_device *pdev)
+@@ -528,10 +528,9 @@ static int pwm_backlight_probe(struct pl
  	if (!state.period && (data->pwm_period_ns > 0))
  		state.period = data->pwm_period_ns;
  
@@ -49,6 +47,3 @@ index 35c716e9043c..d6466913cb49 100644
  		goto err_alloc;
  	}
  
--- 
-2.50.1
-

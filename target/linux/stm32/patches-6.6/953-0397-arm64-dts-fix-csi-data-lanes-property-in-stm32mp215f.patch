@@ -20,11 +20,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-index 5c0de44e1ecb..9ae18794d060 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-@@ -256,7 +256,7 @@ port@0 {
+@@ -256,7 +256,7 @@
  			reg = <0>;
  			csi_sink: endpoint {
  				remote-endpoint = <&imx335_ep>;
@@ -33,6 +31,3 @@ index 5c0de44e1ecb..9ae18794d060 100644
  				bus-type = <4>;
  			};
  		};
--- 
-2.50.1
-

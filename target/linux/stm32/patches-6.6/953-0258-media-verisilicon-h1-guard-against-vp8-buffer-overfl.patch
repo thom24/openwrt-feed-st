@@ -19,11 +19,9 @@ Tested-by: Hugues FRUCHET <hugues.fruchet@st.com>
  .../platform/verisilicon/hantro_h1_vp8_enc.c   | 18 ++++++++++++++++++
  1 file changed, 18 insertions(+)
 
-diff --git a/drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c b/drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c
-index 6c7fd12ca750..622689f9c00a 100644
 --- a/drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c
 +++ b/drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c
-@@ -1468,6 +1468,7 @@ void hantro_h1_vp8_enc_done(struct hantro_ctx *ctx)
+@@ -1468,6 +1468,7 @@ void hantro_h1_vp8_enc_done(struct hantr
  	int part1_sz = ctx->vp8_enc.boolenc.bytes_written + ctrl_buf->hw_hdr_size;
  	void *dst = ctx->vp8_enc.frame_tag;
  	int old_g = ctx->vp8_enc.golden_ref, old_a = ctx->vp8_enc.alt_ref;
@@ -31,7 +29,7 @@ index 6c7fd12ca750..622689f9c00a 100644
  	int i;
  
  	ctx->vp8_enc.frame_tag->tag[0] |= ((part1_sz << 5) & 0xff);
-@@ -1475,6 +1476,23 @@ void hantro_h1_vp8_enc_done(struct hantro_ctx *ctx)
+@@ -1475,6 +1476,23 @@ void hantro_h1_vp8_enc_done(struct hantr
  	ctx->vp8_enc.frame_tag->tag[2] = ((part1_sz << 5) >> 16) & 0xff;
  
  	dst_buf = hantro_get_dst_buf(ctx);
@@ -55,6 +53,3 @@ index 6c7fd12ca750..622689f9c00a 100644
  
  	/* assemble dst frame */
  	vb2_set_plane_payload(&dst_buf->vb2_buf, 0,
--- 
-2.50.1
-

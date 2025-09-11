@@ -20,11 +20,9 @@ Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
  drivers/net/phy/realtek/realtek_main.c | 12 +++++++-----
  1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/phy/realtek/realtek_main.c b/drivers/net/phy/realtek/realtek_main.c
-index 5edef94ee623e..321afa0746a54 100644
 --- a/drivers/net/phy/realtek/realtek_main.c
 +++ b/drivers/net/phy/realtek/realtek_main.c
-@@ -593,13 +593,15 @@ static int rtl8211f_config_init(struct phy_device *phydev)
+@@ -598,13 +598,15 @@ static int rtl8211f_config_init(struct p
  	}
  
  	if (of_property_read_bool(dev->of_node, "realtek,eee-disable")) {
@@ -45,6 +43,3 @@ index 5edef94ee623e..321afa0746a54 100644
  	}
  
  	/* Disable PHY-mode EEE so LPI is passed to the MAC */
--- 
-2.51.0
-

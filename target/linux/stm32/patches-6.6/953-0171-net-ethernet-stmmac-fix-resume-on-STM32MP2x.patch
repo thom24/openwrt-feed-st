@@ -25,11 +25,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
-index 9bbb46ef8bfa..2436c9d0f919 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
-@@ -727,6 +727,7 @@ static struct stm32_ops stm32mp25_dwmac_data = {
+@@ -727,6 +727,7 @@ static struct stm32_ops stm32mp25_dwmac_
  	.suspend = stm32mp1_suspend,
  	.resume = stm32mp1_resume,
  	.parse_data = stm32mp1_parse_data,
@@ -37,6 +35,3 @@ index 9bbb46ef8bfa..2436c9d0f919 100644
  	.syscfg_eth_mask = SYSCFG_MP2_ETH_MASK
  };
  
--- 
-2.50.1
-

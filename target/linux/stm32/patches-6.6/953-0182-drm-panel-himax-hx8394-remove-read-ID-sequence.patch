@@ -14,11 +14,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/panel/panel-himax-hx8394.c | 20 --------------------
  1 file changed, 20 deletions(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-himax-hx8394.c b/drivers/gpu/drm/panel/panel-himax-hx8394.c
-index 689a652c1b9d..028cae3c56ca 100644
 --- a/drivers/gpu/drm/panel/panel-himax-hx8394.c
 +++ b/drivers/gpu/drm/panel/panel-himax-hx8394.c
-@@ -221,8 +221,6 @@ static const struct hx8394_panel_desc hsd060bhw4_desc = {
+@@ -221,8 +221,6 @@ static const struct hx8394_panel_desc hs
  static int rocktech_rk055mhd042a0_init_sequence(struct hx8394 *ctx)
  {
  	struct mipi_dsi_device *dsi = to_mipi_dsi_device(ctx->dev);
@@ -27,7 +25,7 @@ index 689a652c1b9d..028cae3c56ca 100644
  
  	mipi_dsi_dcs_write_seq(dsi, HX8394_CMD_SETEXTC,
  			       0xFF, 0x83, 0x94);
-@@ -294,24 +292,6 @@ static int rocktech_rk055mhd042a0_init_sequence(struct hx8394 *ctx)
+@@ -294,24 +292,6 @@ static int rocktech_rk055mhd042a0_init_s
  
  	mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_ADDRESS_MODE, FH);
  
@@ -52,6 +50,3 @@ index 689a652c1b9d..028cae3c56ca 100644
  	return 0;
  }
  
--- 
-2.50.1
-

@@ -22,11 +22,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm/boot/dts/st/stm32mp135f-dk.dts | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index c353b7882745..fb0f354ace53 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -454,23 +454,23 @@ scmi_vddcore: regulator@9 {
+@@ -454,23 +454,23 @@
  		reg = <VOLTD_SCMI_STPMIC1_BUCK4>;
  		regulator-name = "vddcore";
  	};
@@ -55,6 +53,3 @@ index c353b7882745..fb0f354ace53 100644
  		reg = <VOLTD_SCMI_STPMIC1_PWR_SW2>;
  		regulator-name = "v3v3_sw";
  	};
--- 
-2.50.1
-

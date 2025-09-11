@@ -32,11 +32,9 @@ Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
  arch/arm/mm/ioremap.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/mm/ioremap.c b/arch/arm/mm/ioremap.c
-index 1c5aeba9bc27..cd9ef5b6a70f 100644
 --- a/arch/arm/mm/ioremap.c
 +++ b/arch/arm/mm/ioremap.c
-@@ -141,7 +141,7 @@ void __check_vmalloc_seq(struct mm_struct *mm)
+@@ -141,7 +141,7 @@ void __check_vmalloc_seq(struct mm_struc
  	int seq;
  
  	do {
@@ -45,6 +43,3 @@ index 1c5aeba9bc27..cd9ef5b6a70f 100644
  		memcpy_pgd(mm, VMALLOC_START, VMALLOC_END);
  		if (IS_ENABLED(CONFIG_KASAN_VMALLOC)) {
  			unsigned long start =
--- 
-2.50.1
-
