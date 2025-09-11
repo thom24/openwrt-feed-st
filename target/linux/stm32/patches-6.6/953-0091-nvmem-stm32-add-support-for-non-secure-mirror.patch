@@ -18,18 +18,18 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  1 file changed, 54 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/nvmem/stm32-romem.c b/drivers/nvmem/stm32-romem.c
-index c3f19852e150..392afd8da6c3 100644
+index 82879b1c9eb93..00bd139166f6a 100644
 --- a/drivers/nvmem/stm32-romem.c
 +++ b/drivers/nvmem/stm32-romem.c
 @@ -11,6 +11,7 @@
  #include <linux/module.h>
  #include <linux/nvmem-provider.h>
- #include <linux/of_device.h>
+ #include <linux/of.h>
 +#include <linux/of_reserved_mem.h>
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
  #include <linux/tee_drv.h>
- 
- #include "stm32-bsec-optee-ta.h"
-@@ -25,6 +26,19 @@
+@@ -27,6 +28,19 @@
  /* shadow registers offset */
  #define STM32MP15_BSEC_DATA0		0x200
  
@@ -49,7 +49,7 @@ index c3f19852e150..392afd8da6c3 100644
  struct stm32_romem_cfg {
  	int size;
  	u8 lower;
-@@ -33,6 +47,7 @@ struct stm32_romem_cfg {
+@@ -35,6 +49,7 @@ struct stm32_romem_cfg {
  
  struct stm32_romem_priv {
  	void __iomem *base;
@@ -57,7 +57,7 @@ index c3f19852e150..392afd8da6c3 100644
  	struct nvmem_config cfg;
  	u8 lower;
  	struct tee_context *ctx;
-@@ -89,7 +104,14 @@ static int stm32_bsec_read(void *context, unsigned int offset, void *buf,
+@@ -91,7 +106,14 @@ static int stm32_bsec_read(void *context, unsigned int offset, void *buf,
  	for (i = roffset; (i < roffset + rbytes); i += 4) {
  		u32 otp = i >> 2;
  
@@ -73,7 +73,7 @@ index c3f19852e150..392afd8da6c3 100644
  			/* read lower data from shadow registers */
  			val = readl_relaxed(
  				priv->base + STM32MP15_BSEC_DATA0 + i);
-@@ -99,7 +121,7 @@ static int stm32_bsec_read(void *context, unsigned int offset, void *buf,
+@@ -101,7 +123,7 @@ static int stm32_bsec_read(void *context, unsigned int offset, void *buf,
  			if (ret) {
  				dev_err(dev, "Can't read data%d (%d)\n", otp,
  					ret);
@@ -82,7 +82,7 @@ index c3f19852e150..392afd8da6c3 100644
  			}
  		}
  		/* skip first bytes in case of unaligned read */
-@@ -114,6 +136,10 @@ static int stm32_bsec_read(void *context, unsigned int offset, void *buf,
+@@ -116,6 +138,10 @@ static int stm32_bsec_read(void *context, unsigned int offset, void *buf,
  	}
  
  	return 0;
@@ -93,7 +93,7 @@ index c3f19852e150..392afd8da6c3 100644
  }
  
  static int stm32_bsec_write(void *context, unsigned int offset, void *buf,
-@@ -218,8 +244,33 @@ static int stm32_romem_probe(struct platform_device *pdev)
+@@ -219,8 +245,33 @@ static int stm32_romem_probe(struct platform_device *pdev)
  		priv->cfg.size = resource_size(res);
  		priv->cfg.reg_read = stm32_romem_read;
  	} else {
@@ -127,7 +127,7 @@ index c3f19852e150..392afd8da6c3 100644
  		if (cfg->ta || optee_presence_check()) {
  			rc = stm32_bsec_optee_ta_open(&priv->ctx);
  			if (rc) {
-@@ -245,6 +296,7 @@ static int stm32_romem_probe(struct platform_device *pdev)
+@@ -246,6 +297,7 @@ static int stm32_romem_probe(struct platform_device *pdev)
  		}
  	}
  
@@ -136,5 +136,5 @@ index c3f19852e150..392afd8da6c3 100644
  }
  
 -- 
-2.50.1
+2.51.0
 

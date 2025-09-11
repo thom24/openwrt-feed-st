@@ -26,66 +26,42 @@ Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
 ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
 Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
 ---
- drivers/counter/stm32-lptimer-cnt.c | 24 +++++++++++++++---------
- 1 file changed, 15 insertions(+), 9 deletions(-)
+ drivers/counter/stm32-lptimer-cnt.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/counter/stm32-lptimer-cnt.c b/drivers/counter/stm32-lptimer-cnt.c
-index 27cec6b7897b..c68e9339b68c 100644
+index bc9d06971caa6..c68e9339b68cb 100644
 --- a/drivers/counter/stm32-lptimer-cnt.c
 +++ b/drivers/counter/stm32-lptimer-cnt.c
-@@ -62,37 +62,43 @@ static int stm32_lptim_set_enable_state(struct stm32_lptim_cnt *priv,
+@@ -62,7 +62,7 @@ static int stm32_lptim_set_enable_state(struct stm32_lptim_cnt *priv,
  		return 0;
  	}
  
+-	ret = clk_enable(priv->clk);
 +	ret = pm_runtime_resume_and_get(priv->dev);
-+	if (ret)
-+		goto disable_cnt;
-+
- 	/* LP timer must be enabled before writing CMP & ARR */
- 	ret = regmap_write(priv->regmap, STM32_LPTIM_ARR, priv->ceiling);
  	if (ret)
--		return ret;
-+		goto disable_clk;
+ 		goto disable_cnt;
  
- 	ret = regmap_write(priv->regmap, STM32_LPTIM_CMP, 0);
+@@ -87,10 +87,6 @@ static int stm32_lptim_set_enable_state(struct stm32_lptim_cnt *priv,
  	if (ret)
--		return ret;
-+		goto disable_clk;
- 
- 	/* ensure CMP & ARR registers are properly written */
- 	ret = regmap_read_poll_timeout(priv->regmap, STM32_LPTIM_ISR, val,
- 				       (val & STM32_LPTIM_CMPOK_ARROK) == STM32_LPTIM_CMPOK_ARROK,
- 				       100, 1000);
- 	if (ret)
--		return ret;
-+		goto disable_clk;
- 
- 	ret = regmap_write(priv->regmap, STM32_LPTIM_ICR,
- 			   STM32_LPTIM_CMPOKCF_ARROKCF);
- 	if (ret)
--		return ret;
-+		goto disable_clk;
+ 		goto disable_clk;
  
 -	ret = pm_runtime_resume_and_get(priv->dev);
--	if (ret < 0) {
--		regmap_write(priv->regmap, STM32_LPTIM_CR, 0);
--		return ret;
--	}
+-	if (ret < 0)
+-		goto disable_clk;
+-
  	priv->enabled = true;
  
  	/* Start LP timer in continuous mode */
- 	return regmap_update_bits(priv->regmap, STM32_LPTIM_CR,
+@@ -98,7 +94,7 @@ static int stm32_lptim_set_enable_state(struct stm32_lptim_cnt *priv,
  				  STM32_LPTIM_CNTSTRT, STM32_LPTIM_CNTSTRT);
-+
-+disable_clk:
-+	pm_runtime_put_sync_suspend(priv->dev);
-+disable_cnt:
-+	regmap_write(priv->regmap, STM32_LPTIM_CR, 0);
-+
-+	return ret;
- }
  
- static int stm32_lptim_setup(struct stm32_lptim_cnt *priv, int enable)
+ disable_clk:
+-	clk_disable(priv->clk);
++	pm_runtime_put_sync_suspend(priv->dev);
+ disable_cnt:
+ 	regmap_write(priv->regmap, STM32_LPTIM_CR, 0);
+ 
 -- 
-2.50.1
+2.51.0
 

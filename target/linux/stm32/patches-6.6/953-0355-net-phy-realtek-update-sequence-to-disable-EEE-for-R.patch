@@ -17,14 +17,14 @@ Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
 ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
 Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
 ---
- drivers/net/phy/realtek.c | 12 +++++++-----
+ drivers/net/phy/realtek/realtek_main.c | 12 +++++++-----
  1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/phy/realtek.c b/drivers/net/phy/realtek.c
-index 271cc3174bfe..8a7820c6df58 100644
---- a/drivers/net/phy/realtek.c
-+++ b/drivers/net/phy/realtek.c
-@@ -419,13 +419,15 @@ static int rtl8211f_config_init(struct phy_device *phydev)
+diff --git a/drivers/net/phy/realtek/realtek_main.c b/drivers/net/phy/realtek/realtek_main.c
+index 5edef94ee623e..321afa0746a54 100644
+--- a/drivers/net/phy/realtek/realtek_main.c
++++ b/drivers/net/phy/realtek/realtek_main.c
+@@ -593,13 +593,15 @@ static int rtl8211f_config_init(struct phy_device *phydev)
  	}
  
  	if (of_property_read_bool(dev->of_node, "realtek,eee-disable")) {
@@ -37,14 +37,14 @@ index 271cc3174bfe..8a7820c6df58 100644
 -		phy_write(phydev, 0xe,0x3c);
 -		phy_write(phydev, 0xd,0x4007);
 -		phy_write(phydev, 0xe,0x0);
-+		__phy_write(phydev, 0xd, 7);
-+		__phy_write(phydev, 0xe, 0x3c);
-+		__phy_write(phydev, 0xd, 0x4007);
-+		__phy_write(phydev, 0xe, 0x0);
++		__phy_write(phydev, 0xd,7);
++		__phy_write(phydev, 0xe,0x3c);
++		__phy_write(phydev, 0xd,0x4007);
++		__phy_write(phydev, 0xe,0x0);
 +		phy_unlock_mdio_bus(phydev);
  	}
  
- 	if (priv->has_phycr2) {
+ 	/* Disable PHY-mode EEE so LPI is passed to the MAC */
 -- 
-2.50.1
+2.51.0
 
