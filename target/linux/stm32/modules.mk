@@ -416,6 +416,18 @@ endef
 $(eval $(call KernelPackage,stm32-hash))
 
 
+define KernelPackage/stm32-hog
+  SUBMENU:=$(OTHER_MENU)
+  TITLE:=STM32 hog
+  DEPENDS:=@TARGET_stm32
+  KCONFIG:=CONFIG_STM32_HOG
+  FILES:=$(LINUX_DIR)/drivers/soc/st/stm32_hog.ko
+  AUTOLOAD:=$(call AutoProbe,stm32-hog)
+endef
+
+$(eval $(call KernelPackage,stm32-hog))
+
+
 define KernelPackage/stm32-ipcc
   SUBMENU:=$(OTHER_MENU)
   TITLE:=STM32 IPCC Mailbox
