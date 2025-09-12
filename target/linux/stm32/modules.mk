@@ -536,6 +536,19 @@ endef
 $(eval $(call KernelPackage,st-thermal))
 
 
+define KernelPackage/tps6598x
+  SUBMENU:=$(USB_MENU)
+  TITLE:=TI TPS6598x USB Power Delivery controller driver
+  KCONFIG:=CONFIG_TYPEC_TPS6598X \
+	   CONFIG_POWER_SUPPLY=y
+  DEPENDS:=+kmod-typec +kmod-usb-roles +kmod-regmap-i2c
+  FILES:=$(LINUX_DIR)/drivers/usb/typec/tipd/tps6598x.ko
+  AUTOLOAD:=$(call AutoProbe,tps6598x)
+endef
+
+$(eval $(call KernelPackage,tps6598x))
+
+
 define KernelPackage/typec
   SUBMENU:=$(USB_MENU)
   TITLE:=USB Type-C Support
