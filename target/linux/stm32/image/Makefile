@@ -106,6 +106,13 @@ define Device/stm32mp235f-dk
   DEVICE_PACKAGES += $(STM32MP2_WIFI)
 endef
 
+define Device/stm32mp215f-dk
+  $(call Device/stm32mp2)
+  DEVICE_MODEL := STM32MP215F-DK
+  DEVICE_DTS := stm32mp215f-dk
+  SUPPORTED_DEVICES := st,stm32mp215f-dk
+endef
+
 ifeq ($(SUBTARGET),stm32mp1)
   TARGET_DEVICES += \
 		    stm32mp157f-dk2 \
@@ -116,7 +123,8 @@ ifeq ($(SUBTARGET),stm32mp2)
   TARGET_DEVICES += \
 		    stm32mp257f-ev1 \
 		    stm32mp257f-dk \
-		    stm32mp235f-dk
+		    stm32mp235f-dk \
+		    stm32mp215f-dk
 endif
 
 include demo.mk
