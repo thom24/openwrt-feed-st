@@ -34,7 +34,8 @@ endef
 define Optee-os/stm32mp2
   BUILD_SUBTARGET:=stm32mp2
   PLAT:=stm32mp2
-  OPTEE_MAKE_FLAGS += CFG_SCMI_SCPFW=y
+  OPTEE_MAKE_FLAGS += CFG_SCMI_SCPFW=y \
+		      CFG_EMBED_DTB_SOURCE_FILE=$(1).dts
 endef
 
 define Optee-os/stm32mp157f-dk2
@@ -51,23 +52,26 @@ define Optee-os/stm32mp135f-dk
 endef
 
 define Optee-os/stm32mp257f-ev1
-  $(call Optee-os/stm32mp2)
+  $(call Optee-os/stm32mp2,$(1))
   NAME:=STM32MP257F-EV1
-  OPTEE_MAKE_FLAGS += CFG_EMBED_DTB_SOURCE_FILE=stm32mp257f-ev1.dts
 endef
 
 define Optee-os/stm32mp257f-dk
-  $(call Optee-os/stm32mp2)
+  $(call Optee-os/stm32mp2,$(1))
   NAME:=STM32MP257F-DK
-  OPTEE_MAKE_FLAGS += CFG_EMBED_DTB_SOURCE_FILE=stm32mp257f-dk.dts
 endef
 
+define Optee-os/stm32mp235f-dk
+  $(call Optee-os/stm32mp2,$(1))
+  NAME:=STM32MP235F-DK
+endef
 
 OPTEE_TARGETS := \
 	stm32mp157f-dk2 \
 	stm32mp135f-dk \
 	stm32mp257f-ev1 \
-	stm32mp257f-dk
+	stm32mp257f-dk \
+	stm32mp235f-dk
 
 define Package/optee-os/install/default
 endef
