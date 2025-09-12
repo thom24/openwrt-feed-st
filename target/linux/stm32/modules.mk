@@ -2,6 +2,18 @@
 #
 # Copyright (C) 2024 Bootlin
 
+define KernelPackage/adc-typec
+  TITLE:=ADC based Type-C controller Driver
+  KCONFIG:=CONFIG_TYPEC_ADC \
+	   CONFIG_POWER_SUPPLY=y
+  FILES=$(LINUX_DIR)/drivers/usb/typec/adc_typec.ko
+  AUTOLOAD:=$(call AutoProbe,adc_typec)
+  $(call AddDepends/iio,+kmod-typec)
+endef
+
+$(eval $(call KernelPackage,adc-typec))
+
+
 define KernelPackage/bxcan
   TITLE:=STM32 Basic Extended CAN (bxCAN) devices
   KCONFIG:=CONFIG_CAN_BXCAN
