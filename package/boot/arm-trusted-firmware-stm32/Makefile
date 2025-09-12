@@ -25,6 +25,7 @@ define Trusted-Firmware-A/Default
   BUILD_TARGET:=stm32
   BUILD_DEVICES:=$(1) $(1)-demo
   DEPENDS:=+u-boot-$(1) +optee-os-$(1)
+  DTB_FILE_NAME:=$(1).dtb
 endef
 
 define Trusted-Firmware-A/stm32mp1
@@ -46,26 +47,28 @@ endef
 define Trusted-Firmware-A/stm32mp157f-dk2
   $(call Trusted-Firmware-A/stm32mp1)
   NAME:=STM32MP157F-DK2
-  DTB_FILE_NAME:=stm32mp157f-dk2.dtb
 endef
 
 define Trusted-Firmware-A/stm32mp135f-dk
   $(call Trusted-Firmware-A/stm32mp1)
   NAME:=STM32MP135F-DK
-  DTB_FILE_NAME=stm32mp135f-dk.dtb
 endef
 
 define Trusted-Firmware-A/stm32mp257f-ev1
   $(call Trusted-Firmware-A/stm32mp2)
   NAME:=STM32MP257F-EV1
-  DTB_FILE_NAME:=stm32mp257f-ev1.dtb
   MAKE_ARGS += STM32MP_DDR4_TYPE=1
 endef
 
 define Trusted-Firmware-A/stm32mp257f-dk
   $(call Trusted-Firmware-A/stm32mp2)
   NAME:=STM32MP257F-DK
-  DTB_FILE_NAME:=stm32mp257f-dk.dtb
+  MAKE_ARGS += STM32MP_LPDDR4_TYPE=1
+endef
+
+define Trusted-Firmware-A/stm32mp235f-dk
+  $(call Trusted-Firmware-A/stm32mp2)
+  NAME:=STM32MP235F-DK
   MAKE_ARGS += STM32MP_LPDDR4_TYPE=1
 endef
 
@@ -73,7 +76,8 @@ TFA_TARGETS := \
 	       stm32mp157f-dk2 \
 	       stm32mp135f-dk \
 	       stm32mp257f-ev1 \
-	       stm32mp257f-dk
+	       stm32mp257f-dk \
+	       stm32mp235f-dk
 
 TFA_MAKE_FLAGS += \
 		$(if $(CONFIG_BINUTILS_VERSION_2_37)$(CONFIG_BINUTILS_VERSION_2_38),,LDFLAGS="-no-warn-rwx-segments") \
