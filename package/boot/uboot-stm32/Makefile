@@ -24,6 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define U-Boot/Default
   BUILD_TARGET:=stm32
   UBOOT_IMAGE:=u-boot.bin u-boot.dtb
+  DEVICE_TREE:=$(1)
 endef
 
 define U-Boot/stm32mp15
@@ -41,35 +42,47 @@ define U-Boot/stm32mp25
   UBOOT_CONFIG:=stm32mp25
 endef
 
+define U-Boot/stm32mp23
+  BUILD_SUBTARGET:=stm32mp2
+  UBOOT_CONFIG:=stm32mp23
+endef
+
 define U-Boot/stm32mp157f-dk2
   $(call U-Boot/stm32mp15)
   NAME:=STM32MP157F-DK2
-  DEVICE_TREE:=stm32mp157f-dk2
 endef
 
 define U-Boot/stm32mp135f-dk
   $(call U-Boot/stm32mp13)
   NAME:=STM32MP135F-DK
-  DEVICE_TREE:=stm32mp135f-dk
 endef
 
 define U-Boot/stm32mp257f-ev1
   $(call U-Boot/stm32mp25)
   NAME:=STM32MP257F-EV1
-  DEVICE_TREE:=stm32mp257f-ev1
 endef
 
 define U-Boot/stm32mp257f-dk
   $(call U-Boot/stm32mp25)
   NAME:=STM32MP257F-DK
-  DEVICE_TREE:=stm32mp257f-dk
+endef
+
+define U-Boot/stm32mp257f-dk
+  $(call U-Boot/stm32mp25)
+  NAME:=STM32MP257F-DK
+endef
+
+define U-Boot/stm32mp235f-dk
+  $(call U-Boot/stm32mp23)
+  NAME:=STM32MP235F-DK
 endef
 
 UBOOT_TARGETS := \
 	stm32mp157f-dk2 \
 	stm32mp135f-dk \
 	stm32mp257f-ev1 \
-	stm32mp257f-dk
+	stm32mp257f-dk \
+	stm32mp235f-dk
 
 UBOOT_MAKE_FLAGS += DEVICE_TREE=$(DEVICE_TREE)
 
