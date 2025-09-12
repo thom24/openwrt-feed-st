@@ -47,6 +47,11 @@ define U-Boot/stm32mp23
   UBOOT_CONFIG:=stm32mp23
 endef
 
+define U-Boot/stm32mp21
+  BUILD_SUBTARGET:=stm32mp2
+  UBOOT_CONFIG:=stm32mp21
+endef
+
 define U-Boot/stm32mp157f-dk2
   $(call U-Boot/stm32mp15)
   NAME:=STM32MP157F-DK2
@@ -77,12 +82,18 @@ define U-Boot/stm32mp235f-dk
   NAME:=STM32MP235F-DK
 endef
 
+define U-Boot/stm32mp215f-dk
+  $(call U-Boot/stm32mp21)
+  NAME:=STM32MP215F-DK
+endef
+
 UBOOT_TARGETS := \
 	stm32mp157f-dk2 \
 	stm32mp135f-dk \
 	stm32mp257f-ev1 \
 	stm32mp257f-dk \
-	stm32mp235f-dk
+	stm32mp235f-dk \
+	stm32mp215f-dk
 
 UBOOT_MAKE_FLAGS += DEVICE_TREE=$(DEVICE_TREE)
 
