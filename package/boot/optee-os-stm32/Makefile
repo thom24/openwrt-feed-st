@@ -66,12 +66,18 @@ define Optee-os/stm32mp235f-dk
   NAME:=STM32MP235F-DK
 endef
 
+define Optee-os/stm32mp215f-dk
+  $(call Optee-os/stm32mp2,$(1))
+  NAME:=STM32MP215F-DK
+endef
+
 OPTEE_TARGETS := \
 	stm32mp157f-dk2 \
 	stm32mp135f-dk \
 	stm32mp257f-ev1 \
 	stm32mp257f-dk \
-	stm32mp235f-dk
+	stm32mp235f-dk \
+	stm32mp215f-dk
 
 define Package/optee-os/install/default
 endef
