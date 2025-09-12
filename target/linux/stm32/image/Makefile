@@ -64,6 +64,11 @@ define Device/stm32mp2
   DEVICE_PACKAGES += kmod-usb-stm32-usbh
 endef
 
+STM32MP2_WIFI:= kmod-brcmfmac \
+		murata-firmware-43439-sdio \
+		murata-nvram-43439-sdio \
+		wpad-basic-mbedtls
+
 define Device/stm32mp157f-dk2
   $(call Device/stm32mp1)
   DEVICE_MODEL := STM32MP157F-DK2
@@ -90,10 +95,15 @@ define Device/stm32mp257f-dk
   DEVICE_MODEL := STM32MP257F-DK
   DEVICE_DTS := stm32mp257f-dk
   SUPPORTED_DEVICES := st,stm32mp257f-dk
-  DEVICE_PACKAGES += kmod-brcmfmac \
-		     murata-firmware-43439-sdio \
-		     murata-nvram-43439-sdio \
-		     wpad-basic-mbedtls
+  DEVICE_PACKAGES += $(STM32MP2_WIFI)
+endef
+
+define Device/stm32mp235f-dk
+  $(call Device/stm32mp2)
+  DEVICE_MODEL := STM32MP235F-DK
+  DEVICE_DTS := stm32mp235f-dk
+  SUPPORTED_DEVICES := st,stm32mp235f-dk
+  DEVICE_PACKAGES += $(STM32MP2_WIFI)
 endef
 
 ifeq ($(SUBTARGET),stm32mp1)
@@ -105,7 +115,8 @@ endif
 ifeq ($(SUBTARGET),stm32mp2)
   TARGET_DEVICES += \
 		    stm32mp257f-ev1 \
-		    stm32mp257f-dk
+		    stm32mp257f-dk \
+		    stm32mp235f-dk
 endif
 
 include demo.mk

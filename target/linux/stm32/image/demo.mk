@@ -17,7 +17,7 @@ define Device/Demo-stm32mp2
   $(call Device/Demo)
   DEVICE_PACKAGES += kmod-nvmem-stm32-tamp \
 		     kmod-stm32-rproc \
-		     kmod-stm32-m0-rproc \
+		     $(if $(filter-out stm32mp235f-dk,$(1)), kmod-stm32-m0-rproc) \
 		     kmod-stm32-ipcc \
 		     kmod-virtio-rpmsg-bus \
 		     rproc \
@@ -54,6 +54,12 @@ define Device/stm32mp257f-dk-demo
   DEVICE_NAME := stm32mp257f-dk
 endef
 
+define Device/stm32mp235f-dk-demo
+  $(call Device/stm32mp235f-dk)
+  $(call Device/Demo-stm32mp2,stm32mp235f-dk)
+  DEVICE_NAME := stm32mp235f-dk
+endef
+
 ifeq ($(SUBTARGET),stm32mp1)
   TARGET_DEVICES += \
 		    stm32mp157f-dk2-demo \
@@ -63,5 +69,6 @@ endif
 ifeq ($(SUBTARGET),stm32mp2)
   TARGET_DEVICES += \
 		    stm32mp257f-ev1-demo \
-		    stm32mp257f-dk-demo
+		    stm32mp257f-dk-demo \
+		    stm32mp235f-dk-demo
 endif
