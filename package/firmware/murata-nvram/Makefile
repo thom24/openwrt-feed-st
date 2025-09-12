@@ -62,6 +62,9 @@ define Package/murata-nvram-43439-sdio/install
 	$(LN) \
 		cyfmac43439-sdio.1YN.stm32.txt \
 		$(1)/lib/firmware/brcm/brcmfmac43439-sdio.st,stm32mp257f-dk.txt
+	$(LN) \
+		cyfmac43439-sdio.1YN.stm32.txt \
+		$(1)/lib/firmware/brcm/brcmfmac43439-sdio.st,stm32mp235f-dk.txt
 endef
 
 $(eval $(call BuildPackage,murata-nvram-43430-sdio))
