@@ -72,12 +72,19 @@ define Trusted-Firmware-A/stm32mp235f-dk
   MAKE_ARGS += STM32MP_LPDDR4_TYPE=1
 endef
 
+define Trusted-Firmware-A/stm32mp215f-dk
+  $(call Trusted-Firmware-A/stm32mp2)
+  NAME:=STM32MP215F-DK
+  MAKE_ARGS += STM32MP_LPDDR4_TYPE=1
+endef
+
 TFA_TARGETS := \
 	       stm32mp157f-dk2 \
 	       stm32mp135f-dk \
 	       stm32mp257f-ev1 \
 	       stm32mp257f-dk \
-	       stm32mp235f-dk
+	       stm32mp235f-dk \
+	       stm32mp215f-dk
 
 TFA_MAKE_FLAGS += \
 		$(if $(CONFIG_BINUTILS_VERSION_2_37)$(CONFIG_BINUTILS_VERSION_2_38),,LDFLAGS="-no-warn-rwx-segments") \
