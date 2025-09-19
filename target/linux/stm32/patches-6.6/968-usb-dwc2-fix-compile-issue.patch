@@ -1,0 +1,78 @@
+From 0a19691361fdbb7e3bfbf4608489539f289cb6d5 Mon Sep 17 00:00:00 2001
+From: Thomas Richard <thomas.richard@bootlin.com>
+Date: Fri, 19 Sep 2025 17:58:06 +0200
+Subject: [PATCH] usb: dwc2: fix compile issue
+
+Fix compile issue introduced by
+953-0288-usb-dwc2-update-gadget-state-when-suspended.patch.
+
+Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+---
+ drivers/usb/dwc2/core_intr.c | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
+
+--- a/drivers/usb/dwc2/core_intr.c
++++ b/drivers/usb/dwc2/core_intr.c
+@@ -381,9 +381,11 @@ void dwc2_wakeup_from_lpm_l1(struct dwc2
+ 			goto fail;
+ 			return;
+ 		}
+-
++#if IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) || \
++	IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)
+ 		/* Inform gadget to exit from L1 */
+ 		usb_gadget_set_state(&hsotg->gadget, hsotg->suspended_from);
++#endif
+ 		call_gadget(hsotg, resume);
+ 		/* Change to L0 state */
+ 		hsotg->lx_state = DWC2_L0;
+@@ -442,7 +444,10 @@ static void dwc2_handle_wakeup_detected_
+ 
+ 			/* Change to L0 state, when no_clock_gating == true */
+ 			hsotg->lx_state = DWC2_L0;
++#if IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) || \
++	IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)
+ 			usb_gadget_set_state(&hsotg->gadget, hsotg->suspended_from);
++#endif
+ 			call_gadget(hsotg, resume);
+ 		} else {
+ 			/* Change to L0 state */
+@@ -586,10 +591,11 @@ static void dwc2_handle_usb_suspend_intr
+ 			 * spinlock
+ 			 */
+ 			hsotg->lx_state = DWC2_L2;
+-
++#if IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) || \
++	IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)
+ 			hsotg->suspended_from = hsotg->gadget.state;
+ 			usb_gadget_set_state(&hsotg->gadget, USB_STATE_SUSPENDED);
+-
++#endif
+ 			/* Call gadget suspend callback */
+ 			call_gadget(hsotg, suspend);
+ 		}
+@@ -666,9 +672,11 @@ static void dwc2_handle_lpm_intr(struct
+ 			dev_dbg(hsotg->dev,
+ 				"Core is in L1 sleep glpmcfg=%08x\n", glpmcfg);
+ 
++#if IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) || \
++	IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)
+ 			hsotg->suspended_from = hsotg->gadget.state;
+ 			usb_gadget_set_state(&hsotg->gadget, USB_STATE_SUSPENDED);
+-
++#endif
+ 			/* Inform gadget that we are in L1 state */
+ 			call_gadget(hsotg, suspend);
+ 		}
+@@ -820,8 +828,10 @@ static int dwc2_handle_gpwrdn_intr(struc
+ 				if (ret)
+ 					dev_err(hsotg->dev,
+ 						"exit hibernation failed.\n");
+-
++#if IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) || \
++	IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)
+ 				usb_gadget_set_state(&hsotg->gadget, hsotg->suspended_from);
++#endif
+ 				call_gadget(hsotg, resume);
+ 			} else {
+ 				ret = dwc2_exit_hibernation(hsotg, 1, 0, 1);
