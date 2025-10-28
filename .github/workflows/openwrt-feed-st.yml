@@ -46,10 +46,15 @@ jobs:
           echo CONFIG_SDK=y >> openwrt/.config
           echo CONFIG_SDK_LLVM_BPF=y >> openwrt/.config
           echo CONFIG_TARGET_ALL_PROFILES=y >> openwrt/.config
+          echo CONFIG_CCACHE=y >> openwrt/.config
+          echo CONFIG_CCACHE_DIR=\"$HOME/.openwrt-ccache\" >> openwrt/.config
+          echo CONFIG_DOWNLOAD_FOLDER=\"$HOME/.openwrt-dl\" >> openwrt/.config
           make -C openwrt defconfig
       - name: Build
         id: build
-        run: make -j${{ env.NPROC }} -C openwrt || make -C openwrt -j1 V=s
+        run: |
+          make -j${{ env.NPROC }} -C openwrt tools/ccache/compile
+          make -j${{ env.NPROC }} -C openwrt || make -C openwrt -j1 V=s
 
       - name: Archive and compress factory images
         run: |
