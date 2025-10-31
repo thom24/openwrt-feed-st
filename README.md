@@ -21,40 +21,59 @@ Actually the feed is based on OpenWrt
 
 ## Supported devices
 
-1. `STM32MP157F-DK2`: minimal support for the STM32MP157F-DK2
+1. `STM32MP157F-DK2`: minimal support for the [STM32MP157F Discovery Kit 2](https://www.st.com/en/evaluation-tools/stm32mp157f-dk2.html)
+   board.
 
-2. `STM32MP135F-DK`: minimal support for the STM32MP135F-DK
-
-3. `STM32MP257F-EV1`: minimal support for the STM32MP257F-EV1
-
-3. `STM32MP257F-DK`: minimal support for the STM32MP257F-DK
-
-5. `STM32MP157F-DK2-DEMO`: based on the `STM32MP157F-DK2` device including
+2. `STM32MP157F-DK2-DEMO`: based on the `STM32MP157F-DK2` device including
    additional packages like a web interface to configure the device.
 
-6. `STM32MP135F-DK-DEMO`: based on the `STM32MP135F-DK` device including
+3. `STM32MP135F-DK`: minimal support for the [STM32MP135F Discovery Kit](https://www.st.com/en/evaluation-tools/stm32mp135f-dk.html)
+   board.
+
+4. `STM32MP135F-DK-DEMO`: based on the `STM32MP135F-DK` device including
    additional packages like a web interface to configure the device.
 
-7. `STM32MP257F-EV1-DEMO`: based on the `STM32MP257F-EV1` device including
+5. `STM32MP257F-EV1`: minimal support for the [STM32MP257F Evaluation](https://www.st.com/en/evaluation-tools/stm32mp257f-ev1.html)
+   board.
+
+6. `STM32MP257F-EV1-DEMO`: based on the `STM32MP257F-EV1` device including
    additional packages like a web interface to configure the device.
 
-7. `STM32MP257F-DK-DEMO`: based on the `STM32MP257F-DK` device including
+7. `STM32MP257F-DK`: minimal support for the [STM32MP257F Discovery Kit](https://www.st.com/en/evaluation-tools/stm32mp257f-dk.html)
+   board.
+
+8. `STM32MP257F-DK-DEMO`: based on the `STM32MP257F-DK` device including
    additional packages like a web interface to configure the device.
 
+9. `STM32MP235F-DK`: minimal support for the [STM32MP235F Discovery Kit](https://www.st.com/en/microcontrollers-microprocessors/stm32mp235f.html)
+   board. Although this board does not physically exist, it enables users to
+   emulate the behavior of an `STM32MP235` system using the `STM32MP257F Discovery Kit`.
+   Since the STM32MP235 implements a subset of the STM32MP257 features, this
+   configuration allows developers to evaluate the STM32MP235 SoC.
 
-|Supported features|STM32MP157F-DK2|STM32MP135F-DK|STM32MP257F-EV1|STM32MP257F-DK|
-|------------------|---------------|--------------|---------------|--------------|
-|Sysupgrade|yes|yes|yes|yes|
-|Ethernet|yes|yes|yes|yes|
-|Watchdog|yes|yes|yes|yes|
-|RTC|yes|yes|yes|yes|
-|Hardware RNG (Optee)|yes|yes|yes|yes|
-|LED|yes|yes|yes|yes|
-|Button|no|yes (USER2)|yes (USER1/USER2)|yes (USER1/USER2)|
-|Wifi|yes|yes|x|yes|
-|USB Type-A|yes|yes|yes|yes|
-|Remote processors|no|no|yes (demo profile)|yes (demo profile)|
-|USB Type-C|no|no|yes dual-role (demo profile)|yes dual-role (demo profile)|
+10. `STM32MP235F-DK-DEMO`: based on the `STM32MP235F-DK` device including
+    additional packages like a web interface to configure the device.
+
+11. `STM32MP215F-DK`: minimal support for the [STM32MP215F Discovery Kit](https://wiki.st.com/stm32mpu/wiki/STM32MP215x-DKx_-_hardware_description)
+    board.
+
+12. `STM32MP215F-DK-DEMO`: based on the `STM32MP215F-DK` device including
+    additional packages like a web interface to configure the device.
+
+
+|Supported features|STM32MP157F-DK2|STM32MP135F-DK|STM32MP257F-EV1|STM32MP257F-DK|STM32MP235F-DK|STM32MP215F-DK|
+|------------------|---------------|--------------|---------------|--------------|--------------|--------------|
+|Sysupgrade|yes|yes|yes|yes|yes|yes|
+|Ethernet|yes|yes|yes|yes|yes|yes|
+|Watchdog|yes|yes|yes|yes|yes|yes|
+|RTC|yes|yes|yes|yes|yes|yes|
+|Hardware RNG (Optee)|yes|yes|yes|yes|yes|yes|
+|LED|yes|yes|yes|yes|yes|yes|
+|Button|no|yes (USER2)|yes (USER1/USER2)|yes (USER1/USER2)|yes|yes (USER1/USER2)|
+|Wifi|yes|yes|x|yes|yes|x|
+|USB Type-A|yes|yes|yes|yes|yes|x|
+|Remote processors|no|no|yes (demo profile)|yes (demo profile)|yes (demo profile)|yes (demo profile)|
+|USB Type-C|no|no|yes dual-role (demo profile)|yes dual-role (demo profile)|yes dual-role (demo profile)|yes dual-role (demo profile)|
 
 ## BSP
 
@@ -281,13 +300,14 @@ Then:
 1. Insert the microSD card
    - STM32MP157: connector CN15
    - STM32MP135: connector CN3
-   - STM32MP257: connector CN1
+   - STM32MP257-EV1: connector CN1
+   - STM32MP257-DK and STM32MP235-DK: connector CN6
+   - STM32MP215-DK: connector CN7
 
 2. Plug a micro-USB cable or USB-C for `STM32MP257` and run your serial
    communication program on /dev/ttyACM0
    - STM32MP157: connector CN11
    - STM32MP135: connector CN10
-   - STM32MP257: connector CN21
 
 3. Configure the SW1 switch to boot on SD card
    - STM32MP157: BOOT0 and BOOT2 to ON
