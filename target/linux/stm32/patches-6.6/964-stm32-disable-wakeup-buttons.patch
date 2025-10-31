@@ -45,3 +45,25 @@ Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
  		};
  	};
  
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -99,7 +99,7 @@
+ 			linux,code = <KEY_WAKEUP>;
+ 			interrupts-extended = <&optee 0>;
+ 			wakeup-source;
+-			status = "okay";
++			status = "disabled";
+ 		};
+ 	};
+ 
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -77,7 +77,7 @@
+ 			linux,code = <KEY_WAKEUP>;
+ 			interrupts-extended = <&optee 0>;
+ 			wakeup-source;
+-			status = "okay";
++			status = "disabled";
+ 		};
+ 	};
+ 
