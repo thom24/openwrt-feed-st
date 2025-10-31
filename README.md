@@ -58,17 +58,17 @@ Actually the feed is based on OpenWrt
 
 ## BSP
 
-This feed is based on the `STPM32MP1/STM32MP2 BSP v6.0`.
+This feed is based on the `STPM32MP1/STM32MP2 BSP v6.1`.
 
 |Components|Version|
 |----------|-------|
 |TF-A|2.10-stm32mp-r1|
 |U-Boot|2023.10-stm32mp-r1|
 |OPTEE|4.0.0-stm32mp-r1|
-|Linux|OpenWRT kernel + v6.6-stm32mp-r1.2|
+|Linux|OpenWRT kernel + v6.6-stm32mp-r2|
 
 For the kernel, the patches from the v6.6-stm32mp branch until the tag
-v6.6-stm32mp-r1.2 were added.
+v6.6-stm32mp-r2 were added.
 They are available in `target/linux/stm32/patches-6.6/`.
 
 Some patches were removed as they were applied in Linux, or they are already
@@ -86,6 +86,9 @@ fd68ca2e9089 ("i2c: stm32f7: Do not prepare/unprepare clock during runtime suspe
 6ab3278ee867 ("pinctrl: devicetree: do not goto err when probing hogs in pinctrl_dt_to_map")
 10b245589fa0 ("drm: bridge: adv7511: fill i2s stream capabilities")
 a1ff3250129a ("pinctrl: stm32: check devm_kasprintf() returned value")
+67f10b41e33e ("drivers: core: fix device leak in __fw_devlink_relax_cycles()")
+94508b3dd9f6 ("usb: dwc2: gadget: remove of_node reference upon udc_stop")
+07963aca871a ("net: phy: realtek: disable PHY-mode EEE")
 ```
 
 Some patches had to be modified to fix some conflicts.
@@ -102,7 +105,12 @@ b1f3318a0f09 ("ASoC: Update wm8994 codec config")
 dd680178e937 ("counter: stm32-lptimer-cnt: add pm runtime support")
 0a222d6c04c9 ("Revert "media: stm32: dcmipp: avoid calling s_stream if state already correct"")
 7fdd5f74c211 ("Revert "media: v4l2-subdev: Document and enforce .s_stream() requirements"")
+00925911ce6d ("nvmem: stm32: add support for non-secure mirror")
+2a41a04bec3f ("arm64: dts: st: add st,stm32mp25-cortex-a7-gic in intc node in stm32mp251.dtsi")
+fdfbbb333977 ("counter: stm32-lptimer-cnt: fix error handling when enabling")
+d0b3f9979ae5 ("net: phy: realtek: update sequence to disable EEE for RTL8211F")
 ```
+
 Following patches were not applied due to conflicts. They corresponds to the
 empty patches in `target/linux/stm32/patches-6.1/`. They could be applied in the
 future if needed.
@@ -131,6 +139,9 @@ dc9d876018c6 ("drm/stm: ltdc: Check the security of layer 2.")
 3682d604ecbd ("drm/stm: ltdc: reset ltdc on crtc enable")
 bba33e9f0619 ("drm/stm: ltdc: set clock parent before set rate")
 247114342fd4 ("drm/stm: ltdc: ckeck pm_runtime status")
+634d4d01d037 ("drm/stm: ltdc: add clock tolerance module parameter")
+cf2f1b885568 ("drm/stm: ltdc: set configuration register masks to 12 bits")
+a825a4c45283 ("drm/stm: ltdc: check the secure layer")
 ```
 
 ## Starter Package
