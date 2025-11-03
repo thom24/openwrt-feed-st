@@ -1,0 +1,80 @@
+From 8a4f472655500323c32913ca7b34a886fb5a3b1e Mon Sep 17 00:00:00 2001
+From: Thomas Richard <thomas.richard@bootlin.com>
+Date: Mon, 3 Nov 2025 17:17:34 +0100
+Subject: [PATCH] Revert "arm64: dts: st: Use 128kB size for aliased GIC400
+ register access on stm32mp25 SoCs"
+
+This reverts commit f129d8aea8b17227e95610e86acc1c9c489f7da7. It comes from
+linux-6.6.y stable branch. ST kernel patches are based on an older 6.6
+kernel release than OpenWrt. But with a 6.6.93 kernel it causes a kernel
+crash on STM32MP257F-EV1 and STM32MP257F-DK.
+
+[    0.008496] Unable to handle kernel paging request at virtual address ffff800080dbf000
+[    0.015952] Mem abort info:
+[    0.018737]   ESR = 0x0000000096000047
+[    0.022483]   EC = 0x25: DABT (current EL), IL = 32 bits
+[    0.027798]   SET = 0, FnV = 0
+[    0.030849]   EA = 0, S1PTW = 0
+[    0.033984]   FSC = 0x07: level 3 translation fault
+[    0.038862] Data abort info:
+[    0.041737]   ISV = 0, ISS = 0x00000047, ISS2 = 0x00000000
+[    0.047226]   CM = 0, WnR = 1, TnD = 0, TagAccess = 0
+[    0.052280]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+[    0.057596] swapper pgtable: 4k pages, 48-bit VAs, pgdp=000000008aa3c000
+[    0.064305] [ffff800080dbf000] pgd=100000017ffff003, p4d=100000017ffff003, pud=100000017fffe003, pmd=100000017fffa003, pte=000000000000000
+[    0.076852] Internal error: Oops: 0000000096000047 [#1] PREEMPT SMP
+[    0.083124] Modules linked in:
+[    0.086174] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.6.93 #0
+[    0.092098] Hardware name: STMicroelectronics STM32MP257F-DK Discovery Board (DT)
+[    0.099596] pstate: 200000c5 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    0.106567] pc : gic_eoimode1_eoi_irq+0xb0/0xb8
+[    0.111097] lr : handle_percpu_devid_irq+0x94/0x130
+[    0.115978] sp : ffff800080003f50
+[    0.119289] x29: ffff800080003f50 x28: ffff800080c162c0 x27: 0000000000000400
+[    0.126434] x26: ffff0000ff7a23c0 x25: ffff800080aa5008 x24: ffff800080aba780
+[    0.133577] x23: ffff800080ca6000 x22: ffff000080009600 x21: 000000000000000b
+[    0.140722] x20: 000000000000001e x19: ffff000080032660 x18: 0000000000000069
+[    0.147868] x17: ffff80007ecc4000 x16: ffff800080000000 x15: ffff800080c1fcd8
+[    0.155012] x14: 000000000000013b x13: 0000000000000069 x12: 00000000ffffffea
+[    0.162160] x11: 00000000ffffefff x10: ffff800080c77cd8 x9 : ffff800080c1fc78
+[    0.169303] x8 : 0000000000017fe8 x7 : c0000000ffffefff x6 : 00000000ffff8ad1
+[    0.176447] x5 : 00000000ffffffff x4 : 0000000000a3d70a x3 : ffff800080003f00
+[    0.183588] x2 : ffff800080c102b0 x1 : 0000000000000001 x0 : ffff800080dbf000
+[    0.190731] Call trace:
+[    0.193169]  gic_eoimode1_eoi_irq+0xb0/0xb8
+[    0.197348]  handle_percpu_devid_irq+0x94/0x130
+[    0.201876]  handle_irq_desc+0x40/0x58
+[    0.205620]  generic_handle_domain_irq+0x1c/0x28
+[    0.210236]  gic_handle_irq+0x48/0xd0
+[    0.213895]  call_on_irq_stack+0x24/0x4c
+[    0.217815]  do_interrupt_handler+0x80/0x8c
+[    0.221999]  el1_interrupt+0x34/0x68
+[    0.225572]  el1h_64_irq_handler+0x18/0x24
+[    0.229668]  el1h_64_irq+0x64/0x68
+[    0.233066]  start_kernel+0x2d0/0x52c
+[    0.236725]  __primary_switched+0xbc/0xc4
+[    0.240737] Code: b5fffc80 94104f8b 17ffffe2 91404000 (b9000014)
+[    0.246827] ---[ end trace 0000000000000000 ]---
+[    0.251444] Kernel panic - not syncing: Oops: Fatal exception in interrupt
+
+Instead of reworking ST patches, just revert this commit to fix the kernel
+crash.
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -203,9 +203,9 @@
+ 		interrupt-controller;
+ 		interrupt-parent = <&intc>;
+ 		reg = <0x0 0x4ac10000 0x0 0x1000>,
+-		      <0x0 0x4ac20000 0x0 0x20000>,
+-		      <0x0 0x4ac40000 0x0 0x20000>,
+-		      <0x0 0x4ac60000 0x0 0x20000>;
++		      <0x0 0x4ac20000 0x0 0x2000>,
++		      <0x0 0x4ac40000 0x0 0x2000>,
++		      <0x0 0x4ac60000 0x0 0x2000>;
+ 		interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
+ 
+ 		#address-cells = <2>;
