@@ -41,7 +41,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  	struct phy *phy;
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -5157,8 +5157,10 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg
+@@ -5163,8 +5163,10 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg
  {
  	unsigned long flags;
  
@@ -53,7 +53,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  
  	if (hsotg->driver) {
  		int ep;
-@@ -5181,6 +5183,8 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg
+@@ -5187,6 +5189,8 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg
  		}
  	}
  
@@ -62,7 +62,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  	return 0;
  }
  
-@@ -5188,7 +5192,7 @@ int dwc2_hsotg_resume(struct dwc2_hsotg
+@@ -5194,7 +5198,7 @@ int dwc2_hsotg_resume(struct dwc2_hsotg
  {
  	unsigned long flags;
  

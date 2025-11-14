@@ -21,7 +21,7 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
 
 --- a/drivers/usb/host/xhci.c
 +++ b/drivers/usb/host/xhci.c
-@@ -942,7 +942,7 @@ int xhci_suspend(struct xhci_hcd *xhci,
+@@ -944,7 +944,7 @@ int xhci_suspend(struct xhci_hcd *xhci,
  	writel(command, &xhci->op_regs->command);
  	xhci->broken_suspend = 0;
  	if (xhci_handshake(&xhci->op_regs->status,

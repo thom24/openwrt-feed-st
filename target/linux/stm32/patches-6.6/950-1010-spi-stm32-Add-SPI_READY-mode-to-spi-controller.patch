@@ -102,7 +102,7 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  	/* Update spi->cur_speed with real clock speed */
  	if (STM32_SPI_MASTER_MODE(spi)) {
  		mbr = stm32_spi_prepare_mbr(spi, transfer->speed_hz,
-@@ -2019,7 +2039,7 @@ static int stm32_spi_probe(struct platfo
+@@ -2025,7 +2045,7 @@ static int stm32_spi_probe(struct platfo
  	ctrl->auto_runtime_pm = true;
  	ctrl->bus_num = pdev->id;
  	ctrl->mode_bits = SPI_CPHA | SPI_CPOL | SPI_CS_HIGH | SPI_LSB_FIRST |

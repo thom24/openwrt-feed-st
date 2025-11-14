@@ -88,7 +88,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  	default:
  		return -EINVAL;
  	}
-@@ -1887,6 +1936,12 @@ static struct v4l2_ctrl *v4l2_ctrl_new(s
+@@ -1886,6 +1935,12 @@ static struct v4l2_ctrl *v4l2_ctrl_new(s
  	case V4L2_CTRL_TYPE_VP8_ENCODE_PARAMS:
  		elem_size = sizeof(struct v4l2_ctrl_vp8_encode_params);
  		break;

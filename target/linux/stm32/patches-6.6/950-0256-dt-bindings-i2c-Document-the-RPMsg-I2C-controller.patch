@@ -71,7 +71,7 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
 +    };
 --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
 +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -1161,6 +1161,8 @@ patternProperties:
+@@ -1163,6 +1163,8 @@ patternProperties:
      description: Shenzhen Roofull Technology Co, Ltd
    "^roseapplepi,.*":
      description: RoseapplePi.org

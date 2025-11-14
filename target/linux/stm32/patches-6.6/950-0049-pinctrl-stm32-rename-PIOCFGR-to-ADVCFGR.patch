@@ -62,7 +62,7 @@ Change-Id: I1274d41de76a88eeffd03ae31444526b7ab59adc
  }
  
  static void stm32_gpio_backup_delay(struct stm32_gpio_bank *bank, u32 offset, u32 delay)
-@@ -1214,11 +1214,11 @@ static u32 stm32_pconf_get_bias(struct s
+@@ -1215,11 +1215,11 @@ static u32 stm32_pconf_get_bias(struct s
  	return (val >> (offset * 2));
  }
  
@@ -77,7 +77,7 @@ Change-Id: I1274d41de76a88eeffd03ae31444526b7ab59adc
  	unsigned long flags;
  	int err = 0;
  	u32 val;
-@@ -1236,15 +1236,15 @@ static int stm32_pconf_set_piocfgr(struc
+@@ -1237,15 +1237,15 @@ static int stm32_pconf_set_piocfgr(struc
  		}
  	}
  
@@ -98,7 +98,7 @@ Change-Id: I1274d41de76a88eeffd03ae31444526b7ab59adc
  
  unlock:
  	spin_unlock_irqrestore(&bank->lock, flags);
-@@ -1252,20 +1252,20 @@ unlock:
+@@ -1253,20 +1253,20 @@ unlock:
  	return err;
  }
  
@@ -125,7 +125,7 @@ Change-Id: I1274d41de76a88eeffd03ae31444526b7ab59adc
  }
  
  static int stm32_pconf_set_delay(struct stm32_gpio_bank *bank, int offset, u32 delay)
-@@ -1389,20 +1389,20 @@ static int stm32_pconf_parse_conf(struct
+@@ -1390,20 +1390,20 @@ static int stm32_pconf_parse_conf(struct
  		ret = stm32_pmx_gpio_set_direction(pctldev, range, pin, false);
  		break;
  	case STM32_GPIO_PIN_CONFIG_DELAY_PATH:
@@ -154,7 +154,7 @@ Change-Id: I1274d41de76a88eeffd03ae31444526b7ab59adc
  		break;
  	case STM32_GPIO_PIN_CONFIG_DELAY:
  		ret = stm32_pconf_set_delay(bank, offset, arg);
-@@ -1557,14 +1557,14 @@ static void stm32_pconf_dbg_show(struct
+@@ -1558,14 +1558,14 @@ static void stm32_pconf_dbg_show(struct
  	if (bank->io_sync_control) {
  		u32 retime, clk_type, clk_edge, delay_path, delay;
  
@@ -177,7 +177,7 @@ Change-Id: I1274d41de76a88eeffd03ae31444526b7ab59adc
  		delay = stm32_pconf_get_delay(bank, offset);
  
  		if (retime || clk_type || clk_edge || delay_path || delay)
-@@ -1986,14 +1986,14 @@ err_register:
+@@ -1987,14 +1987,14 @@ err_register:
  	return ret;
  }
  
@@ -196,7 +196,7 @@ Change-Id: I1274d41de76a88eeffd03ae31444526b7ab59adc
  }
  
  static int __maybe_unused stm32_pinctrl_restore_gpio_regs(
-@@ -2054,23 +2054,23 @@ static int __maybe_unused stm32_pinctrl_
+@@ -2055,23 +2055,23 @@ static int __maybe_unused stm32_pinctrl_
  		return ret;
  
  	if (bank->io_sync_control) {

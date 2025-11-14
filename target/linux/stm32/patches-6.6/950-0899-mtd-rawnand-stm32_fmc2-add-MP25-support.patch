@@ -63,7 +63,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  
  	struct dma_chan *dma_tx_ch;
  	struct dma_chan *dma_rx_ch;
-@@ -1809,7 +1818,7 @@ static int stm32_fmc2_nfc_parse_child(st
+@@ -1811,7 +1820,7 @@ static int stm32_fmc2_nfc_parse_child(st
  			return ret;
  		}
  
@@ -72,7 +72,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  			dev_err(nfc->dev, "invalid reg value: %d\n", cs);
  			return -EINVAL;
  		}
-@@ -1915,9 +1924,17 @@ static int stm32_fmc2_nfc_probe(struct p
+@@ -1917,9 +1926,17 @@ static int stm32_fmc2_nfc_probe(struct p
  	nand_controller_init(&nfc->base);
  	nfc->base.ops = &stm32_fmc2_nfc_controller_ops;
  
@@ -93,7 +93,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  
  	ret = stm32_fmc2_nfc_parse_dt(nfc);
  	if (ret)
-@@ -1936,7 +1953,7 @@ static int stm32_fmc2_nfc_probe(struct p
+@@ -1938,7 +1955,7 @@ static int stm32_fmc2_nfc_probe(struct p
  	if (nfc->dev == nfc->cdev)
  		start_region = 1;
  
@@ -102,7 +102,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  	     chip_cs++, mem_region += 3) {
  		if (!(nfc->cs_assigned & BIT(chip_cs)))
  			continue;
-@@ -2092,7 +2109,7 @@ static int __maybe_unused stm32_fmc2_nfc
+@@ -2094,7 +2111,7 @@ static int __maybe_unused stm32_fmc2_nfc
  
  	stm32_fmc2_nfc_wp_disable(nand);
  
@@ -111,7 +111,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  		if (!(nfc->cs_assigned & BIT(chip_cs)))
  			continue;
  
-@@ -2105,9 +2122,28 @@ static int __maybe_unused stm32_fmc2_nfc
+@@ -2107,9 +2124,28 @@ static int __maybe_unused stm32_fmc2_nfc
  static SIMPLE_DEV_PM_OPS(stm32_fmc2_nfc_pm_ops, stm32_fmc2_nfc_suspend,
  			 stm32_fmc2_nfc_resume);
  

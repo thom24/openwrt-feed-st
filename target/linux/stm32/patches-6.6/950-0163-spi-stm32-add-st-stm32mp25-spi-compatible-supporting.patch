@@ -234,7 +234,7 @@ Signed-off-by: Mark Brown <broonie@kernel.org>
  	{ .compatible = "st,stm32h7-spi", .data = (void *)&stm32h7_spi_cfg },
  	{ .compatible = "st,stm32f4-spi", .data = (void *)&stm32f4_spi_cfg },
  	{},
-@@ -1900,6 +1992,22 @@ static int stm32_spi_probe(struct platfo
+@@ -1906,6 +1998,22 @@ static int stm32_spi_probe(struct platfo
  	if (spi->cfg->has_fifo)
  		spi->fifo_size = spi->cfg->get_fifo_size(spi);
  

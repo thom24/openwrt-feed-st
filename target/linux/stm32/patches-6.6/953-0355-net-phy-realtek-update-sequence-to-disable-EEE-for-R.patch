@@ -22,7 +22,7 @@ Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
 
 --- a/drivers/net/phy/realtek/realtek_main.c
 +++ b/drivers/net/phy/realtek/realtek_main.c
-@@ -598,13 +598,15 @@ static int rtl8211f_config_init(struct p
+@@ -593,13 +593,15 @@ static int rtl8211f_config_init(struct p
  	}
  
  	if (of_property_read_bool(dev->of_node, "realtek,eee-disable")) {

@@ -27,7 +27,7 @@ Tested-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
 
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -1212,7 +1212,7 @@ static int stmmac_phy_setup(struct stmma
+@@ -1217,7 +1217,7 @@ static int stmmac_phy_setup(struct stmma
  
  	priv->phylink_config.dev = &priv->dev->dev;
  	priv->phylink_config.type = PHYLINK_NETDEV;

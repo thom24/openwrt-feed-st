@@ -134,7 +134,7 @@ Change-Id: I45d92f1fd46682522bff47e501da12f170a59248
  	return 0;
  }
  
-@@ -1553,6 +1617,7 @@ static int stm32_gpiolib_register_bank(s
+@@ -1554,6 +1618,7 @@ static int stm32_gpiolib_register_bank(s
  	bank->bank_ioport_nr = bank_ioport_nr;
  	bank->secure_control = pctl->match_data->secure_control;
  	bank->io_sync_control = pctl->match_data->io_sync_control;

@@ -116,7 +116,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  			/*
  			 * this is the notification we've received a
  			 * setup packet. In non-DMA mode we'd get this
-@@ -5194,6 +5215,7 @@ int dwc2_gadget_init(struct dwc2_hsotg *
+@@ -5200,6 +5221,7 @@ int dwc2_gadget_init(struct dwc2_hsotg *
  		return -ENOMEM;
  	}
  	INIT_WORK(&hsotg->wf_gadget, dwc2_gadget_remote_wkup_change);

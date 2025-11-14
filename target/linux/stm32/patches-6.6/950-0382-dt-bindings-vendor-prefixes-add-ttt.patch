@@ -18,7 +18,7 @@ Reviewed-by: Eric FOURMONT <eric.fourmont-ext@st.com>
 
 --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
 +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -1416,6 +1416,8 @@ patternProperties:
+@@ -1418,6 +1418,8 @@ patternProperties:
      description: TPO
    "^tq,.*":
      description: TQ-Systems GmbH

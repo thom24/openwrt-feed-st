@@ -20,11 +20,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/i2c/busses/i2c-stm32f7.c | 32 +++++++++++++++++++++-----------
  1 file changed, 21 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index 2caeca61c8bdb..564b1a4f0944d 100644
 --- a/drivers/i2c/busses/i2c-stm32f7.c
 +++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -741,11 +741,14 @@ static void stm32f7_i2c_dma_callback(void *arg)
+@@ -741,11 +741,14 @@ static void stm32f7_i2c_dma_callback(voi
  {
  	struct stm32f7_i2c_dev *i2c_dev = arg;
  	struct stm32_i2c_dma *dma = i2c_dev->dma;
@@ -39,7 +37,7 @@ index 2caeca61c8bdb..564b1a4f0944d 100644
  	complete(&dma->dma_complete);
  }
  
-@@ -881,6 +884,7 @@ static void stm32f7_i2c_xfer_msg(struct stm32f7_i2c_dev *i2c_dev,
+@@ -881,6 +884,7 @@ static void stm32f7_i2c_xfer_msg(struct
  {
  	struct stm32f7_i2c_msg *f7_msg = &i2c_dev->f7_msg;
  	void __iomem *base = i2c_dev->base;
@@ -47,7 +45,7 @@ index 2caeca61c8bdb..564b1a4f0944d 100644
  	u32 cr1, cr2;
  	int ret;
  
-@@ -930,17 +934,23 @@ static void stm32f7_i2c_xfer_msg(struct stm32f7_i2c_dev *i2c_dev,
+@@ -930,17 +934,23 @@ static void stm32f7_i2c_xfer_msg(struct
  
  	/* Configure DMA or enable RX/TX interrupt */
  	i2c_dev->use_dma = false;
@@ -82,6 +80,3 @@ index 2caeca61c8bdb..564b1a4f0944d 100644
  	}
  
  	if (!i2c_dev->use_dma) {
--- 
-2.51.0
-

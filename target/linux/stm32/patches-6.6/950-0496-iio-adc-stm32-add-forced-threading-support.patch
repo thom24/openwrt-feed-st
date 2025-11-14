@@ -90,9 +90,7 @@ Change-Id: I1a83f80e304a03eff3b5361c2de2f755444c2ed9
 +
 +static int stm32_adc_core_domain_alloc(struct irq_domain *dm, unsigned int virq,
 +				       unsigned int nr_irqs, void *data)
- {
--	irq_set_chip_and_handler(irq, NULL, NULL);
--	irq_set_chip_data(irq, NULL);
++{
 +	irq_hw_number_t hwirq;
 +	struct stm32_adc_priv *priv = dm->host_data;
 +	struct irq_fwspec *fwspec = data;
@@ -133,7 +131,9 @@ Change-Id: I1a83f80e304a03eff3b5361c2de2f755444c2ed9
 +
 +static void stm32_adc_core_domain_free(struct irq_domain *domain, unsigned int virq,
 +				       unsigned int nr_irqs)
-+{
+ {
+-	irq_set_chip_and_handler(irq, NULL, NULL);
+-	irq_set_chip_data(irq, NULL);
 +	struct irq_data *irq_data;
 +
 +	irq_set_chip_and_handler(virq, NULL, NULL);
@@ -208,7 +208,7 @@ Change-Id: I1a83f80e304a03eff3b5361c2de2f755444c2ed9
  	if (!priv->domain) {
  		dev_err(&pdev->dev, "Failed to add irq domain\n");
  		return -ENOMEM;
-@@ -446,8 +538,10 @@ static void stm32_adc_irq_remove(struct
+@@ -445,8 +537,10 @@ static void stm32_adc_irq_remove(struct
  		irq_dispose_mapping(irq_find_mapping(priv->domain, hwirq));
  	irq_domain_remove(priv->domain);
  
@@ -220,7 +220,7 @@ Change-Id: I1a83f80e304a03eff3b5361c2de2f755444c2ed9
  }
  
  static int stm32_adc_core_switches_supply_en(struct stm32_adc_priv *priv,
-@@ -722,6 +816,7 @@ static int stm32_adc_probe(struct platfo
+@@ -721,6 +815,7 @@ static int stm32_adc_probe(struct platfo
  		return -ENOMEM;
  	platform_set_drvdata(pdev, &priv->common);
  

@@ -51,7 +51,7 @@ Reviewed-by: Pankaj DEV <pankaj.dev@st.com>
  static inline void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg,
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -5668,6 +5668,7 @@ int dwc2_gadget_enter_partial_power_down
+@@ -5674,6 +5674,7 @@ int dwc2_gadget_enter_partial_power_down
   * power down.
   *
   * @hsotg: Programming view of the DWC_otg controller
@@ -59,7 +59,7 @@ Reviewed-by: Pankaj DEV <pankaj.dev@st.com>
   * @restore: indicates whether need to restore the registers or not.
   *
   * Return: non-zero if failed to exit device partial power down.
-@@ -5675,7 +5676,7 @@ int dwc2_gadget_enter_partial_power_down
+@@ -5681,7 +5682,7 @@ int dwc2_gadget_enter_partial_power_down
   * This function is for exiting from device mode partial power down.
   */
  int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
@@ -68,7 +68,7 @@ Reviewed-by: Pankaj DEV <pankaj.dev@st.com>
  {
  	u32 pcgcctl;
  	u32 dctl;
-@@ -5722,6 +5723,19 @@ int dwc2_gadget_exit_partial_power_down(
+@@ -5728,6 +5729,19 @@ int dwc2_gadget_exit_partial_power_down(
  	dctl |= DCTL_PWRONPRGDONE;
  	dwc2_writel(hsotg, dctl, DCTL);
  

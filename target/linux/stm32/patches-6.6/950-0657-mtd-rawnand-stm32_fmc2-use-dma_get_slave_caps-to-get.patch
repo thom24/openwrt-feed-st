@@ -24,16 +24,16 @@ Tested-by: Christophe KERELLO <christophe.kerello@st.com>
 
 --- a/drivers/mtd/nand/raw/stm32_fmc2_nand.c
 +++ b/drivers/mtd/nand/raw/stm32_fmc2_nand.c
-@@ -264,6 +264,8 @@ struct stm32_fmc2_nfc {
- 	struct sg_table dma_ecc_sg;
+@@ -265,6 +265,8 @@ struct stm32_fmc2_nfc {
  	u8 *ecc_buf;
+ 	dma_addr_t dma_ecc_addr;
  	int dma_ecc_len;
 +	u32 tx_dma_max_burst;
 +	u32 rx_dma_max_burst;
  
  	struct completion complete;
  	struct completion dma_data_complete;
-@@ -347,20 +349,26 @@ static int stm32_fmc2_nfc_select_chip(st
+@@ -348,20 +350,26 @@ static int stm32_fmc2_nfc_select_chip(st
  	stm32_fmc2_nfc_setup(chip);
  	stm32_fmc2_nfc_timings_init(chip);
  
@@ -65,7 +65,7 @@ Tested-by: Christophe KERELLO <christophe.kerello@st.com>
  
  		ret = dmaengine_slave_config(nfc->dma_rx_ch, &dma_cfg);
  		if (ret) {
-@@ -1545,6 +1553,7 @@ static int stm32_fmc2_nfc_setup_interfac
+@@ -1546,6 +1554,7 @@ static int stm32_fmc2_nfc_setup_interfac
  
  static int stm32_fmc2_nfc_dma_setup(struct stm32_fmc2_nfc *nfc)
  {
@@ -73,7 +73,7 @@ Tested-by: Christophe KERELLO <christophe.kerello@st.com>
  	int ret = 0;
  
  	nfc->dma_tx_ch = dma_request_chan(nfc->dev, "tx");
-@@ -1557,6 +1566,11 @@ static int stm32_fmc2_nfc_dma_setup(stru
+@@ -1558,6 +1567,11 @@ static int stm32_fmc2_nfc_dma_setup(stru
  		goto err_dma;
  	}
  
@@ -85,7 +85,7 @@ Tested-by: Christophe KERELLO <christophe.kerello@st.com>
  	nfc->dma_rx_ch = dma_request_chan(nfc->dev, "rx");
  	if (IS_ERR(nfc->dma_rx_ch)) {
  		ret = PTR_ERR(nfc->dma_rx_ch);
-@@ -1567,6 +1581,11 @@ static int stm32_fmc2_nfc_dma_setup(stru
+@@ -1568,6 +1582,11 @@ static int stm32_fmc2_nfc_dma_setup(stru
  		goto err_dma;
  	}
  

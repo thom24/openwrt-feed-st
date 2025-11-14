@@ -16,7 +16,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
 
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -7772,6 +7772,8 @@ int stmmac_suspend(struct device *dev)
+@@ -7779,6 +7779,8 @@ int stmmac_suspend(struct device *dev)
  		return 0;
  	}
  
@@ -25,7 +25,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  	mutex_lock(&priv->lock);
  
  	netif_device_detach(ndev);
-@@ -7797,22 +7799,20 @@ int stmmac_suspend(struct device *dev)
+@@ -7804,22 +7806,20 @@ int stmmac_suspend(struct device *dev)
  		stmmac_pmt(priv, priv->hw, priv->wolopts);
  		priv->irq_wake = 1;
  	} else {
@@ -56,7 +56,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  	if (priv->dma_cap.fpesel) {
  		/* Disable FPE */
  		stmmac_fpe_configure(priv, priv->ioaddr,
-@@ -7910,9 +7910,15 @@ int stmmac_resume(struct device *dev)
+@@ -7917,9 +7917,15 @@ int stmmac_resume(struct device *dev)
  			return ret;
  	}
  
@@ -74,7 +74,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  	mutex_lock(&priv->lock);
  
  	stmmac_reset_queues_param(priv);
-@@ -7937,6 +7943,8 @@ int stmmac_resume(struct device *dev)
+@@ -7944,6 +7950,8 @@ int stmmac_resume(struct device *dev)
  
  	rtnl_unlock();
  

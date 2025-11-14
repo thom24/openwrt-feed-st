@@ -30,7 +30,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
 
 --- a/drivers/iio/adc/stm32-adc-core.c
 +++ b/drivers/iio/adc/stm32-adc-core.c
-@@ -1072,6 +1072,9 @@ static const struct of_device_id stm32_a
+@@ -1071,6 +1071,9 @@ static const struct of_device_id stm32_a
  		.compatible = "st,stm32mp21-adc-core",
  		.data = (void *)&stm32mp21_adc_priv_cfg
  	}, {

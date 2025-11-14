@@ -42,7 +42,7 @@ Domain-Review: Eric FOURMONT <eric.fourmont-ext@st.com>
  	default:
  		return -EINVAL;
  	}
-@@ -1865,6 +1868,9 @@ static struct v4l2_ctrl *v4l2_ctrl_new(s
+@@ -1864,6 +1867,9 @@ static struct v4l2_ctrl *v4l2_ctrl_new(s
  	case V4L2_CTRL_TYPE_AV1_FILM_GRAIN:
  		elem_size = sizeof(struct v4l2_ctrl_av1_film_grain);
  		break;
