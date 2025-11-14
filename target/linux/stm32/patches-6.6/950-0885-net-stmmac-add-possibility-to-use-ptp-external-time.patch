@@ -18,14 +18,16 @@ Domain-Review: Eric FOURMONT <eric.fourmont-ext@st.com>
 Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/365955
 ---
  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c     | 6 +++++-
- drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c | 4 ++++
+ drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c | 3 +++
  drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.h      | 2 ++
  include/linux/stmmac.h                                | 1 +
- 4 files changed, 12 insertions(+), 1 deletion(-)
+ 4 files changed, 11 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 8ccc36450477d..9ad10111d2afc 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -883,12 +883,16 @@ EXPORT_SYMBOL_GPL(stmmac_init_tstamp_cou
+@@ -888,12 +888,16 @@ EXPORT_SYMBOL_GPL(stmmac_init_tstamp_counter);
  static int stmmac_init_ptp(struct stmmac_priv *priv)
  {
  	bool xmac = priv->plat->has_gmac4 || priv->plat->has_xgmac;
@@ -43,19 +45,22 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/365955
  	if (ret)
  		return ret;
  
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+index 6c684f6ee84be..1dbda9542493c 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-@@ -454,6 +454,10 @@ stmmac_probe_config_dt(struct platform_d
+@@ -454,6 +454,9 @@ stmmac_probe_config_dt(struct platform_device *pdev, u8 *mac)
+ 	/* Get max speed of operation from device tree */
  	of_property_read_u32(np, "max-speed", &plat->max_speed);
  
- 	plat->bus_id = of_alias_get_id(np, "ethernet");
-+
 +	/* Get external system time state from device tree */
 +	plat->ext_systime = of_property_read_bool(np, "snps,ext-systime");
 +
- 	if (plat->bus_id < 0)
- 		plat->bus_id = 0;
- 
+ 	plat->bus_id = of_alias_get_id(np, "ethernet");
+ 	if (plat->bus_id < 0) {
+ 		if (bus_id < 0)
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.h b/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.h
+index d1fe4b46f1629..29fc41eeae257 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.h
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.h
 @@ -58,6 +58,8 @@
@@ -67,6 +72,8 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/365955
  /* Select PTP packets for Taking Snapshots
   * On gmac4 specifically:
   * Enable SYNC, Pdelay_Req, Pdelay_Resp when TSEVNTENA is enabled.
+diff --git a/include/linux/stmmac.h b/include/linux/stmmac.h
+index 42ff5a4de8ee7..f78b695337719 100644
 --- a/include/linux/stmmac.h
 +++ b/include/linux/stmmac.h
 @@ -263,6 +263,7 @@ struct plat_stmmacenet_data {
@@ -77,3 +84,6 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/365955
  	u32 host_dma_width;
  	u32 rx_queues_to_use;
  	u32 tx_queues_to_use;
+-- 
+2.51.0
+
