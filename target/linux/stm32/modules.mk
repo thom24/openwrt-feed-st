@@ -112,6 +112,18 @@ endef
 $(eval $(call KernelPackage,nvmem-stm32-tamp))
 
 
+define KernelPackage/pcie-stm32
+  SUBMENU:=$(OTHER_MENU)
+  TITLE:=STMicroelectronics PCIe Controller Host Mode for STM32 MP25
+  DEPENDS:=@PCI_SUPPORT @TARGET_stm32_stm32mp2
+  KCONFIG:=CONFIG_PCIE_STM32
+  FILES:=$(LINUX_DIR)/drivers/pci/controller/dwc/pcie-stm32.ko
+  AUTOLOAD:=$(call AutoProbe,pcie-stm32)
+endef
+
+$(eval $(call KernelPackage,pcie-stm32))
+
+
 define KernelPackage/phy-stm32-usbphyc
   TITLE:=STM32 USB HS PHY Controller driver
   DEPENDS:=@TARGET_stm32
