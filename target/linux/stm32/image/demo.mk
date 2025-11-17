@@ -46,6 +46,8 @@ define Device/stm32mp257f-ev1-demo
   $(call Device/stm32mp257f-ev1)
   $(call Device/Demo-stm32mp2,stm32mp257f-ev1)
   DEVICE_NAME := stm32mp257f-ev1
+  DEVICE_PACKAGES += kmod-pcie-stm32 \
+		     pciutils
 endef
 
 define Device/stm32mp257f-dk-demo
