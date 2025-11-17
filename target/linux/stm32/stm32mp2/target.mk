@@ -5,7 +5,7 @@
 
 BOARDNAME:=STM32MP2 boards
 ARCH:=aarch64
-FEATURES+=fpu usbgadget
+FEATURES+=fpu usbgadget pci pcie
 KERNEL_IMAGES:=Image.gz
 
 DEFAULT_PACKAGES += blockdev kmod-gpio-button-hotplug
