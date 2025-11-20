@@ -148,7 +148,7 @@ c2ab7c5deab4f ("Revert "net: phy: smsc: add WoL support to LAN8740/LAN8742 PHYs"
 ```
 
 Following patches were not applied due to conflicts. They corresponds to the
-empty patches in `target/linux/stm32/patches-6.1/`. They could be applied in the
+empty patches in `target/linux/stm32/patches-6.6/`. They could be applied in the
 future if needed.
 ```
 426e1c78e4c1 ("drm/stm: ltdc: set transparency after plane disable")
