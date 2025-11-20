@@ -74,6 +74,7 @@ Actually the feed is based on OpenWrt
 |USB Type-A|yes|yes|yes|yes|yes|x|
 |Remote processors|no|no|yes (demo profile)|yes (demo profile)|yes (demo profile)|yes (demo profile)|
 |USB Type-C|no|no|yes dual-role (demo profile)|yes dual-role (demo profile)|yes dual-role (demo profile)|yes dual-role (demo profile)|
+|PCIe|x|x|yes root complex (demo profile)|x|x|x|
 
 ## BSP
 
