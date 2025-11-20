@@ -16,8 +16,8 @@ And more boards are supported in the feed.
 You are using the `openwrt-24.10` branch of the feed, which is based on the
 OpenWrt branch `openwrt-24.10`.
 Actually the feed is based on OpenWrt
-[v24.10.2](https://github.com/openwrt/openwrt/tree/v24.10.2)
-([Release Note](https://openwrt.org/releases/24.10/notes-24.10.2)).
+[v24.10.4](https://github.com/openwrt/openwrt/tree/v24.10.4)
+([Release Note](https://openwrt.org/releases/24.10/notes-24.10.4)).
 
 ## Supported devices
 
@@ -108,6 +108,16 @@ a1ff3250129a ("pinctrl: stm32: check devm_kasprintf() returned value")
 67f10b41e33e ("drivers: core: fix device leak in __fw_devlink_relax_cycles()")
 94508b3dd9f6 ("usb: dwc2: gadget: remove of_node reference upon udc_stop")
 07963aca871a ("net: phy: realtek: disable PHY-mode EEE")
+89e1b6a95cdf4 ("i2c: stm32f7: Use devm_clk_get_enabled()")
+435fd1bcf552b ("i2c: stm32f7: use dev_err_probe upon calls of devm_request_irq")
+cf32cfcc2d74e ("i2c: stm32f7: perform most of irq job in threaded handler")
+2b1d2978b2b05 ("i2c: stm32f7: simplify status messages in case of errors")
+6016e8616824a ("spi: stm32: Check for cfg availability in stm32_spi_probe")
+2f38d4c001e8b ("mtd: rawnand: stm32_fmc2: avoid overlapping mappings on ECC buffer")
+865a7b9b16b14 ("pinctrl: stm32: Manage irq affinity settings")
+d9d7111f3cf5c ("i2c: stm32f7: unmap DMA mapped buffer")
+55273980dc97f ("i2c: stm32: fix the device used for the DMA map")
+9207b7bce2799 ("mtd: rawnand: stm32_fmc2: fix ECC overwrite")
 ```
 
 Some patches had to be modified to fix some conflicts.
@@ -128,6 +138,13 @@ dd680178e937 ("counter: stm32-lptimer-cnt: add pm runtime support")
 2a41a04bec3f ("arm64: dts: st: add st,stm32mp25-cortex-a7-gic in intc node in stm32mp251.dtsi")
 fdfbbb333977 ("counter: stm32-lptimer-cnt: fix error handling when enabling")
 d0b3f9979ae5 ("net: phy: realtek: update sequence to disable EEE for RTL8211F")
+5e8186da1fa40 ("i2c: stm32f7: add support for stm32mp25 soc")
+c32748b702c28 ("iio: adc: stm32: add support for stm32mp25")
+d247bababb186 ("net: stmmac: add possibility to use ptp external time")
+babfc9ba63a0f ("dmaengine: stm32: New directory for STM32 DMA controllers drivers")
+c2ab7c5deab4f ("Revert "net: phy: smsc: add WoL support to LAN8740/LAN8742 PHYs"")
+6068e745fc3b5 ("i2c: stm32f7: support i2c_*_dma_safe_msg_buf APIs")
+79f24c8b193bf ("usb: dwc2: gadget: enable the gadget as wakeup source")
 ```
 
 Following patches were not applied due to conflicts. They corresponds to the
@@ -219,12 +236,12 @@ And you need to install a set of packages as described in the
 ### Getting the code
 
 The feed is designed to work with the `openwrt-24.10` branch of OpenWRT (last
-tested commit is [v24.10.2](https://github.com/openwrt/openwrt/tree/v24.10.2)).
+tested commit is [v24.10.4](https://github.com/openwrt/openwrt/tree/v24.10.4)).
 
 ```bash
 $ git clone https://git.openwrt.org/openwrt/openwrt.git
 $ cd openwrt
-$ git checkout v24.10.2
+$ git checkout v24.10.4
 ```
 
 Next step is to add the [STMicroelectronics](https://www.st.com) feed in the
