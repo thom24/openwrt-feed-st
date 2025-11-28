@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_VERSION:=2.10-stm32mp-r2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/STMicroelectronics/arm-trusted-firmware.git
@@ -32,7 +32,6 @@ define Trusted-Firmware-A/stm32mp1
   BUILD_SUBTARGET:=stm32mp1
   PLAT:=stm32mp1
   MAKE_ARGS += BL32_EXTRA2=$(STAGING_DIR_IMAGE)/$(BUILD_VARIANT)-tee-pageable_v2.bin \
-	       STM32MP_USB_PROGRAMMER=1 \
 	       STM32MP1_OPTEE_IN_SYSRAM=1 \
 	       ARM_ARCH_MAJOR=7
 endef
