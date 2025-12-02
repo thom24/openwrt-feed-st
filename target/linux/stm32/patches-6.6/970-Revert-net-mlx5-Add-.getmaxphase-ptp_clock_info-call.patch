@@ -1,0 +1,76 @@
+From c3cd20d2ed30997d0a66180a172f53c968afa1e8 Mon Sep 17 00:00:00 2001
+From: Thomas Richard <thomas.richard@bootlin.com>
+Date: Thu, 13 Nov 2025 18:12:37 +0100
+Subject: [PATCH] Revert "net/mlx5: Add .getmaxphase ptp_clock_info callback"
+
+In ST kernel patches, commit 9994e09faf430 ("Revert "ptp: Add .getmaxphase
+callback to ptp_clock_info"") remove getmaxphase callback in ptp_clock_info
+struct. But this callback is used in the mlx5e driver.
+
+So revert commit 67ac72a599d833ff7d9b210186a66d46c13f0a18 to remove
+getmaxphase callback use.
+
+Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+---
+ .../ethernet/mellanox/mlx5/core/lib/clock.c   | 28 ++++++++-----------
+ 1 file changed, 12 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lib/clock.c b/drivers/net/ethernet/mellanox/mlx5/core/lib/clock.c
+index f00702bf781f1..319a98023281e 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/lib/clock.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/lib/clock.c
+@@ -115,23 +115,17 @@ static u32 mlx5_ptp_shift_constant(u32 dev_freq_khz)
+ 		   ilog2((U32_MAX / NSEC_PER_MSEC) * dev_freq_khz));
+ }
+ 
+-static s32 mlx5_ptp_getmaxphase(struct ptp_clock_info *ptp)
+-{
+-	struct mlx5_clock *clock = container_of(ptp, struct mlx5_clock, ptp_info);
+-	struct mlx5_core_dev *mdev;
+-
+-	mdev = container_of(clock, struct mlx5_core_dev, clock);
+-
+-	return MLX5_CAP_MCAM_FEATURE(mdev, mtutc_time_adjustment_extended_range) ?
+-		       MLX5_MTUTC_OPERATION_ADJUST_TIME_EXTENDED_MAX :
+-			     MLX5_MTUTC_OPERATION_ADJUST_TIME_MAX;
+-}
+-
+ static bool mlx5_is_mtutc_time_adj_cap(struct mlx5_core_dev *mdev, s64 delta)
+ {
+-	s64 max = mlx5_ptp_getmaxphase(&mdev->clock.ptp_info);
++	s64 min = MLX5_MTUTC_OPERATION_ADJUST_TIME_MIN;
++	s64 max = MLX5_MTUTC_OPERATION_ADJUST_TIME_MAX;
+ 
+-	if (delta < -max || delta > max)
++	if (MLX5_CAP_MCAM_FEATURE(mdev, mtutc_time_adjustment_extended_range)) {
++		min = MLX5_MTUTC_OPERATION_ADJUST_TIME_EXTENDED_MIN;
++		max = MLX5_MTUTC_OPERATION_ADJUST_TIME_EXTENDED_MAX;
++	}
++
++	if (delta < min || delta > max)
+ 		return false;
+ 
+ 	return true;
+@@ -388,7 +382,10 @@ static int mlx5_ptp_adjphase(struct ptp_clock_info *ptp, s32 delta)
+ 
+ 	mdev = container_of(clock, struct mlx5_core_dev, clock);
+ 
+-	return mlx5_ptp_adjtime_real_time(mdev, delta);
++	if (!mlx5_is_mtutc_time_adj_cap(mdev, delta))
++		return -ERANGE;
++
++	return mlx5_ptp_adjtime(ptp, delta);
+ }
+ 
+ static int mlx5_ptp_freq_adj_real_time(struct mlx5_core_dev *mdev, long scaled_ppm)
+@@ -764,7 +761,6 @@ static const struct ptp_clock_info mlx5_ptp_clock_info = {
+ 	.pps		= 0,
+ 	.adjfine	= mlx5_ptp_adjfine,
+ 	.adjphase	= mlx5_ptp_adjphase,
+-	.getmaxphase    = mlx5_ptp_getmaxphase,
+ 	.adjtime	= mlx5_ptp_adjtime,
+ 	.gettimex64	= mlx5_ptp_gettimex,
+ 	.settime64	= mlx5_ptp_settime,
+-- 
+2.51.0
+
