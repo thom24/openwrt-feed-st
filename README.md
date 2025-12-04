@@ -278,6 +278,7 @@ $ ./scripts/feeds install -f stm32
 Install all other packages
 
 ```bash
+$ ./scripts/feeds install -p st -a -f
 $ ./scripts/feeds install -a -f
 ```
 (Some overriding warnings can occur, if you used `-f` please ignore them).
