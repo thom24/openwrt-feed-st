@@ -456,3 +456,4 @@ service rngd restart
 * [Using the OpenWrt Image Builder](docs/imagebuilder.md)
 * [Using the package repositories](docs/repositories.md)
 * [Benchmarking](docs/benchmarking.md)
+* [Release notes](docs/release-notes.md)
