@@ -15,11 +15,9 @@ Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
  .../ethernet/mellanox/mlx5/core/lib/clock.c   | 28 ++++++++-----------
  1 file changed, 12 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lib/clock.c b/drivers/net/ethernet/mellanox/mlx5/core/lib/clock.c
-index f00702bf781f1..319a98023281e 100644
 --- a/drivers/net/ethernet/mellanox/mlx5/core/lib/clock.c
 +++ b/drivers/net/ethernet/mellanox/mlx5/core/lib/clock.c
-@@ -115,23 +115,17 @@ static u32 mlx5_ptp_shift_constant(u32 dev_freq_khz)
+@@ -115,23 +115,17 @@ static u32 mlx5_ptp_shift_constant(u32 d
  		   ilog2((U32_MAX / NSEC_PER_MSEC) * dev_freq_khz));
  }
  
@@ -51,7 +49,7 @@ index f00702bf781f1..319a98023281e 100644
  		return false;
  
  	return true;
-@@ -388,7 +382,10 @@ static int mlx5_ptp_adjphase(struct ptp_clock_info *ptp, s32 delta)
+@@ -388,7 +382,10 @@ static int mlx5_ptp_adjphase(struct ptp_
  
  	mdev = container_of(clock, struct mlx5_core_dev, clock);
  
@@ -63,7 +61,7 @@ index f00702bf781f1..319a98023281e 100644
  }
  
  static int mlx5_ptp_freq_adj_real_time(struct mlx5_core_dev *mdev, long scaled_ppm)
-@@ -764,7 +761,6 @@ static const struct ptp_clock_info mlx5_ptp_clock_info = {
+@@ -764,7 +761,6 @@ static const struct ptp_clock_info mlx5_
  	.pps		= 0,
  	.adjfine	= mlx5_ptp_adjfine,
  	.adjphase	= mlx5_ptp_adjphase,
@@ -71,6 +69,3 @@ index f00702bf781f1..319a98023281e 100644
  	.adjtime	= mlx5_ptp_adjtime,
  	.gettimex64	= mlx5_ptp_gettimex,
  	.settime64	= mlx5_ptp_settime,
--- 
-2.51.0
-

@@ -53,7 +53,7 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
 
 --- a/drivers/usb/gadget/function/f_ncm.c
 +++ b/drivers/usb/gadget/function/f_ncm.c
-@@ -1603,10 +1603,7 @@ static void ncm_free_inst(struct usb_fun
+@@ -1593,10 +1593,7 @@ static void ncm_free_inst(struct usb_fun
  	struct f_ncm_opts *opts;
  
  	opts = container_of(f, struct f_ncm_opts, func_inst);
@@ -65,7 +65,7 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  	kfree(opts->ncm_interf_group);
  	kfree(opts);
  }
-@@ -1665,6 +1662,7 @@ static void ncm_free(struct usb_function
+@@ -1655,6 +1652,7 @@ static void ncm_free(struct usb_function
  static void ncm_unbind(struct usb_configuration *c, struct usb_function *f)
  {
  	struct f_ncm *ncm = func_to_ncm(f);
@@ -73,7 +73,7 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  
  	DBG(c->cdev, "ncm unbind\n");
  
-@@ -1683,6 +1681,9 @@ static void ncm_unbind(struct usb_config
+@@ -1673,6 +1671,9 @@ static void ncm_unbind(struct usb_config
  
  	kfree(ncm->notify_req->buf);
  	usb_ep_free_request(ncm->notify, ncm->notify_req);

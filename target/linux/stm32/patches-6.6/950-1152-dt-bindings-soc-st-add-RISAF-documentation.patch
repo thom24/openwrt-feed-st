@@ -91,7 +91,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
 +        };
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -20642,6 +20642,11 @@ F:	Documentation/arch/arm/stm32/stm32-dm
+@@ -20637,6 +20637,11 @@ F:	Documentation/arch/arm/stm32/stm32-dm
  F:	Documentation/devicetree/bindings/dma/stm32/
  F:	drivers/dma/stm32/
  

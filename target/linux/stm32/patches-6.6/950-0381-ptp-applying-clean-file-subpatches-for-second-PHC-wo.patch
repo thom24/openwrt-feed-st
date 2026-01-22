@@ -72,7 +72,7 @@ Reviewed-by: Eric FOURMONT <eric.fourmont-ext@st.com>
  		sysoff = memdup_user((void __user *)arg, sizeof(*sysoff));
 --- a/drivers/ptp/ptp_clock.c
 +++ b/drivers/ptp/ptp_clock.c
-@@ -234,6 +234,7 @@ struct ptp_clock *ptp_clock_register(str
+@@ -245,6 +245,7 @@ struct ptp_clock *ptp_clock_register(str
  
  	ptp->clock.ops = ptp_clock_ops;
  	ptp->info = info;
@@ -80,7 +80,7 @@ Reviewed-by: Eric FOURMONT <eric.fourmont-ext@st.com>
  	ptp->devid = MKDEV(major, index);
  	ptp->index = index;
  	spin_lock_init(&ptp->tsevq.lock);
-@@ -360,6 +361,25 @@ static int unregister_vclock(struct devi
+@@ -371,6 +372,25 @@ static int unregister_vclock(struct devi
  	return 0;
  }
  

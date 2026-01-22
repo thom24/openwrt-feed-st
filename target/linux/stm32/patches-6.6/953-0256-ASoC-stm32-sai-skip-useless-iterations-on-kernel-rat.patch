@@ -96,7 +96,7 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  
  	/* No accurate rate found */
  	dev_err(&pdev->dev, "Failed to find an accurate rate");
-@@ -686,7 +702,7 @@ static int stm32_sai_set_sysclk(struct s
+@@ -694,7 +710,7 @@ static int stm32_sai_set_sysclk(struct s
  		}
  
  		/* If master clock is used, configure SAI kernel clock now */
@@ -105,7 +105,7 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  		if (ret)
  			return ret;
  
-@@ -1110,7 +1126,7 @@ static int stm32_sai_configure_clock(str
+@@ -1118,7 +1134,7 @@ static int stm32_sai_configure_clock(str
  	int ret;
  
  	if (!sai->sai_mclk) {
