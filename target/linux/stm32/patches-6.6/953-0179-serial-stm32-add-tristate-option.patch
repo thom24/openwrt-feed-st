@@ -14,19 +14,22 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
 Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
 Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
 ---
- drivers/tty/serial/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/tty/serial/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+index 4f57833e3ec7..90f4c08c0d5b 100644
 --- a/drivers/tty/serial/Kconfig
 +++ b/drivers/tty/serial/Kconfig
-@@ -1404,8 +1404,8 @@ config SERIAL_STM32
+@@ -1404,7 +1404,7 @@ config SERIAL_STM32
  	  If unsure, say N.
  
  config SERIAL_STM32_CONSOLE
 -	bool "Support for console on STM32"
--	depends on SERIAL_STM32=y
 +	tristate "Support for console on STM32"
-+	depends on SERIAL_STM32
+ 	depends on SERIAL_STM32
  	select SERIAL_CORE_CONSOLE
  	select SERIAL_EARLYCON
- 
+-- 
+2.51.0
+
