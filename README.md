@@ -16,8 +16,8 @@ And more boards are supported in the feed.
 You are using the `openwrt-24.10` branch of the feed, which is based on the
 OpenWrt branch `openwrt-24.10`.
 Actually the feed is based on OpenWrt
-[v24.10.4](https://github.com/openwrt/openwrt/tree/v24.10.4)
-([Release Note](https://openwrt.org/releases/24.10/notes-24.10.4)).
+[v24.10.5](https://github.com/openwrt/openwrt/tree/v24.10.5)
+([Release Note](https://openwrt.org/releases/24.10/notes-24.10.5)).
 
 ## Supported devices
 
@@ -119,6 +119,8 @@ cf32cfcc2d74e ("i2c: stm32f7: perform most of irq job in threaded handler")
 d9d7111f3cf5c ("i2c: stm32f7: unmap DMA mapped buffer")
 55273980dc97f ("i2c: stm32: fix the device used for the DMA map")
 9207b7bce2799 ("mtd: rawnand: stm32_fmc2: fix ECC overwrite")
+9d74fc2f5e3a ("spi: spi-mem: Allow specifying the byte order in DTR mode")
+ee48aa9e5979 ("rtc: rtc-optee: fix memory leak on removal")
 ```
 
 Some patches had to be modified to fix some conflicts.
@@ -146,6 +148,7 @@ babfc9ba63a0f ("dmaengine: stm32: New directory for STM32 DMA controllers driver
 c2ab7c5deab4f ("Revert "net: phy: smsc: add WoL support to LAN8740/LAN8742 PHYs"")
 6068e745fc3b5 ("i2c: stm32f7: support i2c_*_dma_safe_msg_buf APIs")
 79f24c8b193bf ("usb: dwc2: gadget: enable the gadget as wakeup source")
+b9e45016861b ("serial: stm32: add tristate option")
 ```
 
 Following patches were not applied due to conflicts. They corresponds to the
@@ -237,12 +240,12 @@ And you need to install a set of packages as described in the
 ### Getting the code
 
 The feed is designed to work with the `openwrt-24.10` branch of OpenWRT (last
-tested commit is [v24.10.4](https://github.com/openwrt/openwrt/tree/v24.10.4)).
+tested commit is [v24.10.4](https://github.com/openwrt/openwrt/tree/v24.10.5)).
 
 ```bash
 $ git clone https://git.openwrt.org/openwrt/openwrt.git
 $ cd openwrt
-$ git checkout v24.10.4
+$ git checkout v24.10.5
 ```
 
 Next step is to add the [STMicroelectronics](https://www.st.com) feed in the
