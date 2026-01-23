@@ -11,7 +11,7 @@ device or a host.
 ## Configuration
 
 To configure the Cortex M33 processor to act as a usb role switch, the
-USBPD_DRP_UCSI firmware shall be loaded. Skip this step for STM32MP135F-DK
+USBPD_DRP_UCSI firmware shall be loaded. Skip this step for STM32MP215F-DK
 board.
 
 1. Create a uci-defaults script
