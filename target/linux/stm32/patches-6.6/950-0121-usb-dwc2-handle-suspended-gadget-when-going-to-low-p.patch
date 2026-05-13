@@ -18,12 +18,14 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/usb/dwc2/platform.c | 13 ++++++++++++-
  1 file changed, 12 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index 898cbe5cf338..7112b1940837 100644
 --- a/drivers/usb/dwc2/platform.c
 +++ b/drivers/usb/dwc2/platform.c
-@@ -649,8 +649,19 @@ static int __maybe_unused dwc2_suspend(s
- 	bool is_device_mode = dwc2_is_device_mode(dwc2);
- 	int ret = 0;
+@@ -656,8 +656,19 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+ 		return 0;
  
+ 	is_device_mode = dwc2_is_device_mode(dwc2);
 -	if (is_device_mode)
 +	if (is_device_mode) {
 +		/*
@@ -41,3 +43,6 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  
  	dwc2_drd_suspend(dwc2);
  
+-- 
+2.53.0
+
