@@ -48,7 +48,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
 
 --- a/drivers/usb/dwc2/platform.c
 +++ b/drivers/usb/dwc2/platform.c
-@@ -765,6 +765,12 @@ static int __maybe_unused dwc2_resume(st
+@@ -775,6 +775,12 @@ static int __maybe_unused dwc2_resume(st
  	if (device_may_wakeup(dev) || device_wakeup_path(dev))
  		disable_irq_wake(dwc2->irq);
  

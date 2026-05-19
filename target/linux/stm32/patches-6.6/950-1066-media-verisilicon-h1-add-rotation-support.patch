@@ -42,7 +42,7 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/374018
  
  	const struct hantro_codec_ops *codec_ops;
  	struct hantro_postproc_ctx postproc;
-@@ -506,5 +508,7 @@ int hanto_postproc_enum_framesizes(struc
+@@ -508,5 +510,7 @@ int hanto_postproc_enum_framesizes(struc
  
  void hantro_h1_set_axi_ctrl(struct hantro_dev *vpu, struct hantro_ctx *ctx);
  void hantro_h1_set_color_conv(struct hantro_dev *vpu, struct hantro_ctx *ctx);

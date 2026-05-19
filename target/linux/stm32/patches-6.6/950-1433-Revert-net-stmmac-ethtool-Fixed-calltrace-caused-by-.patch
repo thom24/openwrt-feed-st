@@ -50,7 +50,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  	mutex_lock(&priv->lock);
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -3557,7 +3557,6 @@ static int stmmac_request_irq_multi_msi(
+@@ -3558,7 +3558,6 @@ static int stmmac_request_irq_multi_msi(
  	/* Request the Wake IRQ in case of another line
  	 * is used for WoL
  	 */

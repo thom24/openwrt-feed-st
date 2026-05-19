@@ -96,7 +96,7 @@ Change-Id: I45c1c8d00af3b64d760a5b381dd6c91b29337b35
  	struct extcon_dev	*edev;
  	struct notifier_block	edev_nb;
  	enum usb_phy_interface	hsphy_mode;
-@@ -1532,7 +1533,9 @@ struct dwc3_gadget_ep_cmd_params {
+@@ -1533,7 +1534,9 @@ struct dwc3_gadget_ep_cmd_params {
  
  /* prototypes */
  void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode, bool ignore_susphy);

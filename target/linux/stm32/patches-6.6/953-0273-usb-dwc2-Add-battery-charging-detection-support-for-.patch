@@ -310,7 +310,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  /*
   * Check the dr_mode against the module configuration and hardware
   * capabilities.
-@@ -633,6 +815,12 @@ static int dwc2_driver_probe(struct plat
+@@ -626,6 +808,12 @@ static int dwc2_driver_probe(struct plat
  		hsotg->gadget_enabled = 1;
  	}
  

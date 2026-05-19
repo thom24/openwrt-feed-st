@@ -1405,7 +1405,7 @@ Tested-by: Hugues FRUCHET <hugues.fruchet@st.com>
  /**
   * struct hantro_codec_ops - codec mode specific operations
   *
-@@ -639,4 +657,9 @@ void hantro_vp8_enc_exit(struct hantro_c
+@@ -643,4 +661,9 @@ void hantro_vp8_enc_exit(struct hantro_c
  int hantro_h1_vp8_enc_run(struct hantro_ctx *ctx);
  void hantro_h1_vp8_enc_done(struct hantro_ctx *ctx);
  

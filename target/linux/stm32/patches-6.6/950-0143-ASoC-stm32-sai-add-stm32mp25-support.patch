@@ -65,8 +65,8 @@ Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
  	{}
  };
  
-@@ -148,6 +159,29 @@ error:
- 	return ret;
+@@ -142,6 +153,29 @@ static int stm32_sai_set_sync(struct stm
+ 	return stm32_sai_sync_conf_provider(sai_provider, synco);
  }
  
 +static int stm32_sai_get_parent_clk(struct stm32_sai_data *sai)
@@ -95,7 +95,7 @@ Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
  static int stm32_sai_probe(struct platform_device *pdev)
  {
  	struct stm32_sai_data *sai;
-@@ -160,6 +194,8 @@ static int stm32_sai_probe(struct platfo
+@@ -154,6 +188,8 @@ static int stm32_sai_probe(struct platfo
  	if (!sai)
  		return -ENOMEM;
  
@@ -104,7 +104,7 @@ Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
  	sai->base = devm_platform_ioremap_resource(pdev, 0);
  	if (IS_ERR(sai->base))
  		return PTR_ERR(sai->base);
-@@ -178,15 +214,11 @@ static int stm32_sai_probe(struct platfo
+@@ -172,15 +208,11 @@ static int stm32_sai_probe(struct platfo
  					     "missing bus clock pclk\n");
  	}
  
@@ -125,7 +125,7 @@ Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
  
  	/* init irqs */
  	sai->irq = platform_get_irq(pdev, 0);
-@@ -227,7 +259,6 @@ static int stm32_sai_probe(struct platfo
+@@ -221,7 +253,6 @@ static int stm32_sai_probe(struct platfo
  	}
  	clk_disable_unprepare(sai->pclk);
  
@@ -363,7 +363,7 @@ Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
  	spin_lock_irqsave(&sai->irq_lock, flags);
  	sai->substream = NULL;
  	spin_unlock_irqrestore(&sai->irq_lock, flags);
-@@ -1538,6 +1663,13 @@ static int stm32_sai_sub_probe(struct pl
+@@ -1552,6 +1677,13 @@ static int stm32_sai_sub_probe(struct pl
  		return -EINVAL;
  	}
  

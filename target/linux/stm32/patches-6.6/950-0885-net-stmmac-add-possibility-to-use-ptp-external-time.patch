@@ -25,7 +25,7 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/365955
 
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -888,12 +888,16 @@ EXPORT_SYMBOL_GPL(stmmac_init_tstamp_cou
+@@ -889,12 +889,16 @@ EXPORT_SYMBOL_GPL(stmmac_init_tstamp_cou
  static int stmmac_init_ptp(struct stmmac_priv *priv)
  {
  	bool xmac = priv->plat->has_gmac4 || priv->plat->has_xgmac;

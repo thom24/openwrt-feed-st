@@ -88,7 +88,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  }
  
  static int stm32_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
-@@ -659,12 +662,21 @@ static int stm32_pwm_probe(struct platfo
+@@ -658,12 +661,21 @@ static int stm32_pwm_probe(struct platfo
  	priv->chip.npwm = stm32_pwm_detect_channels(priv, ddata, &num_enabled);
  
  	/* Initialize clock refcount to number of enabled PWM channels. */
@@ -111,7 +111,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  	ret = devm_pwmchip_add(dev, &priv->chip);
  	if (ret < 0)
  		return ret;
-@@ -674,11 +686,12 @@ static int stm32_pwm_probe(struct platfo
+@@ -673,11 +685,12 @@ static int stm32_pwm_probe(struct platfo
  	return 0;
  }
  
@@ -125,7 +125,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  
  	/* Look for active channels */
  	ccer = active_channels(priv);
-@@ -692,23 +705,66 @@ static int __maybe_unused stm32_pwm_susp
+@@ -691,23 +704,66 @@ static int __maybe_unused stm32_pwm_susp
  		}
  	}
  
@@ -197,7 +197,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  
  static const struct of_device_id stm32_pwm_of_match[] = {
  	{ .compatible = "st,stm32-pwm",	},
-@@ -723,7 +779,7 @@ static struct platform_driver stm32_pwm_
+@@ -722,7 +778,7 @@ static struct platform_driver stm32_pwm_
  	.driver	= {
  		.name = "stm32-pwm",
  		.of_match_table = stm32_pwm_of_match,

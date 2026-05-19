@@ -19,7 +19,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
 
 --- a/drivers/net/phy/phy_device.c
 +++ b/drivers/net/phy/phy_device.c
-@@ -342,7 +342,7 @@ static __maybe_unused int mdio_bus_phy_s
+@@ -381,7 +381,7 @@ static __maybe_unused int mdio_bus_phy_s
  static __maybe_unused int mdio_bus_phy_resume(struct device *dev)
  {
  	struct phy_device *phydev = to_phy_device(dev);
@@ -28,7 +28,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  
  	if (phydev->mac_managed_pm)
  		return 0;
-@@ -352,6 +352,10 @@ static __maybe_unused int mdio_bus_phy_r
+@@ -391,6 +391,10 @@ static __maybe_unused int mdio_bus_phy_r
  
  	phydev->suspended_by_mdio_bus = 0;
  

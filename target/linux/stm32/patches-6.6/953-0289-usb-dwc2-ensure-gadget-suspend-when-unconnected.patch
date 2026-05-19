@@ -21,7 +21,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
 
 --- a/drivers/usb/dwc2/platform.c
 +++ b/drivers/usb/dwc2/platform.c
-@@ -913,13 +913,26 @@ static int __maybe_unused dwc2_suspend(s
+@@ -906,13 +906,26 @@ static int __maybe_unused dwc2_suspend(s
  	if (is_device_mode) {
  		/*
  		 * Handle the case when bus has been suspended prior to platform suspend.

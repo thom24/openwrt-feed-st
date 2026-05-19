@@ -227,7 +227,7 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  }
  
  /**
-@@ -596,13 +596,6 @@ static int dwc2_driver_probe(struct plat
+@@ -599,13 +599,6 @@ static int dwc2_driver_probe(struct plat
  		usleep_range(5000, 7000);
  	}
  
@@ -241,7 +241,7 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  
  	retval = dwc2_drd_init(hsotg);
  	if (retval) {
-@@ -610,6 +603,19 @@ static int dwc2_driver_probe(struct plat
+@@ -613,6 +606,19 @@ static int dwc2_driver_probe(struct plat
  		goto error_init;
  	}
  
@@ -261,7 +261,7 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  	if (hsotg->dr_mode != USB_DR_MODE_HOST) {
  		retval = dwc2_gadget_init(hsotg);
  		if (retval)
-@@ -739,14 +745,6 @@ static int __maybe_unused dwc2_suspend(s
+@@ -746,14 +752,6 @@ static int __maybe_unused dwc2_suspend(s
  		regulator_disable(dwc2->usb33d);
  	}
  
@@ -276,7 +276,7 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  	if (dwc2->ll_hw_enabled &&
  	    (is_device_mode || dwc2_host_can_poweroff_phy(dwc2))) {
  		ret = __dwc2_lowlevel_hw_disable(dwc2);
-@@ -799,11 +797,16 @@ static int __maybe_unused dwc2_resume(st
+@@ -809,11 +807,16 @@ static int __maybe_unused dwc2_resume(st
  		spin_unlock_irqrestore(&dwc2->lock, flags);
  	}
  

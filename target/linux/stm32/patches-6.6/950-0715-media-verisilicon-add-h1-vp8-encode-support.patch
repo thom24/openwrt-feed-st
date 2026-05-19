@@ -1752,7 +1752,7 @@ Change-Id: I7369849403effb4056f78a367875c34ab1118000
 +}
 --- a/drivers/media/platform/verisilicon/hantro_hw.h
 +++ b/drivers/media/platform/verisilicon/hantro_hw.h
-@@ -632,4 +632,7 @@ int hantro_vp8_enc_init(struct hantro_ct
+@@ -636,4 +636,7 @@ int hantro_vp8_enc_init(struct hantro_ct
  void rockchip_vpu2_vp8_enc_done(struct hantro_ctx *ctx);
  void hantro_vp8_enc_exit(struct hantro_ctx *ctx);
  

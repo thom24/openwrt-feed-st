@@ -28,7 +28,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
 
 --- a/drivers/pwm/pwm-stm32.c
 +++ b/drivers/pwm/pwm-stm32.c
-@@ -494,9 +494,51 @@ static int stm32_pwm_apply_locked(struct
+@@ -493,9 +493,51 @@ static int stm32_pwm_apply_locked(struct
  	return ret;
  }
  

@@ -17,7 +17,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
 
 --- a/drivers/gpu/drm/stm/drv.c
 +++ b/drivers/gpu/drm/stm/drv.c
-@@ -127,16 +127,14 @@ static void drv_unload(struct drm_device
+@@ -128,16 +128,14 @@ static void drv_unload(struct drm_device
  static __maybe_unused int drv_suspend(struct device *dev)
  {
  	struct drm_device *ddev = dev_get_drvdata(dev);
@@ -39,7 +39,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  	pm_runtime_force_suspend(dev);
  
  	return 0;
-@@ -145,20 +143,12 @@ static __maybe_unused int drv_suspend(st
+@@ -146,20 +144,12 @@ static __maybe_unused int drv_suspend(st
  static __maybe_unused int drv_resume(struct device *dev)
  {
  	struct drm_device *ddev = dev_get_drvdata(dev);

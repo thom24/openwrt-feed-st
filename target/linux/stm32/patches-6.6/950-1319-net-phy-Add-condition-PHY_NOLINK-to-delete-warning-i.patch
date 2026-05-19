@@ -25,7 +25,7 @@ Tested-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
 
 --- a/drivers/net/phy/phy_device.c
 +++ b/drivers/net/phy/phy_device.c
-@@ -358,7 +358,7 @@ static __maybe_unused int mdio_bus_phy_r
+@@ -397,7 +397,7 @@ static __maybe_unused int mdio_bus_phy_r
  	 * MAC managed PM, but we are not.
  	 */
  	WARN_ON(phydev->state != PHY_HALTED && phydev->state != PHY_READY &&
