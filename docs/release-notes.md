@@ -1,5 +1,11 @@
 # Release notes
 
+##  openstlinux-6.6-openwrt-24.10.6-mpu-v25.06.11
+
+Changes in this release:
+
+- Based on OpenWrt v24.10.6.
+
 ##  openstlinux-6.6-openwrt-24.10.5-mpu-v25.06.11
 
 Changes in this release:
