@@ -16,8 +16,8 @@ And more boards are supported in the feed.
 You are using the `openwrt-24.10` branch of the feed, which is based on the
 OpenWrt branch `openwrt-24.10`.
 Actually the feed is based on OpenWrt
-[v24.10.5](https://github.com/openwrt/openwrt/tree/v24.10.5)
-([Release Note](https://openwrt.org/releases/24.10/notes-24.10.5)).
+[v24.10.6](https://github.com/openwrt/openwrt/tree/v24.10.6)
+([Release Note](https://openwrt.org/releases/24.10/notes-24.10.6)).
 
 ## Supported devices
 
@@ -121,6 +121,9 @@ d9d7111f3cf5c ("i2c: stm32f7: unmap DMA mapped buffer")
 9207b7bce2799 ("mtd: rawnand: stm32_fmc2: fix ECC overwrite")
 9d74fc2f5e3a ("spi: spi-mem: Allow specifying the byte order in DTR mode")
 ee48aa9e5979 ("rtc: rtc-optee: fix memory leak on removal")
+a17c92edd7bb ("Revert "drm: Call drm_atomic_helper_shutdown() at shutdown/remove time for misc drivers"")
+fbdc154a59a4 ("usb: dwc2: fix shutdown in peripheral mode when gadget isn't configured")
+f739a554280b ("pwm: stm32: ensure PWM polarity is set when enabling it")
 ```
 
 Some patches had to be modified to fix some conflicts.
@@ -149,6 +152,10 @@ c2ab7c5deab4f ("Revert "net: phy: smsc: add WoL support to LAN8740/LAN8742 PHYs"
 6068e745fc3b5 ("i2c: stm32f7: support i2c_*_dma_safe_msg_buf APIs")
 79f24c8b193bf ("usb: dwc2: gadget: enable the gadget as wakeup source")
 b9e45016861b ("serial: stm32: add tristate option")
+f1bc1b5d21c5 ("usb: dwc2: platform: Add irq wakeup support")
+f6e33af19395 ("usb: dwc2: handle suspended gadget when going to low power")
+7bf7d5b59c8d ("media: verisilicon: add VP8 encode support for Rockchip RK3399 VPU2")
+e9813d379cc9 ("usb: dwc2: fix suspend in peripheral mode when gadget isn't configured")
 ```
 
 Following patches were not applied due to conflicts. They corresponds to the
@@ -240,12 +247,12 @@ And you need to install a set of packages as described in the
 ### Getting the code
 
 The feed is designed to work with the `openwrt-24.10` branch of OpenWRT (last
-tested commit is [v24.10.4](https://github.com/openwrt/openwrt/tree/v24.10.5)).
+tested commit is [v24.10.6](https://github.com/openwrt/openwrt/tree/v24.10.6)).
 
 ```bash
 $ git clone https://git.openwrt.org/openwrt/openwrt.git
 $ cd openwrt
-$ git checkout v24.10.5
+$ git checkout v24.10.6
 ```
 
 Next step is to add the [STMicroelectronics](https://www.st.com) feed in the
