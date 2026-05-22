@@ -7,13 +7,13 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_VERSION:=2023.10-stm32mp-r2
+PKG_VERSION:=2023.10-stm32mp-r3
 PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/STMicroelectronics/u-boot.git
 PKG_SOURCE_VERSION:=v$(PKG_VERSION)
-PKG_MIRROR_HASH:=74cf383ef84648cd449756d6db9dbd3dd43ac3aa5f4b652cb8ec3153e01bc7e9
+PKG_MIRROR_HASH:=072af60d420974eb032970b19ff9a6dd4c9e7f73e4c9497e9a470c1817ae6aec
 PKG_MAINTAINER:=Thomas Richard <thomas.richard@bootlin.com>
 
 UBOOT_USE_INTREE_DTC:=1
