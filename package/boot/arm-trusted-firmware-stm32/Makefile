@@ -7,13 +7,13 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_VERSION:=2.10-stm32mp-r2
-PKG_RELEASE:=2
+PKG_VERSION:=2.10-stm32mp-r3
+PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/STMicroelectronics/arm-trusted-firmware.git
 PKG_SOURCE_VERSION:=v$(PKG_VERSION)
-PKG_MIRROR_HASH:=108bcd8936cffe39b516418062229f914072a3b89368e763d9857fb923f15b6c
+PKG_MIRROR_HASH:=fbc046ab179666cd1a66226b0bc2fe38380f1190080fae8c8a13ca9ea0003583
 
 PKG_MAINTAINER:=Thomas Richard <thomas.richard@bootlin.com>
 
@@ -86,7 +86,6 @@ TFA_TARGETS := \
 	       stm32mp215f-dk
 
 TFA_MAKE_FLAGS += \
-		$(if $(CONFIG_BINUTILS_VERSION_2_37)$(CONFIG_BINUTILS_VERSION_2_38),,LDFLAGS="-no-warn-rwx-segments") \
 		$(if $(CONFIG_aarch64), ARCH=aarch64 SPD=opteed, ARCH=aarch32 AARCH32_SP=optee) \
 		BL32=$(STAGING_DIR_IMAGE)/$(BUILD_VARIANT)-tee-header_v2.bin \
 		BL32_EXTRA1=$(STAGING_DIR_IMAGE)/$(BUILD_VARIANT)-tee-pager_v2.bin \
@@ -97,6 +96,16 @@ TFA_MAKE_FLAGS += \
 		TARGET_BOARD="" \
 		$(MAKE_ARGS) \
 		all fip
+
+override define Build/Compile/Trusted-Firmware-A
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+		CROSS_COMPILE=$(TARGET_CROSS) \
+		OPENSSL_DIR=$(STAGING_DIR_HOST) \
+		$(if $(DTC),DTC="$(DTC)") \
+		PLAT=$(PLAT) \
+		BUILD_STRING="OpenWrt $(PKG_VERSION_PREFIX)$(PKG_VERSION)-$(PKG_RELEASE) ($(VARIANT))" \
+		$(TFA_MAKE_FLAGS)
+endef
 
 define Package/trusted-firmware-a/install
 	$(INSTALL_DIR) $(STAGING_DIR_IMAGE)
