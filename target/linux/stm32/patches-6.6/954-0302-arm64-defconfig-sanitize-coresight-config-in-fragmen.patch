@@ -1,0 +1,48 @@
+From 7872d4239f93f6e9b2ee7aa611f2540d0ea802a2 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Tue, 28 Oct 2025 14:15:31 +0100
+Subject: [PATCH] arm64: defconfig: sanitize coresight config in
+ fragment-02-defconfig-addons
+
+In the ARM64 defconfig, most of the coresight configuration switches
+are already enabled as module. To avoid overriding them to built-in,
+remove the coresight configuration in the fragment-02-defconfig-addons
+except CONFIG_CORESIGHT_SOURCE_ETM4X that is needed for the ETM
+peripheral. But change it to module so that it is consistent with the
+rest.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I0012f22896e49d73e6130ad8ddb10a324b8d7794
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/503603
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+---
+ arch/arm64/configs/fragment-02-defconfig-addons.config | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/arch/arm64/configs/fragment-02-defconfig-addons.config b/arch/arm64/configs/fragment-02-defconfig-addons.config
+index 8694391df99a..c5b1e68dc302 100644
+--- a/arch/arm64/configs/fragment-02-defconfig-addons.config
++++ b/arch/arm64/configs/fragment-02-defconfig-addons.config
+@@ -6,13 +6,7 @@ CONFIG_CAN_M_CAN=m
+ CONFIG_CAN_M_CAN_PLATFORM=m
+ CONFIG_CLKSRC_STM32_LP=y
+ CONFIG_CLK_STM32MP2_CA35SS=m
+-CONFIG_CORESIGHT=y
+-CONFIG_CORESIGHT_CPU_DEBUG=y
+-CONFIG_CORESIGHT_CTI=y
+-CONFIG_CORESIGHT_LINK_AND_SINK_TMC=y
+-CONFIG_CORESIGHT_SINK_TPIU=y
+-CONFIG_CORESIGHT_SOURCE_ETM4X=y
+-CONFIG_CORESIGHT_STM=y
++CONFIG_CORESIGHT_SOURCE_ETM4X=m
+ CONFIG_COUNTER=m
+ CONFIG_CPUFREQ_DT=m
+ CONFIG_CPU_IDLE_GOV_TEO=y
+-- 
+2.53.0
+

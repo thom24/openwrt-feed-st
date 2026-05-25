@@ -1,0 +1,87 @@
+From f9175224cd9ab75887945644eb98ca7a62d171d0 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Wed, 9 Jul 2025 14:37:16 +0200
+Subject: [PATCH] arm64: dts: st: enable the debug bus on stm32mp2x boards
+
+On stm32mp2x boards, enable the debug bus so we always try to probe
+the debug peripherals, if the debug configuration allows it.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I56b1c458a89d5c6f28e0e33efd90196d046de27d
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/473656
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts  | 4 ++++
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts  | 4 ++++
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts  | 4 ++++
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 4 ++++
+ 4 files changed, 16 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 194de2b62ed3..77b5159d875b 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -267,6 +267,10 @@ csi_source: endpoint {
+ 	};
+ };
+ 
++&dbg_bus {
++	status = "okay";
++};
++
+ &dcmipp {
+ 	status = "okay";
+ 	port {
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index a1a1dfac1e4c..85ab93aeff7b 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -203,6 +203,10 @@ csi_source: endpoint {
+ 	};
+ };
+ 
++&dbg_bus {
++	status = "okay";
++};
++
+ &dcmipp {
+ 	status = "okay";
+ 	port {
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index e148f056b74f..c89add9ce07d 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -250,6 +250,10 @@ csi_source: endpoint {
+ 	};
+ };
+ 
++&dbg_bus {
++	status = "okay";
++};
++
+ &dcmipp {
+ 	status = "okay";
+ 	port {
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+index ae7d845fc350..c3e6e913bdcc 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+@@ -243,6 +243,10 @@ csi_source: endpoint {
+ 	};
+ };
+ 
++&dbg_bus {
++	status = "okay";
++};
++
+ &dcmipp {
+ 	status = "okay";
+ 	port {
+-- 
+2.53.0
+

@@ -1,0 +1,38 @@
+From 57ea0baf2b2ae9f20f2e69803d503083783b7e16 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Fri, 19 Dec 2025 16:39:51 +0100
+Subject: [PATCH] usb: dwc2: fix gadget state after device disconnect
+
+In case the gadget has been suspended by the host, and it gets
+disconnected, also take care to reset the suspended_from state.
+In this scenario, the controller can be put into low power after the
+disconnect, but the drd layer gets notified, triggering a resume
+interrupt, setting the state back to the suspended_from state
+(typically configured).
+So it needs to be reset also to not attached.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I03b29f0562c8631f84ca013ef6aad001cabafa18
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/522343
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/usb/dwc2/gadget.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 3e12fd8ab5ce..24c3da25d3f0 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -3452,6 +3452,7 @@ void dwc2_hsotg_disconnect(struct dwc2_hsotg *hsotg)
+ 	hsotg->lx_state = DWC2_L3;
+ 
+ 	usb_gadget_set_state(&hsotg->gadget, USB_STATE_NOTATTACHED);
++	hsotg->suspended_from = USB_STATE_NOTATTACHED;
+ }
+ 
+ /**
+-- 
+2.53.0
+

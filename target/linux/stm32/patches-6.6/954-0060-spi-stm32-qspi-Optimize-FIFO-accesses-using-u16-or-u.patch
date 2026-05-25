@@ -1,0 +1,113 @@
+From 81ddb36d92a16711fc64986b1bd5b9c4eb625cd5 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Fri, 20 Jun 2025 18:10:47 +0200
+Subject: [PATCH] spi: stm32-qspi: Optimize FIFO accesses using u16 or u32
+
+FIFO accesses uses u8 only for read/write.
+In order to optimize throughput, add u16 or u32 read/write
+accesses when possible.
+
+write 64MB		before	after	ratio
+sNOR  108MHz : 	68 sec	64 sec	-6%
+sNAND 133MHz : 	20 sec	12 sec	-40%
+
+Change-Id: Ifa9de9f52bbe9f4df93c3fa7f04d4209312ed64a
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/469057
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
+---
+ drivers/spi/spi-stm32-qspi.c | 51 ++++++++++++++++++++++++++++--------
+ 1 file changed, 40 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
+index e24bdbec23ef..a900f3c857e4 100644
+--- a/drivers/spi/spi-stm32-qspi.c
++++ b/drivers/spi/spi-stm32-qspi.c
+@@ -153,34 +153,53 @@ static irqreturn_t stm32_qspi_irq(int irq, void *dev_id)
+ 	return IRQ_HANDLED;
+ }
+ 
+-static void stm32_qspi_read_fifo(u8 *val, void __iomem *addr)
++static void stm32_qspi_read_fifo(void *val, void __iomem *addr, u8 len)
+ {
+-	*val = readb_relaxed(addr);
++	switch (len) {
++	case sizeof(u32):
++		*((u32 *)val) = readl_relaxed(addr);
++		break;
++	case sizeof(u16):
++		*((u16 *)val) = readw_relaxed(addr);
++		break;
++	case sizeof(u8):
++		*((u8 *)val) = readb_relaxed(addr);
++	};
+ }
+ 
+-static void stm32_qspi_write_fifo(u8 *val, void __iomem *addr)
++static void stm32_qspi_write_fifo(void *val, void __iomem *addr, u8 len)
+ {
+-	writeb_relaxed(*val, addr);
++	switch (len) {
++	case sizeof(u32):
++		writel_relaxed(*((u32 *)val), addr);
++		break;
++	case sizeof(u16):
++		writew_relaxed(*((u16 *)val), addr);
++		break;
++	case sizeof(u8):
++		writeb_relaxed(*((u8 *)val), addr);
++	};
+ }
+ 
+ static int stm32_qspi_tx_poll(struct stm32_qspi *qspi,
+ 			      const struct spi_mem_op *op)
+ {
+-	void (*tx_fifo)(u8 *val, void __iomem *addr);
++	void (*fifo)(void *val, void __iomem *addr, u8 len);
+ 	u32 len = op->data.nbytes, sr;
+-	u8 *buf;
++	void *buf;
+ 	int ret;
++	u8 step;
+ 
+ 	if (op->data.dir == SPI_MEM_DATA_IN) {
+-		tx_fifo = stm32_qspi_read_fifo;
++		fifo = stm32_qspi_read_fifo;
+ 		buf = op->data.buf.in;
+ 
+ 	} else {
+-		tx_fifo = stm32_qspi_write_fifo;
+-		buf = (u8 *)op->data.buf.out;
++		fifo = stm32_qspi_write_fifo;
++		buf = (void *)op->data.buf.out;
+ 	}
+ 
+-	while (len--) {
++	while (len) {
+ 		ret = readl_relaxed_poll_timeout_atomic(qspi->io_base + QSPI_SR,
+ 							sr, (sr & SR_FTF), 1,
+ 							STM32_FIFO_TIMEOUT_US);
+@@ -189,7 +208,17 @@ static int stm32_qspi_tx_poll(struct stm32_qspi *qspi,
+ 				len, sr);
+ 			return ret;
+ 		}
+-		tx_fifo(buf++, qspi->io_base + QSPI_DR);
++
++		if (len >= sizeof(u32))
++			step = sizeof(u32);
++		else if (len >= sizeof(u16))
++			step = sizeof(u16);
++		else
++			step = sizeof(u8);
++
++		fifo(buf, qspi->io_base + QSPI_DR, step);
++		len -= step;
++		buf += step;
+ 	}
+ 
+ 	return 0;
+-- 
+2.53.0
+

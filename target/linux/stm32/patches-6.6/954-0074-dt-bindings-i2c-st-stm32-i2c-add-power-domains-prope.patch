@@ -1,0 +1,38 @@
+From d4585fbcd818129fd979381e6a04d87b28df73d1 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Tue, 1 Jul 2025 16:26:10 +0200
+Subject: [PATCH] dt-bindings: i2c: st,stm32-i2c: add 'power-domains' property
+
+STM32 I2C may be in a power domain which is the case for the STM32MP25
+based boards. Allow a single 'power-domains' entry for STM32 I2C.
+
+Change-Id: I4b4d7418c10e52ba895f2210b1f571f74d20ebf7
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/471694
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
+index 8fd8be76875e..6c3e76d61b9e 100644
+--- a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
++++ b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
+@@ -127,6 +127,9 @@ properties:
+ 
+   wakeup-source: true
+ 
++  power-domains:
++    maxItems: 1
++
+   access-controllers:
+     minItems: 1
+     maxItems: 2
+-- 
+2.53.0
+

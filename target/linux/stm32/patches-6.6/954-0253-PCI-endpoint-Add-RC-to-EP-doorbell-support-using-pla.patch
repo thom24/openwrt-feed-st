@@ -1,0 +1,246 @@
+From 6991b94ad59022c578663c527064338a4491f97a Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Thu, 10 Jul 2025 15:13:49 -0400
+Subject: [PATCH] PCI: endpoint: Add RC-to-EP doorbell support using platform
+ MSI controller
+
+[ Upstream commit 1c3b002c6bf684b445a7107609979bca5f21bc03 ]
+
+Implement the doorbell feature by mapping the EP's MSI interrupt controller
+message address to a dedicated BAR.
+
+The EPF driver should pass the actual message data to be written to the
+message address by the host through implementation-specific logic.
+
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+Signed-off-by: Manivannan Sadhasivam <mani@kernel.org>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Link: https://patch.msgid.link/20250710-ep-msi-v21-3-57683fc7fb25@nxp.com
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+[Use v6.6 platform_msi_domain_alloc_irqs API]
+Change-Id: I8c6e727e1910bfa75cf0e741af645bf40c30d724
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/497594
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/pci/endpoint/Kconfig      |  9 +++
+ drivers/pci/endpoint/Makefile     |  1 +
+ drivers/pci/endpoint/pci-ep-msi.c | 92 +++++++++++++++++++++++++++++++
+ include/linux/pci-ep-msi.h        | 28 ++++++++++
+ include/linux/pci-epf.h           | 15 +++++
+ 5 files changed, 145 insertions(+)
+ create mode 100644 drivers/pci/endpoint/pci-ep-msi.c
+ create mode 100644 include/linux/pci-ep-msi.h
+
+diff --git a/drivers/pci/endpoint/Kconfig b/drivers/pci/endpoint/Kconfig
+index 17bbdc9bbde0..c8ade60835e8 100644
+--- a/drivers/pci/endpoint/Kconfig
++++ b/drivers/pci/endpoint/Kconfig
+@@ -28,6 +28,15 @@ config PCI_ENDPOINT_CONFIGFS
+ 	   configure the endpoint function and used to bind the
+ 	   function with a endpoint controller.
+ 
++config PCI_ENDPOINT_MSI_DOORBELL
++	bool "PCI Endpoint MSI Doorbell Support"
++	depends on PCI_ENDPOINT && GENERIC_MSI_IRQ
++	help
++	  This enables the EP's MSI interrupt controller to function as a
++	  doorbell. The RC can trigger doorbell in EP by writing data to a
++	  dedicated BAR, which the EP maps to the controller's message
++	  address.
++
+ source "drivers/pci/endpoint/functions/Kconfig"
+ 
+ endmenu
+diff --git a/drivers/pci/endpoint/Makefile b/drivers/pci/endpoint/Makefile
+index 95b2fe47e3b0..b4869d52053a 100644
+--- a/drivers/pci/endpoint/Makefile
++++ b/drivers/pci/endpoint/Makefile
+@@ -6,3 +6,4 @@
+ obj-$(CONFIG_PCI_ENDPOINT_CONFIGFS)	+= pci-ep-cfs.o
+ obj-$(CONFIG_PCI_ENDPOINT)		+= pci-epc-core.o pci-epf-core.o\
+ 					   pci-epc-mem.o functions/
++obj-$(CONFIG_PCI_ENDPOINT_MSI_DOORBELL)	+= pci-ep-msi.o
+diff --git a/drivers/pci/endpoint/pci-ep-msi.c b/drivers/pci/endpoint/pci-ep-msi.c
+new file mode 100644
+index 000000000000..f99d2f0aea1b
+--- /dev/null
++++ b/drivers/pci/endpoint/pci-ep-msi.c
+@@ -0,0 +1,92 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * PCI Endpoint *Controller* (EPC) MSI library
++ *
++ * Copyright (C) 2025 NXP
++ * Author: Frank Li <Frank.Li@nxp.com>
++ */
++
++#include <linux/device.h>
++#include <linux/export.h>
++#include <linux/irqdomain.h>
++#include <linux/module.h>
++#include <linux/msi.h>
++#include <linux/of_irq.h>
++#include <linux/pci-epc.h>
++#include <linux/pci-epf.h>
++#include <linux/pci-ep-cfs.h>
++#include <linux/pci-ep-msi.h>
++#include <linux/slab.h>
++
++static void pci_epf_write_msi_msg(struct msi_desc *desc, struct msi_msg *msg)
++{
++	struct pci_epc *epc;
++	struct pci_epf *epf;
++
++	epc = pci_epc_get(dev_name(msi_desc_to_dev(desc)));
++	if (!epc)
++		return;
++
++	epf = list_first_entry_or_null(&epc->pci_epf, struct pci_epf, list);
++
++	if (epf && epf->db_msg && desc->msi_index < epf->num_db)
++		memcpy(&epf->db_msg[desc->msi_index].msg, msg, sizeof(*msg));
++
++	pci_epc_put(epc);
++}
++
++int pci_epf_alloc_doorbell(struct pci_epf *epf, u16 num_db)
++{
++	struct pci_epc *epc = epf->epc;
++	struct device *dev = &epf->dev;
++	struct irq_domain *domain;
++	void *msg;
++	int ret;
++	int i;
++
++	/* TODO: Multi-EPF support */
++	if (list_first_entry_or_null(&epc->pci_epf, struct pci_epf, list) != epf) {
++		dev_err(dev, "MSI doorbell doesn't support multiple EPF\n");
++		return -EINVAL;
++	}
++
++	domain = of_msi_map_get_device_domain(epc->dev.parent, 0,
++					      DOMAIN_BUS_PLATFORM_MSI);
++	if (!domain) {
++		dev_err(dev, "Can't find MSI domain for EPC\n");
++		return -ENODEV;
++	}
++
++	dev_set_msi_domain(epc->dev.parent, domain);
++
++	msg = kcalloc(num_db, sizeof(struct pci_epf_doorbell_msg), GFP_KERNEL);
++	if (!msg)
++		return -ENOMEM;
++
++	epf->num_db = num_db;
++	epf->db_msg = msg;
++
++	ret = platform_msi_domain_alloc_irqs(epc->dev.parent, num_db,
++					     pci_epf_write_msi_msg);
++	if (ret) {
++		dev_err(dev, "Failed to allocate MSI\n");
++		kfree(msg);
++		return ret;
++	}
++
++	for (i = 0; i < num_db; i++)
++		epf->db_msg[i].virq = msi_get_virq(epc->dev.parent, i);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(pci_epf_alloc_doorbell);
++
++void pci_epf_free_doorbell(struct pci_epf *epf)
++{
++	platform_msi_domain_free_irqs(epf->epc->dev.parent);
++
++	kfree(epf->db_msg);
++	epf->db_msg = NULL;
++	epf->num_db = 0;
++}
++EXPORT_SYMBOL_GPL(pci_epf_free_doorbell);
+diff --git a/include/linux/pci-ep-msi.h b/include/linux/pci-ep-msi.h
+new file mode 100644
+index 000000000000..7c5db90f9620
+--- /dev/null
++++ b/include/linux/pci-ep-msi.h
+@@ -0,0 +1,28 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * PCI Endpoint *Function* side MSI header file
++ *
++ * Copyright (C) 2024 NXP
++ * Author: Frank Li <Frank.Li@nxp.com>
++ */
++
++#ifndef __PCI_EP_MSI__
++#define __PCI_EP_MSI__
++
++struct pci_epf;
++
++#ifdef CONFIG_PCI_ENDPOINT_MSI_DOORBELL
++int pci_epf_alloc_doorbell(struct pci_epf *epf, u16 nums);
++void pci_epf_free_doorbell(struct pci_epf *epf);
++#else
++static inline int pci_epf_alloc_doorbell(struct pci_epf *epf, u16 nums)
++{
++	return -ENODATA;
++}
++
++static inline void pci_epf_free_doorbell(struct pci_epf *epf)
++{
++}
++#endif /* CONFIG_GENERIC_MSI_IRQ */
++
++#endif /* __PCI_EP_MSI__ */
+diff --git a/include/linux/pci-epf.h b/include/linux/pci-epf.h
+index 3f44b6aec477..9ac4f70bf1fe 100644
+--- a/include/linux/pci-epf.h
++++ b/include/linux/pci-epf.h
+@@ -12,6 +12,7 @@
+ #include <linux/configfs.h>
+ #include <linux/device.h>
+ #include <linux/mod_devicetable.h>
++#include <linux/msi.h>
+ #include <linux/pci.h>
+ 
+ struct pci_epf;
+@@ -123,6 +124,16 @@ struct pci_epf_bar {
+ 	int		flags;
+ };
+ 
++/**
++ * struct pci_epf_doorbell_msg - represents doorbell message
++ * @msg: MSI message
++ * @virq: IRQ number of this doorbell MSI message
++ */
++struct pci_epf_doorbell_msg {
++	struct msi_msg msg;
++	int virq;
++};
++
+ /**
+  * struct pci_epf - represents the PCI EPF device
+  * @dev: the PCI EPF device
+@@ -150,6 +161,8 @@ struct pci_epf_bar {
+  * @vfunction_num_map: bitmap to manage virtual function number
+  * @pci_vepf: list of virtual endpoint functions associated with this function
+  * @event_ops: Callbacks for capturing the EPC events
++ * @db_msg: data for MSI from RC side
++ * @num_db: number of doorbells
+  */
+ struct pci_epf {
+ 	struct device		dev;
+@@ -180,6 +193,8 @@ struct pci_epf {
+ 	unsigned long		vfunction_num_map;
+ 	struct list_head	pci_vepf;
+ 	const struct pci_epc_event_ops *event_ops;
++	struct pci_epf_doorbell_msg *db_msg;
++	u16 num_db;
+ };
+ 
+ /**
+-- 
+2.53.0
+

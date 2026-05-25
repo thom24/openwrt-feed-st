@@ -1,0 +1,123 @@
+From da3a0bc8b1d10d619958102204442a5a719d1b84 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Sun, 8 Dec 2024 14:50:04 +0100
+Subject: [PATCH] media: stm32: dcmipp: update stream control in proc / isp
+ subdevs
+
+Since the dcmipp-input has multiple SOURCE pads, it is not possible
+to rely on the v4l2_subdev_s_stream_helper function to make the
+conversion from s_stream calls to the enable_streams / disable_streams.
+For the time being, not all the dcmipp has been converted to stream
+control hence, depending on the source subdev, the pixelproc
+must use either s_stream or enable/disable_streams ops.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: I756641f3f4cc6af24b0cf4bf64a283f306fbb4ad
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/499333
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ .../st/stm32/stm32-dcmipp/dcmipp-byteproc.c   |  4 ++--
+ .../st/stm32/stm32-dcmipp/dcmipp-isp.c        | 19 +++++++++++++------
+ .../st/stm32/stm32-dcmipp/dcmipp-pixelproc.c  | 13 +++++++++++--
+ 3 files changed, 26 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
+index 4f1b9f055c28..ac7293ed09f9 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
+@@ -684,7 +684,7 @@ static int dcmipp_byteproc_s_stream(struct v4l2_subdev *sd, int enable)
+ 		if (ret)
+ 			return ret;
+ 
+-		ret = v4l2_subdev_call(s_subdev, video, s_stream, enable);
++		ret = v4l2_subdev_enable_streams(s_subdev, pad->index, 1);
+ 		if (ret < 0) {
+ 			dev_err(byteproc->dev,
+ 				"failed to start source subdev streaming (%d)\n",
+@@ -692,7 +692,7 @@ static int dcmipp_byteproc_s_stream(struct v4l2_subdev *sd, int enable)
+ 			return ret;
+ 		}
+ 	} else {
+-		ret = v4l2_subdev_call(s_subdev, video, s_stream, enable);
++		ret = v4l2_subdev_disable_streams(s_subdev, pad->index, 1);
+ 		if (ret < 0) {
+ 			dev_err(byteproc->dev,
+ 				"failed to stop source subdev streaming (%d)\n",
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
+index c0e87a864875..db5c5c61d891 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
+@@ -600,6 +600,13 @@ static int dcmipp_isp_s_stream(struct v4l2_subdev *sd, int enable)
+ 
+ 		/* Configure default ISP Histo area */
+ 		dcmipp_isp_config_histo(isp, compose);
++
++		ret = v4l2_subdev_enable_streams(s_subdev, pad->index, 1);
++		if (ret < 0) {
++			dev_err(isp->dev,
++				"failed to start source subdev streaming (%d)\n", ret);
++			goto error_s_stream;
++		}
+ 	} else {
+ 		if (isp->usecnt > 1)
+ 			goto out;
+@@ -608,13 +615,13 @@ static int dcmipp_isp_s_stream(struct v4l2_subdev *sd, int enable)
+ 		reg_write(isp, DCMIPP_P1SRCR, 0);
+ 		reg_write(isp, DCMIPP_P1DECR, 0);
+ 		reg_write(isp, DCMIPP_P1DMCR, 0);
+-	}
+ 
+-	ret = v4l2_subdev_call(s_subdev, video, s_stream, enable);
+-	if (ret < 0) {
+-		dev_err(isp->dev,
+-			"failed to start source subdev streaming (%d)\n", ret);
+-		goto error_s_stream;
++		ret = v4l2_subdev_disable_streams(s_subdev, pad->index, 1);
++		if (ret < 0) {
++			dev_err(isp->dev,
++				"failed to stop source subdev streaming (%d)\n", ret);
++			goto error_s_stream;
++		}
+ 	}
+ 
+ out:
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
+index f9b3fba694b4..13df97d4efd8 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
+@@ -1052,7 +1052,12 @@ static int dcmipp_pixelproc_s_stream(struct v4l2_subdev *sd, int enable)
+ 	s_subdev = media_entity_to_v4l2_subdev(pad->entity);
+ 
+ 	if (!enable) {
+-		ret = v4l2_subdev_call(s_subdev, video, s_stream, enable);
++		/* Only dcmipp_input is streams enabled hence need to differentiate */
++		if (!strcmp(s_subdev->name, "dcmipp_input"))
++			ret = v4l2_subdev_disable_streams(s_subdev, pad->index,
++							  1);
++		else
++			ret = v4l2_subdev_call(s_subdev, video, s_stream, enable);
+ 		if (ret < 0)
+ 			dev_err(pixelproc->dev,
+ 				"failed to stop source subdev streaming (%d)\n",
+@@ -1098,7 +1103,11 @@ static int dcmipp_pixelproc_s_stream(struct v4l2_subdev *sd, int enable)
+ 		return ret;
+ 	}
+ 
+-	ret = v4l2_subdev_call(s_subdev, video, s_stream, enable);
++	/* Only dcmipp_input is streams enabled hence need to differentiate */
++	if (!strcmp(s_subdev->name, "dcmipp_input"))
++		ret = v4l2_subdev_enable_streams(s_subdev, pad->index, 1);
++	else
++		ret = v4l2_subdev_call(s_subdev, video, s_stream, enable);
+ 	if (ret < 0) {
+ 		dev_err(pixelproc->dev,
+ 			"failed to start source subdev streaming (%d)\n", ret);
+-- 
+2.53.0
+

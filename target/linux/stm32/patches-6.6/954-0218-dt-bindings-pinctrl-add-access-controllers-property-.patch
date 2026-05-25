@@ -1,0 +1,40 @@
+From bcae06b34c99020594150358b49b1239592d42e7 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Wed, 24 Sep 2025 13:55:48 +0200
+Subject: [PATCH] dt-bindings: pinctrl: add access-controllers property to HDP
+
+HDP being functional depends on the debug configuration on the platform
+that can be checked using the access-controllers property, add it to
+the documentation.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I913398d55bb097cb03090423fd8c0dc36579a1ac
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/493429
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+---
+ .../devicetree/bindings/pinctrl/st,stm32-pinctrl-hdp.yaml     | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl-hdp.yaml b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl-hdp.yaml
+index be5596c9e2b8..5de672840462 100644
+--- a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl-hdp.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl-hdp.yaml
+@@ -35,6 +35,10 @@ properties:
+           - description: The mask to use when writing to the register.
+           - description: The value to write in the register.
+ 
++  access-controllers:
++    minItems: 1
++    maxItems: 2
++
+ patternProperties:
+   '-pins$':
+     type: object
+-- 
+2.53.0
+

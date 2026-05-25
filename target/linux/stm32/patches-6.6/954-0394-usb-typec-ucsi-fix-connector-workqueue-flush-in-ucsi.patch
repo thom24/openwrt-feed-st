@@ -1,0 +1,146 @@
+From 80d29586bafa4734bad35a8f063919fdd79f5dec Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Date: Thu, 22 Jan 2026 10:03:04 +0100
+Subject: [PATCH] usb: typec: ucsi: fix connector workqueue flush in
+ ucsi_unregister
+
+When unregistering, delayed work items are forced to execute immediately.
+If uwork->cb() returns an error, the work may be rescheduled instead
+of being freed, which can lead to use-after-free or NULL pointer
+dereference errors, resulting in kernel panics.
+
+This patch ensures that work items are always freed, even if
+an error occurs, by introducing a force_delete flag.
+Additionally, robustness is improved by using
+list_for_each_entry_safe() when iterating and modifying the work list
+during cleanup.
+
+Example kernel panic:
+We force the delayed work to be executed immediately. If an error is
+returned by uwork->cb() the uwrk is not free but rescheduled.
+This can lead to Unable to handle kernel paging or kernel null pointer
+error.
+
+[  722.961575] ucsi-stm32g0-i2c 1-0035: GET_CONNECTOR_STATUS failed (-110)
+[  723.140875] remoteproc remoteproc1: stopped remote processor m33
+[  723.142432] Stopping fw image stm32mp257f-dk-ca35tdcid-ostl
+[  723.986239] Unable to handle kernel paging request at virtual address ffff80007e1c6000
+[  723.988605] Mem abort info:
+[  723.991425]   ESR = 0x0000000096000006
+[  723.995149]   EC = 0x25: DABT (current EL), IL = 32 bits
+[  724.000483]   SET = 0, FnV = 0
+[  724.003604]   EA = 0, S1PTW = 0
+[  724.006725]   FSC = 0x06: level 2 translation fault
+[  724.011655] Data abort info:
+[  724.014574]   ISV = 0, ISS = 0x00000006, ISS2 = 0x00000000
+[  724.020007]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+[  724.025138]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+[  724.030471] swapper pgtable: 4k pages, 48-bit VAs, pgdp=000000008b4a8000
+[  724.037210] [ffff80007e1c6000] pgd=100000017ffff003, p4d=100000017ffff003, pud=1000000102a82003, pmd=0000000000000000
+[  724.047884] Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
+[  724.054222] Modules linked in: hci_uart btqca btbcm ucsi_stm32g0 typec_ucsi typec rpmsg_ctrl rpmsg_char virtio_rpmsg_bus af_alg snd_soy
+[  724.054539]  stm32_rproc stm32_m0_rproc display_connector panel_lvds mailbox_client_cdev pwm_bl snd_soc_dmic irq_rpmsg fuse ip_tables ]
+[  724.160452] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.6.116-gbc55fd2f9a5e #3
+[  724.167697] Hardware name: STMicroelectronics STM32MP257F-DK CA35TDCID OSTL Discovery Board (DT)
+[  724.176544] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  724.183588] pc : __queue_work+0x158/0x454
+[  724.187627] lr : __queue_work+0x38/0x454
+[  724.191559] sp : ffff800080003de0
+[  724.194881] x29: ffff800080003de0 x28: 0000000000000101 x27: ffff800080003e90
+[  724.202033] x26: ffff8000818679c0 x25: 0000000000000000 x24: ffff80008186d7d0
+[  724.209184] x23: 0000000000000002 x22: ffff000084358600 x21: 0000000000000101
+[  724.216436] x20: ffff800081872e80 x19: ffff000082360cc0 x18: 0000000000000000
+[  724.223587] x17: ffff80007e1c6000 x16: ffff800080000000 x15: 00003d0130007d00
+[  724.230739] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000261
+[  724.237990] x11: 0000000000000000 x10: 000000000000000f x9 : 0000000000000001
+[  724.245141] x8 : ffff800080003e98 x7 : 00000000000000b5 x6 : 0800000008000001
+[  724.252292] x5 : ffff0000ff7683a8 x4 : 0000000000000240 x3 : 0000000000000009
+[  724.259543] x2 : 0000000000000000 x1 : ffff80007e1c6000 x0 : ffff80007e1c6000
+[  724.266695] Call trace:
+[  724.269114]  __queue_work+0x158/0x454
+[  724.272845]  delayed_work_timer_fn+0x1c/0x28
+[  724.277079]  call_timer_fn.isra.0+0x24/0x80
+[  724.281314]  __run_timers+0x1e0/0x280
+[  724.285043]  run_timer_softirq+0x20/0x40
+[  724.288974]  handle_softirqs+0x108/0x24c
+[  724.292909]  __do_softirq+0x14/0x20
+[  724.296337]  ____do_softirq+0x10/0x1c
+[  724.300067]  call_on_irq_stack+0x30/0x48
+[  724.303998]  do_softirq_own_stack+0x1c/0x2c
+[  724.308230]  irq_exit_rcu+0xc0/0xdc
+[  724.311761]  el1_interrupt+0x38/0x68
+[  724.315292]  el1h_64_irq_handler+0x18/0x24
+[  724.319425]  el1h_64_irq+0x64/0x68
+[  724.322852]  cpuidle_enter_state+0x134/0x2e0
+[  724.327187]  cpuidle_enter+0x38/0x50
+[  724.330716]  do_idle+0x1f4/0x264
+[  724.333945]  cpu_startup_entry+0x38/0x3c
+[  724.337877]  kernel_init+0x0/0x1dc
+[  724.341307]  arch_post_acpi_subsys_init+0x0/0x8
+[  724.345842]  start_kernel+0x50c/0x614
+[  724.349571]  __primary_switched+0xbc/0xc4
+[  724.353613] Code: 91002000 b8616819 f94086c2 f879db00 (f8606854)
+[  724.359750] ---[ end trace 0000000000000000 ]---
+[  724.364381] Kernel panic - not syncing: Oops: Fatal exception in interrupt
+[  724.371319] SMP: stopping secondary CPUs
+[  724.375256] Kernel Offset: disabled
+[  724.378778] CPU features: 0x0,00000000,00020000,0000421b
+[  724.384111] Memory Limit: none
+[  724.387134] ---[ end Kernel panic - not syncing: Oops: Fatal exception in interrupt ]--
+
+Change-Id: Ibcfe2781f67d41efc263d327247d65f00eb12098
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/527837
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ drivers/usb/typec/ucsi/ucsi.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index e5c001ee0cd7..a69417147398 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -217,6 +217,7 @@ struct ucsi_work {
+ 	unsigned int count;
+ 	struct ucsi_connector *con;
+ 	int (*cb)(struct ucsi_connector *);
++	bool force_delete;
+ };
+ 
+ static void ucsi_poll_worker(struct work_struct *work)
+@@ -236,7 +237,7 @@ static void ucsi_poll_worker(struct work_struct *work)
+ 
+ 	ret = uwork->cb(con);
+ 
+-	if (uwork->count-- && (ret == -EBUSY || ret == -ETIMEDOUT)) {
++	if (uwork->count-- && (ret == -EBUSY || ret == -ETIMEDOUT) && !uwork->force_delete) {
+ 		queue_delayed_work(con->wq, &uwork->work, uwork->delay);
+ 	} else {
+ 		list_del(&uwork->node);
+@@ -1688,15 +1689,18 @@ void ucsi_unregister(struct ucsi *ucsi)
+ 		cancel_work_sync(&ucsi->connector[i].work);
+ 
+ 		if (ucsi->connector[i].wq) {
+-			struct ucsi_work *uwork;
++			struct ucsi_work *uwork, *uwork_temp;
+ 
+ 			mutex_lock(&ucsi->connector[i].lock);
+ 			/*
+ 			 * queue delayed items immediately so they can execute
+ 			 * and free themselves before the wq is destroyed
+ 			 */
+-			list_for_each_entry(uwork, &ucsi->connector[i].partner_tasks, node)
++			list_for_each_entry_safe(uwork, uwork_temp,
++						 &ucsi->connector[i].partner_tasks, node) {
++				uwork->force_delete = true;
+ 				mod_delayed_work(ucsi->connector[i].wq, &uwork->work, 0);
++			}
+ 			mutex_unlock(&ucsi->connector[i].lock);
+ 			destroy_workqueue(ucsi->connector[i].wq);
+ 		}
+-- 
+2.53.0
+

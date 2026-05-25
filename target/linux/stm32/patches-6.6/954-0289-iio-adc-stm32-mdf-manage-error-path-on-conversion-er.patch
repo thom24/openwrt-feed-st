@@ -1,0 +1,45 @@
+From b0527f3598ca9068f9292f8c619a9e00aea26254 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Mon, 13 Oct 2025 17:11:23 +0200
+Subject: [PATCH] iio: adc: stm32-mdf: manage error path on conversion error
+
+Do not affect result variable in case of timeout or error on single
+conversion as this is meaningless.
+
+Change-Id: I473d47894ae4bf8dcb69c0fad3165b9ca7a42ba4
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/498983
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/iio/adc/stm32-mdf-adc.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/iio/adc/stm32-mdf-adc.c b/drivers/iio/adc/stm32-mdf-adc.c
+index 66516ad8ca11..f19a67c8d113 100644
+--- a/drivers/iio/adc/stm32-mdf-adc.c
++++ b/drivers/iio/adc/stm32-mdf-adc.c
+@@ -1333,8 +1333,10 @@ static int stm32_mdf_adc_single_conv(struct iio_dev *indio_dev,
+ 	if (timeout == 0) {
+ 		dev_err(&indio_dev->dev, "Timeout reached on channel [%d]", chan->channel);
+ 		ret = -ETIMEDOUT;
++		goto stop_conv;
+ 	} else if (timeout < 0) {
+ 		ret = timeout;
++		goto stop_conv;
+ 	} else {
+ 		ret = IIO_VAL_INT;
+ 	}
+@@ -1344,6 +1346,7 @@ static int stm32_mdf_adc_single_conv(struct iio_dev *indio_dev,
+ 	else
+ 		*res = adc->buffer[0];
+ 
++stop_conv:
+ 	stm32_mdf_adc_stop_conv(indio_dev);
+ 
+ err_conv:
+-- 
+2.53.0
+

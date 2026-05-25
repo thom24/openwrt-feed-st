@@ -1,0 +1,37 @@
+From a70f711f8f195e12454dbb1af74fd26a990ef96d Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Tue, 30 Sep 2025 08:18:50 +0200
+Subject: [PATCH] media: stm32: dcmipp: remove unused histogram default value
+
+Removal of the default histogram value which is not needed within
+the statcap device.
+
+Change-Id: I66ee983e5cfcbc3ff8e8bf801de293a096f463b2
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/497938
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
+index 654cc1dd785c..09ab28ee7ee8 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
+@@ -67,8 +67,6 @@
+ /* Histogram block - only available starting from stm32mp21 */
+ #define DCMIPP_P1HSCR			0x8b0
+ #define DCMIPP_P1HSCR_ENABLE		BIT(0)
+-/* 4 Comp / 64 bins per comp / 1 region / decimated by 2*/
+-#define DCMIPP_P1HSCR_DEFAULT		0x08411000
+ 
+ #define DCMIPP_P1HSSTR			0x8b4
+ #define DCMIPP_P1HSSTR_START(x, y)	((x) | ((y) << 16))
+-- 
+2.53.0
+

@@ -1,0 +1,40 @@
+From 5e3260959519cfde82f85a59148490a53d3023f9 Mon Sep 17 00:00:00 2001
+From: Christophe Kerello <christophe.kerello@foss.st.com>
+Date: Wed, 17 Dec 2025 14:35:02 +0100
+Subject: [PATCH] usb: dwc2: disable platform lowlevel hw resources during
+ shutdown
+
+Disable platform lowlevel hw resources such as phy, clock and
+regulators in device shutdown hook. It will allow to properly
+probe the driver on next warm reboot.
+
+Change-Id: I4a97b59c3fdfa915a544f166329ea93361461e83
+Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/519097
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Christophe KERELLO <christophe.kerello@st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/usb/dwc2/platform.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index ed3a87339e87..ebd69d0f0326 100644
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -571,8 +571,7 @@ static void dwc2_driver_shutdown(struct platform_device *dev)
+ 	dwc2_disable_global_interrupts(hsotg);
+ 	synchronize_irq(hsotg->irq);
+ 
+-	if (!hsotg->ll_hw_enabled)
+-		__dwc2_lowlevel_hw_disable(hsotg);
++	__dwc2_lowlevel_hw_disable(hsotg);
+ }
+ 
+ /**
+-- 
+2.53.0
+

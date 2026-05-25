@@ -1,0 +1,82 @@
+From f61963fecb6049517cf311df946ddce4d6dabd06 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Fri, 31 Oct 2025 16:37:38 +0100
+Subject: [PATCH] phy: stm32: usb2phy: remove wakeup source to report wakeup
+ events
+
+The wakeup capability added earlier to the PHY, to prevent a race
+during suspend, for the dwc2 device mode, by calling pm_wakeup_hard_event
+is now handled conditionally into dwc2 wakeup/resume IRQ.
+It is no longer necessary at the PHY side, so remove it.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I9fa682af0dad63f48d9ce1326c030aaa88488e2e
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/512987
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/phy/st/phy-stm32-usb2phy.c | 19 +++----------------
+ 1 file changed, 3 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/phy/st/phy-stm32-usb2phy.c b/drivers/phy/st/phy-stm32-usb2phy.c
+index f9740a1a3815..69c4d0898184 100644
+--- a/drivers/phy/st/phy-stm32-usb2phy.c
++++ b/drivers/phy/st/phy-stm32-usb2phy.c
+@@ -502,12 +502,9 @@ static int stm32_usb2phy_phy_power_on(struct phy *phy)
+ 	struct stm32_usb2phy *phy_dev = phy_get_drvdata(phy);
+ 	struct device *dev = &phy->dev;
+ 
+-	if (phy_dev->wakeirq > 0) {
++	if (phy_dev->wakeirq > 0)
+ 		if (enable_irq_wake(phy_dev->wakeirq))
+ 			dev_warn(dev, "Wake irq not enabled\n");
+-		if (device_wakeup_enable(phy_dev->dev))
+-			dev_warn(dev, "device_wakeup_enable failed\n");
+-	}
+ 
+ 	if (phy_dev->vbus)
+ 		return regulator_enable(phy_dev->vbus);
+@@ -520,12 +517,9 @@ static int stm32_usb2phy_phy_power_off(struct phy *phy)
+ 	struct stm32_usb2phy *phy_dev = phy_get_drvdata(phy);
+ 	struct device *dev = &phy->dev;
+ 
+-	if (phy_dev->wakeirq > 0) {
+-		if (device_wakeup_disable(phy_dev->dev))
+-			dev_warn(dev, "device_wakeup_disable failed\n");
++	if (phy_dev->wakeirq > 0)
+ 		if (disable_irq_wake(phy_dev->wakeirq))
+ 			dev_warn(dev, "Wake irq not disabled\n");
+-	}
+ 
+ 	if (phy_dev->vbus)
+ 		return regulator_disable(phy_dev->vbus);
+@@ -847,11 +841,6 @@ static int stm32_usb2phy_tuning(struct phy *phy)
+ 
+ static irqreturn_t stm32_usb2phy_irq_wakeup_handler(int irq, void *dev_id)
+ {
+-	struct device *dev = dev_id;
+-
+-	/* Prevents remote wakeup interrupt race while suspending */
+-	pm_wakeup_hard_event(dev);
+-
+ 	return IRQ_HANDLED;
+ }
+ 
+@@ -915,12 +904,10 @@ static int stm32_usb2phy_probe(struct platform_device *pdev)
+ 
+ 		ret = devm_request_threaded_irq(dev, phy_dev->wakeirq, NULL,
+ 						stm32_usb2phy_irq_wakeup_handler, IRQF_ONESHOT,
+-						NULL, dev);
++						NULL, NULL);
+ 		if (ret)
+ 			return dev_err_probe(dev, ret, "unable to request wake IRQ %d\n",
+ 						 phy_dev->wakeirq);
+-
+-		device_set_wakeup_capable(dev, true);
+ 	}
+ 
+ 	phy_dev->hw_data = stm32_usb2phy_get_hwdata(dev, phycr);
+-- 
+2.53.0
+

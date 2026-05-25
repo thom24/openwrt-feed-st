@@ -1,0 +1,55 @@
+From 05971988da1cbf7be9f6eeaa6e8af0efd36b0f91 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Fri, 11 Jul 2025 14:28:09 +0200
+Subject: [PATCH] net: ethernet: stmmac: add WoL from PHY support
+
+If the "st,phy-wol" property is present in the device tree node,
+set the STMMAC_FLAG_USE_PHY_WOL to use the WoL capability of the PHY.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I8e02ec1e6020c90d00935d6ef0ec5e1aa7774892
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/474376
+Tested-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Christophe ROULLIER <christophe.roullier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
+index bdb6b77b3805..005b021e9cc2 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
+@@ -105,6 +105,7 @@ struct stm32_dwmac {
+ 	const struct stm32_ops *ops;
+ 	struct device *dev;
+ 	struct stm32_firewall firewall;
++	bool phy_wol;
+ };
+ 
+ struct stm32_syscfg_pmcsetr {
+@@ -402,6 +403,8 @@ static int stm32_dwmac_parse_data(struct stm32_dwmac *dwmac,
+ 		dwmac->regulator = NULL;
+ 	}
+ 
++	dwmac->phy_wol = of_property_read_bool(np, "st,phy-wol");
++
+ 	return 0;
+ }
+ 
+@@ -544,6 +547,8 @@ static int stm32_dwmac_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	plat_dat->bsp_priv = dwmac;
++	if (dwmac->phy_wol)
++		plat_dat->flags |= STMMAC_FLAG_USE_PHY_WOL;
+ 
+ 	ret = stm32_dwmac_init(plat_dat);
+ 	if (ret)
+-- 
+2.53.0
+

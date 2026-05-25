@@ -1,0 +1,35 @@
+From 81115aba37de124d76c0c4128b239104a166dc31 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Wed, 2 Jul 2025 10:40:47 +0200
+Subject: [PATCH] dt-bindings: media: st: csi: allow proper example check
+
+Correct example by adding a missing clock include file.
+
+Change-Id: Ie254577646a344b53cf5d06ddbdfd492f14381a1
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/471691
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ Documentation/devicetree/bindings/media/st,stm32-csi.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/media/st,stm32-csi.yaml b/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
+index 81059d81b331..5ab9ed22da98 100644
+--- a/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
++++ b/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
+@@ -88,6 +88,7 @@ additionalProperties: false
+ 
+ examples:
+   - |
++    #include <dt-bindings/clock/st,stm32mp25-rcc.h>
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+     #include <dt-bindings/reset/st,stm32mp25-rcc.h>
+     #include <dt-bindings/media/video-interfaces.h>
+-- 
+2.53.0
+

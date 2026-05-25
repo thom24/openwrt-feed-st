@@ -1,0 +1,39 @@
+From 784290de60a9e2efe554972d6afa5ca76cae19b5 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Thu, 28 Nov 2024 10:16:01 +0100
+Subject: [PATCH] media: subdev: enable the subdev stream api
+
+As of linux v6.6, the v4l2 subdev stream api is still
+experimental and disabled by default. Enable it by default
+in order to be able to use the stream API with stm32 drivers.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: I7243fa783ac84870f4fd2280d9d3a3af5738cd0b
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/498967
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+---
+ drivers/media/v4l2-core/v4l2-subdev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index 8bf1448eba42..2f6afb116f63 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -31,7 +31,7 @@
+  * 'v4l2_subdev_enable_streams_api' to 1 below.
+  */
+ 
+-static bool v4l2_subdev_enable_streams_api;
++static bool v4l2_subdev_enable_streams_api = 1;
+ #endif
+ 
+ /*
+-- 
+2.53.0
+

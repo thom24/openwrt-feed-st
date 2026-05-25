@@ -1,0 +1,73 @@
+From 648c13f1e96383e0f80e83b00eba54f767c143e4 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Tue, 16 Dec 2025 16:32:47 +0100
+Subject: [PATCH] usb: dwc2: drd: avoid Mode Mismatch during data role swap
+
+When swapping from host to device:
+- the A session override bits gets cleared, B session gets set
+- the override bit (FORCEHOSTMODE) is still set
+- the SFTDISCON in DCTL (device mode register)) gets written
+This triggers the Mode Mismatch Interrupt. So move the write to
+SFTDISCON after the dwc2_force_mode() call, to avoid it.
+It looks like there's no functional issue due to earlier behavior.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I585e616ac0ea6926d0af1f08019241b379960acc
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/522346
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/usb/dwc2/drd.c | 29 ++++++++++++++++-------------
+ 1 file changed, 16 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
+index 02d2ace62188..637f43ad156a 100644
+--- a/drivers/usb/dwc2/drd.c
++++ b/drivers/usb/dwc2/drd.c
+@@ -238,26 +238,29 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+ 		already = dwc2_ovr_avalid(hsotg, true);
+ 	} else if (role == USB_ROLE_DEVICE) {
+ 		already = dwc2_ovr_bvalid(hsotg, true);
+-		if (dwc2_is_device_enabled(hsotg)) {
+-			/* This clear DCTL.SFTDISCON bit */
+-			dwc2_hsotg_core_connect(hsotg);
+-		}
+ 	} else {
+-		if (dwc2_is_device_mode(hsotg)) {
+-			if (!dwc2_ovr_bvalid(hsotg, false))
+-				/* This set DCTL.SFTDISCON bit */
+-				dwc2_hsotg_core_disconnect(hsotg);
+-		} else {
++		if (dwc2_is_device_mode(hsotg))
++			already = dwc2_ovr_bvalid(hsotg, false);
++		else
+ 			dwc2_ovr_avalid(hsotg, false);
+-		}
+ 	}
+ 
+ 	hsotg->current_role = role;
+ 	spin_unlock_irqrestore(&hsotg->lock, flags);
+ 
+-	if (!already && hsotg->dr_mode == USB_DR_MODE_OTG)
+-		/* This will raise a Connector ID Status Change Interrupt */
+-		dwc2_force_mode(hsotg, role == USB_ROLE_HOST);
++	if (!already) {
++		if (hsotg->dr_mode == USB_DR_MODE_OTG)
++			/* This will raise a Connector ID Status Change Interrupt */
++			dwc2_force_mode(hsotg, role == USB_ROLE_HOST);
++
++		if (role == USB_ROLE_DEVICE && dwc2_is_device_enabled(hsotg))
++			/* This clear DCTL.SFTDISCON bit */
++			dwc2_hsotg_core_connect(hsotg);
++
++		if (role == USB_ROLE_NONE && dwc2_is_device_mode(hsotg))
++			/* This set DCTL.SFTDISCON bit */
++			dwc2_hsotg_core_disconnect(hsotg);
++	}
+ 
+ 	if (role == USB_ROLE_NONE &&
+ 	    (hsotg->hw_params.op_mode == GHWCFG2_OP_MODE_NO_HNP_SRP_CAPABLE ||
+-- 
+2.53.0
+

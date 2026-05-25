@@ -1,0 +1,64 @@
+From 8a7f0d190f09d1d09319ad386f7de92d091a401e Mon Sep 17 00:00:00 2001
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 25 Aug 2023 13:26:31 +0200
+Subject: [PATCH] cpufreq: scmi: Add support to parse domain-id using
+ #power-domain-cells
+
+The performance domain-id can be described in DT using the power-domains
+property or the clock property. The latter is already supported, so let's
+add support for the power-domains too.
+
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Link: https://lore.kernel.org/r/20230825112633.236607-12-ulf.hansson@linaro.org
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+[upstream commit 92b2028b00ff987272a10fee980c7412ae7ebea6]
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: I8283cdba1c520932b9fc1e588ae424fc23d3d28d
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/476918
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ drivers/cpufreq/scmi-cpufreq.c | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
+index 1cf271fdfa69..d36503322848 100644
+--- a/drivers/cpufreq/scmi-cpufreq.c
++++ b/drivers/cpufreq/scmi-cpufreq.c
+@@ -78,13 +78,25 @@ static unsigned int scmi_cpufreq_fast_switch(struct cpufreq_policy *policy,
+ 
+ static int scmi_cpu_domain_id(struct device *cpu_dev)
+ {
+-	struct of_phandle_args clkspec;
+-
+-	if (of_parse_phandle_with_args(cpu_dev->of_node, "clocks",
+-				       "#clock-cells", 0, &clkspec))
+-		return -EINVAL;
++	struct device_node *np = cpu_dev->of_node;
++	struct of_phandle_args domain_id;
++	int index;
++
++	if (of_parse_phandle_with_args(np, "clocks", "#clock-cells", 0,
++				       &domain_id)) {
++		/* Find the corresponding index for power-domain "perf". */
++		index = of_property_match_string(np, "power-domain-names",
++						 "perf");
++		if (index < 0)
++			return -EINVAL;
++
++		if (of_parse_phandle_with_args(np, "power-domains",
++					       "#power-domain-cells", index,
++					       &domain_id))
++			return -EINVAL;
++	}
+ 
+-	return clkspec.args[0];
++	return domain_id.args[0];
+ }
+ 
+ static int
+-- 
+2.53.0
+

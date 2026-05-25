@@ -1,0 +1,161 @@
+From 5d04b21e6137ceb93f463accaaa4268a497d644b Mon Sep 17 00:00:00 2001
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Date: Tue, 17 Dec 2024 12:11:41 -0600
+Subject: [PATCH] mfd: syscon: Remove the platform driver support
+
+[ Upstream commit 26769582bf353ae613f5113a1414ff3a80e08264 ]
+
+The platform driver is dead code. It is not used by DT platforms since
+commit bdb0066df96e ("mfd: syscon: Decouple syscon interface from
+platform devices") which said:
+
+    For non-DT based platforms, this patch keeps syscon platform driver
+    structure so that syscon can be probed and such non-DT based drivers
+    can use syscon_regmap_lookup_by_pdev API and access regmap handles.
+    Once all users of "syscon_regmap_lookup_by_pdev" migrated to DT based,
+    we can completely remove platform driver of syscon, and keep only helper
+    functions to get regmap handles.
+
+The last user of syscon_regmap_lookup_by_pdevname() was removed in 2018.
+syscon_regmap_lookup_by_pdevname() was then removed in 2019, but that
+commit failed to remove the rest of the platform driver.
+
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+Tested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Tested-by: Will McVicker <willmcvicker@google.com>
+Acked-by: Liviu Dudau <liviu.dudau@arm.com>
+Reviewed-by: Pankaj Dubey <pankaj.dubey@samsung.com>
+Tested-by: Pankaj Dubey <pankaj.dubey@samsung.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20241217-syscon-fixes-v2-2-4f56d750541d@kernel.org
+Signed-off-by: Lee Jones <lee@kernel.org>
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: Ia8cf6b6657863824d9614bbe9c13c8e113a20a2b
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/509406
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ drivers/mfd/syscon.c                 | 63 ----------------------------
+ drivers/mfd/vexpress-sysreg.c        |  1 -
+ include/linux/platform_data/syscon.h |  9 ----
+ 3 files changed, 73 deletions(-)
+ delete mode 100644 include/linux/platform_data/syscon.h
+
+diff --git a/drivers/mfd/syscon.c b/drivers/mfd/syscon.c
+index 729e79e1be49..3dadbc8a63f7 100644
+--- a/drivers/mfd/syscon.c
++++ b/drivers/mfd/syscon.c
+@@ -12,22 +12,15 @@
+ #include <linux/clk.h>
+ #include <linux/err.h>
+ #include <linux/hwspinlock.h>
+-#include <linux/io.h>
+-#include <linux/init.h>
+ #include <linux/list.h>
+ #include <linux/mutex.h>
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+-#include <linux/of_platform.h>
+-#include <linux/platform_data/syscon.h>
+-#include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/reset.h>
+ #include <linux/mfd/syscon.h>
+ #include <linux/slab.h>
+ 
+-static struct platform_driver syscon_driver;
+-
+ static DEFINE_MUTEX(syscon_list_lock);
+ static LIST_HEAD(syscon_list);
+ 
+@@ -335,59 +328,3 @@ struct regmap *syscon_regmap_lookup_by_phandle_optional(struct device_node *np,
+ 	return regmap;
+ }
+ EXPORT_SYMBOL_GPL(syscon_regmap_lookup_by_phandle_optional);
+-
+-static int syscon_probe(struct platform_device *pdev)
+-{
+-	struct device *dev = &pdev->dev;
+-	struct syscon_platform_data *pdata = dev_get_platdata(dev);
+-	struct syscon *syscon;
+-	struct regmap_config syscon_config = syscon_regmap_config;
+-	struct resource *res;
+-	void __iomem *base;
+-
+-	syscon = devm_kzalloc(dev, sizeof(*syscon), GFP_KERNEL);
+-	if (!syscon)
+-		return -ENOMEM;
+-
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	if (!res)
+-		return -ENOENT;
+-
+-	base = devm_ioremap(dev, res->start, resource_size(res));
+-	if (!base)
+-		return -ENOMEM;
+-
+-	syscon_config.max_register = resource_size(res) - 4;
+-	if (pdata)
+-		syscon_config.name = pdata->label;
+-	syscon->regmap = devm_regmap_init_mmio(dev, base, &syscon_config);
+-	if (IS_ERR(syscon->regmap)) {
+-		dev_err(dev, "regmap init failed\n");
+-		return PTR_ERR(syscon->regmap);
+-	}
+-
+-	platform_set_drvdata(pdev, syscon);
+-
+-	dev_dbg(dev, "regmap %pR registered\n", res);
+-
+-	return 0;
+-}
+-
+-static const struct platform_device_id syscon_ids[] = {
+-	{ "syscon", },
+-	{ }
+-};
+-
+-static struct platform_driver syscon_driver = {
+-	.driver = {
+-		.name = "syscon",
+-	},
+-	.probe		= syscon_probe,
+-	.id_table	= syscon_ids,
+-};
+-
+-static int __init syscon_init(void)
+-{
+-	return platform_driver_register(&syscon_driver);
+-}
+-postcore_initcall(syscon_init);
+diff --git a/drivers/mfd/vexpress-sysreg.c b/drivers/mfd/vexpress-sysreg.c
+index 8e4194208113..b598ec096906 100644
+--- a/drivers/mfd/vexpress-sysreg.c
++++ b/drivers/mfd/vexpress-sysreg.c
+@@ -10,7 +10,6 @@
+ #include <linux/mfd/core.h>
+ #include <linux/module.h>
+ #include <linux/of_platform.h>
+-#include <linux/platform_data/syscon.h>
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ #include <linux/stat.h>
+diff --git a/include/linux/platform_data/syscon.h b/include/linux/platform_data/syscon.h
+deleted file mode 100644
+index 2c089dd3e2bd..000000000000
+--- a/include/linux/platform_data/syscon.h
++++ /dev/null
+@@ -1,9 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef PLATFORM_DATA_SYSCON_H
+-#define PLATFORM_DATA_SYSCON_H
+-
+-struct syscon_platform_data {
+-	const char *label;
+-};
+-
+-#endif
+-- 
+2.53.0
+

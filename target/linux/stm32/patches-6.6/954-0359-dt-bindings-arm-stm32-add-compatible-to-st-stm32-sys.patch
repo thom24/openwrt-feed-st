@@ -1,0 +1,57 @@
+From 7e609fcc6eaaddf5da9fe57520025cbc3a383ec4 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Tue, 4 Nov 2025 12:23:53 +0100
+Subject: [PATCH] dt-bindings: arm: stm32: add compatible to st,stm32-syscon
+
+Add the new compatible 'st,stm32mp25-a35ss-syscfg' to the list in
+st,stm32-syscon.
+
+This compatible should not use the 'syscon' because the associated
+driver would be loaded as module and the compatible 'syscon' could
+probe the mfd/syscon before the correct module.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: Iec44ac09c407af7fbed51ec397393c454022beee
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/496986
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ .../devicetree/bindings/arm/stm32/st,stm32-syscon.yaml    | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
+index ef5e17ce6f23..628c8a84097f 100644
+--- a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
++++ b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
+@@ -9,6 +9,7 @@ title: STMicroelectronics STM32 Platforms System Controller
+ maintainers:
+   - Alexandre Torgue <alexandre.torgue@foss.st.com>
+   - Christophe Roullier <christophe.roullier@foss.st.com>
++  - Antonio Borneo <antonio.borneo@foss.st.com>
+ 
+ properties:
+   compatible:
+@@ -31,6 +32,7 @@ properties:
+           - const: st,stm32-tamp
+           - const: syscon
+           - const: simple-mfd
++      - const: st,stm32mp25-a35ss-syscfg
+ 
+   reg:
+     maxItems: 1
+@@ -89,4 +91,10 @@ examples:
+         clocks = <&rcc SYSCFG>;
+     };
+ 
++  - |
++    a35ss_syscfg: syscon@48800000 {
++        compatible = "st,stm32mp25-a35ss-syscfg";
++        reg = <0x48800000 0x4000>;
++    };
++
+ ...
+-- 
+2.53.0
+

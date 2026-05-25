@@ -1,0 +1,47 @@
+From e443c4b9f93cb5b782e7e65434905f3c539c8357 Mon Sep 17 00:00:00 2001
+From: Valentin Caron <valentin.caron@foss.st.com>
+Date: Wed, 23 Jul 2025 11:29:24 +0200
+Subject: [PATCH] ARM: dts: st: change SCMI perf protocol to power-domain
+ stm32mp13x boards
+
+Change SCMI protocol 0x13 from clock provider to power-domain provider,
+and update cpu0 node for frequency scaling.
+
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: Ie7a7563f0f22fe65651bc830e0a780e815ca9e2b
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/476940
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp131.dtsi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
+index f5287a5dab37..b241c26370f4 100644
+--- a/arch/arm/boot/dts/st/stm32mp131.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
+@@ -21,8 +21,8 @@ cpu0: cpu@0 {
+ 			compatible = "arm,cortex-a7";
+ 			device_type = "cpu";
+ 			reg = <0>;
+-			clocks = <&scmi_perf 0>;
+-			clock-names = "cpu";
++			power-domains = <&scmi_perf 0>;
++			power-domain-names = "perf";
+ 			#cooling-cells = <2>;
+ 		};
+ 	};
+@@ -58,7 +58,7 @@ scmi: scmi {
+ 
+ 			scmi_perf: protocol@13 {
+ 				reg = <0x13>;
+-				#clock-cells = <1>;
++				#power-domain-cells = <1>;
+ 			};
+ 
+ 			scmi_clk: protocol@14 {
+-- 
+2.53.0
+

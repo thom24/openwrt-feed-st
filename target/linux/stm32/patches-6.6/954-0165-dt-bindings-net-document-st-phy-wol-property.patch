@@ -1,0 +1,42 @@
+From 04d2d7536bd98e61a73e03eaf82c06cf2265bf70 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Fri, 11 Jul 2025 15:31:16 +0200
+Subject: [PATCH] dt-bindings: net: document st,phy-wol property
+
+The "st,phy-wol" property can be set to use the wakeup capability of
+the PHY instead of the MAC.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I451bef4285f3dbf140807451fd45944e36807f7e
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/474383
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Tested-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+Domain-Review: Christophe ROULLIER <christophe.roullier@foss.st.com>
+Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+---
+ Documentation/devicetree/bindings/net/stm32-dwmac.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
+index 2b86ec21ba63..e8267b28db20 100644
+--- a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
++++ b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
+@@ -132,6 +132,12 @@ properties:
+     minItems: 1
+     maxItems: 2
+ 
++  st,phy-wol:
++    description:
++      set this property to use the wakeup capability from the PHY, if supported, instead of the
++      MAC.
++    type: boolean
++
+ required:
+   - compatible
+   - clocks
+-- 
+2.53.0
+

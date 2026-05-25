@@ -1,0 +1,33 @@
+From 99737900aae4c2f9b338c51f0b149e35c0e149fc Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Wed, 21 May 2025 08:55:12 +0200
+Subject: [PATCH] arm64: dts: st: fix lvds support on stm32mp235
+
+Keep same clock order than stm32mp231 to get always the lcd clock link
+to the rcc clock CK_KER_LTDC.
+
+Change-Id: Ia7b66f8e3a9bf07e2d891be58d6cecc326573a90
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/460519
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235.dtsi b/arch/arm64/boot/dts/st/stm32mp235.dtsi
+index 11feb1283b72..ecfe8b87e956 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp235.dtsi
+@@ -29,7 +29,7 @@ map1 {
+ 
+ &ltdc {
+ 	clocks = <&rcc CK_BUS_LTDC>, <&rcc CK_KER_LTDC>, <&syscfg 0>, <&lvds 0>;
+-	clock-names = "bus", "ref", "lcd", "lvds";
++	clock-names = "bus", "lcd", "ref", "lvds";
+ };
+ 
+ &rcc {
+-- 
+2.53.0
+

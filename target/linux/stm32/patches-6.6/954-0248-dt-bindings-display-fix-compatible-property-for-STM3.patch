@@ -1,0 +1,118 @@
+From d1771c6cda2a935043aaeeb4ed5c58d62d44bb2c Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Tue, 7 Oct 2025 09:59:56 +0200
+Subject: [PATCH] dt-bindings: display: fix compatible property for STM32 DSI
+ device
+
+Compatible property should be changed with enum type and the power
+supplies should be placed before example part to avoid errors when
+running dtb_check_bindings script.
+
+Change-Id: If6c2682d7325c9e30582f646af84008b2ffbebcb
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/496966
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ .../bindings/display/st,stm32-dsi.yaml        | 68 ++++++++++---------
+ 1 file changed, 35 insertions(+), 33 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/display/st,stm32-dsi.yaml b/Documentation/devicetree/bindings/display/st,stm32-dsi.yaml
+index 402c7db195da..bab54dd6a412 100644
+--- a/Documentation/devicetree/bindings/display/st,stm32-dsi.yaml
++++ b/Documentation/devicetree/bindings/display/st,stm32-dsi.yaml
+@@ -13,13 +13,11 @@ maintainers:
+ description:
+   The STMicroelectronics STM32 DSI controller uses the Synopsys DesignWare MIPI-DSI host controller.
+ 
+-allOf:
+-  - $ref: dsi-controller.yaml#
+-
+ properties:
+   compatible:
+-    const: st,stm32-dsi
+-    const: st,stm32mp25-dsi
++    enum:
++      - st,stm32-dsi
++      - st,stm32mp25-dsi
+ 
+   reg:
+     maxItems: 1
+@@ -45,34 +43,6 @@ properties:
+     items:
+       - const: apb
+ 
+-  - if:
+-      properties:
+-        compatible:
+-          contains:
+-            enum:
+-              - st,stm32-dsi
+-    then:
+-      properties:
+-        phy-dsi-supply:
+-          description:
+-            Phandle of the regulator that provides the supply voltage.
+-
+-  - if:
+-      properties:
+-        compatible:
+-          contains:
+-            enum:
+-              - st,stm32mp25-dsi
+-    then:
+-      properties:
+-        vdd-supply:
+-          description:
+-            Phandle of the regulator that provides the supply voltage vdd.
+-
+-        vdda18-supply:
+-          description:
+-            Phandle of the regulator that provides the supply voltage vdda18.
+-
+   ports:
+     $ref: /schemas/graph.yaml#/properties/ports
+ 
+@@ -107,6 +77,38 @@ required:
+ 
+ unevaluatedProperties: false
+ 
++
++allOf:
++  - $ref: dsi-controller.yaml#
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - st,stm32-dsi
++    then:
++      properties:
++        phy-dsi-supply:
++          description:
++            Phandle of the regulator that provides the supply voltage.
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - st,stm32mp25-dsi
++    then:
++      properties:
++        vdd-supply:
++          description:
++            Phandle of the regulator that provides the supply voltage vdd.
++
++        vdda18-supply:
++          description:
++            Phandle of the regulator that provides the supply voltage vdda18.
++
+ examples:
+   - |
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+-- 
+2.53.0
+

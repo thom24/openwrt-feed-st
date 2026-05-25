@@ -1,0 +1,42 @@
+From 4b4143c36bd85ad69f678be5ac87722a0d9304b1 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Wed, 15 Oct 2025 16:46:03 +0200
+Subject: [PATCH] media: stm32: dcmipp: set v4l2 subdev device pointer
+
+Properly initialize the device pointer within the v4l2_subdev
+structure of the dcmipp driver.
+v4l2_subdev common code is relying to this pointer in order
+to perform dev_xxx prints, and not setting it leads to
+incorrect messages such as:
+
+[ 3651.810152] (NULL device *): disabling streaming failed (-110)
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: I2751a2b40208e2226d9ac6d315164aa73422b253
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/499961
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.c
+index bdaceae8f990..d165071c8beb 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.c
+@@ -60,6 +60,7 @@ int dcmipp_ent_sd_register(struct dcmipp_ent_device *ved,
+ 	ved->ent = &sd->entity;
+ 
+ 	/* Initialize the subdev */
++	sd->dev = v4l2_dev->dev;
+ 	v4l2_subdev_init(sd, sd_ops);
+ 	sd->internal_ops = sd_int_ops;
+ 	sd->entity.function = function;
+-- 
+2.53.0
+

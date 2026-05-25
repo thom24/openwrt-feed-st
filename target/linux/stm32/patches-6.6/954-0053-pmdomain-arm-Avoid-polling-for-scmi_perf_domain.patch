@@ -1,0 +1,41 @@
+From c7fdfe71a35e74c6b8abf78e8b0562d9a4fffa92 Mon Sep 17 00:00:00 2001
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Mon, 27 Nov 2023 14:50:33 +0100
+Subject: [PATCH] pmdomain: arm: Avoid polling for scmi_perf_domain
+
+It was a mistake to prefer polling based mode when setting a performance
+level for a domain. Let's instead rely on the protocol to decide what is
+best and thus avoid polling when possible.
+
+Reported-by: Nikunj Kela <nkela@quicinc.com>
+Fixes: 2af23ceb8624 ("pmdomain: arm: Add the SCMI performance domain")
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+Link: https://lore.kernel.org/r/20231127135033.136442-1-ulf.hansson@linaro.org
+[upstream commit 0cb19e50a911aaadf49eed120392e429d6e1fa0c]
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: Iee1b78852a62cddb367202f454bb5384632c62a2
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/476935
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ drivers/pmdomain/arm/scmi_perf_domain.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/pmdomain/arm/scmi_perf_domain.c b/drivers/pmdomain/arm/scmi_perf_domain.c
+index bc3f78abb6da..709bbc448fad 100644
+--- a/drivers/pmdomain/arm/scmi_perf_domain.c
++++ b/drivers/pmdomain/arm/scmi_perf_domain.c
+@@ -35,7 +35,7 @@ scmi_pd_set_perf_state(struct generic_pm_domain *genpd, unsigned int state)
+ 	if (!state)
+ 		return -EINVAL;
+ 
+-	ret = pd->perf_ops->level_set(pd->ph, pd->domain_id, state, true);
++	ret = pd->perf_ops->level_set(pd->ph, pd->domain_id, state, false);
+ 	if (ret)
+ 		dev_warn(&genpd->dev, "Failed with %d when trying to set %d perf level",
+ 			 ret, state);
+-- 
+2.53.0
+

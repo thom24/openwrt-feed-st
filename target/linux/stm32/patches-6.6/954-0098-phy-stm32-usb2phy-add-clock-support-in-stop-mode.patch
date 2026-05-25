@@ -1,0 +1,87 @@
+From bec4ec81167481d19b63a2f0423e9419ec2e2a44 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 3 Sep 2025 14:39:02 +0200
+Subject: [PATCH] phy: stm32: usb2phy: add clock support in stop mode
+
+On STM32MP23/25, USB2PHY clock can remain active in stop mode, by
+setting STPEN bit (e.g. USB2PHY1STPEN). So get this clock for stop
+mode. Add clock names, e.g. "core" for clkcore, and stp, for the
+stop mode clock.
+This is useful for PSCI/OSI, to be able to wakeup from stop, to detect
+device connect/disconnect. This is also mandatory to keep the PLL
+active: it is necessary to access OHCI control (HCFS) bits to
+resume the bus from the CPU.
+So when the OHCI clock is required, CMN bit gets cleared, enable
+also the "stp" clock at the same time.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I393fb6e6a9c1cb00a7e0f65c1ed8f3992eab6231
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/487220
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+---
+ drivers/phy/st/phy-stm32-usb2phy.c | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/phy/st/phy-stm32-usb2phy.c b/drivers/phy/st/phy-stm32-usb2phy.c
+index 27068d937325..54c4e23cb0ec 100644
+--- a/drivers/phy/st/phy-stm32-usb2phy.c
++++ b/drivers/phy/st/phy-stm32-usb2phy.c
+@@ -82,6 +82,7 @@ struct stm32_usb2phy {
+ 	struct reset_control *rstc;
+ 	struct regulator *vbus;
+ 	struct clk *phyref;
++	struct clk *stp;
+ 	struct regulator *vdd33, *vdda18;
+ 	enum phy_mode mode;
+ 	int submode;
+@@ -573,9 +574,20 @@ static int stm32_usb2phy_clkohci_prepare(struct clk_hw *hw)
+ 	const struct stm32mp2_usb2phy_hw_data *phy_data = phy_dev->hw_data;
+ 	int ret;
+ 
++	/*
++	 * CMN = 0: PLL remains active event in suspend or sleep.
++	 * So the clock needs to remain active even in stop mode.
++	 */
++	ret = clk_prepare_enable(phy_dev->stp);
++	if (ret)
++		return ret;
++
+ 	ret = regmap_clear_bits(phy_dev->regmap, phy_data->cr_offset,
+ 				SYSCFG_USB2PHY2CR_USB2PHY2CMN_MASK);
+ 
++	if (ret)
++		clk_disable_unprepare(phy_dev->stp);
++
+ 	return ret;
+ }
+ 
+@@ -585,6 +597,8 @@ static void stm32_usb2phy_clkohci_unprepare(struct clk_hw *hw)
+ 	const struct stm32mp2_usb2phy_hw_data *phy_data = phy_dev->hw_data;
+ 
+ 	regmap_set_bits(phy_dev->regmap, phy_data->cr_offset, SYSCFG_USB2PHY2CR_USB2PHY2CMN_MASK);
++
++	clk_disable_unprepare(phy_dev->stp);
+ }
+ 
+ static unsigned long stm32_usb2phy_clkohci_recalc_rate(struct clk_hw *hw,
+@@ -846,10 +860,14 @@ static int stm32_usb2phy_probe(struct platform_device *pdev)
+ 	if (IS_ERR(phy_dev->rstc))
+ 		return dev_err_probe(dev, PTR_ERR(phy_dev->rstc), "failed to get USB2PHY reset\n");
+ 
+-	phy_dev->phyref = devm_clk_get(dev, NULL);
++	phy_dev->phyref = devm_clk_get(dev, "core");
+ 	if (IS_ERR(phy_dev->phyref))
+ 		return dev_err_probe(dev, PTR_ERR(phy_dev->phyref), "failed to get phyref clk\n");
+ 
++	phy_dev->stp = devm_clk_get_optional(dev, "stp");
++	if (IS_ERR(phy_dev->stp))
++		return dev_err_probe(dev, PTR_ERR(phy_dev->stp), "failed to get stp clk\n");
++
+ 	phy_dev->regmap = syscon_regmap_lookup_by_phandle(np, "st,syscfg");
+ 	if (IS_ERR(phy_dev->regmap))
+ 		return dev_err_probe(dev, PTR_ERR(phy_dev->regmap),
+-- 
+2.53.0
+

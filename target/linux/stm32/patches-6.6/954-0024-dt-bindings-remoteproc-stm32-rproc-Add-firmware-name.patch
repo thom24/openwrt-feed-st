@@ -1,0 +1,42 @@
+From 6b4f2b4739ca5ee01cc0ff38371ff0d057dc45f3 Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Date: Thu, 27 Mar 2025 09:27:20 +0100
+Subject: [PATCH] dt-bindings: remoteproc: stm32-rproc: Add firmware-name
+ property
+
+Add the 'firmware-name' property to the remote processor binding
+to allow specifying the default firmware name in the device tree.
+
+Change-Id: I3cfa1658328d2183756913729b0263f9aa782724
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Link: https://lore.kernel.org/r/20250327082721.641278-2-arnaud.pouliquen@foss.st.com
+Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/451162
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ .../devicetree/bindings/remoteproc/st,stm32-rproc.yaml        | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
+index 8b4d04571fb3..b19d9d4cbdf1 100644
+--- a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
+@@ -147,6 +147,10 @@ properties:
+       If defined, when remoteproc is probed, it loads the default firmware and
+       starts the remote processor.
+ 
++  firmware-name:
++    maxItems: 1
++    description: Default name of the remote processor firmware.
++
+   power-domains:
+     items:
+       - description: CLUSTER power domain
+-- 
+2.53.0
+

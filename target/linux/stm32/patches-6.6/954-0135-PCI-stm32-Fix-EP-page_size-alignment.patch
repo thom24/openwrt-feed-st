@@ -1,0 +1,36 @@
+From 6807fec7201e7517aa7fcff67b29bd19d5eebedb Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Mon, 8 Sep 2025 12:55:41 +0200
+Subject: [PATCH] PCI: stm32: Fix EP page_size alignment
+
+pci_epc_mem_alloc_addr() will allocate the cpu addr from the ATU
+window phys base and a page number. Resulting cpu addr must be
+correctly aligned with the ATU required alignment.
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I0936e528f876b4dd05fbe57146db091889be6571
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/487928
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/pci/controller/dwc/pcie-stm32-ep.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/pci/controller/dwc/pcie-stm32-ep.c b/drivers/pci/controller/dwc/pcie-stm32-ep.c
+index 4e2870b89046..b5ea0deb75e3 100644
+--- a/drivers/pci/controller/dwc/pcie-stm32-ep.c
++++ b/drivers/pci/controller/dwc/pcie-stm32-ep.c
+@@ -314,6 +314,8 @@ static int stm32_add_pcie_ep(struct stm32_pcie *stm32_pcie,
+ 		return ret;
+ 	}
+ 
++	ep->page_size = stm32_pcie_get_features(ep)->align;
++
+ 	ret = dw_pcie_ep_init(ep);
+ 	if (ret) {
+ 		dev_err(dev, "failed to initialize ep: %d\n", ret);
+-- 
+2.53.0
+

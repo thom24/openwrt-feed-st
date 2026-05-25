@@ -1,0 +1,63 @@
+From e7c19558a07f62353e7037232e791501fda28fbf Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Thu, 26 Jun 2025 18:35:56 +0200
+Subject: [PATCH] pinctrl: stm32: Declare suspend/resume functions only with
+ PM_SLEEP
+
+The functions stm32_pinctrl_suspend() and stm32_pinctrl_resume()
+are only used when CONFIG_PM_SLEEP is set, so has been initially
+declared as __maybe_unused to potentially reduce the binary size.
+
+But since they got also be used by kernel modules, they has been
+later exposed through EXPORT_SYMBOL().
+This last declaration actually makes the functions 'used', removing
+any possibility for the compiler to drop them.
+
+Drop the useless __maybe_unused attributes and declare and expose
+the functions only when CONFIG_PM_SLEEP is set.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: Ibdf943bb49e5bf3725b61977ad3e43baaba23b38
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/470488
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/pinctrl/stm32/pinctrl-stm32.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
+index b4eccd00744f..4d2899f496f9 100644
+--- a/drivers/pinctrl/stm32/pinctrl-stm32.c
++++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
+@@ -2276,7 +2276,8 @@ static int __maybe_unused stm32_pinctrl_restore_gpio_regs(
+ 	return 0;
+ }
+ 
+-int __maybe_unused stm32_pinctrl_suspend(struct device *dev)
++#ifdef CONFIG_PM_SLEEP
++int stm32_pinctrl_suspend(struct device *dev)
+ {
+ 	struct stm32_pinctrl *pctl = dev_get_drvdata(dev);
+ 
+@@ -2286,7 +2287,7 @@ int __maybe_unused stm32_pinctrl_suspend(struct device *dev)
+ }
+ EXPORT_SYMBOL(stm32_pinctrl_suspend);
+ 
+-int __maybe_unused stm32_pinctrl_resume(struct device *dev)
++int stm32_pinctrl_resume(struct device *dev)
+ {
+ 	struct stm32_pinctrl *pctl = dev_get_drvdata(dev);
+ 	struct stm32_pinctrl_group *g = pctl->groups;
+@@ -2302,6 +2303,7 @@ int __maybe_unused stm32_pinctrl_resume(struct device *dev)
+ 	return 0;
+ }
+ EXPORT_SYMBOL(stm32_pinctrl_resume);
++#endif /* CONFIG_PM_SLEEP */
+ 
+ MODULE_DESCRIPTION("STM32 core pinctrl driver");
+ MODULE_LICENSE("GPL");
+-- 
+2.53.0
+

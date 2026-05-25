@@ -1,0 +1,61 @@
+From 920f4577d3a527478170d252519e9bc810494ebd Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Tue, 28 Oct 2025 10:34:59 +0100
+Subject: [PATCH] arm64: dts: st: remove #access-controller-cells for RISABs on
+ stm32mp211x
+
+There is no need to declare the RISAB nodes as access-controllers,
+simply remove the #access-controller-cells property.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: Ic22758a95c9b850b31c6a38abe6d13f0a415d7cc
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/503469
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index e45d0ec92a02..a8d06e23329e 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -1920,7 +1920,6 @@ risab1: risab@420f0000 {
+ 			reg = <0x420f0000 0x0 0x1000>;
+ 			clocks = <&scmi_clk CK_SCMI_ICN_LS_MCU>;
+ 			st,mem-map = <0xa000000 0x20000>;
+-			#access-controller-cells = <1>;
+ 		};
+ 
+ 		risab2: risab@42100000 {
+@@ -1928,7 +1927,6 @@ risab2: risab@42100000 {
+ 			reg = <0x42100000 0x0 0x1000>;
+ 			clocks = <&scmi_clk CK_SCMI_ICN_LS_MCU>;
+ 			st,mem-map = <0xa020000 0x20000>;
+-			#access-controller-cells = <1>;
+ 		};
+ 
+ 		risab3: risab@42110000 {
+@@ -1936,7 +1934,6 @@ risab3: risab@42110000 {
+ 			reg = <0x42110000 0x0 0x1000>;
+ 			clocks = <&scmi_clk CK_SCMI_ICN_LS_MCU>;
+ 			st,mem-map = <0x0a060000 0x10000>;
+-			#access-controller-cells = <1>;
+ 		};
+ 
+ 		risab5: risab@42130000 {
+@@ -1944,7 +1941,6 @@ risab5: risab@42130000 {
+ 			reg = <0x42130000 0x0 0x1000>;
+ 			clocks = <&scmi_clk CK_SCMI_ICN_LS_MCU>;
+ 			st,mem-map = <0x0a040000 0x20000>;
+-			#access-controller-cells = <1>;
+ 		};
+ 
+ 		bsec: efuse@44000000 {
+-- 
+2.53.0
+

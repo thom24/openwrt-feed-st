@@ -1,0 +1,51 @@
+From e2bc4c81bed09b4376f9ff2309bb5bfb30a1a572 Mon Sep 17 00:00:00 2001
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 25 Aug 2023 13:26:28 +0200
+Subject: [PATCH] dt-bindings: arm: cpus: Add a power-domain-name for a
+ performance-domain
+
+When an CPU's performance domain is managed through the SCMI firmware,
+let's enable us describe this as a consumer of a power-domain provider,
+which is the de-facto standard to use for performance domains. In this
+case, let's specify a corresponding power-domain-name, to point out the
+corresponding index for it.
+
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Conor Dooley <conor+dt@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/20230825112633.236607-9-ulf.hansson@linaro.org
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+[upstream commit 6e429adc60b1fa87b6e89d68cb9d1c0a8224d58a]
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: Ib025709b803f6ee3602bb2d610c390f6fb73d241
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/476915
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ Documentation/devicetree/bindings/arm/cpus.yaml | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
+index 0d17cbad9778..ad7fee0245fa 100644
+--- a/Documentation/devicetree/bindings/arm/cpus.yaml
++++ b/Documentation/devicetree/bindings/arm/cpus.yaml
+@@ -308,7 +308,9 @@ properties:
+       power-domains property.
+ 
+       For PSCI based platforms, the name corresponding to the index of the PSCI
+-      PM domain provider, must be "psci".
++      PM domain provider, must be "psci". For SCMI based platforms, the name
++      corresponding to the index of an SCMI performance domain provider, must be
++      "perf".
+ 
+   qcom,saw:
+     $ref: /schemas/types.yaml#/definitions/phandle
+-- 
+2.53.0
+

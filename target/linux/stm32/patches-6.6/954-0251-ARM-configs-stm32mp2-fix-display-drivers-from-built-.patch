@@ -1,0 +1,31 @@
+From 5756d5f976ed0b60ec4ccddf1e3b6167c9acaa97 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Wed, 15 Oct 2025 08:42:26 +0200
+Subject: [PATCH] ARM: configs: stm32mp2: fix display drivers from built-in to
+ module
+
+Update drivers to set all of them as module drivers except DRM & SIMPLEDRM.
+
+Change-Id: I85d80918c90e7a38e31cfcd63d6ae8fed220da9f
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/499568
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/configs/mp2-fragment-04-multiv7-addons.config | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm/configs/mp2-fragment-04-multiv7-addons.config b/arch/arm/configs/mp2-fragment-04-multiv7-addons.config
+index ba819395a02f..10d0726afadf 100644
+--- a/arch/arm/configs/mp2-fragment-04-multiv7-addons.config
++++ b/arch/arm/configs/mp2-fragment-04-multiv7-addons.config
+@@ -1,4 +1,6 @@
+ CONFIG_ARM_LPAE=y
+ CONFIG_ARM_SMC_WATCHDOG=y
++CONFIG_BACKLIGHT_PWM=m
++CONFIG_DRM_PANEL_SIMPLE=m
+ CONFIG_IKCONFIG=y
+ CONFIG_IKCONFIG_PROC=y
+-- 
+2.53.0
+

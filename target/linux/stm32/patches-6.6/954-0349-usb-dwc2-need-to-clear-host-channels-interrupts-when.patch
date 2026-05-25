@@ -1,0 +1,38 @@
+From acfa6c429cedcaf809174bfdbd9e81fdffd094e7 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Tue, 25 Nov 2025 15:02:14 +0100
+Subject: [PATCH] usb: dwc2: need to clear host channels interrupts when
+ switching to host
+
+There may be some race when in drd, and switching from device mode.
+Even with HCINT disabled, there may be some IRQ loop, some host channel
+HCINT can trigger the IRQ line. It can result in some IRQ loop, and
+trigger the kernel unhandled IRQ mechanism, disabling the IRQ.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I8d101ebca36b15d1f997f2639ea2ff58be82a63d
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/512991
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ drivers/usb/dwc2/core_intr.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
+index 96b79af05889..3d4d3f81b4bf 100644
+--- a/drivers/usb/dwc2/core_intr.c
++++ b/drivers/usb/dwc2/core_intr.c
+@@ -259,6 +259,10 @@ static void dwc2_handle_conn_id_status_change_intr(struct dwc2_hsotg *hsotg)
+ 	gintmsk &= ~GINTSTS_SOF;
+ 	dwc2_writel(hsotg, gintmsk, GINTMSK);
+ 
++	/* Switching to host mode, need to disable channels interrupts */
++	if (dwc2_is_host_mode(hsotg))
++		dwc2_writel(hsotg, 0, HAINTMSK);
++
+ 	dev_dbg(hsotg->dev, " ++Connector ID Status Change Interrupt++  (%s)\n",
+ 		dwc2_is_host_mode(hsotg) ? "Host" : "Device");
+ 
+-- 
+2.53.0
+

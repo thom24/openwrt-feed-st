@@ -1,0 +1,41 @@
+From 781c59f581e1ad839b62104e364f8b0a3f13027b Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Date: Wed, 14 Jan 2026 16:03:16 +0100
+Subject: [PATCH] remoteproc: stm32_rproc: Do not print warning on shutdown in
+ attached mode
+
+In the CM33 cold boot topology, during shutdown, the warning
+"Warning: remote fw is still running with possible side effect!!!"
+
+This patch ensures the warning is only printed when the remote processor
+is actually running, avoiding unnecessary warnings in attached mode.
+
+Change-Id: I9e6a4ebd3da57e0195d2cea8a9d4fac3ce634e6d
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/524597
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ drivers/remoteproc/stm32_rproc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
+index c969566e4772..72ff9a949b66 100644
+--- a/drivers/remoteproc/stm32_rproc.c
++++ b/drivers/remoteproc/stm32_rproc.c
+@@ -1371,7 +1371,7 @@ static void stm32_rproc_shutdown(struct platform_device *pdev)
+ {
+ 	struct rproc *rproc = platform_get_drvdata(pdev);
+ 
+-	if (atomic_read(&rproc->power) > 0)
++	if (atomic_read(&rproc->power) > 0 && rproc->state == RPROC_RUNNING)
+ 		dev_warn(&pdev->dev,
+ 			 "Warning: remote fw is still running with possible side effect!!!\n");
+ }
+-- 
+2.53.0
+

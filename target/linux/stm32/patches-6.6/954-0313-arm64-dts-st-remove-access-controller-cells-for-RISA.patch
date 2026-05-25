@@ -1,0 +1,85 @@
+From 88c61cf249a2c3b30c4a650d274618a356be38a0 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Tue, 28 Oct 2025 10:35:05 +0100
+Subject: [PATCH] arm64: dts: st: remove #access-controller-cells for RISABs on
+ stm32mp231x
+
+There is no need to declare the RISAB nodes as access-controllers,
+simply remove the #access-controller-cells property.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: Ibdec2064165fea5b11007dd339f3ed5fbe915317
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/503470
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp231.dtsi | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+index d3585860b96e..3182cac784d2 100644
+--- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+@@ -2133,7 +2133,6 @@ risab1: risab@420f0000 {
+ 			reg = <0x420f0000 0x1000>;
+ 			clocks = <&scmi_clk CK_SCMI_ICN_LS_MCU>;
+ 			st,mem-map = <0xa000000 0x20000>;
+-			#access-controller-cells = <1>;
+ 		};
+ 
+ 		risab2: risab@42100000 {
+@@ -2141,7 +2140,6 @@ risab2: risab@42100000 {
+ 			reg = <0x42100000 0x1000>;
+ 			clocks = <&scmi_clk CK_SCMI_ICN_LS_MCU>;
+ 			st,mem-map = <0xa020000 0x20000>;
+-			#access-controller-cells = <1>;
+ 		};
+ 
+ 		risab3: risab@42110000 {
+@@ -2149,7 +2147,6 @@ risab3: risab@42110000 {
+ 			reg = <0x42110000 0x1000>;
+ 			clocks = <&scmi_clk CK_SCMI_ICN_LS_MCU>;
+ 			st,mem-map = <0xa040000 0x20000>;
+-			#access-controller-cells = <1>;
+ 		};
+ 
+ 		risab4: risab@42120000 {
+@@ -2157,7 +2154,6 @@ risab4: risab@42120000 {
+ 			reg = <0x42120000 0x1000>;
+ 			clocks = <&scmi_clk CK_SCMI_ICN_LS_MCU>;
+ 			st,mem-map = <0xa060000 0x20000>;
+-			#access-controller-cells = <1>;
+ 		};
+ 
+ 		risab5: risab@42130000 {
+@@ -2165,7 +2161,6 @@ risab5: risab@42130000 {
+ 			reg = <0x42130000 0x1000>;
+ 			clocks = <&scmi_clk CK_SCMI_ICN_LS_MCU>;
+ 			st,mem-map = <0xa080000 0x20000>;
+-			#access-controller-cells = <1>;
+ 		};
+ 
+ 		risab6: risab@42140000 {
+@@ -2173,7 +2168,6 @@ risab6: risab@42140000 {
+ 			reg = <0x42140000 0x1000>;
+ 			clocks = <&scmi_clk CK_SCMI_ICN_LS_MCU>;
+ 			st,mem-map = <0xa0a0000 0x20000>;
+-			#access-controller-cells = <1>;
+ 			status = "disabled";
+ 		};
+ 
+@@ -3002,6 +2996,7 @@ cs_cpu_debug0: cpu-debug@4a210000 {
+ 				reg = <0x4a210000 0x1000>;
+ 				clocks = <&scmi_clk CK_SCMI_SYSDBG>;
+ 				clock-names = "apb_pclk";
++				cpu = <&cpu0>;
+ 				access-controllers = <&dbg_bus 0>;
+ 				status = "disabled";
+ 			};
+-- 
+2.53.0
+

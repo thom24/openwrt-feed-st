@@ -1,0 +1,49 @@
+From 52528b46cdced453385c3e670f9c0e24ba654c3a Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Tue, 1 Jul 2025 15:40:18 +0200
+Subject: [PATCH] dt-bindings: media: st: csi: correct data-lanes property
+
+Correct the data-lanes related property description in order to avoid
+following make dtbs_check error:
+
+ports:port@0:endpoint:data-lanes:0: 1 is not of type 'array'
+ports:port@0:endpoint:data-lanes:1: 2 is not of type 'array'
+
+Change-Id: Ic0d38b759e3db3836c41379c08234198284eed5b
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/471690
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ .../devicetree/bindings/media/st,stm32-csi.yaml        | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/media/st,stm32-csi.yaml b/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
+index ef66f80eda1b..81059d81b331 100644
+--- a/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
++++ b/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
+@@ -62,14 +62,10 @@ properties:
+ 
+             properties:
+               data-lanes:
+-                description:
+-                  Indicate the number of data-lanes and their mapping.
+-
++                minItems: 1
+                 items:
+-                  minItems: 1
+-                  items:
+-                    - const: 1
+-                    - const: 2
++                  - const: 1
++                  - const: 2
+ 
+             required:
+               - data-lanes
+-- 
+2.53.0
+

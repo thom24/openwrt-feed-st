@@ -1,0 +1,57 @@
+From d5c2e7ec074faa38056e54aaba3855259e791cfd Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 3 Sep 2025 09:17:05 +0200
+Subject: [PATCH] usb: usbh-stm32: keep PM runtime active when clocks aren't
+ enabled in stop
+
+On STM32MP23 and STM32MP25, RCC has registers to maintain the clocks
+(e.g. STPEN bits). These aren't present in STM32MP21, so the USBH
+power domain must remain active at runtime.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ia92597a0ab3aa8605e6971e2de9b969278344da4
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/487218
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/usb/host/usbh-stm32.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/drivers/usb/host/usbh-stm32.c b/drivers/usb/host/usbh-stm32.c
+index e329134244c3..252937b9576f 100644
+--- a/drivers/usb/host/usbh-stm32.c
++++ b/drivers/usb/host/usbh-stm32.c
+@@ -22,10 +22,12 @@
+ #define SYSCFG_USBHARCR_OFFSET_AREN_MASK        BIT(0)
+ 
+ struct stm32_usb2h_cfg {
++	bool keep_runtime_active;
+ 	bool has_addr_remapping;
+ };
+ 
+ static const struct stm32_usb2h_cfg stm32mp21_usb2h_cfg = {
++	.keep_runtime_active = true,
+ 	.has_addr_remapping = true,
+ };
+ 
+@@ -145,6 +147,16 @@ static int stm32_usbh_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return dev_err_probe(dev, ret, "Failed to enable pm runtime\n");
+ 
++	if (hwdata_cfg && hwdata_cfg->keep_runtime_active) {
++		/*
++		 * No RCC STPEN to maintain necessary clocks during stop mode.
++		 * So keep the PM domain active.
++		 */
++		ret = pm_runtime_resume_and_get(dev);
++		if (ret)
++			return dev_err_probe(dev, ret, "pm runtime resume failed\n");
++	}
++
+ 	/* Populate the ehci and ohci child nodes */
+ 	ret = devm_of_platform_populate(dev);
+ 	if (ret)
+-- 
+2.53.0
+

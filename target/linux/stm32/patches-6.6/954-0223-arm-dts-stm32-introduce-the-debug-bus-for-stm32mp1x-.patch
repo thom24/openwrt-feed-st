@@ -1,0 +1,444 @@
+From 4aa00ccd5ee39aa087334eb1d5b8a084df38dc03 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Wed, 9 Jul 2025 14:37:16 +0200
+Subject: [PATCH] arm: dts: stm32: introduce the debug bus for stm32mp1x
+ platforms
+
+Some peripherals cannot be probed if a debug configuration is not set
+in the BSEC.
+Introduce a debug bus that will check the debug subsystem accessibility
+before probing these peripheral drivers.
+
+Add Coresight peripheral nodes under this bus.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I89c734b5a9bfecbb3ca34e5613aaff79878cfe1e
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/473654
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp131.dtsi | 119 ++++++++++++++++++
+ arch/arm/boot/dts/st/stm32mp151.dtsi | 173 +++++++++++++++++++++++++++
+ arch/arm/boot/dts/st/stm32mp153.dtsi |  68 +++++++++++
+ 3 files changed, 360 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
+index 99934b8e6ff4..ac67910c07c2 100644
+--- a/arch/arm/boot/dts/st/stm32mp131.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
+@@ -3,6 +3,7 @@
+  * Copyright (C) STMicroelectronics 2021 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+  */
++#include <dt-bindings/arm/coresight-cti-dt.h>
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
+ #include <dt-bindings/clock/stm32mp13-clks.h>
+ #include <dt-bindings/regulator/st,stm32mp13-regulator.h>
+@@ -1130,9 +1131,127 @@ hdp: pinctrl@5002a000 {
+ 			compatible = "st,stm32mp-hdp";
+ 			reg = <0x5002a000 0x400>;
+ 			clocks = <&rcc HDP>;
++			access-controllers = <&dbg_bus 1>;
+ 			status = "disabled";
+ 		};
+ 
++		dbg_bus: bus@50080000 {
++			compatible = "st,stm32mp131-dbg-bus";
++			reg = <0x50080000 0x3f80000>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			clocks = <&rcc CK_DBG>;
++			#access-controller-cells = <1>;
++			ranges;
++			status = "disabled";
++
++			cs_etf: etf@50092000 {
++				compatible = "arm,coresight-tmc", "arm,primecell";
++				reg = <0x50092000 0x1000>;
++				clocks = <&rcc CK_DBG>;
++				clock-names = "apb_pclk";
++				access-controllers = <&dbg_bus 0>;
++				status = "disabled";
++
++				in-ports {
++					port {
++						etf_in_port: endpoint {
++							remote-endpoint = <&etm0_out_port>;
++						};
++					};
++				};
++
++				out-ports {
++					port {
++						etf_out_port: endpoint {
++							remote-endpoint = <&tpiu_in_port>;
++						};
++					};
++				};
++			};
++
++			cs_tpiu: tpiu@50093000 {
++				compatible = "arm,coresight-tpiu", "arm,primecell";
++				reg = <0x50093000 0x1000>;
++				clocks = <&rcc CK_DBG>, <&rcc CK_TRACE>;
++				clock-names = "apb_pclk", "atclk";
++				access-controllers = <&dbg_bus 0>;
++				status = "disabled";
++
++				in-ports {
++					port {
++						tpiu_in_port: endpoint {
++							remote-endpoint = <&etf_out_port>;
++						};
++					};
++				};
++			};
++
++			cs_cti_trace: cti@50094000 {
++				compatible = "arm,coresight-cti", "arm,primecell";
++				reg = <0x50094000 0x1000>;
++				clocks = <&rcc CK_DBG>;
++				clock-names = "apb_pclk";
++				access-controllers = <&dbg_bus 0>;
++				status = "disabled";
++			};
++
++			cs_cti_cpu0: cti@500d8000 {
++				compatible = "arm,coresight-cti", "arm,primecell";
++				reg = <0x500d8000 0x1000>;
++				clocks = <&rcc CK_DBG>;
++				clock-names = "apb_pclk";
++				#address-cells = <1>;
++				#size-cells = <0>;
++				access-controllers = <&dbg_bus 0>;
++				status = "disabled";
++
++				trig-conns@0 {
++					reg = <0>;
++					arm,trig-in-sigs = <0 4 5>;
++					arm,trig-in-types = <PE_DBGTRIGGER
++							     GEN_IO
++							     GEN_IO>;
++					arm,trig-out-sigs = <0 7>;
++					arm,trig-out-types = <PE_EDBGREQ
++							      PE_DBGRESTART>;
++					cpu = <&cpu0>;
++				};
++
++				trig-conns@2 {
++					reg = <2>;
++					arm,trig-in-sigs = <2 3 6>;
++					arm,trig-in-types = <ETM_EXTOUT
++							     ETM_EXTOUT
++							     ETM_EXTOUT>;
++					arm,trig-out-sigs = <1 2 3 4>;
++					arm,trig-out-types = <ETM_EXTIN
++							      ETM_EXTIN
++							      ETM_EXTIN
++							      ETM_EXTIN>;
++					arm,cs-dev-assoc = <&cs_etm0>;
++				};
++			};
++
++			cs_etm0: etm@500dc000 {
++				compatible = "arm,coresight-etm3x", "arm,primecell";
++				reg = <0x500dc000 0x1000>;
++				cpu = <&cpu0>;
++				clocks = <&rcc CK_DBG>, <&rcc CK_TRACE>;
++				clock-names = "apb_pclk", "atclk";
++				access-controllers = <&dbg_bus 0>;
++				status = "disabled";
++
++				out-ports {
++					port {
++						etm0_out_port: endpoint {
++							remote-endpoint = <&etf_in_port>;
++						};
++					};
++				};
++			};
++		};
++
+ 		mdma: dma-controller@58000000 {
+ 			compatible = "st,stm32h7-mdma";
+ 			reg = <0x58000000 0x1000>;
+diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
+index a3a78ced375b..25f6efa1437f 100644
+--- a/arch/arm/boot/dts/st/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
+@@ -3,6 +3,7 @@
+  * Copyright (C) STMicroelectronics 2017 - All Rights Reserved
+  * Author: Ludovic Barre <ludovic.barre@st.com> for STMicroelectronics.
+  */
++#include <dt-bindings/arm/coresight-cti-dt.h>
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
+ #include <dt-bindings/clock/stm32mp1-clks.h>
+ #include <dt-bindings/gpio/gpio.h>
+@@ -509,9 +510,181 @@ hdp: pinctrl@5002a000 {
+ 			compatible = "st,stm32mp-hdp";
+ 			reg = <0x5002a000 0x400>;
+ 			clocks = <&rcc HDP>;
++			access-controllers = <&dbg_bus 1>;
+ 			status = "disabled";
+ 		};
+ 
++		dbg_bus: bus@50080000 {
++			compatible = "st,stm32mp151-dbg-bus";
++			reg = <0x50080000 0x3f80000>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			clocks = <&rcc CK_DBG>;
++			#access-controller-cells = <1>;
++			ranges;
++			status = "disabled";
++
++			cs_funnel: funnel@50091000 {
++				compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
++				reg = <0x50091000 0x1000>;
++				clocks = <&rcc CK_DBG>, <&rcc CK_TRACE>;
++				clock-names = "apb_pclk", "atclk";
++				access-controllers = <&dbg_bus 0>;
++				status = "disabled";
++
++				in-ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++					port@0 {
++						reg = <0>;
++						funnel_in_port0: endpoint {
++							remote-endpoint = <&stm_out_port>;
++						};
++					};
++
++					port@1 {
++						reg = <1>;
++						funnel_in_port1: endpoint {
++							remote-endpoint = <&etm0_out>;
++						};
++					};
++				};
++
++				out-ports {
++					port {
++						funnel_out_port: endpoint {
++							remote-endpoint = <&etf_in_port>;
++						};
++					};
++				};
++			};
++
++			cs_etf: etf@50092000 {
++				compatible = "arm,coresight-tmc", "arm,primecell";
++				reg = <0x50092000 0x1000>;
++				clocks = <&rcc CK_DBG>;
++				clock-names = "apb_pclk";
++				access-controllers = <&dbg_bus 0>;
++				status = "disabled";
++
++				in-ports {
++					port {
++						etf_in_port: endpoint {
++							remote-endpoint = <&funnel_out_port>;
++						};
++					};
++				};
++
++				out-ports {
++					port {
++						etf_out_port: endpoint {
++							remote-endpoint = <&tpiu_in_port>;
++						};
++					};
++				};
++			};
++
++			cs_tpiu: tpiu@50093000 {
++				compatible = "arm,coresight-tpiu", "arm,primecell";
++				reg = <0x50093000 0x1000>;
++				clocks = <&rcc CK_DBG>, <&rcc CK_TRACE>;
++				clock-names = "apb_pclk", "atclk";
++				access-controllers = <&dbg_bus 0>;
++				status = "disabled";
++
++				in-ports {
++					port {
++						tpiu_in_port: endpoint {
++							remote-endpoint = <&etf_out_port>;
++						};
++					};
++				};
++			};
++
++			cs_cti_trace: cti@50094000 {
++				compatible = "arm,coresight-cti", "arm,primecell";
++				reg = <0x50094000 0x1000>;
++				clocks = <&rcc CK_DBG>;
++				clock-names = "apb_pclk";
++				access-controllers = <&dbg_bus 0>;
++				status = "disabled";
++			};
++
++			cs_stm: stm@500a0000 {
++				compatible = "arm,coresight-stm", "arm,primecell";
++				reg = <0x500a0000 0x00001000>,
++				<0x90000000 0x01000000>;
++				reg-names = "stm-base", "stm-stimulus-base";
++				clocks = <&rcc CK_DBG>, <&rcc CK_TRACE>;
++				clock-names = "apb_pclk", "atclk";
++				access-controllers = <&dbg_bus 0>;
++				status = "disabled";
++
++				out-ports {
++					port {
++						stm_out_port: endpoint {
++							remote-endpoint = <&funnel_in_port0>;
++						};
++					};
++				};
++			};
++
++			cs_cti_cpu0: cti@500d8000 {
++				compatible = "arm,coresight-cti", "arm,primecell";
++				reg = <0x500d8000 0x1000>;
++				clocks = <&rcc CK_DBG>;
++				clock-names = "apb_pclk";
++				#address-cells = <1>;
++				#size-cells = <0>;
++				access-controllers = <&dbg_bus 0>;
++				status = "disabled";
++
++				trig-conns@0 {
++					reg = <0>;
++					arm,trig-in-sigs = <0 4 5>;
++					arm,trig-in-types = <PE_DBGTRIGGER
++							     GEN_IO
++							     GEN_IO>;
++					arm,trig-out-sigs = <0 7>;
++					arm,trig-out-types = <PE_EDBGREQ
++							      PE_DBGRESTART>;
++					cpu = <&cpu0>;
++				};
++
++				trig-conns@2 {
++					reg = <2>;
++					arm,trig-in-sigs = <2 3 6>;
++					arm,trig-in-types = <ETM_EXTOUT
++							     ETM_EXTOUT
++							     ETM_EXTOUT>;
++					arm,trig-out-sigs = <1 2 3 4>;
++					arm,trig-out-types = <ETM_EXTIN
++							      ETM_EXTIN
++							      ETM_EXTIN
++							      ETM_EXTIN>;
++					arm,cs-dev-assoc = <&cs_etm0>;
++				};
++			};
++
++			cs_etm0: etm@500dc000 {
++				compatible = "arm,coresight-etm3x", "arm,primecell";
++				reg = <0x500dc000 0x1000>;
++				cpu = <&cpu0>;
++				clocks = <&rcc CK_DBG>, <&rcc CK_TRACE>;
++				clock-names = "apb_pclk", "atclk";
++				access-controllers = <&dbg_bus 0>;
++				status = "disabled";
++
++				out-ports {
++					port {
++						etm0_out: endpoint {
++							remote-endpoint = <&funnel_in_port1>;
++						};
++					};
++				};
++			};
++		};
++
+ 		pinctrl_z: pinctrl@54004000 {
+ 			bootph-all;
+ 			#address-cells = <1>;
+diff --git a/arch/arm/boot/dts/st/stm32mp153.dtsi b/arch/arm/boot/dts/st/stm32mp153.dtsi
+index e9ddf67cd3d8..cd63ed951fc6 100644
+--- a/arch/arm/boot/dts/st/stm32mp153.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp153.dtsi
+@@ -31,6 +31,74 @@ timer {
+ 	};
+ };
+ 
++&cs_funnel {
++	in-ports {
++		port@2 {
++			reg = <2>;
++			funnel_in_port2: endpoint {
++				remote-endpoint = <&etm1_out>;
++			};
++		};
++	};
++};
++
++&dbg_bus {
++	cs_cti_cpu1: cti@500d9000 {
++		compatible = "arm,coresight-cti", "arm,primecell";
++		reg = <0x500d9000 0x1000>;
++		clocks = <&rcc CK_DBG>;
++		clock-names = "apb_pclk";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		access-controllers = <&dbg_bus 0>;
++		status = "disabled";
++
++		trig-conns@0 {
++			reg = <0>;
++			arm,trig-in-sigs = <0 4 5>;
++			arm,trig-in-types = <PE_DBGTRIGGER
++					     GEN_IO
++					     GEN_IO>;
++			arm,trig-out-sigs = <0 7>;
++			arm,trig-out-types = <PE_EDBGREQ
++					      PE_DBGRESTART>;
++			cpu = <&cpu1>;
++		};
++
++		trig-conns@2 {
++			reg = <2>;
++			arm,trig-in-sigs = <2 3 6>;
++			arm,trig-in-types = <ETM_EXTOUT
++					     ETM_EXTOUT
++					     ETM_EXTOUT>;
++			arm,trig-out-sigs = <1 2 3 4>;
++			arm,trig-out-types = <ETM_EXTIN
++					      ETM_EXTIN
++					      ETM_EXTIN
++					      ETM_EXTIN>;
++			arm,cs-dev-assoc = <&cs_etm1>;
++		};
++	};
++
++	cs_etm1: etm@500dd000 {
++		compatible = "arm,coresight-etm3x", "arm,primecell";
++		reg = <0x500dd000 0x1000>;
++		cpu = <&cpu1>;
++		clocks = <&rcc CK_DBG>, <&rcc CK_TRACE>;
++		clock-names = "apb_pclk", "atclk";
++		access-controllers = <&dbg_bus 0>;
++		status = "disabled";
++
++		out-ports {
++			port {
++				etm1_out: endpoint {
++					remote-endpoint = <&funnel_in_port2>;
++				};
++			};
++		};
++	};
++};
++
+ &etzpc {
+ 	m_can1: can@4400e000 {
+ 		compatible = "bosch,m_can";
+-- 
+2.53.0
+

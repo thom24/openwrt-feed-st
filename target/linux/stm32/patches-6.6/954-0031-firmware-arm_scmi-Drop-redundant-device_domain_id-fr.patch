@@ -1,0 +1,79 @@
+From 4584c3f7e14bd72303bda7be0a97236b9006c182 Mon Sep 17 00:00:00 2001
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 25 Aug 2023 13:26:25 +0200
+Subject: [PATCH] firmware: arm_scmi: Drop redundant ->device_domain_id() from
+ perf ops
+
+There are no longer any users of the ->device_domain_id() ops in the
+scmi_perf_proto_ops, therefore let's remove it.
+
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Link: https://lore.kernel.org/r/20230825112633.236607-6-ulf.hansson@linaro.org
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+[upstream commit 9b578d83629e13f81a53d1695a4f700cdb10f772]
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: Icd874f682f99197a49424f99c00b6c48a3e81840
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/476913
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/firmware/arm_scmi/perf.c | 13 -------------
+ include/linux/scmi_protocol.h    |  2 --
+ 2 files changed, 15 deletions(-)
+
+diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
+index d1a093f8343c..d9b867fe3671 100644
+--- a/drivers/firmware/arm_scmi/perf.c
++++ b/drivers/firmware/arm_scmi/perf.c
+@@ -796,18 +796,6 @@ static void scmi_perf_domain_init_fc(const struct scmi_protocol_handle *ph,
+ 	*p_fc = fc;
+ }
+ 
+-/* Device specific ops */
+-static int scmi_dev_domain_id(struct device *dev)
+-{
+-	struct of_phandle_args clkspec;
+-
+-	if (of_parse_phandle_with_args(dev->of_node, "clocks", "#clock-cells",
+-				       0, &clkspec))
+-		return -EINVAL;
+-
+-	return clkspec.args[0];
+-}
+-
+ static int scmi_dvfs_device_opps_add(const struct scmi_protocol_handle *ph,
+ 				     struct device *dev, u32 domain)
+ {
+@@ -966,7 +954,6 @@ static const struct scmi_perf_proto_ops perf_proto_ops = {
+ 	.limits_get = scmi_perf_limits_get,
+ 	.level_set = scmi_perf_level_set,
+ 	.level_get = scmi_perf_level_get,
+-	.device_domain_id = scmi_dev_domain_id,
+ 	.transition_latency_get = scmi_dvfs_transition_latency_get,
+ 	.device_opps_add = scmi_dvfs_device_opps_add,
+ 	.freq_set = scmi_dvfs_freq_set,
+diff --git a/include/linux/scmi_protocol.h b/include/linux/scmi_protocol.h
+index 0dbae5634290..c6b47d42320e 100644
+--- a/include/linux/scmi_protocol.h
++++ b/include/linux/scmi_protocol.h
+@@ -123,7 +123,6 @@ struct scmi_perf_domain_info {
+  * @limits_get: gets limits on the performance level of a domain
+  * @level_set: sets the performance level of a domain
+  * @level_get: gets the performance level of a domain
+- * @device_domain_id: gets the scmi domain id for a given device
+  * @transition_latency_get: gets the DVFS transition latency for a given device
+  * @device_opps_add: adds all the OPPs for a given device
+  * @freq_set: sets the frequency for a given device using sustained frequency
+@@ -149,7 +148,6 @@ struct scmi_perf_proto_ops {
+ 			 u32 level, bool poll);
+ 	int (*level_get)(const struct scmi_protocol_handle *ph, u32 domain,
+ 			 u32 *level, bool poll);
+-	int (*device_domain_id)(struct device *dev);
+ 	int (*transition_latency_get)(const struct scmi_protocol_handle *ph,
+ 				      u32 domain);
+ 	int (*device_opps_add)(const struct scmi_protocol_handle *ph,
+-- 
+2.53.0
+

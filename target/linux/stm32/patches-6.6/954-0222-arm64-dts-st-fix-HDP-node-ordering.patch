@@ -1,0 +1,56 @@
+From 80fd2c421122ff80cd1689c582c44b70c66f4a62 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Fri, 10 Oct 2025 09:49:27 +0200
+Subject: [PATCH] arm64: dts: st: fix HDP node ordering
+
+Introduction of the BSEC node broke the ordering of the DT. Fix it by
+moving the HDP node.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I7f9a6392c34f402003e5016848b2dcef7c7519ee
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/498276
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 04e2fd09a7d4..f1b9f26719aa 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -1979,13 +1979,6 @@ risab5: risab@42130000 {
+ 			#access-controller-cells = <1>;
+ 		};
+ 
+-		hdp: pinctrl@44090000 {
+-			compatible = "st,stm32mp-hdp";
+-			reg = <0x44090000 0x0 0x400>;
+-			clocks = <&rcc CK_BUS_HDP>;
+-			status = "disabled";
+-		};
+-
+ 		bsec: efuse@44000000 {
+ 			bootph-all;
+ 			compatible = "st,stm32mp25-bsec";
+@@ -2019,6 +2012,13 @@ dts: thermal-sensor@44070000 {
+ 			#thermal-sensor-cells = <1>;
+ 		};
+ 
++		hdp: pinctrl@44090000 {
++			compatible = "st,stm32mp-hdp";
++			reg = <0x44090000 0x0 0x400>;
++			clocks = <&rcc CK_BUS_HDP>;
++			status = "disabled";
++		};
++
+ 		rcc: clock-controller@44200000 {
+ 			bootph-all;
+ 			compatible = "st,stm32mp21-rcc";
+-- 
+2.53.0
+

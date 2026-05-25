@@ -1,0 +1,45 @@
+From 36abd0b868ecc178386ad3dd0c837e34352cd60f Mon Sep 17 00:00:00 2001
+From: Valentin Caron <valentin.caron@foss.st.com>
+Date: Mon, 24 Nov 2025 12:17:54 +0100
+Subject: [PATCH] dt-bindings: clock: stm32mp15: add SCMI IDs for GPIO bank
+ clocks
+
+Add SCMI clock IDs for GPIO banks A to K (21 to 31).
+
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: I98a20d33fe2916e43809ff2486e38ee9fcc147ea
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/511848
+Tested-by: Jerome BESNARD <jerome.besnard@st.com>
+Reviewed-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ include/dt-bindings/clock/stm32mp1-clks.h | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/include/dt-bindings/clock/stm32mp1-clks.h b/include/dt-bindings/clock/stm32mp1-clks.h
+index ff3a40ac5b59..7b3952a0e693 100644
+--- a/include/dt-bindings/clock/stm32mp1-clks.h
++++ b/include/dt-bindings/clock/stm32mp1-clks.h
+@@ -276,5 +276,16 @@
+ #define CK_SCMI_RTCAPB		18
+ #define CK_SCMI_SPI6		19
+ #define CK_SCMI_USART1		20
++#define CK_SCMI_GPIOA		21
++#define CK_SCMI_GPIOB		22
++#define CK_SCMI_GPIOC		23
++#define CK_SCMI_GPIOD		24
++#define CK_SCMI_GPIOE		25
++#define CK_SCMI_GPIOF		26
++#define CK_SCMI_GPIOG		27
++#define CK_SCMI_GPIOH		28
++#define CK_SCMI_GPIOI		29
++#define CK_SCMI_GPIOJ		30
++#define CK_SCMI_GPIOK		31
+ 
+ #endif /* _DT_BINDINGS_STM32MP1_CLKS_H_ */
+-- 
+2.53.0
+

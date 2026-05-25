@@ -1,0 +1,107 @@
+From 3bada4c13ed16317e51d298eaa09b6233da9c614 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Thu, 31 Jul 2025 11:17:13 +0200
+Subject: [PATCH] drm/stm: ltdc: default-on property removed
+
+The "default-on" property is not set for the bindings.
+Check if the ltdc has been activated by another software
+component to determine if it needs to be reset.
+
+Change-Id: Ibe144f8435b0e1272db711f63b2db28e884704db
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/475876
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/gpu/drm/stm/ltdc.c | 47 ++++++++++++++++++++++++--------------
+ 1 file changed, 30 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+index 57d43adb8e87..d0db6feb1aaa 100644
+--- a/drivers/gpu/drm/stm/ltdc.c
++++ b/drivers/gpu/drm/stm/ltdc.c
+@@ -2428,8 +2428,7 @@ int ltdc_load(struct drm_device *ddev)
+ 	struct resource *res;
+ 	int irq, i, nb_endpoints;
+ 	int ret = -ENODEV;
+-	u32 mbl;
+-	bool def_value;
++	u32 mbl, gcr;
+ 
+ 	DRM_DEBUG_DRIVER("\n");
+ 
+@@ -2486,20 +2485,6 @@ int ltdc_load(struct drm_device *ddev)
+ 
+ 	mutex_init(&ldev->err_lock);
+ 
+-	def_value = device_property_read_bool(dev, "default-on");
+-
+-	/*
+-	 * To obtain a continuous display after the probe, the clocks must
+-	 * remain activated and reset shouldn't be done
+-	 */
+-	if (!def_value) {
+-		if (!IS_ERR(ldev->rstc)) {
+-			reset_control_assert(ldev->rstc);
+-			usleep_range(10, 20);
+-			reset_control_deassert(ldev->rstc);
+-		}
+-	}
+-
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	ldev->regs = devm_ioremap_resource(dev, res);
+ 	if (IS_ERR(ldev->regs)) {
+@@ -2515,6 +2500,21 @@ int ltdc_load(struct drm_device *ddev)
+ 		goto err;
+ 	}
+ 
++	/*
++	 * To obtain a continuous display after the probe, the clocks must
++	 * remain activated and reset shouldn't be done
++	 */
++	regmap_read(ldev->regmap, LTDC_GCR, &gcr);
++
++	/* Check if the ltdc has been activated */
++	if (!(gcr & GCR_LTDCEN)) {
++		if (!IS_ERR(ldev->rstc)) {
++			reset_control_assert(ldev->rstc);
++			usleep_range(10, 20);
++			reset_control_deassert(ldev->rstc);
++		}
++	}
++
+ 	ret = ltdc_get_caps(ddev);
+ 	if (ret)
+ 		goto err;
+@@ -2573,7 +2573,8 @@ int ltdc_load(struct drm_device *ddev)
+ 	pm_runtime_set_active(ddev->dev);
+ 	pm_runtime_enable(ddev->dev);
+ 
+-	if (def_value) {
++	/* Check if the ltdc has been activated */
++	if (gcr & GCR_LTDCEN) {
+ 		/* keep runtime active after the probe */
+ 		ret = pm_runtime_resume_and_get(ddev->dev);
+ 		if (ret) {
+@@ -2583,6 +2584,18 @@ int ltdc_load(struct drm_device *ddev)
+ 	} else {
+ 		/* set to sleep state the pinctrl to stop data trasfert */
+ 		pinctrl_pm_select_sleep_state(ddev->dev);
++
++		/*
++		 * Parent of the pixel clock should default to the reference clock (rcc clock).
++		 * If the driver has already been started, this action is not necessary and
++		 *  may cause an issue on register reading/writing.
++		 */
++		if (of_device_is_compatible(dev->of_node, "st,stm32mp25-ltdc")) {
++			ret = clk_set_parent(ldev->pixel_clk, ldev->ltdc_clk);
++			if (ret)
++				return dev_err_probe(dev, PTR_ERR(ldev->lvds_clk),
++						     "Could not set parent clock\n");
++		}
+ 	}
+ 
+ 	/* Get the secure rotation buffer memory resource */
+-- 
+2.53.0
+

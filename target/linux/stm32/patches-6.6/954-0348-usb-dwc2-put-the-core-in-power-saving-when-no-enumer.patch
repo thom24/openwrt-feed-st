@@ -1,0 +1,125 @@
+From 1361ceab93e581d1ced155417bee1f41f48886af Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 26 Nov 2025 19:08:42 +0100
+Subject: [PATCH] usb: dwc2: put the core in power saving when no enumeration
+
+When the enumeration doesn't complete, the suspend irq lets the
+core active (ignore suspend request during enumeration).
+The enumeration normally ends at some point, within connect timings
+range. Allow to put the core in one of the power saving modes, once
+passed the timeout.
+
+A typical case is the disconnect of a cable. The controller, gets a
+suspend interrupt, which is ignored before enumeration. Until it
+gets plugged to another (A or B) device, this timeout allows to
+reach low power state.
+
+Another case is: the user configures the gadget driver, but the cable
+isn't plugged to a host. To avoid letting the controller active while
+not plugged, use the same timeout in dwc2_hsotg_core_connect.
+
+The timeout gets canceled, when the enumeration completes.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ifdedc2458198a77379c67a7956ac6c58e049d771
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/512990
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/usb/dwc2/core.h      |  1 +
+ drivers/usb/dwc2/core_intr.c |  9 +++++++++
+ drivers/usb/dwc2/gadget.c    | 24 ++++++++++++++++++++++--
+ 3 files changed, 32 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+index 1f3d76668c8e..1b457463641a 100644
+--- a/drivers/usb/dwc2/core.h
++++ b/drivers/usb/dwc2/core.h
+@@ -1107,6 +1107,7 @@ struct dwc2_hsotg {
+ 	struct work_struct wf_otg;
+ 	struct work_struct wf_gadget;
+ 	struct delayed_work dw_gsetup;
++	struct delayed_work dw_enumtimeout;
+ 	struct timer_list wkp_timer;
+ 	enum dwc2_lx_state lx_state;
+ 	struct dwc2_gregs_backup gr_backup;
+diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
+index 276f10706486..96b79af05889 100644
+--- a/drivers/usb/dwc2/core_intr.c
++++ b/drivers/usb/dwc2/core_intr.c
+@@ -554,6 +554,15 @@ static void dwc2_handle_usb_suspend_intr(struct dwc2_hsotg *hsotg)
+ 		if (!dwc2_is_device_connected(hsotg)) {
+ 			dev_dbg(hsotg->dev,
+ 				"ignore suspend request before enumeration\n");
++			/*
++			 * Connect timing: timeout to put the controller in low power, in
++			 * case the enumeration doesn't complete. Typical case is to start
++			 * the gadget driver, without a cable plugged. Still prevent to
++			 * suspend during enumeration process.
++			 */
++			if (hsotg->wq_gadget)
++				queue_delayed_work(hsotg->wq_gadget, &hsotg->dw_enumtimeout,
++						   msecs_to_jiffies(2000));
+ 			return;
+ 		}
+ 		if (dsts & DSTS_SUSPSTS) {
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 7a4a7ee3353a..3e12fd8ab5ce 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -3293,6 +3293,18 @@ static void dwc2_gadget_enter_lp(struct dwc2_hsotg *hsotg)
+ 	}
+ }
+ 
++static void dwc2_gadget_enum_timeout(struct work_struct *work)
++{
++	struct dwc2_hsotg *hsotg = container_of(work, struct dwc2_hsotg, dw_enumtimeout.work);
++	unsigned long flags;
++
++	dev_dbg(hsotg->dev, "%s enumeration timeout\n",  __func__);
++
++	spin_lock_irqsave(&hsotg->lock, flags);
++	dwc2_gadget_enter_lp(hsotg);
++	spin_unlock_irqrestore(&hsotg->lock, flags);
++}
++
+ /**
+  * dwc2_hsotg_irq_enumdone - Handle EnumDone interrupt (enumeration done)
+  * @hsotg: The device state.
+@@ -3723,9 +3735,14 @@ void dwc2_hsotg_core_disconnect(struct dwc2_hsotg *hsotg)
+ 
+ void dwc2_hsotg_core_connect(struct dwc2_hsotg *hsotg)
+ {
+-	/* remove the soft-disconnect and let's go */
+-	if (!hsotg->role_sw || (dwc2_readl(hsotg, GOTGCTL) & GOTGCTL_BSESVLD))
++	if (!hsotg->role_sw || (dwc2_readl(hsotg, GOTGCTL) & GOTGCTL_BSESVLD)) {
++		/* remove the soft-disconnect and let's go */
+ 		dwc2_clear_bit(hsotg, DCTL, DCTL_SFTDISCON);
++	} else {
++		/* Delayed power saving, if not connected: role_sw can exit from lp later */
++		queue_delayed_work(hsotg->wq_gadget, &hsotg->dw_enumtimeout,
++				   msecs_to_jiffies(2000));
++	}
+ }
+ 
+ /**
+@@ -3898,6 +3915,8 @@ static irqreturn_t dwc2_hsotg_irq(int irq, void *pw)
+ 	if (gintsts & GINTSTS_ENUMDONE) {
+ 		dwc2_writel(hsotg, GINTSTS_ENUMDONE, GINTSTS);
+ 
++		cancel_delayed_work(&hsotg->dw_enumtimeout);
++
+ 		dwc2_hsotg_irq_enumdone(hsotg);
+ 	}
+ 
+@@ -5303,6 +5322,7 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
+ 	}
+ 	INIT_WORK(&hsotg->wf_gadget, dwc2_gadget_remote_wkup_change);
+ 	INIT_DELAYED_WORK(&hsotg->dw_gsetup, dwc2_gadget_setup_timeout);
++	INIT_DELAYED_WORK(&hsotg->dw_enumtimeout, dwc2_gadget_enum_timeout);
+ 
+ 	/* setup endpoint information */
+ 
+-- 
+2.53.0
+

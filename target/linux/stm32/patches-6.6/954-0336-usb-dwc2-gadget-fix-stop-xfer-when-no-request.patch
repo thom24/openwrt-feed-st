@@ -1,0 +1,49 @@
+From 5c0d53fc7d151c1ed9a9d1b672fddfcafb681800 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Tue, 18 Nov 2025 11:09:33 +0100
+Subject: [PATCH] usb: dwc2: gadget: fix stop xfer when no request
+
+Since "usb: dwc2: gadget: stop xfer when no request", out EP gets stopped
+unconditionally, when no new packets has been fed. But the endpoint may
+not be enabled. When it happens, it lead to get errors, e.g.
+"timeout GINTSTS.GOUTNAKEFF" and "timeout DOEPCTL.EPDisable".
+So only stop xfer, when the out EP has been enabled.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ica1a98599f4162c5c8d8d28ee447378f4e3a5301
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/510067
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+Tested-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/usb/dwc2/gadget.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index cc5a4cf9b343..8907c841ef2a 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -1759,9 +1759,16 @@ static void dwc2_gadget_start_next_request(struct dwc2_hsotg_ep *hs_ep)
+ 	}
+ 	if (!hs_ep->isochronous) {
+ 		if (hs_ep->index && !dir_in) {
+-			/* No new request, stop xfer and NAK on this endpoint. */
+-			dev_dbg(hsotg->dev, "No request, stop %s\n", hs_ep->ep.name);
+-			dwc2_hsotg_ep_stop_xfr(hsotg, hs_ep);
++			u32 ctrl = dwc2_readl(hsotg, DOEPCTL(hs_ep->index));
++
++			if (ctrl & DXEPCTL_EPENA) {
++				/*
++				 * No new request for enabled endpoint, stop xfer and NAK
++				 * on this endpoint.
++				 */
++				dev_dbg(hsotg->dev, "No request, stop %s\n", hs_ep->ep.name);
++				dwc2_hsotg_ep_stop_xfr(hsotg, hs_ep);
++			}
+ 		}
+ 		return;
+ 	}
+-- 
+2.53.0
+

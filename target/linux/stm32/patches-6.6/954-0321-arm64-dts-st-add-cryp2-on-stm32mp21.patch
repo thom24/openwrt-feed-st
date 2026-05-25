@@ -1,0 +1,68 @@
+From 3c7b122c4bac11ef3af3ae755f04d181c8e4649e Mon Sep 17 00:00:00 2001
+From: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Date: Mon, 3 Nov 2025 14:10:41 +0100
+Subject: [PATCH] arm64: dts: st: add cryp2 on stm32mp21
+
+Add cryp2 node for stm32mp21xc and stm32mp21xf with DMA support.
+
+Signed-off-by: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Change-Id: I83306323941a6394c8d64c2892863e013ecd09b7
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/505546
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp21xc.dtsi | 14 ++++++++++++++
+ arch/arm64/boot/dts/st/stm32mp21xf.dtsi | 14 ++++++++++++++
+ 2 files changed, 28 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp21xc.dtsi b/arch/arm64/boot/dts/st/stm32mp21xc.dtsi
+index 38f07c939e39..5fa5bb04c055 100644
+--- a/arch/arm64/boot/dts/st/stm32mp21xc.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp21xc.dtsi
+@@ -18,4 +18,18 @@ cryp1: crypto@42030000 {
+ 		power-domains = <&d1_pd>;
+ 		status = "disabled";
+ 	};
++
++	cryp2: crypto@42040000 {
++		compatible = "st,stm32mp1-cryp";
++		reg = <0x42040000 0x0 0x400>;
++		interrupts = <GIC_SPI 157 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&rcc CK_BUS_CRYP2>;
++		resets = <&rcc CRYP2_R>;
++		dmas = <&hpdma 108 0x40 0x3021>,
++		       <&hpdma 109 0x43 0x3012>;
++		dma-names = "in", "out";
++		access-controllers = <&rifsc 99>;
++		power-domains = <&d1_pd>;
++		status = "disabled";
++	};
+ };
+diff --git a/arch/arm64/boot/dts/st/stm32mp21xf.dtsi b/arch/arm64/boot/dts/st/stm32mp21xf.dtsi
+index 38f07c939e39..5fa5bb04c055 100644
+--- a/arch/arm64/boot/dts/st/stm32mp21xf.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp21xf.dtsi
+@@ -18,4 +18,18 @@ cryp1: crypto@42030000 {
+ 		power-domains = <&d1_pd>;
+ 		status = "disabled";
+ 	};
++
++	cryp2: crypto@42040000 {
++		compatible = "st,stm32mp1-cryp";
++		reg = <0x42040000 0x0 0x400>;
++		interrupts = <GIC_SPI 157 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&rcc CK_BUS_CRYP2>;
++		resets = <&rcc CRYP2_R>;
++		dmas = <&hpdma 108 0x40 0x3021>,
++		       <&hpdma 109 0x43 0x3012>;
++		dma-names = "in", "out";
++		access-controllers = <&rifsc 99>;
++		power-domains = <&d1_pd>;
++		status = "disabled";
++	};
+ };
+-- 
+2.53.0
+

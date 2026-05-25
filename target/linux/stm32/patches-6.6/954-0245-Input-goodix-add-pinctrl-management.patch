@@ -1,0 +1,52 @@
+From 4a446b51fd6d390819f03da3305b62c88d0d9c6e Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Thu, 2 Oct 2025 17:11:07 +0200
+Subject: [PATCH] Input: goodix - add pinctrl management
+
+Temporary patch allowing pinctrl management during suspend/resume.
+
+Change-Id: I8059ec353a9a7a26b2a1b7d2f704478f588b897f
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/495799
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/input/touchscreen/goodix.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/input/touchscreen/goodix.c b/drivers/input/touchscreen/goodix.c
+index fd40c27e9cde..67c2b0550f66 100644
+--- a/drivers/input/touchscreen/goodix.c
++++ b/drivers/input/touchscreen/goodix.c
+@@ -19,6 +19,7 @@
+ #include <drm/drm_mipi_dsi.h>
+ #include <linux/irq.h>
+ #include <linux/interrupt.h>
++#include <linux/pinctrl/consumer.h>
+ #include <linux/platform_data/x86/soc.h>
+ #include <linux/slab.h>
+ #include <linux/acpi.h>
+@@ -1451,6 +1452,10 @@ static int goodix_suspend(struct device *dev)
+ 	/* We need gpio pins to suspend/resume */
+ 	if (ts->irq_pin_access_method == IRQ_PIN_ACCESS_NONE) {
+ 		disable_irq(client->irq);
++
++		/* Set to sleep state the pinctrl */
++		pinctrl_pm_select_sleep_state(dev);
++
+ 		return 0;
+ 	}
+ 
+@@ -1495,6 +1500,9 @@ static int goodix_resume(struct device *dev)
+ 	int error;
+ 
+ 	if (ts->irq_pin_access_method == IRQ_PIN_ACCESS_NONE) {
++		/* Set to default state the pinctrl */
++		pinctrl_pm_select_default_state(dev);
++
+ 		enable_irq(client->irq);
+ 		return 0;
+ 	}
+-- 
+2.53.0
+

@@ -1,0 +1,115 @@
+From 79db483decba4800279220b609078547da121108 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Thu, 13 Nov 2025 12:48:42 +0100
+Subject: [PATCH] PCI: stm32: guard against multiple start_link
+
+Consecutive start_link will call enable_irq twice, which is unbalanced.
+Guard against it
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I4b53bf0c1313830129c15a12703f3ac10545560d
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/508908
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/pci/controller/dwc/pcie-stm32-ep.c | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+
+diff --git a/drivers/pci/controller/dwc/pcie-stm32-ep.c b/drivers/pci/controller/dwc/pcie-stm32-ep.c
+index 2d6c42b4fa78..ad13eeaf2ee0 100644
+--- a/drivers/pci/controller/dwc/pcie-stm32-ep.c
++++ b/drivers/pci/controller/dwc/pcie-stm32-ep.c
+@@ -18,6 +18,9 @@
+ #include "pcie-designware.h"
+ #include "pcie-stm32.h"
+ 
++#define STM32_PCIE_EP_PERST_IRQ_ENABLED 1
++#define STM32_PCIE_EP_LINK_ENABLED 2
++
+ struct stm32_pcie {
+ 	struct dw_pcie *pci;
+ 	struct regmap *regmap;
+@@ -25,6 +28,7 @@ struct stm32_pcie {
+ 	struct phy *phy;
+ 	struct clk *clk;
+ 	struct gpio_desc *reset_gpio;
++	int link_status;
+ 	unsigned int perst_irq;
+ };
+ 
+@@ -46,6 +50,13 @@ static int stm32_pcie_start_link(struct dw_pcie *pci)
+ {
+ 	struct stm32_pcie *stm32_pcie = to_stm32_pcie(pci);
+ 
++	if (stm32_pcie->link_status & STM32_PCIE_EP_PERST_IRQ_ENABLED) {
++		dev_dbg(pci->dev, "perst_irq is already enabled\n");
++		return 0;
++	}
++
++	stm32_pcie->link_status |= STM32_PCIE_EP_PERST_IRQ_ENABLED;
++
+ 	enable_irq(stm32_pcie->perst_irq);
+ 
+ 	return 0;
+@@ -55,7 +66,14 @@ static void stm32_pcie_stop_link(struct dw_pcie *pci)
+ {
+ 	struct stm32_pcie *stm32_pcie = to_stm32_pcie(pci);
+ 
++	if (!(stm32_pcie->link_status & STM32_PCIE_EP_PERST_IRQ_ENABLED)) {
++		dev_dbg(pci->dev, "perst_irq is already disabled\n");
++		return;
++	}
++
+ 	disable_irq(stm32_pcie->perst_irq);
++
++	stm32_pcie->link_status &= ~STM32_PCIE_EP_PERST_IRQ_ENABLED;
+ }
+ 
+ static int stm32_pcie_raise_irq(struct dw_pcie_ep *ep, u8 func_no,
+@@ -127,6 +145,11 @@ static void stm32_pcie_perst_assert(struct dw_pcie *pci)
+ 	struct device *dev = pci->dev;
+ 	struct dw_pcie_ep *ep = &pci->ep;
+ 
++	if (!(stm32_pcie->link_status & STM32_PCIE_EP_LINK_ENABLED)) {
++		dev_dbg(pci->dev, "Link is already disabled\n");
++		return;
++	}
++
+ 	dev_dbg(dev, "PERST asserted by host. Shutting down the PCIe link\n");
+ 
+ 	regmap_update_bits(stm32_pcie->regmap, SYSCFG_PCIECR, STM32MP25_PCIECR_LTSSM_EN, 0);
+@@ -136,6 +159,8 @@ static void stm32_pcie_perst_assert(struct dw_pcie *pci)
+ 	stm32_pcie_disable_resources(stm32_pcie);
+ 
+ 	pm_runtime_put_sync(dev);
++
++	stm32_pcie->link_status &= ~STM32_PCIE_EP_LINK_ENABLED;
+ }
+ 
+ static void stm32_pcie_perst_deassert(struct dw_pcie *pci)
+@@ -145,6 +170,11 @@ static void stm32_pcie_perst_deassert(struct dw_pcie *pci)
+ 	struct dw_pcie_ep *ep = &pci->ep;
+ 	int ret;
+ 
++	if (stm32_pcie->link_status & STM32_PCIE_EP_LINK_ENABLED) {
++		dev_dbg(pci->dev, "Link is already enabled\n");
++		return;
++	}
++
+ 	dev_dbg(dev, "PERST de-asserted by host. Starting link training\n");
+ 
+ 	ret = pm_runtime_resume_and_get(dev);
+@@ -176,6 +206,8 @@ static void stm32_pcie_perst_deassert(struct dw_pcie *pci)
+ 			   STM32MP25_PCIECR_LTSSM_EN);
+ 
+ 	dw_pcie_ep_linkup(ep);
++
++	stm32_pcie->link_status |= STM32_PCIE_EP_LINK_ENABLED;
+ }
+ 
+ static irqreturn_t stm32_pcie_ep_perst_irq_thread(int irq, void *data)
+-- 
+2.53.0
+

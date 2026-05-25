@@ -1,0 +1,38 @@
+From 7e4d852e7be9537f1924679cd758b3795e033c1f Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Wed, 3 Sep 2025 13:53:32 +0200
+Subject: [PATCH] clk: stm32mp25: fix HSI_KER and HSE_KER clock enum
+
+HSI_KER and HSE_KER were inverted and were not aligned with the
+device tree definition.
+
+Fixes: 06e21c54a8d3 ("clk: stm32mp25: add clock for D3 peripherals allocation for Cortex-CM0")
+Change-Id: Ib40d3a594b9e80091351fd86818c5efe8bcfdcc9
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/486751
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/clk/stm32/clk-stm32mp25.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/clk/stm32/clk-stm32mp25.c b/drivers/clk/stm32/clk-stm32mp25.c
+index fce2e3f7561e..e3f48aa0f363 100644
+--- a/drivers/clk/stm32/clk-stm32mp25.c
++++ b/drivers/clk/stm32/clk-stm32mp25.c
+@@ -130,8 +130,8 @@ enum {
+ 	TIMG2,
+ 	PLL3,
+ 	DSI_TXBYTE,
+-	HSE_KER,
+ 	HSI_KER,
++	HSE_KER,
+ 	MSI_KER,
+ };
+ 
+-- 
+2.53.0
+

@@ -1,0 +1,54 @@
+From 290a50af1678feab4f1b86997bfad939f7621fae Mon Sep 17 00:00:00 2001
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Date: Tue, 10 Sep 2024 18:44:31 -0500
+Subject: [PATCH] dt-bindings: rtc: Drop non-trivial duplicate compatibles
+
+[ Upstream commit 0cfd26cc06ff353e9b59d0ee57a4950df2abd616 ]
+
+Several compatibles documented in trivial-rtc.yaml are documented
+elsewhere and are not trivial, so drop them.
+
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Link: https://lore.kernel.org/r/20240910234431.1043923-1-robh@kernel.org
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I6f2b506ad9d68f880b47ed51028f5522f9edef0c
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/496701
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ Documentation/devicetree/bindings/rtc/trivial-rtc.yaml | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
+index 2a65f31ac5a0..a0a8bc06d016 100644
+--- a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
++++ b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
+@@ -35,22 +35,15 @@ properties:
+       # I2C-BUS INTERFACE REAL TIME CLOCK MODULE
+       - epson,rx8010
+       # I2C-BUS INTERFACE REAL TIME CLOCK MODULE
+-      - epson,rx8025
+       - epson,rx8035
+       # I2C-BUS INTERFACE REAL TIME CLOCK MODULE with Battery Backed RAM
+       - epson,rx8571
+       # I2C-BUS INTERFACE REAL TIME CLOCK MODULE
+       - epson,rx8581
+-      # Intersil ISL1208 Low Power RTC with Battery Backed SRAM
+-      - isil,isl1208
+-      # Intersil ISL1218 Low Power RTC with Battery Backed SRAM
+-      - isil,isl1218
+       # Real Time Clock Module with I2C-Bus
+       - microcrystal,rv3029
+       # Real Time Clock
+       - microcrystal,rv8523
+-      # Real-time Clock Module
+-      - pericom,pt7c4338
+       # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
+       - ricoh,r2025sd
+       # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
+-- 
+2.53.0
+

@@ -1,0 +1,118 @@
+From ec2ac92887052bef7721863820a7f8985e05465e Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Fri, 17 Oct 2025 10:02:56 +0200
+Subject: [PATCH] arm: dts: stm32: enable the debug bus on stm32mp1x boards
+
+On stm32mp1x boards, enable the debug bus so we always try to probe
+the debug peripherals, if the debug configuration allows it.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I0a72321d25f98adf9e356a6a188a8ed2e1c33a6a
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/500608
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dk.dts   | 4 ++++
+ arch/arm/boot/dts/st/stm32mp157a-ev1.dts  | 4 ++++
+ arch/arm/boot/dts/st/stm32mp157c-ev1.dts  | 4 ++++
+ arch/arm/boot/dts/st/stm32mp157d-ev1.dts  | 4 ++++
+ arch/arm/boot/dts/st/stm32mp157f-ev1.dts  | 4 ++++
+ arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi | 4 ++++
+ 6 files changed, 24 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+index e91764a9bbae..62ac7600dede 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+@@ -197,6 +197,10 @@ &cryp {
+ 	status = "okay";
+ };
+ 
++&dbg_bus {
++	status = "okay";
++};
++
+ &dcmipp {
+ 	status = "okay";
+ 	pinctrl-names = "default", "sleep";
+diff --git a/arch/arm/boot/dts/st/stm32mp157a-ev1.dts b/arch/arm/boot/dts/st/stm32mp157a-ev1.dts
+index a390e316d027..c8a05abc77d7 100644
+--- a/arch/arm/boot/dts/st/stm32mp157a-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157a-ev1.dts
+@@ -182,6 +182,10 @@ &cec {
+ 	status = "okay";
+ };
+ 
++&dbg_bus {
++	status = "okay";
++};
++
+ &dcmi {
+ 	status = "okay";
+ 	pinctrl-names = "default", "sleep";
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
+index 92f97f505df2..21226662c376 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
+@@ -182,6 +182,10 @@ &cec {
+ 	status = "okay";
+ };
+ 
++&dbg_bus {
++	status = "okay";
++};
++
+ &dcmi {
+ 	status = "okay";
+ 	pinctrl-names = "default", "sleep";
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+index 5c0c7d6d0c0d..e7c517ec95cc 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+@@ -182,6 +182,10 @@ &cec {
+ 	status = "okay";
+ };
+ 
++&dbg_bus {
++	status = "okay";
++};
++
+ &dcmi {
+ 	status = "okay";
+ 	pinctrl-names = "default", "sleep";
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+index 42b05d502387..25d823b3f863 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+@@ -182,6 +182,10 @@ &cec {
+ 	status = "okay";
+ };
+ 
++&dbg_bus {
++	status = "okay";
++};
++
+ &dcmi {
+ 	status = "okay";
+ 	pinctrl-names = "default", "sleep";
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
+index ccb2dafe3252..2cb89211026f 100644
+--- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
+@@ -189,6 +189,10 @@ &crc1 {
+ 	status = "okay";
+ };
+ 
++&dbg_bus {
++	status = "okay";
++};
++
+ &dts {
+ 	status = "okay";
+ };
+-- 
+2.53.0
+

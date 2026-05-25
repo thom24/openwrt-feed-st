@@ -1,0 +1,46 @@
+From 85f9ba686fbe85ce25fabab71b8a1b6f9f79c0dd Mon Sep 17 00:00:00 2001
+From: Pascal Paillet <p.paillet@foss.st.com>
+Date: Wed, 2 Jul 2025 09:28:44 +0200
+Subject: [PATCH] dt-bindings: update STM32MP25 regulator bindings
+
+Update STM32MP25 regulator bindings to add GPO regulators.
+
+Change-Id: I484c953f545423fcb3e17e8c1e98fc8f6d9a85cc
+Signed-off-by: Pascal Paillet <p.paillet@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/472300
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Tested-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ include/dt-bindings/regulator/st,stm32mp25-regulator.h | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/include/dt-bindings/regulator/st,stm32mp25-regulator.h b/include/dt-bindings/regulator/st,stm32mp25-regulator.h
+index 10a893892055..be7220df3477 100644
+--- a/include/dt-bindings/regulator/st,stm32mp25-regulator.h
++++ b/include/dt-bindings/regulator/st,stm32mp25-regulator.h
+@@ -1,6 +1,6 @@
+ /* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+ /*
+- * Copyright (C) 2023, STMicroelectronics - All Rights Reserved
++ * Copyright (C) 2023-2025, STMicroelectronics - All Rights Reserved
+  */
+ 
+ #ifndef __DT_BINDINGS_REGULATOR_ST_STM32MP25_REGULATOR_H
+@@ -45,4 +45,11 @@
+ #define VOLTD_SCMI_REGU3		29
+ #define VOLTD_SCMI_REGU4		30
+ 
++/* GPO controls */
++#define VOLTD_SCMI_STPMIC_GPO1		31
++#define VOLTD_SCMI_STPMIC_GPO2		32
++#define VOLTD_SCMI_STPMIC_GPO3		33
++#define VOLTD_SCMI_STPMIC_GPO4		34
++#define VOLTD_SCMI_STPMIC_GPO5		35
++
+ #endif /*__DT_BINDINGS_REGULATOR_ST_STM32MP25_REGULATOR_H */
+-- 
+2.53.0
+

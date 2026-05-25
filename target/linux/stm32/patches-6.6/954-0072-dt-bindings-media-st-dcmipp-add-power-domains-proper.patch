@@ -1,0 +1,38 @@
+From 2e9f151127546dec9ad6fc5d00b801c24e1ba09b Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Tue, 1 Jul 2025 15:45:40 +0200
+Subject: [PATCH] dt-bindings: media: st: dcmipp: add 'power-domains' property
+
+STM32 DCMIPP may be in a power domain which is the case for the STM32MP25
+based boards. Allow a single 'power-domains' entry for STM32 DCMIPP.
+
+Change-Id: I5fedef8ebcac6e241dfa1cd4751fc4f05bd11137
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/471692
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml b/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
+index fc1ad613b8ee..6911a51bc955 100644
+--- a/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
++++ b/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
+@@ -38,6 +38,9 @@ properties:
+   resets:
+     maxItems: 1
+ 
++  power-domains:
++    maxItems: 1
++
+   access-controllers:
+     minItems: 1
+     maxItems: 2
+-- 
+2.53.0
+

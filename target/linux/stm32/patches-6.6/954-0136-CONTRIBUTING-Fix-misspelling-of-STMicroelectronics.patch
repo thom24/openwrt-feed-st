@@ -1,0 +1,33 @@
+From 608a25207c875dccb72aeeecd77eb23daf252c16 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Fri, 25 Jul 2025 10:52:07 +0200
+Subject: [PATCH] CONTRIBUTING: Fix misspelling of "STMicroelectronics"
+
+Fix misspelling of the company name "STMicroelectronics" in CONTRIBUTING.md
+file.
+
+Change-Id: I4aefb7b2a745cf89612d778e399b067e8517dd6c
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/477727
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ CONTRIBUTING.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CONTRIBUTING.md b/CONTRIBUTING.md
+index 3d1bacd78a54..75f5671d2a8d 100644
+--- a/CONTRIBUTING.md
++++ b/CONTRIBUTING.md
+@@ -10,7 +10,7 @@ STM32MPU projects do not activate "Github issues" feature for the time being. If
+ 
+ ## 2. Pull Requests
+ 
+-STMicrolectronics is happy to receive contributions from the community, based on an initial Contributor License Agreement (CLA) procedure.
++STMicroelectronics is happy to receive contributions from the community, based on an initial Contributor License Agreement (CLA) procedure.
+ 
+ * If you are an individual writing original source code and you are sure **you own the intellectual property**, then you need to sign an Individual CLA (https://cla.st.com).
+ * If you work for a company that wants also to allow you to contribute with your work, your company needs to provide a Corporate CLA (https://cla.st.com) mentioning your GitHub account name.
+-- 
+2.53.0
+

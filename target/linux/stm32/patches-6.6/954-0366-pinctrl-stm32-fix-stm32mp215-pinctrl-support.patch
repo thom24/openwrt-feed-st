@@ -1,0 +1,61 @@
+From 97f6f92c77f672811fa5b4f32e8cd598d84f9b3a Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Thu, 20 Nov 2025 12:26:07 +0100
+Subject: [PATCH] pinctrl: stm32: fix stm32mp215 pinctrl support
+
+Some entry for package AO is incorrect. Fix them.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: If0456d5050d3e9b0c2db8c56dbdb761ba80d7a81
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/510975
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/pinctrl/stm32/pinctrl-stm32mp215.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/pinctrl/stm32/pinctrl-stm32mp215.c b/drivers/pinctrl/stm32/pinctrl-stm32mp215.c
+index 972fa4695903..322c95ad6649 100644
+--- a/drivers/pinctrl/stm32/pinctrl-stm32mp215.c
++++ b/drivers/pinctrl/stm32/pinctrl-stm32mp215.c
+@@ -1000,7 +1000,7 @@ static const struct stm32_desc_pin stm32mp215_pins[] = {
+ 	),
+ 	STM32_PIN_PKG(
+ 		PINCTRL_PIN(74, "PE10"),
+-		STM32MP_PKG_AL | STM32MP_PKG_AM | STM32MP_PKG_AN | STM32MP_PKG_AO,
++		STM32MP_PKG_AL | STM32MP_PKG_AM | STM32MP_PKG_AN,
+ 		STM32_FUNCTION(0, "GPIOE10"),
+ 		STM32_FUNCTION(2, "SPI4_SCK"),
+ 		STM32_FUNCTION(4, "SAI4_D1"),
+@@ -1045,7 +1045,7 @@ static const struct stm32_desc_pin stm32mp215_pins[] = {
+ 	),
+ 	STM32_PIN_PKG(
+ 		PINCTRL_PIN(77, "PE13"),
+-		STM32MP_PKG_AL | STM32MP_PKG_AM | STM32MP_PKG_AN,
++		STM32MP_PKG_AL | STM32MP_PKG_AM | STM32MP_PKG_AN | STM32MP_PKG_AO,
+ 		STM32_FUNCTION(0, "GPIOE13"),
+ 		STM32_FUNCTION(5, "SAI1_SD_A"),
+ 		STM32_FUNCTION(8, "TIM15_CH1"),
+@@ -1397,7 +1397,7 @@ static const struct stm32_desc_pin stm32mp215_pins[] = {
+ 	),
+ 	STM32_PIN_PKG(
+ 		PINCTRL_PIN(103, "PG7"),
+-		STM32MP_PKG_AL | STM32MP_PKG_AM | STM32MP_PKG_AN,
++		STM32MP_PKG_AL | STM32MP_PKG_AM | STM32MP_PKG_AN | STM32MP_PKG_AO,
+ 		STM32_FUNCTION(0, "GPIOG7"),
+ 		STM32_FUNCTION(1, "TRACED5"),
+ 		STM32_FUNCTION(2, "HDP5"),
+@@ -1505,7 +1505,7 @@ static const struct stm32_desc_pin stm32mp215_pins[] = {
+ 	),
+ 	STM32_PIN_PKG(
+ 		PINCTRL_PIN(111, "PG15"),
+-		STM32MP_PKG_AL | STM32MP_PKG_AM | STM32MP_PKG_AN | STM32MP_PKG_AO,
++		STM32MP_PKG_AL | STM32MP_PKG_AM | STM32MP_PKG_AN,
+ 		STM32_FUNCTION(0, "GPIOG15"),
+ 		STM32_FUNCTION(1, "TRACED13"),
+ 		STM32_FUNCTION(2, "HDP5"),
+-- 
+2.53.0
+

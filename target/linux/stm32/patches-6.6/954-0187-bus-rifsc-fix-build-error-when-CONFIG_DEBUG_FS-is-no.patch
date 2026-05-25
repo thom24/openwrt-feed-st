@@ -1,0 +1,38 @@
+From 517e1a304744c5926bee3d03159336555ad1fee7 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Wed, 1 Oct 2025 10:02:05 +0200
+Subject: [PATCH] bus: rifsc: fix build error when CONFIG_DEBUG_FS is not set
+
+Fix build error when CONFIG_DEBUG_FS is not set. The prototype
+of stm32_rifsc_register_debugfs() uses __unused that is considered
+as a second variable instead of an attribute
+
+Signed-off-by: Jocelyn Meyron <JocelynMeyron@eaton.com>
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I8016ed8391343ea946ecb8df0dd3959f2b1a86cf
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/495233
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+---
+ drivers/bus/stm32_rifsc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/bus/stm32_rifsc.c b/drivers/bus/stm32_rifsc.c
+index 022baa7ed46e..4856d8d88ea2 100644
+--- a/drivers/bus/stm32_rifsc.c
++++ b/drivers/bus/stm32_rifsc.c
+@@ -633,7 +633,7 @@ static int stm32_rifsc_register_debugfs(struct rifsc_private *priv)
+ 	return 0;
+ }
+ #else /* CONFIG_DEBUG_FS */
+-static int stm32_rifsc_register_debugfs(struct rifsc_private *priv __unused)
++static int stm32_rifsc_register_debugfs(struct rifsc_private __maybe_unused *priv)
+ {
+ 	return 0;
+ }
+-- 
+2.53.0
+

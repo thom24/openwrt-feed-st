@@ -1,0 +1,48 @@
+From c4478c0c982993dcbf5799d62ad5c3bea6dc7e9f Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Wed, 6 Aug 2025 12:27:46 +0200
+Subject: [PATCH] serial: stm32: fix missing locking and flip on suspend
+
+Commit 6333a48506217 ("serial: stm32: push DMA RX data before suspending")
+moved the locking and tty_flip_buffer_push calls outside of the
+stm32_usart_receive_chars function. However, one call to this function
+in the PM runtime suspend handler remained unprotected,
+which could lead to lost or duplicated characters.
+
+This commit had the locking as well of tty_flip_buffer_push
+call whenever new data is received.
+
+Fixes: 6333a4850621 ("serial: stm32: push DMA RX data before suspending")
+
+Change-Id: I7e83554b1f8ae3db8e2cbcef37c345c16892ac5c
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/481044
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ drivers/tty/serial/stm32-usart.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index 63b6e0b7e588..d81a0ea154e1 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -2478,7 +2478,11 @@ static int __maybe_unused stm32_usart_serial_en_wakeup(struct uart_port *port,
+ 		}
+ 
+ 		/* Poll data from RX FIFO if any */
+-		stm32_usart_receive_chars(port, false);
++		spin_lock_irqsave(&port->lock, flags);
++		size = stm32_usart_receive_chars(port, false);
++		if (size)
++			tty_flip_buffer_push(tport);
++		uart_unlock_and_check_sysrq_irqrestore(port, flags);
+ 	} else {
+ 		if (stm32_port->tx_ch)
+ 			stm32_usart_set_bits(port, ofs->cr3, USART_CR3_DMAT);
+-- 
+2.53.0
+

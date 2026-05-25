@@ -1,0 +1,41 @@
+From 515bd9fd46df1a509edb98e2eb580e712721d40b Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Tue, 1 Jul 2025 14:46:50 +0200
+Subject: [PATCH] dt-bindings: media: st: csi: add supply properties
+
+Add optional vdd-supply and vdda18-supply properties to allow
+control of regulators.
+
+Change-Id: I656850c7ff86d02f7ef2eda475668df6ace287a8
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/471689
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ Documentation/devicetree/bindings/media/st,stm32-csi.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/media/st,stm32-csi.yaml b/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
+index e636f9ad8965..ef66f80eda1b 100644
+--- a/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
++++ b/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
+@@ -32,6 +32,12 @@ properties:
+   resets:
+     maxItems: 1
+ 
++  vdd-supply:
++    description: Digital core power supply (0.91V)
++
++  vdda18-supply:
++    description: System analog power supply (1.8V)
++
+   power-domains:
+     maxItems: 1
+ 
+-- 
+2.53.0
+

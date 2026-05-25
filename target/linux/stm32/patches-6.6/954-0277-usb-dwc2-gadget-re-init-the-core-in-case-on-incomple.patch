@@ -1,0 +1,36 @@
+From 4dae21b151291cb8d552a064449fba7bdbfc0bc7 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Tue, 9 Sep 2025 14:48:29 +0200
+Subject: [PATCH] usb: dwc2: gadget: re-init the core in case on incomplete
+ setup
+
+In case of incomplete setup phase, the core may fall into a non
+functional state (naking). So rather reintilize it, to recover.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I14f1272263b496d63e7240fbe3b15b5d80ec0f71
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/499321
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/usb/dwc2/gadget.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 7e0386eb5cf0..cc5a4cf9b343 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -3046,8 +3046,7 @@ static void dwc2_gadget_setup_timeout(struct work_struct *work)
+ 	dev_dbg(hsotg->dev, "%s: DOEPINT0=0x%08x\n",  __func__, dwc2_readl(hsotg, DOEPINT(0)));
+ 
+ 	spin_lock_irqsave(&hsotg->lock, flags);
+-	kill_all_requests(hsotg, hsotg->eps_out[0], -ESHUTDOWN);
+-	dwc2_hsotg_enqueue_setup(hsotg);
++	dwc2_hsotg_core_init_disconnected(hsotg, false);
+ 	spin_unlock_irqrestore(&hsotg->lock, flags);
+ }
+ 
+-- 
+2.53.0
+

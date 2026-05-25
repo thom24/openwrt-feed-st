@@ -1,0 +1,44 @@
+From 2590886d79ecf7c7ef703b94876e25bcff9d4f6b Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 3 Sep 2025 15:34:39 +0200
+Subject: [PATCH] dt-bindings: phy: stm32: usb2phy: add support for clock in
+ stop mode
+
+On STM32MP23/25, the USB2PHY clock can remain active in stop mode.
+So add an optional clock to manage it.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I0ef5c4877878fbb4157a3bf8d819d554665fcef2
+Depends-On: Ide4aadc53fdb8ef2e7540f68ac0391f652d85ceb
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/487219
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ .../devicetree/bindings/phy/st,stm32-usb2phy.yaml      | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml b/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml
+index 76b7219f515b..0b5a5d5036b3 100644
+--- a/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml
++++ b/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml
+@@ -26,7 +26,15 @@ properties:
+ 
+   clocks:
+     items:
+-      description: PHY ref clock
++      - description: PHY core clock
++      - description: PHY clock in stop mode
++    minItems: 1
++
++  clock-names:
++    items:
++      - const: core
++      - const: stp
++    minItems: 1
+ 
+   resets:
+     items:
+-- 
+2.53.0
+

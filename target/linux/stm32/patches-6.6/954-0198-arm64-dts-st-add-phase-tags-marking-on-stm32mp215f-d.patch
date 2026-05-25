@@ -1,0 +1,62 @@
+From 2b7e0bea4a22ec336336ed942669476f58298574 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Fri, 3 Oct 2025 17:51:44 +0200
+Subject: [PATCH] arm64: dts: st: add phase tags marking on stm32mp215f-dk
+ board
+
+bootph-all/bootph-pre-ram as phase tags were added to dt-schema
+(dtschema/schemas/bootph.yaml) to describe various node usage during
+boot phases with DT.
+
+Describe them for STM32MP215F-DK boot devices.
+
+Change-Id: Iae7d6232b21a6d4f2f4e4be200fe10fee79568e8
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/496300
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrice CHOTARD <patrice.chotard@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 7b5a2acb66c8..5826a44fb8d9 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -395,6 +395,7 @@ timer {
+ };
+ 
+ &ltdc {
++	bootph-all;
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&ltdc_pins_a>;
+ 	pinctrl-1 = <&ltdc_sleep_pins_a>;
+@@ -588,6 +589,7 @@ &uart4 {
+ };
+ 
+ &usart2 {
++	bootph-all;
+ 	pinctrl-names = "default", "idle", "sleep";
+ 	pinctrl-0 = <&usart2_pins_a>;
+ 	pinctrl-1 = <&usart2_idle_pins_a>;
+@@ -597,6 +599,16 @@ &usart2 {
+ 	status = "okay";
+ };
+ 
++&usart2_pins_a {
++	bootph-all;
++	pins1 {
++		bootph-all;
++	};
++	pins2 {
++		bootph-all;
++	};
++};
++
+ /* Bluetooth */
+ &usart1 {
+ 	pinctrl-names = "default", "sleep", "idle";
+-- 
+2.53.0
+

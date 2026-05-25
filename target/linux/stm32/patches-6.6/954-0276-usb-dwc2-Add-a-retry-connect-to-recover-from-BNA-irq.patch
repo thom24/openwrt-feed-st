@@ -1,0 +1,118 @@
+From 2b115ca194aabf57d32f0cbb4642476b958b8b1b Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Mon, 8 Sep 2025 18:35:36 +0200
+Subject: [PATCH] usb: dwc2: Add a retry connect to recover from BNA irq loop
+
+Under heavy load, with the dwc2 logs activated, quickly unplugging and
+plugging a cable, the controller driver may fall into a BNA IRQ loop.
+It happens on EP0 out, during setup phase, after:
+[  105.702649] dwc2 49000000.usb: dwc2_hsotg_irq: USBRstDet
+[  105.708000] dwc2 49000000.usb: dwc2_hsotg_irq: USBRst
+[  105.713047] dwc2 49000000.usb: GNPTXSTS=0008001f
+...
+[  106.155417] dwc2 49000000.usb: dwc2_hsotg_ep_disable(ep 80c21ef2)
+[  106.161473] dwc2 49000000.usb: dwc2_hsotg_ep_disable: DxEPCTL=0x08020400
+[  106.168232] dwc2 49000000.usb: dwc2_hsotg_ep_disable(ep b7de71dd)
+[  106.174288] dwc2 49000000.usb: dwc2_hsotg_ep_disable: DxEPCTL=0x08020400
+[  106.180947] dwc2 49000000.usb: HS UTMI+ PHY selected
+[  106.185901] dwc2 49000000.usb: FIFOs reset, timeout at 100
+[  106.191456] dwc2 49000000.usb: EP0: DIEPCTL0=0x00028000, DOEPCTL0=0x00028000
+...
+[  106.263909] dwc2 49000000.usb: dwc2_hsotg_start_req: DXEPCTL=0x80008000
+[  106.270467] dwc2 49000000.usb: EP0: DIEPCTL0=0x00028000, DOEPCTL0=0x00008000
+[  106.277529] dwc2 49000000.usb: dwc2_hsotg_irq: daint=00010001
+[  106.283284] dwc2 49000000.usb: dwc2_hsotg_epint: ep0(out) DxEPINT=0x00000201
+[  106.290357] dwc2 49000000.usb: dwc2_hsotg_epint: BNA interrupt
+
+Even if setup request has been queued, the controller gets starved,
+causing the BNA to fire in loop, followed by a watchdog reset.
+This case is seen on stm32.
+
+So, when the BNA fires, implement some recover mechanism:
+- mask the BNA interrupt, it this happens on EP0 out, when using DMA
+desc, during setup stage.
+- Keep track of the connect state when the USBRst happens. Clear this
+flag as soon as the Setup stage has completed (e.g. the normal case).
+
+In case the BNA irq loop fires, the recovery happens upon next USBRst
+event, the core gets re-initialized.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: If2d3f177600deed8b245a753f5bf4fef727b54bb
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/499320
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/usb/dwc2/core.h   |  1 +
+ drivers/usb/dwc2/gadget.c | 22 +++++++++++++++++++++-
+ 2 files changed, 22 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+index ec26989d125c..5e1f41381c70 100644
+--- a/drivers/usb/dwc2/core.h
++++ b/drivers/usb/dwc2/core.h
+@@ -1223,6 +1223,7 @@ struct dwc2_hsotg {
+ 	struct usb_gadget gadget;
+ 	unsigned int enabled:1;
+ 	unsigned int connected:1;
++	unsigned int retry_connect:1;
+ 	unsigned int remote_wakeup_allowed:1;
+ 	unsigned int wakeup_configured:1;
+ 	struct dwc2_hsotg_ep *eps_in[MAX_EPS_CHANNELS];
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index f62ba6de8935..7e0386eb5cf0 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -3160,6 +3160,8 @@ static void dwc2_hsotg_epint(struct dwc2_hsotg *hsotg, unsigned int idx,
+ 	if (ints & DXEPINT_SETUP) {  /* Setup or Timeout */
+ 		dev_dbg(hsotg->dev, "%s: Setup/Timeout\n",  __func__);
+ 
++		hsotg->retry_connect = false;
++
+ 		if (using_dma(hsotg) && idx == 0) {
+ 			/* Safety check to cancel dw_gsetup setup timeout */
+ 			if (hsotg->ep0_state == DWC2_EP0_SETUP)
+@@ -3209,6 +3211,17 @@ static void dwc2_hsotg_epint(struct dwc2_hsotg *hsotg, unsigned int idx,
+ 		dev_dbg(hsotg->dev, "%s: BNA interrupt\n", __func__);
+ 		if (hs_ep->isochronous)
+ 			dwc2_gadget_handle_isoc_bna(hs_ep);
++
++		/*
++		 * In case BNA IRQ fires during setup phase, we may fall into
++		 * an endless BNA IRQ loop. So mask it here, and wait for the
++		 * next USBRSt event, to recover, using retry_connect flag.
++		 */
++		if (using_desc_dma(hsotg) && idx == 0 && !hs_ep->dir_in &&
++		    hsotg->ep0_state == DWC2_EP0_SETUP) {
++			dwc2_clear_bit(hsotg, DOEPMSK, DOEPMSK_BNAMSK);
++			hsotg->retry_connect = true;
++		}
+ 	}
+ 
+ 	if (dir_in && !hs_ep->isochronous) {
+@@ -3822,13 +3835,20 @@ static irqreturn_t dwc2_hsotg_irq(int irq, void *pw)
+ 
+ 		dwc2_writel(hsotg, GINTSTS_USBRST, GINTSTS);
+ 
++		/*
++		 * Setup Phase may later fail, resulting in a non-functional state. So
++		 * keep track of previous attempt, up to the Setup completion.
++		 */
++		if (connected)
++			hsotg->retry_connect = true;
++
+ 		/* Report disconnection if it is not already done. */
+ 		dwc2_hsotg_disconnect(hsotg);
+ 
+ 		/* Reset device address to zero */
+ 		dwc2_clear_bit(hsotg, DCFG, DCFG_DEVADDR_MASK);
+ 
+-		if (usb_status & GOTGCTL_BSESVLD && connected)
++		if (usb_status & GOTGCTL_BSESVLD && hsotg->retry_connect)
+ 			dwc2_hsotg_core_init_disconnected(hsotg, true);
+ 	}
+ 
+-- 
+2.53.0
+

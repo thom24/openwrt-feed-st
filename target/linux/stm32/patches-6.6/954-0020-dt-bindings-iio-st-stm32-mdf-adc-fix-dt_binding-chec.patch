@@ -1,0 +1,54 @@
+From 799dcfe367494d0c812d8f46fad75d713ca2f087 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Mon, 28 Apr 2025 14:54:24 +0200
+Subject: [PATCH] dt-bindings: iio: st,stm32-mdf-adc: fix dt_binding check
+ errors
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Remove unnecessary quotes.
+Add unevaluatedProperties for filter node properties.
+
+Change-Id: I9d230258ea8a497a978404f01b6ecae81fb7bd9a
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/469679
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Eric FOURMONT <eric.fourmont-ext@st.com>
+Domain-Review: Eric FOURMONT <eric.fourmont-ext@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Eric FOURMONT <eric.fourmont-ext@st.com>
+---
+ .../devicetree/bindings/iio/adc/st,stm32-mdf-adc.yaml       | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-mdf-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-mdf-adc.yaml
+index 749caf76d293..3dd9cc042e16 100644
+--- a/Documentation/devicetree/bindings/iio/adc/st,stm32-mdf-adc.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-mdf-adc.yaml
+@@ -124,7 +124,7 @@ patternProperties:
+           Select serial interface protocol
+           - spi: SPI mode
+           - lf_spi: low frequency SPI mode for low power applications
+-        $ref: "/schemas/types.yaml#/definitions/string"
++        $ref: /schemas/types.yaml#/definitions/string
+         enum:
+           - spi
+           - lf_spi
+@@ -231,10 +231,12 @@ patternProperties:
+       - "#size-cells"
+       - st,sitf
+ 
++    unevaluatedProperties: false
++
+     patternProperties:
+       "^channel@([0-7])$":
+         type: object
+-        $ref: "adc.yaml"
++        $ref: adc.yaml
+         description: Represents the external channel which is connected to the MDF.
+ 
+         properties:
+-- 
+2.53.0
+

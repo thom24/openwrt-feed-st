@@ -1,0 +1,106 @@
+From c00b7e591acc88e6cc0c08669e8f5954fde8d75a Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Tue, 29 Jul 2025 18:31:56 +0200
+Subject: [PATCH] counter: stm32-timer-cnt: add etr selection attribute
+
+TIMx_ETR pin is the default external trigger signal. There's an input
+multiplexer to select one of the tim_etr0 to tim_etr15 inputs.
+
+So add extended attribute to ETR signal, to select one of these inputs.
+Example to select and use tim_etr7:
+$ cd /sys/bus/counter/devices/counter0/count0/
+$ cat ../signal5/name
+ETR
+$ echo 7 > ../signal7/etrsel
+$ echo rising edge > signal7_action
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Id2fd40e0fff9d16cf0ad2c1655ab0551fd1b5c28
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/487190
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+---
+ drivers/counter/stm32-timer-cnt.c | 37 +++++++++++++++++++++++++++++++
+ include/linux/mfd/stm32-timers.h  |  2 ++
+ 2 files changed, 39 insertions(+)
+
+diff --git a/drivers/counter/stm32-timer-cnt.c b/drivers/counter/stm32-timer-cnt.c
+index b461587de4bf..621509e0f8b7 100644
+--- a/drivers/counter/stm32-timer-cnt.c
++++ b/drivers/counter/stm32-timer-cnt.c
+@@ -945,6 +945,41 @@ static struct counter_comp stm32_count_channel_ext[] = {
+ 	COUNTER_COMP_SIGNAL_U8("tisel", stm32_count_tisel_get, stm32_count_tisel_set),
+ };
+ 
++static int stm32_count_etrsel_get(struct counter_device *counter,
++				  struct counter_signal *signal,
++				  u8 *etrsel)
++{
++	struct stm32_timer_cnt *const priv = counter_priv(counter);
++	u32 val;
++	int ret;
++
++	ret = regmap_read(priv->regmap, TIM_AF1, &val);
++	if (ret)
++		return ret;
++
++	*etrsel = FIELD_GET(TIM_AF1_ETRSEL, val);
++
++	return 0;
++}
++
++static int stm32_count_etrsel_set(struct counter_device *counter,
++				  struct counter_signal *signal,
++				  u8 etrsel)
++{
++	struct stm32_timer_cnt *const priv = counter_priv(counter);
++
++	if (etrsel > 15)
++		return -ERANGE;
++
++	return regmap_update_bits(priv->regmap, TIM_AF1, TIM_AF1_ETRSEL,
++				  FIELD_PREP(TIM_AF1_ETRSEL, etrsel));
++}
++
++static struct counter_comp stm32_count_etr_ext[] = {
++	/* ETRSEL mux to select from tim_etr0 to tim_etr15 */
++	COUNTER_COMP_SIGNAL_U8("etrsel", stm32_count_etrsel_get, stm32_count_etrsel_set),
++};
++
+ static struct counter_signal stm32_signals[] = {
+ 	/*
+ 	 * Need to declare all the signals as a static array, and keep the signals order here,
+@@ -988,6 +1023,8 @@ static struct counter_signal stm32_signals[] = {
+ 	{
+ 		.id = STM32_ETR_SIG,
+ 		.name = "ETR",
++		.ext = stm32_count_etr_ext,
++		.num_ext = ARRAY_SIZE(stm32_count_etr_ext),
+ 	},
+ };
+ 
+diff --git a/include/linux/mfd/stm32-timers.h b/include/linux/mfd/stm32-timers.h
+index b1f0f0bf6121..d2bfafdbb41e 100644
+--- a/include/linux/mfd/stm32-timers.h
++++ b/include/linux/mfd/stm32-timers.h
+@@ -31,6 +31,7 @@
+ #define TIM_BDTR	0x44	/* Break and Dead-Time Reg */
+ #define TIM_DCR		0x48	/* DMA control register    */
+ #define TIM_DMAR	0x4C	/* DMA register for transfer */
++#define TIM_AF1		0x60	/* Alt function register 1 */
+ #define TIM_TISEL	0x68	/* Input Selection         */
+ #define STM32MP25_TIM_TISEL	0x5C	/* Input Selection         */
+ 
+@@ -97,6 +98,7 @@
+ #define TIM_BDTR_BKF(x)	(0xf << (16 + (x) * 4))
+ #define TIM_DCR_DBA	GENMASK(4, 0)	/* DMA base addr */
+ #define TIM_DCR_DBL	GENMASK(12, 8)	/* DMA burst len */
++#define TIM_AF1_ETRSEL	GENMASK(17, 14) /* ETR Input selection mask */
+ #define TIM_TISEL_TI1	GENMASK(3, 0)	/* TI1 Input Selection mask*/
+ #define TIM_TISEL_TI2	GENMASK(11, 8)	/* TI2 Input Selection mask*/
+ #define TIM_TISEL_TI3	GENMASK(19, 16)	/* TI3 Input Selection mask*/
+-- 
+2.53.0
+

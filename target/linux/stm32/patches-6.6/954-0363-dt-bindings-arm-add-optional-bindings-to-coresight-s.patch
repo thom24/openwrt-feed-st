@@ -1,0 +1,47 @@
+From 096268d4d71a54eba81f12bf0bd32092dc1a7433 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Wed, 29 Oct 2025 16:41:52 +0100
+Subject: [PATCH] dt-bindings: arm: add optional bindings to coresight static
+ replicator
+
+When the replicator is static, its registers are read-only but they
+do exist. Add the possibility to optionally specify the "reg" property.
+
+Also add the optional "access-controllers" property in case some firewall
+configuration needs to be checked before accessing it.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I85b36c4cba69a180fb3d517cb887bcba382fddf1
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/504211
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+---
+ .../bindings/arm/arm,coresight-static-replicator.yaml      | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-static-replicator.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-static-replicator.yaml
+index 1892a091ac35..9bd755c92aaa 100644
+--- a/Documentation/devicetree/bindings/arm/arm,coresight-static-replicator.yaml
++++ b/Documentation/devicetree/bindings/arm/arm,coresight-static-replicator.yaml
+@@ -47,6 +47,13 @@ properties:
+         description: Output connections to CoreSight Trace bus
+         $ref: /schemas/graph.yaml#/properties/port
+ 
++  reg:
++    description: Only used as information, not used by the driver
++    maxItems: 1
++
++  access-controllers:
++    maxItems: 1
++
+ required:
+   - compatible
+   - in-ports
+-- 
+2.53.0
+

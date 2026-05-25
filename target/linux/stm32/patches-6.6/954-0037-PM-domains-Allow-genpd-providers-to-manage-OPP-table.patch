@@ -1,0 +1,108 @@
+From c2841df278e808f7881d794e1cfbcf190edd67fe Mon Sep 17 00:00:00 2001
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 25 Aug 2023 13:26:32 +0200
+Subject: [PATCH] PM: domains: Allow genpd providers to manage OPP tables
+ directly by its FW
+
+In some cases the OPP tables aren't specified in device tree, but rather
+encoded in the FW. To allow a genpd provider to specify them dynamically
+instead, let's add a new genpd flag, GENPD_FLAG_OPP_TABLE_FW.
+
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Link: https://lore.kernel.org/r/20230825112633.236607-13-ulf.hansson@linaro.org
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+[upstream commit 3dd91515ef43dd43e32e2a84e4bd881b64fb33ae]
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: I8153257770ed2fbe75194dddd081fd68c08d9847
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/476919
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/base/power/domain.c | 11 ++++++-----
+ include/linux/pm_domain.h   |  5 +++++
+ 2 files changed, 11 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index d1dae47f3534..7e5123b0ad20 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -130,6 +130,7 @@ static const struct genpd_lock_ops genpd_spin_ops = {
+ #define genpd_is_active_wakeup(genpd)	(genpd->flags & GENPD_FLAG_ACTIVE_WAKEUP)
+ #define genpd_is_cpu_domain(genpd)	(genpd->flags & GENPD_FLAG_CPU_DOMAIN)
+ #define genpd_is_rpm_always_on(genpd)	(genpd->flags & GENPD_FLAG_RPM_ALWAYS_ON)
++#define genpd_is_opp_table_fw(genpd)	(genpd->flags & GENPD_FLAG_OPP_TABLE_FW)
+ 
+ static inline bool irq_safe_dev_in_sleep_domain(struct device *dev,
+ 		const struct generic_pm_domain *genpd)
+@@ -2329,7 +2330,7 @@ int of_genpd_add_provider_simple(struct device_node *np,
+ 	genpd->dev.of_node = np;
+ 
+ 	/* Parse genpd OPP table */
+-	if (genpd->set_performance_state) {
++	if (!genpd_is_opp_table_fw(genpd) && genpd->set_performance_state) {
+ 		ret = dev_pm_opp_of_add_table(&genpd->dev);
+ 		if (ret)
+ 			return dev_err_probe(&genpd->dev, ret, "Failed to add OPP table\n");
+@@ -2344,7 +2345,7 @@ int of_genpd_add_provider_simple(struct device_node *np,
+ 
+ 	ret = genpd_add_provider(np, genpd_xlate_simple, genpd);
+ 	if (ret) {
+-		if (genpd->set_performance_state) {
++		if (!genpd_is_opp_table_fw(genpd) && genpd->set_performance_state) {
+ 			dev_pm_opp_put_opp_table(genpd->opp_table);
+ 			dev_pm_opp_of_remove_table(&genpd->dev);
+ 		}
+@@ -2388,7 +2389,7 @@ int of_genpd_add_provider_onecell(struct device_node *np,
+ 		genpd->dev.of_node = np;
+ 
+ 		/* Parse genpd OPP table */
+-		if (genpd->set_performance_state) {
++		if (!genpd_is_opp_table_fw(genpd) && genpd->set_performance_state) {
+ 			ret = dev_pm_opp_of_add_table_indexed(&genpd->dev, i);
+ 			if (ret) {
+ 				dev_err_probe(&genpd->dev, ret,
+@@ -2424,7 +2425,7 @@ int of_genpd_add_provider_onecell(struct device_node *np,
+ 		genpd->provider = NULL;
+ 		genpd->has_provider = false;
+ 
+-		if (genpd->set_performance_state) {
++		if (!genpd_is_opp_table_fw(genpd) && genpd->set_performance_state) {
+ 			dev_pm_opp_put_opp_table(genpd->opp_table);
+ 			dev_pm_opp_of_remove_table(&genpd->dev);
+ 		}
+@@ -2456,7 +2457,7 @@ void of_genpd_del_provider(struct device_node *np)
+ 				if (gpd->provider == &np->fwnode) {
+ 					gpd->has_provider = false;
+ 
+-					if (!gpd->set_performance_state)
++					if (genpd_is_opp_table_fw(gpd) || !gpd->set_performance_state)
+ 						continue;
+ 
+ 					dev_pm_opp_put_opp_table(gpd->opp_table);
+diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+index 564c0de3eda7..325831a7cbd2 100644
+--- a/include/linux/pm_domain.h
++++ b/include/linux/pm_domain.h
+@@ -88,6 +88,10 @@ struct dev_pm_domain_list {
+  * GENPD_FLAG_MIN_RESIDENCY:	Enable the genpd governor to consider its
+  *				components' next wakeup when determining the
+  *				optimal idle state.
++ *
++ * GENPD_FLAG_OPP_TABLE_FW:	The genpd provider supports performance states,
++ *				but its corresponding OPP tables are not
++ *				described in DT, but are given directly by FW.
+  */
+ #define GENPD_FLAG_PM_CLK	 (1U << 0)
+ #define GENPD_FLAG_IRQ_SAFE	 (1U << 1)
+@@ -96,6 +100,7 @@ struct dev_pm_domain_list {
+ #define GENPD_FLAG_CPU_DOMAIN	 (1U << 4)
+ #define GENPD_FLAG_RPM_ALWAYS_ON (1U << 5)
+ #define GENPD_FLAG_MIN_RESIDENCY (1U << 6)
++#define GENPD_FLAG_OPP_TABLE_FW	 (1U << 7)
+ 
+ enum gpd_status {
+ 	GENPD_STATE_ON = 0,	/* PM domain is on */
+-- 
+2.53.0
+

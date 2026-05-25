@@ -1,0 +1,44 @@
+From 23666c57609d025e36309339cd4887244b17606b Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Tue, 5 Aug 2025 16:31:13 +0200
+Subject: [PATCH] usb: ehci-platform: enable pm runtime
+
+In order to properly manage pm-domains and low power modes on stm32,
+enable the pm runtime in ehci-platform driver.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Id94c228078a054d521346db39390d6ba816d123a
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/487216
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+---
+ drivers/usb/host/ehci-platform.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/drivers/usb/host/ehci-platform.c b/drivers/usb/host/ehci-platform.c
+index c1e08eec6a25..f85083ff8640 100644
+--- a/drivers/usb/host/ehci-platform.c
++++ b/drivers/usb/host/ehci-platform.c
+@@ -370,6 +370,18 @@ static int ehci_platform_probe(struct platform_device *dev)
+ 
+ 	hcd->tpl_support = of_usb_host_tpl_support(dev->dev.of_node);
+ 
++	err = pm_runtime_set_active(&dev->dev);
++	if (err) {
++		dev_err_probe(&dev->dev, err, "Failed to activate pm runtime\n");
++		goto err_power;
++	}
++
++	err = devm_pm_runtime_enable(&dev->dev);
++	if (err) {
++		dev_err_probe(&dev->dev, err, "Failed to enable pm runtime\n");
++		goto err_power;
++	}
++
+ 	err = usb_add_hcd(hcd, irq, IRQF_SHARED);
+ 	if (err)
+ 		goto err_power;
+-- 
+2.53.0
+

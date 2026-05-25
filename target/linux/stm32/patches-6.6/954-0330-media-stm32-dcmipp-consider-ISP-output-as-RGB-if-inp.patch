@@ -1,0 +1,64 @@
+From 4fb39d4699fe0c4b9713f2163c7e683405e36525 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Fri, 21 Nov 2025 13:08:34 +0100
+Subject: [PATCH] media: stm32-dcmipp: consider ISP output as RGB if input is
+ CSI Yx
+
+If the input of the ISP subdev is CSI based Yx format, the ISP will
+put the same Yx value in all 3 components internally hence this
+should be considered as RGB greyscale so that further processing
+down the pipeline will generate correct colors.
+
+Change-Id: I541a94e98992bb6ca928264a4b2d4b63e6689e9b
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/511333
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Domain-Review: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ .../platform/st/stm32/stm32-dcmipp/dcmipp-isp.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
+index 5388f2472f12..9bea4859582c 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
+@@ -281,6 +281,14 @@ static int dcmipp_isp_set_fmt(struct v4l2_subdev *sd,
+ 		else
+ 			opp_pad_fmt->code = MEDIA_BUS_FMT_RGB888_1X24;
+ 
++		/* Need to consider ISP output as RGB in case of CSI Yxx input */
++		if (dcmipp_is_input_csi(isp->ved.dcmipp) &&
++		    (fmt->format.code == MEDIA_BUS_FMT_Y8_1X8 ||
++		     fmt->format.code == MEDIA_BUS_FMT_Y10_1X10 ||
++		     fmt->format.code == MEDIA_BUS_FMT_Y12_1X12 ||
++		     fmt->format.code == MEDIA_BUS_FMT_Y14_1X14))
++			opp_pad_fmt->code = MEDIA_BUS_FMT_RGB888_1X24;
++
+ 		crop->top = 0;
+ 		crop->left = 0;
+ 		crop->width = fmt->format.width;
+@@ -305,6 +313,15 @@ static int dcmipp_isp_set_fmt(struct v4l2_subdev *sd,
+ 			fmt->format.code = MEDIA_BUS_FMT_YUV8_1X24;
+ 		else
+ 			fmt->format.code = MEDIA_BUS_FMT_RGB888_1X24;
++
++		/* Need to consider ISP output as RGB in case of CSI Yxx input */
++		if (dcmipp_is_input_csi(isp->ved.dcmipp) &&
++		    (opp_pad_fmt->code == MEDIA_BUS_FMT_Y8_1X8 ||
++		     opp_pad_fmt->code == MEDIA_BUS_FMT_Y10_1X10 ||
++		     opp_pad_fmt->code == MEDIA_BUS_FMT_Y12_1X12 ||
++		     opp_pad_fmt->code == MEDIA_BUS_FMT_Y14_1X14))
++			fmt->format.code = MEDIA_BUS_FMT_RGB888_1X24;
++
+ 		if (compose->width && compose->height) {
+ 			fmt->format.width = compose->width;
+ 			fmt->format.height = compose->height;
+-- 
+2.53.0
+

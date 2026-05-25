@@ -1,0 +1,42 @@
+From 1bf7d67076fbc2328657cbd5c0878e147b694e47 Mon Sep 17 00:00:00 2001
+From: Erwan SZYMANSKI <erwan.szymanski@st.com>
+Date: Thu, 11 Sep 2025 10:17:09 +0200
+Subject: [PATCH] serial: stm32: keep uart lock for tty_flip_buffer_push in
+ rx_dma_complete
+
+Ensure that the uart port is locked whenever calling
+tty_flip_buffer_push to avoid having concurrent access from
+the tty framework when handling the buffer.
+
+Fixes: a01ae50d7eae ("serial: stm32: replace access to DMAR bit by dmaengine_pause/resume")
+
+Change-Id: I1e63784269e64e6070b62bcd6ee71da4f514be9d
+Signed-off-by: Erwan SZYMANSKI <erwan.szymanski@st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/488887
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ drivers/tty/serial/stm32-usart.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index 7ed9161ae243..074fc8558f15 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -713,9 +713,9 @@ static void stm32_usart_rx_dma_complete(void *arg)
+ 
+ 	spin_lock_irqsave(&port->lock, flags);
+ 	size = stm32_usart_receive_chars(port, false);
+-	uart_unlock_and_check_sysrq_irqrestore(port, flags);
+ 	if (size)
+ 		tty_flip_buffer_push(tport);
++	uart_unlock_and_check_sysrq_irqrestore(port, flags);
+ 	if (!stm32port->has_rtor)
+ 		mod_timer(&stm32port->rx_dma_timer,
+ 			  jiffies + msecs_to_jiffies(LPUART_RECEIVE_TIMEOUT_MS));
+-- 
+2.53.0
+

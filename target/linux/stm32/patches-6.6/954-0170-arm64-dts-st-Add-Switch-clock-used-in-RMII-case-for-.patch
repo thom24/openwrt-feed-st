@@ -1,0 +1,43 @@
+From bb0497dc7a7edd12017f3b96b04026b857bb7a1f Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Thu, 10 Jul 2025 11:28:38 +0200
+Subject: [PATCH] arm64: dts: st: Add Switch clock used in RMII case for
+ STM32MP25
+
+By default add all clocks used by switch.
+"ethsw-ref-clk" is used in case of Ethernet PHY in RMII and PHY
+without crystal so PHY is clocking by RCC thanks to this clock.
+In driver there are some tests to enable clock when all conditions
+are true. (for example, in RMII case, need property
+"st,ethsw-rmii-internal-refclk" and rate of clock must be equal
+to 25MHZ or 50MHZ to be enable.)
+
+Change-Id: I8a422335f2c8af802ed8e085b787ddb916fecb2e
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/473924
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257.dtsi | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257.dtsi b/arch/arm64/boot/dts/st/stm32mp257.dtsi
+index c364d47daac4..6b5d9bbf71bc 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp257.dtsi
+@@ -10,10 +10,11 @@ switch0: ttt-sw@4c000000 {
+ 		#address-cells  = <1>;
+ 		#size-cells     = <1>;
+ 		compatible = "st,stm32-deip";
+-		clock-names = "ethsw-bus-clk", "ethsw-clk",
++		clock-names = "ethsw-bus-clk", "ethsw-clk", "ethsw-ref-clk",
+ 			      "ethswacmcfg-bus-clk", "ethswacmmsg-bus-clk";
+ 		clocks = <&rcc CK_BUS_ETHSW>,
+ 			 <&rcc CK_KER_ETHSW>,
++			 <&rcc CK_KER_ETHSWREF>,
+ 			 <&rcc CK_BUS_ETHSWACMCFG>,
+ 			 <&rcc CK_BUS_ETHSWACMMSG>;
+ 		st,syscon = <&syscfg 0x3800>;
+-- 
+2.53.0
+

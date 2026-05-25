@@ -1,0 +1,55 @@
+From c20af0f750230635c0f791eae6112bebd1e2f149 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Thu, 2 Oct 2025 17:03:54 +0200
+Subject: [PATCH] ARM: dts: stm32: add sleep pin configuration for goodix on
+ stm32mp135f-dk
+
+Temporary patch to add sleep pin configuration for goodix touchscreen
+on stm32mp135f-dk.
+
+Change-Id: I54b288e0a1c483cf00f9405827a4628f4497ff84
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/495797
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi | 7 +++++++
+ arch/arm/boot/dts/st/stm32mp135f-dk.dts     | 3 ++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
+index 08042e87b1bb..a19fa5d7af93 100644
+--- a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
+@@ -178,6 +178,13 @@ pins2 {
+ 		};
+ 	};
+ 
++	goodix_sleep_pins_a: goodix_sleep-0 {
++		pins {
++			pinmux = <STM32_PINMUX('H',  2, ANALOG)>,
++				 <STM32_PINMUX('F',  5, ANALOG)>;
++		};
++	};
++
+ 	i2c1_pins_a: i2c1-0 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('D', 12, AF5)>, /* I2C1_SCL */
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+index a7f9e1442abc..f54ef5abe10d 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+@@ -433,8 +433,9 @@ ov5640_0: endpoint {
+ 	goodix: goodix-ts@5d {
+ 		compatible = "goodix,gt911";
+ 		reg = <0x5d>;
+-		pinctrl-names = "default";
++		pinctrl-names = "default", "sleep";
+ 		pinctrl-0 = <&goodix_pins_a>;
++		pinctrl-1 = <&goodix_sleep_pins_a>;
+ 		interrupt-parent = <&gpiof>;
+ 		interrupts = <5 IRQ_TYPE_EDGE_FALLING>;
+ 		AVDD28-supply = <&scmi_v3v3_sw>;
+-- 
+2.53.0
+

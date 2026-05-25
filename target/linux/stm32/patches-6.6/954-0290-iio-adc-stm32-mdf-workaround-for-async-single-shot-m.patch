@@ -1,0 +1,72 @@
+From 3147dd22faa7a91d40f39b23b3f771c4ea3f276c Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Tue, 7 Oct 2025 13:58:31 +0200
+Subject: [PATCH] iio: adc: stm32-mdf: workaround for async single-shot mode
+
+In asynchronous single-shot mode the MDF filter sometimes fails to start
+when the DFLTEN bit is set. This SoC dependent problem is affected by
+bus/kernel clock ratio and DFLTEN register access timings.
+As a workaround the asynchronous single shot mode can be emulated using
+synchronous single shot mode combined with a software trigger.
+
+Change-Id: I9e74823795e3d05ca6a700b4fb1d9922d208e246
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/476806
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/iio/adc/stm32-mdf-adc.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/iio/adc/stm32-mdf-adc.c b/drivers/iio/adc/stm32-mdf-adc.c
+index f19a67c8d113..ac7430f700f2 100644
+--- a/drivers/iio/adc/stm32-mdf-adc.c
++++ b/drivers/iio/adc/stm32-mdf-adc.c
+@@ -479,7 +479,14 @@ static int stm32_mdf_adc_filter_set_mode(struct stm32_mdf_adc *adc, bool cont)
+ 		if (cont)
+ 			mode = STM32_MDF_ACQ_MODE_ASYNC_CONT;
+ 		else
+-			mode = STM32_MDF_ACQ_MODE_ASYNC_SINGLE_SHOT;
++			/*
++			 * The expected mode would be STM32_MDF_ACQ_MODE_ASYNC_SINGLE_SHOT here.
++			 * However, there is an instability depending on "bus/kernel clock ratio"
++			 * in this mode.
++			 * Use STM32_MDF_ACQ_MODE_SYNC_SINGLE_SHOT mode along with TRGO trigger,
++			 * as a workaround.
++			 */
++			mode = STM32_MDF_ACQ_MODE_SYNC_SINGLE_SHOT;
+ 	}
+ 
+ 	dev_dbg(adc->dev, "Set mode [0x%x] on filter [%d]\n", mode, adc->fl_id);
+@@ -1305,6 +1312,7 @@ static int stm32_mdf_adc_single_conv(struct iio_dev *indio_dev,
+ {
+ 	struct stm32_mdf_adc *adc = iio_priv(indio_dev);
+ 	long timeout;
++	bool save_trgo = adc->trgo;
+ 	int ret;
+ 
+ 	reinit_completion(&adc->completion);
+@@ -1320,6 +1328,9 @@ static int stm32_mdf_adc_single_conv(struct iio_dev *indio_dev,
+ 
+ 	stm32_mdf_adc_filter_set_mode(adc, false);
+ 
++	/* Force trgo as a workaround for STM32_MDF_ACQ_MODE_ASYNC_SINGLE_SHOT mode */
++	adc->trgo = true;
++
+ 	ret = stm32_mdf_adc_start_conv(indio_dev);
+ 	if (ret < 0) {
+ 		regmap_update_bits(adc->regmap, MDF_DFLTIER_REG, MDF_DFLTIER_FTHIE_MASK, 0);
+@@ -1350,6 +1361,8 @@ static int stm32_mdf_adc_single_conv(struct iio_dev *indio_dev,
+ 	stm32_mdf_adc_stop_conv(indio_dev);
+ 
+ err_conv:
++	adc->trgo = save_trgo;
++
+ 	stm32_mdf_adc_stop_mdf(indio_dev);
+ 
+ 	return ret;
+-- 
+2.53.0
+

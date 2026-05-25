@@ -1,0 +1,46 @@
+From 0fea1636ea70c7fee57b231fb7c94c0386a5e5f4 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Tue, 28 Oct 2025 10:33:19 +0100
+Subject: [PATCH] dt-bindings: add missing reg property for the stm32 debug bus
+
+Fix bindings check warning on missing reg property for the stm32 debug
+bus.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I5b60045bcc1e757409621a409bfaa97834201866
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/503468
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ .../devicetree/bindings/bus/st,stm32mp131-dbg-bus.yaml        | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/bus/st,stm32mp131-dbg-bus.yaml b/Documentation/devicetree/bindings/bus/st,stm32mp131-dbg-bus.yaml
+index 4dced89abd25..e4868f1e2732 100644
+--- a/Documentation/devicetree/bindings/bus/st,stm32mp131-dbg-bus.yaml
++++ b/Documentation/devicetree/bindings/bus/st,stm32mp131-dbg-bus.yaml
+@@ -36,6 +36,9 @@ properties:
+ 
+   ranges: true
+ 
++  reg:
++    maxItems: 1
++
+   "#access-controller-cells":
+     const: 1
+     description:
+@@ -57,6 +60,7 @@ required:
+   - "#size-cells"
+   - clocks
+   - ranges
++  - reg
+ 
+ additionalProperties: false
+ 
+-- 
+2.53.0
+

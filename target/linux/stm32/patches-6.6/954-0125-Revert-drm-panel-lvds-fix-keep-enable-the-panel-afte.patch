@@ -1,0 +1,121 @@
+From 5575432e745d5fd36b9c1c7019f462efb81def50 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Tue, 29 Jul 2025 15:43:55 +0200
+Subject: [PATCH] Revert "drm/panel: lvds:fix keep enable the panel after the
+ probe"
+
+This reverts commit 07ee7131fb8149912570f7f7134813be6bf61ac0.
+
+Change-Id: If64018554dfb052af9838991b4b499ef386205d6
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/479223
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/gpu/drm/panel/panel-lvds.c | 42 +++---------------------------
+ 1 file changed, 4 insertions(+), 38 deletions(-)
+
+diff --git a/drivers/gpu/drm/panel/panel-lvds.c b/drivers/gpu/drm/panel/panel-lvds.c
+index adb35047efbf..3ca0da67ee16 100644
+--- a/drivers/gpu/drm/panel/panel-lvds.c
++++ b/drivers/gpu/drm/panel/panel-lvds.c
+@@ -34,7 +34,6 @@ struct panel_lvds {
+ 	struct drm_display_mode dmode;
+ 	u32 bus_flags;
+ 	unsigned int bus_format;
+-	bool prepared;
+ 
+ 	struct regulator *supply;
+ 
+@@ -53,17 +52,12 @@ static int panel_lvds_unprepare(struct drm_panel *panel)
+ {
+ 	struct panel_lvds *lvds = to_panel_lvds(panel);
+ 
+-	if (!lvds->prepared)
+-		return 0;
+-
+ 	if (lvds->enable_gpio)
+ 		gpiod_set_value_cansleep(lvds->enable_gpio, 0);
+ 
+ 	if (lvds->supply)
+ 		regulator_disable(lvds->supply);
+ 
+-	lvds->prepared = false;
+-
+ 	return 0;
+ }
+ 
+@@ -71,9 +65,6 @@ static int panel_lvds_prepare(struct drm_panel *panel)
+ {
+ 	struct panel_lvds *lvds = to_panel_lvds(panel);
+ 
+-	if (lvds->prepared)
+-		return 0;
+-
+ 	if (lvds->supply) {
+ 		int err;
+ 
+@@ -95,8 +86,6 @@ static int panel_lvds_prepare(struct drm_panel *panel)
+ 	 */
+ 	msleep(30);
+ 
+-	lvds->prepared = true;
+-
+ 	return 0;
+ }
+ 
+@@ -208,12 +197,8 @@ static int panel_lvds_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	/* Get GPIOs and backlight controller. */
+-	if (device_property_read_bool(lvds->dev, "default-on"))
+-		lvds->enable_gpio = devm_gpiod_get_optional(lvds->dev, "enable",
+-							    GPIOD_OUT_HIGH);
+-	else
+-		lvds->enable_gpio = devm_gpiod_get_optional(lvds->dev, "enable",
+-							    GPIOD_OUT_LOW);
++	lvds->enable_gpio = devm_gpiod_get_optional(lvds->dev, "enable",
++						    GPIOD_OUT_HIGH);
+ 	if (IS_ERR(lvds->enable_gpio)) {
+ 		ret = PTR_ERR(lvds->enable_gpio);
+ 		dev_err(lvds->dev, "failed to request %s GPIO: %d\n",
+@@ -221,12 +206,8 @@ static int panel_lvds_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
+-	if (device_property_read_bool(lvds->dev, "default-on"))
+-		lvds->reset_gpio = devm_gpiod_get_optional(lvds->dev, "reset",
+-							   GPIOD_OUT_LOW);
+-	else
+-		lvds->reset_gpio = devm_gpiod_get_optional(lvds->dev, "reset",
+-							   GPIOD_OUT_HIGH);
++	lvds->reset_gpio = devm_gpiod_get_optional(lvds->dev, "reset",
++						   GPIOD_OUT_HIGH);
+ 	if (IS_ERR(lvds->reset_gpio)) {
+ 		ret = PTR_ERR(lvds->reset_gpio);
+ 		dev_err(lvds->dev, "failed to request %s GPIO: %d\n",
+@@ -249,21 +230,6 @@ static int panel_lvds_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
+-	if (device_property_read_bool(lvds->dev, "default-on")) {
+-		if (lvds->supply) {
+-			ret = regulator_enable(lvds->supply);
+-			if (ret < 0) {
+-				dev_err(lvds->dev, "failed to enable supply: %d\n", ret);
+-				return ret;
+-			}
+-		}
+-
+-		if (lvds->enable_gpio)
+-			gpiod_set_value_cansleep(lvds->enable_gpio, 1);
+-	}
+-
+-	lvds->prepared = true;
+-
+ 	drm_panel_add(&lvds->panel);
+ 
+ 	dev_set_drvdata(lvds->dev, lvds);
+-- 
+2.53.0
+

@@ -1,0 +1,41 @@
+From a0375dc492d1fb958224a5e3c1953c55be0f8702 Mon Sep 17 00:00:00 2001
+From: Peng Fan <peng.fan@nxp.com>
+Date: Tue, 14 May 2024 21:18:33 +0800
+Subject: [PATCH] pmdomain: arm: scmi_pm_domain: set flag
+ GENPD_FLAG_ACTIVE_WAKEUP
+
+Set flag GENPD_FLAG_ACTIVE_WAKEUP to scmi genpd, then when a device
+is set as wakeup source using device_set_wakeup_enable, the power
+domain could be kept on to make sure the device could wakeup the system.
+
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+Link: https://lore.kernel.org/r/20240514131833.911703-1-peng.fan@oss.nxp.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+[upstream commit e5cddc34067acf7848f63c014761ed232172f027]
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: I9751d739509ed75ab52e29f6d5db02c6d44648bf
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/476934
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ drivers/pmdomain/arm/scmi_pm_domain.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/pmdomain/arm/scmi_pm_domain.c b/drivers/pmdomain/arm/scmi_pm_domain.c
+index 8133eb493959..2a213c218126 100644
+--- a/drivers/pmdomain/arm/scmi_pm_domain.c
++++ b/drivers/pmdomain/arm/scmi_pm_domain.c
+@@ -103,6 +103,7 @@ static int scmi_pm_domain_probe(struct scmi_device *sdev)
+ 		scmi_pd->genpd.name = scmi_pd->name;
+ 		scmi_pd->genpd.power_off = scmi_pd_power_off;
+ 		scmi_pd->genpd.power_on = scmi_pd_power_on;
++		scmi_pd->genpd.flags = GENPD_FLAG_ACTIVE_WAKEUP;
+ 
+ 		pm_genpd_init(&scmi_pd->genpd, NULL,
+ 			      state == SCMI_POWER_STATE_GENERIC_OFF);
+-- 
+2.53.0
+

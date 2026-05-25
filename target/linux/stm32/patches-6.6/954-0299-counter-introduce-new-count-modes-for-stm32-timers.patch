@@ -1,0 +1,99 @@
+From 63fb8111212429f62ce132e55267066e782de215 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 30 Jul 2025 18:20:33 +0200
+Subject: [PATCH] counter: introduce new count modes for stm32 timers
+
+STM32 timers can use a trigger input, that influences the way the counter
+gets updated. This signal, e.g. external to the timer, a.k.a ETR (External
+Trigger) can be used to synchronize the counter start, the counter reset
+or even gate the clock (or combine these modes) based on the trigger input
+edge or level.
+In these modes, the counter still counts on its internal clock. So the
+choice is made to add the description for these modes to "count_mode"
+and "count_mode_available" attributes.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Icc858030a9e930a23d9acbecafeb95ffa9072e0d
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/487191
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ Documentation/ABI/testing/sysfs-bus-counter | 26 +++++++++++++++++++++
+ drivers/counter/counter-sysfs.c             |  5 ++++
+ include/uapi/linux/counter.h                |  5 ++++
+ 3 files changed, 36 insertions(+)
+
+diff --git a/Documentation/ABI/testing/sysfs-bus-counter b/Documentation/ABI/testing/sysfs-bus-counter
+index 73ac84c0bca7..ec358cae3123 100644
+--- a/Documentation/ABI/testing/sysfs-bus-counter
++++ b/Documentation/ABI/testing/sysfs-bus-counter
+@@ -144,6 +144,32 @@ Description:
+ 			go high again. A trigger results in loading the counter
+ 			to the preset value.
+ 
++		hardware triggered reset:
++			Rising edge of the selected trigger input resets the
++			counter and generates an update of the registers.
++
++		hardware triggered gated:
++			The counter clock is enabled when the trigger input is
++			high. The counter stops (but is not reset) as soon as
++			the trigger becomes low. Both start and stop of the
++			counter are controlled.
++
++		hardware triggered start:
++			The counter starts at a rising edge of the trigger input
++			(but it is not reset). Only the start of the counter is
++			controlled.
++
++		hardware triggered reset start:
++			Combined reset and start: rising edge of the trigger
++			input reinitializes the counter, generates an update
++			of the registers and starts the counter.
++
++		hardware triggered gated reset:
++			Combined gated and reset: The counter clock is enabled
++			when the trigger input is high. The counter stops and
++			is reset as soon as the trigger becomes low. Both start
++			and stop of the counter are controlled.
++
+ What:		/sys/bus/counter/devices/counterX/countY/count_mode_available
+ What:		/sys/bus/counter/devices/counterX/countY/error_noise_available
+ What:		/sys/bus/counter/devices/counterX/countY/function_available
+diff --git a/drivers/counter/counter-sysfs.c b/drivers/counter/counter-sysfs.c
+index 8600cdfb9728..a9f11c74cd9f 100644
+--- a/drivers/counter/counter-sysfs.c
++++ b/drivers/counter/counter-sysfs.c
+@@ -98,6 +98,11 @@ static const char *const counter_count_mode_str[] = {
+ 	[COUNTER_COUNT_MODE_SQUARE_WAVE_MODE] = "square wave mode",
+ 	[COUNTER_COUNT_MODE_SOFTWARE_TRIGGERED_STROBE] = "software triggered strobe",
+ 	[COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_STROBE] = "hardware triggered strobe",
++	[COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_RESET] = "hardware triggered reset",
++	[COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_GATED] = "hardware triggered gated",
++	[COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_START] = "hardware triggered start",
++	[COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_RESET_START] = "hardware triggered reset start",
++	[COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_GATED_RESET] = "hardware triggered gated reset",
+ };
+ 
+ static const char *const counter_signal_polarity_str[] = {
+diff --git a/include/uapi/linux/counter.h b/include/uapi/linux/counter.h
+index 411c5ce89f81..13002a45e23d 100644
+--- a/include/uapi/linux/counter.h
++++ b/include/uapi/linux/counter.h
+@@ -133,6 +133,11 @@ enum counter_count_mode {
+ 	COUNTER_COUNT_MODE_SQUARE_WAVE_MODE,
+ 	COUNTER_COUNT_MODE_SOFTWARE_TRIGGERED_STROBE,
+ 	COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_STROBE,
++	COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_RESET,
++	COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_GATED,
++	COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_START,
++	COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_RESET_START,
++	COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_GATED_RESET,
+ };
+ 
+ /* Count function values */
+-- 
+2.53.0
+

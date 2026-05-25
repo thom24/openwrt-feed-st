@@ -1,0 +1,48 @@
+From ee906daf4dc90352d32f4c395a6c6aa8ab64999e Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Fri, 31 Oct 2025 15:48:25 +0100
+Subject: [PATCH] usb: dwc2: don't disconnect remote wakeup enabled gadget upon
+ suspend
+
+When a remote wakeup enabled device is connected, it is suitable to
+keep the USB link enabled, even when going to low power, so it
+can resume the bus, and wakeup the HOST. When the HOST has suspended
+the USB bus (lx_state != DWC2_L0), it may expect to be woken up,
+rather than see the device disconnect.
+For non-wakeup enabled devices, or in case the HOST hasn't suspended the
+bus, it's rather the platform's decision to go to low power (initiated
+by the user). In such, keep current behavior (e.g. disconnect): there's
+no other choice.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I859cf46799feb9d4a311ad654345b37554e71cb1
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/512982
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ drivers/usb/dwc2/gadget.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 088aff91041c..a657387aed5c 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -5326,7 +5326,13 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
+ 
+ 	flush_workqueue(hsotg->wq_gadget);
+ 
+-	if (hsotg->lx_state != DWC2_L0) {
++	if (hsotg->remote_wakeup_allowed &&
++	    (hsotg->bus_suspended || hsotg->in_ppd || hsotg->hibernated)) {
++		/*
++		 * The bus has been suspended by the HOST, and the remote
++		 * wakeup has been enabled. So don't suspend gadget or it
++		 * will disconnect.
++		 */
+ 		hsotg->gadget_off_for_suspend = false;
+ 		return 0;
+ 	}
+-- 
+2.53.0
+

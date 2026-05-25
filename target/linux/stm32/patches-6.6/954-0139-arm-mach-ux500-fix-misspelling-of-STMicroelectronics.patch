@@ -1,0 +1,33 @@
+From 5d4c942a75c6aa9a18f68a4123c03010c093dd0e Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Fri, 25 Jul 2025 10:59:50 +0200
+Subject: [PATCH] arm: mach-ux500: fix misspelling of "STMicroelectronics"
+
+"STMicroelectronics" company name is misspelled in the header section of
+platsmp.c file. Fix it.
+
+Change-Id: I85a548e76560501c185cbca718cf6429c988e9b7
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/477730
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm/mach-ux500/platsmp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/mach-ux500/platsmp.c b/arch/arm/mach-ux500/platsmp.c
+index 656b58bd296a..7bba58facc32 100644
+--- a/arch/arm/mach-ux500/platsmp.c
++++ b/arch/arm/mach-ux500/platsmp.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /*
+  * Copyright (C) 2002 ARM Ltd.
+- * Copyright (C) 2008 STMicroelctronics.
++ * Copyright (C) 2008 STMicroelectronics.
+  * Copyright (C) 2009 ST-Ericsson.
+  * Author: Srinidhi Kasagar <srinidhi.kasagar@stericsson.com>
+  *
+-- 
+2.53.0
+

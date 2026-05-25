@@ -1,0 +1,75 @@
+From 5bc184c4417f4ef843aea770fb65e1abaa4f8b1f Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Mon, 15 Dec 2025 15:54:37 +0100
+Subject: [PATCH] dmaengine: stm32-dma3: set LL base address when transfer
+ starts
+
+Linked-list (LL) is allocated in stm32_dma3_chan_desc_alloc(). The LL is
+then used when starting the transfer in stm32_dma3_chan_start(). Nothing
+prevents a user from preparing another transfer before starting the
+previous one. If, for the same channel, another kind of transfer is
+prepared (using dmaengine_prep_xxx API), the LL base address may change.
+This address could be overwritten in the CxLBAR register if the channel is
+disabled, or the CxLBAR might not be updated if the channel is enabled,
+leading to a mismatch between the transfer being started and the LL pointed
+to by CxLBAR register.
+To avoid this, write the LL base address in CxLBAR when starting the
+transfer instead of when the linked-list is allocated.
+
+Change-Id: Ia8e8cb9b2e423b994545154f09feb46bc6b51e4e
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/521392
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ drivers/dma/stm32/stm32-dma3.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
+index eaf5d9f4d54f..0a96a3068cf1 100644
+--- a/drivers/dma/stm32/stm32-dma3.c
++++ b/drivers/dma/stm32/stm32-dma3.c
+@@ -668,7 +668,6 @@ static struct stm32_dma3_swdesc *stm32_dma3_chan_desc_alloc(struct stm32_dma3_ch
+ {
+ 	struct stm32_dma3_ddata *ddata = to_stm32_dma3_ddata(chan);
+ 	struct stm32_dma3_swdesc *swdesc;
+-	dma_addr_t base_addr;
+ 	u32 lap = ddata->lap;
+ 	int ret;
+ 
+@@ -713,11 +712,6 @@ static struct stm32_dma3_swdesc *stm32_dma3_chan_desc_alloc(struct stm32_dma3_ch
+ 	/* Set LL allocated port */
+ 	swdesc->ccr = FIELD_PREP(CCR_LAP, lap);
+ 
+-	/* Set LL base address */
+-	base_addr = stm32_dma3_translate_addr(ddata, lap, ddata2dev(ddata),
+-					      swdesc->lli[0].hwdesc_addr);
+-	writel_relaxed(base_addr & CLBAR_LBA, ddata->base + STM32_DMA3_CLBAR(chan->id));
+-
+ 	return swdesc;
+ }
+ 
+@@ -1073,6 +1067,7 @@ static void stm32_dma3_chan_start(struct stm32_dma3_chan *chan)
+ 	struct stm32_dma3_ddata *ddata = to_stm32_dma3_ddata(chan);
+ 	struct virt_dma_desc *vdesc;
+ 	struct stm32_dma3_hwdesc *hwdesc;
++	dma_addr_t base_addr;
+ 	u32 id = chan->id;
+ 	u32 csr, ccr;
+ 
+@@ -1096,6 +1091,11 @@ static void stm32_dma3_chan_start(struct stm32_dma3_chan *chan)
+ 	writel_relaxed(hwdesc->cdar, ddata->base + STM32_DMA3_CDAR(id));
+ 	writel_relaxed(hwdesc->cllr, ddata->base + STM32_DMA3_CLLR(id));
+ 
++	/* Set LL base address */
++	base_addr = stm32_dma3_translate_addr(ddata, FIELD_GET(CCR_LAP, chan->swdesc->ccr),
++					      ddata2dev(ddata), chan->swdesc->lli[0].hwdesc_addr);
++	writel_relaxed(base_addr & CLBAR_LBA, ddata->base + STM32_DMA3_CLBAR(chan->id));
++
+ 	/* Clear any pending interrupts */
+ 	csr = readl_relaxed(ddata->base + STM32_DMA3_CSR(id));
+ 	if (csr & CSR_ALL_F)
+-- 
+2.53.0
+

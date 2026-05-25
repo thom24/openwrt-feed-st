@@ -1,0 +1,55 @@
+From 854b792de8849e740e2a23f6cc0418dcea9b98bc Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Wed, 15 Oct 2025 17:59:55 +0200
+Subject: [PATCH] counter: add capture synapses
+
+An input signal can serve either as a capture signal or as a clock
+source for counting. The triggering edges may have to be configured
+independently depending on the usage of the input signal.
+Add specific synapses for capture.
+
+Change-Id: Ic4d5d92bf45bf14cbf37d2e119da7a19294db8d4
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/501441
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/counter/counter-sysfs.c | 5 ++++-
+ include/uapi/linux/counter.h    | 3 +++
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/counter/counter-sysfs.c b/drivers/counter/counter-sysfs.c
+index 42c523343d32..8600cdfb9728 100644
+--- a/drivers/counter/counter-sysfs.c
++++ b/drivers/counter/counter-sysfs.c
+@@ -76,7 +76,10 @@ static const char *const counter_synapse_action_str[] = {
+ 	[COUNTER_SYNAPSE_ACTION_NONE] = "none",
+ 	[COUNTER_SYNAPSE_ACTION_RISING_EDGE] = "rising edge",
+ 	[COUNTER_SYNAPSE_ACTION_FALLING_EDGE] = "falling edge",
+-	[COUNTER_SYNAPSE_ACTION_BOTH_EDGES] = "both edges"
++	[COUNTER_SYNAPSE_ACTION_BOTH_EDGES] = "both edges",
++	[COUNTER_SYNAPSE_CAPTURE_RISING_EDGE] = "capture rising edge",
++	[COUNTER_SYNAPSE_CAPTURE_FALLING_EDGE] = "capture falling edge",
++	[COUNTER_SYNAPSE_CAPTURE_BOTH_EDGES] = "capture both edges"
+ };
+ 
+ static const char *const counter_count_direction_str[] = {
+diff --git a/include/uapi/linux/counter.h b/include/uapi/linux/counter.h
+index fc248ef00e86..411c5ce89f81 100644
+--- a/include/uapi/linux/counter.h
++++ b/include/uapi/linux/counter.h
+@@ -159,6 +159,9 @@ enum counter_synapse_action {
+ 	COUNTER_SYNAPSE_ACTION_RISING_EDGE,
+ 	COUNTER_SYNAPSE_ACTION_FALLING_EDGE,
+ 	COUNTER_SYNAPSE_ACTION_BOTH_EDGES,
++	COUNTER_SYNAPSE_CAPTURE_RISING_EDGE,
++	COUNTER_SYNAPSE_CAPTURE_FALLING_EDGE,
++	COUNTER_SYNAPSE_CAPTURE_BOTH_EDGES,
+ };
+ 
+ /* Signal polarity values */
+-- 
+2.53.0
+

@@ -1,0 +1,56 @@
+From 1a5a7312f98d0c498c46bf102bfb42ecd4f4da5d Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 9 Sep 2025 10:02:23 +0200
+Subject: [PATCH] arm64: dts: st: refine hpdmas lli reserved memory nodes on
+ stm32mp257f-ev1
+
+hpdma2_lli is not well defined as it crosses a 64KB boundary. In reference
+manual, "The user must program HPDMA_CxLLR for each LLIn to be 32-bit
+aligned, and not to exceed the 64-Kbyte addressable space pointed by
+HPDMA_CxLBAR".
+
+Refine each HPDMA LLI area to avoid crossing 64KB boundary: due to
+dmaengine implementation, the HPDMA1 channels are more used than HPDMA2
+and HPDMA3. Moreover, there is only two channels dedicated to Linux on
+HPDMA3. That's why, the following split is used: 64KB for HPDMA1 LLI,
+56KB for HPDMA2 and 8KB for HPDMA3.
+
+Change-Id: Ia68129959ea6995f9865b77f1597f6ed5a0410d5
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/488186
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ .../boot/dts/st/stm32mp257f-ev1-ca35tdcid-resmem.dtsi  | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1-ca35tdcid-resmem.dtsi b/arch/arm64/boot/dts/st/stm32mp257f-ev1-ca35tdcid-resmem.dtsi
+index 9990523113e0..3474e2356873 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1-ca35tdcid-resmem.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1-ca35tdcid-resmem.dtsi
+@@ -23,17 +23,17 @@ tfa_bl31: tfa-bl31@a000000 {
+ 		};
+ 
+ 		hpdma1_lli: hpdma1-lli@a020000 {
+-			reg = <0x0 0xa020000 0x0 0xf0f0>;
++			reg = <0x0 0xa020000 0x0 0x10000>;
+ 			no-map;
+ 		};
+ 
+-		hpdma2_lli: hpdma2-lli@a02f0f0 {
+-			reg = <0x0 0xa02f0f0 0x0 0xf0f0>;
++		hpdma2_lli: hpdma2-lli@a030000 {
++			reg = <0x0 0xa030000 0x0 0xe000>;
+ 			no-map;
+ 		};
+ 
+-		hpdma3_lli: hpdma3-lli@a03e1e0 {
+-			reg = <0x0 0xa03e1e0 0x0 0x1e20>;
++		hpdma3_lli: hpdma3-lli@a03e000 {
++			reg = <0x0 0xa03e000 0x0 0x2000>;
+ 			no-map;
+ 		};
+ 
+-- 
+2.53.0
+

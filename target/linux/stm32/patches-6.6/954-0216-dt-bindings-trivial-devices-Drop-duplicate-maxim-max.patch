@@ -1,0 +1,38 @@
+From b71a8e14d8a1c0bc6de55686f109de7a596a479e Mon Sep 17 00:00:00 2001
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Date: Tue, 3 Sep 2024 16:52:08 -0500
+Subject: [PATCH] dt-bindings: trivial-devices: Drop duplicate "maxim,max1237"
+
+[ Upstream commit f8fd66468fc21a978f01fe29ce8eee63c9569da5 ]
+
+"maxim,max1237" is already documented in iio/adc/maxim,max1238.yaml, so
+drop it from trivial-devices.yaml.
+
+Link: https://lore.kernel.org/r/20240903-dt-trivial-devices-v1-4-ad684c754b9c@kernel.org
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: Ia9502fa48badc906807de6ef0f014afe65ae6240
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/496700
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ Documentation/devicetree/bindings/trivial-devices.yaml | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 0bb132040904..2850a50ef908 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -189,8 +189,6 @@ properties:
+           - maxim,ds1803-100
+             # 10 kOhm digital potentiometer with I2C interface
+           - maxim,ds3502
+-            # Low-Power, 4-/12-Channel, 2-Wire Serial, 12-Bit ADCs
+-          - maxim,max1237
+             # Temperature Sensor, I2C interface
+           - maxim,max1619
+             # 10-bit 10 kOhm linear programmable voltage divider
+-- 
+2.53.0
+

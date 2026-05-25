@@ -1,0 +1,45 @@
+From 2661f7e025145dbe34a35d99322656428440f5d5 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 3 Sep 2025 15:44:14 +0200
+Subject: [PATCH] arm64: dts: st: usb2phy: add clock for stop mode on
+ stm32mp231
+
+On STM32MP23/25, USB2PHY1 clock can remain active in stop mode.
+This is useful for PSCI/OSI. So add clock names, as defined in the
+bindings, and associated stop clock on usb2phy1.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ic6d2e2dab432d841bcaa2fb5669a966874b4c27d
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/487222
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp231.dtsi | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+index 131b05cb8d5f..f34b015f9a91 100644
+--- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+@@ -303,7 +303,8 @@ usb2_phy1: usb2-phy1 {
+ 		#phy-cells      = <0>;
+ 		#clock-cells    = <1>;
+ 		st,syscfg       = <&syscfg 0x2400>;
+-		clocks          = <&rcc CK_KER_USB2PHY1>;
++		clocks          = <&rcc CK_KER_USB2PHY1>, <&rcc CK_KER_USB2PHY1STP>;
++		clock-names     = "core", "stp";
+ 		resets          = <&rcc USB2PHY1_R>;
+ 		status          = "disabled";
+ 	};
+@@ -314,6 +315,7 @@ usb2_phy2: usb2-phy2 {
+ 		#clock-cells    = <1>;
+ 		st,syscfg       = <&syscfg 0x2800>;
+ 		clocks          = <&rcc CK_KER_USB2PHY2EN>;
++		clock-names     = "core";
+ 		resets          = <&rcc USB2PHY2_R>;
+ 		status          = "disabled";
+ 	};
+-- 
+2.53.0
+

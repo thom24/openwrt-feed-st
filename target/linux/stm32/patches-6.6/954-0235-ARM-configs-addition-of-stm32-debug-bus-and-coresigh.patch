@@ -1,0 +1,51 @@
+From 74e4b9dd3a644f89bdabbc545debb211bcca4d9d Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Wed, 24 Sep 2025 11:07:20 +0200
+Subject: [PATCH] ARM: configs: addition of stm32 debug bus and coresight in
+ fragment-02
+
+The stm32 debug bus support is needed to handle the probe of debug-related
+peripherals. Enable CONFIG_STM32_DBG_BUS as module by default on ARM32
+platforms. Because it handles coresight peripherals, add coresight
+support as well.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I8cae52be1d4c6b2acae4ee965515f73c08a27fd0
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/493432
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+---
+ arch/arm/configs/fragment-02-multiv7_addons.config | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/arch/arm/configs/fragment-02-multiv7_addons.config b/arch/arm/configs/fragment-02-multiv7_addons.config
+index 7b6e480cb84a..855b8c59b298 100644
+--- a/arch/arm/configs/fragment-02-multiv7_addons.config
++++ b/arch/arm/configs/fragment-02-multiv7_addons.config
+@@ -8,6 +8,12 @@ CONFIG_CAN_M_CAN=y
+ CONFIG_CAN_M_CAN_PLATFORM=y
+ CONFIG_CHR_DEV_SG=y
+ CONFIG_CLKSRC_STM32_LP=y
++CONFIG_CORESIGHT=m
++CONFIG_CORESIGHT_CTI=m
++CONFIG_CORESIGHT_LINK_AND_SINK_TMC=m
++CONFIG_CORESIGHT_SINK_TPIU=m
++CONFIG_CORESIGHT_SOURCE_ETM3X=m
++CONFIG_CORESIGHT_STM=m
+ CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_DEBUG_PREEMPT=y
+ CONFIG_DEBUG_SECTION_MISMATCH=y
+@@ -64,6 +70,7 @@ CONFIG_SCMI_STM32MP_OSTL_V5=y
+ CONFIG_SD_ADC_MODULATOR=y
+ CONFIG_SERIAL_NONSTANDARD=y
+ CONFIG_SRAM=y
++CONFIG_STM32_DBG_BUS=m
+ CONFIG_STM32_IPCC=y
+ CONFIG_STM32_RPROC=y
+ CONFIG_TEE_REMOTEPROC=y
+-- 
+2.53.0
+

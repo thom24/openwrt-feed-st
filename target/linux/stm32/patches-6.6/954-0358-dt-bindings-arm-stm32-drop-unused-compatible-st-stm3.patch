@@ -1,0 +1,35 @@
+From 10f33e6ff864ea6b3243b228398ab043f8381645 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Thu, 6 Nov 2025 10:43:59 +0100
+Subject: [PATCH] dt-bindings: arm: stm32: drop unused compatible
+ st,stm32mp25-a35ssc-m33
+
+The compatible is not used. Drop it.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: Id35755ee4781fc9f46c202f33eaf3901147a6278
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/509410
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ .../devicetree/bindings/arm/stm32/st,stm32-syscon.yaml          | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
+index 71061bdf0a76..ef5e17ce6f23 100644
+--- a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
++++ b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
+@@ -26,8 +26,6 @@ properties:
+               - st,stm32mp25-pwr
+               - st,stm32mp21-syscfg
+               - st,stm32mp21-pwr
+-
+-              - st,stm32mp25-a35ssc-m33
+           - const: syscon
+       - items:
+           - const: st,stm32-tamp
+-- 
+2.53.0
+

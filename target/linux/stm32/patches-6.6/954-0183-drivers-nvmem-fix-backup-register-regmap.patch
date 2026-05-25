@@ -1,0 +1,177 @@
+From 4152fc40412d70db6a92d95302b509fb9ff78721 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Fri, 12 Sep 2025 15:48:49 +0200
+Subject: [PATCH] drivers: nvmem: fix backup register regmap
+
+The backup register regmap missed some ops to be able to use sysfs
+entries correctly. For example:
+
+cat /sys/kernel/debug/regmap/46010100.nvram/registers
+
+led to:
+
+E/TC:1   stm32_iac_itr:192 IAC exceptions [159:128]: 0x1000000
+E/TC:1   stm32_iac_itr:197 IAC exception ID: 152
+E/TC:1   Panic at xxx
+E/TC:1   TEE load address @ 0x82000000
+E/TC:1   Call stack:
+E/TC:1    0x82007ef0
+E/TC:1    0x82043428
+E/TC:1    0x8202d54c
+E/TC:1    0x82040f5c
+E/TC:1    0x820141d0
+E/TC:1    0x820017dc
+I/TC: Halting CPU 0
+
+This is because the regmap framework has no idea whether the register
+is actually accessible or not.
+
+Add the readable_reg() and writeable_reg() ops to the backup registers
+regmap configuration to be able to filter whether a register is
+accessible in read or write.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I701a496736fd29db5fa423de2f75d7e901c2b014
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/489408
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+---
+ drivers/nvmem/stm32-tamp-nvram.c | 89 +++++++++++++++++++++++---------
+ 1 file changed, 65 insertions(+), 24 deletions(-)
+
+diff --git a/drivers/nvmem/stm32-tamp-nvram.c b/drivers/nvmem/stm32-tamp-nvram.c
+index 9601f884c556..15e12088f5de 100644
+--- a/drivers/nvmem/stm32-tamp-nvram.c
++++ b/drivers/nvmem/stm32-tamp-nvram.c
+@@ -66,13 +66,6 @@ struct stm32_tamp_nvram_plat {
+ 	const struct reg_field *config_reg_fields;
+ };
+ 
+-static const struct regmap_config stm32mp_tamp_nvram_regmap_cfg = {
+-	.reg_bits = 32,
+-	.val_bits = 32,
+-	.reg_stride = 4,
+-
+-};
+-
+ static const struct reg_field stm32mp1_tamp_nvram_zone_cfg_fields[NB_ZONES_STM32MP1 - 1] = {
+ 	[BKPREG_PROTECTION_ZONE_1] = REG_FIELD(_TAMP_SECCFGR, 0, 7),
+ 	[BKPREG_PROTECTION_ZONE_2] = REG_FIELD(_TAMP_SECCFGR, 16, 23),
+@@ -105,20 +98,6 @@ static enum stm32_tamp_bkpreg_access stm32mp1_tamp_bkpreg_access[NB_ZONES_STM32M
+ 	[BKPREG_PROTECTION_ZONE_3] = BKP_READ_WRITE,
+ };
+ 
+-static const struct stm32_tamp_nvram_plat stm32mp1_tamp_nvram = {
+-	.nb_zones = NB_ZONES_STM32MP1,
+-	.nb_regs = NB_REGS_STM32MP1,
+-	.bkpregs_regmap_cfg = &stm32mp_tamp_nvram_regmap_cfg,
+-	.config_reg_fields = stm32mp1_tamp_nvram_zone_cfg_fields,
+-};
+-
+-static const struct stm32_tamp_nvram_plat stm32mp25_tamp_nvram = {
+-	.nb_zones = NB_ZONES_STM32MP2,
+-	.nb_regs = NB_REGS_STM32MP2,
+-	.bkpregs_regmap_cfg = &stm32mp_tamp_nvram_regmap_cfg,
+-	.config_reg_fields = stm32mp25_tamp_nvram_zone_cfg_fields,
+-};
+-
+ static int stm32_tamp_is_compartment_isolation_enabled_mp2X(struct stm32_tamp_nvram_priv *priv)
+ {
+ 	int nb_compartment_enabled = 0;
+@@ -311,6 +290,64 @@ static bool stm32_tamp_nvram_rights(struct stm32_tamp_nvram_priv *priv, int reg,
+ 	return false;
+ }
+ 
++static bool stm32_tamp_nvram_readable_bkpreg(struct device *dev, unsigned int reg)
++{
++	struct stm32_tamp_nvram_priv *priv = dev_get_drvdata(dev);
++
++	if (!priv)
++		return false;
++
++	if (!stm32_tamp_nvram_rights(priv, ALIGN_DOWN(reg, sizeof(u32)) / sizeof(u32), true))
++		return false;
++
++	return true;
++}
++
++static bool stm32_tamp_nvram_writeable_bkpreg(struct device *dev, unsigned int reg)
++{
++	struct stm32_tamp_nvram_priv *priv = dev_get_drvdata(dev);
++
++	if (!priv)
++		return false;
++
++	if (!stm32_tamp_nvram_rights(priv, ALIGN_DOWN(reg, sizeof(u32)) / sizeof(u32), false))
++		return false;
++
++	return true;
++}
++
++static const struct regmap_config stm32mp1_tamp_nvram_regmap_cfg = {
++	.reg_bits = 32,
++	.val_bits = 32,
++	.reg_stride = 4,
++	.readable_reg = stm32_tamp_nvram_readable_bkpreg,
++	.writeable_reg = stm32_tamp_nvram_writeable_bkpreg,
++	.max_register = 0x80,
++};
++
++static const struct regmap_config stm32mp2_tamp_nvram_regmap_cfg = {
++	.reg_bits = 32,
++	.val_bits = 32,
++	.reg_stride = 4,
++	.readable_reg = stm32_tamp_nvram_readable_bkpreg,
++	.writeable_reg = stm32_tamp_nvram_writeable_bkpreg,
++	.max_register = 0x200,
++};
++
++static const struct stm32_tamp_nvram_plat stm32mp1_tamp_nvram = {
++	.nb_zones = NB_ZONES_STM32MP1,
++	.nb_regs = NB_REGS_STM32MP1,
++	.bkpregs_regmap_cfg = &stm32mp1_tamp_nvram_regmap_cfg,
++	.config_reg_fields = stm32mp1_tamp_nvram_zone_cfg_fields,
++};
++
++static const struct stm32_tamp_nvram_plat stm32mp25_tamp_nvram = {
++	.nb_zones = NB_ZONES_STM32MP2,
++	.nb_regs = NB_REGS_STM32MP2,
++	.bkpregs_regmap_cfg = &stm32mp2_tamp_nvram_regmap_cfg,
++	.config_reg_fields = stm32mp25_tamp_nvram_zone_cfg_fields,
++};
++
+ static int stm32_tamp_nvram_write_byte(struct stm32_tamp_nvram_priv *priv, u32 offset, u8 byte)
+ {
+ 	int offset_aligned = ALIGN_DOWN(offset, sizeof(u32));
+@@ -534,9 +571,7 @@ static int stm32_tamp_nvram_probe(struct platform_device *pdev)
+ 		dev_err(dev, "Can't remap resource\n");
+ 		return PTR_ERR(base_addr);
+ 	}
+-	priv->bkpregs_regmap = devm_regmap_init_mmio(dev,
+-						     base_addr,
+-						     priv->data->bkpregs_regmap_cfg);
++
+ 	priv->cfg.name = "stm32-tamp-nvram";
+ 	priv->cfg.word_size = 1;
+ 	priv->cfg.stride = 1;
+@@ -653,6 +688,12 @@ static int stm32_tamp_nvram_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	platform_set_drvdata(pdev, priv);
++	priv->bkpregs_regmap = devm_regmap_init_mmio(dev, base_addr,
++						     priv->data->bkpregs_regmap_cfg);
++	if (IS_ERR(priv->bkpregs_regmap)) {
++		dev_err(dev, "failed to init regmap: %ld\n", PTR_ERR(priv->bkpregs_regmap));
++		return PTR_ERR(priv->bkpregs_regmap);
++	}
+ 
+ 	return PTR_ERR_OR_ZERO(devm_nvmem_register(dev, &priv->cfg));
+ }
+-- 
+2.53.0
+

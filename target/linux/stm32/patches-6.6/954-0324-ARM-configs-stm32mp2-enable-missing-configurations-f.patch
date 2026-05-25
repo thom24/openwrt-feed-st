@@ -1,0 +1,37 @@
+From 17d59cad8ad396edbc9f880e6e51a72c1acff68a Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Thu, 6 Nov 2025 17:42:33 +0100
+Subject: [PATCH] ARM: configs: stm32mp2: enable missing configurations for
+ aarch32
+
+Enable NAMESPACES, POSIX_MQUEUE, PREEMPT, SCHED_MC configurations.
+
+These configurations are enabled in the addons fragment for stm32mp1x.
+Enable them for stm32mp2x aarch32.
+
+Change-Id: I82a17e965653dc0d1f0d5a52bffdd6c1ca00081e
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/506783
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Jerome BESNARD <jerome.besnard@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/configs/mp2-fragment-04-multiv7-addons.config | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/arm/configs/mp2-fragment-04-multiv7-addons.config b/arch/arm/configs/mp2-fragment-04-multiv7-addons.config
+index 10d0726afadf..f675ca71b375 100644
+--- a/arch/arm/configs/mp2-fragment-04-multiv7-addons.config
++++ b/arch/arm/configs/mp2-fragment-04-multiv7-addons.config
+@@ -4,3 +4,8 @@ CONFIG_BACKLIGHT_PWM=m
+ CONFIG_DRM_PANEL_SIMPLE=m
+ CONFIG_IKCONFIG=y
+ CONFIG_IKCONFIG_PROC=y
++CONFIG_NAMESPACES=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_PREEMPT=y
++CONFIG_PREEMPT_COUNT=y
++CONFIG_SCHED_MC=y
+-- 
+2.53.0
+

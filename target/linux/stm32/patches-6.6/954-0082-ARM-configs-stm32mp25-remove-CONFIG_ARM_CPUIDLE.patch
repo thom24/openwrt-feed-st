@@ -1,0 +1,30 @@
+From 16393be2bcbb1795530ec48dd923378c9941a031 Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Date: Thu, 10 Jul 2025 19:31:43 +0200
+Subject: [PATCH] ARM: configs: stm32mp25: remove CONFIG_ARM_CPUIDLE
+
+Remove CONFIG_ARM_CPUIDLE for STM32MP2 family as CPUIdle is managed
+by PSCI without ARM Cpuidle driver support.
+
+This patch avoids trace for unsupported enable-method property: psci.
+
+Change-Id: I9f88df03e1fd32e2c8f484430ed756a3630e95ee
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/474145
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm/configs/mp2-fragment-03-multiv7-cleanup.config | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/configs/mp2-fragment-03-multiv7-cleanup.config b/arch/arm/configs/mp2-fragment-03-multiv7-cleanup.config
+index 96ea456b8049..6d90a2c7f095 100644
+--- a/arch/arm/configs/mp2-fragment-03-multiv7-cleanup.config
++++ b/arch/arm/configs/mp2-fragment-03-multiv7-cleanup.config
+@@ -1,2 +1,3 @@
++# CONFIG_ARM_CPUIDLE is not set
+ # CONFIG_MACH_STM32MP13 is not set
+ # CONFIG_MACH_STM32MP157 is not set
+-- 
+2.53.0
+

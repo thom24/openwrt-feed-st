@@ -1,0 +1,64 @@
+From 71db2cb08317445b3d171e23780eaf07e847fe12 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Fri, 17 Oct 2025 11:40:31 +0200
+Subject: [PATCH] PCI: endpoint: pci-epf-test: Fix doorbell test support
+
+[ Upstream commit f272210b28d050df56ec7dfaecb9fa3bebca6419 ]
+
+The doorbell feature temporarily overrides the inbound translation to point
+to the address stored in epf_test->db_bar.phys_addr, i.e., it calls
+set_bar() twice without ever calling clear_bar(), as calling clear_bar()
+would clear the BAR's PCI address assigned by the host.
+
+Thus, when disabling the doorbell, restore the inbound translation to point
+to the memory allocated for the BAR.
+
+Without this, running the PCI endpoint kselftest doorbell test case more
+than once would fail.
+
+Signed-off-by: Niklas Cassel <cassel@kernel.org>
+Signed-off-by: Manivannan Sadhasivam <mani@kernel.org>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Reviewed-by: Frank Li <Frank.Li@nxp.com>
+Link: https://patch.msgid.link/20250908161942.534799-2-cassel@kernel.org
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I23027a65b4b8c77d4c7f13871eec28e9cd4d7639
+---
+ drivers/pci/endpoint/functions/pci-epf-test.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
+index 4f28b942e7d8..d9017999165e 100644
+--- a/drivers/pci/endpoint/functions/pci-epf-test.c
++++ b/drivers/pci/endpoint/functions/pci-epf-test.c
+@@ -734,12 +734,27 @@ static void pci_epf_test_disable_doorbell(struct pci_epf_test *epf_test,
+ {
+ 	enum pci_barno bar = le32_to_cpu(reg->doorbell_bar);
+ 	u32 status = le32_to_cpu(reg->status);
++	struct pci_epf *epf = epf_test->epf;
++	struct pci_epc *epc = epf->epc;
++	int ret;
+ 
+ 	if (bar < BAR_0)
+ 		goto set_status_err;
+ 
+ 	pci_epf_test_doorbell_cleanup(epf_test);
+ 
++	/*
++	 * The doorbell feature temporarily overrides the inbound translation
++	 * to point to the address stored in epf_test->db_bar.phys_addr, i.e.,
++	 * it calls set_bar() twice without ever calling clear_bar(), as
++	 * calling clear_bar() would clear the BAR's PCI address assigned by
++	 * the host. Thus, when disabling the doorbell, restore the inbound
++	 * translation to point to the memory allocated for the BAR.
++	 */
++	ret = pci_epc_set_bar(epc, epf->func_no, epf->vfunc_no, &epf->bar[bar]);
++	if (ret)
++		goto set_status_err;
++
+ 	status |= STATUS_DOORBELL_DISABLE_SUCCESS;
+ 	reg->status = cpu_to_le32(status);
+ 
+-- 
+2.53.0
+

@@ -1,0 +1,39 @@
+From 04ffd315dd205b6c92b85f31a7b8529f523c3cf2 Mon Sep 17 00:00:00 2001
+From: Luben Tuikov <ltuikov89@gmail.com>
+Date: Thu, 16 Nov 2023 22:44:53 -0500
+Subject: [PATCH] drm/print: Handle NULL drm device in __drm_printk()
+
+drm_{err,warn,...}() use __drm_printk() which takes a drm device pointer and
+uses the embedded device pointer to print the device. This facility handles
+NULL device pointer, but not NULL drm device pointer. This patch makes
+__drm_printk() also handle a NULL drm device pointer. The printed output is
+identical to if drm->dev had been NULL.
+
+Change-Id: I1830ffcfbd403143abe7c19756527011b9e601dc
+Signed-off-by: Luben Tuikov <ltuikov89@gmail.com>
+Reviewed-by: Jani Nikula <jani.nikula@linux.intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20231117035427.68125-2-ltuikov89@gmail.com
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/490705
+Reviewed-by: Yannick FERTRE <yannick.fertre@foss.st.com>
+Tested-by: Yannick FERTRE <yannick.fertre@foss.st.com>
+Domain-Review: Yannick FERTRE <yannick.fertre@foss.st.com>
+---
+ include/drm/drm_print.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/drm/drm_print.h b/include/drm/drm_print.h
+index 2ad9c9f9e90f..5f52c16f3102 100644
+--- a/include/drm/drm_print.h
++++ b/include/drm/drm_print.h
+@@ -505,7 +505,7 @@ void __drm_dev_dbg(struct _ddebug *desc, const struct device *dev,
+ 
+ /* Helper for struct drm_device based logging. */
+ #define __drm_printk(drm, level, type, fmt, ...)			\
+-	dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
++	dev_##level##type((drm) ? (drm)->dev : NULL, "[drm] " fmt, ##__VA_ARGS__)
+ 
+ 
+ #define drm_info(drm, fmt, ...)					\
+-- 
+2.53.0
+

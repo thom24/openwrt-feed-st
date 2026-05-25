@@ -1,0 +1,74 @@
+From a33d6c5d4f521e595e8b145cd1d796b1c2198b5f Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Mon, 27 Oct 2025 17:21:57 +0100
+Subject: [PATCH] dt-bindings: fix warnings on access-controllers property for
+ display
+
+In the stm32mpxxx device tree files, the access-controllers property has
+been added to display-related peripheral nodes so that the firewall
+configuration is checked before using them. Document it.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: Idb9266b18470444f4bd1b5ea1e46f3615c637d84
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/503460
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+---
+ .../devicetree/bindings/display/st,stm32-dsi.yaml          | 3 +++
+ .../devicetree/bindings/display/st,stm32-ltdc.yaml         | 7 +++++++
+ .../devicetree/bindings/display/st,stm32-lvds.yaml         | 3 +++
+ 3 files changed, 13 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/display/st,stm32-dsi.yaml b/Documentation/devicetree/bindings/display/st,stm32-dsi.yaml
+index bab54dd6a412..a621d043eab9 100644
+--- a/Documentation/devicetree/bindings/display/st,stm32-dsi.yaml
++++ b/Documentation/devicetree/bindings/display/st,stm32-dsi.yaml
+@@ -68,6 +68,9 @@ properties:
+                   - const: 1
+                   - const: 2
+ 
++  access-controllers:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+diff --git a/Documentation/devicetree/bindings/display/st,stm32-ltdc.yaml b/Documentation/devicetree/bindings/display/st,stm32-ltdc.yaml
+index e55e790dcfc9..62abf12f84be 100644
+--- a/Documentation/devicetree/bindings/display/st,stm32-ltdc.yaml
++++ b/Documentation/devicetree/bindings/display/st,stm32-ltdc.yaml
+@@ -45,6 +45,13 @@ properties:
+       - for internal dpi input of the MIPI DSI host controller.
+       Note: These 2 endpoints cannot be activated simultaneously.
+ 
++  access-controllers:
++    maxItems: 1
++
++  access-controller-names:
++    items:
++      - const: cmn
++
+ required:
+   - compatible
+   - reg
+diff --git a/Documentation/devicetree/bindings/display/st,stm32-lvds.yaml b/Documentation/devicetree/bindings/display/st,stm32-lvds.yaml
+index 0b15c600b9cc..b86c24fa89ea 100644
+--- a/Documentation/devicetree/bindings/display/st,stm32-lvds.yaml
++++ b/Documentation/devicetree/bindings/display/st,stm32-lvds.yaml
+@@ -78,6 +78,9 @@ properties:
+       - port@0
+       - port@1
+ 
++  access-controllers:
++    maxItems: 1
++
+ required:
+   - compatible
+   - "#clock-cells"
+-- 
+2.53.0
+

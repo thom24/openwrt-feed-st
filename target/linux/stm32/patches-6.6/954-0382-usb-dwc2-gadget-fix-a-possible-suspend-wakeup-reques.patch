@@ -1,0 +1,71 @@
+From 3571ef528b87c5bda576172aabf70e93671b2431 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Thu, 18 Dec 2025 12:12:49 +0100
+Subject: [PATCH] usb: dwc2: gadget: fix a possible suspend-wakeup requests
+ deadlock
+
+There's a possible deadlock triggered by a suspend interrupt, invoking
+the suspend callback. The suspend callback requests to trigger a wakeup.
+In the wakeup callback, the resume is called directly. Suspend and
+resume callback requests the same lock, hence the deadlock with stack:
+
+_raw_spin_lock_irqsave
+configfs_composite_resume
+dwc2_hsotg_wakeup
+usb_gadget_wakeup
+gether_suspend
+composite_suspend
+configfs_composite_suspend
+dwc2_handle_usb_suspend_intr
+dwc2_handle_common_intr
+
+The resume callback should be called from the resume IRQ instead of the
+wakeup callback.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ic4164eb3f96ab6ab84fe92f95f0746cfd2932e30
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/522345
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/usb/dwc2/core_intr.c | 4 ++--
+ drivers/usb/dwc2/gadget.c    | 3 ---
+ 2 files changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
+index 3d4d3f81b4bf..0bcd95757249 100644
+--- a/drivers/usb/dwc2/core_intr.c
++++ b/drivers/usb/dwc2/core_intr.c
+@@ -450,12 +450,12 @@ static void dwc2_handle_wakeup_detected_intr(struct dwc2_hsotg *hsotg)
+ 
+ 			/* Change to L0 state, when no_clock_gating == true */
+ 			hsotg->lx_state = DWC2_L0;
+-			usb_gadget_set_state(&hsotg->gadget, hsotg->suspended_from);
+-			call_gadget(hsotg, resume);
+ 		} else {
+ 			/* Change to L0 state */
+ 			hsotg->lx_state = DWC2_L0;
+ 		}
++		usb_gadget_set_state(&hsotg->gadget, hsotg->suspended_from);
++		call_gadget(hsotg, resume);
+ 	} else {
+ 		if (hsotg->lx_state == DWC2_L2) {
+ 			if (hsotg->in_ppd) {
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 24c3da25d3f0..a577f5b0b430 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -4878,9 +4878,6 @@ static int dwc2_hsotg_wakeup(struct usb_gadget *gadget)
+ 		hsotg->lx_state = DWC2_L0;
+ 	}
+ 
+-	usb_gadget_set_state(&hsotg->gadget, hsotg->suspended_from);
+-	call_gadget(hsotg, resume);
+-
+ 	spin_unlock_irqrestore(&hsotg->lock, flags);
+ 
+ 	return 0;
+-- 
+2.53.0
+

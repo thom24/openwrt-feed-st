@@ -1,0 +1,67 @@
+From b83b35424099ef3f1130f29a2e2c1818568e4bc2 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 2 Sep 2025 14:07:39 +0200
+Subject: [PATCH] ARM: dts: stm32: add cap-power-off-card on stm32mp13 and
+ stm32mp15 DKs
+
+Since [1] (from LTS v6.6.87), and due to the absence of cap-power-off-card
+property in wifi sdmmc parent node, the wifi adapter is no more turned off
+on suspend and re-probed on resume, causing watchdog.
+To avoid this watchdog, add cap-power-off-card property in wifi sdmmc node
+of stm32mp135f-dk, stm32mp157c-dk and stm32mp157f-dk. Using this property
+turns on runtime PM.
+
+[1] commit ec7315e68d88 ("wifi: brcmfmac: keep power during suspend if board requires it")
+
+Change-Id: I1449d907e57bb3df78729432a5a63f0ac8fc0552
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/486712
+Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
+Tested-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dk.dts  | 1 +
+ arch/arm/boot/dts/st/stm32mp157c-dk2.dts | 1 +
+ arch/arm/boot/dts/st/stm32mp157f-dk2.dts | 1 +
+ 3 files changed, 3 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+index 9e53c7d49d9c..d49a0ab5d8ea 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+@@ -496,6 +496,7 @@ &sdmmc2 {
+ 	pinctrl-1 = <&sdmmc2_b4_od_pins_a &sdmmc2_clk_pins_a>;
+ 	pinctrl-2 = <&sdmmc2_b4_sleep_pins_a>;
+ 	non-removable;
++	cap-power-off-card;
+ 	cap-sdio-irq;
+ 	st,neg-edge;
+ 	bus-width = <4>;
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
+index a37c3f2fe152..ef430bc99190 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
+@@ -118,6 +118,7 @@ &sdmmc2 {
+ 	pinctrl-1 = <&sdmmc2_b4_od_pins_a>;
+ 	pinctrl-2 = <&sdmmc2_b4_sleep_pins_a>;
+ 	non-removable;
++	cap-power-off-card;
+ 	cap-sdio-irq;
+ 	st,neg-edge;
+ 	bus-width = <4>;
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
+index 0748828dabcc..f1cf2cbd23c3 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
+@@ -129,6 +129,7 @@ &sdmmc2 {
+ 	pinctrl-1 = <&sdmmc2_b4_od_pins_a>;
+ 	pinctrl-2 = <&sdmmc2_b4_sleep_pins_a>;
+ 	non-removable;
++	cap-power-off-card;
+ 	cap-sdio-irq;
+ 	st,neg-edge;
+ 	bus-width = <4>;
+-- 
+2.53.0
+

@@ -1,0 +1,42 @@
+From 5f2cdd59b107b340035f96e0590ffd3ff09a7846 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Tue, 1 Jul 2025 16:04:11 +0200
+Subject: [PATCH] dt-bindings: media: st: dcmipp: add pclk-max-frequency
+ property
+
+Add description of the pclk-max-frequency property allowing to
+indicate the maximum allowed pixel-clock that the IP can handle
+as input.
+
+Change-Id: Ic784e7b552af07e46bd174fb20c8118deda3bf24
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/471693
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml b/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
+index 6911a51bc955..4aaf86933ddb 100644
+--- a/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
++++ b/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
+@@ -69,6 +69,11 @@ properties:
+           hsync-active: true
+           vsync-active: true
+ 
++          pclk-max-frequency:
++            $ref: /schemas/types.yaml#/definitions/uint32
++            description:
++              Maximum acceptable pixel clock frequency.
++
+ required:
+   - compatible
+   - reg
+-- 
+2.53.0
+

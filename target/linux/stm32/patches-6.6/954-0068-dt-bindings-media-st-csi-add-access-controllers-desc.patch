@@ -1,0 +1,40 @@
+From bbda5efaabc49c11cb4528b837653286f5816f72 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Tue, 1 Jul 2025 14:43:45 +0200
+Subject: [PATCH] dt-bindings: media: st: csi: add access-controllers
+ description
+
+access-controllers is an optional property that allows a peripheral to
+refer to one or more domain access controller(s).
+
+Change-Id: Ia2cce7cc165ad0437b3a1ad02c9d6e7df8402554
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/471688
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ Documentation/devicetree/bindings/media/st,stm32-csi.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/media/st,stm32-csi.yaml b/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
+index 4bc2daba2284..e636f9ad8965 100644
+--- a/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
++++ b/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
+@@ -35,6 +35,10 @@ properties:
+   power-domains:
+     maxItems: 1
+ 
++  access-controllers:
++    minItems: 1
++    maxItems: 2
++
+   ports:
+     $ref: /schemas/graph.yaml#/properties/ports
+ 
+-- 
+2.53.0
+

@@ -1,0 +1,95 @@
+From 547142af5f33f566ebbfe0571d59f153423451af Mon Sep 17 00:00:00 2001
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Mon, 25 Sep 2023 15:17:08 +0200
+Subject: [PATCH] PM: domains: Implement the ->set_performance_state() callback
+ for genpd
+
+To enable generic support for performance scaling for PM domains, let's
+implement the ->set_performance_state() callback for genpd.
+
+Beyond this change, users of the corresponding genpd specific API,
+dev_pm_genpd_set_performance_state() are encouraged to switch to the common
+dev_pm_domain_set_performance_state() API.
+
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+[upstream commit 401e09201a01183f1cc8533aa956cb837bf6d3da]
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: Ie24c145921f790ad3bb3d3d7d77ea785faf72555
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/476924
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ drivers/base/power/domain.c | 33 +++++++++++++++++++++------------
+ 1 file changed, 21 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 7e5123b0ad20..043f62f790a4 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -420,6 +420,25 @@ static void genpd_restore_performance_state(struct device *dev,
+ 		genpd_set_performance_state(dev, state);
+ }
+ 
++static int genpd_dev_pm_set_performance_state(struct device *dev,
++					      unsigned int state)
++{
++	struct generic_pm_domain *genpd = dev_to_genpd(dev);
++	int ret = 0;
++
++	genpd_lock(genpd);
++	if (pm_runtime_suspended(dev)) {
++		dev_gpd_data(dev)->rpm_pstate = state;
++	} else {
++		ret = genpd_set_performance_state(dev, state);
++		if (!ret)
++			dev_gpd_data(dev)->rpm_pstate = 0;
++	}
++	genpd_unlock(genpd);
++
++	return ret;
++}
++
+ /**
+  * dev_pm_genpd_set_performance_state- Set performance state of device's power
+  * domain.
+@@ -438,7 +457,6 @@ static void genpd_restore_performance_state(struct device *dev,
+ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
+ {
+ 	struct generic_pm_domain *genpd;
+-	int ret = 0;
+ 
+ 	genpd = dev_to_genpd_safe(dev);
+ 	if (!genpd)
+@@ -448,17 +466,7 @@ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
+ 		     !dev->power.subsys_data->domain_data))
+ 		return -EINVAL;
+ 
+-	genpd_lock(genpd);
+-	if (pm_runtime_suspended(dev)) {
+-		dev_gpd_data(dev)->rpm_pstate = state;
+-	} else {
+-		ret = genpd_set_performance_state(dev, state);
+-		if (!ret)
+-			dev_gpd_data(dev)->rpm_pstate = 0;
+-	}
+-	genpd_unlock(genpd);
+-
+-	return ret;
++	return genpd_dev_pm_set_performance_state(dev, state);
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_genpd_set_performance_state);
+ 
+@@ -2081,6 +2089,7 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+ 	genpd->domain.ops.restore_noirq = genpd_restore_noirq;
+ 	genpd->domain.ops.complete = genpd_complete;
+ 	genpd->domain.start = genpd_dev_pm_start;
++	genpd->domain.set_performance_state = genpd_dev_pm_set_performance_state;
+ 
+ 	if (genpd->flags & GENPD_FLAG_PM_CLK) {
+ 		genpd->dev_ops.stop = pm_clk_suspend;
+-- 
+2.53.0
+

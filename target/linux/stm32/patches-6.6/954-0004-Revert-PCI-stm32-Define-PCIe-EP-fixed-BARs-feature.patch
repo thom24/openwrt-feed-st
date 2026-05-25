@@ -1,0 +1,43 @@
+From 5b908a2da2fdc3dea2739186f6f0d7677fcdb489 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Fri, 6 Jun 2025 14:26:13 +0200
+Subject: [PATCH] Revert "PCI: stm32: Define PCIe EP fixed BARs feature"
+
+Now that we have a dbi2 write workaround, we don't need to force
+BARs fixed.
+Also don't reserve BARs 4 et 5.
+We are limited to 4 windows but which BARs to reserve is
+up to the user.
+
+This reverts commit f356f0b86a2bf183dd85859042ebd953fab354aa.
+
+Change-Id: I383b2561bda10880362af7cbe1ac13f2d8a1f137
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/465342
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/pci/controller/dwc/pcie-stm32-ep.c | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/drivers/pci/controller/dwc/pcie-stm32-ep.c b/drivers/pci/controller/dwc/pcie-stm32-ep.c
+index ff74de50f767..4e2870b89046 100644
+--- a/drivers/pci/controller/dwc/pcie-stm32-ep.c
++++ b/drivers/pci/controller/dwc/pcie-stm32-ep.c
+@@ -148,12 +148,6 @@ static const struct pci_epc_features stm32_pcie_epc_features = {
+ 	.force_core_init = true,
+ 	.core_init_notifier = true,
+ 	.msi_capable = true,
+-	.msix_capable = false,
+-	.bar_fixed_size[0] = SZ_1M,
+-	.bar_fixed_size[1] = SZ_64K,
+-	.bar_fixed_size[2] = SZ_1M,
+-	.bar_fixed_size[3] = SZ_1M,
+-	.reserved_bar = 1 << BAR_4 | 1 << BAR_5,
+ 	.align = SZ_64K,
+ };
+ 
+-- 
+2.53.0
+

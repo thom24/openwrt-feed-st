@@ -1,0 +1,256 @@
+From e9c498f235c9ae8a6dced960a3eceffce21de081 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 10 Dec 2025 11:29:38 +0100
+Subject: [PATCH] usb: dwc2: introduce flags to manage session end while
+ suspended
+
+When in host mode, if the bus has been suspended (in L2), disconnecting
+the device causes the core to raise a disconnect and resume interrupt:
+++Disconnect Detected Interrupt++ (Host) a_host
+++Resume or Remote Wakeup Detected Interrupt++
+
+The controller flags in HPRT0 doesn't reflect that, as long as the core
+is in power saving mode. So in the disconnect, dwc2_hcd_disconnect()
+takes wrong assumption on the connect status flag.
+Then the resume IRQ will exit power saving modes (PPD or clock gating),
+with the remote wakeup flag set. Result is the driver starts resume
+signaling and start wkp_timer.
+Last, when used with usb-role-switch (asynchronous notification), there's
+a race with "None" role set in drd.c, leading to unpredictable or
+incorrect role assignment and initialization of the core, either as
+host or device.
+
+So introduce new flags, to exit PPD or clock gating modes without
+driving resume signaling upon disconnection (end of session end), when
+entering dwc2_hcd_disconnect(). Then subsequent IRQs (resume, session...)
+won't take wrong actions.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ic8c4e0888b350e29ba059641ce41136614f676bc
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/517466
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/usb/dwc2/core.h      |  4 +++
+ drivers/usb/dwc2/core_intr.c | 12 ++++----
+ drivers/usb/dwc2/hcd.c       | 58 ++++++++++++++++++++++++++++++------
+ 3 files changed, 60 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+index 1b457463641a..a4f1eb841d1e 100644
+--- a/drivers/usb/dwc2/core.h
++++ b/drivers/usb/dwc2/core.h
+@@ -1427,6 +1427,10 @@ void dwc2_dump_global_registers(struct dwc2_hsotg *hsotg);
+ int stm32mp2_usb2phy_batt_chg_det(struct dwc2_hsotg *hsotg);
+ int stm32mp2_usb2phy_usb_chg_psy_register(struct dwc2_hsotg *hsotg);
+ 
++#define DWC2_POWER_DOWN_RESUME		0
++#define DWC2_POWER_DOWN_REMOTE_WKUP	1
++#define DWC2_POWER_DOWN_SESSION_END	2
++
+ /* Gadget defines */
+ #if IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) || \
+ 	IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)
+diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
+index 0bcd95757249..e1f69471d149 100644
+--- a/drivers/usb/dwc2/core_intr.c
++++ b/drivers/usb/dwc2/core_intr.c
+@@ -298,7 +298,7 @@ static void dwc2_handle_session_req_intr(struct dwc2_hsotg *hsotg)
+ 	if (dwc2_is_device_mode(hsotg)) {
+ 		if (hsotg->lx_state == DWC2_L2) {
+ 			if (hsotg->in_ppd) {
+-				ret = dwc2_exit_partial_power_down(hsotg, 0,
++				ret = dwc2_exit_partial_power_down(hsotg, DWC2_POWER_DOWN_RESUME,
+ 								   true);
+ 				if (ret)
+ 					dev_err(hsotg->dev,
+@@ -309,7 +309,7 @@ static void dwc2_handle_session_req_intr(struct dwc2_hsotg *hsotg)
+ 			if (hsotg->params.power_down ==
+ 			    DWC2_POWER_DOWN_PARAM_NONE && hsotg->bus_suspended &&
+ 			    !hsotg->params.no_clock_gating)
+-				dwc2_gadget_exit_clock_gating(hsotg, 0);
++				dwc2_gadget_exit_clock_gating(hsotg, DWC2_POWER_DOWN_RESUME);
+ 		}
+ 
+ 		/*
+@@ -435,7 +435,8 @@ static void dwc2_handle_wakeup_detected_intr(struct dwc2_hsotg *hsotg)
+ 				/* Clear Remote Wakeup Signaling */
+ 				dctl &= ~DCTL_RMTWKUPSIG;
+ 				dwc2_writel(hsotg, dctl, DCTL);
+-				ret = dwc2_exit_partial_power_down(hsotg, 1,
++				ret = dwc2_exit_partial_power_down(hsotg,
++								   DWC2_POWER_DOWN_REMOTE_WKUP,
+ 								   true);
+ 				if (ret)
+ 					dev_err(hsotg->dev,
+@@ -459,7 +460,8 @@ static void dwc2_handle_wakeup_detected_intr(struct dwc2_hsotg *hsotg)
+ 	} else {
+ 		if (hsotg->lx_state == DWC2_L2) {
+ 			if (hsotg->in_ppd) {
+-				ret = dwc2_exit_partial_power_down(hsotg, 1,
++				ret = dwc2_exit_partial_power_down(hsotg,
++								   DWC2_POWER_DOWN_REMOTE_WKUP,
+ 								   true);
+ 				if (ret)
+ 					dev_err(hsotg->dev,
+@@ -469,7 +471,7 @@ static void dwc2_handle_wakeup_detected_intr(struct dwc2_hsotg *hsotg)
+ 			if (hsotg->params.power_down ==
+ 			    DWC2_POWER_DOWN_PARAM_NONE && hsotg->bus_suspended &&
+ 			    !hsotg->params.no_clock_gating)
+-				dwc2_host_exit_clock_gating(hsotg, 1);
++				dwc2_host_exit_clock_gating(hsotg, DWC2_POWER_DOWN_REMOTE_WKUP);
+ 
+ 			/*
+ 			 * If we've got this quirk then the PHY is stuck upon
+diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+index 613fabaeb7dc..b3b56c9da532 100644
+--- a/drivers/usb/dwc2/hcd.c
++++ b/drivers/usb/dwc2/hcd.c
+@@ -1756,6 +1756,25 @@ void dwc2_hcd_disconnect(struct dwc2_hsotg *hsotg, bool force)
+ 	hsotg->flags.b.port_connect_status_change = 1;
+ 	hsotg->flags.b.port_connect_status = 0;
+ 
++	if (hsotg->lx_state == DWC2_L2) {
++		/*
++		 * Need to exit power saving mode, so the HPRT0 state will report
++		 * the connection state correctly here after.
++		 */
++		if (hsotg->in_ppd) {
++			if (dwc2_exit_partial_power_down(hsotg,
++							 DWC2_POWER_DOWN_SESSION_END, true))
++				dev_err(hsotg->dev, "exit partial_power_down failed\n");
++		}
++
++		if (hsotg->params.power_down ==
++		    DWC2_POWER_DOWN_PARAM_NONE && hsotg->bus_suspended &&
++		    !hsotg->params.no_clock_gating)
++			dwc2_host_exit_clock_gating(hsotg, DWC2_POWER_DOWN_SESSION_END);
++
++		usb_hcd_resume_root_hub(hsotg->priv);
++	}
++
+ 	/*
+ 	 * Shutdown any transfers in process by clearing the Tx FIFO Empty
+ 	 * interrupt mask and status bits and disabling subsequent host
+@@ -5825,7 +5844,8 @@ int dwc2_host_enter_partial_power_down(struct dwc2_hsotg *hsotg)
+  * power down.
+  *
+  * @hsotg: Programming view of the DWC_otg controller
+- * @rem_wakeup: indicates whether resume is initiated by Reset.
++ * @flags: indicates whether resume is initiated by simple resume,
++ *	   remote wakeup or session end.
+  * @restore: indicates whether need to restore the registers or not.
+  *
+  * Return: non-zero if failed to exit host partial power down.
+@@ -5833,7 +5853,7 @@ int dwc2_host_enter_partial_power_down(struct dwc2_hsotg *hsotg)
+  * This function is for exiting from Host mode partial power down.
+  */
+ int dwc2_host_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+-				      int rem_wakeup, bool restore)
++				      int flags, bool restore)
+ {
+ 	u32 pcgcctl;
+ 	int ret = 0;
+@@ -5843,7 +5863,7 @@ int dwc2_host_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+ 
+ 	/*
+ 	 * Rely on rpm_suspended, to resume once, as gadget/host partial_power_down
+-	 * routines may get called several times, with rem_wakeup.
++	 * routines may get called several times, with rem_wakeup flags.
+ 	 */
+ 	if (hsotg->rpm_suspended) {
+ 		pm_runtime_get(hsotg->dev);
+@@ -5881,6 +5901,14 @@ int dwc2_host_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+ 		}
+ 	}
+ 
++	if (flags == DWC2_POWER_DOWN_SESSION_END) {
++		/*
++		 * Out of low power, upon session end, the application doesn't
++		 * need to drive resume signaling.
++		 */
++		goto out;
++	}
++
+ 	/* Drive resume signaling and exit suspend mode on the port. */
+ 	hprt0 = dwc2_read_hprt0(hsotg);
+ 	hprt0 |= HPRT0_RES;
+@@ -5888,14 +5916,14 @@ int dwc2_host_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+ 	dwc2_writel(hsotg, hprt0, HPRT0);
+ 	udelay(5);
+ 
+-	if (!rem_wakeup) {
++	if (flags == DWC2_POWER_DOWN_RESUME) {
+ 		/* Stop driveing resume signaling on the port. */
+ 		hprt0 = dwc2_read_hprt0(hsotg);
+ 		hprt0 &= ~HPRT0_RES;
+ 		dwc2_writel(hsotg, hprt0, HPRT0);
+ 
+ 		hsotg->bus_suspended = false;
+-	} else {
++	} else { /* DWC2_POWER_DOWN_REMOTE_WKUP */
+ 		/* Turn on the port power bit. */
+ 		hprt0 = dwc2_read_hprt0(hsotg);
+ 		hprt0 |= HPRT0_PWR;
+@@ -5908,6 +5936,7 @@ int dwc2_host_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+ 			  jiffies + msecs_to_jiffies(71));
+ 	}
+ 
++out:
+ 	/* Set lx_state to and in_ppd to 0 as here core exits from suspend. */
+ 	hsotg->in_ppd = 0;
+ 	hsotg->lx_state = DWC2_L0;
+@@ -5958,11 +5987,12 @@ void dwc2_host_enter_clock_gating(struct dwc2_hsotg *hsotg)
+  * dwc2_host_exit_clock_gating() - Exit controller from clock gating.
+  *
+  * @hsotg: Programming view of the DWC_otg controller
+- * @rem_wakeup: indicates whether resume is initiated by remote wakeup
++ * @flags: indicates whether resume is initiated by simple resume,
++ *	   remote wakeup or session end.
+  *
+  * This function is for exiting Host mode clock gating.
+  */
+-void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
++void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg, int flags)
+ {
+ 	u32 hprt0;
+ 	u32 pcgctl;
+@@ -5990,6 +6020,16 @@ void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
+ 	dwc2_writel(hsotg, pcgctl, PCGCTL);
+ 	udelay(5);
+ 
++	if (flags == DWC2_POWER_DOWN_SESSION_END) {
++		/*
++		 * Out of low power, upon session end, the application doesn't
++		 * need to drive resume signaling.
++		 */
++		hsotg->bus_suspended = false;
++		hsotg->lx_state = DWC2_L0;
++		return;
++	}
++
+ 	/* Drive resume signaling and exit suspend mode on the port. */
+ 	hprt0 = dwc2_read_hprt0(hsotg);
+ 	hprt0 |= HPRT0_RES;
+@@ -5997,7 +6037,7 @@ void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
+ 	dwc2_writel(hsotg, hprt0, HPRT0);
+ 	udelay(5);
+ 
+-	if (!rem_wakeup) {
++	if (flags == DWC2_POWER_DOWN_RESUME) {
+ 		/* In case of port resume need to wait for 40 ms */
+ 		msleep(USB_RESUME_TIMEOUT);
+ 
+@@ -6008,7 +6048,7 @@ void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
+ 
+ 		hsotg->bus_suspended = false;
+ 		hsotg->lx_state = DWC2_L0;
+-	} else {
++	} else { /* DWC2_POWER_DOWN_REMOTE_WKUP */
+ 		mod_timer(&hsotg->wkp_timer,
+ 			  jiffies + msecs_to_jiffies(71));
+ 	}
+-- 
+2.53.0
+

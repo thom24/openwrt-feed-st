@@ -1,0 +1,59 @@
+From b02c6b9b28b6b68fb7266adfd44fe8552ed91850 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Tue, 5 Aug 2025 12:32:23 +0200
+Subject: [PATCH] Reapply "tty: Fix lookahead_buf crash with serdev"
+
+Put back the original commit now that tty instability is understood and
+not related to this commit.
+
+This reverts commit c621f090aebcb3b939101d00f53d265bbb373a33.
+
+Change-Id: I2743a0d286e8aa09323c6be73442e0bda74328c8
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/481042
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/tty/tty_buffer.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/tty/tty_buffer.c b/drivers/tty/tty_buffer.c
+index 3b99774d16de..5f6d0cf67571 100644
+--- a/drivers/tty/tty_buffer.c
++++ b/drivers/tty/tty_buffer.c
+@@ -400,7 +400,6 @@ static void lookahead_bufs(struct tty_port *port, struct tty_buffer *head)
+ 
+ 	while (head) {
+ 		struct tty_buffer *next;
+-		u8 *p, *f = NULL;
+ 		unsigned int count;
+ 
+ 		/*
+@@ -419,11 +418,16 @@ static void lookahead_bufs(struct tty_port *port, struct tty_buffer *head)
+ 			continue;
+ 		}
+ 
+-		p = char_buf_ptr(head, head->lookahead);
+-		if (head->flags)
+-			f = flag_buf_ptr(head, head->lookahead);
++		if (port->client_ops->lookahead_buf) {
++			u8 *p, *f = NULL;
++
++			p = char_buf_ptr(head, head->lookahead);
++			if (head->flags)
++				f = flag_buf_ptr(head, head->lookahead);
++
++			port->client_ops->lookahead_buf(port, p, f, count);
++		}
+ 
+-		port->client_ops->lookahead_buf(port, p, f, count);
+ 		head->lookahead += count;
+ 	}
+ }
+-- 
+2.53.0
+

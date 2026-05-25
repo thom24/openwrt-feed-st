@@ -1,0 +1,46 @@
+From 74b9e0b5246e5366678958db95c682748fa7a871 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 7 Jan 2026 12:17:13 +0100
+Subject: [PATCH] usb: dwc2: drd: fix end of session without OTG capability
+
+When the dwc2 core doesn't have OTG capability, the driver doesn't
+properly detect the disconnect when in drd (type-c). This results in
+a suspend IRQ to be detected when unplugging (hence gadget suspends),
+but it doesn't disconnect (leaving the gadget in suspended state,
+rather than disconnect). It interferes with the runtime PM idle check,
+preventing the driver to put the controller into power saving mode.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I8ea624c8444478febcbd9ac029d61098f5fa7881
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/522344
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+---
+ drivers/usb/dwc2/drd.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
+index ad7063e15fbe..02d2ace62188 100644
+--- a/drivers/usb/dwc2/drd.c
++++ b/drivers/usb/dwc2/drd.c
+@@ -259,6 +259,16 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+ 		/* This will raise a Connector ID Status Change Interrupt */
+ 		dwc2_force_mode(hsotg, role == USB_ROLE_HOST);
+ 
++	if (role == USB_ROLE_NONE &&
++	    (hsotg->hw_params.op_mode == GHWCFG2_OP_MODE_NO_HNP_SRP_CAPABLE ||
++	     hsotg->hw_params.op_mode == GHWCFG2_OP_MODE_NO_SRP_CAPABLE_DEVICE ||
++	     hsotg->hw_params.op_mode == GHWCFG2_OP_MODE_NO_SRP_CAPABLE_HOST)) {
++		/* OTGINT session end detection not available, so directly disconnect here */
++		spin_lock_irqsave(&hsotg->lock, flags);
++		dwc2_hsotg_disconnect(hsotg);
++		spin_unlock_irqrestore(&hsotg->lock, flags);
++	}
++
+ skip:
+ 	if (!hsotg->ll_hw_enabled && hsotg->clk)
+ 		clk_disable_unprepare(hsotg->clk);
+-- 
+2.53.0
+

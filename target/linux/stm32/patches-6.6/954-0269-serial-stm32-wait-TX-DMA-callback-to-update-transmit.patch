@@ -1,0 +1,100 @@
+From 931f9f153833e506992d8a2e8c4ce538fbc2f35c Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 14 Oct 2025 15:29:36 +0200
+Subject: [PATCH] serial: stm32: wait TX DMA callback to update transmit buffer
+ offset
+
+Ensure the transmit buffer is advanced only after the DMA transfer is truly
+complete, not when it starts. This guarantees the TTY layer waits for the
+DMA transfer to finish before closing the port, preventing data loss.
+Keep track of bytes transferred by DMA in stm32port->tx_dma_bytes. Use this
+in the TX DMA callback to update transfer buffer offset with
+uart_xmit_advance(), and wake up the write workqueue with
+uart_write_wakeup() to notify the TTY layer of the actual number of bytes
+sent by DMA.
+
+Change-Id: I23de46c57c1e054eba3509484404b5e1269872e0
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/499684
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Valentin CARON <valentin.caron@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ drivers/tty/serial/stm32-usart.c | 27 ++++++++++++++++++++++-----
+ drivers/tty/serial/stm32-usart.h |  1 +
+ 2 files changed, 23 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index 05d2fada8ff7..5dae07643a78 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -836,15 +836,33 @@ static void stm32_usart_tx_dma_complete(void *arg)
+ {
+ 	struct uart_port *port = arg;
+ 	struct stm32_port *stm32port = to_stm32_port(port);
++	struct dma_tx_state state;
+ 	unsigned long flags;
+-
+-	stm32_usart_tx_dma_terminate(stm32port);
++	int count;
+ 
+ 	pm_runtime_get(port->dev);
+ 
+-	/* Let's see if we have pending data to send */
++	/* Get the actual count of bytes transferred */
++	dmaengine_tx_status(stm32port->tx_ch, stm32port->tx_ch->cookie, &state);
++	count = stm32port->tx_dma_bytes - state.residue;
++	if (count != stm32port->tx_dma_bytes)
++		dev_warn(port->dev, "DMA residue not null: residue=%d, in_flight=%d\n",
++			 state.residue, state.in_flight_bytes);
++
+ 	spin_lock_irqsave(&port->lock, flags);
++
++	/* Update TX status */
++	uart_xmit_advance(port, count);
++	if (uart_circ_chars_pending(&port->state->xmit) < WAKEUP_CHARS)
++		uart_write_wakeup(port);
++
++	/* Reset TX DMA status */
++	stm32_usart_tx_dma_terminate(stm32port);
++	stm32port->tx_dma_bytes = 0;
++
++	/* Let's see if we have pending data to send */
+ 	stm32_usart_transmit_chars(port);
++
+ 	spin_unlock_irqrestore(&port->lock, flags);
+ 
+ 	pm_runtime_mark_last_busy(port->dev);
+@@ -971,6 +989,7 @@ static void stm32_usart_transmit_chars_dma(struct uart_port *port)
+ 	 * if the callback of the previous is not yet called.
+ 	 */
+ 	stm32port->tx_dma_busy = true;
++	stm32port->tx_dma_bytes = count;
+ 
+ 	desc->callback = stm32_usart_tx_dma_complete;
+ 	desc->callback_param = port;
+@@ -987,8 +1006,6 @@ static void stm32_usart_transmit_chars_dma(struct uart_port *port)
+ 	/* Issue pending DMA TX requests */
+ 	dma_async_issue_pending(stm32port->tx_ch);
+ 
+-	uart_xmit_advance(port, count);
+-
+ 	return;
+ 
+ fallback_err:
+diff --git a/drivers/tty/serial/stm32-usart.h b/drivers/tty/serial/stm32-usart.h
+index aff60429fb0a..fc280d314b94 100644
+--- a/drivers/tty/serial/stm32-usart.h
++++ b/drivers/tty/serial/stm32-usart.h
+@@ -237,6 +237,7 @@ struct stm32_port {
+ 	u32 cr1_irq;		 /* USART_CR1_RXNEIE or RTOIE */
+ 	u32 cr3_irq;		 /* USART_CR3_RXFTIE */
+ 	int last_res;
++	unsigned int tx_dma_bytes;
+ 	bool tx_dma_busy;	 /* dma tx transaction in progress */
+ 	bool rx_dma_busy;	 /* dma rx transaction in progress */
+ 	bool throttled;		 /* port throttled            */
+-- 
+2.53.0
+

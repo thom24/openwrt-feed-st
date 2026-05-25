@@ -1,0 +1,56 @@
+From 5ef95e5fc75773a67992df6c28140f0079b1a7f4 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Thu, 15 Jan 2026 10:36:45 +0100
+Subject: [PATCH] usb: dwc2: forbid runtime PM during HCD initialization
+
+As soon as runtime PM is activated, runtime PM callbacks can be called.
+During HCD initialization, device driver data is set by the USB framework
+with the usb_hcd structure, which is not the dwc2_hsotg structure expected
+when runtime PM callbacks are called.
+That's why device driver data must be (re)set in dwc2_driver_probe after
+dwc2_hcd_init().
+However, HCD initialization also requires runtime PM to be enabled so that
+the child devices' runtime PM is properly configured.
+For these reasons, runtime PM must be forbidden so the device cannot be
+suspended during HCD initialization.
+
+Change-Id: I758686b98652b87b10a0d629dd710635c5d06366
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/524997
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+---
+ drivers/usb/dwc2/platform.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index 93f41019c14b..4d384508fb2f 100644
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -677,6 +677,12 @@ static int dwc2_driver_probe(struct platform_device *dev)
+ 	if (retval)
+ 		return dev_err_probe(&dev->dev, retval, "Failed to enable pm runtime\n");
+ 
++	/*
++	 * Disable runtime PM until the device is fully initialized.
++	 * This prevents the device from being suspended prematurely.
++	 */
++	pm_runtime_forbid(&dev->dev);
++
+ 	spin_lock_init(&hsotg->lock);
+ 
+ 	hsotg->vbus_supply = devm_regulator_get_optional(hsotg->dev, "vbus");
+@@ -858,6 +864,9 @@ static int dwc2_driver_probe(struct platform_device *dev)
+ 	platform_set_drvdata(dev, hsotg);
+ 	hsotg->hibernated = 0;
+ 
++	/* Now that the hcd is fully initialized, allow runtime PM */
++	pm_runtime_allow(&dev->dev);
++
+ 	dwc2_debugfs_init(hsotg);
+ 
+ 	/* Gadget code manages lowlevel hw on its own */
+-- 
+2.53.0
+

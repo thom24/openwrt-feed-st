@@ -1,0 +1,64 @@
+From 5bba60d89c9e9a46e22262245bc501d832c43d61 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Fri, 12 Sep 2025 14:00:22 +0200
+Subject: [PATCH] rtc: stm32: allow use as clock provider
+
+The rtc driver with compatible 'st,stm32mp*-rtc' registers itself
+as a clock provider as it can generate a 32 kHz clock on the
+output pin configured as LSCO through the property "st,lsco".
+
+On ST boards, the LSCO clock is only used by the combo WiFi/BT.
+The drivers "brcm,bcm43438-bt" and "brcm,bcm4329-fmac" of the
+combo WiFi/BT were not capable to require the clock from DT.
+Thus the driver RTC puts the LSCO clock as "critical" and does
+not require the "#clock-cells" property.
+
+Now that the client drivers are capable to require the clock from
+DT, remove the "critical" flag from LSCO.
+For DT backward compatibility, that is when "#clock-cells" is not
+present, keep the LSCO clock as "critical".
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I1fcc3041a46245f786aeb6d32c0085052e160764
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/490100
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ drivers/rtc/rtc-stm32.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/rtc/rtc-stm32.c b/drivers/rtc/rtc-stm32.c
+index 2929cc9381fd..f70856ab139b 100644
+--- a/drivers/rtc/rtc-stm32.c
++++ b/drivers/rtc/rtc-stm32.c
+@@ -231,6 +231,7 @@ static int stm32_rtc_clk_lsco_register(struct platform_device *pdev)
+ {
+ 	struct stm32_rtc *rtc = platform_get_drvdata(pdev);
+ 	struct stm32_rtc_registers regs = rtc->data->regs;
++	unsigned long flags = 0;
+ 	u8 lscoen;
+ 	int ret;
+ 
+@@ -241,9 +242,16 @@ static int stm32_rtc_clk_lsco_register(struct platform_device *pdev)
+ 	lscoen = (rtc->lsco == RTC_OUT1) ? STM32_RTC_CFGR_LSCOEN_OUT1 :
+ 					   STM32_RTC_CFGR_LSCOEN_OUT2_RMP;
+ 
++	/*
++	 * For backward compatibility with old DT without #clock-cells
++	 * and with no clock clients, keep the clock always enabled.
++	 */
++	if (!of_property_present(pdev->dev.of_node, "#clock-cells"))
++		flags = CLK_IGNORE_UNUSED | CLK_IS_CRITICAL;
++
+ 	rtc->clk_lsco = clk_register_gate(&pdev->dev, "rtc_lsco",
+ 					  __clk_get_name(rtc->rtc_ck),
+-					  CLK_IGNORE_UNUSED | CLK_IS_CRITICAL,
++					  flags,
+ 					  rtc->base + regs.cfgr, lscoen,
+ 					  0, NULL);
+ 	if (IS_ERR(rtc->clk_lsco))
+-- 
+2.53.0
+

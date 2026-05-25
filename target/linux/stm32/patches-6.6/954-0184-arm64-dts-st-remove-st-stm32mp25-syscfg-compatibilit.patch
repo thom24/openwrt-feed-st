@@ -1,0 +1,36 @@
+From 66ace0f2d300202565ee4c8153e7f58d6e22feb1 Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Fri, 5 Sep 2025 16:19:30 +0200
+Subject: [PATCH] arm64: dts: st: remove "st,stm32mp25-syscfg" compatibility in
+ stm32mp211
+
+Remove compatibility with "st,stm32mp25-syscfg".
+This is only needed to provide the stm32mp25 clock (clk_pix_ltdc).
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: I5bbc89e9e1586ecdd41d7b531bb828fed9d9ca3a
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/487546
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 84b84958aff2..cfdc05921985 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -2188,7 +2188,7 @@ exti1: interrupt-controller@44220000 {
+ 		};
+ 
+ 		syscfg: syscon@44230000 {
+-			compatible = "st,stm32mp25-syscfg", "syscon";
++			compatible = "syscon";
+ 			reg = <0x44230000 0x0 0x10000>;
+ 		};
+ 
+-- 
+2.53.0
+

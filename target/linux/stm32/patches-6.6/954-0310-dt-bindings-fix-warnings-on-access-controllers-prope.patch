@@ -1,0 +1,41 @@
+From ab0a4b84d5d17ad0283ee5b0bb092bcd203e67a4 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Tue, 28 Oct 2025 10:32:29 +0100
+Subject: [PATCH] dt-bindings: fix warnings on access-controllers property for
+ combophy
+
+In the stm32mpxxx device tree files, the access-controllers property has
+been added to combophy nodes so that the RIFSC configuration is checked
+before using them. Document it.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: Icda3752e6658a40bf3da7e82d6623f39e669f098
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/503467
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+---
+ Documentation/devicetree/bindings/phy/st,stm32-combophy.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/phy/st,stm32-combophy.yaml b/Documentation/devicetree/bindings/phy/st,stm32-combophy.yaml
+index 132a7c3e4f9f..8035a0e01c81 100644
+--- a/Documentation/devicetree/bindings/phy/st,stm32-combophy.yaml
++++ b/Documentation/devicetree/bindings/phy/st,stm32-combophy.yaml
+@@ -63,6 +63,10 @@ properties:
+   power-domains:
+     maxItems: 1
+ 
++  access-controllers:
++    maxItems: 1
++    description: Phandle to the rifsc device to check access right.
++
+   st,ssc-on:
+     type: boolean
+     description:
+-- 
+2.53.0
+

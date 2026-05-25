@@ -1,0 +1,111 @@
+From f0477729aead13ecfd0b58b25e943c2880ff7227 Mon Sep 17 00:00:00 2001
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Mon, 25 Sep 2023 15:17:07 +0200
+Subject: [PATCH] PM: domains: Introduce dev_pm_domain_set_performance_state()
+
+The generic PM domain is currently the only PM domain variant that supports
+performance scaling. To allow performance scaling to be supported through a
+common interface, let's add an optional callback ->set_performance_state(),
+in the struct dev_pm_domain.
+
+Moreover, let's add a function, dev_pm_domain_set_performance_state(), that
+may be called by consumers to request a new performance state for a device
+through its PM domain.
+
+Note that, in most cases it's preferred that a consumer use the OPP library
+to request a new performance state for its device. Although, this requires
+some additional changes to be supported, which are being implemented from
+subsequent changes.
+
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+[upstream commit 3fbc5c3b8522d655cf91d32c158261060fdc02fe]
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: I25b0e0d521ef9643dab98ee5aec28f80b71117c8
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/476923
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ drivers/base/power/common.c | 21 +++++++++++++++++++++
+ include/linux/pm.h          |  2 ++
+ include/linux/pm_domain.h   |  6 ++++++
+ 3 files changed, 29 insertions(+)
+
+diff --git a/drivers/base/power/common.c b/drivers/base/power/common.c
+index 299496e1381d..327d168dd37a 100644
+--- a/drivers/base/power/common.c
++++ b/drivers/base/power/common.c
+@@ -362,3 +362,24 @@ void dev_pm_domain_set(struct device *dev, struct dev_pm_domain *pd)
+ 	device_pm_check_callbacks(dev);
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_domain_set);
++
++/**
++ * dev_pm_domain_set_performance_state - Request a new performance state.
++ * @dev: The device to make the request for.
++ * @state: Target performance state for the device.
++ *
++ * This function should be called when a new performance state needs to be
++ * requested for a device that is attached to a PM domain. Note that, the
++ * support for performance scaling for PM domains is optional.
++ *
++ * Returns 0 on success and when performance scaling isn't supported, negative
++ * error code on failure.
++ */
++int dev_pm_domain_set_performance_state(struct device *dev, unsigned int state)
++{
++	if (dev->pm_domain && dev->pm_domain->set_performance_state)
++		return dev->pm_domain->set_performance_state(dev, state);
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(dev_pm_domain_set_performance_state);
+diff --git a/include/linux/pm.h b/include/linux/pm.h
+index 629c1633bbd0..92a4f69de0e8 100644
+--- a/include/linux/pm.h
++++ b/include/linux/pm.h
+@@ -734,6 +734,7 @@ extern void dev_pm_put_subsys_data(struct device *dev);
+  * @activate: Called before executing probe routines for bus types and drivers.
+  * @sync: Called after successful driver probe.
+  * @dismiss: Called after unsuccessful driver probe and after driver removal.
++ * @set_performance_state: Called to request a new performance state.
+  *
+  * Power domains provide callbacks that are executed during system suspend,
+  * hibernation, system resume and during runtime PM transitions instead of
+@@ -746,6 +747,7 @@ struct dev_pm_domain {
+ 	int (*activate)(struct device *dev);
+ 	void (*sync)(struct device *dev);
+ 	void (*dismiss)(struct device *dev);
++	int (*set_performance_state)(struct device *dev, unsigned int state);
+ };
+ 
+ /*
+diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+index 325831a7cbd2..6b71fb69c349 100644
+--- a/include/linux/pm_domain.h
++++ b/include/linux/pm_domain.h
+@@ -466,6 +466,7 @@ void dev_pm_domain_detach(struct device *dev, bool power_off);
+ void dev_pm_domain_detach_list(struct dev_pm_domain_list *list);
+ int dev_pm_domain_start(struct device *dev);
+ void dev_pm_domain_set(struct device *dev, struct dev_pm_domain *pd);
++int dev_pm_domain_set_performance_state(struct device *dev, unsigned int state);
+ #else
+ static inline int dev_pm_domain_attach(struct device *dev, bool power_on)
+ {
+@@ -495,6 +496,11 @@ static inline int dev_pm_domain_start(struct device *dev)
+ }
+ static inline void dev_pm_domain_set(struct device *dev,
+ 				     struct dev_pm_domain *pd) {}
++static inline int dev_pm_domain_set_performance_state(struct device *dev,
++						      unsigned int state)
++{
++	return 0;
++}
+ #endif
+ 
+ #endif /* _LINUX_PM_DOMAIN_H */
+-- 
+2.53.0
+

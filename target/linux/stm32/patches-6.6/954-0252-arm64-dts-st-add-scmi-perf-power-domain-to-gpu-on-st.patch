@@ -1,0 +1,41 @@
+From fea52760b3bc26c69a9fd9b94ddb441dfaf9f943 Mon Sep 17 00:00:00 2001
+From: Philippe Cornu <philippe.cornu@foss.st.com>
+Date: Tue, 14 Oct 2025 16:51:54 +0200
+Subject: [PATCH] arm64: dts: st: add scmi perf power domain to gpu on
+ stm32mp255
+
+Thanks to the scmi perf power domain, the gpu can support
+several operating points (defined in the OP-TEE related dt nodes)
+on stm32mp255 and stm32mp257 chipsets.
+Note: It is important to respect the following conditions
+in this gpu dt node to be able to use gpu operating points:
+1) The 1st power-domain must be "<&scmi_perf 1>".
+2) The 1st related power-domain-names must be "perf".
+
+Signed-off-by: Philippe Cornu <philippe.cornu@foss.st.com>
+Change-Id: I6940edcc5005779916e3b4736668fc7f52ec20be
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/499421
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp255.dtsi | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp255.dtsi b/arch/arm64/boot/dts/st/stm32mp255.dtsi
+index 17233a5dc779..c72ebc4b692b 100644
+--- a/arch/arm64/boot/dts/st/stm32mp255.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp255.dtsi
+@@ -173,7 +173,8 @@ gpu: gpu@48280000 {
+ 		resets = <&rcc GPU_R>;
+ 		clock-names = "bus", "core";
+ 		clocks = <&rcc CK_BUS_GPU>, <&rcc CK_KER_GPU>;
+-		power-domains = <&scmi_devpd PD_SCMI_GPU>, <&d1_pd>;
++		power-domains = <&scmi_perf 1>, <&scmi_devpd PD_SCMI_GPU>, <&d1_pd>;
++		power-domain-names = "perf", "scmi_devpd", "d1_pd";
+ 		access-controllers = <&rifsc 79>;
+ 		status = "disabled";
+ 
+-- 
+2.53.0
+

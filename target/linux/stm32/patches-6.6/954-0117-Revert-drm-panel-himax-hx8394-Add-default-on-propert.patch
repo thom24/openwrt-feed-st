@@ -1,0 +1,83 @@
+From c8166fcce798c1a51de2962cc7ad14eb9bee6892 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Tue, 29 Jul 2025 14:37:14 +0200
+Subject: [PATCH] Revert "drm/panel: himax-hx8394: Add default-on property"
+
+This reverts commit 5771b6573fb7ad3b85eadc4b47b078f51d2e9caf.
+This property was not added in the binding & is no longer needed
+
+Change-Id: I54966a69f057205c41c17de26d7477b8bc9e5eb5
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/479213
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/gpu/drm/panel/panel-himax-hx8394.c | 25 +++-------------------
+ 1 file changed, 3 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/gpu/drm/panel/panel-himax-hx8394.c b/drivers/gpu/drm/panel/panel-himax-hx8394.c
+index 2087b8a96338..47ddc08999b6 100644
+--- a/drivers/gpu/drm/panel/panel-himax-hx8394.c
++++ b/drivers/gpu/drm/panel/panel-himax-hx8394.c
+@@ -475,11 +475,7 @@ static int hx8394_probe(struct mipi_dsi_device *dsi)
+ 	if (!ctx)
+ 		return -ENOMEM;
+ 
+-	if (device_property_read_bool(dev, "default-on"))
+-		ctx->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
+-	else
+-		ctx->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
+-
++	ctx->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
+ 	if (IS_ERR(ctx->reset_gpio))
+ 		return dev_err_probe(dev, PTR_ERR(ctx->reset_gpio),
+ 				     "Failed to get reset gpio\n");
+@@ -518,21 +514,13 @@ static int hx8394_probe(struct mipi_dsi_device *dsi)
+ 	pm_runtime_set_autosuspend_delay(dev, 1000);
+ 	pm_runtime_use_autosuspend(dev);
+ 
+-	if (device_property_read_bool(dev, "default-on")) {
+-		ret = pm_runtime_get_sync(dev);
+-		if (ret < 0)
+-			goto disable_pm_runtime;
+-
+-		ctx->prepared = true;
+-	}
+-
+ 	drm_panel_add(&ctx->panel);
+ 
+ 	ret = mipi_dsi_attach(dsi);
+ 	if (ret < 0) {
+ 		dev_err_probe(dev, ret, "mipi_dsi_attach failed\n");
+ 		drm_panel_remove(&ctx->panel);
+-		goto disable_pm_runtime;
++		return ret;
+ 	}
+ 
+ 	dev_dbg(dev, "%ux%u@%u %ubpp dsi %udl - ready\n",
+@@ -541,12 +529,6 @@ static int hx8394_probe(struct mipi_dsi_device *dsi)
+ 		mipi_dsi_pixel_format_to_bpp(dsi->format), dsi->lanes);
+ 
+ 	return 0;
+-
+-disable_pm_runtime:
+-	pm_runtime_dont_use_autosuspend(dev);
+-	pm_runtime_disable(dev);
+-
+-	return ret;
+ }
+ 
+ static void hx8394_shutdown(struct mipi_dsi_device *dsi)
+@@ -597,8 +579,7 @@ static __maybe_unused int himax_hx8394_resume(struct device *dev)
+ 	struct hx8394 *ctx = dev_get_drvdata(dev);
+ 	int ret;
+ 
+-	if (!device_property_read_bool(dev, "default-on"))
+-		gpiod_set_value_cansleep(ctx->reset_gpio, 1);
++	gpiod_set_value_cansleep(ctx->reset_gpio, 1);
+ 
+ 	ret = regulator_enable(ctx->vcc);
+ 	if (ret) {
+-- 
+2.53.0
+

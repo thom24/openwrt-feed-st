@@ -1,0 +1,63 @@
+From 2b2dd088ef606788d421f89d804bf70253aae9de Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Fri, 23 May 2025 16:18:51 +0200
+Subject: [PATCH] clocksource/drivers/stm32-lptimer: balance pm_runtime_put in
+ case of error
+
+In case the stm32_clkevent_lp_set_timer() call reports an error,
+pm_runtime_put() may be called each time. It isn't balanced as the
+pm_runtime_get() call, upon state transitions.
+
+Fix it by introducing stm32_clkevent_lp_pm_runtime_err() routine, to
+balance pm_runtime_get calls done in stm32_clkevent_lp_pm_runtime_get().
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I873b0e8e7cbd655ff01df53dad2bf49c025f8856
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/489015
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/clocksource/timer-stm32-lp.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/clocksource/timer-stm32-lp.c b/drivers/clocksource/timer-stm32-lp.c
+index b5fe0e89a80e..dedf59187352 100644
+--- a/drivers/clocksource/timer-stm32-lp.c
++++ b/drivers/clocksource/timer-stm32-lp.c
+@@ -192,6 +192,14 @@ static int stm32_clkevent_lp_pm_runtime_get(struct clock_event_device *clkevt)
+ 	return 0;
+ }
+ 
++static void stm32_clkevent_lp_pm_runtime_err(struct clock_event_device *clkevt)
++{
++	struct stm32_lp_private *priv = to_priv(clkevt);
++
++	if (clockevent_state_detached(clkevt) || clockevent_state_shutdown(clkevt))
++		pm_runtime_put(priv->dev);
++}
++
+ static int stm32_clkevent_lp_set_periodic(struct clock_event_device *clkevt)
+ {
+ 	struct stm32_lp_private *priv = to_priv(clkevt);
+@@ -203,7 +211,7 @@ static int stm32_clkevent_lp_set_periodic(struct clock_event_device *clkevt)
+ 
+ 	ret = stm32_clkevent_lp_set_timer(priv->period, clkevt, true);
+ 	if (ret < 0)
+-		pm_runtime_put(priv->dev);
++		stm32_clkevent_lp_pm_runtime_err(clkevt);
+ 
+ 	return ret;
+ }
+@@ -219,7 +227,7 @@ static int stm32_clkevent_lp_set_oneshot(struct clock_event_device *clkevt)
+ 
+ 	ret = stm32_clkevent_lp_set_timer(priv->period, clkevt, false);
+ 	if (ret < 0)
+-		pm_runtime_put(priv->dev);
++		stm32_clkevent_lp_pm_runtime_err(clkevt);
+ 
+ 	return ret;
+ }
+-- 
+2.53.0
+

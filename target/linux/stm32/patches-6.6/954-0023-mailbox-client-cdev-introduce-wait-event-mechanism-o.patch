@@ -1,0 +1,93 @@
+From 295d57413359b2bbef7537fe8e4ff4614929e4ce Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Date: Tue, 13 May 2025 11:48:09 +0200
+Subject: [PATCH] mailbox: client-cdev: introduce wait event mechanism on read
+
+This commit introduces a wait queue object, readq, in the
+mbox_cdev_ddata structure to manage incoming queue operations.
+
+The reader is blocked while waiting for a response using
+wait_event_interruptible(). Errors are no longer returned based
+on the requested length or the current state.
+
+The mbox_cdev_mb_callback function wakes up blocked reader by calling
+wake_up_interruptible() after receiving a response,thus unblocking
+reader when an answer is received.
+
+Change-Id: I1f635f313feb635a24fc98afcc9556d476ad60b3
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/457441
+Tested-by: Eric FOURMONT <eric.fourmont-ext@st.com>
+Reviewed-by: Eric FOURMONT <eric.fourmont-ext@st.com>
+Domain-Review: Eric FOURMONT <eric.fourmont-ext@st.com>
+---
+ drivers/mailbox/mailbox-client_cdev.c | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/mailbox/mailbox-client_cdev.c b/drivers/mailbox/mailbox-client_cdev.c
+index d159c59655e2..a02008adf7e8 100644
+--- a/drivers/mailbox/mailbox-client_cdev.c
++++ b/drivers/mailbox/mailbox-client_cdev.c
+@@ -15,6 +15,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ #include <linux/uaccess.h>
++#include <linux/wait.h>
+ 
+ #define MBOX_DEV_MAX (MINORMASK + 1)
+ 
+@@ -49,6 +50,7 @@ struct mbox_cdev_mbox {
+  * @resm: Pointer to the mapped memory region
+  * @resm_size: Size of the mapped memory region
+  * @req_state: request state
++ * @readq: wait object for incoming queue
+  */
+ struct mbox_cdev_ddata {
+ 	struct device dev;
+@@ -57,6 +59,7 @@ struct mbox_cdev_ddata {
+ 	void __iomem *resm;
+ 	size_t resm_size;
+ 	unsigned int req_state;
++	wait_queue_head_t readq;
+ };
+ 
+ static void mbox_cdev_mb_callback(struct mbox_client *cl, void *data)
+@@ -66,6 +69,9 @@ static void mbox_cdev_mb_callback(struct mbox_client *cl, void *data)
+ 
+ 	dev_dbg(&mbxdev->dev, "Answer received\n");
+ 	mbxdev->req_state = REQ_ANSWERED;
++
++	/* wake up any blocked readers */
++	wake_up_interruptible(&mbxdev->readq);
+ }
+ 
+ static const struct mbox_cdev_mbox rx_tx_mbox = {
+@@ -83,14 +89,8 @@ static ssize_t mbox_cdev_read(struct file *filep, char *buffer, size_t len, loff
+ {
+ 	struct mbox_cdev_ddata *mbxdev = cdev_to_mbxdev(filep->f_inode->i_cdev);
+ 
+-	if (len > mbxdev->resm_size)
+-		return -EINVAL;
+-
+-	if (mbxdev->req_state == NO_REQ)
+-		return -EPERM;
+-
+-	if (mbxdev->req_state == REQ_SENT)
+-		return -EBUSY;
++	if (wait_event_interruptible(mbxdev->readq, !(mbxdev->req_state != REQ_ANSWERED)))
++		return -ERESTARTSYS;
+ 
+ 	if (copy_to_user(buffer, mbxdev->resm, min(len, mbxdev->resm_size)))
+ 		return -EFAULT;
+@@ -241,6 +241,8 @@ static int mbox_cdev_driver_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto free_mbx;
+ 
++	init_waitqueue_head(&mbxdev->readq);
++
+ 	platform_set_drvdata(pdev, mbxdev);
+ 
+ 	return 0;
+-- 
+2.53.0
+

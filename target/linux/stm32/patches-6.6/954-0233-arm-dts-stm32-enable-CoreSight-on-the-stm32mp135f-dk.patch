@@ -1,0 +1,53 @@
+From 19942cb08146c83167f12af30367c295241c09a7 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Thu, 25 Sep 2025 16:46:10 +0200
+Subject: [PATCH] arm: dts: stm32: enable CoreSight on the stm32mp135f-dk board
+
+Enable CoreSight peripherals on the stm32mp135f-dk board.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I6fd387bfe1a71387e9dc21a422c7bd871aafc149
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/493950
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dk.dts | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+index 62ac7600dede..a7f9e1442abc 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+@@ -197,6 +197,26 @@ &cryp {
+ 	status = "okay";
+ };
+ 
++&cs_cti_trace {
++	status = "okay";
++};
++
++&cs_cti_cpu0 {
++	status = "okay";
++};
++
++&cs_etf {
++	status = "okay";
++};
++
++&cs_etm0 {
++	status = "okay";
++};
++
++&cs_tpiu {
++	status = "okay";
++};
++
+ &dbg_bus {
+ 	status = "okay";
+ };
+-- 
+2.53.0
+

@@ -1,0 +1,59 @@
+From 4b90a86332edfba4db294f541182eef3eb9ac5d9 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Wed, 30 Jul 2025 12:45:32 +0200
+Subject: [PATCH] drm/stm: dsi: remove property default-on
+
+To obtain a continuous display after the probe, the txbyte clock must
+remain enabled if the DSI bridge is powered on (default-on property
+not define by bindings).
+
+Change-Id: Ibc046919fa4026ae912fb7cbe7cb2fadaf2eba5b
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/479227
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/gpu/drm/stm/dw_mipi_dsi-stm.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
+index 56ffa02f9c5d..48005381265a 100644
+--- a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
++++ b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
+@@ -89,6 +89,10 @@
+ #define WRPCR2_CLR	BIT(24)		/* Clears the PLL shadow registers to their reset values */
+ #define WRPCR2_FPLL	BIT(28)		/* Force PLL lock signal */
+ 
++#define DSI_PWR_UP	0x04
++#define RESET		0
++#define POWERUP		BIT(0)
++
+ #define DSI_PTCR0	0x00B4		/* Host PHY test control register 0 */
+ #define PTCR0_TRSEN	BIT(0)		/* Test-interface reset enable for the TDI bus */
+ #define PTCR0_TCKEN	BIT(1)		/* Test-interface clock enable for the TDI bus */
+@@ -1261,6 +1265,7 @@ static int dw_mipi_dsi_stm_probe(struct platform_device *pdev)
+ 	struct dw_mipi_dsi_stm *dsi;
+ 	const struct dw_mipi_dsi_plat_data *pdata = of_device_get_match_data(dev);
+ 	int ret;
++	u32 pwr;
+ 
+ 	dsi = devm_kzalloc(dev, sizeof(*dsi), GFP_KERNEL);
+ 	if (!dsi)
+@@ -1391,10 +1396,11 @@ static int dw_mipi_dsi_stm_probe(struct platform_device *pdev)
+ 	dsi->probe_done = true;
+ 
+ 	/*
+-	 * To obtain a continuous display after the probe, the txbyte clock must
+-	 * remain activated
++	 * To obtain a continuous display after the probe,
++	 * the txbyte clock must remain enabled if the DSI bridge is powered on.
+ 	 */
+-	if (device_property_read_bool(dev, "default-on")) {
++	pwr = dsi_read(dsi, DSI_PWR_UP);
++	if (pwr == POWERUP) {
+ 		ret = clk_prepare_enable(dsi->txbyte_clk.clk);
+ 		if (ret) {
+ 			DRM_ERROR("Failed to enable DSI pixel clock: %d\n", ret);
+-- 
+2.53.0
+

@@ -1,0 +1,35 @@
+From 11813523f3e643cd7706ecc7ca9af73d9eaa30db Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Thu, 19 Jun 2025 09:57:22 +0200
+Subject: [PATCH] drm/stm: lvds: rework runtime power management
+
+Set late the suspend to avoid conflict between the lvds runtime suspend
+& atomic disable during execution of systemctl suspend command.
+
+Change-Id: Ie2d5878ebce7a73520f5ef9e3f3b0322e181126b
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/468285
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Jerome BESNARD <jerome.besnard@st.com>
+Tested-by: Jerome BESNARD <jerome.besnard@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/gpu/drm/stm/lvds.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
+index 913cfffd8427..95f2938322ef 100644
+--- a/drivers/gpu/drm/stm/lvds.c
++++ b/drivers/gpu/drm/stm/lvds.c
+@@ -1276,7 +1276,7 @@ static const struct of_device_id lvds_dt_ids[] = {
+ MODULE_DEVICE_TABLE(of, lvds_dt_ids);
+ 
+ static const struct dev_pm_ops lvds_pm_ops = {
+-	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend, pm_runtime_force_resume)
++	SET_LATE_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend, pm_runtime_force_resume)
+ 	SET_RUNTIME_PM_OPS(lvds_runtime_suspend, lvds_runtime_resume, NULL)
+ };
+ 
+-- 
+2.53.0
+

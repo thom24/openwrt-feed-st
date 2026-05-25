@@ -1,0 +1,93 @@
+From b82c2e7534ac80cd887ae16b96d5ad2298a2caff Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Thu, 17 Jul 2025 18:06:45 +0200
+Subject: [PATCH] arm64: dts: st: enable analog-filter in all i2c in
+ stm32mp251.dtsi
+
+Activate the analog-filter for all i2c instances on STM32MP25
+socs.
+
+Change-Id: Idfe09a9031be9d25798b87e2d1ddf91efa8cbd47
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/478568
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index 8915011e6024..16980acbc59b 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -956,6 +956,7 @@ i2c1: i2c@40120000 {
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&rifsc 41>;
+ 				power-domains = <&d1_pd>;
++				i2c-analog-filter;
+ 				status = "disabled";
+ 			};
+ 
+@@ -973,6 +974,7 @@ i2c2: i2c@40130000 {
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&rifsc 42>;
+ 				power-domains = <&d1_pd>;
++				i2c-analog-filter;
+ 				status = "disabled";
+ 			};
+ 
+@@ -990,6 +992,7 @@ i2c3: i2c@40140000 {
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&rifsc 43>;
+ 				power-domains = <&d1_pd>;
++				i2c-analog-filter;
+ 				status = "disabled";
+ 			};
+ 
+@@ -1007,6 +1010,7 @@ i2c4: i2c@40150000 {
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&rifsc 44>;
+ 				power-domains = <&d1_pd>;
++				i2c-analog-filter;
+ 				status = "disabled";
+ 			};
+ 
+@@ -1024,6 +1028,7 @@ i2c5: i2c@40160000 {
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&rifsc 45>;
+ 				power-domains = <&d1_pd>;
++				i2c-analog-filter;
+ 				status = "disabled";
+ 			};
+ 
+@@ -1041,6 +1046,7 @@ i2c6: i2c@40170000 {
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&rifsc 46>;
+ 				power-domains = <&d1_pd>;
++				i2c-analog-filter;
+ 				status = "disabled";
+ 			};
+ 
+@@ -1058,6 +1064,7 @@ i2c7: i2c@40180000 {
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&rifsc 47>;
+ 				power-domains = <&d1_pd>;
++				i2c-analog-filter;
+ 				status = "disabled";
+ 			};
+ 
+@@ -2045,6 +2052,7 @@ i2c8: i2c@46040000 {
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&rifsc 48>;
+ 				power-domains = <&d1_pd>;
++				i2c-analog-filter;
+ 				status = "disabled";
+ 			};
+ 
+-- 
+2.53.0
+

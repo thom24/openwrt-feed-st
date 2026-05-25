@@ -1,0 +1,40 @@
+From a0bf745a963790dcb2855a71a6a5e5c65393112e Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Fri, 19 Dec 2025 15:42:55 +0100
+Subject: [PATCH] usb: dwc2: drd: proper disconnect on DR swap from host mode
+
+When swapping from host to device mode, the driver doesn't exit power
+saving mode before writing the forcing bits. So the controller doesn't
+react until the resume IRQ fires. Then, it takes some wrong
+assumption this is a remote wakeup condition. Then, the role swap
+starts to take effect, but racing with remote signaling timers
+(wkp_timer). So call directly the dwc2_hcd_disconnect() routine,
+that will resume power saving modes (and the root hub), before
+switching to device mode.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I00b18408efe1d04dae5048403b30f45e80ae25ee
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/522347
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/usb/dwc2/drd.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
+index 637f43ad156a..3657d638eb9c 100644
+--- a/drivers/usb/dwc2/drd.c
++++ b/drivers/usb/dwc2/drd.c
+@@ -237,6 +237,8 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+ 	if (role == USB_ROLE_HOST) {
+ 		already = dwc2_ovr_avalid(hsotg, true);
+ 	} else if (role == USB_ROLE_DEVICE) {
++		if (hsotg->current_role == USB_ROLE_HOST)
++			dwc2_hcd_disconnect(hsotg, true);
+ 		already = dwc2_ovr_bvalid(hsotg, true);
+ 	} else {
+ 		if (dwc2_is_device_mode(hsotg))
+-- 
+2.53.0
+

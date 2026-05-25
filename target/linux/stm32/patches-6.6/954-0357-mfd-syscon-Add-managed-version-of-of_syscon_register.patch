@@ -1,0 +1,122 @@
+From 82f76513447af1c2ccccbf2096f73fb51620df09 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Mon, 6 Oct 2025 18:13:13 +0200
+Subject: [PATCH] mfd: syscon: Add managed version of
+ of_syscon_register_regmap()
+
+For drivers that can be removed, add the managed version of the
+API of_syscon_register_regmap().
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: Ic9a6e18e330e357597433c66c119cb66e3a34f8c
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/496985
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/mfd/syscon.c       | 44 ++++++++++++++++++++++++++++++++++++++
+ include/linux/mfd/syscon.h | 11 ++++++++++
+ 2 files changed, 55 insertions(+)
+
+diff --git a/drivers/mfd/syscon.c b/drivers/mfd/syscon.c
+index 79528ad59d23..df2e456430d4 100644
+--- a/drivers/mfd/syscon.c
++++ b/drivers/mfd/syscon.c
+@@ -10,6 +10,7 @@
+ 
+ #include <linux/cleanup.h>
+ #include <linux/clk.h>
++#include <linux/device.h>
+ #include <linux/err.h>
+ #include <linux/hwspinlock.h>
+ #include <linux/list.h>
+@@ -232,6 +233,49 @@ int of_syscon_register_regmap(struct device_node *np, struct regmap *regmap)
+ }
+ EXPORT_SYMBOL_GPL(of_syscon_register_regmap);
+ 
++static void of_syscon_unregister_regmap(void *data)
++{
++	struct device_node *np = data;
++	struct syscon *entry, *tmp;
++
++	/* check if syscon entry exists */
++	mutex_lock(&syscon_list_lock);
++
++	list_for_each_entry_safe(entry, tmp, &syscon_list, list)
++		if (entry->np == np) {
++			list_del(&entry->list);
++			kfree(entry);
++			break;
++		}
++
++	mutex_unlock(&syscon_list_lock);
++}
++
++/**
++ * devm_of_syscon_register_regmap() - Register managed regmap for specified device node
++ * @dev: Device
++ * @np: Device tree node
++ * @regmap: Pointer to regmap object
++ *
++ * Return: 0 on success, negative error code on failure.
++ * The registered regmap will be automatically unregistered on driver detach.
++ */
++int devm_of_syscon_register_regmap(struct device *dev, struct device_node *np,
++				   struct regmap *regmap)
++{
++	int ret;
++
++	if (!dev)
++		return -EINVAL;
++
++	ret = of_syscon_register_regmap(np, regmap);
++	if (ret)
++		return ret;
++
++	return devm_add_action_or_reset(dev, &of_syscon_unregister_regmap, np);
++}
++EXPORT_SYMBOL_GPL(devm_of_syscon_register_regmap);
++
+ /**
+  * device_node_to_regmap() - Get or create a regmap for specified device node
+  * @np: Device tree node
+diff --git a/include/linux/mfd/syscon.h b/include/linux/mfd/syscon.h
+index aad9c6b50463..853ce19f0141 100644
+--- a/include/linux/mfd/syscon.h
++++ b/include/linux/mfd/syscon.h
+@@ -14,6 +14,7 @@
+ #include <linux/err.h>
+ #include <linux/errno.h>
+ 
++struct device;
+ struct device_node;
+ 
+ #ifdef CONFIG_MFD_SYSCON
+@@ -30,6 +31,9 @@ struct regmap *syscon_regmap_lookup_by_phandle_optional(struct device_node *np,
+ 							const char *property);
+ int of_syscon_register_regmap(struct device_node *np,
+ 			      struct regmap *regmap);
++int devm_of_syscon_register_regmap(struct device *dev,
++				   struct device_node *np,
++				   struct regmap *regmap);
+ #else
+ static inline struct regmap *device_node_to_regmap(struct device_node *np)
+ {
+@@ -75,6 +79,13 @@ static inline int of_syscon_register_regmap(struct device_node *np,
+ 	return -EOPNOTSUPP;
+ }
+ 
++static inline int devm_of_syscon_register_regmap(struct device *dev,
++						 struct device_node *np,
++						 struct regmap *regmap)
++{
++	return -EOPNOTSUPP;
++}
++
+ #endif
+ 
+ #endif /* __LINUX_MFD_SYSCON_H__ */
+-- 
+2.53.0
+

@@ -1,0 +1,67 @@
+From 2ef21be399a229d0c6ff3eb5ddf8bd1674bb7888 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Fri, 28 Nov 2025 10:53:14 +0100
+Subject: [PATCH] usb: dwc2: wa for isoc packet tx fifo flush at periodic frame
+ boundary
+
+If an isochronous packet is still being transmitted, when the end of
+periodic frame interval elapses, using dma desc on dwc2 controller,
+the device wrongly flushes the pending packets from the tx fifo.
+This can lead to a huge packet is sent on the bus, leading to the host
+finally reset the bus, and re-enumerate it.
+
+Tuning the periodic frame interval limit from 80% to 95%, on the
+affected cores (2.70a to 4.00a) makes the issue very unlikely to occur.
+
+Fixes: 197ba5f406cc ("Move DWC2 driver out of staging")
+CC: stable@vger.kernel.org
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I6f745f72c09e6abe6b49ef180b5a8264d1030726
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/513480
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/usb/dwc2/core.h   |  1 +
+ drivers/usb/dwc2/gadget.c | 13 +++++++++++++
+ 2 files changed, 14 insertions(+)
+
+diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+index 5e1f41381c70..b0f1b9c52eda 100644
+--- a/drivers/usb/dwc2/core.h
++++ b/drivers/usb/dwc2/core.h
+@@ -1114,6 +1114,7 @@ struct dwc2_hsotg {
+ 
+ 	/* DWC OTG HW Release versions */
+ #define DWC2_CORE_REV_4_30a	0x4f54430a
++#define DWC2_CORE_REV_2_70a	0x4f54270a
+ #define DWC2_CORE_REV_2_71a	0x4f54271a
+ #define DWC2_CORE_REV_2_72a     0x4f54272a
+ #define DWC2_CORE_REV_2_80a	0x4f54280a
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 8907c841ef2a..088aff91041c 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -3509,6 +3509,19 @@ void dwc2_hsotg_core_init_disconnected(struct dwc2_hsotg *hsotg,
+ 	if (hsotg->params.ipg_isoc_en)
+ 		dcfg |= DCFG_IPG_ISOC_SUPPORDED;
+ 
++	/*
++	 * WA for Device Flushes Ongoing ISOC IN Packet at End-of-Periodic-Frame Boundary.
++	 * Once passed the end of periodic frame, and the controller is transmitting an
++	 * ISOC IN packet, the device fulshes the transmit FIFO. Tune periodic frame
++	 * interval to 95% instead of 80% to avoid it.
++	 */
++	if (using_desc_dma(hsotg) &&
++	    (hsotg->hw_params.snpsid >= DWC2_CORE_REV_2_70a &&
++	     hsotg->hw_params.snpsid <= DWC2_CORE_REV_4_00a)) {
++		dcfg &= ~DCFG_PERFRINT_MASK;
++		dcfg |= ((DCFG_PERFRINT_LIMIT << DCFG_PERFRINT_SHIFT) & DCFG_PERFRINT_MASK);
++	}
++
+ 	dwc2_writel(hsotg, dcfg,  DCFG);
+ 
+ 	dwc2_hsotg_init_fifo(hsotg);
+-- 
+2.53.0
+

@@ -1,0 +1,40 @@
+From c8f9bbbfb471ddf25ee82fad8ae1205b14a22524 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Thu, 19 Jun 2025 10:02:21 +0200
+Subject: [PATCH] drm/stm: lvds: rework remove
+
+To respect the call order (probe inversion), disable pm_runtime
+and the clock unregistration must be performed after removing
+the bridge.
+
+Change-Id: I4e6e0cc0f7c63cdab6b317c2053fb81924a94db5
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/468286
+Reviewed-by: Jerome BESNARD <jerome.besnard@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Jerome BESNARD <jerome.besnard@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/gpu/drm/stm/lvds.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
+index 95f2938322ef..6e8e09a1133e 100644
+--- a/drivers/gpu/drm/stm/lvds.c
++++ b/drivers/gpu/drm/stm/lvds.c
+@@ -1223,10 +1223,9 @@ static int lvds_remove(struct platform_device *pdev)
+ {
+ 	struct stm_lvds *lvds = platform_get_drvdata(pdev);
+ 
+-	lvds_pixel_clk_unregister(lvds);
+-	pm_runtime_disable(&pdev->dev);
+-
+ 	drm_bridge_remove(&lvds->lvds_bridge);
++	pm_runtime_disable(&pdev->dev);
++	lvds_pixel_clk_unregister(lvds);
+ 
+ 	return 0;
+ }
+-- 
+2.53.0
+

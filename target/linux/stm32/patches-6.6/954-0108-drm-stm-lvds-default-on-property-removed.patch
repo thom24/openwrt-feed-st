@@ -1,0 +1,94 @@
+From f8e7325d64522b7ec8d2966eb510e003e1296917 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Wed, 16 Jul 2025 19:17:38 +0200
+Subject: [PATCH] drm/stm: lvds: default-on property removed
+
+The "default-on" property is not set for the bindings.
+Check if the lvds has been activated by another software
+component to determine if it needs to be reset.
+
+Change-Id: I23011102dfe3e535383b80ca325d560b6175ba87
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/475875
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/gpu/drm/stm/lvds.c | 43 +++++++++++++++++++++-----------------
+ 1 file changed, 24 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
+index 6e8e09a1133e..8c7a7b769f89 100644
+--- a/drivers/gpu/drm/stm/lvds.c
++++ b/drivers/gpu/drm/stm/lvds.c
+@@ -1073,6 +1073,7 @@ static int lvds_probe(struct platform_device *pdev)
+ 	struct reset_control *rstc;
+ 	struct stm_lvds *lvds;
+ 	int ret, dual_link;
++	u32 cr;
+ 
+ 	dev_dbg(dev, "Probing LVDS driver...\n");
+ 
+@@ -1115,20 +1116,6 @@ static int lvds_probe(struct platform_device *pdev)
+ 		return  PTR_ERR(lvds->vdda18_supply);
+ 	}
+ 
+-	/* To obtain a continuous display after the probe, reset shouldn't be done */
+-	if (!device_property_read_bool(dev, "default-on")) {
+-		rstc = devm_reset_control_get_exclusive(dev, NULL);
+-
+-		if (IS_ERR(rstc)) {
+-			ret = PTR_ERR(rstc);
+-			return ret;
+-		}
+-
+-		reset_control_assert(rstc);
+-		usleep_range(10, 20);
+-		reset_control_deassert(rstc);
+-	}
+-
+ 	port1 = of_graph_get_port_by_id(dev->of_node, 1);
+ 	port2 = of_graph_get_port_by_id(dev->of_node, 2);
+ 	dual_link = drm_of_lvds_get_dual_link_pixel_order(port1, port2);
+@@ -1191,16 +1178,34 @@ static int lvds_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
+-	ret = lvds_pixel_clk_register(lvds);
++	ret = clk_prepare_enable(lvds->pclk);
+ 	if (ret) {
+-		DRM_ERROR("Failed to register LVDS pixel clock: %d\n", ret);
++		dev_err(dev, "%s: Failed to enable peripheral clk\n", __func__);
+ 		return ret;
+ 	}
+ 
+-	ret = clk_prepare_enable(lvds->pclk);
++	rstc = devm_reset_control_get_exclusive(dev, NULL);
++
++	if (IS_ERR(rstc)) {
++		ret = PTR_ERR(rstc);
++		return ret;
++	}
++
++	/*
++	 * Check if the lvds has been activated by another software
++	 * component to determine if it needs to be reset.
++	 */
++	cr = lvds_read(lvds, LVDS_CR);
++
++	if (!(cr & CR_LVDSEN)) {
++		reset_control_assert(rstc);
++		usleep_range(10, 20);
++		reset_control_deassert(rstc);
++	}
++
++	ret = lvds_pixel_clk_register(lvds);
+ 	if (ret) {
+-		lvds_pixel_clk_unregister(lvds);
+-		dev_err(dev, "%s: Failed to enable peripheral clk\n", __func__);
++		dev_err(dev, "%s: Failed to register LVDS pixel clock\n", __func__);
+ 		return ret;
+ 	}
+ 
+-- 
+2.53.0
+

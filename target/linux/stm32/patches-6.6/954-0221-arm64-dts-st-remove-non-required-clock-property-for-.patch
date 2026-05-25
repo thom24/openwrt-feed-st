@@ -1,0 +1,66 @@
+From dcf6be91c023a135a6ca485c0f758f337a0d690f Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Wed, 9 Jul 2025 14:37:15 +0200
+Subject: [PATCH] arm64: dts: st: remove non required clock property for
+ cs_replicator
+
+According to the documentation, there's no need to specify the clock
+property so let's remove it.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I798b4c7cd27334a40ec5fee3be1c990b9c345c51
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/447233
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 2 --
+ arch/arm64/boot/dts/st/stm32mp231.dtsi | 2 --
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 2 --
+ 3 files changed, 6 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index c65f6cae61c5..04e2fd09a7d4 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -82,8 +82,6 @@ clk_rcbsec: clk-rcbsec {
+ 
+ 	cs_replicator: replicator {
+ 		compatible = "arm,coresight-static-replicator";
+-		clocks = <&scmi_clk CK_SCMI_SYSATB>;
+-		clock-names = "apb_pclk";
+ 		status = "disabled";
+ 
+ 		in-ports {
+diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+index a14ac6163615..4f603883bdbc 100644
+--- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+@@ -91,8 +91,6 @@ clk_rcbsec: clk-rcbsec {
+ 
+ 	cs_replicator: replicator {
+ 		compatible = "arm,coresight-static-replicator";
+-		clocks = <&scmi_clk CK_SCMI_SYSATB>;
+-		clock-names = "apb_pclk";
+ 		status = "disabled";
+ 
+ 		in-ports {
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index 617aeaba7736..f41b30d7561b 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -91,8 +91,6 @@ clk_rcbsec: clk-rcbsec {
+ 
+ 	cs_replicator: replicator {
+ 		compatible = "arm,coresight-static-replicator";
+-		clocks = <&scmi_clk CK_SCMI_SYSATB>;
+-		clock-names = "apb_pclk";
+ 		status = "disabled";
+ 
+ 		in-ports {
+-- 
+2.53.0
+

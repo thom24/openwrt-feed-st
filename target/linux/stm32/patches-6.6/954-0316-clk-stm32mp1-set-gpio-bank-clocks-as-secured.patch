@@ -1,0 +1,45 @@
+From c67859003ea086d68c347fdb9e50cfe9e95de3e3 Mon Sep 17 00:00:00 2001
+From: Valentin Caron <valentin.caron@foss.st.com>
+Date: Mon, 24 Nov 2025 12:12:17 +0100
+Subject: [PATCH] clk: stm32mp1: set gpio bank clocks as secured
+
+GPIO[A-K] are now secured with the compatible st,stm32mp1-rcc-secure.
+
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: I38b89eed1646b429120e2a23596cc49f741f281c
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/511849
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
+Tested-by: Jerome BESNARD <jerome.besnard@st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/clk/stm32/clk-stm32mp1.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/drivers/clk/stm32/clk-stm32mp1.c b/drivers/clk/stm32/clk-stm32mp1.c
+index 22a7f5e01b61..d999fd7fef97 100644
+--- a/drivers/clk/stm32/clk-stm32mp1.c
++++ b/drivers/clk/stm32/clk-stm32mp1.c
+@@ -2236,6 +2236,17 @@ static const u32 stm32mp1_clock_secured[] = {
+ 	IWDG1,
+ 	BSEC,
+ 	STGEN,
++	GPIOA,
++	GPIOB,
++	GPIOC,
++	GPIOD,
++	GPIOE,
++	GPIOF,
++	GPIOG,
++	GPIOH,
++	GPIOI,
++	GPIOJ,
++	GPIOK,
+ 	GPIOZ,
+ 	CRYP1,
+ 	HASH1,
+-- 
+2.53.0
+

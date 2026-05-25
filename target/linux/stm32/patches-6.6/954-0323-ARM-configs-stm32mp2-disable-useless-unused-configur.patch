@@ -1,0 +1,56 @@
+From d87c39a95b2188cc50cc601226cb5ed87e69219e Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Mon, 17 Nov 2025 14:25:51 +0100
+Subject: [PATCH] ARM: configs: stm32mp2: disable useless/unused configurations
+ for aarch32
+
+Several multi_v7 configurations are not used on mp2 aarch32. Disable them
+to reduce build time and footprint.
+
+Change-Id: I12f26a04971e408914bec3085ad16a9a5d44af42
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/509769
+Reviewed-by: Jerome BESNARD <jerome.besnard@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ .../mp2-fragment-03-multiv7-cleanup.config    | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/arch/arm/configs/mp2-fragment-03-multiv7-cleanup.config b/arch/arm/configs/mp2-fragment-03-multiv7-cleanup.config
+index 6d90a2c7f095..efd54d61200e 100644
+--- a/arch/arm/configs/mp2-fragment-03-multiv7-cleanup.config
++++ b/arch/arm/configs/mp2-fragment-03-multiv7-cleanup.config
+@@ -1,3 +1,30 @@
++# CONFIG_ARCH_AIROHA is not set
++# CONFIG_ARCH_ARTPEC is not set
++# CONFIG_ARCH_ASPEED is not set
++# CONFIG_ARCH_AT91 is not set
++# CONFIG_ARCH_DIGICOLOR is not set
++# CONFIG_ARCH_HIGHBANK is not set
++# CONFIG_ARCH_HPE is not set
++# CONFIG_ARCH_KEYSTONE is not set
++# CONFIG_ARCH_MILBEAUT is not set
++# CONFIG_ARCH_MMP is not set
++# CONFIG_ARCH_OMAP3 is not set
++# CONFIG_ARCH_OMAP4 is not set
++# CONFIG_ARCH_STI is not set
++# CONFIG_ARCH_SUNPLUS is not set
++# CONFIG_ARCH_U8500 is not set
++# CONFIG_ARCH_VIRT is not set
++# CONFIG_ARCH_WM8850 is not set
++# CONFIG_ARCH_ZYNQ is not set
+ # CONFIG_ARM_CPUIDLE is not set
++# CONFIG_KEXEC is not set
+ # CONFIG_MACH_STM32MP13 is not set
+ # CONFIG_MACH_STM32MP157 is not set
++# CONFIG_PLAT_SPEAR is not set
++# CONFIG_SCHED_DEBUG is not set
++# CONFIG_SOC_AM33XX is not set
++# CONFIG_SOC_AM43XX is not set
++# CONFIG_SOC_DRA7XX is not set
++# CONFIG_SOC_OMAP5 is not set
++# CONFIG_SPI_STM32_QSPI is not set
++# CONFIG_USB_ETH_RNDIS is not set
+-- 
+2.53.0
+

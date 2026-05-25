@@ -1,0 +1,72 @@
+From e0e7086f7e1b2a447683d4316e54b99f76a1603f Mon Sep 17 00:00:00 2001
+From: Sudeep Holla <sudeep.holla@arm.com>
+Date: Fri, 14 Mar 2025 09:58:51 +0000
+Subject: [PATCH] pmdomain: arm: scmi_pm_domain: Remove redundant state
+ verification
+
+Currently, scmi_pd_power() explicitly verifies whether the requested
+power state was applied by calling state_get(). While this check could
+detect failures where the state was not properly updated, ensuring
+correctness is the responsibility of the SCMI firmware.
+
+Removing this redundant state_get() call eliminates an unnecessary
+round-trip to the firmware, improving efficiency. Any mismatches
+between the requested and actual states should be handled by the SCMI
+firmware, which must return a failure if state_set() is unsuccessful.
+
+Additionally, in some cases, checking the state after powering off a
+domain may be unreliable or unsafe, depending on the firmware
+implementation.
+
+This patch removes the redundant verification, simplifying the function
+without compromising correctness.
+
+Reported-and-tested-by: Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+Reviewed-by: Peng Fan <peng.fan@nxp.com>
+Reviewed-by: Cristian Marussi <cristian.marussi@arm.com>
+Link: https://lore.kernel.org/r/20250314095851.443979-1-sudeep.holla@arm.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+[upstream commit 6cf5db71dc6d51ede4ff77cab126876ecf065048]
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: I2482a34a04263ab9077d90161e827a9e78f33282
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/476932
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ drivers/pmdomain/arm/scmi_pm_domain.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/pmdomain/arm/scmi_pm_domain.c b/drivers/pmdomain/arm/scmi_pm_domain.c
+index 0e05a79de82d..4399216a2173 100644
+--- a/drivers/pmdomain/arm/scmi_pm_domain.c
++++ b/drivers/pmdomain/arm/scmi_pm_domain.c
+@@ -24,8 +24,7 @@ struct scmi_pm_domain {
+ 
+ static int scmi_pd_power(struct generic_pm_domain *domain, bool power_on)
+ {
+-	int ret;
+-	u32 state, ret_state;
++	u32 state;
+ 	struct scmi_pm_domain *pd = to_scmi_pd(domain);
+ 
+ 	if (power_on)
+@@ -33,13 +32,7 @@ static int scmi_pd_power(struct generic_pm_domain *domain, bool power_on)
+ 	else
+ 		state = SCMI_POWER_STATE_GENERIC_OFF;
+ 
+-	ret = power_ops->state_set(pd->ph, pd->domain, state);
+-	if (!ret)
+-		ret = power_ops->state_get(pd->ph, pd->domain, &ret_state);
+-	if (!ret && state != ret_state)
+-		return -EIO;
+-
+-	return ret;
++	return power_ops->state_set(pd->ph, pd->domain, state);
+ }
+ 
+ static int scmi_pd_power_on(struct generic_pm_domain *domain)
+-- 
+2.53.0
+

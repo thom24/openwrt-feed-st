@@ -1,0 +1,63 @@
+From d2004af80a22a31e6d75bc5051ea6bc96530399f Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Fri, 13 Dec 2024 12:21:47 +0100
+Subject: [PATCH] arm64: dts: st: usb2phy: adopt once cell clock bindings on
+ stm32mp231
+
+Distinguish OHCI and PLL clocks on stm32mp231, by using one cell clock
+bindings. The OHCI clock must be enabled specifically during resume from
+low power.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: If3ce553e9215a83279e9610c26b5e22c5a886a34
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/424749
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp231.dtsi | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+index 83adc4fa5ef8..131b05cb8d5f 100644
+--- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+@@ -301,7 +301,7 @@ timer {
+ 	usb2_phy1: usb2-phy1 {
+ 		compatible      = "st,stm32mp25-usb2phy";
+ 		#phy-cells      = <0>;
+-		#clock-cells    = <0>;
++		#clock-cells    = <1>;
+ 		st,syscfg       = <&syscfg 0x2400>;
+ 		clocks          = <&rcc CK_KER_USB2PHY1>;
+ 		resets          = <&rcc USB2PHY1_R>;
+@@ -311,7 +311,7 @@ usb2_phy1: usb2-phy1 {
+ 	usb2_phy2: usb2-phy2 {
+ 		compatible      = "st,stm32mp25-usb2phy";
+ 		#phy-cells      = <0>;
+-		#clock-cells    = <0>;
++		#clock-cells    = <1>;
+ 		st,syscfg       = <&syscfg 0x2800>;
+ 		clocks          = <&rcc CK_KER_USB2PHY2EN>;
+ 		resets          = <&rcc USB2PHY2_R>;
+@@ -2087,7 +2087,7 @@ usbh: usb@482e0000 {
+ 				usbh_ohci: usb@482e0000 {
+ 					compatible = "generic-ohci";
+ 					reg = <0x482e0000 0x1000>;
+-					clocks = <&usb2_phy1>, <&rcc CK_BUS_USB2OHCI>;
++					clocks = <&usb2_phy1 1>, <&rcc CK_BUS_USB2OHCI>;
+ 					resets = <&rcc USB2_R>;
+ 					interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
+ 					phys = <&usb2_phy1>;
+@@ -2098,7 +2098,7 @@ usbh_ohci: usb@482e0000 {
+ 				usbh_ehci: usb@482f0000 {
+ 					compatible = "generic-ehci";
+ 					reg = <0x482f0000 0x1000>;
+-					clocks = <&rcc CK_BUS_USB2EHCI>;
++					clocks = <&usb2_phy1 0>, <&rcc CK_BUS_USB2EHCI>;
+ 					resets = <&rcc USB2_R>;
+ 					interrupts = <GIC_SPI 139 IRQ_TYPE_LEVEL_HIGH>;
+ 					companion = <&usbh_ohci>;
+-- 
+2.53.0
+

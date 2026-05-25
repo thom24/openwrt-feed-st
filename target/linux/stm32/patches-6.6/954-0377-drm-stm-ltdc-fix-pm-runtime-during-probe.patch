@@ -1,0 +1,59 @@
+From bc54bccfaff4986fd0d62347c0c5f8dac4d6b5ad Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Thu, 11 Dec 2025 17:15:33 +0100
+Subject: [PATCH] drm/stm: ltdc: fix pm runtime during probe
+
+During the probe, enable the PM runtime environment only if LTDC
+was previously enabled to avoid a conflict between resuming and
+ending the probe.
+
+Change-Id: I25ea59912986d6796ba64be765df5c242fcc5d90
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/517390
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/gpu/drm/stm/ltdc.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+index d0db6feb1aaa..51b200cb6975 100644
+--- a/drivers/gpu/drm/stm/ltdc.c
++++ b/drivers/gpu/drm/stm/ltdc.c
+@@ -2570,18 +2570,21 @@ int ltdc_load(struct drm_device *ddev)
+ 		goto err;
+ 	}
+ 
+-	pm_runtime_set_active(ddev->dev);
+-	pm_runtime_enable(ddev->dev);
+-
+ 	/* Check if the ltdc has been activated */
+ 	if (gcr & GCR_LTDCEN) {
+ 		/* keep runtime active after the probe */
++		pm_runtime_set_active(ddev->dev);
++		pm_runtime_enable(ddev->dev);
++
+ 		ret = pm_runtime_resume_and_get(ddev->dev);
+ 		if (ret) {
+ 			DRM_ERROR("Failed to load driver, cannot resume pm\n");
+ 			return ret;
+ 		}
+ 	} else {
++		/* suspend device to disable the clocks */
++		ltdc_suspend(ldev);
++
+ 		/* set to sleep state the pinctrl to stop data trasfert */
+ 		pinctrl_pm_select_sleep_state(ddev->dev);
+ 
+@@ -2596,6 +2599,8 @@ int ltdc_load(struct drm_device *ddev)
+ 				return dev_err_probe(dev, PTR_ERR(ldev->lvds_clk),
+ 						     "Could not set parent clock\n");
+ 		}
++
++		pm_runtime_enable(ddev->dev);
+ 	}
+ 
+ 	/* Get the secure rotation buffer memory resource */
+-- 
+2.53.0
+

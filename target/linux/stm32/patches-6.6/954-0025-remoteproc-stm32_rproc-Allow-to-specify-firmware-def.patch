@@ -1,0 +1,57 @@
+From 45587154f9938b83fc3865625353d72644233488 Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Date: Thu, 27 Mar 2025 09:27:21 +0100
+Subject: [PATCH] remoteproc: stm32_rproc: Allow to specify firmware default
+ name
+
+Enhance the stm32_rproc driver to allow enabling the configuration of the
+firmware name based on the 'firmware-name' property in the device tree,
+offering flexibility compared to using the remote proc device node
+name.
+
+Change-Id: If7a7da2bd68fd7d90bc9b3617a12884751462381
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Link: https://lore.kernel.org/r/20250327082721.641278-3-arnaud.pouliquen@foss.st.com
+Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/451163
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ drivers/remoteproc/stm32_rproc.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
+index d21f22164814..7a7094feee0c 100644
+--- a/drivers/remoteproc/stm32_rproc.c
++++ b/drivers/remoteproc/stm32_rproc.c
+@@ -1196,6 +1196,7 @@ static int stm32_rproc_probe(struct platform_device *pdev)
+ 	struct device_node *np = dev->of_node;
+ 	const struct stm32_rproc_data *desc;
+ 	struct tee_rproc *trproc = NULL;
++	const char *fw_name;
+ 	struct rproc *rproc;
+ 	int ret;
+ 
+@@ -1219,9 +1220,15 @@ static int stm32_rproc_probe(struct platform_device *pdev)
+ 		 */
+ 		dev_info(dev, "Support of signed firmware only\n");
+ 	}
++
++	/* Look for an optional firmware name */
++	ret = rproc_of_parse_firmware(dev, 0, &fw_name);
++	if (ret < 0 && ret != -EINVAL)
++		goto free_tee;
++
+ 	rproc = rproc_alloc(dev, np->name,
+ 			    trproc ? &st_rproc_tee_ops : &st_rproc_ops,
+-			    NULL, sizeof(*ddata));
++			    fw_name, sizeof(*ddata));
+ 	if (!rproc) {
+ 		ret = -ENOMEM;
+ 		goto free_tee;
+-- 
+2.53.0
+

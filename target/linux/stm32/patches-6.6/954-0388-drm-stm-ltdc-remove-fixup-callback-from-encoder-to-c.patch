@@ -1,0 +1,75 @@
+From 714992840543c8d07597fa9955e34588de581020 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Tue, 13 Jan 2026 13:08:24 +0100
+Subject: [PATCH] drm/stm: ltdc:  remove fixup callback from encoder to crtc
+ helpers
+
+To avoid frequent calls to the clock framework, the fixup callback
+can be removed. The processing of this function is handled by the
+crtc_atomic_enable callback.
+
+Change-Id: I72c1e45d4d2fce4346896182e562dabe09ed35a1
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/524091
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/gpu/drm/stm/ltdc.c | 41 --------------------------------------
+ 1 file changed, 41 deletions(-)
+
+diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+index 51b200cb6975..6ea30597d23f 100644
+--- a/drivers/gpu/drm/stm/ltdc.c
++++ b/drivers/gpu/drm/stm/ltdc.c
+@@ -2113,48 +2113,7 @@ static enum drm_mode_status ltdc_encoder_mode_valid(struct drm_encoder *encoder,
+ 	return MODE_OK;
+ }
+ 
+-static bool ltdc_encoder_mode_fixup(struct drm_encoder *encoder,
+-				    const struct drm_display_mode *mode,
+-				    struct drm_display_mode *adjusted_mode)
+-{
+-	struct drm_device *ddev = encoder->dev;
+-	struct ltdc_device *ldev =  ddev->dev_private;
+-	int rate = mode->clock * 1000;
+-	int ret;
+-
+-	if (encoder->encoder_type == DRM_MODE_ENCODER_LVDS) {
+-		if (ldev->lvds_clk) {
+-			ret = clk_set_parent(ldev->pixel_clk, ldev->lvds_clk);
+-			if (ret) {
+-				DRM_ERROR("Could not set parent clock: %d\n", ret);
+-				return false;
+-			}
+-		}
+-	} else {
+-		if (ldev->ltdc_clk) {
+-			ret = clk_set_parent(ldev->pixel_clk, ldev->ltdc_clk);
+-			if (ret) {
+-				DRM_ERROR("Could not set parent clock: %d\n", ret);
+-				return false;
+-			}
+-		}
+-	}
+-
+-	if (clk_set_rate(ldev->pixel_clk, rate) < 0) {
+-		DRM_ERROR("Cannot set rate (%dHz) for pixel clk\n", rate);
+-		return false;
+-	}
+-
+-	adjusted_mode->clock = clk_get_rate(ldev->pixel_clk) / 1000;
+-
+-	DRM_DEBUG_DRIVER("requested clock %dkHz, adjusted clock %dkHz\n",
+-			 mode->clock, adjusted_mode->clock);
+-
+-	return true;
+-}
+-
+ static const struct drm_encoder_helper_funcs ltdc_encoder_helper_funcs = {
+-	.mode_fixup = ltdc_encoder_mode_fixup,
+ 	.mode_valid = ltdc_encoder_mode_valid,
+ };
+ 
+-- 
+2.53.0
+

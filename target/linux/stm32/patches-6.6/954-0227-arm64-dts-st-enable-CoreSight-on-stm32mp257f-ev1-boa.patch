@@ -1,0 +1,91 @@
+From 48b10f151c81f47f15545638df0743393e3bb214 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Wed, 9 Jul 2025 14:37:17 +0200
+Subject: [PATCH] arm64: dts: st: enable CoreSight on stm32mp257f-ev1 board
+
+Enable CoreSight on stm32mp257f-ev1 board.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/427081
+Change-Id: If9be65cfd5f65e42f746bf8ff845ba74310269c0
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/473657
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 56 ++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+index c3e6e913bdcc..c470850e9883 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+@@ -219,6 +219,62 @@ &cryp1 {
+ 	status = "okay";
+ };
+ 
++&cs_cpu_debug0 {
++	status = "okay";
++};
++
++&cs_cpu_debug1 {
++	status = "okay";
++};
++
++&cs_cti0 {
++	status = "okay";
++};
++
++&cs_cti1 {
++	status = "okay";
++};
++
++&cs_cti_cpu0 {
++	status = "okay";
++};
++
++&cs_cti_cpu1 {
++	status = "okay";
++};
++
++&cs_etf {
++	status = "okay";
++};
++
++&cs_etm0 {
++	status = "okay";
++};
++
++&cs_etm1 {
++	status = "okay";
++};
++
++&cs_etr {
++	status = "okay";
++};
++
++&cs_funnel {
++	status = "okay";
++};
++
++&cs_replicator {
++	status = "okay";
++};
++
++&cs_stm {
++	status = "okay";
++};
++
++&cs_tpiu {
++	status = "okay";
++};
++
+ &csi {
+ 	vdd-supply =  <&scmi_vddcore>;
+ 	vdda18-supply = <&scmi_v1v8>;
+-- 
+2.53.0
+

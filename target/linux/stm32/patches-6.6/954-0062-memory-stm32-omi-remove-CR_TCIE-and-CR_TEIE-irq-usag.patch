@@ -1,0 +1,117 @@
+From c9191a8d8f46e07eb1988da27973d5a49ada7b0d Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Mon, 23 Jun 2025 14:47:03 +0200
+Subject: [PATCH] memory: stm32-omi: remove CR_TCIE and CR_TEIE irq usage
+
+Replace CR_TCIE and CR_TEIE irq usage by a read_poll_timeout_atomic() in
+stm32_omi_wait_cmd(). It will reduce the time waiting for TCF or TEF flags
+to optimize throughput.
+
+  						before		after
+average time spent in stm32_omi_wait_cmd:	5685 ns		923 ns
+
+Change-Id: I27566ca554627806440ac208492bf060c3e45494
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/469814
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
+---
+ drivers/memory/stm32-omi.c | 28 ++++++----------------------
+ include/memory/stm32-omi.h |  4 +---
+ 2 files changed, 7 insertions(+), 25 deletions(-)
+
+diff --git a/drivers/memory/stm32-omi.c b/drivers/memory/stm32-omi.c
+index 7e498580568b..0006c314b8a0 100644
+--- a/drivers/memory/stm32-omi.c
++++ b/drivers/memory/stm32-omi.c
+@@ -109,22 +109,16 @@ EXPORT_SYMBOL(stm32_omi_wait_nobusy);
+ int stm32_omi_wait_cmd(struct stm32_omi *omi)
+ {
+ 	void __iomem *regs_base = omi->regs_base;
+-	u32 cr, sr;
++	u32 sr;
+ 	int err = 0;
+ 
+-	if ((readl_relaxed(regs_base + OSPI_SR) & SR_TCF) ||
+-	    omi->fmode == CR_FMODE_APM)
++	if (omi->fmode == CR_FMODE_APM)
+ 		goto out;
+ 
+-	reinit_completion(&omi->data_completion);
+-	cr = readl_relaxed(regs_base + OSPI_CR);
+-	writel_relaxed(cr | CR_TCIE | CR_TEIE, regs_base + OSPI_CR);
++	err = readl_relaxed_poll_timeout_atomic(regs_base + OSPI_SR,
++						sr, (sr & (SR_TEF | SR_TCF)), 1,
++						STM32_WAIT_CMD_TIMEOUT_US);
+ 
+-	if (!wait_for_completion_timeout(&omi->data_completion,
+-				msecs_to_jiffies(STM32_COMP_TIMEOUT_MS)))
+-		err = -ETIMEDOUT;
+-
+-	sr = readl_relaxed(regs_base + OSPI_SR);
+ 	if (sr & SR_TCF)
+ 		/* avoid false timeout */
+ 		err = 0;
+@@ -159,20 +153,11 @@ static irqreturn_t stm32_omi_irq(int irq, void *dev_id)
+ 	cr = readl_relaxed(regs_base + OSPI_CR);
+ 	sr = readl_relaxed(regs_base + OSPI_SR);
+ 
+-	if (cr & CR_SMIE && sr & SR_SMF) {
++	if (sr & SR_SMF) {
+ 		/* disable irq */
+ 		cr &= ~CR_SMIE;
+ 		writel_relaxed(cr, regs_base + OSPI_CR);
+ 		complete(&omi->match_completion);
+-
+-		return IRQ_HANDLED;
+-	}
+-
+-	if (sr & (SR_TEF | SR_TCF)) {
+-		/* disable irq */
+-		cr &= ~CR_TCIE & ~CR_TEIE;
+-		writel_relaxed(cr, regs_base + OSPI_CR);
+-		complete(&omi->data_completion);
+ 	}
+ 
+ 	return IRQ_HANDLED;
+@@ -623,7 +608,6 @@ static int stm32_omi_probe(struct platform_device *pdev)
+ 		dev_info(dev, "No memory-map region found\n");
+ 	}
+ 
+-	init_completion(&omi->data_completion);
+ 	init_completion(&omi->match_completion);
+ 
+ 	vdev = platform_device_alloc(name, PLATFORM_DEVID_AUTO);
+diff --git a/include/memory/stm32-omi.h b/include/memory/stm32-omi.h
+index b4c1f181629a..922e64b54480 100644
+--- a/include/memory/stm32-omi.h
++++ b/include/memory/stm32-omi.h
+@@ -41,8 +41,6 @@
+ #define CR_DMAEN		BIT(2)
+ #define CR_TCEN			BIT(3)
+ #define CR_FTHRES_SHIFT		8
+-#define CR_TEIE			BIT(16)
+-#define CR_TCIE			BIT(17)
+ #define CR_SMIE			BIT(19)
+ #define CR_APMS			BIT(22)
+ #define CR_CSSEL		BIT(24)
+@@ -147,6 +145,7 @@
+ #define STM32_ABT_TIMEOUT_US		100000
+ #define STM32_COMP_TIMEOUT_MS		5000
+ #define STM32_BUSY_TIMEOUT_US		100000
++#define STM32_WAIT_CMD_TIMEOUT_US	5000
+ #define STM32_DLYB_FREQ_THRESHOLD	50000000
+ #define STM32_DLYBOS_TIMEOUT_MS		1000
+ #define STM32_DLYBOS_DELAY_NB		24
+@@ -158,7 +157,6 @@ struct stm32_omi {
+ 	struct reset_control *rstc;
+ 	struct regmap *regmap;
+ 
+-	struct completion data_completion;
+ 	struct completion match_completion;
+ 
+ 	struct dma_chan *dma_chtx;
+-- 
+2.53.0
+

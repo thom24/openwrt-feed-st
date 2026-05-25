@@ -1,0 +1,49 @@
+From ac3445a60ad27583c514e587a813d365235d7f11 Mon Sep 17 00:00:00 2001
+From: Valentin Caron <valentin.caron@foss.st.com>
+Date: Wed, 23 Jul 2025 11:28:50 +0200
+Subject: [PATCH] arm64: dts: st: change SCMI perf protocol to power-domain
+ stm32mp21x boards
+
+Change SCMI protocol 0x13 from clock provider to power-domain provider,
+and update cpu0 node for frequency scaling.
+
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: Ied01c269f435c99a55265f7e88a74df5313f1dcb
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/476939
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index b58c7acbb19e..6911ce15e143 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -22,10 +22,8 @@ cpu0: cpu@0 {
+ 			device_type = "cpu";
+ 			reg = <0>;
+ 			enable-method = "psci";
+-			clocks = <&scmi_perf 0>;
+-			clock-names = "cpu";
+-			power-domains = <&cpu0_pd>;
+-			power-domain-names = "psci";
++			power-domains = <&cpu0_pd>, <&scmi_perf 0>;
++			power-domain-names = "psci", "perf";
+ 			#cooling-cells = <2>;
+ 		};
+ 
+@@ -134,7 +132,7 @@ scmi: scmi {
+ 
+ 			scmi_perf: protocol@13 {
+ 				reg = <0x13>;
+-				#clock-cells = <1>;
++				#power-domain-cells = <1>;
+ 			};
+ 
+ 			scmi_clk: protocol@14 {
+-- 
+2.53.0
+

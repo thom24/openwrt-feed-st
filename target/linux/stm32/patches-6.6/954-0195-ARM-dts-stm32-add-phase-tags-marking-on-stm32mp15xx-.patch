@@ -1,0 +1,53 @@
+From aa84fe6c0580121084c18d7393bd30ef7c94d7ae Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Fri, 3 Oct 2025 17:39:13 +0200
+Subject: [PATCH] ARM: dts: stm32: add phase tags marking on stm32mp15xx-dkx
+
+bootph-all/bootph-some-ram/bootph-pre-ram as phase tags were added to
+dt-schema (dtschema/schemas/bootph.yaml) to describe various node usage
+during boot phases with DT.
+
+Describe them for STM32MP15 DK boot devices.
+
+Change-Id: I7e15219f9440ab3377b260ab8f7cdfd1031999cc
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/496297
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrice CHOTARD <patrice.chotard@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
+index 4b7e3a317918..ccb2dafe3252 100644
+--- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
+@@ -745,6 +745,7 @@ timer@11 {
+ };
+ 
+ &uart4 {
++	bootph-all;
+ 	pinctrl-names = "default", "sleep", "idle";
+ 	pinctrl-0 = <&uart4_pins_a>;
+ 	pinctrl-1 = <&uart4_sleep_pins_a>;
+@@ -754,6 +755,16 @@ &uart4 {
+ 	status = "okay";
+ };
+ 
++&uart4_pins_a {
++	bootph-all;
++	pins1 {
++		bootph-all;
++	};
++	pins2 {
++		bootph-all;
++	};
++};
++
+ &uart7 {
+ 	pinctrl-names = "default", "sleep", "idle";
+ 	pinctrl-0 = <&uart7_pins_c>;
+-- 
+2.53.0
+

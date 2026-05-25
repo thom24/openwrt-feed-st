@@ -1,0 +1,77 @@
+From d54694863b5a8c828ea7828efdea8387f725f2e8 Mon Sep 17 00:00:00 2001
+From: Sudeep Holla <sudeep.holla@arm.com>
+Date: Wed, 15 Jan 2025 11:39:31 +0000
+Subject: [PATCH] pmdomain: arm: scmi_pm_domain: Send an explicit request to
+ set the current state
+
+On a system with multiple active SCMI agents, one agent(other than OSPM/
+Linux or bootloader) would request to turn on a shared power domain
+before the Linux boots/initialise the genpds. So when the Linux boots
+and gets the power state as already ON, it just registers the genpd with
+a default ON state.
+
+However, when the driver that needs this shared power domain is probed
+genpd sees that the power domain status is ON and never makes any SCMI
+call to power it up which is correct. But, since Linux didn't make an
+explicit request to turn on the shared power domain, the SCMI platform
+firmware will not know if the OSPM agent is actively using it.
+
+Suppose the other agent that requested the shared power domain to be
+powered ON requests to power it OFF as it no longer needs it, the SCMI
+platform firmware needs to turn it off if there are no active users of
+it which in the above scenaro is the case.
+
+As a result of SCMI platform firmware turning off the resource, OSPM/
+Linux will crash the moment as it expects the shared power domain to be
+powered ON.
+
+Send an explicit request to set the current state when setting up the
+genpd power domains so that OSPM registers its vote in the power domain
+state with the SCMI platform firmware.
+
+The other option is to not read the state and set the genpds as default
+OFF, but it can't handle the scenario on certain platforms where SCMI
+platform keeps all the power domains turned ON by default for faster boot
+(or any other such variations) and expect the OSPM to turn off the unused
+domains if power saving is required.
+
+Link: https://lore.kernel.org/all/Z4aBkezSWOPCXcUh@bogus
+Reported-by: Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>
+Reported-by: Peng Fan <peng.fan@nxp.com>
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+Reviewed-by: Cristian Marussi <cristian.marussi@arm.com>
+Link: https://lore.kernel.org/r/20250115113931.1181309-1-sudeep.holla@arm.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+[upstream commit c2d7aa308ecfb55e798558683ee08b171929e764]
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: I7e25ceffb21762400fb505b33fa32921b96c70c6
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/476933
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ drivers/pmdomain/arm/scmi_pm_domain.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/pmdomain/arm/scmi_pm_domain.c b/drivers/pmdomain/arm/scmi_pm_domain.c
+index 4399216a2173..8133eb493959 100644
+--- a/drivers/pmdomain/arm/scmi_pm_domain.c
++++ b/drivers/pmdomain/arm/scmi_pm_domain.c
+@@ -89,6 +89,14 @@ static int scmi_pm_domain_probe(struct scmi_device *sdev)
+ 			continue;
+ 		}
+ 
++		/*
++		 * Register the explicit power on request to the firmware so
++		 * that it is tracked as used by OSPM agent and not
++		 * accidentally turned off with OSPM's knowledge
++		 */
++		if (state == SCMI_POWER_STATE_GENERIC_ON)
++			power_ops->state_set(ph, i, state);
++
+ 		scmi_pd->domain = i;
+ 		scmi_pd->ph = ph;
+ 		scmi_pd->name = power_ops->name_get(ph, i);
+-- 
+2.53.0
+

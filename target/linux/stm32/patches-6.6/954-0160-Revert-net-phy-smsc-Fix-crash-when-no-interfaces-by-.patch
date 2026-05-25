@@ -1,0 +1,42 @@
+From d8823fc25589b566c71b0a01b42f65576a0cbbbe Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Thu, 10 Jul 2025 17:14:08 +0200
+Subject: [PATCH] Revert "net: phy: smsc: Fix crash when no interfaces by
+ default in userland"
+
+This reverts commit b443f7dc3fac8fa1e6a35faf47f3260052911ab5.
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I3f7db9b1073c098f1a0d1f62b542de19da313cc1
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/474371
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+Domain-Review: Christophe ROULLIER <christophe.roullier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Tested-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/net/phy/smsc.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/drivers/net/phy/smsc.c b/drivers/net/phy/smsc.c
+index 9369d345f1e1..c2fceb4a74a9 100644
+--- a/drivers/net/phy/smsc.c
++++ b/drivers/net/phy/smsc.c
+@@ -130,12 +130,8 @@ static int smsc_phy_config_wol(struct phy_device *phydev)
+ 	int i, wol_ctrl, wol_filter;
+ 	u16 pwd[3] = {0, 0, 0};
+ 
+-	const u8 *mac_addr = NULL;
+-	if(!phydev->attached_dev)
+-		return -ENODEV;
+-
+ 	/* Write @MAC in LAN8742_MMD3_MAC_ADDRA/B/C registers */
+-	mac_addr = phydev->attached_dev->dev_addr;
++	const u8 *mac_addr = phydev->attached_dev->dev_addr;
+ 	/* Store the device address for the magic packet */
+ 	for (i = 0; i < ARRAY_SIZE(pwd); i++)
+ 		pwd[i] = mac_addr[5 - i * 2] << 8 | mac_addr[5 - (i * 2 + 1)];
+-- 
+2.53.0
+

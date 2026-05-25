@@ -1,0 +1,578 @@
+From c476e77fd34ddf7389975464d9354e232c77ea1b Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Tue, 9 Dec 2025 16:31:33 +0100
+Subject: [PATCH] usb: dwc2: factorize power saving entry routines to ease
+ runtime suspend
+
+This is a precursor patch intended to ease moving the entry into power
+saving modes routines, to PM runtime suspend callback. This becomes
+the common entry point into power saving mode, in order to be used by
+all the host, gadget and debugfs child drivers.
+No functional change intended.
+
+All the dwc2_[gadget|host]_enter_[clock_gating|partial_power_down...]
+becomes static routines. Factorize these into:
+- dwc2_gadget_enter_lp
+- dwc2_host_enter_lp
+dwc2_enter_partial_power_down() and dwc2_enter_hibernation() becomes
+unused, remove them.
+
+Replace everywhere the switch...case entry points by newly introduced
+dwc2_[gadget|host]_enter_lp() routines. This requires some adaptation
+of the spin_lock as these are called from various context, e.g. IRQ or
+threads. Especially, some of the dwc2_host_enter_xxx routines might
+sleep, hence the spin_lock is managed locally.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I13f5f881b0c3a68a2dc98221d5f0d18872b67f53
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/517467
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/usb/dwc2/core.c      |  29 ---------
+ drivers/usb/dwc2/core.h      |  24 ++-----
+ drivers/usb/dwc2/core_intr.c |  29 +--------
+ drivers/usb/dwc2/drd.c       |  25 ++------
+ drivers/usb/dwc2/gadget.c    |  86 ++++++++++++++++---------
+ drivers/usb/dwc2/hcd.c       | 121 ++++++++++++++++-------------------
+ 6 files changed, 122 insertions(+), 192 deletions(-)
+
+diff --git a/drivers/usb/dwc2/core.c b/drivers/usb/dwc2/core.c
+index d8465237bf39..05a8d22bec83 100644
+--- a/drivers/usb/dwc2/core.c
++++ b/drivers/usb/dwc2/core.c
+@@ -123,19 +123,6 @@ int dwc2_exit_partial_power_down(struct dwc2_hsotg *hsotg, int rem_wakeup,
+ 		return dwc2_gadget_exit_partial_power_down(hsotg, rem_wakeup, restore);
+ }
+ 
+-/**
+- * dwc2_enter_partial_power_down() - Put controller in Partial Power Down.
+- *
+- * @hsotg: Programming view of the DWC_otg controller
+- */
+-int dwc2_enter_partial_power_down(struct dwc2_hsotg *hsotg)
+-{
+-	if (dwc2_is_host_mode(hsotg))
+-		return dwc2_host_enter_partial_power_down(hsotg);
+-	else
+-		return dwc2_gadget_enter_partial_power_down(hsotg);
+-}
+-
+ /**
+  * dwc2_restore_essential_regs() - Restore essiential regs of core.
+  *
+@@ -351,22 +338,6 @@ static bool dwc2_iddig_filter_enabled(struct dwc2_hsotg *hsotg)
+ 	return true;
+ }
+ 
+-/*
+- * dwc2_enter_hibernation() - Common function to enter hibernation.
+- *
+- * @hsotg: Programming view of the DWC_otg controller
+- * @is_host: True if core is in host mode.
+- *
+- * Return: 0 if successful, negative error code otherwise
+- */
+-int dwc2_enter_hibernation(struct dwc2_hsotg *hsotg, int is_host)
+-{
+-	if (is_host)
+-		return dwc2_host_enter_hibernation(hsotg);
+-	else
+-		return dwc2_gadget_enter_hibernation(hsotg);
+-}
+-
+ /*
+  * dwc2_exit_hibernation() - Common function to exit from hibernation.
+  *
+diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+index a4f1eb841d1e..89f590b02bae 100644
+--- a/drivers/usb/dwc2/core.h
++++ b/drivers/usb/dwc2/core.h
+@@ -1331,10 +1331,8 @@ static inline bool dwc2_is_hs_iot(struct dwc2_hsotg *hsotg)
+  * and the DWC_otg controller
+  */
+ int dwc2_core_reset(struct dwc2_hsotg *hsotg, bool skip_wait);
+-int dwc2_enter_partial_power_down(struct dwc2_hsotg *hsotg);
+ int dwc2_exit_partial_power_down(struct dwc2_hsotg *hsotg, int rem_wakeup,
+ 				 bool restore);
+-int dwc2_enter_hibernation(struct dwc2_hsotg *hsotg, int is_host);
+ int dwc2_exit_hibernation(struct dwc2_hsotg *hsotg, int rem_wakeup,
+ 		int reset, int is_host);
+ void dwc2_init_fs_ls_pclk_sel(struct dwc2_hsotg *hsotg);
+@@ -1449,15 +1447,13 @@ int dwc2_hsotg_set_test_mode(struct dwc2_hsotg *hsotg, int testmode);
+ #define dwc2_is_device_enabled(hsotg) (hsotg->enabled)
+ int dwc2_backup_device_registers(struct dwc2_hsotg *hsotg);
+ int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg, int remote_wakeup);
+-int dwc2_gadget_enter_hibernation(struct dwc2_hsotg *hsotg);
+ int dwc2_gadget_exit_hibernation(struct dwc2_hsotg *hsotg,
+ 				 int rem_wakeup, int reset);
+-int dwc2_gadget_enter_partial_power_down(struct dwc2_hsotg *hsotg);
+ int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+ 					int rem_wakeup, bool restore);
+-void dwc2_gadget_enter_clock_gating(struct dwc2_hsotg *hsotg);
+ void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg,
+ 				   int rem_wakeup);
++int dwc2_gadget_enter_lp(struct dwc2_hsotg *hsotg);
+ int dwc2_hsotg_tx_fifo_count(struct dwc2_hsotg *hsotg);
+ int dwc2_hsotg_tx_fifo_total_depth(struct dwc2_hsotg *hsotg);
+ int dwc2_hsotg_tx_fifo_average_depth(struct dwc2_hsotg *hsotg);
+@@ -1491,19 +1487,16 @@ static inline int dwc2_backup_device_registers(struct dwc2_hsotg *hsotg)
+ static inline int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg,
+ 						int remote_wakeup)
+ { return 0; }
+-static inline int dwc2_gadget_enter_hibernation(struct dwc2_hsotg *hsotg)
+-{ return 0; }
+ static inline int dwc2_gadget_exit_hibernation(struct dwc2_hsotg *hsotg,
+ 					       int rem_wakeup, int reset)
+ { return 0; }
+-static inline int dwc2_gadget_enter_partial_power_down(struct dwc2_hsotg *hsotg)
+-{ return 0; }
+ static inline int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+ 						      int rem_wakeup, bool restore)
+ { return 0; }
+-static inline void dwc2_gadget_enter_clock_gating(struct dwc2_hsotg *hsotg) {}
+ static inline void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg,
+ 						 int rem_wakeup) {}
++static inline int dwc2_gadget_enter_lp(struct dwc2_hsotg *hsotg)
++{ return 0; }
+ static inline int dwc2_hsotg_tx_fifo_count(struct dwc2_hsotg *hsotg)
+ { return 0; }
+ static inline int dwc2_hsotg_tx_fifo_total_depth(struct dwc2_hsotg *hsotg)
+@@ -1526,14 +1519,12 @@ int dwc2_port_suspend(struct dwc2_hsotg *hsotg, u16 windex);
+ int dwc2_port_resume(struct dwc2_hsotg *hsotg);
+ int dwc2_backup_host_registers(struct dwc2_hsotg *hsotg);
+ int dwc2_restore_host_registers(struct dwc2_hsotg *hsotg);
+-int dwc2_host_enter_hibernation(struct dwc2_hsotg *hsotg);
+ int dwc2_host_exit_hibernation(struct dwc2_hsotg *hsotg,
+ 			       int rem_wakeup, int reset);
+-int dwc2_host_enter_partial_power_down(struct dwc2_hsotg *hsotg);
+ int dwc2_host_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+ 				      int rem_wakeup, bool restore);
+-void dwc2_host_enter_clock_gating(struct dwc2_hsotg *hsotg);
+ void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup);
++int dwc2_host_enter_lp(struct dwc2_hsotg *hsotg);
+ bool dwc2_host_can_poweroff_phy(struct dwc2_hsotg *dwc2);
+ static inline void dwc2_host_schedule_phy_reset(struct dwc2_hsotg *hsotg)
+ { schedule_work(&hsotg->phy_reset_work); }
+@@ -1559,19 +1550,16 @@ static inline int dwc2_backup_host_registers(struct dwc2_hsotg *hsotg)
+ { return 0; }
+ static inline int dwc2_restore_host_registers(struct dwc2_hsotg *hsotg)
+ { return 0; }
+-static inline int dwc2_host_enter_hibernation(struct dwc2_hsotg *hsotg)
+-{ return 0; }
+ static inline int dwc2_host_exit_hibernation(struct dwc2_hsotg *hsotg,
+ 					     int rem_wakeup, int reset)
+ { return 0; }
+-static inline int dwc2_host_enter_partial_power_down(struct dwc2_hsotg *hsotg)
+-{ return 0; }
+ static inline int dwc2_host_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+ 						    int rem_wakeup, bool restore)
+ { return 0; }
+-static inline void dwc2_host_enter_clock_gating(struct dwc2_hsotg *hsotg) {}
+ static inline void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg,
+ 					       int rem_wakeup) {}
++static inline int dwc2_host_enter_lp(struct dwc2_hsotg *hsotg)
++{ return 0; }
+ static inline bool dwc2_host_can_poweroff_phy(struct dwc2_hsotg *dwc2)
+ { return false; }
+ static inline void dwc2_host_schedule_phy_reset(struct dwc2_hsotg *hsotg) {}
+diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
+index e1f69471d149..6b6668648cd0 100644
+--- a/drivers/usb/dwc2/core_intr.c
++++ b/drivers/usb/dwc2/core_intr.c
+@@ -521,7 +521,6 @@ static void dwc2_handle_usb_suspend_intr(struct dwc2_hsotg *hsotg)
+ {
+ 	u32 gintsts = dwc2_readl(hsotg, GINTSTS) & dwc2_readl(hsotg, GINTMSK);
+ 	u32 dsts;
+-	int ret;
+ 
+ 	if (gintsts & GINTSTS_ERLYSUSP) {
+ 		dev_dbg(hsotg->dev, "USBSUSP temporarily ignored, raced with ERLYSUSP\n");
+@@ -572,33 +571,7 @@ static void dwc2_handle_usb_suspend_intr(struct dwc2_hsotg *hsotg)
+ 			return;
+ 		}
+ 		if (dsts & DSTS_SUSPSTS) {
+-			switch (hsotg->params.power_down) {
+-			case DWC2_POWER_DOWN_PARAM_PARTIAL:
+-				ret = dwc2_enter_partial_power_down(hsotg);
+-				if (ret)
+-					dev_err(hsotg->dev,
+-						"enter partial_power_down failed\n");
+-
+-				udelay(100);
+-
+-				/* Ask phy to be suspended */
+-				if (!IS_ERR_OR_NULL(hsotg->uphy))
+-					usb_phy_set_suspend(hsotg->uphy, true);
+-				break;
+-			case DWC2_POWER_DOWN_PARAM_HIBERNATION:
+-				ret = dwc2_enter_hibernation(hsotg, 0);
+-				if (ret)
+-					dev_err(hsotg->dev,
+-						"enter hibernation failed\n");
+-				break;
+-			case DWC2_POWER_DOWN_PARAM_NONE:
+-				/*
+-				 * If neither hibernation nor partial power down are supported,
+-				 * clock gating is used to save power.
+-				 */
+-				if (!hsotg->params.no_clock_gating)
+-					dwc2_gadget_enter_clock_gating(hsotg);
+-			}
++			dwc2_gadget_enter_lp(hsotg);
+ 
+ 			/*
+ 			 * Change to L2 (suspend) state before releasing
+diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
+index 3657d638eb9c..700bb092357c 100644
+--- a/drivers/usb/dwc2/drd.c
++++ b/drivers/usb/dwc2/drd.c
+@@ -282,33 +282,16 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+ 		role == USB_ROLE_NONE ? "No" :
+ 		role == USB_ROLE_HOST ? "A" : "B");
+ 
+-	spin_lock_irqsave(&hsotg->lock, flags);
+-	if (role == USB_ROLE_NONE &&
+-	    (hsotg->lx_state == DWC2_L0 || hsotg->lx_state == DWC2_L3)) {
++	if (role == USB_ROLE_NONE && !hsotg->rpm_suspended) {
+ 		/*
+ 		 * With none role, the controller can be put in low power mode,
+ 		 * in case of a new event, e.g. usb-role-switch, role_sw_set
+ 		 * will be called, to resume.
+ 		 */
+-		switch (hsotg->params.power_down) {
+-			int ret;
+-		case DWC2_POWER_DOWN_PARAM_PARTIAL:
+-			ret = dwc2_enter_partial_power_down(hsotg);
+-			if (ret)
+-				dev_err(hsotg->dev, "enter partial_power_down failed %d\n", ret);
+-			spin_unlock_irqrestore(&hsotg->lock, flags);
+-			return ret;
+-
+-		case DWC2_POWER_DOWN_PARAM_NONE:
+-			/*
+-			 * If neither hibernation nor partial power down are supported,
+-			 * clock gating is used to save power.
+-			 */
+-			if (!hsotg->params.no_clock_gating)
+-				dwc2_gadget_enter_clock_gating(hsotg);
+-		}
++		spin_lock_irqsave(&hsotg->lock, flags);
++		dwc2_gadget_enter_lp(hsotg);
++		spin_unlock_irqrestore(&hsotg->lock, flags);
+ 	}
+-	spin_unlock_irqrestore(&hsotg->lock, flags);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index a577f5b0b430..326b17141cd9 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -3271,28 +3271,6 @@ static void dwc2_gadget_exit_lp(struct dwc2_hsotg *hsotg)
+ 	}
+ }
+ 
+-static void dwc2_gadget_enter_lp(struct dwc2_hsotg *hsotg)
+-{
+-	/* Only enter LP when in L0 state, or when the core has been disconnected / stopped */
+-	if (hsotg->lx_state != DWC2_L0 && hsotg->lx_state != DWC2_L3)
+-		return;
+-
+-	switch (hsotg->params.power_down) {
+-	case DWC2_POWER_DOWN_PARAM_PARTIAL:
+-		if (dwc2_enter_partial_power_down(hsotg))
+-			dev_err(hsotg->dev, "enter partial_power_down failed\n");
+-		return;
+-
+-	case DWC2_POWER_DOWN_PARAM_NONE:
+-		/*
+-		 * If neither hibernation nor partial power down are supported,
+-		 * clock gating is used to save power.
+-		 */
+-		if (!hsotg->params.no_clock_gating)
+-			dwc2_gadget_enter_clock_gating(hsotg);
+-	}
+-}
+-
+ static void dwc2_gadget_enum_timeout(struct work_struct *work)
+ {
+ 	struct dwc2_hsotg *hsotg = container_of(work, struct dwc2_hsotg, dw_enumtimeout.work);
+@@ -5620,7 +5598,7 @@ void dwc2_gadget_program_ref_clk(struct dwc2_hsotg *hsotg)
+  *
+  * Return non-zero if failed to enter to hibernation.
+  */
+-int dwc2_gadget_enter_hibernation(struct dwc2_hsotg *hsotg)
++static int dwc2_gadget_enter_hibernation(struct dwc2_hsotg *hsotg)
+ {
+ 	u32 gpwrdn;
+ 	int ret = 0;
+@@ -5806,7 +5784,7 @@ int dwc2_gadget_exit_hibernation(struct dwc2_hsotg *hsotg,
+  *
+  * This function is for entering device mode partial power down.
+  */
+-int dwc2_gadget_enter_partial_power_down(struct dwc2_hsotg *hsotg)
++static int dwc2_gadget_enter_partial_power_down(struct dwc2_hsotg *hsotg)
+ {
+ 	u32 pcgcctl;
+ 	int ret = 0;
+@@ -5853,8 +5831,6 @@ int dwc2_gadget_enter_partial_power_down(struct dwc2_hsotg *hsotg)
+ 	hsotg->lx_state = DWC2_L2;
+ 	queue_work(hsotg->wq_gadget, &hsotg->wf_gadget);
+ 
+-	pm_runtime_put(hsotg->dev);
+-	hsotg->rpm_suspended = true;
+ 	dev_dbg(hsotg->dev, "Entering device partial power down completed.\n");
+ 
+ 	return ret;
+@@ -5961,7 +5937,7 @@ int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+  *
+  * This function is for entering device mode clock gating.
+  */
+-void dwc2_gadget_enter_clock_gating(struct dwc2_hsotg *hsotg)
++static void dwc2_gadget_enter_clock_gating(struct dwc2_hsotg *hsotg)
+ {
+ 	u32 pcgctl;
+ 
+@@ -5982,9 +5958,6 @@ void dwc2_gadget_enter_clock_gating(struct dwc2_hsotg *hsotg)
+ 	hsotg->lx_state = DWC2_L2;
+ 	hsotg->bus_suspended = true;
+ 	queue_work(hsotg->wq_gadget, &hsotg->wf_gadget);
+-
+-	pm_runtime_put(hsotg->dev);
+-	hsotg->rpm_suspended = true;
+ }
+ 
+ /*
+@@ -6036,3 +6009,56 @@ void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
+ 	hsotg->bus_suspended = false;
+ 	queue_work(hsotg->wq_gadget, &hsotg->wf_gadget);
+ }
++
++/*
++ * dwc2_gadget_enter_lp() - Put the controller when in device mode, into one
++ *			    of the supported power saving modes:
++ *			    hibernation, partia power down, clock gating or none.
++ *
++ * Return: non-zero if failed to enter power saving mode.
++ */
++int dwc2_gadget_enter_lp(struct dwc2_hsotg *hsotg)
++{
++	int ret;
++
++	switch (hsotg->params.power_down) {
++	case DWC2_POWER_DOWN_PARAM_HIBERNATION:
++		ret = dwc2_gadget_enter_hibernation(hsotg);
++		if (ret) {
++			dev_err(hsotg->dev, "enter hibernation failed %d\n", ret);
++			return ret;
++		}
++		break;
++
++	case DWC2_POWER_DOWN_PARAM_PARTIAL:
++		ret = dwc2_gadget_enter_partial_power_down(hsotg);
++		if (ret) {
++			dev_err(hsotg->dev, "enter partial_power_down failed %d\n", ret);
++			return ret;
++		}
++		break;
++
++	case DWC2_POWER_DOWN_PARAM_NONE:
++		/*
++		 * If neither hibernation nor partial power down are supported,
++		 * clock gating is used to save power.
++		 */
++		if (!hsotg->params.no_clock_gating)
++			dwc2_gadget_enter_clock_gating(hsotg);
++	}
++
++	/* Core hasn't been put into one of the power saving modes: simply return */
++	if (!(hsotg->bus_suspended || hsotg->in_ppd || hsotg->hibernated))
++		return 0;
++
++	/* Ask phy to be suspended */
++	if (!IS_ERR_OR_NULL(hsotg->uphy))
++		usb_phy_set_suspend(hsotg->uphy, true);
++
++	if (!hsotg->rpm_suspended) {
++		pm_runtime_put(hsotg->dev);
++		hsotg->rpm_suspended = true;
++	}
++
++	return 0;
++}
+diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+index b3b56c9da532..d10de4244e05 100644
+--- a/drivers/usb/dwc2/hcd.c
++++ b/drivers/usb/dwc2/hcd.c
+@@ -3316,34 +3316,10 @@ int dwc2_port_suspend(struct dwc2_hsotg *hsotg, u16 windex)
+ 		hsotg->op_state = OTG_STATE_A_SUSPEND;
+ 	}
+ 
+-	switch (hsotg->params.power_down) {
+-	case DWC2_POWER_DOWN_PARAM_PARTIAL:
+-		ret = dwc2_enter_partial_power_down(hsotg);
+-		if (ret)
+-			dev_err(hsotg->dev,
+-				"enter partial_power_down failed.\n");
+-		break;
+-	case DWC2_POWER_DOWN_PARAM_HIBERNATION:
+-		/*
+-		 * Perform spin unlock and lock because in
+-		 * "dwc2_host_enter_hibernation()" function there is a spinlock
+-		 * logic which prevents servicing of any IRQ during entering
+-		 * hibernation.
+-		 */
++	if (!hsotg->rpm_suspended) {
+ 		spin_unlock_irqrestore(&hsotg->lock, flags);
+-		ret = dwc2_enter_hibernation(hsotg, 1);
+-		if (ret)
+-			dev_err(hsotg->dev, "enter hibernation failed.\n");
++		dwc2_host_enter_lp(hsotg);
+ 		spin_lock_irqsave(&hsotg->lock, flags);
+-		break;
+-	case DWC2_POWER_DOWN_PARAM_NONE:
+-		/*
+-		 * If not hibernation nor partial power down are supported,
+-		 * clock gating is used to save power.
+-		 */
+-		if (!hsotg->params.no_clock_gating)
+-			dwc2_host_enter_clock_gating(hsotg);
+-		break;
+ 	}
+ 
+ 	/* For HNP the bus must be suspended for at least 200ms */
+@@ -4384,48 +4360,14 @@ static int _dwc2_hcd_suspend(struct usb_hcd *hcd)
+ 	if (!(dwc2_read_hprt0(hsotg) & HPRT0_CONNSTS))
+ 		goto skip_power_saving;
+ 
+-	switch (hsotg->params.power_down) {
+-	case DWC2_POWER_DOWN_PARAM_PARTIAL:
+-		/* Enter partial_power_down */
+-		ret = dwc2_enter_partial_power_down(hsotg);
+-		if (ret)
+-			dev_err(hsotg->dev,
+-				"enter partial_power_down failed\n");
+-		/* After entering suspend, hardware is not accessible */
+-		clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
+-		break;
+-	case DWC2_POWER_DOWN_PARAM_HIBERNATION:
+-		/* Enter hibernation */
++	if (!hsotg->rpm_suspended) {
+ 		spin_unlock_irqrestore(&hsotg->lock, flags);
+-		ret = dwc2_enter_hibernation(hsotg, 1);
+-		if (ret)
+-			dev_err(hsotg->dev, "enter hibernation failed\n");
++		dwc2_host_enter_lp(hsotg);
+ 		spin_lock_irqsave(&hsotg->lock, flags);
+ 
+ 		/* After entering suspend, hardware is not accessible */
+-		clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
+-		break;
+-	case DWC2_POWER_DOWN_PARAM_NONE:
+-		/*
+-		 * If not hibernation nor partial power down are supported,
+-		 * clock gating is used to save power.
+-		 */
+-		if (!hsotg->params.no_clock_gating) {
+-			dwc2_host_enter_clock_gating(hsotg);
+-
+-			/* After entering suspend, hardware is not accessible */
++		if (hsotg->lx_state == DWC2_L2)
+ 			clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
+-		}
+-		break;
+-	default:
+-		goto skip_power_saving;
+-	}
+-
+-	/* Ask phy to be suspended */
+-	if (!IS_ERR_OR_NULL(hsotg->uphy)) {
+-		spin_unlock_irqrestore(&hsotg->lock, flags);
+-		usb_phy_set_suspend(hsotg->uphy, true);
+-		spin_lock_irqsave(&hsotg->lock, flags);
+ 	}
+ 
+ skip_power_saving:
+@@ -5506,7 +5448,7 @@ int dwc2_restore_host_registers(struct dwc2_hsotg *hsotg)
+  *
+  * @hsotg: Programming view of the DWC_otg controller
+  */
+-int dwc2_host_enter_hibernation(struct dwc2_hsotg *hsotg)
++static int dwc2_host_enter_hibernation(struct dwc2_hsotg *hsotg)
+ {
+ 	unsigned long flags;
+ 	int ret = 0;
+@@ -5774,7 +5716,7 @@ bool dwc2_host_can_poweroff_phy(struct dwc2_hsotg *dwc2)
+  *
+  * This function is for entering Host mode partial power down.
+  */
+-int dwc2_host_enter_partial_power_down(struct dwc2_hsotg *hsotg)
++static int dwc2_host_enter_partial_power_down(struct dwc2_hsotg *hsotg)
+ {
+ 	u32 pcgcctl;
+ 	u32 hprt0;
+@@ -5952,7 +5894,7 @@ int dwc2_host_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+  *
+  * This function is for entering Host mode clock gating.
+  */
+-void dwc2_host_enter_clock_gating(struct dwc2_hsotg *hsotg)
++static void dwc2_host_enter_clock_gating(struct dwc2_hsotg *hsotg)
+ {
+ 	u32 hprt0;
+ 	u32 pcgctl;
+@@ -6053,3 +5995,50 @@ void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg, int flags)
+ 			  jiffies + msecs_to_jiffies(71));
+ 	}
+ }
++
++int dwc2_host_enter_lp(struct dwc2_hsotg *hsotg)
++{
++	unsigned long flags;
++	int ret;
++
++	spin_lock_irqsave(&hsotg->lock, flags);
++	switch (hsotg->params.power_down) {
++	case DWC2_POWER_DOWN_PARAM_PARTIAL:
++		/* Enter partial_power_down */
++		ret = dwc2_host_enter_partial_power_down(hsotg);
++		if (ret) {
++			spin_unlock_irqrestore(&hsotg->lock, flags);
++			dev_err(hsotg->dev, "enter partial_power_down failed %d\n", ret);
++			return ret;
++		}
++		break;
++	case DWC2_POWER_DOWN_PARAM_HIBERNATION:
++		/* Enter hibernation */
++		spin_unlock_irqrestore(&hsotg->lock, flags);
++		ret = dwc2_host_enter_hibernation(hsotg);
++		if (ret) {
++			dev_err(hsotg->dev, "enter hibernation failed %d\n", ret);
++			return ret;
++		}
++		spin_lock_irqsave(&hsotg->lock, flags);
++		break;
++	case DWC2_POWER_DOWN_PARAM_NONE:
++		/*
++		 * If not hibernation nor partial power down are supported,
++		 * clock gating is used to save power.
++		 */
++		if (!hsotg->params.no_clock_gating)
++			dwc2_host_enter_clock_gating(hsotg);
++		break;
++	}
++	spin_unlock_irqrestore(&hsotg->lock, flags);
++
++	/* Core hasn't been put into one of the power saving modes: simply return */
++	if (!(hsotg->bus_suspended || hsotg->in_ppd || hsotg->hibernated))
++		return 0;
++
++	if (!IS_ERR_OR_NULL(hsotg->uphy))
++		usb_phy_set_suspend(hsotg->uphy, true);
++
++	return 0;
++}
+-- 
+2.53.0
+

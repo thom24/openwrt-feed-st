@@ -1,0 +1,36 @@
+From fc14a7348e0d4994916aacd1199ca3cd68c09b78 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Wed, 18 Jun 2025 11:32:36 +0200
+Subject: [PATCH] net: stmmac: restore pinctrl when driver remove.
+
+when system suspend or unbind, need to set pins to low power state to
+save IO power consumption.
+
+Change-Id: If038d13b3459804eee916a8ff1f3ece802611403
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/467967
+Tested-by: Jerome BESNARD <jerome.besnard@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Jerome BESNARD <jerome.besnard@st.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 9558ee3b8624..54ebe06061ee 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -7722,6 +7722,9 @@ void stmmac_dvr_remove(struct device *dev)
+ 	mutex_destroy(&priv->lock);
+ 	bitmap_free(priv->af_xdp_zc_qps);
+ 
++	/* Select sleep pin state */
++	pinctrl_pm_select_sleep_state(dev);
++
+ 	pm_runtime_disable(dev);
+ 	pm_runtime_put_noidle(dev);
+ }
+-- 
+2.53.0
+

@@ -1,0 +1,53 @@
+From 98a1201d35ad8474f596ea01944176cc76d302e2 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Mon, 8 Sep 2025 18:33:41 +0200
+Subject: [PATCH] usb: dwc2: fix fifo reinit in
+ dwc2_hsotg_core_init_disconnected
+
+Currently, the fifo gets re-init, with a running DMA, e.g. when
+using_desc_dma():
+- dwc2_hsotg_init_fifo -> Flushes the FIFO, DMA may run in parallel
+- DCFG_DESCDMA_EN gets cleared (e.g. disables dma desc)
+- then DCFG_DESCDMA_EN gets set back again.
+
+So move the dwc2_hsotg_init_fifo() call after DCFG_DESCDMA_EN gets
+cleared, so the FIFO can be flushed safely, before it's set back on.
+
+In case the BNA interrupt happens on EP0, before this change, it seems
+we can't recover to a working device.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I443341495cb2d51b1052556e7e92aa9f9dee1daf
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/499319
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/usb/dwc2/gadget.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 2849d1a8df82..f62ba6de8935 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -3468,8 +3468,6 @@ void dwc2_hsotg_core_init_disconnected(struct dwc2_hsotg *hsotg,
+ 
+ 	dwc2_phy_init(hsotg, true);
+ 
+-	dwc2_hsotg_init_fifo(hsotg);
+-
+ 	if (!is_usb_reset)
+ 		dwc2_set_bit(hsotg, DCTL, DCTL_SFTDISCON);
+ 
+@@ -3494,6 +3492,8 @@ void dwc2_hsotg_core_init_disconnected(struct dwc2_hsotg *hsotg,
+ 
+ 	dwc2_writel(hsotg, dcfg,  DCFG);
+ 
++	dwc2_hsotg_init_fifo(hsotg);
++
+ 	/* Clear any pending OTG interrupts */
+ 	dwc2_writel(hsotg, 0xffffffff, GOTGINT);
+ 
+-- 
+2.53.0
+

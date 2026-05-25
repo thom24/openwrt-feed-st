@@ -1,0 +1,53 @@
+From ae235295f3a5fe8c9bab9d93a6c846e57064b8b8 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Fri, 12 Sep 2025 14:01:00 +0200
+Subject: [PATCH] arm: dts: stm32: use rtc as clock provider for WiFi/BT on
+ stm32mp135f-dk
+
+Add the "#clock-cells" property in the rtc node.
+Add the "clocks" property to the WiFi/BT combo nodes.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I3f057bde1cec78c8e5f999f9a42658177d1af3b6
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/490101
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dk.dts | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+index 6d0ce2cba93c..e91764a9bbae 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+@@ -154,6 +154,8 @@ v3v3_ao: v3v3-ao {
+ 	wifi_pwrseq: wifi-pwrseq {
+ 		compatible = "mmc-pwrseq-simple";
+ 		reset-gpios = <&mcp23017 11 GPIO_ACTIVE_LOW>;
++		clocks = <&rtc>;
++		clock-names = "ext_clock";
+ 	};
+ };
+ 
+@@ -433,6 +435,7 @@ ltdc_out_rgb: endpoint {
+ };
+ 
+ &rtc {
++	#clock-cells = <0>;
+ 	st,lsco = <RTC_OUT2_RMP>;
+ 	pinctrl-0 = <&rtc_out2_rmp_pins_a>;
+ 	pinctrl-names = "default";
+@@ -660,6 +663,8 @@ &usart2 {
+ 	bluetooth {
+ 		shutdown-gpios = <&mcp23017 13 GPIO_ACTIVE_HIGH>;
+ 		compatible = "brcm,bcm43438-bt";
++		clocks = <&rtc>;
++		clock-names = "lpo";
+ 		max-speed = <2000000>;
+ 		vbat-supply = <&v3v3_ao>;
+ 		vddio-supply = <&v3v3_ao>;
+-- 
+2.53.0
+

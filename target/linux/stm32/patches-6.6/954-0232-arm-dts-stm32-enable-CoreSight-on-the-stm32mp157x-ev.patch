@@ -1,0 +1,214 @@
+From 4a687ae15b63a28df26edd247757d07dff1b8c24 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Fri, 17 Oct 2025 10:11:48 +0200
+Subject: [PATCH] arm: dts: stm32: enable CoreSight on the stm32mp157x-ev1
+ board
+
+Enable CoreSight peripherals on the stm32mp157x-ev1 board.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: Iaa413905e4000e88554d8727ab0db9541d2b6b7a
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/500609
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp157a-ev1.dts | 36 ++++++++++++++++++++++++
+ arch/arm/boot/dts/st/stm32mp157c-ev1.dts | 36 ++++++++++++++++++++++++
+ arch/arm/boot/dts/st/stm32mp157d-ev1.dts | 36 ++++++++++++++++++++++++
+ arch/arm/boot/dts/st/stm32mp157f-ev1.dts | 36 ++++++++++++++++++++++++
+ 4 files changed, 144 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157a-ev1.dts b/arch/arm/boot/dts/st/stm32mp157a-ev1.dts
+index c8a05abc77d7..064882a305d1 100644
+--- a/arch/arm/boot/dts/st/stm32mp157a-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157a-ev1.dts
+@@ -182,6 +182,42 @@ &cec {
+ 	status = "okay";
+ };
+ 
++&cs_cti_trace {
++	status = "okay";
++};
++
++&cs_cti_cpu0 {
++	status = "okay";
++};
++
++&cs_cti_cpu1 {
++	status = "okay";
++};
++
++&cs_etf {
++	status = "okay";
++};
++
++&cs_etm0 {
++	status = "okay";
++};
++
++&cs_etm1 {
++	status = "okay";
++};
++
++&cs_funnel {
++	status = "okay";
++};
++
++&cs_stm {
++	status = "okay";
++};
++
++&cs_tpiu {
++	status = "okay";
++};
++
+ &dbg_bus {
+ 	status = "okay";
+ };
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
+index 21226662c376..f74229c3f965 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
+@@ -182,6 +182,42 @@ &cec {
+ 	status = "okay";
+ };
+ 
++&cs_cti_trace {
++	status = "okay";
++};
++
++&cs_cti_cpu0 {
++	status = "okay";
++};
++
++&cs_cti_cpu1 {
++	status = "okay";
++};
++
++&cs_etf {
++	status = "okay";
++};
++
++&cs_etm0 {
++	status = "okay";
++};
++
++&cs_etm1 {
++	status = "okay";
++};
++
++&cs_funnel {
++	status = "okay";
++};
++
++&cs_stm {
++	status = "okay";
++};
++
++&cs_tpiu {
++	status = "okay";
++};
++
+ &dbg_bus {
+ 	status = "okay";
+ };
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+index e7c517ec95cc..aa10c9631c74 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+@@ -182,6 +182,42 @@ &cec {
+ 	status = "okay";
+ };
+ 
++&cs_cti_trace {
++	status = "okay";
++};
++
++&cs_cti_cpu0 {
++	status = "okay";
++};
++
++&cs_cti_cpu1 {
++	status = "okay";
++};
++
++&cs_etf {
++	status = "okay";
++};
++
++&cs_etm0 {
++	status = "okay";
++};
++
++&cs_etm1 {
++	status = "okay";
++};
++
++&cs_funnel {
++	status = "okay";
++};
++
++&cs_stm {
++	status = "okay";
++};
++
++&cs_tpiu {
++	status = "okay";
++};
++
+ &dbg_bus {
+ 	status = "okay";
+ };
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+index 25d823b3f863..2bd9efc892db 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+@@ -182,6 +182,42 @@ &cec {
+ 	status = "okay";
+ };
+ 
++&cs_cti_trace {
++	status = "okay";
++};
++
++&cs_cti_cpu0 {
++	status = "okay";
++};
++
++&cs_cti_cpu1 {
++	status = "okay";
++};
++
++&cs_etf {
++	status = "okay";
++};
++
++&cs_etm0 {
++	status = "okay";
++};
++
++&cs_etm1 {
++	status = "okay";
++};
++
++&cs_funnel {
++	status = "okay";
++};
++
++&cs_stm {
++	status = "okay";
++};
++
++&cs_tpiu {
++	status = "okay";
++};
++
+ &dbg_bus {
+ 	status = "okay";
+ };
+-- 
+2.53.0
+

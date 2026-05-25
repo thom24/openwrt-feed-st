@@ -1,0 +1,39 @@
+From ea9533be7749d9bd78e56665925283295b4b7da6 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Tue, 28 Oct 2025 14:34:56 +0100
+Subject: [PATCH] arm64: defconfig: set stm32 rtc as built-in in addons
+ fragment
+
+The stm32 rtc is a clock provider for the node wifi-pwrseq.
+
+Set the driver as built-in to prevent the probe of the node
+wifi-pwrseq to be deferred while waiting for the availability
+of the root file system.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I09ec3b9dc153a34289d064770d6cc7f87cd1a422
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/503624
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/configs/fragment-02-defconfig-addons.config | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/configs/fragment-02-defconfig-addons.config b/arch/arm64/configs/fragment-02-defconfig-addons.config
+index 143f8eed2c66..8694391df99a 100644
+--- a/arch/arm64/configs/fragment-02-defconfig-addons.config
++++ b/arch/arm64/configs/fragment-02-defconfig-addons.config
+@@ -76,7 +76,7 @@ CONFIG_RPMSG_CTRL=m
+ CONFIG_RPMSG_IRQ=m
+ CONFIG_RPMSG_TTY=m
+ CONFIG_RPMSG_VIRTIO=m
+-CONFIG_RTC_DRV_STM32=m
++CONFIG_RTC_DRV_STM32=y
+ CONFIG_SAMPLES=y
+ CONFIG_SAMPLE_RPMSG_CLIENT=m
+ CONFIG_SCMI_STM32MP_OSTL_V5=y
+-- 
+2.53.0
+

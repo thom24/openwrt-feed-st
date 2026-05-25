@@ -1,0 +1,59 @@
+From fb91db5a4ac1dbeacefa3b415290d5979c8ebcc7 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Fri, 3 Oct 2025 17:54:49 +0200
+Subject: [PATCH] arm64: dts: st: reorder usart1 node in stm32mp215f-dk
+
+usart1 node is misplaced. It should be before usart2 node.
+
+Change-Id: I40529b433482c60e6b15a908a772fd2cf0e26811
+Fixes: 10ae4fd23100 ("arm64: dts: st: add usart1 support for stm32mp215f-dk board")
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/496301
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Patrice CHOTARD <patrice.chotard@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 5826a44fb8d9..0417a02ff9cc 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -588,6 +588,16 @@ &uart4 {
+ 	status = "disabled";
+ };
+ 
++/* Bluetooth */
++&usart1 {
++	pinctrl-names = "default", "sleep", "idle";
++	pinctrl-0 = <&usart1_pins_a>;
++	pinctrl-1 = <&usart1_sleep_pins_a>;
++	pinctrl-2 = <&usart1_idle_pins_a>;
++	uart-has-rtscts;
++	status = "disabled";
++};
++
+ &usart2 {
+ 	bootph-all;
+ 	pinctrl-names = "default", "idle", "sleep";
+@@ -609,16 +619,6 @@ pins2 {
+ 	};
+ };
+ 
+-/* Bluetooth */
+-&usart1 {
+-	pinctrl-names = "default", "sleep", "idle";
+-	pinctrl-0 = <&usart1_pins_a>;
+-	pinctrl-1 = <&usart1_sleep_pins_a>;
+-	pinctrl-2 = <&usart1_idle_pins_a>;
+-	uart-has-rtscts;
+-	status = "disabled";
+-};
+-
+ &usart6 {
+ 	pinctrl-names = "default", "idle", "sleep";
+ 	pinctrl-0 = <&usart6_pins_a>;
+-- 
+2.53.0
+

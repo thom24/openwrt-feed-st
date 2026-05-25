@@ -1,0 +1,37 @@
+From 797236a40bc35560f9f0ecaa0b57b63641bf717e Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Fri, 6 Jun 2025 14:29:58 +0200
+Subject: [PATCH] arm64: dts: st: Fix pcie_ep ranges on stm32mp251
+
+Use full 256MB addr_range to map BARs on PCIe endpoing
+and remove useless dma binding (no DMA in our PCIe controller)
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: Icb4c57153e7b5136154f63fb61cf073b731af4d5
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/465343
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index 3b96eccc42ea..30b8419be711 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -2405,9 +2405,8 @@ pcie_ep: pcie-ep@48400000 {
+ 				reg = <0x48400000 0x100000>,
+ 				      <0x48500000 0x100000>,
+ 				      <0x48700000 0x80000>,
+-				      <0x48780000 0x80000>,
+-				      <0x10000000 0x8000000>;
+-				reg-names = "dbi", "dbi2", "atu", "dma", "addr_space";
++				      <0x10000000 0x10000000>;
++				reg-names = "dbi", "dbi2", "atu", "addr_space";
+ 				st,syscfg = <&syscfg>;
+ 				clocks = <&rcc CK_BUS_PCIE>;
+ 				clock-names = "core";
+-- 
+2.53.0
+

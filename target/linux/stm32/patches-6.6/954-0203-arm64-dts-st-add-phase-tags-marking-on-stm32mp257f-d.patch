@@ -1,0 +1,54 @@
+From 1301e23e37fc4ad71971caa631a27f557175e96d Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Fri, 3 Oct 2025 17:58:18 +0200
+Subject: [PATCH] arm64: dts: st: add phase tags marking on stm32mp257f-dk
+ board
+
+bootph-all as phase tags was added to dt-schema
+(dtschema/schemas/bootph.yaml) to describe various node usage during
+boot phases with DT.
+
+Describe it for STM32MP257F-DK boot devices.
+
+Change-Id: I023936c4b8782503a88296348881019ae4ae41b9
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/496305
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrice CHOTARD <patrice.chotard@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index 6b50916c1f77..e24154a0c2c9 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -791,6 +791,7 @@ bluetooth {
+ };
+ 
+ &usart2 {
++	bootph-all;
+ 	pinctrl-names = "default", "idle", "sleep";
+ 	pinctrl-0 = <&usart2_pins_a>;
+ 	pinctrl-1 = <&usart2_idle_pins_a>;
+@@ -800,6 +801,16 @@ &usart2 {
+ 	status = "okay";
+ };
+ 
++&usart2_pins_a {
++	bootph-all;
++	pins1 {
++		bootph-all;
++	};
++	pins2 {
++		bootph-all;
++	};
++};
++
+ &usart6 {
+ 	pinctrl-names = "default", "idle", "sleep";
+ 	pinctrl-0 = <&usart6_pins_a>;
+-- 
+2.53.0
+

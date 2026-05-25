@@ -1,0 +1,93 @@
+From 3989afe4ccfb9c608c55b759d00d55fa981175fa Mon Sep 17 00:00:00 2001
+From: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Date: Tue, 9 Dec 2025 11:48:16 +0100
+Subject: [PATCH] media: verisilicon: fix decoding of jpeg with unaligned
+ height
+
+Relax alignment constraint in height from 16 pixels (macroblock)
+to 8 pixels in order to support standard resolutions such
+as 1920x1080 or 800x600.
+
+Change-Id: I201308b44bebf26b4c5cc0727f544700ecfe0452
+Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/519343
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ .../platform/verisilicon/hantro_g1_jpeg_dec.c  |  2 +-
+ .../media/platform/verisilicon/hantro_v4l2.c   | 18 ++++++++++++++++--
+ .../platform/verisilicon/stm32mp25_vpu_hw.c    |  2 +-
+ 3 files changed, 18 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/media/platform/verisilicon/hantro_g1_jpeg_dec.c b/drivers/media/platform/verisilicon/hantro_g1_jpeg_dec.c
+index 9fba6f6f9929..4e1376186b05 100644
+--- a/drivers/media/platform/verisilicon/hantro_g1_jpeg_dec.c
++++ b/drivers/media/platform/verisilicon/hantro_g1_jpeg_dec.c
+@@ -264,7 +264,7 @@ int hantro_g1_jpeg_dec_run(struct hantro_ctx *ctx)
+ 
+ 	/* Check JPEG width/height */
+ 	if (header.frame.width != width ||
+-	    header.frame.height != height) {
++	    MB_HEIGHT(header.frame.height) != MB_HEIGHT(height)) {
+ 		dev_err(vpu->dev,
+ 			"Resolution mismatch: %dx%d (JPEG) versus %lux%lu (user)",
+ 			header.frame.width, header.frame.height, width, height);
+diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
+index fa1910ce5230..5926df4f57df 100644
+--- a/drivers/media/platform/verisilicon/hantro_v4l2.c
++++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+@@ -655,11 +655,16 @@ static int vidioc_g_selection(struct file *file, void *priv,
+ {
+ 	struct hantro_ctx *ctx = fh_to_ctx(priv);
+ 
+-	/* Crop only supported on source. */
+-	if (!ctx->is_encoder ||
++	/* Crop only supported on encoder source. */
++	if (ctx->is_encoder &&
+ 	    sel->type != V4L2_BUF_TYPE_VIDEO_OUTPUT)
+ 		return -EINVAL;
+ 
++	/* Compose only supported on decoder destination. */
++	if (!ctx->is_encoder &&
++	    sel->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
++		return -EINVAL;
++
+ 	switch (sel->target) {
+ 	case V4L2_SEL_TGT_CROP_DEFAULT:
+ 	case V4L2_SEL_TGT_CROP_BOUNDS:
+@@ -674,6 +679,15 @@ static int vidioc_g_selection(struct file *file, void *priv,
+ 		sel->r.width = ctx->dst_fmt.width;
+ 		sel->r.height = ctx->dst_fmt.height;
+ 		break;
++	case V4L2_SEL_TGT_COMPOSE:
++	case V4L2_SEL_TGT_COMPOSE_DEFAULT:
++	case V4L2_SEL_TGT_COMPOSE_BOUNDS:
++		/* Returns the visible region of video within the MB aligned frame */
++		sel->r.top = 0;
++		sel->r.left = 0;
++		sel->r.width = ctx->src_fmt.width;
++		sel->r.height = ctx->src_fmt.height;
++		break;
+ 	default:
+ 		return -EINVAL;
+ 	}
+diff --git a/drivers/media/platform/verisilicon/stm32mp25_vpu_hw.c b/drivers/media/platform/verisilicon/stm32mp25_vpu_hw.c
+index 53474d5901b6..883dbae088e5 100644
+--- a/drivers/media/platform/verisilicon/stm32mp25_vpu_hw.c
++++ b/drivers/media/platform/verisilicon/stm32mp25_vpu_hw.c
+@@ -77,7 +77,7 @@ static const struct hantro_fmt stm32mp25_vdec_fmts[] = {
+ 			.step_width = MB_DIM,
+ 			.min_height = 48,
+ 			.max_height = FMT_4K_HEIGHT,
+-			.step_height = MB_DIM,
++			.step_height = 8,
+ 		},
+ 	},
+ };
+-- 
+2.53.0
+

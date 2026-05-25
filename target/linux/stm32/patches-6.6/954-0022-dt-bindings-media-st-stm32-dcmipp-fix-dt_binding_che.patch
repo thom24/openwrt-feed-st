@@ -1,0 +1,102 @@
+From 75f471298f57d0bd5d93a706134ba84aaadf1441 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Tue, 29 Apr 2025 15:33:01 +0200
+Subject: [PATCH] dt-bindings: media: st,stm32-dcmipp: fix dt_binding_check
+ error
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Backport from upstream.
+
+Link: https://lore.kernel.org/lkml/20241212-csi_dcmipp_mp25-v4-12-fbeb55a05ed7@foss.st.com/
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Change-Id: Ifa13c0ae4ff3fe975eb4e68dcdd79643fa86c3ff
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/469681
+Domain-Review: Eric FOURMONT <eric.fourmont-ext@st.com>
+Reviewed-by: Eric FOURMONT <eric.fourmont-ext@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Eric FOURMONT <eric.fourmont-ext@st.com>
+---
+ .../bindings/media/st,stm32-dcmipp.yaml       | 26 ++++++++++++++-----
+ 1 file changed, 19 insertions(+), 7 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml b/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
+index 484ff8a2ade4..fc1ad613b8ee 100644
+--- a/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
++++ b/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
+@@ -24,16 +24,24 @@ properties:
+     maxItems: 1
+ 
+   clocks:
+-    maxItems: 2
++    items:
++      - description: bus clock
++      - description: csi clock
++    minItems: 1
+ 
+   clock-names:
+     items:
+       - const: kclk
+       - const: mclk
++    minItems: 1
+ 
+   resets:
+     maxItems: 1
+ 
++  access-controllers:
++    minItems: 1
++    maxItems: 2
++
+   port:
+     $ref: /schemas/graph.yaml#/$defs/port-base
+     unevaluatedProperties: false
+@@ -58,9 +66,6 @@ properties:
+           hsync-active: true
+           vsync-active: true
+ 
+-        required:
+-          - pclk-sample
+-
+ required:
+   - compatible
+   - reg
+@@ -74,15 +79,15 @@ allOf:
+       properties:
+         compatible:
+           contains:
+-            const: st,stm32mp13-dcmipp
++            enum:
++              - st,stm32mp13-dcmipp
+     then:
+       properties:
+         clocks:
+           maxItems: 1
+ 
+         clock-names:
+-          items:
+-            - const: kclk
++          maxItems: 1
+ 
+         port:
+           properties:
+@@ -90,6 +95,13 @@ allOf:
+               properties:
+                 bus-type:
+                   enum: [5, 6]
++    else:
++      properties:
++        clocks:
++          minItems: 2
++
++        clock-names:
++          minItems: 2
+ 
+ additionalProperties: false
+ 
+-- 
+2.53.0
+

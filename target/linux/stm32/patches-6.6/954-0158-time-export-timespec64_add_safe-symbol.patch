@@ -1,0 +1,41 @@
+From c67fefff2ae9b102692ebd2712d9de95a6af891e Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Mon, 1 Sep 2025 11:16:27 +0200
+Subject: [PATCH] time: export timespec64_add_safe() symbol
+
+Export the timespec64_add_safe() symbol so that this function can be used
+in modules where computation of time related is done.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Acked-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://patch.msgid.link/20250901-relative_flex_pps-v4-1-b874971dfe85@foss.st.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+(cherry picked from commit 96c88268b79bc0af2014b8732a438a7afc4fff0d)
+Change-Id: Ia0e68973353b26741e4f16a97c5878227cfa348c
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/486988
+Tested-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Christophe ROULLIER <christophe.roullier@foss.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+---
+ kernel/time/time.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/kernel/time/time.c b/kernel/time/time.c
+index 1ad88e97b4eb..d5288d2ff37e 100644
+--- a/kernel/time/time.c
++++ b/kernel/time/time.c
+@@ -858,6 +858,7 @@ struct timespec64 timespec64_add_safe(const struct timespec64 lhs,
+ 
+ 	return res;
+ }
++EXPORT_SYMBOL_GPL(timespec64_add_safe);
+ 
+ /**
+  * get_timespec64 - get user's time value into kernel space
+-- 
+2.53.0
+

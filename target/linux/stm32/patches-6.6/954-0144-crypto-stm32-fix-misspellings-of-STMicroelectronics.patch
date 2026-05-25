@@ -1,0 +1,44 @@
+From fd893c729b01dd8cfef100cec768c9e3c84ceede Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Fri, 25 Jul 2025 13:04:55 +0200
+Subject: [PATCH] crypto: stm32 - fix misspellings of "STMicroelectronics"
+
+"STMicroelectronics" company name is misspelled in stm32-crc2.c and
+stm32-cryp.c files. Fix these misspellings.
+
+Link: https://lore.kernel.org/lkml/20250724105754.140400-1-colin.i.king@gmail.com/
+Change-Id: I6a25497750d9b60a2829caa5dcd395793c12ecd2
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/477735
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/crypto/stm32/stm32-crc32.c | 2 +-
+ drivers/crypto/stm32/stm32-cryp.c  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/crypto/stm32/stm32-crc32.c b/drivers/crypto/stm32/stm32-crc32.c
+index c439be1650c8..2c371675d92d 100644
+--- a/drivers/crypto/stm32/stm32-crc32.c
++++ b/drivers/crypto/stm32/stm32-crc32.c
+@@ -483,5 +483,5 @@ static struct platform_driver stm32_crc_driver = {
+ module_platform_driver(stm32_crc_driver);
+ 
+ MODULE_AUTHOR("Fabien Dessenne <fabien.dessenne@st.com>");
+-MODULE_DESCRIPTION("STMicrolectronics STM32 CRC32 hardware driver");
++MODULE_DESCRIPTION("STMicroelectronics STM32 CRC32 hardware driver");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/crypto/stm32/stm32-cryp.c b/drivers/crypto/stm32/stm32-cryp.c
+index b46194956c30..6962a6dd6cab 100644
+--- a/drivers/crypto/stm32/stm32-cryp.c
++++ b/drivers/crypto/stm32/stm32-cryp.c
+@@ -2937,5 +2937,5 @@ static struct platform_driver stm32_cryp_driver = {
+ module_platform_driver(stm32_cryp_driver);
+ 
+ MODULE_AUTHOR("Fabien Dessenne <fabien.dessenne@st.com>");
+-MODULE_DESCRIPTION("STMicrolectronics STM32 CRYP hardware driver");
++MODULE_DESCRIPTION("STMicroelectronics STM32 CRYP hardware driver");
+ MODULE_LICENSE("GPL");
+-- 
+2.53.0
+

@@ -1,0 +1,46 @@
+From 97b9a6e37e11b350ef94c4b9815977ab273db71b Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Fri, 11 Jul 2025 14:34:54 +0200
+Subject: [PATCH] arm: dts: st: refactor WoL for stm32mp135f-dk
+
+Refactor the WoL support for the Ethernet1 node by using the "st,phy-wol"
+property instead of the "wakeup-source" property that's not supported
+by the PHY node.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: Idabaeb89d4caf0a9c407d050f7012b4f3548774b
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/474378
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Domain-Review: Christophe ROULLIER <christophe.roullier@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dk.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+index 5e27cd5cc94f..ea438163f2b4 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+@@ -226,6 +226,7 @@ &ethernet1 {
+ 	phy-handle = <&phy0_eth1>;
+ 	nvmem-cells = <&ethernet_mac1_address>;
+ 	nvmem-cell-names = "mac-address";
++	st,phy-wol;
+ 
+ 	mdio {
+ 		#address-cells = <1>;
+@@ -238,7 +239,6 @@ phy0_eth1: ethernet-phy@0 {
+ 			reset-assert-us = <1000>;
+ 			reset-deassert-us = <30000>;
+ 			reg = <0>;
+-			wakeup-source;
+ 		};
+ 	};
+ };
+-- 
+2.53.0
+

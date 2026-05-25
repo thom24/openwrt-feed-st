@@ -1,0 +1,48 @@
+From e47ce083b39ef6e2c242fae04b361adf62876d5a Mon Sep 17 00:00:00 2001
+From: Sudeep Holla <sudeep.holla@arm.com>
+Date: Thu, 21 Sep 2023 09:52:57 +0100
+Subject: [PATCH] firmware: arm_scmi: Do not use !! on boolean when setting
+ msg->flags
+
+Both pc->async_powercap_cap_set and ignore_dresp are already boolean.
+Use of !! on them is obviously dubious.
+
+Sparse reports:
+drivers/firmware/arm_scmi/powercap.c:363:17: warning: dubious: x & !y
+drivers/firmware/arm_scmi/powercap.c:363:17: warning: dubious: x & !y
+
+Remove the unnecessary !! and get rid of the warning.
+
+Reviewed-by: Cristian Marussi <cristian.marussi@arm.com>
+Link: https://lore.kernel.org/r/20230921085257.3125744-1-sudeep.holla@arm.com
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+[upstream commit a10aa2584ef5223398cce82310bf5fa6ef9a75ab]
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: Ide1d55d98bdf6af61bfa7bca70efb23dacd01aa3
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/476922
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ drivers/firmware/arm_scmi/powercap.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/firmware/arm_scmi/powercap.c b/drivers/firmware/arm_scmi/powercap.c
+index 244929cb4f3e..cb5617443a14 100644
+--- a/drivers/firmware/arm_scmi/powercap.c
++++ b/drivers/firmware/arm_scmi/powercap.c
+@@ -360,8 +360,8 @@ static int scmi_powercap_xfer_cap_set(const struct scmi_protocol_handle *ph,
+ 	msg = t->tx.buf;
+ 	msg->domain = cpu_to_le32(pc->id);
+ 	msg->flags =
+-		cpu_to_le32(FIELD_PREP(CAP_SET_ASYNC, !!pc->async_powercap_cap_set) |
+-			    FIELD_PREP(CAP_SET_IGNORE_DRESP, !!ignore_dresp));
++		cpu_to_le32(FIELD_PREP(CAP_SET_ASYNC, pc->async_powercap_cap_set) |
++			    FIELD_PREP(CAP_SET_IGNORE_DRESP, ignore_dresp));
+ 	msg->value = cpu_to_le32(power_cap);
+ 
+ 	if (!pc->async_powercap_cap_set || ignore_dresp) {
+-- 
+2.53.0
+

@@ -1,0 +1,53 @@
+From 47fa8db5604ca490e0a4c0a2a481a7d2ab1bbd69 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Tue, 29 Jul 2025 14:50:42 +0200
+Subject: [PATCH] Revert "drm/panel: simple: Add default-on property"
+
+This reverts commit 09a76e5507a86903580b556c09146ddeb94923e1.
+This property was not added in the binding & is no longer needed.
+
+Change-Id: I965c0f831957e591f93b40ef4a21d5921705e94e
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/479219
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/gpu/drm/panel/panel-simple.c | 15 ++-------------
+ 1 file changed, 2 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
+index 6567c56364e0..139743b07c62 100644
+--- a/drivers/gpu/drm/panel/panel-simple.c
++++ b/drivers/gpu/drm/panel/panel-simple.c
+@@ -594,11 +594,8 @@ static int panel_simple_probe(struct device *dev, const struct panel_desc *desc)
+ 	if (IS_ERR(panel->supply))
+ 		return PTR_ERR(panel->supply);
+ 
+-	if (device_property_read_bool(dev, "default-on"))
+-		panel->enable_gpio = devm_gpiod_get_optional(dev, "enable", GPIOD_OUT_HIGH);
+-	else
+-		panel->enable_gpio = devm_gpiod_get_optional(dev, "enable", GPIOD_OUT_LOW);
+-
++	panel->enable_gpio = devm_gpiod_get_optional(dev, "enable",
++						     GPIOD_OUT_LOW);
+ 	if (IS_ERR(panel->enable_gpio))
+ 		return dev_err_probe(dev, PTR_ERR(panel->enable_gpio),
+ 				     "failed to request GPIO\n");
+@@ -697,14 +694,6 @@ static int panel_simple_probe(struct device *dev, const struct panel_desc *desc)
+ 
+ 	drm_panel_init(&panel->base, dev, &panel_simple_funcs, connector_type);
+ 
+-	if (device_property_read_bool(dev, "default-on")) {
+-		err = pm_runtime_get_sync(dev);
+-		if (err < 0)
+-			goto disable_pm_runtime;
+-
+-		panel->prepared = true;
+-	}
+-
+ 	err = drm_panel_of_backlight(&panel->base);
+ 	if (err) {
+ 		dev_err_probe(dev, err, "Could not find backlight\n");
+-- 
+2.53.0
+

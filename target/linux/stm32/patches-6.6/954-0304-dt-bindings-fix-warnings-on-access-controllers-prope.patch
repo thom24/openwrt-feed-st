@@ -1,0 +1,57 @@
+From 8988066a5462c53e3c352039ac22b340e1f09b53 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Mon, 27 Oct 2025 17:20:51 +0100
+Subject: [PATCH] dt-bindings: fix warnings on access-controllers property for
+ RCC
+
+In the stm32mpxxx device tree files, the access-controllers property has
+been added to RCC peripheral nodes so that there is a link to the RIFSC
+peripheral. Document it.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: Ied28f1e493acef18f6c55a29fa7e7d3c2a847dff
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/503459
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ Documentation/devicetree/bindings/clock/st,stm32mp21-rcc.yaml | 4 ++++
+ Documentation/devicetree/bindings/clock/st,stm32mp25-rcc.yaml | 4 ++++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/clock/st,stm32mp21-rcc.yaml b/Documentation/devicetree/bindings/clock/st,stm32mp21-rcc.yaml
+index b1156049e48e..9473d0c7e8d8 100644
+--- a/Documentation/devicetree/bindings/clock/st,stm32mp21-rcc.yaml
++++ b/Documentation/devicetree/bindings/clock/st,stm32mp21-rcc.yaml
+@@ -102,6 +102,10 @@ properties:
+       - description: CK_SCMI_ICN_APBDBG Peripheral bridge for degub
+       - description: CK_SCMI_TIMG1 Peripheral bridge for timer1
+       - description: CK_SCMI_TIMG2 Peripheral bridge for timer2
++
++  access-controllers:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+diff --git a/Documentation/devicetree/bindings/clock/st,stm32mp25-rcc.yaml b/Documentation/devicetree/bindings/clock/st,stm32mp25-rcc.yaml
+index 4c8be6c39443..027c192d6310 100644
+--- a/Documentation/devicetree/bindings/clock/st,stm32mp25-rcc.yaml
++++ b/Documentation/devicetree/bindings/clock/st,stm32mp25-rcc.yaml
+@@ -121,6 +121,10 @@ properties:
+       - description: CK_SCMI_HSI_KER_CK Kernel High Speed Internal oscillator
+       - description: CK_SCMI_HSE_KER_CK Kernel High Speed External oscillator
+       - description: CK_SCMI_MSI_KER_CK Kernel Low Power Internal oscillator
++
++  access-controllers:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+-- 
+2.53.0
+

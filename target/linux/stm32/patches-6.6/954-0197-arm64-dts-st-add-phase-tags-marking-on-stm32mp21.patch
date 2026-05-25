@@ -1,0 +1,194 @@
+From 326b2b1a5425a560a89dcff486030a853f5425e1 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Fri, 3 Oct 2025 17:23:11 +0200
+Subject: [PATCH] arm64: dts: st: add phase tags marking on stm32mp21
+
+bootph-all as phase tag was added to dt-schema
+(dtschema/schemas/bootph.yaml) to describe various node usage during
+boot phases with DT.
+
+Describe it for STM32MP21 boot devices.
+
+Change-Id: Ibfe5f6f9ac46e21ee474f8783bb1c970c58df6a2
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/496299
+Reviewed-by: Patrice CHOTARD <patrice.chotard@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index cfdc05921985..c65f6cae61c5 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -116,6 +116,7 @@ replicator_out_port1: endpoint {
+ 
+ 	firmware {
+ 		optee: optee {
++			bootph-all;
+ 			compatible = "linaro,optee-tz";
+ 			method = "smc";
+ 			interrupt-parent = <&intc>;
+@@ -125,6 +126,7 @@ optee: optee {
+ 		};
+ 
+ 		scmi: scmi {
++			bootph-all;
+ 			compatible = "linaro,scmi-optee";
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+@@ -136,6 +138,7 @@ scmi_perf: protocol@13 {
+ 			};
+ 
+ 			scmi_clk: protocol@14 {
++				bootph-all;
+ 				reg = <0x14>;
+ 				#clock-cells = <1>;
+ 			};
+@@ -193,6 +196,7 @@ d1_pd: power-domain-d1 {
+ 	};
+ 
+ 	psci {
++		bootph-all;
+ 		compatible = "arm,psci-1.0";
+ 		method = "smc";
+ 
+@@ -277,6 +281,7 @@ usb2_phy2: usb2-phy2 {
+ 	};
+ 
+ 	soc0: soc@0 {
++		bootph-all;
+ 		compatible = "simple-bus";
+ 		#address-cells = <1>;
+ 		#size-cells = <2>;
+@@ -375,6 +380,7 @@ ipcc1: mailbox@40490000 {
+ 		};
+ 
+ 		rifsc: bus@42080000 {
++			bootph-all;
+ 			compatible = "st,stm32mp21-rifsc", "simple-bus";
+ 			reg = <0x42080000 0x0 0x1000>;
+ 			#address-cells = <1>;
+@@ -1983,6 +1989,7 @@ hdp: pinctrl@44090000 {
+ 		};
+ 
+ 		bsec: efuse@44000000 {
++			bootph-all;
+ 			compatible = "st,stm32mp25-bsec";
+ 			reg = <0x44000000 0x0 0x1000>;
+ 			#address-cells = <1>;
+@@ -2015,6 +2022,7 @@ dts: thermal-sensor@44070000 {
+ 		};
+ 
+ 		rcc: clock-controller@44200000 {
++			bootph-all;
+ 			compatible = "st,stm32mp21-rcc";
+ 			reg = <0x44200000 0x0 0x10000>;
+ 			#clock-cells = <1>;
+@@ -2188,11 +2196,13 @@ exti1: interrupt-controller@44220000 {
+ 		};
+ 
+ 		syscfg: syscon@44230000 {
++			bootph-all;
+ 			compatible = "syscon";
+ 			reg = <0x44230000 0x0 0x10000>;
+ 		};
+ 
+ 		pinctrl: pinctrl@44240000 {
++			bootph-all;
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+ 			compatible = "st,stm32mp215-pinctrl";
+@@ -2209,6 +2219,7 @@ pinctrl: pinctrl@44240000 {
+ 				<&exti2 12 0>, <&exti2 13 0>, <&exti2 14 0>, <&exti2 15 0>;
+ 
+ 			gpioa: gpio@44240000 {
++				bootph-all;
+ 				gpio-controller;
+ 				#gpio-cells = <2>;
+ 				interrupt-controller;
+@@ -2220,6 +2231,7 @@ gpioa: gpio@44240000 {
+ 			};
+ 
+ 			gpiob: gpio@44250000 {
++				bootph-all;
+ 				gpio-controller;
+ 				#gpio-cells = <2>;
+ 				interrupt-controller;
+@@ -2231,6 +2243,7 @@ gpiob: gpio@44250000 {
+ 			};
+ 
+ 			gpioc: gpio@44260000 {
++				bootph-all;
+ 				gpio-controller;
+ 				#gpio-cells = <2>;
+ 				interrupt-controller;
+@@ -2242,6 +2255,7 @@ gpioc: gpio@44260000 {
+ 			};
+ 
+ 			gpiod: gpio@44270000 {
++				bootph-all;
+ 				gpio-controller;
+ 				#gpio-cells = <2>;
+ 				interrupt-controller;
+@@ -2253,6 +2267,7 @@ gpiod: gpio@44270000 {
+ 			};
+ 
+ 			gpioe: gpio@44280000 {
++				bootph-all;
+ 				gpio-controller;
+ 				#gpio-cells = <2>;
+ 				interrupt-controller;
+@@ -2264,6 +2279,7 @@ gpioe: gpio@44280000 {
+ 			};
+ 
+ 			gpiof: gpio@44290000 {
++				bootph-all;
+ 				gpio-controller;
+ 				#gpio-cells = <2>;
+ 				interrupt-controller;
+@@ -2275,6 +2291,7 @@ gpiof: gpio@44290000 {
+ 			};
+ 
+ 			gpiog: gpio@442a0000 {
++				bootph-all;
+ 				gpio-controller;
+ 				#gpio-cells = <2>;
+ 				interrupt-controller;
+@@ -2286,6 +2303,7 @@ gpiog: gpio@442a0000 {
+ 			};
+ 
+ 			gpioh: gpio@442b0000 {
++				bootph-all;
+ 				gpio-controller;
+ 				#gpio-cells = <2>;
+ 				interrupt-controller;
+@@ -2297,6 +2315,7 @@ gpioh: gpio@442b0000 {
+ 			};
+ 
+ 			gpioi: gpio@442c0000 {
++				bootph-all;
+ 				gpio-controller;
+ 				#gpio-cells = <2>;
+ 				interrupt-controller;
+@@ -2422,6 +2441,7 @@ reboot_mode: reboot-mode {
+ 		};
+ 
+ 		pinctrl_z: pinctrl@46200000 {
++			bootph-all;
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+ 			compatible = "st,stm32mp215-z-pinctrl";
+@@ -2437,6 +2457,7 @@ pinctrl_z: pinctrl@46200000 {
+ 				<&exti2 12 0>, <&exti2 13 0>, <&exti2 14 0>, <&exti2 15 0>;
+ 
+ 			gpioz: gpio@46200000 {
++				bootph-all;
+ 				gpio-controller;
+ 				#gpio-cells = <2>;
+ 				interrupt-controller;
+-- 
+2.53.0
+

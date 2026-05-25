@@ -1,0 +1,38 @@
+From 8c503ea37376c3f9501a494c5bc8eacc3852a4ca Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Wed, 3 Sep 2025 08:48:48 +0200
+Subject: [PATCH] dt-bindings: stm32: add binding for usb2phy1stp clock on
+ stm32mp25
+
+Add the ck_ker_usb2phy1_stp clock binding required for USB Host (USBH)
+support in PM Runtime on STM32MP25.
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: Ia6c9b28f48181054f432630f7b988183f0d86274
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/486612
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ include/dt-bindings/clock/st,stm32mp25-rcc.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/include/dt-bindings/clock/st,stm32mp25-rcc.h b/include/dt-bindings/clock/st,stm32mp25-rcc.h
+index 04b7fd605a41..07c6835715f4 100644
+--- a/include/dt-bindings/clock/st,stm32mp25-rcc.h
++++ b/include/dt-bindings/clock/st,stm32mp25-rcc.h
+@@ -393,8 +393,9 @@
+ #define CK_LPUART1_AM		371
+ #define CK_RTC_AM		372
+ #define CK_SPI8_AM		373
++#define CK_KER_USB2PHY1STP	374
+ 
+-#define STM32MP25_LAST_CLK	374
++#define STM32MP25_LAST_CLK	375
+ 
+ 
+ #define CK_SCMI_ICN_HS_MCU	0
+-- 
+2.53.0
+

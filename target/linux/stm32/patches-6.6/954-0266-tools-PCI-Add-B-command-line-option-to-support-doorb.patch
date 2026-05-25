@@ -1,0 +1,75 @@
+From 8bd968075dddb99f0f1074d430a306d4bc82d590 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Wed, 8 Oct 2025 09:41:01 +0200
+Subject: [PATCH] tools: PCI: Add 'B' command line option to support doorbell
+
+Add a new command line option 'B' to test PCIe doorbell.
+It allows the host to wakeup the PCIe by writing the BAR1
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: Id119b9043fe24f7e99d210ce3d93acdb5784bb64
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/497593
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ tools/pci/pcitest.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/tools/pci/pcitest.c b/tools/pci/pcitest.c
+index 441b54234635..8139f4b40446 100644
+--- a/tools/pci/pcitest.c
++++ b/tools/pci/pcitest.c
+@@ -36,6 +36,7 @@ struct pci_test {
+ 	bool		copy;
+ 	unsigned long	size;
+ 	bool		use_dma;
++	bool            doorbell;
+ };
+ 
+ static int run_test(struct pci_test *test)
+@@ -149,6 +150,15 @@ static int run_test(struct pci_test *test)
+ 			fprintf(stdout, "%s\n", result[ret]);
+ 	}
+ 
++	if (test->doorbell) {
++		ret = ioctl(fd, PCITEST_DOORBELL, 0);
++		fprintf(stdout, "Ringing doorbell on the EP\t\t");
++		if (ret < 0)
++			fprintf(stdout, "TEST FAILED\n");
++		else
++			fprintf(stdout, "%s\n", result[ret]);
++	}
++
+ 	fflush(stdout);
+ 	close(fd);
+ 	return (ret < 0) ? ret : 1 - ret; /* return 0 if test succeeded */
+@@ -174,7 +184,7 @@ int main(int argc, char **argv)
+ 	/* set default endpoint device */
+ 	test->device = "/dev/pci-endpoint-test.0";
+ 
+-	while ((c = getopt(argc, argv, "D:b:m:x:i:deIlhrwcs:")) != EOF)
++	while ((c = getopt(argc, argv, "D:b:m:x:i:BdeIlhrwcs:")) != EOF)
+ 	switch (c) {
+ 	case 'D':
+ 		test->device = optarg;
+@@ -224,6 +234,9 @@ int main(int argc, char **argv)
+ 	case 'd':
+ 		test->use_dma = true;
+ 		continue;
++	case 'B':
++		test->doorbell = true;
++		continue;
+ 	case 'h':
+ 	default:
+ usage:
+@@ -243,6 +256,7 @@ int main(int argc, char **argv)
+ 			"\t-w			Write buffer test\n"
+ 			"\t-c			Copy buffer test\n"
+ 			"\t-s <size>		Size of buffer {default: 100KB}\n"
++			"\t-B			Doorbell test\n"
+ 			"\t-h			Print this help message\n",
+ 			argv[0]);
+ 		return -EINVAL;
+-- 
+2.53.0
+

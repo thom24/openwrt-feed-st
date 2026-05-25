@@ -1,0 +1,84 @@
+From 19fbceea0843a37ec461e20b816d856ac42868a4 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Fri, 12 Sep 2025 14:01:48 +0200
+Subject: [PATCH] arm: dts: stm32: use rtc as clock provider for WiFi/BT on
+ stm32mp157x-dk2
+
+Add the "#clock-cells" property in the rtc node.
+Add the "clocks" property to the WiFi/BT combo nodes.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: Idebe2e17dd267e8672a6529e81d669d5dd1d2516
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/490102
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp157c-dk2.dts | 5 +++++
+ arch/arm/boot/dts/st/stm32mp157f-dk2.dts | 5 +++++
+ 2 files changed, 10 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
+index f3469e99cfc3..29fa22ed5b55 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
+@@ -39,6 +39,8 @@ framebuffer {
+ 	wifi_pwrseq: wifi-pwrseq {
+ 		compatible = "mmc-pwrseq-simple";
+ 		reset-gpios = <&gpioh 4 GPIO_ACTIVE_LOW>;
++		clocks = <&rtc>;
++		clock-names = "ext_clock";
+ 	};
+ };
+ 
+@@ -104,6 +106,7 @@ ltdc_ep1_out: endpoint@1 {
+ };
+ 
+ &rtc {
++	#clock-cells = <0>;
+ 	st,lsco = <RTC_OUT2_RMP>;
+ 	pinctrl-0 = <&rtc_out2_rmp_pins_a>;
+ 	pinctrl-names = "default";
+@@ -144,6 +147,8 @@ &usart2 {
+ 	bluetooth {
+ 		shutdown-gpios = <&gpioz 6 GPIO_ACTIVE_HIGH>;
+ 		compatible = "brcm,bcm43438-bt";
++		clocks = <&rtc>;
++		clock-names = "lpo";
+ 		max-speed = <2000000>;
+ 		vbat-supply = <&v3v3>;
+ 		vddio-supply = <&v3v3>;
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
+index 14b3290a7b7e..e22df14a016c 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
+@@ -38,6 +38,8 @@ framebuffer {
+ 	wifi_pwrseq: wifi-pwrseq {
+ 		compatible = "mmc-pwrseq-simple";
+ 		reset-gpios = <&gpioh 4 GPIO_ACTIVE_LOW>;
++		clocks = <&rtc>;
++		clock-names = "ext_clock";
+ 	};
+ };
+ 
+@@ -115,6 +117,7 @@ ltdc_ep1_out: endpoint@1 {
+ };
+ 
+ &rtc {
++	#clock-cells = <0>;
+ 	st,lsco = <RTC_OUT2_RMP>;
+ 	pinctrl-0 = <&rtc_out2_rmp_pins_a>;
+ 	pinctrl-names = "default";
+@@ -155,6 +158,8 @@ &usart2 {
+ 	bluetooth {
+ 		shutdown-gpios = <&gpioz 6 GPIO_ACTIVE_HIGH>;
+ 		compatible = "brcm,bcm43438-bt";
++		clocks = <&rtc>;
++		clock-names = "lpo";
+ 		max-speed = <2000000>;
+ 		vbat-supply = <&v3v3>;
+ 		vddio-supply = <&v3v3>;
+-- 
+2.53.0
+

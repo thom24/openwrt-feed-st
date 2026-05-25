@@ -1,0 +1,66 @@
+From 34a9d263a3c631756af660c822420b0775e7908c Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Mon, 19 May 2025 15:37:10 +0200
+Subject: [PATCH] PCI: designware-ep fix programmable BARs
+
+Fix dw_pcie_ep_set_bar so BAR is correctly set after programming
+the ATU.
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I7f7567d87abbd97bed77a9297ff2a0df039c7e9e
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/465341
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ .../pci/controller/dwc/pcie-designware-ep.c   | 24 +++++++++----------
+ 1 file changed, 11 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
+index b40e8731092e..81dcad396d5e 100644
+--- a/drivers/pci/controller/dwc/pcie-designware-ep.c
++++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
+@@ -247,18 +247,6 @@ static int dw_pcie_ep_set_bar(struct pci_epc *epc, u8 func_no, u8 vfunc_no,
+ 
+ 	reg = PCI_BASE_ADDRESS_0 + (4 * bar) + func_offset;
+ 
+-	if (!(flags & PCI_BASE_ADDRESS_SPACE))
+-		type = PCIE_ATU_TYPE_MEM;
+-	else
+-		type = PCIE_ATU_TYPE_IO;
+-
+-	ret = dw_pcie_ep_inbound_atu(ep, func_no, type, epf_bar->phys_addr, bar);
+-	if (ret)
+-		return ret;
+-
+-	if (ep->epf_bar[bar])
+-		return 0;
+-
+ 	dw_pcie_dbi_ro_wr_en(pci);
+ 
+ 	dw_pcie_writel_dbi2(pci, reg, lower_32_bits(size - 1));
+@@ -269,9 +257,19 @@ static int dw_pcie_ep_set_bar(struct pci_epc *epc, u8 func_no, u8 vfunc_no,
+ 		dw_pcie_writel_dbi(pci, reg + 4, 0);
+ 	}
+ 
+-	ep->epf_bar[bar] = epf_bar;
+ 	dw_pcie_dbi_ro_wr_dis(pci);
+ 
++	if (!(flags & PCI_BASE_ADDRESS_SPACE))
++		type = PCIE_ATU_TYPE_MEM;
++	else
++		type = PCIE_ATU_TYPE_IO;
++
++	ret = dw_pcie_ep_inbound_atu(ep, func_no, type, epf_bar->phys_addr, bar);
++	if (ret)
++		return ret;
++
++	ep->epf_bar[bar] = epf_bar;
++
+ 	return 0;
+ }
+ 
+-- 
+2.53.0
+

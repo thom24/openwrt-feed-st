@@ -1,0 +1,56 @@
+From 8ff0f1f66fe1e956ac252ae4b93e108bd75fdded Mon Sep 17 00:00:00 2001
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Mon, 25 Sep 2023 15:17:10 +0200
+Subject: [PATCH] OPP: Extend dev_pm_opp_data with a level
+
+Let's extend the dev_pm_opp_data with a level variable, to allow users to
+specify a corresponding level (performance state) for a dynamically added
+OPP.
+
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+[upstream commit 3166383da081461244918aeed7ad028ef11b17cc]
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: I8610d1f7a45c83daef01a30a1056bd09ca770679
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/476926
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ drivers/opp/core.c     | 1 +
+ include/linux/pm_opp.h | 2 ++
+ 2 files changed, 3 insertions(+)
+
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index a8415f519bc9..297cf3638b42 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -2058,6 +2058,7 @@ int _opp_add_v1(struct opp_table *opp_table, struct device *dev,
+ 
+ 	/* populate the opp table */
+ 	new_opp->rates[0] = data->freq;
++	new_opp->level = data->level;
+ 	tol = u_volt * opp_table->voltage_tolerance_v1 / 100;
+ 	new_opp->supplies[0].u_volt = u_volt;
+ 	new_opp->supplies[0].u_volt_min = u_volt - tol;
+diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+index a8ee93ba41d8..9ad168f4cbf1 100644
+--- a/include/linux/pm_opp.h
++++ b/include/linux/pm_opp.h
+@@ -94,10 +94,12 @@ struct dev_pm_opp_config {
+ 
+ /**
+  * struct dev_pm_opp_data - The data to use to initialize an OPP.
++ * @level: The performance level for the OPP.
+  * @freq: The clock rate in Hz for the OPP.
+  * @u_volt: The voltage in uV for the OPP.
+  */
+ struct dev_pm_opp_data {
++	unsigned int level;
+ 	unsigned long freq;
+ 	unsigned long u_volt;
+ };
+-- 
+2.53.0
+

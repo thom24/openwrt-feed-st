@@ -1,0 +1,67 @@
+From 0e29044e6fc417d04f119cc9a39669acde020b33 Mon Sep 17 00:00:00 2001
+From: Valentin Caron <valentin.caron@foss.st.com>
+Date: Wed, 23 Jul 2025 11:28:26 +0200
+Subject: [PATCH] arm64: dts: st: change SCMI perf protocol to power-domain
+ stm32mp23x boards
+
+Change SCMI protocol 0x13 from clock provider to power-domain provider,
+and update cpu0 and cpu1 nodes for frequency scaling.
+
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: If3c60aafd2bae999ba22ada31b002408451cc107
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/476938
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp231.dtsi | 8 +++-----
+ arch/arm64/boot/dts/st/stm32mp233.dtsi | 6 ++----
+ 2 files changed, 5 insertions(+), 9 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+index 27d6e4aac8c8..7cfe946230ee 100644
+--- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+@@ -23,10 +23,8 @@ cpu0: cpu@0 {
+ 			device_type = "cpu";
+ 			reg = <0>;
+ 			enable-method = "psci";
+-			clocks = <&scmi_perf 0>;
+-			clock-names = "cpu";
+-			power-domains = <&cpu0_pd>;
+-			power-domain-names = "psci";
++			power-domains = <&cpu0_pd>, <&scmi_perf 0>;
++			power-domain-names = "psci", "perf";
+ 			#cooling-cells = <2>;
+ 		};
+ 
+@@ -148,7 +146,7 @@ scmi_devpd: protocol@11 {
+ 
+ 			scmi_perf: protocol@13 {
+ 				reg = <0x13>;
+-				#clock-cells = <1>;
++				#power-domain-cells = <1>;
+ 			};
+ 
+ 			scmi_clk: protocol@14 {
+diff --git a/arch/arm64/boot/dts/st/stm32mp233.dtsi b/arch/arm64/boot/dts/st/stm32mp233.dtsi
+index 0701102d846c..41551b3e91d4 100644
+--- a/arch/arm64/boot/dts/st/stm32mp233.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp233.dtsi
+@@ -12,10 +12,8 @@ cpu1: cpu@1 {
+ 			device_type = "cpu";
+ 			reg = <1>;
+ 			enable-method = "psci";
+-			clocks = <&scmi_perf 0>;
+-			clock-names = "cpu";
+-			power-domains = <&cpu1_pd>;
+-			power-domain-names = "psci";
++			power-domains = <&cpu1_pd>, <&scmi_perf 0>;
++			power-domain-names = "psci", "perf";
+ 		};
+ 	};
+ 
+-- 
+2.53.0
+

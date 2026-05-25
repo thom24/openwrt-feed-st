@@ -1,0 +1,61 @@
+From d7c7c2f53d112c2a82e4eab29d6554f9d3fed861 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Thu, 17 Jul 2025 18:06:17 +0200
+Subject: [PATCH] arm64: dts: st: enable analog-filter in all i2c in
+ stm32mp231.dtsi
+
+Activate the analog-filter for all i2c instances on STM32MP23
+socs.
+
+Change-Id: I63755b39392803d056a9307026194fbe48b4d45b
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/478567
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp231.dtsi | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+index f34b015f9a91..e56f5ea72cae 100644
+--- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+@@ -956,6 +956,7 @@ i2c1: i2c@40120000 {
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&rifsc 41>;
+ 				power-domains = <&d1_pd>;
++				i2c-analog-filter;
+ 				status = "disabled";
+ 			};
+ 
+@@ -973,6 +974,7 @@ i2c2: i2c@40130000 {
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&rifsc 42>;
+ 				power-domains = <&d1_pd>;
++				i2c-analog-filter;
+ 				status = "disabled";
+ 			};
+ 
+@@ -990,6 +992,7 @@ i2c7: i2c@40180000 {
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&rifsc 47>;
+ 				power-domains = <&d1_pd>;
++				i2c-analog-filter;
+ 				status = "disabled";
+ 			};
+ 
+@@ -1797,6 +1800,7 @@ i2c8: i2c@46040000 {
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&rifsc 48>;
+ 				power-domains = <&d1_pd>;
++				i2c-analog-filter;
+ 				status = "disabled";
+ 			};
+ 
+-- 
+2.53.0
+

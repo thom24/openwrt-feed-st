@@ -1,0 +1,104 @@
+From 0f4489ca7f733532cf5b9fcfd391a6b7e1909595 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Mon, 26 May 2025 17:48:14 +0200
+Subject: [PATCH] memory: stm32-omi: Set DMA maxburst dynamically
+
+Set src_maxburst and dst_maxburst dynamically from DMA
+capabilities.
+
+Change-Id: Ic10dcb0271d31212fcc70a10d8a33add27636c90
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/462208
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/memory/stm32-omi.c   | 21 +++++++++++++++++++--
+ drivers/spi/spi-stm32-ospi.c |  6 +++---
+ include/memory/stm32-omi.h   |  4 ++--
+ 3 files changed, 24 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/memory/stm32-omi.c b/drivers/memory/stm32-omi.c
+index 814f26871351..85175480dae8 100644
+--- a/drivers/memory/stm32-omi.c
++++ b/drivers/memory/stm32-omi.c
+@@ -149,10 +149,19 @@ static irqreturn_t stm32_omi_irq(int irq, void *dev_id)
+ 	return IRQ_HANDLED;
+ }
+ 
+-void stm32_omi_dma_setup(struct stm32_omi *omi,
+-			 struct dma_slave_config *dma_cfg)
++int stm32_omi_dma_setup(struct stm32_omi *omi,
++			struct dma_slave_config *dma_cfg)
+ {
++	struct dma_slave_caps caps;
++	int ret = 0;
++
+ 	if (dma_cfg && omi->dma_chrx) {
++		ret = dma_get_slave_caps(omi->dma_chrx, &caps);
++		if (ret)
++			return ret;
++
++		dma_cfg->src_maxburst = caps.max_burst / dma_cfg->src_addr_width;
++
+ 		if (dmaengine_slave_config(omi->dma_chrx, dma_cfg)) {
+ 			dev_err(omi->dev, "dma rx config failed\n");
+ 			dma_release_channel(omi->dma_chrx);
+@@ -161,6 +170,12 @@ void stm32_omi_dma_setup(struct stm32_omi *omi,
+ 	}
+ 
+ 	if (dma_cfg && omi->dma_chtx) {
++		ret = dma_get_slave_caps(omi->dma_chtx, &caps);
++		if (ret)
++			return ret;
++
++		dma_cfg->dst_maxburst = caps.max_burst / dma_cfg->dst_addr_width;
++
+ 		if (dmaengine_slave_config(omi->dma_chtx, dma_cfg)) {
+ 			dev_err(omi->dev, "dma tx config failed\n");
+ 			dma_release_channel(omi->dma_chtx);
+@@ -169,6 +184,8 @@ void stm32_omi_dma_setup(struct stm32_omi *omi,
+ 	}
+ 
+ 	init_completion(&omi->dma_completion);
++
++	return ret;
+ }
+ EXPORT_SYMBOL(stm32_omi_dma_setup);
+ 
+diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
+index 1969c16fa587..a546f70ceb84 100644
+--- a/drivers/spi/spi-stm32-ospi.c
++++ b/drivers/spi/spi-stm32-ospi.c
+@@ -1055,9 +1055,9 @@ static int stm32_ospi_probe(struct platform_device *pdev)
+ 	dma_cfg.dst_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
+ 	dma_cfg.src_addr = omi->regs_phys_base + OSPI_DR;
+ 	dma_cfg.dst_addr = omi->regs_phys_base + OSPI_DR;
+-	dma_cfg.src_maxburst = 4;
+-	dma_cfg.dst_maxburst = 4;
+-	stm32_omi_dma_setup(omi, &dma_cfg);
++	ret = stm32_omi_dma_setup(omi, &dma_cfg);
++	if (ret)
++		return ret;
+ 
+ 	mutex_init(&ospi->lock);
+ 
+diff --git a/include/memory/stm32-omi.h b/include/memory/stm32-omi.h
+index bd182567a384..472f92f6d90b 100644
+--- a/include/memory/stm32-omi.h
++++ b/include/memory/stm32-omi.h
+@@ -193,8 +193,8 @@ int stm32_omi_dlyb_set_cr(struct stm32_omi *omi, u32 dlyb_cr);
+ void stm32_omi_dlyb_get_cr(struct stm32_omi *omi, u32 *dlyb_cr);
+ void stm32_omi_dlyb_stop(struct stm32_omi *omi);
+ void stm32_omi_dma_callback(void *arg);
+-void stm32_omi_dma_setup(struct stm32_omi *omi,
+-			 struct dma_slave_config *dma_cfg);
++int stm32_omi_dma_setup(struct stm32_omi *omi,
++			struct dma_slave_config *dma_cfg);
+ int stm32_omi_tx_poll(struct stm32_omi *omi, u8 *buf, u32 len, bool read);
+ int stm32_omi_wait_cmd(struct stm32_omi *omi);
+ int stm32_omi_wait_nobusy(struct stm32_omi *omi);
+-- 
+2.53.0
+

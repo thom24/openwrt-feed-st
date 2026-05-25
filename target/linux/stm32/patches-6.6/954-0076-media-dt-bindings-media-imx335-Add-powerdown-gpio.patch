@@ -1,0 +1,39 @@
+From f33436ed88681ab599b25b8bf53b1eae328d1f5c Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Tue, 1 Jul 2025 16:33:01 +0200
+Subject: [PATCH] media: dt-bindings: media: imx335: Add powerdown-gpio
+
+Add the bindings for the powerdown gpio allowing to control
+enable of the sensor.
+
+Change-Id: I23a61dafce816b9a47648c961d773ddb59ca57c9
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/471696
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml
+index 106c36ee966d..09fadc9888d8 100644
+--- a/Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml
+@@ -45,6 +45,10 @@ properties:
+     description: Reference to the GPIO connected to the XCLR pin, if any.
+     maxItems: 1
+ 
++  powerdown-gpios:
++    description: GPIO allowing to control the power of the module.
++    maxItems: 1
++
+   port:
+     additionalProperties: false
+     $ref: /schemas/graph.yaml#/$defs/port-base
+-- 
+2.53.0
+

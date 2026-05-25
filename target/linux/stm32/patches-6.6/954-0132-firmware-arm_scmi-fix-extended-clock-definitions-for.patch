@@ -1,0 +1,67 @@
+From 39a9ba83eaccec938c852939cd8b128575cf8f6d Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Mon, 1 Sep 2025 17:25:16 +0200
+Subject: [PATCH] firmware: arm_scmi: fix extended clock definitions for duty
+ cycle
+
+Fix the mask used for extracting the duty cycle in the SCMI clock
+configuration get command.
+
+Fixes: 7d09e46095d1 ("firmware: arm_scmi: duty cycle over SCMI Clock v3.0")
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: I3d4a3345a5e107b12577bf898eebcb5a5dedf051
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/486125
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/firmware/arm_scmi/clock.c | 5 ++++-
+ include/linux/scmi_protocol.h     | 7 +++++++
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/firmware/arm_scmi/clock.c b/drivers/firmware/arm_scmi/clock.c
+index ba562fd32750..127bffadb92c 100644
+--- a/drivers/firmware/arm_scmi/clock.c
++++ b/drivers/firmware/arm_scmi/clock.c
+@@ -351,15 +351,18 @@ scmi_clock_get_duty_cycle(const struct scmi_protocol_handle *ph,
+ 
+ 	if (PROTOCOL_REV_MAJOR(ci->version) >= 0x3) {
+ 		struct scmi_msg_clock_config_get *cfg;
++		u32 flags;
+ 
+ 		ret = ph->xops->xfer_get_init(ph, CLOCK_CONFIG_GET,
+ 					      sizeof(*cfg), 0, &t);
+ 		if (ret)
+ 			return ret;
+ 
++		flags = FIELD_PREP(REGMASK_OEM_TYPE_GET, SCMI_CLOCK_CFG_DUTY_CYCLE);
++
+ 		cfg = t->tx.buf;
+ 		cfg->id = cpu_to_le32(clk_id);
+-		cfg->flags = cpu_to_le32(REGMASK_OEM_TYPE_DUTY_CYCLE);
++		cfg->flags = cpu_to_le32(flags);
+ 	} else {
+ #ifdef CONFIG_SCMI_STM32MP_OSTL_V5
+ 		ret = ph->xops->xfer_get_init(ph, CLOCK_OSTL_DUTY_CYCLE_GET,
+diff --git a/include/linux/scmi_protocol.h b/include/linux/scmi_protocol.h
+index c6b47d42320e..e9a6d1775bcf 100644
+--- a/include/linux/scmi_protocol.h
++++ b/include/linux/scmi_protocol.h
+@@ -71,6 +71,13 @@ struct scmi_handle;
+ struct scmi_device;
+ struct scmi_protocol_handle;
+ 
++enum scmi_clock_oem_config {
++	SCMI_CLOCK_CFG_DUTY_CYCLE = 0x1,
++	SCMI_CLOCK_CFG_PHASE,
++	SCMI_CLOCK_CFG_OEM_START = 0x80,
++	SCMI_CLOCK_CFG_OEM_END = 0xFF,
++};
++
+ /**
+  * struct scmi_clk_proto_ops - represents the various operations provided
+  *	by SCMI Clock Protocol
+-- 
+2.53.0
+

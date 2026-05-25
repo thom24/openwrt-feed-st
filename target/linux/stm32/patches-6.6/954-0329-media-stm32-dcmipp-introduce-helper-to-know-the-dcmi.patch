@@ -1,0 +1,100 @@
+From 78ab9aedd82459cc92f44c7cf25c526b87d71f48 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Fri, 21 Nov 2025 13:04:24 +0100
+Subject: [PATCH] media: stm32-dcmipp: introduce helper to know the dcmipp
+ input type
+
+When handling Yx input format it is important to know if input
+is parallel or CSI since in case of CSI the Yx is handled as
+RAWx hence needs special care.
+
+Change-Id: I75d6f3983afe098f2543ce7b282f26b2ccf79e69
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/511332
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ .../st/stm32/stm32-dcmipp/dcmipp-common.h     | 30 +++++++++++++++++++
+ .../st/stm32/stm32-dcmipp/dcmipp-core.c       | 12 --------
+ 2 files changed, 30 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
+index a260f3b0d283..33f1b5dd3d7f 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
+@@ -290,6 +290,36 @@ static inline void __reg_clear(struct device *dev, void __iomem *base, u32 reg,
+ 	__reg_write(dev, base, reg, readl_relaxed(base + reg) & ~mask);
+ }
+ 
++/* Entities always available */
++#define ID_INPUT 0
++#define ID_DUMP_BYTEPROC 1
++#define ID_DUMP_CAPTURE 2
++
++/* Entities only available on MP2x */
++#define	ID_MAIN_ISP 3
++#define	ID_MAIN_POSTPROC 4
++#define	ID_MAIN_CAPTURE	5
++#define	ID_AUX_POSTPROC 6
++#define	ID_AUX_CAPTURE 7
++#define	ID_ISP_STAT_CAPTURE 8
++#define	ID_ISP_PARAMS_OUTPUT 9
++#define	ID_TPG 10
++
++static inline bool dcmipp_is_input_csi(struct dcmipp_device *dcmipp)
++{
++	/* Only valid for DCMIPP having CSI input */
++	if (!dcmipp->pipe_cfg->has_csi2)
++		return false;
++
++	/* Check if input is connected to a TPG */
++	if (dcmipp->pipe_cfg->has_tpg &&
++	    media_pad_remote_pad_first(&dcmipp->entity[ID_INPUT]->pads[0]) ==
++	    &dcmipp->entity[ID_TPG]->pads[0])
++		return false;
++
++	return (dcmipp->entity[ID_INPUT]->bus_type == V4L2_MBUS_CSI2_DPHY);
++}
++
+ /* DCMIPP subdev init / release entry points */
+ struct dcmipp_ent_device *dcmipp_tpg_ent_init(const char *entity_name,
+ 					      struct dcmipp_device *dcmipp);
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
+index a891e5da83b0..27f1aab11149 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
+@@ -64,10 +64,6 @@ static const struct dcmipp_ent_config stm32mp13_ent_config[] = {
+ 	},
+ };
+ 
+-#define ID_INPUT 0
+-#define ID_DUMP_BYTEPROC 1
+-#define ID_DUMP_CAPTURE 2
+-
+ static const struct dcmipp_ent_link stm32mp13_ent_links[] = {
+ 	DCMIPP_ENT_LINK(ID_INPUT, 1, ID_DUMP_BYTEPROC, 0,
+ 			MEDIA_LNK_FL_ENABLED | MEDIA_LNK_FL_IMMUTABLE),
+@@ -85,14 +81,6 @@ static const struct dcmipp_pipeline_config stm32mp13_pipe_cfg = {
+ 	.pipe_nb	= 1
+ };
+ 
+-#define	ID_MAIN_ISP 3
+-#define	ID_MAIN_POSTPROC 4
+-#define	ID_MAIN_CAPTURE	5
+-#define	ID_AUX_POSTPROC 6
+-#define	ID_AUX_CAPTURE 7
+-#define	ID_ISP_STAT_CAPTURE 8
+-#define	ID_ISP_PARAMS_OUTPUT 9
+-#define	ID_TPG 10
+ static const struct dcmipp_ent_config stm32mp25_ent_config[] = {
+ 	{
+ 		.name = "dcmipp_input",
+-- 
+2.53.0
+

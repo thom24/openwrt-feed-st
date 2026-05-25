@@ -1,0 +1,107 @@
+From 10e27295138ec9366aada92a8facdc75c5b495b9 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Fri, 11 Jul 2025 14:29:58 +0200
+Subject: [PATCH] net: phy: smsc: fix and improve WoL support
+
+Add resume() callback handle the WoL status flags when waking up.
+Suspend() callbacks are never called when WoL is enabled.
+
+If the WoL is supported by the PHY, indicate that the PHY device can
+be a source of wake up for the platform. When setting the WoL
+configuration, enable this capability.
+
+Fixes: 8b305ee2a91c ("net: phy: smsc: add WoL support to LAN8740/LAN8742 PHYs")
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I77fcc7d34b906a73f9a20c4c1b149761ae1e1b11
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/474377
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+Domain-Review: Christophe ROULLIER <christophe.roullier@foss.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/net/phy/smsc.c  | 32 +++++++++++++++++++++++++++++---
+ include/linux/smscphy.h |  2 ++
+ 2 files changed, 31 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/phy/smsc.c b/drivers/net/phy/smsc.c
+index c88edb19d2e7..454c3df5371f 100644
+--- a/drivers/net/phy/smsc.c
++++ b/drivers/net/phy/smsc.c
+@@ -490,14 +490,37 @@ static int lan874x_set_wol(struct phy_device *phydev,
+ 		}
+ 	}
+ 
+-	rc = phy_write_mmd(phydev, MDIO_MMD_PCS, MII_LAN874X_PHY_MMD_WOL_WUCSR,
+-			   val_wucsr);
++	/* Enable wakeup on PHY device if at least one WoL feature is configured */
++	device_set_wakeup_enable(&phydev->mdio.dev, !!(val_wucsr & MII_LAN874X_PHY_WOL_MASK));
++
++	rc = phy_write_mmd(phydev, MDIO_MMD_PCS, MII_LAN874X_PHY_MMD_WOL_WUCSR, val_wucsr);
+ 	if (rc < 0)
+ 		return rc;
+ 
+ 	return 0;
+ }
+ 
++static int smsc_phy_resume(struct phy_device *phydev)
++{
++	int rc;
++
++	if (!phydev->wol_enabled)
++		return genphy_resume(phydev);
++
++	rc = phy_read_mmd(phydev, MDIO_MMD_PCS, MII_LAN874X_PHY_MMD_WOL_WUCSR);
++	if (rc < 0)
++		return rc;
++
++	if (!(rc & MII_LAN874X_PHY_WOL_STATUS_MASK))
++		return 0;
++
++	dev_info(&phydev->mdio.dev, "Woke up from LAN event.\n");
++	rc = phy_write_mmd(phydev, MDIO_MMD_PCS, MII_LAN874X_PHY_MMD_WOL_WUCSR,
++			   rc | MII_LAN874X_PHY_WOL_STATUS_MASK);
++
++	return rc;
++}
++
+ static int smsc_get_sset_count(struct phy_device *phydev)
+ {
+ 	return ARRAY_SIZE(smsc_hw_stats);
+@@ -628,6 +651,9 @@ int smsc_phy_probe(struct phy_device *phydev)
+ 
+ 	phydev->priv = priv;
+ 
++	if (phydev->drv->set_wol)
++		device_set_wakeup_capable(&phydev->mdio.dev, true);
++
+ 	/* Make clk optional to keep DTB backward compatibility. */
+ 	refclk = devm_clk_get_optional_enabled(dev, NULL);
+ 	if (IS_ERR(refclk))
+@@ -830,7 +856,7 @@ static struct phy_driver smsc_phy_driver[] = {
+ 	.get_wol	= lan874x_get_wol,
+ 
+ 	.suspend	= genphy_suspend,
+-	.resume		= genphy_resume,
++	.resume		= smsc_phy_resume,
+ } };
+ 
+ module_phy_driver(smsc_phy_driver);
+diff --git a/include/linux/smscphy.h b/include/linux/smscphy.h
+index 1a6a851d2cf8..cdf266960032 100644
+--- a/include/linux/smscphy.h
++++ b/include/linux/smscphy.h
+@@ -65,6 +65,8 @@ int smsc_phy_probe(struct phy_device *phydev);
+ #define MII_LAN874X_PHY_WOL_WUEN		BIT(2)
+ #define MII_LAN874X_PHY_WOL_MPEN		BIT(1)
+ #define MII_LAN874X_PHY_WOL_BCSTEN		BIT(0)
++#define MII_LAN874X_PHY_WOL_MASK		GENMASK(4, 0)
++#define MII_LAN874X_PHY_WOL_STATUS_MASK		GENMASK(7, 4)
+ 
+ #define MII_LAN874X_PHY_WOL_FILTER_EN		BIT(15)
+ #define MII_LAN874X_PHY_WOL_FILTER_MCASTTEN	BIT(9)
+-- 
+2.53.0
+

@@ -1,0 +1,105 @@
+From 3549c6c1a48d6252fd9f8423b51013a008c45c82 Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Date: Wed, 28 May 2025 14:40:40 +0200
+Subject: [PATCH] clocksource/drivers/stm32-lptimer: fix shutdown on stm32mp25
+
+Correctly manage for STM32MP25 the register STM32_LPTIM_CR, DIER must
+only be written with LPTIM enable, and the register STM32_LPTIM_IER,
+poll DIEROK to ensure register access has completed and clear this flag.
+
+Fixes: 5414bc8c57c4 ("clocksource/drivers/stm32-lptimer: Add support for stm32mp25")
+Change-Id: I2a2c3d79c037309b4251bc9f89213bd8dd487c2c
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/464332
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/clocksource/timer-stm32-lp.c | 40 +++++++++++++++++++++++++---
+ include/linux/mfd/stm32-lptimer.h    |  2 ++
+ 2 files changed, 38 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/clocksource/timer-stm32-lp.c b/drivers/clocksource/timer-stm32-lp.c
+index 815abee7ce4a..b5fe0e89a80e 100644
+--- a/drivers/clocksource/timer-stm32-lp.c
++++ b/drivers/clocksource/timer-stm32-lp.c
+@@ -41,7 +41,9 @@ to_priv(struct clock_event_device *clkevt)
+ static int stm32_clkevent_lp_shutdown(struct clock_event_device *clkevt)
+ {
+ 	struct stm32_lp_private *priv = to_priv(clkevt);
+-	int ret;
++	int ret = 0;
++	int loop_limit = 500;
++	u32 val;
+ 
+ 	if (clockevent_state_oneshot(clkevt) || clockevent_state_periodic(clkevt)) {
+ 		ret = pm_runtime_put(priv->dev);
+@@ -51,12 +53,42 @@ static int stm32_clkevent_lp_shutdown(struct clock_event_device *clkevt)
+ 		}
+ 	}
+ 
+-	regmap_write(priv->reg, STM32_LPTIM_CR, 0);
+-	regmap_write(priv->reg, STM32_LPTIM_IER, 0);
++	/* Check if LPTIMER is already disabled */
++	regmap_read(priv->reg, STM32_LPTIM_CR, &val);
++	if (!FIELD_GET(STM32_LPTIM_ENABLE, val))
++		return 0;
++
++	if (priv->version == STM32_LPTIM_VERR_23) {
++		regmap_write(priv->reg, STM32_LPTIM_IER, 0);
++		/*
++		 * Poll DIEROK to ensure register access has completed
++		 * the clkevent shutdown ops can be called with tick disabled,
++		 * so timeout and poll function can't be used here
++		 */
++		do {
++			regmap_read(priv->reg, STM32_LPTIM_ISR, &val);
++			if ((val & STM32_LPTIM_DIEROK) == STM32_LPTIM_DIEROK)
++				break;
++			udelay(10);
++		} while (--loop_limit);
++		if (!loop_limit) {
++			ret = -ETIMEDOUT;
++			dev_err(priv->dev, "access to LPTIM timed out\n");
++		} else {
++			regmap_write(priv->reg, STM32_LPTIM_ICR, STM32_LPTIM_DIEROKCF);
++		}
++		/* disable LPTIMER */
++		regmap_write(priv->reg, STM32_LPTIM_CR, 0);
++	} else {
++		/* disable LPTIMER to be able to write into IER register*/
++		regmap_write(priv->reg, STM32_LPTIM_CR, 0);
++		regmap_write(priv->reg, STM32_LPTIM_IER, 0);
++	}
++
+ 	/* clear pending flags */
+ 	regmap_write(priv->reg, STM32_LPTIM_ICR, STM32_LPTIM_ARRMCF);
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static int stm32mp25_clkevent_lp_set_evt(struct stm32_lp_private *priv, unsigned long evt)
+diff --git a/include/linux/mfd/stm32-lptimer.h b/include/linux/mfd/stm32-lptimer.h
+index 0fa2b34d8fff..cf295a5c1d0d 100644
+--- a/include/linux/mfd/stm32-lptimer.h
++++ b/include/linux/mfd/stm32-lptimer.h
+@@ -28,6 +28,7 @@
+ #define STM32_LPTIM_VERR	0x3F4	/* Version identification register - MP15 */
+ 
+ /* STM32_LPTIM_ISR - bit fields */
++#define STM32_LPTIM_DIEROK		BIT(24) /* MP25 */
+ #define STM32_LPTIM_DIEROK_ARROK	(BIT(24) | BIT(4)) /* MP25 */
+ #define STM32_LPTIM_CMP2_ARROK		(BIT(19) | BIT(4))
+ #define STM32_LPTIM_CMPOK_ARROK		GENMASK(4, 3)
+@@ -35,6 +36,7 @@
+ #define STM32_LPTIM_CMPOK		BIT(3)
+ 
+ /* STM32_LPTIM_ICR - bit fields */
++#define STM32_LPTIM_DIEROKCF		BIT(24) /* MP25 */
+ #define STM32_LPTIM_DIEROKCF_ARROKCF	(BIT(24) | BIT(4)) /* MP25 */
+ #define STM32_LPTIM_CMP2OKCF_ARROKCF	(BIT(19) | BIT(4))
+ #define STM32_LPTIM_CMPOKCF_ARROKCF	GENMASK(4, 3)
+-- 
+2.53.0
+

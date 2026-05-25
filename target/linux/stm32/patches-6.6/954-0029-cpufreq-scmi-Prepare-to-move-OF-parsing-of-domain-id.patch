@@ -1,0 +1,89 @@
+From 4d8aaabb2bf7498529419b9fc8234855df15b930 Mon Sep 17 00:00:00 2001
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 25 Aug 2023 13:26:23 +0200
+Subject: [PATCH] cpufreq: scmi: Prepare to move OF parsing of domain-id to
+ cpufreq
+
+The OF parsing of the clock domain specifier seems to better belong in the
+scmi cpufreq driver, rather than being implemented behind the generic
+->device_domain_id() perf protocol ops.
+
+To prepare to remove the ->device_domain_id() ops, let's implement the OF
+parsing in the scmi cpufreq driver instead.
+
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Link: https://lore.kernel.org/r/20230825112633.236607-4-ulf.hansson@linaro.org
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+[upstream commit e336baa4193ecc788a06c0c4659e400bb53689b4]
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: I82d42b658f8ef3e3be897b0b274b0158fd2acd45
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/476911
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/cpufreq/scmi-cpufreq.c | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
+index 6ff77003a96e..a1acc4a436c8 100644
+--- a/drivers/cpufreq/scmi-cpufreq.c
++++ b/drivers/cpufreq/scmi-cpufreq.c
+@@ -76,13 +76,24 @@ static unsigned int scmi_cpufreq_fast_switch(struct cpufreq_policy *policy,
+ 	return 0;
+ }
+ 
++static int scmi_cpu_domain_id(struct device *cpu_dev)
++{
++	struct of_phandle_args clkspec;
++
++	if (of_parse_phandle_with_args(cpu_dev->of_node, "clocks",
++				       "#clock-cells", 0, &clkspec))
++		return -EINVAL;
++
++	return clkspec.args[0];
++}
++
+ static int
+ scmi_get_sharing_cpus(struct device *cpu_dev, struct cpumask *cpumask)
+ {
+ 	int cpu, domain, tdomain;
+ 	struct device *tcpu_dev;
+ 
+-	domain = perf_ops->device_domain_id(cpu_dev);
++	domain = scmi_cpu_domain_id(cpu_dev);
+ 	if (domain < 0)
+ 		return domain;
+ 
+@@ -94,7 +105,7 @@ scmi_get_sharing_cpus(struct device *cpu_dev, struct cpumask *cpumask)
+ 		if (!tcpu_dev)
+ 			continue;
+ 
+-		tdomain = perf_ops->device_domain_id(tcpu_dev);
++		tdomain = scmi_cpu_domain_id(tcpu_dev);
+ 		if (tdomain == domain)
+ 			cpumask_set_cpu(cpu, cpumask);
+ 	}
+@@ -110,7 +121,7 @@ scmi_get_cpu_power(struct device *cpu_dev, unsigned long *power,
+ 	unsigned long Hz;
+ 	int ret, domain;
+ 
+-	domain = perf_ops->device_domain_id(cpu_dev);
++	domain = scmi_cpu_domain_id(cpu_dev);
+ 	if (domain < 0)
+ 		return domain;
+ 
+@@ -215,7 +226,7 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+ 	}
+ 
+ 	priv->cpu_dev = cpu_dev;
+-	priv->domain_id = perf_ops->device_domain_id(cpu_dev);
++	priv->domain_id = scmi_cpu_domain_id(cpu_dev);
+ 
+ 	policy->driver_data = priv;
+ 	policy->freq_table = freq_table;
+-- 
+2.53.0
+

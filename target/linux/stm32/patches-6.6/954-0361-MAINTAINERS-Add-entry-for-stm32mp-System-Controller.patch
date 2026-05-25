@@ -1,0 +1,38 @@
+From 133f3be51af06933691147dfe780f37f6b8ca459 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Tue, 7 Oct 2025 10:40:46 +0200
+Subject: [PATCH] MAINTAINERS: Add entry for stm32mp System Controller
+
+Add stm32mp System Controller driver.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: Iedbf97664dde96d29801a1c18a9801dbf743b1b4
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/496988
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ MAINTAINERS | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a1eb4ca1a223..4ade78f05406 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -20360,6 +20360,12 @@ L:	linux-spi@vger.kernel.org
+ S:	Maintained
+ F:	drivers/spi/spi-stm32.c
+ 
++ST STM32 System Controller
++M:	Antonio Borneo <antonio.borneo@foss.st.com>
++S:	Maintained
++F:	Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
++F:	drivers/soc/st/stm32_syscon.c
++
+ ST STPDDC60 DRIVER
+ M:	Daniel Nilsson <daniel.nilsson@flex.com>
+ L:	linux-hwmon@vger.kernel.org
+-- 
+2.53.0
+

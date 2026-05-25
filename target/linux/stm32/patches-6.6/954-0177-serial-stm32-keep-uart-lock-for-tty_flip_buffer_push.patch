@@ -1,0 +1,42 @@
+From 1f4f5efd48c36ba5468ef6baa828d2544d04dfe3 Mon Sep 17 00:00:00 2001
+From: Erwan SZYMANSKI <erwan.szymanski@st.com>
+Date: Thu, 11 Sep 2025 10:18:52 +0200
+Subject: [PATCH] serial: stm32: keep uart lock for tty_flip_buffer_push in
+ stm32_usart_interrupt
+
+Ensure that the uart port is locked whenever calling
+tty_flip_buffer_push to avoid having concurrent access from
+the tty framework when handling the buffer.
+
+Fixes: 1a690bb0629d ("serial: stm32: add smart-card protocol")
+
+Change-Id: I392815d20fc1f916814a49cad0e015dc2b0873f7
+Signed-off-by: Erwan SZYMANSKI <erwan.szymanski@st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/488888
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ drivers/tty/serial/stm32-usart.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index 074fc8558f15..49c8d85ad152 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -1134,9 +1134,9 @@ static irqreturn_t stm32_usart_interrupt(int irq, void *ptr)
+ 			    ((sr & USART_SR_ERR_MASK) && stm32_usart_rx_dma_started(stm32_port))) {
+ 				spin_lock(&port->lock);
+ 				size = stm32_usart_receive_chars(port, false);
+-				uart_unlock_and_check_sysrq(port);
+ 				if (size)
+ 					tty_flip_buffer_push(tport);
++				uart_unlock_and_check_sysrq(port);
+ 				ret = IRQ_HANDLED;
+ 			}
+ 		}
+-- 
+2.53.0
+

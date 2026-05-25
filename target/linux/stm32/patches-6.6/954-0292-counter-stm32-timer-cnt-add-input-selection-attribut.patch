@@ -1,0 +1,234 @@
+From 3a1dd500feb3cb5621fbfa57b07895e1473e36f7 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Tue, 21 Oct 2025 15:06:20 +0200
+Subject: [PATCH] counter: stm32-timer-cnt: add input selection attribute
+
+There's an input selection mux on each timer channel, that allows to
+choose among 16 sources [15:0].
+Each timer input channel TIMx_CH[1..4] defaults to "in0", e.g. is mapped
+as an alternate function to a GPIO port. Remaining sources in1..15 are
+routed to internal SoC signals (or left unconnected) depending on each
+TIM instance.
+
+So provide a signal attribute to the channel called "tisel" as documented
+in the reference manual.
+
+This allows to trigger capture counter events (with counter value) on
+internal signals similarly as available on external TIMx_CH[1..4] pins, by
+configuring tisel for desired channel:
+$ cd /sys/bus/counter/devices/counter0/count0
+$ cat ../signal0/name
+Channel 1
+$ echo 1 > ../signal0/tisel # selects TIMx_TI1_in1
+
+In newer revision of TIM, TISEL register has been moved. So add compatible
+data to specify TISEL register offset on each variant.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Change-Id: I3c3db3a052ce7b4cc784829d6776164f5f93c133
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/487185
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/counter/stm32-timer-cnt.c | 111 ++++++++++++++++++++++++++++--
+ include/linux/mfd/stm32-timers.h  |   5 ++
+ 2 files changed, 109 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/counter/stm32-timer-cnt.c b/drivers/counter/stm32-timer-cnt.c
+index 8c86c84b7b81..5a5693714fae 100644
+--- a/drivers/counter/stm32-timer-cnt.c
++++ b/drivers/counter/stm32-timer-cnt.c
+@@ -37,6 +37,10 @@ struct stm32_timer_regs {
+ 	u32 arr;
+ };
+ 
++struct stm32_timer_cfg {
++	const u32 tisel;	/* TISEL register offset */
++};
++
+ struct stm32_timer_cnt {
+ 	struct regmap *regmap;
+ 	struct clk *clk;
+@@ -48,6 +52,7 @@ struct stm32_timer_cnt {
+ 	unsigned int nr_irqs;
+ 	spinlock_t lock; /* protects nb_ovf */
+ 	u64 nb_ovf;
++	const struct stm32_timer_cfg *cfg;
+ };
+ 
+ static const enum counter_function stm32_count_functions[] = {
+@@ -547,6 +552,81 @@ static struct counter_comp stm32_count_clock_ext[] = {
+ 	COUNTER_COMP_FREQUENCY(stm32_count_clk_get_freq),
+ };
+ 
++static int stm32_count_tisel_get(struct counter_device *counter,
++				 struct counter_signal *signal,
++				 u8 *tisel)
++{
++	struct stm32_timer_cnt *const priv = counter_priv(counter);
++	u32 val;
++	int ret;
++
++	ret = regmap_read(priv->regmap, priv->cfg->tisel, &val);
++	if (ret)
++		return ret;
++
++	switch (signal->id) {
++	case STM32_CH1_SIG:
++		*tisel = FIELD_GET(TIM_TISEL_TI1, val);
++		break;
++	case STM32_CH2_SIG:
++		*tisel = FIELD_GET(TIM_TISEL_TI2, val);
++		break;
++	case STM32_CH3_SIG:
++		*tisel = FIELD_GET(TIM_TISEL_TI3, val);
++		break;
++	case STM32_CH4_SIG:
++		*tisel = FIELD_GET(TIM_TISEL_TI4, val);
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	dev_dbg(counter->parent, "get tisel for channel %d, tisel=%u\n", signal->id, *tisel);
++
++	return 0;
++}
++
++static int stm32_count_tisel_set(struct counter_device *counter,
++				 struct counter_signal *signal,
++				 u8 tisel)
++{
++	struct stm32_timer_cnt *const priv = counter_priv(counter);
++	u32 mask, val;
++
++	if (tisel > 15)
++		return -ERANGE;
++
++	switch (signal->id) {
++	case STM32_CH1_SIG:
++		val = FIELD_PREP(TIM_TISEL_TI1, tisel);
++		mask = TIM_TISEL_TI1;
++		break;
++	case STM32_CH2_SIG:
++		val = FIELD_PREP(TIM_TISEL_TI2, tisel);
++		mask = TIM_TISEL_TI2;
++		break;
++	case STM32_CH3_SIG:
++		val = FIELD_PREP(TIM_TISEL_TI3, tisel);
++		mask = TIM_TISEL_TI3;
++		break;
++	case STM32_CH4_SIG:
++		val = FIELD_PREP(TIM_TISEL_TI4, tisel);
++		mask = TIM_TISEL_TI4;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	dev_dbg(counter->parent, "set tisel for channel %d, tisel=%u\n", signal->id, tisel);
++
++	return regmap_update_bits(priv->regmap, priv->cfg->tisel, mask, val);
++}
++
++static struct counter_comp stm32_count_channel_ext[] = {
++	/* Input select for channel 1..4, e.g. ti[1..4]_in[15:0] */
++	COUNTER_COMP_SIGNAL_U8("tisel", stm32_count_tisel_get, stm32_count_tisel_set),
++};
++
+ static struct counter_signal stm32_signals[] = {
+ 	/*
+ 	 * Need to declare all the signals as a static array, and keep the signals order here,
+@@ -559,11 +639,15 @@ static struct counter_signal stm32_signals[] = {
+ 	 */
+ 	{
+ 		.id = STM32_CH1_SIG,
+-		.name = "Channel 1"
++		.name = "Channel 1",
++		.ext = stm32_count_channel_ext,
++		.num_ext = ARRAY_SIZE(stm32_count_channel_ext),
+ 	},
+ 	{
+ 		.id = STM32_CH2_SIG,
+-		.name = "Channel 2"
++		.name = "Channel 2",
++		.ext = stm32_count_channel_ext,
++		.num_ext = ARRAY_SIZE(stm32_count_channel_ext),
+ 	},
+ 	{
+ 		.id = STM32_CLOCK_SIG,
+@@ -573,11 +657,15 @@ static struct counter_signal stm32_signals[] = {
+ 	},
+ 	{
+ 		.id = STM32_CH3_SIG,
+-		.name = "Channel 3"
++		.name = "Channel 3",
++		.ext = stm32_count_channel_ext,
++		.num_ext = ARRAY_SIZE(stm32_count_channel_ext),
+ 	},
+ 	{
+ 		.id = STM32_CH4_SIG,
+-		.name = "Channel 4"
++		.name = "Channel 4",
++		.ext = stm32_count_channel_ext,
++		.num_ext = ARRAY_SIZE(stm32_count_channel_ext),
+ 	},
+ };
+ 
+@@ -742,6 +830,7 @@ static int stm32_timer_cnt_probe(struct platform_device *pdev)
+ 	priv->clk = ddata->clk;
+ 	priv->max_arr = ddata->max_arr;
+ 	priv->nr_irqs = ddata->nr_irqs;
++	priv->cfg = device_get_match_data(dev);
+ 
+ 	ret = stm32_timer_cnt_probe_encoder(dev, priv);
+ 	if (ret)
+@@ -881,10 +970,18 @@ static const struct dev_pm_ops stm32_timer_cnt_pm_ops = {
+ 	RUNTIME_PM_OPS(stm32_timer_cnt_runtime_suspend, stm32_timer_cnt_runtime_resume, NULL)
+ };
+ 
++static const struct stm32_timer_cfg stm32_timer_cfg = {
++	.tisel = TIM_TISEL,
++};
++
++static const struct stm32_timer_cfg stm32mp25_timer_cfg = {
++	.tisel = STM32MP25_TIM_TISEL,
++};
++
+ static const struct of_device_id stm32_timer_cnt_of_match[] = {
+-	{ .compatible = "st,stm32-timer-counter", },
+-	{ .compatible = "st,stm32mp21-timer-counter", },
+-	{ .compatible = "st,stm32mp25-timer-counter", },
++	{ .compatible = "st,stm32-timer-counter", .data = (void *)&stm32_timer_cfg },
++	{ .compatible = "st,stm32mp21-timer-counter", .data = (void *)&stm32mp25_timer_cfg },
++	{ .compatible = "st,stm32mp25-timer-counter", .data = (void *)&stm32mp25_timer_cfg },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, stm32_timer_cnt_of_match);
+diff --git a/include/linux/mfd/stm32-timers.h b/include/linux/mfd/stm32-timers.h
+index 26e63175284e..98ba3f92618b 100644
+--- a/include/linux/mfd/stm32-timers.h
++++ b/include/linux/mfd/stm32-timers.h
+@@ -32,6 +32,7 @@
+ #define TIM_DCR		0x48	/* DMA control register    */
+ #define TIM_DMAR	0x4C	/* DMA register for transfer */
+ #define TIM_TISEL	0x68	/* Input Selection         */
++#define STM32MP25_TIM_TISEL	0x5C	/* Input Selection         */
+ 
+ #define TIM_HWCFGR2	0x3EC	/* hardware configuration 2 Reg (MP25)	*/
+ #define TIM_HWCFGR1	0x3F0	/* hardware configuration 1 Reg (MP25)	*/
+@@ -95,6 +96,10 @@
+ #define TIM_BDTR_BKF(x)	(0xf << (16 + (x) * 4))
+ #define TIM_DCR_DBA	GENMASK(4, 0)	/* DMA base addr */
+ #define TIM_DCR_DBL	GENMASK(12, 8)	/* DMA burst len */
++#define TIM_TISEL_TI1	GENMASK(3, 0)	/* TI1 Input Selection mask*/
++#define TIM_TISEL_TI2	GENMASK(11, 8)	/* TI2 Input Selection mask*/
++#define TIM_TISEL_TI3	GENMASK(19, 16)	/* TI3 Input Selection mask*/
++#define TIM_TISEL_TI4	GENMASK(27, 24)	/* TI4 Input Selection mask*/
+ #define TIM_HWCFGR1_NB_OF_CC	GENMASK(3, 0)	/* Capture/compare channels */
+ #define TIM_HWCFGR1_NB_OF_DT	GENMASK(7, 4)	/* Complementary outputs & dead-time generators */
+ #define TIM_HWCFGR2_CNT_WIDTH	GENMASK(15, 8)	/* Counter width */
+-- 
+2.53.0
+

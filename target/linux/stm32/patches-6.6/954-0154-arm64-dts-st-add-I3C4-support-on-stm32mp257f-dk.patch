@@ -1,0 +1,40 @@
+From 5a8ddeb8871b6decc12749bdf89c4307aeec82d7 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 29 Jul 2025 10:45:26 +0200
+Subject: [PATCH] arm64: dts: st: add I3C4 support on stm32mp257f-dk
+
+I3C4 is available on GPIO expansion connector of stm32mp257f-dk board,
+using the EXP_GPIO22 and EXP_GPIO23, respectively PZ0 and PZ1 configured
+by i3c4 pins_b pinctrl.
+
+Change-Id: Iec693a637063a6f17d2ea7927c1eff276908dcfa
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/478605
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index 078dd24bf8ab..da066d58c7e9 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -441,6 +441,14 @@ i2s2_endpoint: endpoint {
+ 	};
+ };
+ 
++&i3c4 {
++	pinctrl-names = "default", "init", "sleep";
++	pinctrl-0 = <&i3c4_pins_b>;
++	pinctrl-1 = <&i3c4_init_pins_b>;
++	pinctrl-2 = <&i3c4_sleep_pins_b>;
++	status = "disabled";
++};
++
+ &ipcc1 {
+ 	status = "okay";
+ };
+-- 
+2.53.0
+

@@ -1,0 +1,46 @@
+From a8980a4199a77ad37e76f79d5b563e49fc27967a Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Tue, 2 Dec 2025 15:15:33 +0100
+Subject: [PATCH] ARM: dts: stm32: add Ethernet power domain on stm32mp13x
+
+Ethernet can be used to wakeup from LPLV_Stop mode
+Add pd_core PM domain properties on Ethernet instances.
+
+Change-Id: Ie1c313dffe7c41291518d91b2cc896b90248255c
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/514485
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp131.dtsi | 1 +
+ arch/arm/boot/dts/st/stm32mp133.dtsi | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
+index ac67910c07c2..e8316fdbb367 100644
+--- a/arch/arm/boot/dts/st/stm32mp131.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
+@@ -1940,6 +1940,7 @@ ethernet1: ethernet@5800a000 {
+ 					 <&rcc ETH1STP>,
+ 					 <&rcc ETH1PTP_K>,
+ 					 <&rcc ETH1CK_K>;
++				power-domains = <&pd_core>;
+ 				st,syscon = <&syscfg 0x4 0xff0000>;
+ 				snps,mixed-burst;
+ 				snps,pbl = <2>;
+diff --git a/arch/arm/boot/dts/st/stm32mp133.dtsi b/arch/arm/boot/dts/st/stm32mp133.dtsi
+index feff4f5fb248..9cf03a935056 100644
+--- a/arch/arm/boot/dts/st/stm32mp133.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp133.dtsi
+@@ -89,6 +89,7 @@ ethernet2: ethernet@5800e000 {
+ 			 <&rcc ETH2STP>,
+ 			 <&rcc ETH2PTP_K>,
+ 			 <&rcc ETH2CK_K>;
++		power-domains = <&pd_core>;
+ 		st,syscon = <&syscfg 0x4 0xff000000>;
+ 		snps,mixed-burst;
+ 		snps,pbl = <2>;
+-- 
+2.53.0
+

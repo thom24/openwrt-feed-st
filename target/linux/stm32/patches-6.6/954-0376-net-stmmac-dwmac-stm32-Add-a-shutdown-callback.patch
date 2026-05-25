@@ -1,0 +1,39 @@
+From 7ade49c47a77db237015e1b07b82615c2e3d3afe Mon Sep 17 00:00:00 2001
+From: Christophe Kerello <christophe.kerello@foss.st.com>
+Date: Thu, 8 Jan 2026 17:19:30 +0100
+Subject: [PATCH] net: stmmac: dwmac-stm32: Add a shutdown callback
+
+The Ethernet MAC and PHY are usually major consumers of power on boards
+which may not be able to fully power off. Powering down the MAC and
+internal PHY saves power while these boards are "off".
+
+Change-Id: I20bb4330f425ac2a766b460ad11f2bc779afd5c5
+Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/522974
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+Domain-Review: Christophe ROULLIER <christophe.roullier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Christophe KERELLO <christophe.kerello@st.com>
+Tested-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
+index 76a01cddcbf5..714d045ac0d3 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
+@@ -757,6 +757,7 @@ MODULE_DEVICE_TABLE(of, stm32_dwmac_match);
+ static struct platform_driver stm32_dwmac_driver = {
+ 	.probe  = stm32_dwmac_probe,
+ 	.remove_new = stm32_dwmac_remove,
++	.shutdown = stm32_dwmac_remove,
+ 	.driver = {
+ 		.name           = "stm32-dwmac",
+ #ifdef CONFIG_PM_SLEEP
+-- 
+2.53.0
+

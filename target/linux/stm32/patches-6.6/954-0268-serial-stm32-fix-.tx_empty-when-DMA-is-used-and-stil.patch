@@ -1,0 +1,37 @@
+From 9a2ec7c314d68e9439334b9eb0cdb27cd700dcb0 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Thu, 25 Sep 2025 16:11:02 +0200
+Subject: [PATCH] serial: stm32: fix .tx_empty() when DMA is used and still
+ busy
+
+Prevent reporting the transmitter as empty while a DMA transfer is
+still in progress, regardless of the hardware status register.
+
+Change-Id: Ide20b26aed29623d4abc84839ddc773f73d452f8
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/499273
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Valentin CARON <valentin.caron@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/tty/serial/stm32-usart.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index 677a1a9364c3..05d2fada8ff7 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -143,6 +143,9 @@ static unsigned int stm32_usart_tx_empty(struct uart_port *port)
+ 	struct stm32_port *stm32_port = to_stm32_port(port);
+ 	const struct stm32_usart_offsets *ofs = &stm32_port->info->ofs;
+ 
++	if (stm32_port->tx_dma_busy)
++		return 0;
++
+ 	if (readl_relaxed(port->membase + ofs->isr) & USART_SR_TC)
+ 		return TIOCSER_TEMT;
+ 
+-- 
+2.53.0
+

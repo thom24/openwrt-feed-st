@@ -1,0 +1,49 @@
+From ce8e75e4e4d70b8fedc184b7a0c2c46b8b2912f5 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 26 Nov 2025 16:02:30 +0100
+Subject: [PATCH] usb: dwc2: hcd: don't turn off the phy if wakeup enabled
+ descendants
+
+When there are wakeup enabled descendants, but the controller hasn't
+been enabled to wakeup, the PHY gets switched off, and the enabled
+descendants won't be able to wakeup.
+Change the default behavior in case there are wakeup enabled descendants,
+keep the PHY active.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ia64970ad8326809d3ee65e076c2d31e72ec61c8d
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/512995
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ drivers/usb/dwc2/hcd.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+index 2ea26e3c9eab..613fabaeb7dc 100644
+--- a/drivers/usb/dwc2/hcd.c
++++ b/drivers/usb/dwc2/hcd.c
+@@ -5732,17 +5732,13 @@ bool dwc2_host_can_poweroff_phy(struct dwc2_hsotg *dwc2)
+ 	if (dwc2_is_device_mode(dwc2) || dwc2->dr_mode == USB_DR_MODE_PERIPHERAL)
+ 		return false;
+ 
+-	/* If the controller isn't allowed to wakeup then we can power off. */
+-	if (!device_may_wakeup(dwc2->dev))
+-		return true;
+-
+ 	root_hub = dwc2_hsotg_to_hcd(dwc2)->self.root_hub;
+ 
+ 	/*
+-	 * We don't want to power off the PHY if something under the
+-	 * root hub has wakeup enabled.
++	 * If the controller is allowed to wakeup or if something under the root hub has wakeup
++	 * enabled, then we don't want to power off the PHY.
+ 	 */
+-	if (usb_wakeup_enabled_descendants(root_hub))
++	if (device_may_wakeup(dwc2->dev) || usb_wakeup_enabled_descendants(root_hub))
+ 		return false;
+ 
+ 	/* No reason to keep the PHY powered, so allow poweroff */
+-- 
+2.53.0
+

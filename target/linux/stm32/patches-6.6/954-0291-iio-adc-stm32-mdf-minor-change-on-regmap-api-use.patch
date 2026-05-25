@@ -1,0 +1,44 @@
+From 822d23fe7bcdbf83bdb3cfe80804dbdbbbe13c50 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Wed, 14 May 2025 09:58:58 +0200
+Subject: [PATCH] iio: adc: stm32-mdf: minor change on regmap api use
+
+Use dedicated regmap API for set and clear bits.
+
+Change-Id: I198ab8e4e1ab1b5933e9b2fdc121b08ebba20162
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/476805
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/iio/adc/stm32-mdf-adc.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/iio/adc/stm32-mdf-adc.c b/drivers/iio/adc/stm32-mdf-adc.c
+index ac7430f700f2..0129dc9a1991 100644
+--- a/drivers/iio/adc/stm32-mdf-adc.c
++++ b/drivers/iio/adc/stm32-mdf-adc.c
+@@ -1321,8 +1321,7 @@ static int stm32_mdf_adc_single_conv(struct iio_dev *indio_dev,
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ret = regmap_update_bits(adc->regmap, MDF_DFLTIER_REG,
+-				 MDF_DFLTIER_FTHIE_MASK, MDF_DFLTIER_FTHIE_MASK);
++	ret = regmap_set_bits(adc->regmap, MDF_DFLTIER_REG, MDF_DFLTIER_FTHIE_MASK);
+ 	if (ret < 0)
+ 		goto err_conv;
+ 
+@@ -1339,7 +1338,7 @@ static int stm32_mdf_adc_single_conv(struct iio_dev *indio_dev,
+ 
+ 	timeout = wait_for_completion_interruptible_timeout(&adc->completion, STM32_MDF_TIMEOUT_MS);
+ 
+-	regmap_update_bits(adc->regmap, MDF_DFLTIER_REG, MDF_DFLTIER_FTHIE_MASK, 0);
++	regmap_clear_bits(adc->regmap, MDF_DFLTIER_REG, MDF_DFLTIER_FTHIE_MASK);
+ 
+ 	if (timeout == 0) {
+ 		dev_err(&indio_dev->dev, "Timeout reached on channel [%d]", chan->channel);
+-- 
+2.53.0
+

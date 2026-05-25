@@ -1,0 +1,153 @@
+From dacde78d3a85b8641d382cd893eaba6580d81422 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Mon, 27 Oct 2025 17:19:10 +0100
+Subject: [PATCH] dt-bindings: fix warnings on access-controllers property for
+ coresight
+
+In the stm32mpxxx device tree files, the access-controllers property has
+been added to every coresight peripheral nodes so that the debug
+configuration is checked before using them. Document it.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I0acfbd1c532f1700e31a400dd123127d572b0fde
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/503458
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ .../devicetree/bindings/arm/arm,coresight-cpu-debug.yaml      | 4 ++++
+ Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml  | 4 ++++
+ .../devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml | 4 ++++
+ .../bindings/arm/arm,coresight-dynamic-replicator.yaml        | 4 ++++
+ Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml  | 4 ++++
+ Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml  | 4 ++++
+ Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml  | 4 ++++
+ Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml | 4 ++++
+ 8 files changed, 32 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml
+index 0a6bc03ebe00..f201f7710900 100644
+--- a/Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml
++++ b/Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml
+@@ -60,6 +60,10 @@ properties:
+       dedicated power domain. CPU idle states may also need to be separately
+       constrained to keep CPU cores powered.
+ 
++  access-controllers:
++    minItems: 1
++    maxItems: 2
++
+ required:
+   - compatible
+   - reg
+diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml
+index 6216cfb0a188..002aa1abd751 100644
+--- a/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml
++++ b/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml
+@@ -127,6 +127,10 @@ properties:
+   "#address-cells":
+     const: 1
+ 
++  access-controllers:
++    minItems: 1
++    maxItems: 2
++
+ patternProperties:
+   '^trig-conns@([0-9]+)$':
+     type: object
+diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml
+index 44a1041cb0fc..0c391a4e7baf 100644
+--- a/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml
++++ b/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml
+@@ -74,6 +74,10 @@ properties:
+         description: Output connection to CoreSight Trace bus
+         $ref: /schemas/graph.yaml#/properties/port
+ 
++  access-controllers:
++    minItems: 1
++    maxItems: 2
++
+ required:
+   - compatible
+   - reg
+diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-replicator.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-replicator.yaml
+index 03792e9bd97a..4f5d777e8201 100644
+--- a/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-replicator.yaml
++++ b/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-replicator.yaml
+@@ -80,6 +80,10 @@ properties:
+         description: Output connections to CoreSight Trace bus
+         $ref: /schemas/graph.yaml#/properties/port
+ 
++  access-controllers:
++    minItems: 1
++    maxItems: 2
++
+ required:
+   - compatible
+   - reg
+diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml
+index 01200f67504a..1fd9ab53767b 100644
+--- a/Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml
++++ b/Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml
+@@ -114,6 +114,10 @@ properties:
+         description: Output connection from the ETM to CoreSight Trace bus.
+         $ref: /schemas/graph.yaml#/properties/port
+ 
++  access-controllers:
++    minItems: 1
++    maxItems: 2
++
+ required:
+   - compatible
+   - clocks
+diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml
+index 378380c3f5aa..46baa43a2522 100644
+--- a/Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml
++++ b/Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml
+@@ -73,6 +73,10 @@ properties:
+         description: Output connection to the CoreSight Trace bus.
+         $ref: /schemas/graph.yaml#/properties/port
+ 
++  access-controllers:
++    minItems: 1
++    maxItems: 2
++
+ required:
+   - compatible
+   - reg
+diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
+index cb8dceaca70e..1b15650ef163 100644
+--- a/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
++++ b/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
+@@ -101,6 +101,10 @@ properties:
+           and ETF configurations.
+         $ref: /schemas/graph.yaml#/properties/port
+ 
++  access-controllers:
++    minItems: 1
++    maxItems: 2
++
+ required:
+   - compatible
+   - reg
+diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml
+index 61a0cdc27745..32fdd4307a82 100644
+--- a/Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml
++++ b/Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml
+@@ -66,6 +66,10 @@ properties:
+         description: Input connection from the CoreSight Trace bus.
+         $ref: /schemas/graph.yaml#/properties/port
+ 
++  access-controllers:
++    minItems: 1
++    maxItems: 2
++
+ required:
+   - compatible
+   - reg
+-- 
+2.53.0
+

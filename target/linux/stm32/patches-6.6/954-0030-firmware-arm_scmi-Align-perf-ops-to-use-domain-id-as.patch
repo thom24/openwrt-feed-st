@@ -1,0 +1,179 @@
+From c6eaf5ebb618769ac91ef4ffcadbf0480477858f Mon Sep 17 00:00:00 2001
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 25 Aug 2023 13:26:24 +0200
+Subject: [PATCH] firmware: arm_scmi: Align perf ops to use domain-id as
+ in-parameter
+
+Most scmi_perf_proto_ops are already using an "u32 domain" as an
+in-parameter to indicate what performance domain we shall operate upon.
+However, some of the ops are using a "struct device *dev", which means that
+an additional OF parsing is needed each time the perf ops gets called, to
+find the corresponding domain-id.
+
+To avoid the above, but also to make the code more consistent, let's
+replace the in-parameter "struct device *dev" with an "u32 domain". Note
+that, this requires us to make some corresponding changes to the scmi
+cpufreq driver, so let's do that too.
+
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Link: https://lore.kernel.org/r/20230825112633.236607-5-ulf.hansson@linaro.org
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+[upstream commit 39dfa5b9e1f0fa63b811a0a87f1c2fb9c76a0456]
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: I58e4ad7378b472c6c97c7ede261058d67143680a
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/476912
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ drivers/cpufreq/scmi-cpufreq.c   | 14 +++++++++-----
+ drivers/firmware/arm_scmi/perf.c | 22 ++++------------------
+ include/linux/scmi_protocol.h    |  6 +++---
+ 3 files changed, 16 insertions(+), 26 deletions(-)
+
+diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
+index a1acc4a436c8..07671d31595b 100644
+--- a/drivers/cpufreq/scmi-cpufreq.c
++++ b/drivers/cpufreq/scmi-cpufreq.c
+@@ -143,7 +143,7 @@ scmi_get_cpu_power(struct device *cpu_dev, unsigned long *power,
+ 
+ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+ {
+-	int ret, nr_opp;
++	int ret, nr_opp, domain;
+ 	unsigned int latency;
+ 	struct device *cpu_dev;
+ 	struct scmi_data *priv;
+@@ -155,6 +155,10 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+ 		return -ENODEV;
+ 	}
+ 
++	domain = scmi_cpu_domain_id(cpu_dev);
++	if (domain < 0)
++		return domain;
++
+ 	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+ 	if (!priv)
+ 		return -ENOMEM;
+@@ -193,7 +197,7 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+ 	  */
+ 	nr_opp = dev_pm_opp_get_opp_count(cpu_dev);
+ 	if (nr_opp <= 0) {
+-		ret = perf_ops->device_opps_add(ph, cpu_dev);
++		ret = perf_ops->device_opps_add(ph, cpu_dev, domain);
+ 		if (ret) {
+ 			dev_warn(cpu_dev, "failed to add opps to the device\n");
+ 			goto out_free_cpumask;
+@@ -226,7 +230,7 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+ 	}
+ 
+ 	priv->cpu_dev = cpu_dev;
+-	priv->domain_id = scmi_cpu_domain_id(cpu_dev);
++	priv->domain_id = domain;
+ 
+ 	policy->driver_data = priv;
+ 	policy->freq_table = freq_table;
+@@ -234,14 +238,14 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+ 	/* SCMI allows DVFS request for any domain from any CPU */
+ 	policy->dvfs_possible_from_any_cpu = true;
+ 
+-	latency = perf_ops->transition_latency_get(ph, cpu_dev);
++	latency = perf_ops->transition_latency_get(ph, domain);
+ 	if (!latency)
+ 		latency = CPUFREQ_ETERNAL;
+ 
+ 	policy->cpuinfo.transition_latency = latency;
+ 
+ 	policy->fast_switch_possible =
+-		perf_ops->fast_switch_possible(ph, cpu_dev);
++		perf_ops->fast_switch_possible(ph, domain);
+ 
+ 	return 0;
+ 
+diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
+index dd344506b0a3..d1a093f8343c 100644
+--- a/drivers/firmware/arm_scmi/perf.c
++++ b/drivers/firmware/arm_scmi/perf.c
+@@ -809,16 +809,12 @@ static int scmi_dev_domain_id(struct device *dev)
+ }
+ 
+ static int scmi_dvfs_device_opps_add(const struct scmi_protocol_handle *ph,
+-				     struct device *dev)
++				     struct device *dev, u32 domain)
+ {
+-	int idx, ret, domain;
++	int idx, ret;
+ 	unsigned long freq;
+ 	struct perf_dom_info *dom;
+ 
+-	domain = scmi_dev_domain_id(dev);
+-	if (domain < 0)
+-		return -EINVAL;
+-
+ 	dom = scmi_perf_domain_lookup(ph, domain);
+ 	if (IS_ERR(dom))
+ 		return PTR_ERR(dom);
+@@ -844,15 +840,10 @@ static int scmi_dvfs_device_opps_add(const struct scmi_protocol_handle *ph,
+ 
+ static int
+ scmi_dvfs_transition_latency_get(const struct scmi_protocol_handle *ph,
+-				 struct device *dev)
++				 u32 domain)
+ {
+-	int domain;
+ 	struct perf_dom_info *dom;
+ 
+-	domain = scmi_dev_domain_id(dev);
+-	if (domain < 0)
+-		return -EINVAL;
+-
+ 	dom = scmi_perf_domain_lookup(ph, domain);
+ 	if (IS_ERR(dom))
+ 		return PTR_ERR(dom);
+@@ -949,15 +940,10 @@ static int scmi_dvfs_est_power_get(const struct scmi_protocol_handle *ph,
+ }
+ 
+ static bool scmi_fast_switch_possible(const struct scmi_protocol_handle *ph,
+-				      struct device *dev)
++				      u32 domain)
+ {
+-	int domain;
+ 	struct perf_dom_info *dom;
+ 
+-	domain = scmi_dev_domain_id(dev);
+-	if (domain < 0)
+-		return false;
+-
+ 	dom = scmi_perf_domain_lookup(ph, domain);
+ 	if (IS_ERR(dom))
+ 		return false;
+diff --git a/include/linux/scmi_protocol.h b/include/linux/scmi_protocol.h
+index 94d76d30b6a1..0dbae5634290 100644
+--- a/include/linux/scmi_protocol.h
++++ b/include/linux/scmi_protocol.h
+@@ -151,9 +151,9 @@ struct scmi_perf_proto_ops {
+ 			 u32 *level, bool poll);
+ 	int (*device_domain_id)(struct device *dev);
+ 	int (*transition_latency_get)(const struct scmi_protocol_handle *ph,
+-				      struct device *dev);
++				      u32 domain);
+ 	int (*device_opps_add)(const struct scmi_protocol_handle *ph,
+-			       struct device *dev);
++			       struct device *dev, u32 domain);
+ 	int (*freq_set)(const struct scmi_protocol_handle *ph, u32 domain,
+ 			unsigned long rate, bool poll);
+ 	int (*freq_get)(const struct scmi_protocol_handle *ph, u32 domain,
+@@ -161,7 +161,7 @@ struct scmi_perf_proto_ops {
+ 	int (*est_power_get)(const struct scmi_protocol_handle *ph, u32 domain,
+ 			     unsigned long *rate, unsigned long *power);
+ 	bool (*fast_switch_possible)(const struct scmi_protocol_handle *ph,
+-				     struct device *dev);
++				     u32 domain);
+ 	enum scmi_power_scale (*power_scale_get)(const struct scmi_protocol_handle *ph);
+ };
+ 
+-- 
+2.53.0
+

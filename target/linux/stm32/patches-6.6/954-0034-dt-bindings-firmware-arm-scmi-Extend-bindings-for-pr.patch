@@ -1,0 +1,60 @@
+From 62dec4aad6609373054892562d69991176bf500f Mon Sep 17 00:00:00 2001
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 25 Aug 2023 13:26:29 +0200
+Subject: [PATCH] dt-bindings: firmware: arm,scmi: Extend bindings for
+ protocol@13
+
+The protocol@13 node is describing the performance scaling option for the
+ARM SCMI interface, as a clock provider. This is unnecessary limiting, as
+performance scaling is in many cases not limited to switching a clock's
+frequency.
+
+Therefore, let's extend the binding so the interface can be modelled as a
+generic performance domain too. The common way to describe this, is to use
+the power-domain DT bindings, so let's use that.
+
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Conor Dooley <conor+dt@kernel.org>
+Cc: devicetree@vger.kernel.org
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/20230825112633.236607-10-ulf.hansson@linaro.org
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+[upstream commit e11c480b6df1942b8f9a6958c2d881d8a9a9fb3b]
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: I30d77a42b0d55af36eefa5a041375f47dd6ab488
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/476916
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ .../devicetree/bindings/firmware/arm,scmi.yaml        | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+index b138f3d23df8..563a87dfb31a 100644
+--- a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
++++ b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+@@ -149,8 +149,15 @@ properties:
+       '#clock-cells':
+         const: 1
+ 
+-    required:
+-      - '#clock-cells'
++      '#power-domain-cells':
++        const: 1
++
++    oneOf:
++      - required:
++          - '#clock-cells'
++
++      - required:
++          - '#power-domain-cells'
+ 
+   protocol@14:
+     $ref: '#/$defs/protocol-node'
+-- 
+2.53.0
+

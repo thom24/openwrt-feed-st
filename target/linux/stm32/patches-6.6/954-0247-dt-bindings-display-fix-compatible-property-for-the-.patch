@@ -1,0 +1,39 @@
+From 3d49236537bed53bdcdd4cdef9cd695b892c2277 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Tue, 7 Oct 2025 09:52:28 +0200
+Subject: [PATCH] dt-bindings: display: fix compatible property for the STM32
+ LTDC device
+
+The compatible property should be changed with enum type to avoid errors
+when running dt_binding_check script.
+
+Change-Id: If4b9faf8b79e39df8075e90a9fcb03f4c935e31e
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/496965
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ .../devicetree/bindings/display/st,stm32-ltdc.yaml         | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/display/st,stm32-ltdc.yaml b/Documentation/devicetree/bindings/display/st,stm32-ltdc.yaml
+index 8c18a58c3fe4..e55e790dcfc9 100644
+--- a/Documentation/devicetree/bindings/display/st,stm32-ltdc.yaml
++++ b/Documentation/devicetree/bindings/display/st,stm32-ltdc.yaml
+@@ -12,9 +12,10 @@ maintainers:
+ 
+ properties:
+   compatible:
+-    const: st,stm32-ltdc
+-    const: st,stm32mp21-ltdc
+-    const: st,stm32mp25-ltdc
++    enum:
++      - st,stm32-ltdc
++      - st,stm32mp21-ltdc
++      - st,stm32mp25-ltdc
+ 
+   reg:
+     maxItems: 1
+-- 
+2.53.0
+

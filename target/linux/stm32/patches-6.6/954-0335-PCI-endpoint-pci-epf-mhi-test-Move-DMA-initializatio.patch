@@ -1,0 +1,102 @@
+From 2c115a6e959ee87e7d2c894646d7cc61f10be569 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Tue, 30 Apr 2024 11:43:47 +0530
+Subject: [PATCH] PCI: endpoint: pci-epf-{mhi/test}: Move DMA initialization to
+ EPC init callback
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+[ Upstream commit 60bd3e039aa257790e925f7ff22d776756f3b123 ]
+
+To maintain uniformity across EPF drivers, move DMA initialization to EPC
+init callback. This will also allow us to deinit DMA during PERST# assert
+in the further commits.
+
+For EPC drivers without PERST#, DMA deinit will only happen during driver
+unbind.
+
+Link: https://lore.kernel.org/linux-pci/20240430-pci-epf-rework-v4-6-22832d0d456f@linaro.org
+Tested-by: Niklas Cassel <cassel@kernel.org>
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Signed-off-by: Krzysztof Wilczyński <kwilczynski@kernel.org>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Reviewed-by: Niklas Cassel <cassel@kernel.org>
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I2f182a6c7fa8f8ca53fb1bf49dd2ad515253dc16
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/511389
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/pci/endpoint/functions/pci-epf-mhi.c  | 16 ++++++++--------
+ drivers/pci/endpoint/functions/pci-epf-test.c | 12 ++++++------
+ 2 files changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/pci/endpoint/functions/pci-epf-mhi.c b/drivers/pci/endpoint/functions/pci-epf-mhi.c
+index 87154992ea11..6ebf1c6684b9 100644
+--- a/drivers/pci/endpoint/functions/pci-epf-mhi.c
++++ b/drivers/pci/endpoint/functions/pci-epf-mhi.c
+@@ -506,6 +506,14 @@ static int pci_epf_mhi_core_init(struct pci_epf *epf)
+ 	if (!epf_mhi->epc_features)
+ 		return -ENODATA;
+ 
++	if (info->flags & MHI_EPF_USE_DMA) {
++		ret = pci_epf_mhi_dma_init(epf_mhi);
++		if (ret) {
++			dev_err(dev, "Failed to initialize DMA: %d\n", ret);
++			return ret;
++		}
++	}
++
+ 	return 0;
+ }
+ 
+@@ -518,14 +526,6 @@ static int pci_epf_mhi_link_up(struct pci_epf *epf)
+ 	struct device *dev = &epf->dev;
+ 	int ret;
+ 
+-	if (info->flags & MHI_EPF_USE_DMA) {
+-		ret = pci_epf_mhi_dma_init(epf_mhi);
+-		if (ret) {
+-			dev_err(dev, "Failed to initialize DMA: %d\n", ret);
+-			return ret;
+-		}
+-	}
+-
+ 	mhi_cntrl->mmio = epf_mhi->mmio;
+ 	mhi_cntrl->irq = epf_mhi->irq;
+ 	mhi_cntrl->mru = info->mru;
+diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
+index f7839b312166..fc5d714b8f9e 100644
+--- a/drivers/pci/endpoint/functions/pci-epf-test.c
++++ b/drivers/pci/endpoint/functions/pci-epf-test.c
+@@ -904,6 +904,12 @@ static int pci_epf_test_core_init(struct pci_epf *epf)
+ 	bool msi_capable = true;
+ 	int ret;
+ 
++	epf_test->dma_supported = true;
++
++	ret = pci_epf_test_init_dma_chan(epf_test);
++	if (ret)
++		epf_test->dma_supported = false;
++
+ 	epc_features = pci_epc_get_features(epc, epf->func_no, epf->vfunc_no);
+ 	if (epc_features) {
+ 		msix_capable = epc_features->msix_capable;
+@@ -1099,12 +1105,6 @@ static int pci_epf_test_bind(struct pci_epf *epf)
+ 		}
+ 	}
+ 
+-	epf_test->dma_supported = true;
+-
+-	ret = pci_epf_test_init_dma_chan(epf_test);
+-	if (ret)
+-		epf_test->dma_supported = false;
+-
+ 	if (!linkup_notifier && !core_init_notifier)
+ 		queue_work(kpcitest_workqueue, &epf_test->cmd_handler.work);
+ 
+-- 
+2.53.0
+

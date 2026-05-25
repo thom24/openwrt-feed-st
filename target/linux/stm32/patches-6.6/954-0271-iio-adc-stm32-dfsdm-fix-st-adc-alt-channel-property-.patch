@@ -1,0 +1,45 @@
+From 086e3c13a7526d6ec2288c1c18781c4c5e2a25b6 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Tue, 23 Sep 2025 16:46:51 +0200
+Subject: [PATCH] iio: adc: stm32-dfsdm: fix st,adc-alt-channel property
+ handling
+
+Initially st,adc-alt-channel property was defined as an enum in the DFSDM
+binding. The DFSDM binding has been changed to use the new IIO backend
+framework, along with the adoption of IIO generic channels.
+In this new binding st,adc-alt-channel is defined as a boolean property,
+but it is still handled has an enum in DFSDM driver.
+Fix st,adc-alt-channel property handling in DFSDM driver.
+
+Fixes: 3208fa0cd919 ("iio: adc: stm32-dfsdm: adopt generic channels bindings")
+Change-Id: I42b03b584534536d17c1f4a203bfc20c86e28c84
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/493458
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/iio/adc/stm32-dfsdm-adc.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/iio/adc/stm32-dfsdm-adc.c b/drivers/iio/adc/stm32-dfsdm-adc.c
+index b18e1df55821..b56c8fad21b6 100644
+--- a/drivers/iio/adc/stm32-dfsdm-adc.c
++++ b/drivers/iio/adc/stm32-dfsdm-adc.c
+@@ -724,9 +724,8 @@ static int stm32_dfsdm_generic_channel_parse_of(struct stm32_dfsdm *dfsdm,
+ 	}
+ 	df_ch->src = val;
+ 
+-	ret = fwnode_property_read_u32(node, "st,adc-alt-channel", &df_ch->alt_si);
+-	if (ret != -EINVAL)
+-		df_ch->alt_si = 0;
++	if (fwnode_property_present(node, "st,adc-alt-channel"))
++		df_ch->alt_si = 1;
+ 
+ 	if (adc->dev_data->type == DFSDM_IIO) {
+ 		backend = devm_iio_backend_fwnode_get(&indio_dev->dev, NULL, node);
+-- 
+2.53.0
+

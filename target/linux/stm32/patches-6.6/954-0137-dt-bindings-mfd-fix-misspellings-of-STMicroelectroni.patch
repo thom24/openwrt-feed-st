@@ -1,0 +1,61 @@
+From 3ecfb020c756d01a70befaf8ed617cd0482cdcbc Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Fri, 25 Jul 2025 10:56:17 +0200
+Subject: [PATCH] dt-bindings: mfd: fix misspellings of "STMicroelectronics"
+
+"STMicroelectronics" company name is misspelled in the title of STMPIC1,
+STMFX and STMPE bindings. Fix these misspellings.
+
+Change-Id: I01a3a8c655af1adb96b2b1692e13002ea75ab6f2
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/477728
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ Documentation/devicetree/bindings/mfd/st,stmfx.yaml   | 2 +-
+ Documentation/devicetree/bindings/mfd/st,stmpe.yaml   | 2 +-
+ Documentation/devicetree/bindings/mfd/st,stpmic1.yaml | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/mfd/st,stmfx.yaml b/Documentation/devicetree/bindings/mfd/st,stmfx.yaml
+index 76551c90b128..84308f8a6427 100644
+--- a/Documentation/devicetree/bindings/mfd/st,stmfx.yaml
++++ b/Documentation/devicetree/bindings/mfd/st,stmfx.yaml
+@@ -4,7 +4,7 @@
+ $id: http://devicetree.org/schemas/mfd/st,stmfx.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: STMicroelectonics Multi-Function eXpander (STMFX)
++title: STMicroelectronics Multi-Function eXpander (STMFX)
+ 
+ description: ST Multi-Function eXpander (STMFX) is a slave controller using I2C for
+                communication with the main MCU. Its main features are GPIO expansion,
+diff --git a/Documentation/devicetree/bindings/mfd/st,stmpe.yaml b/Documentation/devicetree/bindings/mfd/st,stmpe.yaml
+index b77cc3f3075d..5d74f5c2b989 100644
+--- a/Documentation/devicetree/bindings/mfd/st,stmpe.yaml
++++ b/Documentation/devicetree/bindings/mfd/st,stmpe.yaml
+@@ -4,7 +4,7 @@
+ $id: http://devicetree.org/schemas/mfd/st,stmpe.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: STMicroelectonics Port Expander (STMPE)
++title: STMicroelectronics Port Expander (STMPE)
+ 
+ description: STMicroelectronics Port Expander (STMPE) is a series of slow
+   bus controllers for various expanded peripherals such as GPIO, keypad,
+diff --git a/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml b/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
+index b17ebeb0a42f..48d7db748c41 100644
+--- a/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
++++ b/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
+@@ -4,7 +4,7 @@
+ $id: http://devicetree.org/schemas/mfd/st,stpmic1.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: STMicroelectonics STPMIC1 Power Management IC
++title: STMicroelectronics STPMIC1 Power Management IC
+ 
+ description: STMicroelectronics STPMIC1 Power Management IC
+ 
+-- 
+2.53.0
+

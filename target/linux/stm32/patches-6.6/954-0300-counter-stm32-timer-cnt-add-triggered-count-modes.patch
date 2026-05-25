@@ -1,0 +1,214 @@
+From 4bb3e0b9b6bc47dec60af350910ff5d73fd32e02 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Wed, 15 Oct 2025 18:23:13 +0200
+Subject: [PATCH] counter: stm32-timer-cnt: add triggered count modes
+
+STM32 timers can use external trigger input (ETR) count modes. So add
+the "count_mode" attribute to manage these modes. All previous modes
+implemented in the driver default to the "normal" mode.
+
+New count modes need a specific count mode added in the counter core,
+as the way the counter is incremented (e.g. function increase), or the
+way the counter gets reset depend on the trigger, and so aren't "normal".
+It depends on:
+- the trigger level (for gated modes, e.g. gating the counting clock
+  stops the counter)
+- or trigger rising edge (for reset and trigger modes, either reset
+  the counter, or start the counter...).
+These mode can also be combined.
+
+The sysfs normally reports which signal is involved in the counting
+process. In case of these new modes, the ETR signal isn't used to count
+on it, so perhaps a new value could be defined to mark it as a trigger,
+rather than involved as rising/falling/both edges. For now, its action
+will report as "none" for the triggered modes (to be confirmed upstream).
+
+Supporting the new trigger modes, allow in addition to enable some
+HW trigger modes (along with IIO trigger driver), to synchronize other
+IPs (through the master_mode attribute).
+
+Example to synchronize ADC conversion (optionally), and use timer
+triggered mode:
+
+$ cd /sys/bus/iio/devices/trigger0
+$ cat name
+tim3_trgo
+$ cat master_mode_available
+reset enable update compare_pulse OC1REF OC2REF OC3REF OC4REF
+$ echo update > master_mode # optional: reset is the default value
+
+$ cd /sys/bus/iio/devices/iio:device0/
+$ echo 1 > scan_elements/in_voltage0_en
+$ echo tim3_trgo > trigger/current_trigger
+$ echo 1 > buffer/enable
+$ hexdump -e '1/2 "%04x " "\n"' /dev/iio:device0 &
+
+$ cd /sys/bus/counter/devices/counter0/count0
+$ cat ../signal5/name
+ETR
+$ echo rising edge > signal5_action # selects trigger input (ETR)
+$ echo 7 > ../signal5/etrsel        # select tim_etr7 mux
+$ echo hardware triggered reset start > count_mode
+$ echo 1 > enable
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ia9542459eb40c51482dc7fe7a2c89b858fce3bbd
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/487192
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/counter/stm32-timer-cnt.c | 105 ++++++++++++++++++++++++++++++
+ include/linux/mfd/stm32-timers.h  |   5 ++
+ 2 files changed, 110 insertions(+)
+
+diff --git a/drivers/counter/stm32-timer-cnt.c b/drivers/counter/stm32-timer-cnt.c
+index 621509e0f8b7..a3ea2fc1d4ae 100644
+--- a/drivers/counter/stm32-timer-cnt.c
++++ b/drivers/counter/stm32-timer-cnt.c
+@@ -100,6 +100,11 @@ static int stm32_count_function_read(struct counter_device *counter,
+ 	switch (smcr & TIM_SMCR_SMS) {
+ 	case TIM_SMCR_SMS_SLAVE_MODE_DISABLED:
+ 	case TIM_SMCR_SMS_EXTERNAL_CLOCK_MODE_1:
++	case TIM_SMCR_SMS_RESET_MODE:
++	case TIM_SMCR_SMS_GATED_MODE:
++	case TIM_SMCR_SMS_TRIGGER_MODE:
++	case TIM_SMCR_SMS_RESET_TRIGGER_MODE:
++	case TIM_SMCR_SMS_GATED_RESET_MODE:
+ 		*function = COUNTER_FUNCTION_INCREASE;
+ 		return 0;
+ 	case TIM_SMCR_SMS_ENCODER_MODE_1:
+@@ -464,6 +469,104 @@ static int stm32_capture_source_write(struct counter_device *counter,
+ 	return 0;
+ }
+ 
++static const enum counter_count_mode stm32_cnt_modes[] = {
++	COUNTER_COUNT_MODE_NORMAL,
++	COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_RESET,
++	COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_GATED,
++	COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_START,
++	COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_RESET_START,
++	COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_GATED_RESET,
++};
++
++static int stm32_count_mode_read(struct counter_device *counter,
++				 struct counter_count *count,
++				 enum counter_count_mode *cnt_mode)
++{
++	struct stm32_timer_cnt *const priv = counter_priv(counter);
++	u32 smcr, sms;
++
++	regmap_read(priv->regmap, TIM_SMCR, &smcr);
++	/* There's a hole in SMS bitfield: need to manage last bit separately */
++	sms = FIELD_GET(TIM_SMCR_SMS, smcr) | (FIELD_GET(TIM_SMCR_SMS3, smcr) << 3);
++	switch (sms) {
++	case TIM_SMCR_SMS_SLAVE_MODE_DISABLED:
++	case TIM_SMCR_SMS_EXTERNAL_CLOCK_MODE_1:
++	case TIM_SMCR_SMS_ENCODER_MODE_1:
++	case TIM_SMCR_SMS_ENCODER_MODE_2:
++	case TIM_SMCR_SMS_ENCODER_MODE_3:
++		*cnt_mode = COUNTER_COUNT_MODE_NORMAL;
++		return 0;
++	case TIM_SMCR_SMS_RESET_MODE:
++		*cnt_mode = COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_RESET;
++		return 0;
++	case TIM_SMCR_SMS_GATED_MODE:
++		*cnt_mode = COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_GATED;
++		return 0;
++	case TIM_SMCR_SMS_TRIGGER_MODE:
++		*cnt_mode = COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_START;
++		return 0;
++	case TIM_SMCR_SMS_RESET_TRIGGER_MODE:
++		*cnt_mode = COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_RESET_START;
++		return 0;
++	case TIM_SMCR_SMS_GATED_RESET_MODE:
++		*cnt_mode = COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_GATED_RESET;
++		return 0;
++	default:
++		return -EINVAL;
++	}
++}
++
++static int stm32_count_mode_write(struct counter_device *counter,
++				  struct counter_count *count,
++				  enum counter_count_mode cnt_mode)
++{
++	struct stm32_timer_cnt *const priv = counter_priv(counter);
++	u32 cr1, sms;
++
++	switch (cnt_mode) {
++	case COUNTER_COUNT_MODE_NORMAL:
++		/* default to reset value */
++		sms = TIM_SMCR_SMS_SLAVE_MODE_DISABLED;
++		break;
++	case COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_RESET:
++		sms = TIM_SMCR_SMS_RESET_MODE;
++		break;
++	case COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_GATED:
++		sms = TIM_SMCR_SMS_GATED_MODE;
++		break;
++	case COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_START:
++		sms = TIM_SMCR_SMS_TRIGGER_MODE;
++		break;
++	case COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_RESET_START:
++		sms = TIM_SMCR_SMS_RESET_TRIGGER_MODE;
++		break;
++	case COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_GATED_RESET:
++		sms = TIM_SMCR_SMS_GATED_RESET_MODE;
++		break;
++	default:
++		/* should never reach this path */
++		return -EINVAL;
++	}
++	/* Store enable status */
++	regmap_read(priv->regmap, TIM_CR1, &cr1);
++	regmap_clear_bits(priv->regmap, TIM_CR1, TIM_CR1_CEN);
++	regmap_update_bits(priv->regmap, TIM_SMCR, TIM_SMCR_SMS, sms);
++	/* There's a hole in SMS bitfield: need to manage last bit separately */
++	if (sms & 0x8)
++		regmap_set_bits(priv->regmap, TIM_SMCR, TIM_SMCR_SMS3);
++	else
++		regmap_clear_bits(priv->regmap, TIM_SMCR, TIM_SMCR_SMS3);
++
++	/* Make sure that registers are updated */
++	regmap_update_bits(priv->regmap, TIM_EGR, TIM_EGR_UG, TIM_EGR_UG);
++
++	/* Restore the enable status */
++	regmap_update_bits(priv->regmap, TIM_CR1, TIM_CR1_CEN, cr1);
++
++	return 0;
++}
++
++static DEFINE_COUNTER_AVAILABLE(stm32_count_mode_available, stm32_cnt_modes);
+ static DEFINE_COUNTER_ARRAY_U64(stm32_count_capture_sources, 4);
+ static DEFINE_COUNTER_ARRAY_CAPTURE(stm32_count_cap_array, 4);
+ 
+@@ -472,6 +575,8 @@ static struct counter_comp stm32_count_ext[] = {
+ 	COUNTER_COMP_ENABLE(stm32_count_enable_read, stm32_count_enable_write),
+ 	COUNTER_COMP_CEILING(stm32_count_ceiling_read,
+ 			     stm32_count_ceiling_write),
++	COUNTER_COMP_COUNT_MODE(stm32_count_mode_read, stm32_count_mode_write,
++				stm32_count_mode_available),
+ 	COUNTER_COMP_COUNT_U64("prescaler", stm32_count_prescaler_read,
+ 			       stm32_count_prescaler_write),
+ 	COUNTER_COMP_ARRAY_CAPTURE(stm32_count_cap_read, NULL, stm32_count_cap_array),
+diff --git a/include/linux/mfd/stm32-timers.h b/include/linux/mfd/stm32-timers.h
+index d2bfafdbb41e..05067a7ad7b7 100644
+--- a/include/linux/mfd/stm32-timers.h
++++ b/include/linux/mfd/stm32-timers.h
+@@ -115,7 +115,12 @@
+ #define TIM_SMCR_SMS_ENCODER_MODE_1		1 /* counts TI1FP1 edges, depending on TI2FP2 level */
+ #define TIM_SMCR_SMS_ENCODER_MODE_2		2 /* counts TI2FP2 edges, depending on TI1FP1 level */
+ #define TIM_SMCR_SMS_ENCODER_MODE_3		3 /* counts on both TI1FP1 and TI2FP2 edges */
++#define TIM_SMCR_SMS_RESET_MODE			4 /* trigger resets counter and update registers */
++#define TIM_SMCR_SMS_GATED_MODE			5 /* trigger input gates the counter clock */
++#define TIM_SMCR_SMS_TRIGGER_MODE		6 /* trigger input starts the counter */
+ #define TIM_SMCR_SMS_EXTERNAL_CLOCK_MODE_1	7 /* counts on rising edges of the selected trgi */
++#define TIM_SMCR_SMS_RESET_TRIGGER_MODE		8 /* combined reset + trigger mode */
++#define TIM_SMCR_SMS_GATED_RESET_MODE		9 /* combined gated + reset mode */
+ #define TIM_SMCR_TS_SHIFT	4
+ #define TIM_BDTR_BKF_MASK	0xF
+ #define TIM_BDTR_BKF_SHIFT(x)	(16 + (x) * 4)
+-- 
+2.53.0
+

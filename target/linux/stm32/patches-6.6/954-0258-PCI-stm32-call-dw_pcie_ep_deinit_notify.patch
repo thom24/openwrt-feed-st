@@ -1,0 +1,58 @@
+From 660abb97471d35c98b5e4292de274f5c6739a307 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Wed, 8 Oct 2025 14:32:38 +0200
+Subject: [PATCH] PCI: stm32: call dw_pcie_ep_deinit_notify
+
+Make sure BARs are released on PERST assert and driver exit.
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I943cefeb1b9740a3ea7e59582386d456f4ac56bb
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/497599
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/pci/controller/dwc/pcie-stm32-ep.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/pci/controller/dwc/pcie-stm32-ep.c b/drivers/pci/controller/dwc/pcie-stm32-ep.c
+index b5ea0deb75e3..65881f7e00c1 100644
+--- a/drivers/pci/controller/dwc/pcie-stm32-ep.c
++++ b/drivers/pci/controller/dwc/pcie-stm32-ep.c
+@@ -194,6 +194,7 @@ static void stm32_pcie_perst_assert(struct dw_pcie *pci)
+ {
+ 	struct stm32_pcie *stm32_pcie = to_stm32_pcie(pci);
+ 	struct device *dev = pci->dev;
++	struct dw_pcie_ep *ep = &pci->ep;
+ 
+ 	dev_dbg(dev, "PERST asserted by host. Shutting down the PCIe link\n");
+ 
+@@ -208,6 +209,8 @@ static void stm32_pcie_perst_assert(struct dw_pcie *pci)
+ 
+ 	stm32_pcie_disable_link(pci);
+ 
++	dw_pcie_ep_deinit_notify(ep);
++
+ 	stm32_pcie_disable_resources(stm32_pcie);
+ 
+ 	pm_runtime_put_sync(dev);
+@@ -255,6 +258,7 @@ static void stm32_pcie_perst_deassert(struct dw_pcie *pci)
+ 	ret = stm32_pcie_enable_link(pci);
+ 	if (ret) {
+ 		dev_err(dev, "PCIe Cannot establish link: %d\n", ret);
++		dw_pcie_ep_deinit_notify(ep);
+ 		stm32_pcie_disable_resources(stm32_pcie);
+ 		pm_runtime_put_sync(dev);
+ 		return;
+@@ -412,6 +416,8 @@ static int stm32_pcie_remove(struct platform_device *pdev)
+ 
+ 	dw_pcie_ep_exit(ep);
+ 
++	dw_pcie_ep_deinit_notify(ep);
++
+ 	stm32_pcie_disable_resources(stm32_pcie);
+ 
+ 	pm_runtime_put_sync(&pdev->dev);
+-- 
+2.53.0
+

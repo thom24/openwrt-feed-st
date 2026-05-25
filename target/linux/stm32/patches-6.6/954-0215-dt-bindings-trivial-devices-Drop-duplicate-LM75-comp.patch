@@ -1,0 +1,62 @@
+From d0c1ea2522f18c1120c5e7eb0635423de17f2a02 Mon Sep 17 00:00:00 2001
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Date: Tue, 3 Sep 2024 16:52:07 -0500
+Subject: [PATCH] dt-bindings: trivial-devices: Drop duplicate LM75 compatible
+ devices
+
+[ Upstream commit 7a75cd6f986133c68b80e68a2f31b633b5150e1c ]
+
+Drop LM75 compatible devices which are already documented in lm75.yaml.
+
+Link: https://lore.kernel.org/r/20240903-dt-trivial-devices-v1-3-ad684c754b9c@kernel.org
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I109e18d45cf9add28352e94bcc4d8f7e95454b8b
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/496699
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ Documentation/devicetree/bindings/trivial-devices.yaml | 8 --------
+ 1 file changed, 8 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 430a814f64a5..0bb132040904 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -73,14 +73,10 @@ properties:
+           - dallas,ds1631
+             # Total-Elapsed-Time Recorder with Alarm
+           - dallas,ds1682
+-            # Tiny Digital Thermometer and Thermostat
+-          - dallas,ds1775
+             # CPU Peripheral Monitor
+           - dallas,ds1780
+             # CPU Supervisor with Nonvolatile Memory and Programmable I/O
+           - dallas,ds4510
+-            # Digital Thermometer and Thermostat
+-          - dallas,ds75
+             # Delta AHE-50DC Open19 power shelf fan control module
+           - delta,ahe50dc-fan
+             # Delta Electronics DPS-650-AB power supply
+@@ -207,8 +203,6 @@ properties:
+           - maxim,max5484
+             # PECI-to-I2C translator for PECI-to-SMBus/I2C protocol conversion
+           - maxim,max6621
+-            # 9-Bit/12-Bit Temperature Sensors with I²C-Compatible Serial Interface
+-          - maxim,max6625
+             # 3-Channel Remote Temperature Sensor
+           - maxim,max31730
+             # mCube 3-axis 8-bit digital accelerometer
+@@ -388,8 +382,6 @@ properties:
+           - ti,tmp121
+           - ti,tmp122
+           - ti,tmp125
+-            # Digital Temperature Sensor
+-          - ti,tmp275
+             # TI DC-DC converter on PMBus
+           - ti,tps40400
+             # TI Dual channel DCAP+ multiphase controller TPS53676 with AVSBus
+-- 
+2.53.0
+

@@ -1,0 +1,60 @@
+From f38287368fbca4ede0b7c3a80940cbb4c3081c1a Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Fri, 25 Jul 2025 11:05:07 +0200
+Subject: [PATCH] misc: lis3lv02d: fix misspellings of "STMicroelectronics"
+
+"STMicroelectronics" company name is misspelled in the Kconfig and Makefile
+files. Fix these misspellings.
+
+Link: https://lore.kernel.org/lkml/20250724105422.140186-1-colin.i.king@gmail.com/
+Change-Id: I3d0634cec5b9ae84e925dc95fa75207210239266
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/477732
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/misc/lis3lv02d/Kconfig  | 6 +++---
+ drivers/misc/lis3lv02d/Makefile | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/misc/lis3lv02d/Kconfig b/drivers/misc/lis3lv02d/Kconfig
+index bb2fec4b5880..368a8001537a 100644
+--- a/drivers/misc/lis3lv02d/Kconfig
++++ b/drivers/misc/lis3lv02d/Kconfig
+@@ -1,10 +1,10 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ #
+-# STMicroelectonics LIS3LV02D and similar accelerometers
++# STMicroelectronics LIS3LV02D and similar accelerometers
+ #
+ 
+ config SENSORS_LIS3_SPI
+-	tristate "STMicroeletronics LIS3LV02Dx three-axis digital accelerometer (SPI)"
++	tristate "STMicroelectronics LIS3LV02Dx three-axis digital accelerometer (SPI)"
+ 	depends on !ACPI && SPI_MASTER && INPUT
+ 	select SENSORS_LIS3LV02D
+ 	help
+@@ -20,7 +20,7 @@ config SENSORS_LIS3_SPI
+ 	  is called lis3lv02d_spi.
+ 
+ config SENSORS_LIS3_I2C
+-	tristate "STMicroeletronics LIS3LV02Dx three-axis digital accelerometer (I2C)"
++	tristate "STMicroelectronics LIS3LV02Dx three-axis digital accelerometer (I2C)"
+ 	depends on I2C && INPUT
+ 	select SENSORS_LIS3LV02D
+ 	help
+diff --git a/drivers/misc/lis3lv02d/Makefile b/drivers/misc/lis3lv02d/Makefile
+index 137e7020c127..bcf208439c64 100644
+--- a/drivers/misc/lis3lv02d/Makefile
++++ b/drivers/misc/lis3lv02d/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ #
+-# STMicroelectonics LIS3LV02D and similar accelerometers
++# STMicroelectronics LIS3LV02D and similar accelerometers
+ #
+ 
+ obj-$(CONFIG_SENSORS_LIS3LV02D) += lis3lv02d.o
+-- 
+2.53.0
+

@@ -1,0 +1,67 @@
+From b366b63051f9e0743906692e25cd6151e52a3906 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Mon, 1 Sep 2025 11:16:29 +0200
+Subject: [PATCH] ARM: dts: stm32: add missing PTP reference clocks on
+ stm32mp13x SoCs
+
+ETH1/2 miss their PTP reference clock in the SoC device tree. Add them
+as the fallback is not correctly handled for PPS generation and it seems
+there's no reason to not add them.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Link: https://lore.kernel.org/r/20250901-relative_flex_pps-v4-3-b874971dfe85@foss.st.com
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+(cherry picked from commit 6d40d5ecf683e31a5e204d0a2f57035c39fc9c5f)
+Change-Id: Id004e993bea8021253589c6df6f19e41706577d4
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/487166
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Tested-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Christophe ROULLIER <christophe.roullier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp131.dtsi | 2 ++
+ arch/arm/boot/dts/st/stm32mp133.dtsi | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
+index b241c26370f4..50f3e02ba508 100644
+--- a/arch/arm/boot/dts/st/stm32mp131.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
+@@ -1792,11 +1792,13 @@ ethernet1: ethernet@5800a000 {
+ 					      "mac-clk-tx",
+ 					      "mac-clk-rx",
+ 					      "ethstp",
++					      "ptp_ref",
+ 					      "eth-ck";
+ 				clocks = <&rcc ETH1MAC>,
+ 					 <&rcc ETH1TX>,
+ 					 <&rcc ETH1RX>,
+ 					 <&rcc ETH1STP>,
++					 <&rcc ETH1PTP_K>,
+ 					 <&rcc ETH1CK_K>;
+ 				st,syscon = <&syscfg 0x4 0xff0000>;
+ 				snps,mixed-burst;
+diff --git a/arch/arm/boot/dts/st/stm32mp133.dtsi b/arch/arm/boot/dts/st/stm32mp133.dtsi
+index 4b6e7ae12937..feff4f5fb248 100644
+--- a/arch/arm/boot/dts/st/stm32mp133.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp133.dtsi
+@@ -81,11 +81,13 @@ ethernet2: ethernet@5800e000 {
+ 			      "mac-clk-tx",
+ 			      "mac-clk-rx",
+ 			      "ethstp",
++			      "ptp_ref",
+ 			      "eth-ck";
+ 		clocks = <&rcc ETH2MAC>,
+ 			 <&rcc ETH2TX>,
+ 			 <&rcc ETH2RX>,
+ 			 <&rcc ETH2STP>,
++			 <&rcc ETH2PTP_K>,
+ 			 <&rcc ETH2CK_K>;
+ 		st,syscon = <&syscfg 0x4 0xff000000>;
+ 		snps,mixed-burst;
+-- 
+2.53.0
+

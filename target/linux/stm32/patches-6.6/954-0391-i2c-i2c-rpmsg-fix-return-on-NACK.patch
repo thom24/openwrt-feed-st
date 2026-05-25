@@ -1,0 +1,40 @@
+From 6ab361d7118306c4efdfad8bd2baac9fe64e0a84 Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Date: Fri, 16 Jan 2026 16:55:56 +0100
+Subject: [PATCH] i2c: i2c-rpmsg: fix return on NACK
+
+When the remote device returns a NACK, we should not continue processing
+the response but return immediately.
+
+This commit fixes the following warning:
+rpmsg_i2c virtio0.rpmsg_i2c.-1.1025: Unexpected read size (0), expected(1)
+
+Change-Id: Id7ba00e356c578f6382ff41830293669a019c5f4
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/525876
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ drivers/i2c/busses/i2c-rpmsg.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/busses/i2c-rpmsg.c b/drivers/i2c/busses/i2c-rpmsg.c
+index fa0514da97bd..439cfa6749e6 100644
+--- a/drivers/i2c/busses/i2c-rpmsg.c
++++ b/drivers/i2c/busses/i2c-rpmsg.c
+@@ -175,7 +175,7 @@ static int rpmsg_i2c_read(struct rpmsg_i2c_dev *ri2c_dev, struct i2c_msg *msg)
+ 	ri2c_dev->is_read = false;
+ 	if (time_left) {
+ 		if (r_msg->result & RPMSG_I2C_NACK)
+-			ret = -ENXIO;
++			return -ENXIO;
+ 
+ 		if (msg->len != r_msg->count)
+ 			dev_warn(&rpdev->dev, "Unexpected read size (%u), expected (%u)\n",
+-- 
+2.53.0
+

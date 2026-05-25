@@ -1,0 +1,54 @@
+From 1d8ba6d50286584dbb9a801bb0cb89963530cfbe Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Fri, 3 Oct 2025 17:56:51 +0200
+Subject: [PATCH] arm64: dts: st: add phase tags marking on stm32mp235f-dk
+ board
+
+bootph-all as phase tags was added to dt-schema
+(dtschema/schemas/bootph.yaml) to describe various node usage during
+boot phases with DT.
+
+Describe it for STM32MP235F-DK boot devices.
+
+Change-Id: I4a4dde87324ae5b538f31b044a3ca7eabedd5eaf
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/496303
+Reviewed-by: Patrice CHOTARD <patrice.chotard@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index 34b29d1675cc..6881e2fefaeb 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -630,6 +630,7 @@ bluetooth {
+ };
+ 
+ &usart2 {
++	bootph-all;
+ 	pinctrl-names = "default", "idle", "sleep";
+ 	pinctrl-0 = <&usart2_pins_a>;
+ 	pinctrl-1 = <&usart2_idle_pins_a>;
+@@ -639,6 +640,16 @@ &usart2 {
+ 	status = "okay";
+ };
+ 
++&usart2_pins_a {
++	bootph-all;
++	pins1 {
++		bootph-all;
++	};
++	pins2 {
++		bootph-all;
++	};
++};
++
+ &usart6 {
+ 	pinctrl-names = "default", "idle", "sleep";
+ 	pinctrl-0 = <&usart6_pins_a>;
+-- 
+2.53.0
+

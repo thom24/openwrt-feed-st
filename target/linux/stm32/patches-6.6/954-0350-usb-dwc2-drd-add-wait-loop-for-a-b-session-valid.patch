@@ -1,0 +1,62 @@
+From 369262bbd581536d2eee3997bfc91abca4585313 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Tue, 28 Oct 2025 18:15:28 +0100
+Subject: [PATCH] usb: dwc2: drd: add wait loop, for a/b-session valid
+
+The BSESVLD may not be set, when the drd (set_role) calls
+dwc2_hsotg_core_connect. So add a wait loop, to ensure it is set.
+In case dwc2_hsotg_core_connect gets called without it, the pull-up
+will not raise, so the host can't enumerate the gadget.
+Similarly, the ASESVLD may not be properly set once
+dwc2_ovr_avalid() has completed. So, add a wait loop as well.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I23b010eb6569eff7e8589bb0a18583a73816b7ec
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/512992
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/usb/dwc2/drd.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
+index 13934d0cf5b8..ad7063e15fbe 100644
+--- a/drivers/usb/dwc2/drd.c
++++ b/drivers/usb/dwc2/drd.c
+@@ -113,6 +113,14 @@ static int dwc2_ovr_avalid(struct dwc2_hsotg *hsotg, bool valid)
+ 		gotgctl &= ~(GOTGCTL_AVALOVAL | GOTGCTL_VBVALOVAL);
+ 	dwc2_writel(hsotg, gotgctl, GOTGCTL);
+ 
++	if (valid) {
++		if (dwc2_hsotg_wait_bit_set(hsotg, GOTGCTL, GOTGCTL_ASESVLD, 50))
++			dev_dbg(hsotg->dev, "GOTGCTL_ASESVLD not set\n");
++	} else {
++		if (dwc2_hsotg_wait_bit_clear(hsotg, GOTGCTL, GOTGCTL_ASESVLD, 50))
++			dev_dbg(hsotg->dev, "GOTGCTL_ASESVLD not cleared\n");
++	}
++
+ 	return 0;
+ }
+ 
+@@ -138,6 +146,18 @@ static int dwc2_ovr_bvalid(struct dwc2_hsotg *hsotg, bool valid)
+ 		gotgctl &= ~(GOTGCTL_BVALOVAL | GOTGCTL_VBVALOVAL);
+ 	dwc2_writel(hsotg, gotgctl, GOTGCTL);
+ 
++	if (valid) {
++		/*
++		 * Wait for GOTGCTL_BSESVLD to be set. It's checked later in
++		 * dwc2_hsotg_core_connect, to remove DCTL_SFTDISCON bit.
++		 */
++		if (dwc2_hsotg_wait_bit_set(hsotg, GOTGCTL, GOTGCTL_BSESVLD, 50))
++			dev_dbg(hsotg->dev, "GOTGCTL_BSESVLD not set\n");
++	} else {
++		if (dwc2_hsotg_wait_bit_clear(hsotg, GOTGCTL, GOTGCTL_BSESVLD, 50))
++			dev_dbg(hsotg->dev, "GOTGCTL_BSESVLD not cleared\n");
++	}
++
+ 	return 0;
+ }
+ 
+-- 
+2.53.0
+

@@ -1,0 +1,40 @@
+From 63f70103388fe3585f362f17287acf5e7a8c2489 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Mon, 27 Oct 2025 17:24:10 +0100
+Subject: [PATCH] dt-bindings: fix warnings on access-controllers property for
+ video codec
+
+In the stm32mpxxx device tree files, the access-controllers property has
+been added to the video codec peripheral node so that the firewall
+configuration is checked before using it. Document it.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I589e5327aa2e05f888601db88a884cdfcc5abdd4
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/503464
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+---
+ .../devicetree/bindings/media/st,stm32mp25-video-codec.yaml    | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml b/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml
+index 479566171568..45ccc449f780 100644
+--- a/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml
++++ b/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml
+@@ -32,6 +32,9 @@ properties:
+   clocks:
+     maxItems: 1
+ 
++  access-controllers:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+-- 
+2.53.0
+

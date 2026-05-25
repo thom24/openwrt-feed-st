@@ -1,0 +1,66 @@
+From c8266a3877515ec01dbd01a188e94eadd0426522 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Thu, 25 Sep 2025 11:05:34 +0200
+Subject: [PATCH] serial: stm32: ensure transmission is completed before
+ disabling dma tx
+
+Check the transmission complete flag before terminating the DMA TX channel.
+Also, ensure the DMA TX callback fully completes before disabling the DMA
+TX request.
+Provide a precise error log if the transmission is incomplete to improve
+clarity, as the generic "Transmission is not complete" log is used
+elsewhere in the driver.
+
+Change-Id: Ie648ca3e9a74db47510fd5bb89f2d28b53d3b415
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/493730
+Reviewed-by: Valentin CARON <valentin.caron@foss.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/tty/serial/stm32-usart.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index d81a0ea154e1..677a1a9364c3 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -1411,8 +1411,18 @@ static void stm32_usart_shutdown(struct uart_port *port)
+ 
+ 	pm_runtime_get(port->dev);
+ 
+-	if (stm32_usart_tx_dma_started(stm32_port))
++	ret = readl_relaxed_poll_timeout(port->membase + ofs->isr,
++					 isr, (isr & USART_SR_TC),
++					 10, 100000);
++
++	/* Send the TC error message only when ISR_TC is not set */
++	if (ret)
++		dev_err(port->dev, "Disabling port: transmission is not complete\n");
++
++	if (stm32_usart_tx_dma_started(stm32_port)) {
+ 		stm32_usart_tx_dma_terminate(stm32_port);
++		dmaengine_synchronize(stm32_port->tx_ch);
++	}
+ 
+ 	if (stm32_port->tx_ch)
+ 		stm32_usart_clr_bits(port, ofs->cr3, USART_CR3_DMAT);
+@@ -1426,14 +1436,6 @@ static void stm32_usart_shutdown(struct uart_port *port)
+ 	if (stm32_port->fifoen)
+ 		val |= USART_CR1_FIFOEN;
+ 
+-	ret = readl_relaxed_poll_timeout(port->membase + ofs->isr,
+-					 isr, (isr & USART_SR_TC),
+-					 10, 100000);
+-
+-	/* Send the TC error message only when ISR_TC is not set */
+-	if (ret)
+-		dev_err(port->dev, "Transmission is not complete\n");
+-
+ 	/* Disable RX DMA. */
+ 	if (stm32_port->rx_ch) {
+ 		stm32_usart_rx_dma_terminate(stm32_port);
+-- 
+2.53.0
+

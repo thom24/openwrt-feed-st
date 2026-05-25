@@ -1,0 +1,185 @@
+From 02f43ec4c21c87b5f7cf40090b5b210bdcf37980 Mon Sep 17 00:00:00 2001
+From: Etienne Carriere <etienne.carriere@foss.st.com>
+Date: Tue, 10 Jun 2025 19:28:43 +0200
+Subject: [PATCH] tee: optee: PM_NOIRQ support for OP-TEE invocation
+
+Support invocation of OP-TEE during Linux PM suspend last steps
+(after Linux has masked the interrupts at CPU level) and resume
+first steps (before Linux unmasks the interrupts at CPU level).
+
+This is needed for OP-TEE SCMI services that can be called from
+Linux syscore suspend/resume sequences to disable/enable clock sources.
+Without this feature, the system would enter a deadlock situation if
+a non-secure interrupt is pending while OP-TEE executes with non-secure
+interrupts unmasked and Linux with its interrupts masked.
+
+To achieve that, add suspend_noirq and resume_noirq handlers in Linux
+optee driver to bound the start and end of a NSEC_NOIRQ state where
+invocation of OP-TEE thread context must execute with non-secure
+interrupts masked.
+
+During this state, invocation of OP-TEE uses new dedicated standard
+messages OPTEE_SMC_CALL_WITH_[RPC_|REGD_]ARG_NSEC_NOIRQ for which
+OP-TEE will keep the non-secure interrupts masked.
+
+Change-Id: Ifdebc336aa60a5711e4b0fd25ae167dff68cf80c
+Signed-off-by: Etienne Carriere <etienne.carriere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/466080
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ drivers/tee/optee/optee_private.h |  2 ++
+ drivers/tee/optee/optee_smc.h     | 27 +++++++++++++++++
+ drivers/tee/optee/smc_abi.c       | 49 +++++++++++++++++++++++++++----
+ 3 files changed, 73 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
+index 96cdbbf97dc4..13dd03d5fde3 100644
+--- a/drivers/tee/optee/optee_private.h
++++ b/drivers/tee/optee/optee_private.h
+@@ -199,6 +199,7 @@ struct optee_ops {
+  * @scan_bus_wq		workqueue to scan optee bus and register optee drivers
+  * @scan_bus_work	workq to scan optee bus and register optee drivers
+  * @itr_notif		True if OP-TEE offers interrupt notification
++ * @noirq_enabled	True if OP-TEE invokes in PM_NOIRQ context
+  */
+ struct optee {
+ 	struct tee_device *supp_teedev;
+@@ -219,6 +220,7 @@ struct optee {
+ 	struct workqueue_struct *scan_bus_wq;
+ 	struct work_struct scan_bus_work;
+ 	bool itr_notif;
++	bool noirq_enabled;
+ };
+ 
+ /**
+diff --git a/drivers/tee/optee/optee_smc.h b/drivers/tee/optee/optee_smc.h
+index bf4a92002d9f..9cd6c6a0f95d 100644
+--- a/drivers/tee/optee/optee_smc.h
++++ b/drivers/tee/optee/optee_smc.h
+@@ -279,6 +279,9 @@ struct optee_smc_get_shm_config_result {
+ /* Secure world supports pre-allocating RPC arg struct */
+ #define OPTEE_SMC_SEC_CAP_RPC_ARG		BIT(6)
+ 
++/* Non-standard capabilities not yet in mainline OP-TEE driver */
++#define OPTEE_SMC_SEC_CAP_PM_NOIRQ		BIT(15)
++
+ #define OPTEE_SMC_FUNCID_EXCHANGE_CAPABILITIES	9
+ #define OPTEE_SMC_EXCHANGE_CAPABILITIES \
+ 	OPTEE_SMC_FAST_CALL_VAL(OPTEE_SMC_FUNCID_EXCHANGE_CAPABILITIES)
+@@ -466,6 +469,30 @@ struct optee_smc_disable_shm_cache_result {
+ #define OPTEE_SMC_SET_IT_NOTIF_MASK \
+ 	OPTEE_SMC_FAST_CALL_VAL(OPTEE_SMC_FUNCID_SET_IT_NOTIF_MASK)
+ 
++/*
++ * OPTEE_SMC_CALL_WITH_ARG_NSEC_NOIRQ
++ * Equivaent to OPTEE_SMC_CALL_WITH_ARG but with foreign interrupts masked.
++ */
++#define OPTEE_SMC_FUNCID_CALL_WITH_ARG_NSEC_NOIRQ	56
++#define OPTEE_SMC_CALL_WITH_ARG_NSEC_NOIRQ \
++	OPTEE_SMC_STD_CALL_VAL(OPTEE_SMC_FUNCID_CALL_WITH_ARG_NSEC_NOIRQ)
++
++/*
++ * OPTEE_SMC_CALL_WITH_RPC_ARG_NSEC_NOIRQ
++ * Equivaent to OPTEE_SMC_CALL_WITH_RPC_ARG but with foreign interrupts masked.
++ */
++#define OPTEE_SMC_FUNCID_CALL_WITH_RPC_ARG_NSEC_NOIRQ	57
++#define OPTEE_SMC_CALL_WITH_RPC_ARG_NSEC_NOIRQ \
++	OPTEE_SMC_STD_CALL_VAL(OPTEE_SMC_FUNCID_CALL_WITH_RPC_ARG_NSEC_NOIRQ)
++
++/*
++ * OPTEE_SMC_CALL_WITH_REGD_ARG_NSEC_NOIRQ
++ * Equivaent to OPTEE_SMC_CALL_WITH_REGD_ARG but with foreign interrupts masked.
++ */
++#define OPTEE_SMC_FUNCID_CALL_WITH_REGD_ARG_NSEC_NOIRQ	58
++#define OPTEE_SMC_CALL_WITH_REGD_ARG_NSEC_NOIRQ \
++	OPTEE_SMC_STD_CALL_VAL(OPTEE_SMC_FUNCID_CALL_WITH_REGD_ARG_NSEC_NOIRQ)
++
+ /*
+  * Resume from RPC (for example after processing a foreign interrupt)
+  *
+diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
+index 9ae7e0d69dee..2b6d6a10884e 100644
+--- a/drivers/tee/optee/smc_abi.c
++++ b/drivers/tee/optee/smc_abi.c
+@@ -925,7 +925,11 @@ static int optee_smc_do_call_with_arg(struct tee_context *ctx,
+ 	}
+ 
+ 	if  (rpc_arg && tee_shm_is_dynamic(shm)) {
+-		param.a0 = OPTEE_SMC_CALL_WITH_REGD_ARG;
++		if (optee->noirq_enabled)
++			param.a0 = OPTEE_SMC_CALL_WITH_REGD_ARG_NSEC_NOIRQ;
++		else
++			param.a0 = OPTEE_SMC_CALL_WITH_REGD_ARG;
++
+ 		reg_pair_from_64(&param.a1, &param.a2, (u_long)shm);
+ 		param.a3 = offs;
+ 	} else {
+@@ -935,10 +939,18 @@ static int optee_smc_do_call_with_arg(struct tee_context *ctx,
+ 		if (rc)
+ 			return rc;
+ 
+-		if (rpc_arg)
+-			param.a0 = OPTEE_SMC_CALL_WITH_RPC_ARG;
+-		else
+-			param.a0 = OPTEE_SMC_CALL_WITH_ARG;
++		if (rpc_arg) {
++			if (optee->noirq_enabled)
++				param.a0 =
++					OPTEE_SMC_CALL_WITH_RPC_ARG_NSEC_NOIRQ;
++			else
++				param.a0 = OPTEE_SMC_CALL_WITH_RPC_ARG;
++		} else {
++			if (optee->noirq_enabled)
++				param.a0 = OPTEE_SMC_CALL_WITH_ARG_NSEC_NOIRQ;
++			else
++				param.a0 = OPTEE_SMC_CALL_WITH_ARG;
++		}
+ 		reg_pair_from_64(&param.a1, &param.a2, parg);
+ 	}
+ 	/* Initialize waiter */
+@@ -1779,6 +1791,32 @@ static inline int optee_load_fw(struct platform_device *pdev,
+ }
+ #endif
+ 
++/*
++ * Hook on PM late ops to switch OP-TEE standard SMC invocation
++ * for supporting PM_NOIRQ sequences.
++ */
++static int optee_suspend_noirq(struct device *dev)
++{
++	struct optee *optee = dev_get_drvdata(dev);
++
++	optee->noirq_enabled = optee->smc.sec_caps & OPTEE_SMC_SEC_CAP_PM_NOIRQ;
++
++	return 0;
++}
++
++static int optee_resume_noirq(struct device *dev)
++{
++	struct optee *optee = dev_get_drvdata(dev);
++
++	optee->noirq_enabled = false;
++
++	return 0;
++}
++
++static const struct dev_pm_ops optee_pm_ops = {
++	NOIRQ_SYSTEM_SLEEP_PM_OPS(optee_suspend_noirq, optee_resume_noirq)
++};
++
+ static int optee_probe(struct platform_device *pdev)
+ {
+ 	optee_invoke_fn *invoke_fn;
+@@ -2027,6 +2065,7 @@ static struct platform_driver optee_driver = {
+ 	.driver = {
+ 		.name = "optee",
+ 		.of_match_table = optee_dt_match,
++		.pm = pm_ptr(&optee_pm_ops),
+ 	},
+ };
+ 
+-- 
+2.53.0
+

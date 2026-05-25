@@ -1,0 +1,34 @@
+From cdb7b9618ee7444383e63bcdea6130f84cec2416 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Wed, 6 Aug 2025 09:11:39 +0200
+Subject: [PATCH] misc: stm32-omm: Fix req2ack update condition
+
+Fix test which allow to compute req2ack value.
+
+Change-Id: Ic5ad716f1d7ce94daa7283403488656f5c8e863c
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/480870
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/misc/stm32_omm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/misc/stm32_omm.c b/drivers/misc/stm32_omm.c
+index b56fa01682e4..829eafccb307 100644
+--- a/drivers/misc/stm32_omm.c
++++ b/drivers/misc/stm32_omm.c
+@@ -208,7 +208,7 @@ static int stm32_omm_configure(struct device *dev)
+ 		if (mux & CR_MUXEN) {
+ 			ret = of_property_read_u32(dev->of_node, "st,omm-req2ack-ns",
+ 						  &req2ack);
+-			if (!ret && !req2ack) {
++			if (!ret && req2ack) {
+ 				req2ack = DIV_ROUND_UP(req2ack, NSEC_PER_SEC / clk_rate_max) - 1;
+ 
+ 				if (req2ack > 256)
+-- 
+2.53.0
+

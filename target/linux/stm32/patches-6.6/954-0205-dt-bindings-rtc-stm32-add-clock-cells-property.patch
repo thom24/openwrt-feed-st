@@ -1,0 +1,66 @@
+From ffd6de84921c6aca98017a7ee0f9170bf2549a15 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Thu, 11 Sep 2025 10:43:28 +0200
+Subject: [PATCH] dt-bindings: rtc: stm32: add #clock-cells property
+
+The rtc driver with compatible 'st,stm32mp*-rtc' registers itself
+as a clock provider as it can generate a 32 kHz clock on the
+output pin configured as LSCO.
+
+Add the property #clock-cells to allow clients to use the clock.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: Ib06726f7e90315a2230f18af28f27ebe4c6630a4
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/490099
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ .../devicetree/bindings/rtc/st,stm32-rtc.yaml    | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
+index 8d67c5f34fc6..51a609189766 100644
+--- a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
++++ b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
+@@ -60,6 +60,9 @@ properties:
+       Refer to <include/dt-bindings/rtc/rtc-stm32.h> for the supported values.
+       Pinctrl state named "default" may be defined to reserve pin for RTC output.
+ 
++  "#clock-cells":
++    const: 0
++
+   st,alarm:
+     $ref: /schemas/types.yaml#/definitions/uint32
+     description: |
+@@ -135,6 +138,18 @@ allOf:
+       required:
+         - clock-names
+ 
++  - if:
++      not:
++        properties:
++          st,lsco:
++            const: 0
++    then:
++      required:
++        - "#clock-cells"
++    else:
++      properties:
++        "#clock-cells": false
++
+ required:
+   - compatible
+   - reg
+@@ -167,6 +182,7 @@ examples:
+       reg = <0x5c004000 0x400>;
+       clocks = <&rcc RTCAPB>, <&rcc RTC>;
+       clock-names = "pclk", "rtc_ck";
++      #clock-cells = <0>;
+       interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
+       st,alarm = <RTC_OUT1>;
+       st,lsco = <RTC_OUT2_RMP>;
+-- 
+2.53.0
+

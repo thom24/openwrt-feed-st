@@ -1,0 +1,43 @@
+From cb41f2d9bacfb7e29ed12e85609cd2e26ad428d0 Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Date: Wed, 26 Nov 2025 11:02:25 +0100
+Subject: [PATCH] arm64: dts: st: enable LPTIM4_AM clock by default on
+ stm32mp257f-ev1
+
+This commit provides a workaround for errata 2.3.27 and 2.3.28, which
+address the Cortex-M0+ hang risk during low-power mode transitions.
+The LPTIM4, used to keep the Cortex-M0+ in WFI during the transition,
+can itself hang if the LPTIM4AMEN bit is set multiple times.
+
+Change-Id: I54ddb1432c98c2b62898665ab80a2df217b3c666
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/512791
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+index c470850e9883..c4c7d8c0bf06 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+@@ -62,6 +62,11 @@ pad_clk: pad-clk {
+ 		};
+ 	};
+ 
++	clock_critical: clock_critical {
++		compatible = "st,stm32-hog";
++		clocks = <&rcc CK_LPTIM4_AM>;
++	};
++
+ 	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+-- 
+2.53.0
+

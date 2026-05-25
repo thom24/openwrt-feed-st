@@ -1,0 +1,42 @@
+From 04215a1263f9f3104e9313666d10c3620cbe5e11 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Mon, 2 Jun 2025 08:46:42 +0200
+Subject: [PATCH] ARM: dts: stm32: update QSPI DMA configuration for
+ stm32mp131.dtsi
+
+When using QSPI in Dual Flash Mode, QSPI clock interruption are observed
+during transfer when QSPI frequency is above 30MHz.
+
+Update QSPI DMA configuration to increase number of bytes to be
+transferred in a single transfer from 8 to 128 bytes in order to feed
+QSPI quickly enough.
+
+Change-Id: Ib669dfb2120a8948c36e670856f8217e15a67167
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/463546
+Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+---
+ arch/arm/boot/dts/st/stm32mp131.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
+index 471ac5183857..f5287a5dab37 100644
+--- a/arch/arm/boot/dts/st/stm32mp131.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
+@@ -1742,8 +1742,8 @@ qspi: spi@58003000 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				interrupts = <GIC_SPI 91 IRQ_TYPE_LEVEL_HIGH>;
+-				dmas = <&mdma 26 0x2 0x10100002 0x0 0x0>,
+-				       <&mdma 26 0x2 0x10100008 0x0 0x0>;
++				dmas = <&mdma 26 0x2 0x12000002 0x0 0x0>,
++				       <&mdma 26 0x2 0x12000008 0x0 0x0>;
+ 				dma-names = "tx", "rx";
+ 				clocks = <&rcc QSPI_K>;
+ 				resets = <&rcc QSPI_R>;
+-- 
+2.53.0
+

@@ -1,0 +1,35 @@
+From 270300dcb26ae1362181bde26e4d858b4e377fb7 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Mon, 1 Sep 2025 13:56:16 +0200
+Subject: [PATCH] pinctrl: stm32: Avoid keeping a bool value in a u32 variable
+
+Change type of variable to avoid keeping the bool return value in
+a variable of u32 type.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: Ic4baa4e57a624ffc94f90b8a41ac81163431b449
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/486020
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ drivers/pinctrl/stm32/pinctrl-stm32.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
+index 741ef86813c4..5d2f66a03db4 100644
+--- a/drivers/pinctrl/stm32/pinctrl-stm32.c
++++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
+@@ -1417,7 +1417,7 @@ static u32 stm32_pconf_get_delay(struct stm32_gpio_bank *bank, int offset)
+ static bool stm32_pconf_get(struct stm32_gpio_bank *bank,
+ 	unsigned int offset, bool dir)
+ {
+-	u32 val;
++	bool val;
+ 
+ 	if (dir)
+ 		val = !!(readl_relaxed(bank->base + STM32_GPIO_IDR) &
+-- 
+2.53.0
+

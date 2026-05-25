@@ -1,0 +1,72 @@
+From a21311e4cea2560aae80fc5da1ca700ddef7b454 Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Date: Mon, 29 Sep 2025 17:33:22 +0200
+Subject: [PATCH] remoteproc: stm32_rproc: return error on start/stop if reset
+ not supported
+
+On STM32MP2, the remote processor lifecycle can be controlled by the
+system, the Linux can only attach to or detach from the remote
+processor. This mode is detected based on the presence of a reset
+property in the device tree. If reset is not supported,
+stm32_rproc_stop() or stm32_rproc_start() return an error.
+
+Change-Id: I8b4e0696907f23ed62e540c437e1f97aa296944f
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/494831
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ drivers/remoteproc/stm32_rproc.c | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
+index 94726df8313d..a5a9489f3e3a 100644
+--- a/drivers/remoteproc/stm32_rproc.c
++++ b/drivers/remoteproc/stm32_rproc.c
+@@ -729,6 +729,11 @@ static int stm32_rproc_start(struct rproc *rproc)
+ 	struct stm32_rproc *ddata = rproc->priv;
+ 	int err;
+ 
++	if (!ddata->rst) {
++		dev_err(&rproc->dev, "Start of the firmware not supported\n");
++		return -EPERM;
++	}
++
+ 	stm32_rproc_add_coredump_trace(rproc);
+ 
+ 	/* clear remote proc Deep Sleep */
+@@ -806,6 +811,11 @@ static int stm32_rproc_stop(struct rproc *rproc)
+ 	struct stm32_rproc *ddata = rproc->priv;
+ 	int err;
+ 
++	if (!ddata->rst) {
++		dev_err(&rproc->dev, "Stop of the firmware not supported\n");
++		return -EPERM;
++	}
++
+ 	stm32_rproc_request_shutdown(rproc);
+ 
+ 	err = stm32_rproc_set_hold_boot(rproc, true);
+@@ -1071,9 +1081,12 @@ static int stm32_rproc_parse_dt(struct platform_device *pdev,
+ 		/* Try legacy fallback method: get it by index */
+ 		ddata->rst = devm_reset_control_get_by_index(dev, 0);
+ 	}
+-	if (IS_ERR(ddata->rst) && PTR_ERR(ddata->rst) != -ENOENT)
+-		return dev_err_probe(dev, PTR_ERR(ddata->rst),
+-				     "failed to get mcu_reset\n");
++	if (IS_ERR(ddata->rst)) {
++		if (PTR_ERR(ddata->rst) != -ENOENT)
++			return dev_err_probe(dev, PTR_ERR(ddata->rst),
++					     "failed to get mcu_reset\n");
++		ddata->rst = NULL;
++	}
+ 
+ 	/*
+ 	 * Three ways to manage the hold boot
+-- 
+2.53.0
+

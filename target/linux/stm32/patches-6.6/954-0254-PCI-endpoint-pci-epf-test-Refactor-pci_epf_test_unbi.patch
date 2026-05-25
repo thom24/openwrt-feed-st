@@ -1,0 +1,108 @@
+From 94f03dd70707d129508aac060b0c9bc1fde7f02c Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Tue, 14 Oct 2025 16:13:09 +0200
+Subject: [PATCH] PCI: endpoint: pci-epf-test: Refactor pci_epf_test_unbind()
+ function
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+[ Upstream commit 942ceba0e4fcc935dc22dd40f5510325e1e96d47 ]
+
+Move the pci_epc_clear_bar() and pci_epf_free_space() code to respective
+helper functions. This allows reusing the helpers in future commits.
+
+This also requires moving the pci_epf_test_unbind() definition below
+pci_epf_test_bind() to avoid forward declaration of the above helpers.
+
+No functional change.
+
+Link: https://lore.kernel.org/linux-pci/20240430-pci-epf-rework-v4-5-22832d0d456f@linaro.org
+Tested-by: Niklas Cassel <cassel@kernel.org>
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Signed-off-by: Krzysztof Wilczyński <kwilczynski@kernel.org>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Reviewed-by: Niklas Cassel <cassel@kernel.org>
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: Id4b0480d3294b9267a9bcd16be323b8e5f151fc8
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/499690
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/pci/endpoint/functions/pci-epf-test.c | 46 ++++++++++---------
+ 1 file changed, 25 insertions(+), 21 deletions(-)
+
+diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
+index 5d108b66f682..0fb1c0c115ff 100644
+--- a/drivers/pci/endpoint/functions/pci-epf-test.c
++++ b/drivers/pci/endpoint/functions/pci-epf-test.c
+@@ -686,27 +686,6 @@ static void pci_epf_test_cmd_handler(struct work_struct *work)
+ 			   msecs_to_jiffies(1));
+ }
+ 
+-static void pci_epf_test_unbind(struct pci_epf *epf)
+-{
+-	struct pci_epf_test *epf_test = epf_get_drvdata(epf);
+-	struct pci_epc *epc = epf->epc;
+-	struct pci_epf_bar *epf_bar;
+-	int bar;
+-
+-	cancel_delayed_work(&epf_test->cmd_handler);
+-	pci_epf_test_clean_dma_chan(epf_test);
+-	for (bar = 0; bar < PCI_STD_NUM_BARS; bar++) {
+-		epf_bar = &epf->bar[bar];
+-
+-		if (epf_test->reg[bar]) {
+-			pci_epc_clear_bar(epc, epf->func_no, epf->vfunc_no,
+-					  epf_bar);
+-			pci_epf_free_space(epf, epf_test->reg[bar], bar,
+-					   PRIMARY_INTERFACE);
+-		}
+-	}
+-}
+-
+ static int pci_epf_test_set_bar(struct pci_epf *epf)
+ {
+ 	int bar, add;
+@@ -744,6 +723,21 @@ static int pci_epf_test_set_bar(struct pci_epf *epf)
+ 	return 0;
+ }
+ 
++static void pci_epf_test_clear_bar(struct pci_epf *epf)
++{
++	struct pci_epf_test *epf_test = epf_get_drvdata(epf);
++	struct pci_epc *epc = epf->epc;
++	int bar;
++
++	for (bar = 0; bar < PCI_STD_NUM_BARS; bar++) {
++		if (!epf_test->reg[bar])
++			continue;
++
++		pci_epc_clear_bar(epc, epf->func_no, epf->vfunc_no,
++				  &epf->bar[bar]);
++	}
++}
++
+ static int pci_epf_test_core_init(struct pci_epf *epf)
+ {
+ 	struct pci_epf_test *epf_test = epf_get_drvdata(epf);
+@@ -961,6 +955,16 @@ static int pci_epf_test_bind(struct pci_epf *epf)
+ 	return 0;
+ }
+ 
++static void pci_epf_test_unbind(struct pci_epf *epf)
++{
++	struct pci_epf_test *epf_test = epf_get_drvdata(epf);
++
++	cancel_delayed_work(&epf_test->cmd_handler);
++	pci_epf_test_clean_dma_chan(epf_test);
++	pci_epf_test_clear_bar(epf);
++	pci_epf_test_free_space(epf);
++}
++
+ static const struct pci_epf_device_id pci_epf_test_ids[] = {
+ 	{
+ 		.name = "pci_epf_test",
+-- 
+2.53.0
+

@@ -1,0 +1,36 @@
+From a43357c368d2b09bb2cd75686dcacde7bc61ff8b Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Tue, 28 Oct 2025 15:32:38 +0100
+Subject: [PATCH] usb: dwc2: hcd: relax suspend wait loop to enter ppd
+
+When entering partial power down mode, the polling loop to detect
+bus suspend is very tight (e.g. 3ms). On stm32, it can be observed
+a bit more than 4ms for the SUSP bit to be set. So relax the timing
+in the polling loop.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I52dd25f86dbf55f80534e874f8916b4228f51959
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/512983
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/usb/dwc2/hcd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+index 57ffea6db253..5900ea68077e 100644
+--- a/drivers/usb/dwc2/hcd.c
++++ b/drivers/usb/dwc2/hcd.c
+@@ -5775,7 +5775,7 @@ int dwc2_host_enter_partial_power_down(struct dwc2_hsotg *hsotg)
+ 	udelay(5);
+ 
+ 	/* Wait for the HPRT0.PrtSusp register field to be set */
+-	if (dwc2_hsotg_wait_bit_set(hsotg, HPRT0, HPRT0_SUSP, 3000))
++	if (dwc2_hsotg_wait_bit_set(hsotg, HPRT0, HPRT0_SUSP, 5000))
+ 		dev_warn(hsotg->dev, "Suspend wasn't generated\n");
+ 
+ 	/* Backup all registers */
+-- 
+2.53.0
+

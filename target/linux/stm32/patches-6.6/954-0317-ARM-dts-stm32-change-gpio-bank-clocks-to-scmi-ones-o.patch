@@ -1,0 +1,359 @@
+From 943bbd7f5c66dc6bd04de05683661b4e9292c0a2 Mon Sep 17 00:00:00 2001
+From: Valentin Caron <valentin.caron@foss.st.com>
+Date: Mon, 24 Nov 2025 12:15:54 +0100
+Subject: [PATCH] ARM: dts: stm32: change gpio bank clocks to scmi ones on
+ stm32mp15
+
+In stm32mp15 "scmi" device trees, change gpio bank clocks to scmi ones.
+
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: I553b68580173492b78ef26721a3b321e5c609270
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/511850
+Reviewed-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Jerome BESNARD <jerome.besnard@st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ .../arm/boot/dts/st/stm32mp157a-dk1-scmi.dtsi | 44 +++++++++++++++++++
+ .../arm/boot/dts/st/stm32mp157a-ed1-scmi.dtsi | 44 +++++++++++++++++++
+ .../arm/boot/dts/st/stm32mp157a-ev1-scmi.dtsi | 44 +++++++++++++++++++
+ .../arm/boot/dts/st/stm32mp157c-dk2-scmi.dtsi | 44 +++++++++++++++++++
+ .../arm/boot/dts/st/stm32mp157c-ed1-scmi.dtsi | 44 +++++++++++++++++++
+ .../arm/boot/dts/st/stm32mp157c-ev1-scmi.dtsi | 44 +++++++++++++++++++
+ 6 files changed, 264 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157a-dk1-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp157a-dk1-scmi.dtsi
+index 3f6eb362040f..5626889f1461 100644
+--- a/arch/arm/boot/dts/st/stm32mp157a-dk1-scmi.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp157a-dk1-scmi.dtsi
+@@ -27,6 +27,50 @@ &dsi {
+ 	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
+ };
+ 
++&gpioa {
++	clocks = <&scmi_clk CK_SCMI_GPIOA>;
++};
++
++&gpiob {
++	clocks = <&scmi_clk CK_SCMI_GPIOB>;
++};
++
++&gpioc {
++	clocks = <&scmi_clk CK_SCMI_GPIOC>;
++};
++
++&gpiod {
++	clocks = <&scmi_clk CK_SCMI_GPIOD>;
++};
++
++&gpioe {
++	clocks = <&scmi_clk CK_SCMI_GPIOE>;
++};
++
++&gpiof {
++	clocks = <&scmi_clk CK_SCMI_GPIOF>;
++};
++
++&gpiog {
++	clocks = <&scmi_clk CK_SCMI_GPIOG>;
++};
++
++&gpioh {
++	clocks = <&scmi_clk CK_SCMI_GPIOH>;
++};
++
++&gpioi {
++	clocks = <&scmi_clk CK_SCMI_GPIOI>;
++};
++
++&gpioj {
++	clocks = <&scmi_clk CK_SCMI_GPIOJ>;
++};
++
++&gpiok {
++	clocks = <&scmi_clk CK_SCMI_GPIOK>;
++};
++
+ &gpioz {
+ 	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
+ };
+diff --git a/arch/arm/boot/dts/st/stm32mp157a-ed1-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp157a-ed1-scmi.dtsi
+index 0edd2bf4835f..e36e8e395323 100644
+--- a/arch/arm/boot/dts/st/stm32mp157a-ed1-scmi.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp157a-ed1-scmi.dtsi
+@@ -27,6 +27,50 @@ &dsi {
+ 	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
+ };
+ 
++&gpioa {
++	clocks = <&scmi_clk CK_SCMI_GPIOA>;
++};
++
++&gpiob {
++	clocks = <&scmi_clk CK_SCMI_GPIOB>;
++};
++
++&gpioc {
++	clocks = <&scmi_clk CK_SCMI_GPIOC>;
++};
++
++&gpiod {
++	clocks = <&scmi_clk CK_SCMI_GPIOD>;
++};
++
++&gpioe {
++	clocks = <&scmi_clk CK_SCMI_GPIOE>;
++};
++
++&gpiof {
++	clocks = <&scmi_clk CK_SCMI_GPIOF>;
++};
++
++&gpiog {
++	clocks = <&scmi_clk CK_SCMI_GPIOG>;
++};
++
++&gpioh {
++	clocks = <&scmi_clk CK_SCMI_GPIOH>;
++};
++
++&gpioi {
++	clocks = <&scmi_clk CK_SCMI_GPIOI>;
++};
++
++&gpioj {
++	clocks = <&scmi_clk CK_SCMI_GPIOJ>;
++};
++
++&gpiok {
++	clocks = <&scmi_clk CK_SCMI_GPIOK>;
++};
++
+ &gpioz {
+ 	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
+ };
+diff --git a/arch/arm/boot/dts/st/stm32mp157a-ev1-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp157a-ev1-scmi.dtsi
+index ee10768051a7..539c28bf9e17 100644
+--- a/arch/arm/boot/dts/st/stm32mp157a-ev1-scmi.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp157a-ev1-scmi.dtsi
+@@ -25,6 +25,50 @@ &dsi {
+ 	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
+ };
+ 
++&gpioa {
++	clocks = <&scmi_clk CK_SCMI_GPIOA>;
++};
++
++&gpiob {
++	clocks = <&scmi_clk CK_SCMI_GPIOB>;
++};
++
++&gpioc {
++	clocks = <&scmi_clk CK_SCMI_GPIOC>;
++};
++
++&gpiod {
++	clocks = <&scmi_clk CK_SCMI_GPIOD>;
++};
++
++&gpioe {
++	clocks = <&scmi_clk CK_SCMI_GPIOE>;
++};
++
++&gpiof {
++	clocks = <&scmi_clk CK_SCMI_GPIOF>;
++};
++
++&gpiog {
++	clocks = <&scmi_clk CK_SCMI_GPIOG>;
++};
++
++&gpioh {
++	clocks = <&scmi_clk CK_SCMI_GPIOH>;
++};
++
++&gpioi {
++	clocks = <&scmi_clk CK_SCMI_GPIOI>;
++};
++
++&gpioj {
++	clocks = <&scmi_clk CK_SCMI_GPIOJ>;
++};
++
++&gpiok {
++	clocks = <&scmi_clk CK_SCMI_GPIOK>;
++};
++
+ &gpioz {
+ 	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
+ };
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dtsi
+index ead69e3decc1..b73185ae75ed 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dtsi
+@@ -32,6 +32,50 @@ &dsi {
+ 	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
+ };
+ 
++&gpioa {
++	clocks = <&scmi_clk CK_SCMI_GPIOA>;
++};
++
++&gpiob {
++	clocks = <&scmi_clk CK_SCMI_GPIOB>;
++};
++
++&gpioc {
++	clocks = <&scmi_clk CK_SCMI_GPIOC>;
++};
++
++&gpiod {
++	clocks = <&scmi_clk CK_SCMI_GPIOD>;
++};
++
++&gpioe {
++	clocks = <&scmi_clk CK_SCMI_GPIOE>;
++};
++
++&gpiof {
++	clocks = <&scmi_clk CK_SCMI_GPIOF>;
++};
++
++&gpiog {
++	clocks = <&scmi_clk CK_SCMI_GPIOG>;
++};
++
++&gpioh {
++	clocks = <&scmi_clk CK_SCMI_GPIOH>;
++};
++
++&gpioi {
++	clocks = <&scmi_clk CK_SCMI_GPIOI>;
++};
++
++&gpioj {
++	clocks = <&scmi_clk CK_SCMI_GPIOJ>;
++};
++
++&gpiok {
++	clocks = <&scmi_clk CK_SCMI_GPIOK>;
++};
++
+ &gpioz {
+ 	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
+ };
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp157c-ed1-scmi.dtsi
+index 1d39c343ad55..47eac3b90593 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ed1-scmi.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp157c-ed1-scmi.dtsi
+@@ -32,6 +32,50 @@ &dsi {
+ 	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
+ };
+ 
++&gpioa {
++	clocks = <&scmi_clk CK_SCMI_GPIOA>;
++};
++
++&gpiob {
++	clocks = <&scmi_clk CK_SCMI_GPIOB>;
++};
++
++&gpioc {
++	clocks = <&scmi_clk CK_SCMI_GPIOC>;
++};
++
++&gpiod {
++	clocks = <&scmi_clk CK_SCMI_GPIOD>;
++};
++
++&gpioe {
++	clocks = <&scmi_clk CK_SCMI_GPIOE>;
++};
++
++&gpiof {
++	clocks = <&scmi_clk CK_SCMI_GPIOF>;
++};
++
++&gpiog {
++	clocks = <&scmi_clk CK_SCMI_GPIOG>;
++};
++
++&gpioh {
++	clocks = <&scmi_clk CK_SCMI_GPIOH>;
++};
++
++&gpioi {
++	clocks = <&scmi_clk CK_SCMI_GPIOI>;
++};
++
++&gpioj {
++	clocks = <&scmi_clk CK_SCMI_GPIOJ>;
++};
++
++&gpiok {
++	clocks = <&scmi_clk CK_SCMI_GPIOK>;
++};
++
+ &gpioz {
+ 	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
+ };
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dtsi
+index 37fac21741eb..ecf6fcdffecc 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dtsi
+@@ -30,6 +30,50 @@ &dsi {
+ 	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
+ };
+ 
++&gpioa {
++	clocks = <&scmi_clk CK_SCMI_GPIOA>;
++};
++
++&gpiob {
++	clocks = <&scmi_clk CK_SCMI_GPIOB>;
++};
++
++&gpioc {
++	clocks = <&scmi_clk CK_SCMI_GPIOC>;
++};
++
++&gpiod {
++	clocks = <&scmi_clk CK_SCMI_GPIOD>;
++};
++
++&gpioe {
++	clocks = <&scmi_clk CK_SCMI_GPIOE>;
++};
++
++&gpiof {
++	clocks = <&scmi_clk CK_SCMI_GPIOF>;
++};
++
++&gpiog {
++	clocks = <&scmi_clk CK_SCMI_GPIOG>;
++};
++
++&gpioh {
++	clocks = <&scmi_clk CK_SCMI_GPIOH>;
++};
++
++&gpioi {
++	clocks = <&scmi_clk CK_SCMI_GPIOI>;
++};
++
++&gpioj {
++	clocks = <&scmi_clk CK_SCMI_GPIOJ>;
++};
++
++&gpiok {
++	clocks = <&scmi_clk CK_SCMI_GPIOK>;
++};
++
+ &gpioz {
+ 	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
+ };
+-- 
+2.53.0
+

@@ -1,0 +1,203 @@
+From c9f0b25a1d1b5849945b76441b147504b3d724ed Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Mon, 6 Oct 2025 10:55:51 +0200
+Subject: [PATCH] soc: st: Add stm32 System Controller driver
+
+The System Controller peripheral in STM32MP251 has some register
+that are not accessible from non-secure world. An illegal access
+causes the secure OS to reboot the platform.
+The default "syscon" crashes for illegal access while reading the
+regmap in debugfs.
+Also the kernel drivers that use the "syscon" can trigger illegal
+access.
+
+Add a simple syscon driver based on regmap, where only the
+accessible registers are mapped.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: Ibb76c6249b6d744d7c90b835e7a6f48a67250bdf
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/496987
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/soc/st/Kconfig        |   9 +++
+ drivers/soc/st/Makefile       |   1 +
+ drivers/soc/st/stm32_syscon.c | 138 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 148 insertions(+)
+ create mode 100644 drivers/soc/st/stm32_syscon.c
+
+diff --git a/drivers/soc/st/Kconfig b/drivers/soc/st/Kconfig
+index 6a6f6b38794d..2fa90d1f3555 100644
+--- a/drivers/soc/st/Kconfig
++++ b/drivers/soc/st/Kconfig
+@@ -37,4 +37,13 @@ config STM32_RISAF
+ 	  topology. It implicitly requires that the RISAF is clocked by a
+ 	  capable software component.
+ 
++config STM32_SYSCON
++	tristate "STM32 System Controller Register R/W Based on Regmap"
++	select MFD_SYSCON
++	select REGMAP_MMIO
++	default y
++	help
++	  Select this option to enable accessing STM32 system control
++	  registers via regmap.
++
+ endif # ARCH_STM32
+diff --git a/drivers/soc/st/Makefile b/drivers/soc/st/Makefile
+index 11f056bfc80a..0843df849cd7 100644
+--- a/drivers/soc/st/Makefile
++++ b/drivers/soc/st/Makefile
+@@ -2,3 +2,4 @@ obj-$(CONFIG_STM32_HOG) += stm32_hog.o
+ obj-$(CONFIG_STM32_PM_DOMAINS) += stm32_pm_domain.o
+ obj-$(CONFIG_STM32_RISAB) += stm32_risab.o
+ obj-$(CONFIG_STM32_RISAF) += stm32_risaf.o
++obj-$(CONFIG_STM32_SYSCON) += stm32_syscon.o
+diff --git a/drivers/soc/st/stm32_syscon.c b/drivers/soc/st/stm32_syscon.c
+new file mode 100644
+index 000000000000..ee44be8ba074
+--- /dev/null
++++ b/drivers/soc/st/stm32_syscon.c
+@@ -0,0 +1,138 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * STM32MP System Control Driver
++ *
++ * Copyright (C) 2025 STMicroelectronics
++ *
++ * Author: Antonio Borneo <antonio.borneo@foss.st.com>
++ */
++
++#include <linux/mfd/syscon.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++
++#define STM32MP25_CA35SS_SYSCFG_ETR_LPI_CR		0x2000
++#define STM32MP25_CA35SS_SYSCFG_ETR_LPI_SR		0x2004
++#define STM32MP25_CA35SS_SYSCFG_STM_NSGUAREN_CR		0x2008
++#define STM32MP25_CA35SS_SYSCFG_TRACE_CLK_DIV_CR	0x200c
++#define STM32MP25_CA35SS_SYSCFG_DBGPWR_CR		0x2010
++#define STM32MP25_CA35SS_SYSCFG_DBGL1RSTDISABLE_CR	0x2014
++#define STM32MP25_CA35SS_SYSCFG_DBGPWR_SR		0x2018
++#define STM32MP25_CA35SS_SYSCFG_EDBGACK_SR		0x201c
++#define STM32MP25_CA35SS_SYSCFG_GIC_CFGR		0x2020
++#define STM32MP25_CA35SS_SYSCFG_LP_SR			0x2024
++#define STM32MP25_CA35SS_SYSCFG_RSTACK_SR		0x2028
++#define STM32MP25_CA35SS_SYSCFG_AARCH_MODE_CR		0x2080
++#define STM32MP25_CA35SS_SYSCFG_VBAR_CR			0x2084
++#define STM32MP25_CA35SS_SYSCFG_M33_ACCESS_CR		0x2088
++#define STM32MP25_CA35SS_SYSCFG_M33_TZEN_CR		0x20a0
++#define STM32MP25_CA35SS_SYSCFG_M33_INITSVTOR_CR	0x20a4
++#define STM32MP25_CA35SS_SYSCFG_M33_INITNSVTOR_CR	0x20a8
++
++static bool stm32_syscon_readable_reg(struct device *dev, unsigned int reg)
++{
++	switch (reg) {
++	case STM32MP25_CA35SS_SYSCFG_ETR_LPI_CR:
++	case STM32MP25_CA35SS_SYSCFG_ETR_LPI_SR:
++	case STM32MP25_CA35SS_SYSCFG_STM_NSGUAREN_CR:
++	case STM32MP25_CA35SS_SYSCFG_TRACE_CLK_DIV_CR:
++	case STM32MP25_CA35SS_SYSCFG_DBGPWR_CR:
++	case STM32MP25_CA35SS_SYSCFG_DBGL1RSTDISABLE_CR:
++	case STM32MP25_CA35SS_SYSCFG_DBGPWR_SR:
++	case STM32MP25_CA35SS_SYSCFG_EDBGACK_SR:
++	case STM32MP25_CA35SS_SYSCFG_GIC_CFGR:
++	case STM32MP25_CA35SS_SYSCFG_LP_SR:
++	case STM32MP25_CA35SS_SYSCFG_RSTACK_SR:
++	case STM32MP25_CA35SS_SYSCFG_M33_TZEN_CR:
++	case STM32MP25_CA35SS_SYSCFG_M33_INITSVTOR_CR:
++	case STM32MP25_CA35SS_SYSCFG_M33_INITNSVTOR_CR:
++		return true;
++
++	case STM32MP25_CA35SS_SYSCFG_AARCH_MODE_CR:
++	case STM32MP25_CA35SS_SYSCFG_VBAR_CR:
++	case STM32MP25_CA35SS_SYSCFG_M33_ACCESS_CR:
++	default:
++		return false;
++	}
++}
++
++static bool stm32_syscon_writeable_reg(struct device *dev, unsigned int reg)
++{
++	switch (reg) {
++	case STM32MP25_CA35SS_SYSCFG_ETR_LPI_CR:
++	case STM32MP25_CA35SS_SYSCFG_STM_NSGUAREN_CR:
++	case STM32MP25_CA35SS_SYSCFG_TRACE_CLK_DIV_CR:
++	case STM32MP25_CA35SS_SYSCFG_DBGPWR_CR:
++	case STM32MP25_CA35SS_SYSCFG_DBGL1RSTDISABLE_CR:
++	case STM32MP25_CA35SS_SYSCFG_GIC_CFGR:
++	case STM32MP25_CA35SS_SYSCFG_M33_TZEN_CR:
++	case STM32MP25_CA35SS_SYSCFG_M33_INITSVTOR_CR:
++	case STM32MP25_CA35SS_SYSCFG_M33_INITNSVTOR_CR:
++		return true;
++
++	case STM32MP25_CA35SS_SYSCFG_ETR_LPI_SR:
++	case STM32MP25_CA35SS_SYSCFG_DBGPWR_SR:
++	case STM32MP25_CA35SS_SYSCFG_EDBGACK_SR:
++	case STM32MP25_CA35SS_SYSCFG_LP_SR:
++	case STM32MP25_CA35SS_SYSCFG_RSTACK_SR:
++	case STM32MP25_CA35SS_SYSCFG_AARCH_MODE_CR:
++	case STM32MP25_CA35SS_SYSCFG_VBAR_CR:
++	case STM32MP25_CA35SS_SYSCFG_M33_ACCESS_CR:
++	default:
++		return false;
++	}
++}
++
++static const struct regmap_config stm32_syscon_regmap_config = {
++	.reg_bits = 32,
++	.val_bits = 32,
++	.reg_stride = 4,
++	.readable_reg = stm32_syscon_readable_reg,
++	.writeable_reg = stm32_syscon_writeable_reg,
++};
++
++static int stm32_syscon_probe(struct platform_device *pdev)
++{
++	struct regmap_config syscon_config = stm32_syscon_regmap_config;
++	struct device *dev = &pdev->dev;
++	struct regmap *regmap;
++	struct resource *res;
++	void __iomem *base;
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!res)
++		return -ENOENT;
++
++	base = devm_ioremap(dev, res->start, resource_size(res));
++	if (!base)
++		return -ENOMEM;
++
++	syscon_config.max_register = resource_size(res) - syscon_config.reg_stride;
++
++	regmap = devm_regmap_init_mmio(dev, base, &syscon_config);
++	if (IS_ERR(regmap))
++		return dev_err_probe(dev, PTR_ERR(regmap), "regmap init failed\n");
++
++	return devm_of_syscon_register_regmap(dev, dev->of_node, regmap);
++}
++
++static const struct of_device_id stm32_syscon_ids[] = {
++	{ .compatible = "st,stm32mp25-a35ss-syscfg" },
++	{},
++};
++MODULE_DEVICE_TABLE(of, stm32_syscon_ids);
++
++static struct platform_driver stm32_syscon_driver = {
++	.probe	= stm32_syscon_probe,
++	.driver	= {
++		.name = "stm32_syscon",
++		.of_match_table = stm32_syscon_ids,
++	},
++};
++
++module_platform_driver(stm32_syscon_driver);
++
++MODULE_AUTHOR("Antonio Borneo <antonio.borneo@foss.st.com>");
++MODULE_DESCRIPTION("STM32MP SYSCON driver");
++MODULE_LICENSE("GPL");
+-- 
+2.53.0
+

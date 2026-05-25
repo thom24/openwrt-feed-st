@@ -1,0 +1,84 @@
+From 76abf66771ad8a2eac2981e6accfcc9504df967c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Mon, 28 Apr 2025 17:39:35 +0200
+Subject: [PATCH] dt-bindings: iio: stm32-adc: fix dt_binding_check error
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Reindent st,stm32mp21-adc condition properly.
+
+Change-Id: I270e310b8bc834d7e2d5f05c9d383d8826fc5337
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/469680
+Domain-Review: Eric FOURMONT <eric.fourmont-ext@st.com>
+Tested-by: Eric FOURMONT <eric.fourmont-ext@st.com>
+Reviewed-by: Eric FOURMONT <eric.fourmont-ext@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ .../bindings/iio/adc/st,stm32-adc.yaml        | 48 +++++++++----------
+ 1 file changed, 24 insertions(+), 24 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
+index b600e337b6a3..11503d340c01 100644
+--- a/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
+@@ -559,30 +559,30 @@ patternProperties:
+               contains:
+                 const: st,stm32mp21-adc
+ 
+-          then:
+-            properties:
+-              reg:
+-                const: 0x0
+-
+-              interrupts:
+-                const: 0
+-
+-              assigned-resolution-bits:
+-                enum: [6, 8, 10, 12]
+-                default: 12
+-
+-              st,adc-channels:
+-                minItems: 1
+-                maxItems: 20
+-                items:
+-                  minimum: 0
+-                  maximum: 19
+-
+-              st,min-sample-time-nsecs:
+-                minItems: 1
+-                maxItems: 20
+-                items:
+-                  minimum: 40
++        then:
++          properties:
++            reg:
++              const: 0x0
++
++            interrupts:
++              const: 0
++
++            assigned-resolution-bits:
++              enum: [6, 8, 10, 12]
++              default: 12
++
++            st,adc-channels:
++              minItems: 1
++              maxItems: 20
++              items:
++                minimum: 0
++                maximum: 19
++
++            st,min-sample-time-nsecs:
++              minItems: 1
++              maxItems: 20
++              items:
++                minimum: 40
+ 
+       - if:
+           properties:
+-- 
+2.53.0
+

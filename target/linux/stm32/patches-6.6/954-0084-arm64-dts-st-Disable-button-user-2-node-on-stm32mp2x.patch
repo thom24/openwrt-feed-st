@@ -1,0 +1,82 @@
+From 08bcd49bc30802bfd59b27a8477f4acead23e20e Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Date: Tue, 1 Jul 2025 11:16:23 +0200
+Subject: [PATCH] arm64: dts: st: Disable button-user-2 node on stm32mp2xx
+ boards
+
+The user button 2 is assigned to the M33 in ST documentation for the
+EV1 and DK boards. Align assignment by disabling associated DT node.
+As consequence, the user button 2 can no more be used for the fast boot
+mode.
+
+Change-Id: I2582bf39125393a475f6b8724fa5f42d603e5188
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/470942
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts  | 2 +-
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts  | 2 +-
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts  | 2 +-
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 9101022ce967..8ce90995757b 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -91,7 +91,7 @@ button-user-2 {
+ 			label = "User-2";
+ 			linux,code = <BTN_2>;
+ 			gpios = <&gpiof 7 GPIO_ACTIVE_HIGH>;
+-			status = "okay";
++			status = "disabled";
+ 		};
+ 
+ 		button-wake-up {
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index b705d40d4793..b8a01b0b460c 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -69,7 +69,7 @@ button-user-2 {
+ 			label = "User-2";
+ 			linux,code = <BTN_2>;
+ 			gpios = <&gpioc 11 GPIO_ACTIVE_HIGH>;
+-			status = "okay";
++			status = "disabled";
+ 		};
+ 
+ 		button-wake-up {
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index 96bd5ed289ff..05bbc3ef16e5 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -97,7 +97,7 @@ button-user-2 {
+ 			label = "User-2";
+ 			linux,code = <BTN_2>;
+ 			gpios = <&gpioc 11 GPIO_ACTIVE_HIGH>;
+-			status = "okay";
++			status = "disabled";
+ 		};
+ 
+ 		button-wake-up {
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+index 8a240acbe00b..02adac46b0cc 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+@@ -76,7 +76,7 @@ button-user-2 {
+ 			label = "User-2";
+ 			linux,code = <BTN_2>;
+ 			gpios = <&gpiog 8 GPIO_ACTIVE_HIGH>;
+-			status = "okay";
++			status = "disabled";
+ 		};
+ 
+ 		button-wake-up {
+-- 
+2.53.0
+

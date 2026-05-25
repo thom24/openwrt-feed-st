@@ -1,0 +1,41 @@
+From 5a08c6a23ce600372bf3341865dba5e8903ee167 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Thu, 19 Jun 2025 17:58:06 +0200
+Subject: [PATCH] dt-bindings: stm32: add PCIE bus as an SCMI clock
+
+Because the PCIE shares its bus clock with the RISAF5 that is covering
+the PCIE memory, and because the RISAF5 is handled by the TDCID, this
+clock should be managed with the SCMI protocol.
+
+This way, the clock reference counter will be managed by the
+entity controlling the RISAF. It will avoid cases where a RISAF5
+register is accessed while the PCIE driver shuts down its clock.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: I1e1b467e70c6c4d656842176d50c2244a1c38eaa
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/468568
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ include/dt-bindings/clock/st,stm32mp25-rcc.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/dt-bindings/clock/st,stm32mp25-rcc.h b/include/dt-bindings/clock/st,stm32mp25-rcc.h
+index 07c6835715f4..b8d69f5b5c90 100644
+--- a/include/dt-bindings/clock/st,stm32mp25-rcc.h
++++ b/include/dt-bindings/clock/st,stm32mp25-rcc.h
+@@ -529,5 +529,6 @@
+ #define CK_SCMI_IPCC2_AM	129
+ #define CK_SCMI_LPDMA_AM	130
+ #define CK_SCMI_RTC_AM		131
++#define CK_SCMI_ICN_PCIE	132
+ 
+ #endif /* _DT_BINDINGS_STM32MP25_CLKS_H_ */
+-- 
+2.53.0
+

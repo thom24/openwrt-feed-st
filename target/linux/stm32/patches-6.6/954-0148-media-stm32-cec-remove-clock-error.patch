@@ -1,0 +1,37 @@
+From eafba7c22bdce6f6be9e3a9810b3da7bad6bb13f Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Tue, 26 Aug 2025 17:12:04 +0200
+Subject: [PATCH] media: stm32-cec: remove clock error
+
+stm32_cec_remove() should unprepare clocks after unregistering CEC driver
+to avoid warnings.
+
+Change-Id: Ibb4383338efec25d79dbfa7d2ad0648f8ef93680
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/484853
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/media/cec/platform/stm32/stm32-cec.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/cec/platform/stm32/stm32-cec.c b/drivers/media/cec/platform/stm32/stm32-cec.c
+index bda9d254041a..b6c328e7f8ec 100644
+--- a/drivers/media/cec/platform/stm32/stm32-cec.c
++++ b/drivers/media/cec/platform/stm32/stm32-cec.c
+@@ -347,10 +347,10 @@ static void stm32_cec_remove(struct platform_device *pdev)
+ {
+ 	struct stm32_cec *cec = platform_get_drvdata(pdev);
+ 
++	cec_unregister_adapter(cec->adap);
++
+ 	clk_unprepare(cec->clk_cec);
+ 	clk_unprepare(cec->clk_hdmi_cec);
+-
+-	cec_unregister_adapter(cec->adap);
+ }
+ 
+ static const struct of_device_id stm32_cec_of_match[] = {
+-- 
+2.53.0
+

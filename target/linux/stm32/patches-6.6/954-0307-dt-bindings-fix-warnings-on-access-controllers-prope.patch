@@ -1,0 +1,40 @@
+From 7067e1fb81c43a480812724fbeaf0a344b6c1bac Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Mon, 27 Oct 2025 17:23:21 +0100
+Subject: [PATCH] dt-bindings: fix warnings on access-controllers property for
+ stm32 CRC
+
+In the stm32mpxxx device tree files, the access-controllers property has
+been added to the CRC peripheral node so that the firewall configuration
+is checked before using it. Document it.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: Id35331e8145cbd4442494e8fbd23745ff2d3ca81
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/503462
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ Documentation/devicetree/bindings/crypto/st,stm32-crc.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-crc.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-crc.yaml
+index 50b2c2e0c3cd..dcb433e7c48c 100644
+--- a/Documentation/devicetree/bindings/crypto/st,stm32-crc.yaml
++++ b/Documentation/devicetree/bindings/crypto/st,stm32-crc.yaml
+@@ -19,6 +19,9 @@ properties:
+   clocks:
+     maxItems: 1
+ 
++  access-controllers:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+-- 
+2.53.0
+

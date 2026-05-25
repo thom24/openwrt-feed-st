@@ -1,0 +1,93 @@
+From 06e8461ceae29027aef6c8eec3698908ad6205da Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Thu, 10 Jul 2025 15:13:51 -0400
+Subject: [PATCH] PCI: endpoint: Add pci_epf_align_inbound_addr() helper for
+ inbound address alignment
+
+[ Upstream commit 4ff4252a2355f585c5cad8dc959ff1097300aa47 ]
+
+Add pci_epf_align_inbound_addr() to align the inbound addresses according
+to PCI BAR alignment requirements. The aligned base address and offset are
+returned via 'base' and 'off' parameters.
+
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+Signed-off-by: Manivannan Sadhasivam <mani@kernel.org>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Tested-by: Niklas Cassel <cassel@kernel.org>
+Link: https://patch.msgid.link/20250710-ep-msi-v21-5-57683fc7fb25@nxp.com
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I24699a31cdaf73a82358fde9fa42e05b7f6f6f8c
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/497601
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/pci/endpoint/pci-epf-core.c | 38 +++++++++++++++++++++++++++++
+ include/linux/pci-epf.h             |  3 +++
+ 2 files changed, 41 insertions(+)
+
+diff --git a/drivers/pci/endpoint/pci-epf-core.c b/drivers/pci/endpoint/pci-epf-core.c
+index 059f8639f21e..d4a9211268f0 100644
+--- a/drivers/pci/endpoint/pci-epf-core.c
++++ b/drivers/pci/endpoint/pci-epf-core.c
+@@ -450,6 +450,44 @@ struct pci_epf *pci_epf_create(const char *name)
+ }
+ EXPORT_SYMBOL_GPL(pci_epf_create);
+ 
++/**
++ * pci_epf_align_inbound_addr() - Align the given address based on the BAR
++ *				  alignment requirement
++ * @epf: the EPF device
++ * @addr: inbound address to be aligned
++ * @bar: the BAR number corresponding to the given addr
++ * @base: base address matching the @bar alignment requirement
++ * @off: offset to be added to the @base address
++ *
++ * Helper function to align input @addr based on BAR's alignment requirement.
++ * The aligned base address and offset are returned via @base and @off.
++ *
++ * NOTE: The pci_epf_alloc_space() function already accounts for alignment.
++ * This API is primarily intended for use with other memory regions not
++ * allocated by pci_epf_alloc_space(), such as peripheral register spaces or
++ * the message address of a platform MSI controller.
++ *
++ * Return: 0 on success, errno otherwise.
++ */
++int pci_epf_align_inbound_addr(struct pci_epf *epf, enum pci_barno bar,
++			       u64 addr, dma_addr_t *base, size_t *off)
++{
++	/*
++	 * Most EP controllers require the BAR start address to be aligned to
++	 * the BAR size, because they mask off the lower bits.
++	 *
++	 * Alignment to BAR size also works for controllers that support
++	 * unaligned addresses.
++	 */
++	u64 align = epf->bar[bar].size;
++
++	*base = round_down(addr, align);
++	*off = addr & (align - 1);
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(pci_epf_align_inbound_addr);
++
+ static void pci_epf_dev_release(struct device *dev)
+ {
+ 	struct pci_epf *epf = to_pci_epf(dev);
+diff --git a/include/linux/pci-epf.h b/include/linux/pci-epf.h
+index da3b0fa38c9a..1aa1c4fb1687 100644
+--- a/include/linux/pci-epf.h
++++ b/include/linux/pci-epf.h
+@@ -236,6 +236,9 @@ void *pci_epf_alloc_space(struct pci_epf *epf, size_t size, enum pci_barno bar,
+ 			  size_t align, enum pci_epc_interface_type type);
+ void pci_epf_free_space(struct pci_epf *epf, void *addr, enum pci_barno bar,
+ 			enum pci_epc_interface_type type);
++
++int pci_epf_align_inbound_addr(struct pci_epf *epf, enum pci_barno bar,
++			       u64 addr, dma_addr_t *base, size_t *off);
+ int pci_epf_bind(struct pci_epf *epf);
+ void pci_epf_unbind(struct pci_epf *epf);
+ int pci_epf_add_vepf(struct pci_epf *epf_pf, struct pci_epf *epf_vf);
+-- 
+2.53.0
+

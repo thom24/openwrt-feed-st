@@ -1,0 +1,75 @@
+From 96c44cf0f186fcb273d9e45d2074d4eeccc00af0 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Mon, 6 Oct 2025 11:00:05 +0200
+Subject: [PATCH] net: ethernet: stmmac: manage PTP clock during suspend
+
+Unprepare PTP clock in suspend only when interface is UP
+Fix error:
+ [   33.093466] ------------[ cut here ]------------
+     [   33.093490] WARNING: CPU: 0 PID: 233 at drivers/clk/clk.c:1181 clk_core_disable+0xe4/0x1f4
+     [   33.093531] ethptp_k already disabled
+     [   33.093537] Modules linked in: aes_arm aes_generic cmac algif_hash algif_skcipher af_alg brcmfmac_wcc stm32_adc stm32_timer_trigger stm32_lptimer_trigger snd_soc_stm32_sai_sub brcmfmac brcmutil cfg80211 stm32_cryp bluetooth stm32_hash stusb160x libdes typec stm32_vrefbuf crypto_engine stm32_adc_core snd_soc_audio_graph_card snd_soc_simple_card_utils snd_soc_cs42l51_i2c snd_soc_cs42l51 snd_soc_hdmi_codec snd_soc_stm32_i2s snd_soc_core ecdh_generic ecc galcore(O) snd_soc_stm32_sai libaes snd_pcm_dmaengine stm32_cec ac97_bus stm32_ddr_pmu snd_pcm stm32_crc32 snd_timer snd soundcore [last unloaded: btbcm]
+     [   33.093766] CPU: 0 PID: 233 Comm: sh Tainted: G           O       6.6.78 #1
+     [   33.093780] Hardware name: STM32 (Device Tree Support)
+     [   33.093802]  unwind_backtrace from show_stack+0x10/0x14
+     [   33.093830]  show_stack from dump_stack_lvl+0x40/0x4c
+     [   33.093853]  dump_stack_lvl from __warn+0x78/0x154
+     [   33.093876]  __warn from warn_slowpath_fmt+0x1ec/0x1f4
+     [   33.093901]  warn_slowpath_fmt from clk_core_disable+0xe4/0x1f4
+     [   33.093925]  clk_core_disable from clk_disable+0x28/0x34
+     [   33.093942]  clk_disable from stm32mp1_suspend+0x84/0xfc
+     [   33.093966]  stm32mp1_suspend from dpm_run_callback+0x48/0x160
+     [   33.093996]  dpm_run_callback from __device_suspend+0x114/0x508
+     [   33.094024]  __device_suspend from dpm_suspend+0x118/0x2cc
+     [   33.094054]  dpm_suspend from dpm_suspend_start+0x64/0x6c
+     [   33.094083]  dpm_suspend_start from suspend_devices_and_enter+0x150/0x2fc
+     [   33.094118]  suspend_devices_and_enter from enter_state+0x200/0x244
+     [   33.094150]  enter_state from pm_suspend+0x40/0x98
+     [   33.094178]  pm_suspend from state_store+0x6c/0xc8
+     [   33.094207]  state_store from kernfs_fop_write_iter+0xfc/0x1e8
+     [   33.094235]  kernfs_fop_write_iter from vfs_write+0x21c/0x42c
+     [   33.094261]  vfs_write from ksys_write+0x70/0xf0
+     [   33.094286]  ksys_write from ret_fast_syscall+0x0/0x54
+     [   33.094308] Exception stack(0xdec09fa8 to 0xdec09ff0)
+     [   33.094323] 9fa0:                   00000001 00566b40 00000001 00566b40 00000004 00000001
+     [   33.094337] 9fc0: 00000001 00566b40 00000004 00000004 00563548 bed306c8 00000020 00000000
+     [   33.094347] 9fe0: 00562d8c bed30680 0049d838 b6efc4d4
+     [   33.094356] ---[ end trace 0000000000000000 ]---
+
+Change-Id: I7dec4034a3ecef09f1a4a0ca032e2f33055b09af
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/496490
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
+index 005b021e9cc2..76a01cddcbf5 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
+@@ -616,7 +616,8 @@ static int stm32mp1_suspend(struct stm32_dwmac *dwmac)
+ 	clk_disable_unprepare(dwmac->syscfg_clk);
+ 	if (dwmac->enable_eth_ck)
+ 		clk_disable_unprepare(dwmac->clk_eth_ck);
+-	clk_disable_unprepare(priv->plat->clk_ptp_ref);
++	if (netif_running(ndev))
++		clk_disable_unprepare(priv->plat->clk_ptp_ref);
+ 
+ 	/* Keep the PHY up if we use Wake-on-Lan. */
+ 	if (!device_may_wakeup(dwmac->dev))
+@@ -631,7 +632,8 @@ static void stm32mp1_resume(struct stm32_dwmac *dwmac)
+ 	struct stmmac_priv *priv = netdev_priv(ndev);
+ 
+ 	clk_disable_unprepare(dwmac->clk_ethstp);
+-	clk_prepare_enable(priv->plat->clk_ptp_ref);
++	if (netif_running(ndev))
++		clk_prepare_enable(priv->plat->clk_ptp_ref);
+ 
+ 	/* The PHY was up for Wake-on-Lan. */
+ 	if (!device_may_wakeup(dwmac->dev))
+-- 
+2.53.0
+

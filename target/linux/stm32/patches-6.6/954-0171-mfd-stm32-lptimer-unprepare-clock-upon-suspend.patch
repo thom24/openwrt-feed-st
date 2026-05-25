@@ -1,0 +1,63 @@
+From 23814d43da47136abc2112cfdf4910589ae85031 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 11 Jun 2025 16:57:07 +0200
+Subject: [PATCH] mfd: stm32-lptimer: unprepare clock upon suspend
+
+The clock is prepared upon probe but remains prepared currently, during
+suspend. It should be unprepared upon suspend, and properly prepared
+again upon resume.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I9a7d9b05be4d2a379ac10b0ca2084242884d8169
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/488999
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+---
+ drivers/mfd/stm32-lptimer.c | 29 ++++++++++++++++++++++++++++-
+ 1 file changed, 28 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/mfd/stm32-lptimer.c b/drivers/mfd/stm32-lptimer.c
+index 78eb237a9092..13c72b149e32 100644
+--- a/drivers/mfd/stm32-lptimer.c
++++ b/drivers/mfd/stm32-lptimer.c
+@@ -140,8 +140,35 @@ static int stm32_lptimer_runtime_resume(struct device *dev)
+ 	return clk_enable(priv->clk);
+ }
+ 
++static int stm32_lptimer_suspend(struct device *dev)
++{
++	struct stm32_lptimer *priv = dev_get_drvdata(dev);
++	int ret;
++
++	ret = pm_runtime_force_suspend(dev);
++	if (ret < 0)
++		return ret;
++
++	/* balance devm_clk_get_prepared() from the probe */
++	clk_unprepare(priv->clk);
++
++	return 0;
++}
++
++static int stm32_lptimer_resume(struct device *dev)
++{
++	struct stm32_lptimer *priv = dev_get_drvdata(dev);
++	int ret;
++
++	ret = clk_prepare(priv->clk);
++	if (ret)
++		dev_err(dev, "failed to prep clock. Error [%d]\n", ret);
++
++	return pm_runtime_force_resume(dev);
++}
++
+ static const struct dev_pm_ops stm32_lptim_pm_ops = {
+-	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend, pm_runtime_force_resume)
++	SET_SYSTEM_SLEEP_PM_OPS(stm32_lptimer_suspend, stm32_lptimer_resume)
+ 	SET_RUNTIME_PM_OPS(stm32_lptimer_runtime_suspend, stm32_lptimer_runtime_resume, NULL)
+ };
+ 
+-- 
+2.53.0
+

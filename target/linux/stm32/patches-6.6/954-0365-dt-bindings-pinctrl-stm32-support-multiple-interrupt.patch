@@ -1,0 +1,36 @@
+From 6ce86bf0e3be2f23f79a214222b12753c1e5d146 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Wed, 3 Sep 2025 15:25:17 +0200
+Subject: [PATCH] dt-bindings: pinctrl: stm32: support multiple interrupts
+
+Drop the limit of a single interrupt, as for STM32MP257 we use
+more than 1.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: Ib0f5977a9a640efcd26d9eea85ec422fb1249e96
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/509724
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ .../devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml          | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
+index b3222e6b6f00..da9cd9f8f412 100644
+--- a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
+@@ -45,8 +45,7 @@ properties:
+     deprecated: true
+   hwlocks: true
+ 
+-  interrupts:
+-    maxItems: 1
++  interrupts: true
+ 
+   st,syscfg:
+     description: Phandle+args to the syscon node which includes IRQ mux selection.
+-- 
+2.53.0
+

@@ -1,0 +1,202 @@
+From 9029e1f451ea7cd1d7d0017acadd2a5d5b026dbc Mon Sep 17 00:00:00 2001
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Mon, 25 Sep 2023 15:17:09 +0200
+Subject: [PATCH] OPP: Add dev_pm_opp_add_dynamic() to allow more flexibility
+
+The dev_pm_opp_add() API is limited to add dynamic OPPs with a frequency
+and a voltage level. To enable more flexibility, let's add a new API,
+dev_pm_opp_add_dynamic() that's takes a struct dev_pm_opp_data* instead of
+a list of in-parameters.
+
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+[upstream commit 248a38d5cc3f3505e6cfbbc0514435c9f1ba00af]
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: Ia0b584697f370bdad4810aa8b574923c18bda44c
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/476925
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/opp/core.c     | 22 ++++++++++------------
+ drivers/opp/of.c       | 10 ++++++----
+ drivers/opp/opp.h      |  2 +-
+ include/linux/pm_opp.h | 29 +++++++++++++++++++++++++----
+ 4 files changed, 42 insertions(+), 21 deletions(-)
+
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 218cb2e7f360..a8415f519bc9 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -2025,8 +2025,7 @@ int _opp_add(struct device *dev, struct dev_pm_opp *new_opp,
+  * _opp_add_v1() - Allocate a OPP based on v1 bindings.
+  * @opp_table:	OPP table
+  * @dev:	device for which we do this operation
+- * @freq:	Frequency in Hz for this OPP
+- * @u_volt:	Voltage in uVolts for this OPP
++ * @data:	The OPP data for the OPP to add
+  * @dynamic:	Dynamically added OPPs.
+  *
+  * This function adds an opp definition to the opp table and returns status.
+@@ -2044,10 +2043,10 @@ int _opp_add(struct device *dev, struct dev_pm_opp *new_opp,
+  * -ENOMEM	Memory allocation failure
+  */
+ int _opp_add_v1(struct opp_table *opp_table, struct device *dev,
+-		unsigned long freq, long u_volt, bool dynamic)
++		struct dev_pm_opp_data *data, bool dynamic)
+ {
+ 	struct dev_pm_opp *new_opp;
+-	unsigned long tol;
++	unsigned long tol, u_volt = data->u_volt;
+ 	int ret;
+ 
+ 	if (!assert_single_clk(opp_table, 0))
+@@ -2058,7 +2057,7 @@ int _opp_add_v1(struct opp_table *opp_table, struct device *dev,
+ 		return -ENOMEM;
+ 
+ 	/* populate the opp table */
+-	new_opp->rates[0] = freq;
++	new_opp->rates[0] = data->freq;
+ 	tol = u_volt * opp_table->voltage_tolerance_v1 / 100;
+ 	new_opp->supplies[0].u_volt = u_volt;
+ 	new_opp->supplies[0].u_volt_min = u_volt - tol;
+@@ -2848,10 +2847,9 @@ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table,
+ }
+ 
+ /**
+- * dev_pm_opp_add()  - Add an OPP table from a table definitions
+- * @dev:	device for which we do this operation
+- * @freq:	Frequency in Hz for this OPP
+- * @u_volt:	Voltage in uVolts for this OPP
++ * dev_pm_opp_add_dynamic()  - Add an OPP table from a table definitions
++ * @dev:	The device for which we do this operation
++ * @data:	The OPP data for the OPP to add
+  *
+  * This function adds an opp definition to the opp table and returns status.
+  * The opp is made available by default and it can be controlled using
+@@ -2864,7 +2862,7 @@ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table,
+  *		Duplicate OPPs (both freq and volt are same) and !opp->available
+  * -ENOMEM	Memory allocation failure
+  */
+-int dev_pm_opp_add(struct device *dev, unsigned long freq, unsigned long u_volt)
++int dev_pm_opp_add_dynamic(struct device *dev, struct dev_pm_opp_data *data)
+ {
+ 	struct opp_table *opp_table;
+ 	int ret;
+@@ -2876,13 +2874,13 @@ int dev_pm_opp_add(struct device *dev, unsigned long freq, unsigned long u_volt)
+ 	/* Fix regulator count for dynamic OPPs */
+ 	opp_table->regulator_count = 1;
+ 
+-	ret = _opp_add_v1(opp_table, dev, freq, u_volt, true);
++	ret = _opp_add_v1(opp_table, dev, data, true);
+ 	if (ret)
+ 		dev_pm_opp_put_opp_table(opp_table);
+ 
+ 	return ret;
+ }
+-EXPORT_SYMBOL_GPL(dev_pm_opp_add);
++EXPORT_SYMBOL_GPL(dev_pm_opp_add_dynamic);
+ 
+ /**
+  * _opp_set_availability() - helper to set the availability of an opp
+diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+index 657c08d0ad97..a8372623442c 100644
+--- a/drivers/opp/of.c
++++ b/drivers/opp/of.c
+@@ -1079,13 +1079,15 @@ static int _of_add_opp_table_v1(struct device *dev, struct opp_table *opp_table)
+ 
+ 	val = prop->value;
+ 	while (nr) {
+-		unsigned long freq = be32_to_cpup(val++) * 1000;
+-		unsigned long volt = be32_to_cpup(val++);
++		struct dev_pm_opp_data data = {
++			.freq = be32_to_cpup(val++) * 1000,
++			.u_volt = be32_to_cpup(val++),
++		};
+ 
+-		ret = _opp_add_v1(opp_table, dev, freq, volt, false);
++		ret = _opp_add_v1(opp_table, dev, &data, false);
+ 		if (ret) {
+ 			dev_err(dev, "%s: Failed to add OPP %ld (%d)\n",
+-				__func__, freq, ret);
++				__func__, data.freq, ret);
+ 			goto remove_static_opp;
+ 		}
+ 		nr -= 2;
+diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
+index 8a5ea38f3a3d..fefdf9845692 100644
+--- a/drivers/opp/opp.h
++++ b/drivers/opp/opp.h
+@@ -251,7 +251,7 @@ struct dev_pm_opp *_opp_allocate(struct opp_table *opp_table);
+ void _opp_free(struct dev_pm_opp *opp);
+ int _opp_compare_key(struct opp_table *opp_table, struct dev_pm_opp *opp1, struct dev_pm_opp *opp2);
+ int _opp_add(struct device *dev, struct dev_pm_opp *new_opp, struct opp_table *opp_table);
+-int _opp_add_v1(struct opp_table *opp_table, struct device *dev, unsigned long freq, long u_volt, bool dynamic);
++int _opp_add_v1(struct opp_table *opp_table, struct device *dev, struct dev_pm_opp_data *data, bool dynamic);
+ void _dev_pm_opp_cpumask_remove_table(const struct cpumask *cpumask, int last_cpu);
+ struct opp_table *_add_opp_table_indexed(struct device *dev, int index, bool getclk);
+ void _put_opp_list_kref(struct opp_table *opp_table);
+diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+index 91f87d7e807c..a8ee93ba41d8 100644
+--- a/include/linux/pm_opp.h
++++ b/include/linux/pm_opp.h
+@@ -92,6 +92,16 @@ struct dev_pm_opp_config {
+ 	struct device ***virt_devs;
+ };
+ 
++/**
++ * struct dev_pm_opp_data - The data to use to initialize an OPP.
++ * @freq: The clock rate in Hz for the OPP.
++ * @u_volt: The voltage in uV for the OPP.
++ */
++struct dev_pm_opp_data {
++	unsigned long freq;
++	unsigned long u_volt;
++};
++
+ #if defined(CONFIG_PM_OPP)
+ 
+ struct opp_table *dev_pm_opp_get_opp_table(struct device *dev);
+@@ -152,8 +162,8 @@ struct dev_pm_opp *dev_pm_opp_find_bw_floor(struct device *dev,
+ 
+ void dev_pm_opp_put(struct dev_pm_opp *opp);
+ 
+-int dev_pm_opp_add(struct device *dev, unsigned long freq,
+-		   unsigned long u_volt);
++int dev_pm_opp_add_dynamic(struct device *dev, struct dev_pm_opp_data *opp);
++
+ void dev_pm_opp_remove(struct device *dev, unsigned long freq);
+ void dev_pm_opp_remove_all_dynamic(struct device *dev);
+ 
+@@ -322,8 +332,8 @@ static inline struct dev_pm_opp *dev_pm_opp_find_bw_floor(struct device *dev,
+ 
+ static inline void dev_pm_opp_put(struct dev_pm_opp *opp) {}
+ 
+-static inline int dev_pm_opp_add(struct device *dev, unsigned long freq,
+-					unsigned long u_volt)
++static inline int
++dev_pm_opp_add_dynamic(struct device *dev, struct dev_pm_opp_data *opp)
+ {
+ 	return -EOPNOTSUPP;
+ }
+@@ -519,6 +529,17 @@ static inline int dev_pm_opp_of_find_icc_paths(struct device *dev, struct opp_ta
+ 
+ /* OPP Configuration helpers */
+ 
++static inline int dev_pm_opp_add(struct device *dev, unsigned long freq,
++				 unsigned long u_volt)
++{
++	struct dev_pm_opp_data data = {
++		.freq = freq,
++		.u_volt = u_volt,
++	};
++
++	return dev_pm_opp_add_dynamic(dev, &data);
++}
++
+ /* Regulators helpers */
+ static inline int dev_pm_opp_set_regulators(struct device *dev,
+ 					    const char * const names[])
+-- 
+2.53.0
+

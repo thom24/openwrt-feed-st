@@ -1,0 +1,56 @@
+From ed1016787b77fd8607ec8e6afb186659ef9fddd8 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Tue, 26 Aug 2025 17:00:43 +0200
+Subject: [PATCH] phy: stm32: usb2phy: fix submode restore when calling
+ phy_init
+
+After low power, when usb controllers drivers call phy_init(), only
+the role (device, host) is restored, but the submode representing
+a valid session gets overridden with USB_ROLE_NONE. This lead typically
+to a non-working usb3dr (dwc3) gadget not to reconnect to the host.
+Fix it by restoring both the role, and the submode.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I0bc9a84a7d181cfe8881e3fd8990576d682ee529
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/484604
+Reviewed-by: Christophe GUIBOUT <christophe.guibout@st.com>
+Tested-by: Christophe GUIBOUT <christophe.guibout@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+---
+ drivers/phy/st/phy-stm32-usb2phy.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/phy/st/phy-stm32-usb2phy.c b/drivers/phy/st/phy-stm32-usb2phy.c
+index ba00ec5718f7..860694c1d7ce 100644
+--- a/drivers/phy/st/phy-stm32-usb2phy.c
++++ b/drivers/phy/st/phy-stm32-usb2phy.c
+@@ -82,6 +82,7 @@ struct stm32_usb2phy {
+ 	struct clk *phyref;
+ 	struct regulator *vdd33, *vdda18;
+ 	enum phy_mode mode;
++	int submode;
+ 	u32 mask_trim1, value_trim1, mask_trim2, value_trim2;
+ 	bool is_init;
+ 	struct clk_hw clk48_hw;
+@@ -472,6 +473,7 @@ static int stm32_usb2phy_set_mode(struct phy *phy, enum phy_mode mode, int submo
+ 	}
+ 
+ 	phy_dev->mode = mode;
++	phy_dev->submode = submode;
+ 
+ 	return 0;
+ }
+@@ -489,7 +491,7 @@ static int stm32_usb2phy_init(struct phy *phy)
+ 	}
+ 
+ 	if (phy_dev->mode != PHY_MODE_INVALID) {
+-		ret = stm32_usb2phy_set_mode(phy, phy_dev->mode, USB_ROLE_NONE);
++		ret = stm32_usb2phy_set_mode(phy, phy_dev->mode, phy_dev->submode);
+ 		if (ret) {
+ 			dev_err(dev, "can't set phy mode (%d)\n", ret);
+ 			goto error_disable;
+-- 
+2.53.0
+
