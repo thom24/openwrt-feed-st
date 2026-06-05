@@ -22,10 +22,10 @@ Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
  3 files changed, 285 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
-index ab9f249d4221..107880d13d21 100644
+index 51659f94921e..073a479cb7f3 100644
 --- a/drivers/net/phy/Kconfig
 +++ b/drivers/net/phy/Kconfig
-@@ -350,6 +350,7 @@ config ROCKCHIP_PHY
+@@ -418,6 +418,7 @@ config ROCKCHIP_PHY
  
  config SMSC_PHY
  	tristate "SMSC PHYs"
@@ -34,7 +34,7 @@ index ab9f249d4221..107880d13d21 100644
  	  Currently supports the LAN83C185, LAN8187 and LAN8700 PHYs
  
 diff --git a/drivers/net/phy/smsc.c b/drivers/net/phy/smsc.c
-index 692930750215..c88edb19d2e7 100644
+index a8fc5c3450bd..5f9bb0ebe455 100644
 --- a/drivers/net/phy/smsc.c
 +++ b/drivers/net/phy/smsc.c
 @@ -20,6 +20,8 @@
@@ -54,9 +54,9 @@ index 692930750215..c88edb19d2e7 100644
  };
  
  static int smsc_phy_ack_interrupt(struct phy_device *phydev)
-@@ -258,6 +261,243 @@ int lan87xx_read_status(struct phy_device *phydev)
+@@ -305,6 +308,243 @@ static int lan87xx_phy_config_init(struct phy_device *phydev)
+ 	return smsc_phy_config_init(phydev);
  }
- EXPORT_SYMBOL_GPL(lan87xx_read_status);
  
 +static int lan874x_phy_config_init(struct phy_device *phydev)
 +{
@@ -298,7 +298,7 @@ index 692930750215..c88edb19d2e7 100644
  static int smsc_get_sset_count(struct phy_device *phydev)
  {
  	return ARRAY_SIZE(smsc_hw_stats);
-@@ -533,7 +773,7 @@ static struct phy_driver smsc_phy_driver[] = {
+@@ -581,7 +821,7 @@ static struct phy_driver smsc_phy_driver[] = {
  
  	/* basic functions */
  	.read_status	= lan87xx_read_status,
@@ -307,7 +307,7 @@ index 692930750215..c88edb19d2e7 100644
  	.soft_reset	= smsc_phy_reset,
  
  	/* IRQ related */
-@@ -548,6 +788,10 @@ static struct phy_driver smsc_phy_driver[] = {
+@@ -596,6 +836,10 @@ static struct phy_driver smsc_phy_driver[] = {
  	.get_tunable	= smsc_phy_get_tunable,
  	.set_tunable	= smsc_phy_set_tunable,
  
@@ -318,7 +318,7 @@ index 692930750215..c88edb19d2e7 100644
  	.suspend	= genphy_suspend,
  	.resume		= genphy_resume,
  }, {
-@@ -566,7 +810,7 @@ static struct phy_driver smsc_phy_driver[] = {
+@@ -614,7 +858,7 @@ static struct phy_driver smsc_phy_driver[] = {
  
  	/* basic functions */
  	.read_status	= lan87xx_read_status,
@@ -327,7 +327,7 @@ index 692930750215..c88edb19d2e7 100644
  	.soft_reset	= smsc_phy_reset,
  
  	/* IRQ related */
-@@ -581,6 +825,10 @@ static struct phy_driver smsc_phy_driver[] = {
+@@ -629,6 +873,10 @@ static struct phy_driver smsc_phy_driver[] = {
  	.get_tunable	= smsc_phy_get_tunable,
  	.set_tunable	= smsc_phy_set_tunable,
  

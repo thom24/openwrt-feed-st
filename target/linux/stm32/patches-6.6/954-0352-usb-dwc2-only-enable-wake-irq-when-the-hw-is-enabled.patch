@@ -20,10 +20,10 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index 8a03715fe266..ed3a87339e87 100644
+index f38c404eb3f4..8b0e06600369 100644
 --- a/drivers/usb/dwc2/platform.c
 +++ b/drivers/usb/dwc2/platform.c
-@@ -988,7 +988,8 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+@@ -981,7 +981,8 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
  		dwc2->phy_off_for_suspend = true;
  	}
  
@@ -33,12 +33,12 @@ index 8a03715fe266..ed3a87339e87 100644
  		enable_irq_wake(dwc2->irq);
  
  	return ret;
-@@ -1000,7 +1001,7 @@ static int __maybe_unused dwc2_resume(struct device *dev)
- 	bool ll_hw_enabled = dwc2->ll_hw_enabled;
- 	int ret = 0;
+@@ -996,7 +997,7 @@ static int __maybe_unused dwc2_resume(struct device *dev)
+ 	if (!dwc2->ll_hw_enabled)
+ 		return 0;
  
 -	if (device_may_wakeup(dev) || device_wakeup_path(dev))
-+	if (dwc2->ll_hw_enabled && !dwc2->phy_off_for_suspend)
++	if (!dwc2->phy_off_for_suspend)
  		disable_irq_wake(dwc2->irq);
  
  	if (!ll_hw_enabled) {

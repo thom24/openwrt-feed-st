@@ -18,10 +18,10 @@ Tested-by: Hugues FRUCHET <hugues.fruchet@st.com>
 ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
 Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
 ---
- .../platform/verisilicon/hantro_g1_jpeg_dec.c  |  2 +-
- .../media/platform/verisilicon/hantro_v4l2.c   | 18 ++++++++++++++++--
- .../platform/verisilicon/stm32mp25_vpu_hw.c    |  2 +-
- 3 files changed, 18 insertions(+), 4 deletions(-)
+ .../platform/verisilicon/hantro_g1_jpeg_dec.c |  2 +-
+ .../media/platform/verisilicon/hantro_v4l2.c  | 19 +++++++++++++++++--
+ .../platform/verisilicon/stm32mp25_vpu_hw.c   |  2 +-
+ 3 files changed, 19 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/media/platform/verisilicon/hantro_g1_jpeg_dec.c b/drivers/media/platform/verisilicon/hantro_g1_jpeg_dec.c
 index 9fba6f6f9929..4e1376186b05 100644
@@ -37,29 +37,27 @@ index 9fba6f6f9929..4e1376186b05 100644
  			"Resolution mismatch: %dx%d (JPEG) versus %lux%lu (user)",
  			header.frame.width, header.frame.height, width, height);
 diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
-index fa1910ce5230..5926df4f57df 100644
+index 0b831888e646..0383e63e524b 100644
 --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
 +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
-@@ -655,11 +655,16 @@ static int vidioc_g_selection(struct file *file, void *priv,
+@@ -655,8 +655,14 @@ static int vidioc_g_selection(struct file *file, void *priv,
  {
  	struct hantro_ctx *ctx = fh_to_ctx(priv);
  
 -	/* Crop only supported on source. */
--	if (!ctx->is_encoder ||
+-	if (sel->type != V4L2_BUF_TYPE_VIDEO_OUTPUT)
 +	/* Crop only supported on encoder source. */
 +	if (ctx->is_encoder &&
- 	    sel->type != V4L2_BUF_TYPE_VIDEO_OUTPUT)
- 		return -EINVAL;
- 
++	    sel->type != V4L2_BUF_TYPE_VIDEO_OUTPUT)
++		return -EINVAL;
++
 +	/* Compose only supported on decoder destination. */
 +	if (!ctx->is_encoder &&
 +	    sel->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
-+		return -EINVAL;
-+
+ 		return -EINVAL;
+ 
  	switch (sel->target) {
- 	case V4L2_SEL_TGT_CROP_DEFAULT:
- 	case V4L2_SEL_TGT_CROP_BOUNDS:
-@@ -674,6 +679,15 @@ static int vidioc_g_selection(struct file *file, void *priv,
+@@ -673,6 +679,15 @@ static int vidioc_g_selection(struct file *file, void *priv,
  		sel->r.width = ctx->dst_fmt.width;
  		sel->r.height = ctx->dst_fmt.height;
  		break;

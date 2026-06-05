@@ -1,7 +1,9 @@
-From e5332eedf04fa538d859ee0ed9d77fa19775d858 Mon Sep 17 00:00:00 2001
+From a4048180cf8ea8b380eff83ca57dd3bf93373694 Mon Sep 17 00:00:00 2001
 From: Yannick Fertre <yannick.fertre@foss.st.com>
 Date: Fri, 18 Jul 2025 10:11:06 +0200
 Subject: [PATCH] drm/stm: Remove redundant drm_of_panel_bridge_remove call
+
+[ e5332eedf04f not applied due to merge conflict ]
 
 Some changes were lost when merging the patch
 "drm/stm: Avoid use-after-free issues with crtc and Plane".
@@ -16,79 +18,7 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/475696
 ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
 Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
 ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
----
- drivers/gpu/drm/stm/ltdc.c | 17 ++---------------
- 1 file changed, 2 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-index b1eb57c142f7..f4fc98df0670 100644
---- a/drivers/gpu/drm/stm/ltdc.c
-+++ b/drivers/gpu/drm/stm/ltdc.c
-@@ -35,13 +35,13 @@
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_atomic_helper.h>
- #include <drm/drm_gem_dma_helper.h>
-+#include <drm/drm_managed.h>
- #include <drm/drm_of.h>
- #include <drm/drm_panel.h>
- #include <drm/drm_plane_helper.h>
- #include <drm/drm_probe_helper.h>
- #include <drm/drm_simple_kms_helper.h>
- #include <drm/drm_vblank.h>
--#include <drm/drm_managed.h>
- 
- #include <video/videomode.h>
- 
-@@ -1858,9 +1858,6 @@ static void ltdc_plane_atomic_disable(struct drm_plane *plane,
- 	/* Disable layer */
- 	regmap_write_bits(ldev->regmap, LTDC_L1CR + lofs, LXCR_MASK, 0);
- 
--	/* Set the transparency of the layer to the default value */
--	regmap_write_bits(ldev->regmap, LTDC_L1CACR + lofs, LXCACR_CONSTA, 0x00);
--
- 	/* Reset the layer transparency to hide any related background color */
- 	regmap_write_bits(ldev->regmap, LTDC_L1CACR + lofs, LXCACR_CONSTA, 0x00);
- 
-@@ -2041,7 +2038,7 @@ static int ltdc_crtc_init(struct drm_device *ddev, struct drm_crtc *crtc)
- 	primary = ltdc_plane_create(ddev, DRM_PLANE_TYPE_PRIMARY, 0);
- 	if (!primary) {
- 		DRM_ERROR("Can not create primary plane\n");
--		return -EINVAL;
-+		return -ENOMEM;
- 	}
- 
- 	if (ldev->caps.dynamic_zorder)
-@@ -2656,18 +2653,13 @@ int ltdc_load(struct drm_device *ddev)
- err:
- 	of_reserved_mem_device_release(dev);
- 
--	for (i = 0; i < nb_endpoints; i++)
--		drm_of_panel_bridge_remove(ddev->dev->of_node, 0, i);
--
- 	return ret;
- }
- 
- void ltdc_unload(struct drm_device *ddev)
- {
--	struct device *dev = ddev->dev;
- 	struct ltdc_device *ldev = ddev->dev_private;
- 	struct stm32_firewall *fwl = (struct stm32_firewall *)ldev->firewall;
--	int nb_endpoints, i;
- 
- 	DRM_DEBUG_DRIVER("\n");
- 
-@@ -2676,11 +2668,6 @@ void ltdc_unload(struct drm_device *ddev)
- 
- 	stm32_firewall_release_access(fwl);
- 
--	nb_endpoints = of_graph_get_endpoint_count(dev->of_node);
--
--	for (i = 0; i < nb_endpoints; i++)
--		drm_of_panel_bridge_remove(ddev->dev->of_node, 0, i);
--
- 	pm_runtime_disable(ddev->dev);
- }
- 
+Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
 -- 
 2.53.0
 
