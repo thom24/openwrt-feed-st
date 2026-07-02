@@ -1,5 +1,11 @@
 # Release notes
 
+##  openstlinux-6.6-openwrt-24.10.6-mpu-v26.02.18
+
+Changes in this release:
+
+- Based on the BSP components of ST's 6.2 BSP.
+
 ##  openstlinux-6.6-openwrt-24.10.6-mpu-v25.06.11
 
 Changes in this release:
