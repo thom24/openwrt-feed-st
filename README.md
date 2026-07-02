@@ -78,17 +78,17 @@ Actually the feed is based on OpenWrt
 
 ## BSP
 
-This feed is based on the `STPM32MP1/STM32MP2 BSP v6.1`.
+This feed is based on the `STPM32MP1/STM32MP2 BSP v6.2`.
 
 |Components|Version|
 |----------|-------|
-|TF-A|2.10-stm32mp-r1|
-|U-Boot|2023.10-stm32mp-r1|
-|OPTEE|4.0.0-stm32mp-r1|
-|Linux|OpenWRT kernel + v6.6-stm32mp-r2|
+|TF-A|2.10-stm32mp-r3|
+|U-Boot|2023.10-stm32mp-r3|
+|OPTEE|4.0.0-stm32mp-r3|
+|Linux|OpenWRT kernel + v6.6-stm32mp-r3|
 
 For the kernel, the patches from the v6.6-stm32mp branch until the tag
-v6.6-stm32mp-r2 were added.
+v6.6-stm32mp-r3 were added.
 They are available in `target/linux/stm32/patches-6.6/`.
 
 Some patches were removed as they were applied in Linux, or they are already
@@ -124,6 +124,11 @@ ee48aa9e5979 ("rtc: rtc-optee: fix memory leak on removal")
 a17c92edd7bb ("Revert "drm: Call drm_atomic_helper_shutdown() at shutdown/remove time for misc drivers"")
 fbdc154a59a4 ("usb: dwc2: fix shutdown in peripheral mode when gadget isn't configured")
 f739a554280b ("pwm: stm32: ensure PWM polarity is set when enabling it")
+f5e3ddbb228d ("dmaengine: stm32-dma: configure next sg only if there are more than 2 sgs")
+8428debab53d ("irqchip: gic-v2m: Handle Multiple MSI base IRQ Alignment")
+7c14e33c9192 ("ASoC: stm32: sai: manage context in set_sysclk callback")
+be95b318b7de ("ext4: clear i_state_flags when alloc inode")
+5e3260959519 ("usb: dwc2: disable platform lowlevel hw resources during shutdown")
 ```
 
 Some patches had to be modified to fix some conflicts.
@@ -156,6 +161,10 @@ f1bc1b5d21c5 ("usb: dwc2: platform: Add irq wakeup support")
 f6e33af19395 ("usb: dwc2: handle suspended gadget when going to low power")
 7bf7d5b59c8d ("media: verisilicon: add VP8 encode support for Rockchip RK3399 VPU2")
 e9813d379cc9 ("usb: dwc2: fix suspend in peripheral mode when gadget isn't configured")
+ce2136afc5e5 ("Revert "Revert "net: phy: smsc: add WoL support to LAN8740/LAN8742 PHYs""")
+237a0e5e7b14 ("usb: dwc2: add support for runtime PM")
+c14e1e7edb97 ("usb: dwc2: only enable wake irq when the hw is enabled for wakeup")
+3989afe4ccfb ("media: verisilicon: fix decoding of jpeg with unaligned height")
 ```
 
 Following patches were not applied due to conflicts. They corresponds to the
@@ -189,6 +198,12 @@ bba33e9f0619 ("drm/stm: ltdc: set clock parent before set rate")
 634d4d01d037 ("drm/stm: ltdc: add clock tolerance module parameter")
 cf2f1b885568 ("drm/stm: ltdc: set configuration register masks to 12 bits")
 a825a4c45283 ("drm/stm: ltdc: check the secure layer")
+e5332eedf04f ("drm/stm: Remove redundant drm_of_panel_bridge_remove call")
+9be78d291d01 ("drm/stm: ltdc: support of plane rotation")
+94097f58f175 ("drm/stm: ltdc: re-map lcd clock tree")
+3bada4c13ed1 ("drm/stm: ltdc: default-on property removed")
+bc54bccfaff4 ("drm/stm: ltdc: fix pm runtime during probe")
+714992840543 ("drm/stm: ltdc:  remove fixup callback from encoder to crtc helpers")
 ```
 
 ## Starter Package
