@@ -27,8 +27,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  3 files changed, 148 insertions(+)
  create mode 100644 drivers/soc/st/stm32_syscon.c
 
-diff --git a/drivers/soc/st/Kconfig b/drivers/soc/st/Kconfig
-index 6a6f6b38794d..2fa90d1f3555 100644
 --- a/drivers/soc/st/Kconfig
 +++ b/drivers/soc/st/Kconfig
 @@ -37,4 +37,13 @@ config STM32_RISAF
@@ -45,8 +43,6 @@ index 6a6f6b38794d..2fa90d1f3555 100644
 +	  registers via regmap.
 +
  endif # ARCH_STM32
-diff --git a/drivers/soc/st/Makefile b/drivers/soc/st/Makefile
-index 11f056bfc80a..0843df849cd7 100644
 --- a/drivers/soc/st/Makefile
 +++ b/drivers/soc/st/Makefile
 @@ -2,3 +2,4 @@ obj-$(CONFIG_STM32_HOG) += stm32_hog.o
@@ -54,9 +50,6 @@ index 11f056bfc80a..0843df849cd7 100644
  obj-$(CONFIG_STM32_RISAB) += stm32_risab.o
  obj-$(CONFIG_STM32_RISAF) += stm32_risaf.o
 +obj-$(CONFIG_STM32_SYSCON) += stm32_syscon.o
-diff --git a/drivers/soc/st/stm32_syscon.c b/drivers/soc/st/stm32_syscon.c
-new file mode 100644
-index 000000000000..ee44be8ba074
 --- /dev/null
 +++ b/drivers/soc/st/stm32_syscon.c
 @@ -0,0 +1,138 @@
@@ -198,6 +191,3 @@ index 000000000000..ee44be8ba074
 +MODULE_AUTHOR("Antonio Borneo <antonio.borneo@foss.st.com>");
 +MODULE_DESCRIPTION("STM32MP SYSCON driver");
 +MODULE_LICENSE("GPL");
--- 
-2.53.0
-

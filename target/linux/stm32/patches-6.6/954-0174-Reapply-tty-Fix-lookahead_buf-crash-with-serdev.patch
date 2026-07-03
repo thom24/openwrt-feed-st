@@ -21,11 +21,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/tty/tty_buffer.c | 14 +++++++++-----
  1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/tty/tty_buffer.c b/drivers/tty/tty_buffer.c
-index 3b99774d16de..5f6d0cf67571 100644
 --- a/drivers/tty/tty_buffer.c
 +++ b/drivers/tty/tty_buffer.c
-@@ -400,7 +400,6 @@ static void lookahead_bufs(struct tty_port *port, struct tty_buffer *head)
+@@ -400,7 +400,6 @@ static void lookahead_bufs(struct tty_po
  
  	while (head) {
  		struct tty_buffer *next;
@@ -33,7 +31,7 @@ index 3b99774d16de..5f6d0cf67571 100644
  		unsigned int count;
  
  		/*
-@@ -419,11 +418,16 @@ static void lookahead_bufs(struct tty_port *port, struct tty_buffer *head)
+@@ -419,11 +418,16 @@ static void lookahead_bufs(struct tty_po
  			continue;
  		}
  
@@ -54,6 +52,3 @@ index 3b99774d16de..5f6d0cf67571 100644
  		head->lookahead += count;
  	}
  }
--- 
-2.53.0
-

@@ -16,11 +16,9 @@ Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 6d6d4d8c914e..e81785b48137 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -7685,6 +7685,8 @@ int stmmac_dvr_probe(struct device *device,
+@@ -7722,6 +7722,8 @@ error_phy_setup:
  	    priv->hw->pcs != STMMAC_PCS_RTBI)
  		stmmac_mdio_unregister(ndev);
  error_mdio_register:
@@ -29,6 +27,3 @@ index 6d6d4d8c914e..e81785b48137 100644
  	stmmac_napi_del(ndev);
  error_hw_init:
  	destroy_workqueue(priv->wq);
--- 
-2.53.0
-

@@ -17,11 +17,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/stm/lvds.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
-index 913cfffd8427..95f2938322ef 100644
 --- a/drivers/gpu/drm/stm/lvds.c
 +++ b/drivers/gpu/drm/stm/lvds.c
-@@ -1276,7 +1276,7 @@ static const struct of_device_id lvds_dt_ids[] = {
+@@ -1276,7 +1276,7 @@ static const struct of_device_id lvds_dt
  MODULE_DEVICE_TABLE(of, lvds_dt_ids);
  
  static const struct dev_pm_ops lvds_pm_ops = {
@@ -30,6 +28,3 @@ index 913cfffd8427..95f2938322ef 100644
  	SET_RUNTIME_PM_OPS(lvds_runtime_suspend, lvds_runtime_resume, NULL)
  };
  
--- 
-2.53.0
-

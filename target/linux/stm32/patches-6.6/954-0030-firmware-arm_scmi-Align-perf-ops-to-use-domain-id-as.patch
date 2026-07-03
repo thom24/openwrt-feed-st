@@ -33,11 +33,9 @@ Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  include/linux/scmi_protocol.h    |  6 +++---
  3 files changed, 16 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-index a1acc4a436c8..07671d31595b 100644
 --- a/drivers/cpufreq/scmi-cpufreq.c
 +++ b/drivers/cpufreq/scmi-cpufreq.c
-@@ -143,7 +143,7 @@ scmi_get_cpu_power(struct device *cpu_dev, unsigned long *power,
+@@ -144,7 +144,7 @@ scmi_get_cpu_power(struct device *cpu_de
  
  static int scmi_cpufreq_init(struct cpufreq_policy *policy)
  {
@@ -46,7 +44,7 @@ index a1acc4a436c8..07671d31595b 100644
  	unsigned int latency;
  	struct device *cpu_dev;
  	struct scmi_data *priv;
-@@ -155,6 +155,10 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+@@ -156,6 +156,10 @@ static int scmi_cpufreq_init(struct cpuf
  		return -ENODEV;
  	}
  
@@ -57,7 +55,7 @@ index a1acc4a436c8..07671d31595b 100644
  	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
  	if (!priv)
  		return -ENOMEM;
-@@ -193,7 +197,7 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+@@ -194,7 +198,7 @@ static int scmi_cpufreq_init(struct cpuf
  	  */
  	nr_opp = dev_pm_opp_get_opp_count(cpu_dev);
  	if (nr_opp <= 0) {
@@ -66,7 +64,7 @@ index a1acc4a436c8..07671d31595b 100644
  		if (ret) {
  			dev_warn(cpu_dev, "failed to add opps to the device\n");
  			goto out_free_cpumask;
-@@ -226,7 +230,7 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+@@ -227,7 +231,7 @@ static int scmi_cpufreq_init(struct cpuf
  	}
  
  	priv->cpu_dev = cpu_dev;
@@ -75,7 +73,7 @@ index a1acc4a436c8..07671d31595b 100644
  
  	policy->driver_data = priv;
  	policy->freq_table = freq_table;
-@@ -234,14 +238,14 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+@@ -235,14 +239,14 @@ static int scmi_cpufreq_init(struct cpuf
  	/* SCMI allows DVFS request for any domain from any CPU */
  	policy->dvfs_possible_from_any_cpu = true;
  
@@ -92,11 +90,9 @@ index a1acc4a436c8..07671d31595b 100644
  
  	return 0;
  
-diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
-index dd344506b0a3..d1a093f8343c 100644
 --- a/drivers/firmware/arm_scmi/perf.c
 +++ b/drivers/firmware/arm_scmi/perf.c
-@@ -809,16 +809,12 @@ static int scmi_dev_domain_id(struct device *dev)
+@@ -809,16 +809,12 @@ static int scmi_dev_domain_id(struct dev
  }
  
  static int scmi_dvfs_device_opps_add(const struct scmi_protocol_handle *ph,
@@ -115,7 +111,7 @@ index dd344506b0a3..d1a093f8343c 100644
  	dom = scmi_perf_domain_lookup(ph, domain);
  	if (IS_ERR(dom))
  		return PTR_ERR(dom);
-@@ -844,15 +840,10 @@ static int scmi_dvfs_device_opps_add(const struct scmi_protocol_handle *ph,
+@@ -844,15 +840,10 @@ static int scmi_dvfs_device_opps_add(con
  
  static int
  scmi_dvfs_transition_latency_get(const struct scmi_protocol_handle *ph,
@@ -132,7 +128,7 @@ index dd344506b0a3..d1a093f8343c 100644
  	dom = scmi_perf_domain_lookup(ph, domain);
  	if (IS_ERR(dom))
  		return PTR_ERR(dom);
-@@ -949,15 +940,10 @@ static int scmi_dvfs_est_power_get(const struct scmi_protocol_handle *ph,
+@@ -949,15 +940,10 @@ static int scmi_dvfs_est_power_get(const
  }
  
  static bool scmi_fast_switch_possible(const struct scmi_protocol_handle *ph,
@@ -149,8 +145,6 @@ index dd344506b0a3..d1a093f8343c 100644
  	dom = scmi_perf_domain_lookup(ph, domain);
  	if (IS_ERR(dom))
  		return false;
-diff --git a/include/linux/scmi_protocol.h b/include/linux/scmi_protocol.h
-index 94d76d30b6a1..0dbae5634290 100644
 --- a/include/linux/scmi_protocol.h
 +++ b/include/linux/scmi_protocol.h
 @@ -151,9 +151,9 @@ struct scmi_perf_proto_ops {
@@ -174,6 +168,3 @@ index 94d76d30b6a1..0dbae5634290 100644
  	enum scmi_power_scale (*power_scale_get)(const struct scmi_protocol_handle *ph);
  };
  
--- 
-2.53.0
-

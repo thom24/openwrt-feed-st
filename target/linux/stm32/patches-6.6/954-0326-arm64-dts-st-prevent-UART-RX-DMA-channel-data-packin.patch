@@ -18,11 +18,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 12 ++++++------
  1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index a8d06e23329e..4ee781b2c04f 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -779,7 +779,7 @@ usart2: serial@400e0000 {
+@@ -779,7 +779,7 @@
  				reg = <0x400e0000 0x0 0x400>;
  				interrupts-extended = <&exti1 27 IRQ_TYPE_LEVEL_HIGH>;
  				clocks = <&rcc CK_KER_USART2>;
@@ -31,7 +29,7 @@ index a8d06e23329e..4ee781b2c04f 100644
  				       <&hpdma 12 0x40 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 32>;
-@@ -793,7 +793,7 @@ usart3: serial@400f0000 {
+@@ -793,7 +793,7 @@
  				reg = <0x400f0000 0x0 0x400>;
  				interrupts-extended = <&exti1 28 IRQ_TYPE_LEVEL_HIGH>;
  				clocks = <&rcc CK_KER_USART3>;
@@ -40,7 +38,7 @@ index a8d06e23329e..4ee781b2c04f 100644
  				       <&hpdma 14 0x40 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 33>;
-@@ -807,7 +807,7 @@ uart4: serial@40100000 {
+@@ -807,7 +807,7 @@
  				reg = <0x40100000 0x0 0x400>;
  				interrupts-extended = <&exti1 30 IRQ_TYPE_LEVEL_HIGH>;
  				clocks = <&rcc CK_KER_UART4>;
@@ -49,7 +47,7 @@ index a8d06e23329e..4ee781b2c04f 100644
  				       <&hpdma 16 0x40 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 34>;
-@@ -821,7 +821,7 @@ uart5: serial@40110000 {
+@@ -821,7 +821,7 @@
  				reg = <0x40110000 0x0 0x400>;
  				interrupts-extended = <&exti1 31 IRQ_TYPE_LEVEL_HIGH>;
  				clocks = <&rcc CK_KER_UART5>;
@@ -58,7 +56,7 @@ index a8d06e23329e..4ee781b2c04f 100644
  				       <&hpdma 18 0x40 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 35>;
-@@ -1027,7 +1027,7 @@ usart6: serial@40220000 {
+@@ -1027,7 +1027,7 @@
  				reg = <0x40220000 0x0 0x400>;
  				interrupts-extended = <&exti1 29 IRQ_TYPE_LEVEL_HIGH>;
  				clocks = <&rcc CK_KER_USART6>;
@@ -67,7 +65,7 @@ index a8d06e23329e..4ee781b2c04f 100644
  				       <&hpdma 20 0x40 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 36>;
-@@ -1436,7 +1436,7 @@ uart7: serial@40370000 {
+@@ -1436,7 +1436,7 @@
  				reg = <0x40370000 0x0 0x400>;
  				interrupts-extended = <&exti1 32 IRQ_TYPE_LEVEL_HIGH>;
  				clocks = <&rcc CK_KER_UART7>;
@@ -76,6 +74,3 @@ index a8d06e23329e..4ee781b2c04f 100644
  				       <&hpdma 22 0x40 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 37>;
--- 
-2.53.0
-

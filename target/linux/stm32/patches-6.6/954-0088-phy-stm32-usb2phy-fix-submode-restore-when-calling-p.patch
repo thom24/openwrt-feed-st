@@ -22,8 +22,6 @@ Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
  drivers/phy/st/phy-stm32-usb2phy.c | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/phy/st/phy-stm32-usb2phy.c b/drivers/phy/st/phy-stm32-usb2phy.c
-index ba00ec5718f7..860694c1d7ce 100644
 --- a/drivers/phy/st/phy-stm32-usb2phy.c
 +++ b/drivers/phy/st/phy-stm32-usb2phy.c
 @@ -82,6 +82,7 @@ struct stm32_usb2phy {
@@ -34,7 +32,7 @@ index ba00ec5718f7..860694c1d7ce 100644
  	u32 mask_trim1, value_trim1, mask_trim2, value_trim2;
  	bool is_init;
  	struct clk_hw clk48_hw;
-@@ -472,6 +473,7 @@ static int stm32_usb2phy_set_mode(struct phy *phy, enum phy_mode mode, int submo
+@@ -472,6 +473,7 @@ static int stm32_usb2phy_set_mode(struct
  	}
  
  	phy_dev->mode = mode;
@@ -42,7 +40,7 @@ index ba00ec5718f7..860694c1d7ce 100644
  
  	return 0;
  }
-@@ -489,7 +491,7 @@ static int stm32_usb2phy_init(struct phy *phy)
+@@ -489,7 +491,7 @@ static int stm32_usb2phy_init(struct phy
  	}
  
  	if (phy_dev->mode != PHY_MODE_INVALID) {
@@ -51,6 +49,3 @@ index ba00ec5718f7..860694c1d7ce 100644
  		if (ret) {
  			dev_err(dev, "can't set phy mode (%d)\n", ret);
  			goto error_disable;
--- 
-2.53.0
-

@@ -27,11 +27,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/counter/stm32-timer-cnt.c | 198 +++++++++++++++++++++++-------
  1 file changed, 155 insertions(+), 43 deletions(-)
 
-diff --git a/drivers/counter/stm32-timer-cnt.c b/drivers/counter/stm32-timer-cnt.c
-index 2884c3eba7f2..85f67785b39d 100644
 --- a/drivers/counter/stm32-timer-cnt.c
 +++ b/drivers/counter/stm32-timer-cnt.c
-@@ -152,7 +152,8 @@ static int stm32_count_function_write(struct counter_device *counter,
+@@ -152,7 +152,8 @@ static int stm32_count_function_write(st
  	regmap_update_bits(priv->regmap, TIM_SMCR, TIM_SMCR_SMS, sms);
  
  	/* Configure polarity */
@@ -41,7 +39,7 @@ index 2884c3eba7f2..85f67785b39d 100644
  
  	/* Make sure that registers are updated */
  	regmap_update_bits(priv->regmap, TIM_EGR, TIM_EGR_UG, TIM_EGR_UG);
-@@ -339,22 +340,30 @@ static int stm32_count_nb_ovf_write(struct counter_device *counter,
+@@ -339,22 +340,30 @@ static int stm32_count_nb_ovf_write(stru
  	return 0;
  }
  
@@ -84,7 +82,7 @@ index 2884c3eba7f2..85f67785b39d 100644
  };
  
  static int stm32_capture_source_read(struct counter_device *counter,
-@@ -365,7 +374,7 @@ static int stm32_capture_source_read(struct counter_device *counter,
+@@ -365,7 +374,7 @@ static int stm32_capture_source_read(str
  	int ret;
  	u32 val;
  
@@ -93,7 +91,7 @@ index 2884c3eba7f2..85f67785b39d 100644
  	if (ret)
  		return ret;
  
-@@ -460,9 +469,12 @@ static const enum counter_synapse_action stm32_clock_synapse_actions[] = {
+@@ -460,9 +469,12 @@ static const enum counter_synapse_action
  	COUNTER_SYNAPSE_ACTION_RISING_EDGE,
  };
  
@@ -108,7 +106,7 @@ index 2884c3eba7f2..85f67785b39d 100644
  };
  
  static int stm32_action_read(struct counter_device *counter,
-@@ -470,20 +482,43 @@ static int stm32_action_read(struct counter_device *counter,
+@@ -470,20 +482,43 @@ static int stm32_action_read(struct coun
  			     struct counter_synapse *synapse,
  			     enum counter_synapse_action *action)
  {
@@ -156,7 +154,7 @@ index 2884c3eba7f2..85f67785b39d 100644
  		return 0;
  	case COUNTER_FUNCTION_QUADRATURE_X2_A:
  		/* counts up/down on TI1FP1 edge depending on TI2FP2 level */
-@@ -511,40 +546,116 @@ static int stm32_action_read(struct counter_device *counter,
+@@ -511,40 +546,116 @@ static int stm32_action_read(struct coun
  	}
  }
  
@@ -288,7 +286,7 @@ index 2884c3eba7f2..85f67785b39d 100644
  
  	return 0;
  }
-@@ -620,6 +731,7 @@ static const struct counter_ops stm32_timer_cnt_ops = {
+@@ -620,6 +731,7 @@ static const struct counter_ops stm32_ti
  	.function_read = stm32_count_function_read,
  	.function_write = stm32_count_function_write,
  	.action_read = stm32_action_read,
@@ -296,7 +294,7 @@ index 2884c3eba7f2..85f67785b39d 100644
  	.events_configure = stm32_count_events_configure,
  	.watch_validate = stm32_count_watch_validate,
  };
-@@ -757,13 +869,13 @@ static struct counter_signal stm32_signals[] = {
+@@ -757,13 +869,13 @@ static struct counter_signal stm32_signa
  
  static struct counter_synapse stm32_count_synapses[] = {
  	{
@@ -314,7 +312,7 @@ index 2884c3eba7f2..85f67785b39d 100644
  		.signal = &stm32_signals[STM32_CH2_SIG]
  	},
  	{
-@@ -772,13 +884,13 @@ static struct counter_synapse stm32_count_synapses[] = {
+@@ -772,13 +884,13 @@ static struct counter_synapse stm32_coun
  		.signal = &stm32_signals[STM32_CLOCK_SIG]
  	},
  	{
@@ -332,6 +330,3 @@ index 2884c3eba7f2..85f67785b39d 100644
  		.signal = &stm32_signals[STM32_CH4_SIG]
  	},
  };
--- 
-2.53.0
-

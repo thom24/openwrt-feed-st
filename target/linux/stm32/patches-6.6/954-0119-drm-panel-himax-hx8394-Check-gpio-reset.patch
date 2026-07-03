@@ -17,11 +17,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/panel/panel-himax-hx8394.c | 8 +++++++-
  1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-himax-hx8394.c b/drivers/gpu/drm/panel/panel-himax-hx8394.c
-index 4d8c32aa428d..5e8537039703 100644
 --- a/drivers/gpu/drm/panel/panel-himax-hx8394.c
 +++ b/drivers/gpu/drm/panel/panel-himax-hx8394.c
-@@ -491,11 +491,17 @@ static int hx8394_probe(struct mipi_dsi_device *dsi)
+@@ -491,11 +491,17 @@ static int hx8394_probe(struct mipi_dsi_
  	if (!ctx)
  		return -ENOMEM;
  
@@ -40,6 +38,3 @@ index 4d8c32aa428d..5e8537039703 100644
  	mipi_dsi_set_drvdata(dsi, ctx);
  
  	ctx->dev = dev;
--- 
-2.53.0
-

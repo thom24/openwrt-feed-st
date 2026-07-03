@@ -18,11 +18,9 @@ Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 8 +++-----
  1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index b58c7acbb19e..6911ce15e143 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -22,10 +22,8 @@ cpu0: cpu@0 {
+@@ -22,10 +22,8 @@
  			device_type = "cpu";
  			reg = <0>;
  			enable-method = "psci";
@@ -35,7 +33,7 @@ index b58c7acbb19e..6911ce15e143 100644
  			#cooling-cells = <2>;
  		};
  
-@@ -134,7 +132,7 @@ scmi: scmi {
+@@ -134,7 +132,7 @@
  
  			scmi_perf: protocol@13 {
  				reg = <0x13>;
@@ -44,6 +42,3 @@ index b58c7acbb19e..6911ce15e143 100644
  			};
  
  			scmi_clk: protocol@14 {
--- 
-2.53.0
-

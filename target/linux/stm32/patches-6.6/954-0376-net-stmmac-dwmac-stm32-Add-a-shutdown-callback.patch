@@ -22,11 +22,9 @@ Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
  drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
-index 76a01cddcbf5..714d045ac0d3 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
-@@ -757,6 +757,7 @@ MODULE_DEVICE_TABLE(of, stm32_dwmac_match);
+@@ -757,6 +757,7 @@ MODULE_DEVICE_TABLE(of, stm32_dwmac_matc
  static struct platform_driver stm32_dwmac_driver = {
  	.probe  = stm32_dwmac_probe,
  	.remove_new = stm32_dwmac_remove,
@@ -34,6 +32,3 @@ index 76a01cddcbf5..714d045ac0d3 100644
  	.driver = {
  		.name           = "stm32-dwmac",
  #ifdef CONFIG_PM_SLEEP
--- 
-2.53.0
-

@@ -23,11 +23,9 @@ Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  drivers/remoteproc/stm32_rproc.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index c969566e4772..72ff9a949b66 100644
 --- a/drivers/remoteproc/stm32_rproc.c
 +++ b/drivers/remoteproc/stm32_rproc.c
-@@ -1371,7 +1371,7 @@ static void stm32_rproc_shutdown(struct platform_device *pdev)
+@@ -1371,7 +1371,7 @@ static void stm32_rproc_shutdown(struct
  {
  	struct rproc *rproc = platform_get_drvdata(pdev);
  
@@ -36,6 +34,3 @@ index c969566e4772..72ff9a949b66 100644
  		dev_warn(&pdev->dev,
  			 "Warning: remote fw is still running with possible side effect!!!\n");
  }
--- 
-2.53.0
-

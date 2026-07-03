@@ -19,8 +19,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  .../devicetree/bindings/bus/st,stm32mp131-dbg-bus.yaml        | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/bus/st,stm32mp131-dbg-bus.yaml b/Documentation/devicetree/bindings/bus/st,stm32mp131-dbg-bus.yaml
-index 4dced89abd25..e4868f1e2732 100644
 --- a/Documentation/devicetree/bindings/bus/st,stm32mp131-dbg-bus.yaml
 +++ b/Documentation/devicetree/bindings/bus/st,stm32mp131-dbg-bus.yaml
 @@ -36,6 +36,9 @@ properties:
@@ -41,6 +39,3 @@ index 4dced89abd25..e4868f1e2732 100644
  
  additionalProperties: false
  
--- 
-2.53.0
-

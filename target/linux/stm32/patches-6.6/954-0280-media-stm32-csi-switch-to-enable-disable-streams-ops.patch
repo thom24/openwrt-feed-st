@@ -21,11 +21,9 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  drivers/media/platform/st/stm32/stm32-csi.c | 101 ++++++++++----------
  1 file changed, 50 insertions(+), 51 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-csi.c b/drivers/media/platform/st/stm32/stm32-csi.c
-index 7422b52afedc..db5781a8b63d 100644
 --- a/drivers/media/platform/st/stm32/stm32-csi.c
 +++ b/drivers/media/platform/st/stm32/stm32-csi.c
-@@ -168,7 +168,6 @@ static const struct stm32_csi_event stm32_csi_events_sr1[] = {
+@@ -168,7 +168,6 @@ static const struct stm32_csi_event stm3
  
  struct stm32_csi_dev {
  	struct device			*dev;
@@ -41,7 +39,7 @@ index 7422b52afedc..db5781a8b63d 100644
  };
  
  struct stm32_csi_fmts {
-@@ -468,12 +468,12 @@ static void stm32_csi_phy_reg_write(struct stm32_csi_dev *csi2priv, uint32_t add
+@@ -468,12 +468,12 @@ static void stm32_csi_phy_reg_write(stru
  	writel_relaxed(0, csi2priv->base + STM32_CSI_PTCR0);
  }
  
@@ -56,7 +54,7 @@ index 7422b52afedc..db5781a8b63d 100644
  	unsigned long phy_clk_frate;
  	int ret, i, mbps;
  	u32 lanes_ie = 0;
-@@ -484,9 +484,7 @@ static int stm32_csi_start(struct stm32_csi_dev *csi2priv)
+@@ -484,9 +484,7 @@ static int stm32_csi_start(struct stm32_
  	dev_dbg(csi2priv->dev, "Starting the CSI2\n");
  
  	/* Get the bpp value on pad0 (input of CSI) */
@@ -67,7 +65,7 @@ index 7422b52afedc..db5781a8b63d 100644
  	fmt = stm32_csi_code_to_fmt(sink_fmt->code);
  
  	/* Get the remote sensor link frequency */
-@@ -618,20 +616,16 @@ static void stm32_csi_stop(struct stm32_csi_dev *csi2priv)
+@@ -618,20 +616,16 @@ static void stm32_csi_stop(struct stm32_
  	pm_runtime_put(csi2priv->dev);
  }
  
@@ -91,7 +89,7 @@ index 7422b52afedc..db5781a8b63d 100644
  	fmt = stm32_csi_code_to_fmt(mbus_fmt->code);
  
  	/* If the mbus code is JPEG, don't enable filtering */
-@@ -693,52 +687,54 @@ static int stm32_csi_stop_vc(struct stm32_csi_dev *csi2priv, uint32_t vc)
+@@ -693,52 +687,54 @@ static int stm32_csi_stop_vc(struct stm3
  	return 0;
  }
  
@@ -106,7 +104,11 @@ index 7422b52afedc..db5781a8b63d 100644
  
 -	if (csi2priv->state == enable)
 -		return 0;
--
++	ret = v4l2_subdev_disable_streams(csi2priv->s_subdev,
++					  csi2priv->s_subdev_pad_nb, BIT_ULL(0));
++	if (ret)
++		return ret;
+ 
 -	if (enable) {
 -		ret = stm32_csi_start(csi2priv);
 -		if (ret)
@@ -124,10 +126,10 @@ index 7422b52afedc..db5781a8b63d 100644
 -			stm32_csi_stop(csi2priv);
 -			return ret;
 -		}
-+	ret = v4l2_subdev_disable_streams(csi2priv->s_subdev,
-+					  csi2priv->s_subdev_pad_nb, BIT_ULL(0));
++	/* Stop the VC0 */
++	ret = stm32_csi_stop_vc(csi2priv, 0);
 +	if (ret)
-+		return ret;
++		dev_err(csi2priv->dev, "Failed to stop VC0\n");
  
 -		ret = v4l2_subdev_call(csi2priv->s_subdev, video, s_stream, 1);
 -		if (ret) {
@@ -139,20 +141,16 @@ index 7422b52afedc..db5781a8b63d 100644
 -		ret = v4l2_subdev_call(csi2priv->s_subdev, video, s_stream, 0);
 -		if (ret)
 -			return ret;
-+	/* Stop the VC0 */
-+	ret = stm32_csi_stop_vc(csi2priv, 0);
-+	if (ret)
-+		dev_err(csi2priv->dev, "Failed to stop VC0\n");
-+
-+	stm32_csi_stop(csi2priv);
-+
-+	return 0;
-+}
- 
+-
 -		/* Stop the VC0 */
 -		ret = stm32_csi_stop_vc(csi2priv, 0);
 -		if (ret)
 -			dev_err(csi2priv->dev, "Failed to stop VC0\n");
++	stm32_csi_stop(csi2priv);
+ 
++	return 0;
++}
++
 +static int stm32_csi_enable_streams(struct v4l2_subdev *sd,
 +				    struct v4l2_subdev_state *state, u32 pad,
 +				    u64 streams_mask)
@@ -163,7 +161,7 @@ index 7422b52afedc..db5781a8b63d 100644
 +	ret = stm32_csi_start(csi2priv, state);
 +	if (ret)
 +		return ret;
- 
++
 +	/* Configure & start the VC0 */
 +	ret = stm32_csi_start_vc(csi2priv, state, 0);
 +	if (ret) {
@@ -183,7 +181,7 @@ index 7422b52afedc..db5781a8b63d 100644
  
  	return 0;
  }
-@@ -827,7 +823,7 @@ static const struct v4l2_subdev_core_ops stm32_csi_core_ops = {
+@@ -827,7 +823,7 @@ static const struct v4l2_subdev_core_ops
  };
  
  static const struct v4l2_subdev_video_ops stm32_csi_video_ops = {
@@ -192,7 +190,7 @@ index 7422b52afedc..db5781a8b63d 100644
  };
  
  static const struct v4l2_subdev_pad_ops stm32_csi_pad_ops = {
-@@ -835,6 +831,8 @@ static const struct v4l2_subdev_pad_ops stm32_csi_pad_ops = {
+@@ -835,6 +831,8 @@ static const struct v4l2_subdev_pad_ops
  	.enum_mbus_code	= stm32_csi_enum_mbus_code,
  	.set_fmt	= stm32_csi_set_pad_format,
  	.get_fmt	= v4l2_subdev_get_fmt,
@@ -201,7 +199,7 @@ index 7422b52afedc..db5781a8b63d 100644
  };
  
  static const struct v4l2_subdev_ops stm32_csi_subdev_ops = {
-@@ -861,6 +859,7 @@ static int stm32_csi_async_bound(struct v4l2_async_notifier *notifier,
+@@ -861,6 +859,7 @@ static int stm32_csi_async_bound(struct
  	}
  
  	csi2priv->s_subdev = s_subdev;
@@ -209,6 +207,3 @@ index 7422b52afedc..db5781a8b63d 100644
  
  	return media_create_pad_link(&csi2priv->s_subdev->entity,
  				     remote_pad, &csi2priv->subdev.entity, 0,
--- 
-2.53.0
-

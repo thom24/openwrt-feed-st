@@ -44,8 +44,6 @@ Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
  drivers/nvmem/stm32-tamp-nvram.c | 89 +++++++++++++++++++++++---------
  1 file changed, 65 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/nvmem/stm32-tamp-nvram.c b/drivers/nvmem/stm32-tamp-nvram.c
-index 9601f884c556..15e12088f5de 100644
 --- a/drivers/nvmem/stm32-tamp-nvram.c
 +++ b/drivers/nvmem/stm32-tamp-nvram.c
 @@ -66,13 +66,6 @@ struct stm32_tamp_nvram_plat {
@@ -62,7 +60,7 @@ index 9601f884c556..15e12088f5de 100644
  static const struct reg_field stm32mp1_tamp_nvram_zone_cfg_fields[NB_ZONES_STM32MP1 - 1] = {
  	[BKPREG_PROTECTION_ZONE_1] = REG_FIELD(_TAMP_SECCFGR, 0, 7),
  	[BKPREG_PROTECTION_ZONE_2] = REG_FIELD(_TAMP_SECCFGR, 16, 23),
-@@ -105,20 +98,6 @@ static enum stm32_tamp_bkpreg_access stm32mp1_tamp_bkpreg_access[NB_ZONES_STM32M
+@@ -105,20 +98,6 @@ static enum stm32_tamp_bkpreg_access stm
  	[BKPREG_PROTECTION_ZONE_3] = BKP_READ_WRITE,
  };
  
@@ -83,7 +81,7 @@ index 9601f884c556..15e12088f5de 100644
  static int stm32_tamp_is_compartment_isolation_enabled_mp2X(struct stm32_tamp_nvram_priv *priv)
  {
  	int nb_compartment_enabled = 0;
-@@ -311,6 +290,64 @@ static bool stm32_tamp_nvram_rights(struct stm32_tamp_nvram_priv *priv, int reg,
+@@ -311,6 +290,64 @@ static bool stm32_tamp_nvram_rights(stru
  	return false;
  }
  
@@ -148,7 +146,7 @@ index 9601f884c556..15e12088f5de 100644
  static int stm32_tamp_nvram_write_byte(struct stm32_tamp_nvram_priv *priv, u32 offset, u8 byte)
  {
  	int offset_aligned = ALIGN_DOWN(offset, sizeof(u32));
-@@ -534,9 +571,7 @@ static int stm32_tamp_nvram_probe(struct platform_device *pdev)
+@@ -534,9 +571,7 @@ static int stm32_tamp_nvram_probe(struct
  		dev_err(dev, "Can't remap resource\n");
  		return PTR_ERR(base_addr);
  	}
@@ -159,7 +157,7 @@ index 9601f884c556..15e12088f5de 100644
  	priv->cfg.name = "stm32-tamp-nvram";
  	priv->cfg.word_size = 1;
  	priv->cfg.stride = 1;
-@@ -653,6 +688,12 @@ static int stm32_tamp_nvram_probe(struct platform_device *pdev)
+@@ -653,6 +688,12 @@ static int stm32_tamp_nvram_probe(struct
  	}
  
  	platform_set_drvdata(pdev, priv);
@@ -172,6 +170,3 @@ index 9601f884c556..15e12088f5de 100644
  
  	return PTR_ERR_OR_ZERO(devm_nvmem_register(dev, &priv->cfg));
  }
--- 
-2.53.0
-

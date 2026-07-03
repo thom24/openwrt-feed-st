@@ -18,11 +18,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/stm/lvds.c | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
-index 95f2938322ef..6e8e09a1133e 100644
 --- a/drivers/gpu/drm/stm/lvds.c
 +++ b/drivers/gpu/drm/stm/lvds.c
-@@ -1223,10 +1223,9 @@ static int lvds_remove(struct platform_device *pdev)
+@@ -1223,10 +1223,9 @@ static int lvds_remove(struct platform_d
  {
  	struct stm_lvds *lvds = platform_get_drvdata(pdev);
  
@@ -35,6 +33,3 @@ index 95f2938322ef..6e8e09a1133e 100644
  
  	return 0;
  }
--- 
-2.53.0
-

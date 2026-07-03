@@ -31,8 +31,6 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  drivers/iio/adc/stm32-mdf-adc.c | 81 ++++++++++++++++-----------------
  1 file changed, 40 insertions(+), 41 deletions(-)
 
-diff --git a/drivers/iio/adc/stm32-mdf-adc.c b/drivers/iio/adc/stm32-mdf-adc.c
-index c5c0ae51c111..66516ad8ca11 100644
 --- a/drivers/iio/adc/stm32-mdf-adc.c
 +++ b/drivers/iio/adc/stm32-mdf-adc.c
 @@ -75,7 +75,8 @@ struct stm32_mdf_adc_chan {
@@ -53,7 +51,7 @@ index c5c0ae51c111..66516ad8ca11 100644
  	unsigned long sample_freq;
  	unsigned int fl_id;
  	unsigned int decim_ratio;
-@@ -761,20 +763,14 @@ static int stm32_mdf_adc_check_clock_config(struct stm32_mdf_adc *adc, unsigned
+@@ -761,20 +763,14 @@ err:
  	return ret;
  }
  
@@ -76,7 +74,7 @@ index c5c0ae51c111..66516ad8ca11 100644
  	sck_freq = clk_get_rate(adc->sitf->sck);
  	if (!sck_freq) {
  		dev_err(dev, "Unexpected serial clock frequency: 0Hz\n");
-@@ -783,8 +779,10 @@ static int mdf_adc_set_samp_freq(struct iio_dev *indio_dev, unsigned long sample
+@@ -783,8 +779,10 @@ static int mdf_adc_set_samp_freq(struct
  	}
  
  	/*
@@ -88,7 +86,7 @@ index c5c0ae51c111..66516ad8ca11 100644
  	 * This ensures that a filter configuration can be found whatever the selected filter
  	 * order. (Most constrained case is order 5)
  	 */
-@@ -828,12 +826,7 @@ static int mdf_adc_set_samp_freq(struct iio_dev *indio_dev, unsigned long sample
+@@ -828,12 +826,7 @@ static int mdf_adc_set_samp_freq(struct
  	adc->sample_freq = DIV_ROUND_CLOSEST(sck_freq, decim_ratio);
  	adc->decim_ratio = decim_ratio;
  
@@ -101,7 +99,7 @@ index c5c0ae51c111..66516ad8ca11 100644
  	return ret;
  }
  
-@@ -849,9 +842,18 @@ static int stm32_mdf_adc_start_mdf(struct iio_dev *indio_dev)
+@@ -849,9 +842,18 @@ static int stm32_mdf_adc_start_mdf(struc
  		return ret;
  	}
  
@@ -121,7 +119,7 @@ index c5c0ae51c111..66516ad8ca11 100644
  
  	return ret;
  }
-@@ -874,21 +876,6 @@ static int stm32_mdf_adc_start_conv(struct iio_dev *indio_dev)
+@@ -874,21 +876,6 @@ static int stm32_mdf_adc_start_conv(stru
  	if (ret < 0)
  		return ret;
  
@@ -143,7 +141,7 @@ index c5c0ae51c111..66516ad8ca11 100644
  	ret = stm32_mdf_adc_start_filter(adc);
  	if (ret < 0)
  		goto stop_sitf;
-@@ -1368,24 +1355,36 @@ static int stm32_mdf_adc_single_conv(struct iio_dev *indio_dev,
+@@ -1368,24 +1355,36 @@ err_conv:
  static int stm32_mdf_adc_write_raw(struct iio_dev *indio_dev, struct iio_chan_spec const *chan,
  				   int val, int val2, long mask)
  {
@@ -156,15 +154,15 @@ index c5c0ae51c111..66516ad8ca11 100644
 -			return -EINVAL;
 +	if (mask != IIO_CHAN_INFO_SAMP_FREQ || !val)
 +		return -EINVAL;
- 
--		ret = iio_device_claim_direct_mode(indio_dev);
++
 +	ret = iio_device_claim_direct_mode(indio_dev);
 +	if (ret)
 +		return ret;
 +
 +	/* Set requested_sample_freq right now, as used by mdf_adc_set_samp_freq() */
 +	adc->requested_sample_freq = val;
-+
+ 
+-		ret = iio_device_claim_direct_mode(indio_dev);
 +	if (adc->dev_data->type == STM32_MDF_IIO) {
 +		ret = stm32_mdf_core_lock_kclk_rate(adc->mdf);
  		if (ret)
@@ -190,6 +188,3 @@ index c5c0ae51c111..66516ad8ca11 100644
  }
  
  static int stm32_mdf_adc_read_raw(struct iio_dev *indio_dev, struct iio_chan_spec const *chan,
--- 
-2.53.0
-

@@ -21,11 +21,9 @@ Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
  arch/arm/boot/dts/st/stm32mp151.dtsi | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
-index 1a70a62902e0..b7f870f1625d 100644
 --- a/arch/arm/boot/dts/st/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
-@@ -2060,8 +2060,8 @@ qspi: spi@58003000 {
+@@ -2060,8 +2060,8 @@
  				reg = <0x58003000 0x1000>, <0x70000000 0x10000000>;
  				reg-names = "qspi", "qspi_mm";
  				interrupts = <GIC_SPI 92 IRQ_TYPE_LEVEL_HIGH>;
@@ -36,6 +34,3 @@ index 1a70a62902e0..b7f870f1625d 100644
  				dma-names = "tx", "rx";
  				clocks = <&rcc QSPI_K>;
  				resets = <&rcc QSPI_R>;
--- 
-2.53.0
-

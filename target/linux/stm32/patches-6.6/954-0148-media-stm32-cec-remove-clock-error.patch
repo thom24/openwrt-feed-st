@@ -15,11 +15,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/media/cec/platform/stm32/stm32-cec.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/cec/platform/stm32/stm32-cec.c b/drivers/media/cec/platform/stm32/stm32-cec.c
-index bda9d254041a..b6c328e7f8ec 100644
 --- a/drivers/media/cec/platform/stm32/stm32-cec.c
 +++ b/drivers/media/cec/platform/stm32/stm32-cec.c
-@@ -347,10 +347,10 @@ static void stm32_cec_remove(struct platform_device *pdev)
+@@ -347,10 +347,10 @@ static void stm32_cec_remove(struct plat
  {
  	struct stm32_cec *cec = platform_get_drvdata(pdev);
  
@@ -32,6 +30,3 @@ index bda9d254041a..b6c328e7f8ec 100644
  }
  
  static const struct of_device_id stm32_cec_of_match[] = {
--- 
-2.53.0
-

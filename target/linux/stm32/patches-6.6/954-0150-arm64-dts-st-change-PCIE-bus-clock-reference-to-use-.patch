@@ -22,11 +22,9 @@ Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp251.dtsi | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 16980acbc59b..81ba560ba5b5 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -2417,7 +2417,7 @@ pcie_ep: pcie-ep@48400000 {
+@@ -2417,7 +2417,7 @@
  				      <0x10000000 0x10000000>;
  				reg-names = "dbi", "dbi2", "atu", "addr_space";
  				st,syscfg = <&syscfg>;
@@ -35,7 +33,7 @@ index 16980acbc59b..81ba560ba5b5 100644
  				clock-names = "core";
  				resets = <&rcc PCIE_R>;
  				reset-names = "pcie";
-@@ -2452,7 +2452,7 @@ pcie_rc: pcie@48400000 {
+@@ -2452,7 +2452,7 @@
  					 <0x42000000 0 0x18000000 0x18000000 0 0x8000000>;
  				dma-ranges = <0x42000000 0x0 0x80000000 0x80000000 0x0 0x80000000>;
  				bus-range = <0x00 0xff>;
@@ -44,6 +42,3 @@ index 16980acbc59b..81ba560ba5b5 100644
  				clock-names = "core";
  				resets = <&rcc PCIE_R>;
  				reset-names = "pcie";
--- 
-2.53.0
-

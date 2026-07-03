@@ -17,11 +17,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/panel/panel-raydium-rm68200.c | 8 +++++++-
  1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-raydium-rm68200.c b/drivers/gpu/drm/panel/panel-raydium-rm68200.c
-index a36352142201..1f7b867bc1ef 100644
 --- a/drivers/gpu/drm/panel/panel-raydium-rm68200.c
 +++ b/drivers/gpu/drm/panel/panel-raydium-rm68200.c
-@@ -397,11 +397,17 @@ static int rm68200_probe(struct mipi_dsi_device *dsi)
+@@ -397,11 +397,17 @@ static int rm68200_probe(struct mipi_dsi
  	if (!ctx)
  		return -ENOMEM;
  
@@ -40,6 +38,3 @@ index a36352142201..1f7b867bc1ef 100644
  	ctx->supply = devm_regulator_get(dev, "power");
  	if (IS_ERR(ctx->supply))
  		return dev_err_probe(dev, PTR_ERR(ctx->supply),
--- 
-2.53.0
-

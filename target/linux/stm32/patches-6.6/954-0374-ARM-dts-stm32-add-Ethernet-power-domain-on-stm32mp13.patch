@@ -17,11 +17,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp133.dtsi | 1 +
  2 files changed, 2 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index ac67910c07c2..e8316fdbb367 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -1940,6 +1940,7 @@ ethernet1: ethernet@5800a000 {
+@@ -1940,6 +1940,7 @@
  					 <&rcc ETH1STP>,
  					 <&rcc ETH1PTP_K>,
  					 <&rcc ETH1CK_K>;
@@ -29,11 +27,9 @@ index ac67910c07c2..e8316fdbb367 100644
  				st,syscon = <&syscfg 0x4 0xff0000>;
  				snps,mixed-burst;
  				snps,pbl = <2>;
-diff --git a/arch/arm/boot/dts/st/stm32mp133.dtsi b/arch/arm/boot/dts/st/stm32mp133.dtsi
-index feff4f5fb248..9cf03a935056 100644
 --- a/arch/arm/boot/dts/st/stm32mp133.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp133.dtsi
-@@ -89,6 +89,7 @@ ethernet2: ethernet@5800e000 {
+@@ -89,6 +89,7 @@
  			 <&rcc ETH2STP>,
  			 <&rcc ETH2PTP_K>,
  			 <&rcc ETH2CK_K>;
@@ -41,6 +37,3 @@ index feff4f5fb248..9cf03a935056 100644
  		st,syscon = <&syscfg 0x4 0xff000000>;
  		snps,mixed-burst;
  		snps,pbl = <2>;
--- 
-2.53.0
-

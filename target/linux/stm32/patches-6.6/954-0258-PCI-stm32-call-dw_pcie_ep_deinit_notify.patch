@@ -15,11 +15,9 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/pci/controller/dwc/pcie-stm32-ep.c | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/drivers/pci/controller/dwc/pcie-stm32-ep.c b/drivers/pci/controller/dwc/pcie-stm32-ep.c
-index b5ea0deb75e3..65881f7e00c1 100644
 --- a/drivers/pci/controller/dwc/pcie-stm32-ep.c
 +++ b/drivers/pci/controller/dwc/pcie-stm32-ep.c
-@@ -194,6 +194,7 @@ static void stm32_pcie_perst_assert(struct dw_pcie *pci)
+@@ -194,6 +194,7 @@ static void stm32_pcie_perst_assert(stru
  {
  	struct stm32_pcie *stm32_pcie = to_stm32_pcie(pci);
  	struct device *dev = pci->dev;
@@ -27,7 +25,7 @@ index b5ea0deb75e3..65881f7e00c1 100644
  
  	dev_dbg(dev, "PERST asserted by host. Shutting down the PCIe link\n");
  
-@@ -208,6 +209,8 @@ static void stm32_pcie_perst_assert(struct dw_pcie *pci)
+@@ -208,6 +209,8 @@ static void stm32_pcie_perst_assert(stru
  
  	stm32_pcie_disable_link(pci);
  
@@ -36,7 +34,7 @@ index b5ea0deb75e3..65881f7e00c1 100644
  	stm32_pcie_disable_resources(stm32_pcie);
  
  	pm_runtime_put_sync(dev);
-@@ -255,6 +258,7 @@ static void stm32_pcie_perst_deassert(struct dw_pcie *pci)
+@@ -255,6 +258,7 @@ static void stm32_pcie_perst_deassert(st
  	ret = stm32_pcie_enable_link(pci);
  	if (ret) {
  		dev_err(dev, "PCIe Cannot establish link: %d\n", ret);
@@ -44,7 +42,7 @@ index b5ea0deb75e3..65881f7e00c1 100644
  		stm32_pcie_disable_resources(stm32_pcie);
  		pm_runtime_put_sync(dev);
  		return;
-@@ -412,6 +416,8 @@ static int stm32_pcie_remove(struct platform_device *pdev)
+@@ -412,6 +416,8 @@ static int stm32_pcie_remove(struct plat
  
  	dw_pcie_ep_exit(ep);
  
@@ -53,6 +51,3 @@ index b5ea0deb75e3..65881f7e00c1 100644
  	stm32_pcie_disable_resources(stm32_pcie);
  
  	pm_runtime_put_sync(&pdev->dev);
--- 
-2.53.0
-

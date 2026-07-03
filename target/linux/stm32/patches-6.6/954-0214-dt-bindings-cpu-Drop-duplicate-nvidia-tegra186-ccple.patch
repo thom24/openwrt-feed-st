@@ -24,9 +24,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  1 file changed, 37 deletions(-)
  delete mode 100644 Documentation/devicetree/bindings/cpu/nvidia,tegra186-ccplex-cluster.yaml
 
-diff --git a/Documentation/devicetree/bindings/cpu/nvidia,tegra186-ccplex-cluster.yaml b/Documentation/devicetree/bindings/cpu/nvidia,tegra186-ccplex-cluster.yaml
-deleted file mode 100644
-index 16a448974561..000000000000
 --- a/Documentation/devicetree/bindings/cpu/nvidia,tegra186-ccplex-cluster.yaml
 +++ /dev/null
 @@ -1,37 +0,0 @@
@@ -67,6 +64,3 @@ index 16a448974561..000000000000
 -        reg = <0x0e000000 0x400000>;
 -        nvidia,bpmp = <&bpmp>;
 -    };
--- 
-2.53.0
-

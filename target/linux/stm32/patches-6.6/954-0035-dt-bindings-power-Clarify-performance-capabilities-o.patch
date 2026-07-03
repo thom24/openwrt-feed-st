@@ -33,8 +33,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  .../devicetree/bindings/power/power-domain.yaml | 17 +++++++++--------
  1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/power/power-domain.yaml b/Documentation/devicetree/bindings/power/power-domain.yaml
-index d1235e562041..8fdb529d560b 100644
 --- a/Documentation/devicetree/bindings/power/power-domain.yaml
 +++ b/Documentation/devicetree/bindings/power/power-domain.yaml
 @@ -13,8 +13,9 @@ maintainers:
@@ -75,6 +73,3 @@ index d1235e562041..8fdb529d560b 100644
  
    "#power-domain-cells":
      description:
--- 
-2.53.0
-

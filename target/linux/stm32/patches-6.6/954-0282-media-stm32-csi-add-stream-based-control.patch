@@ -29,8 +29,6 @@ Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
  drivers/media/platform/st/stm32/stm32-csi.c | 401 ++++++++++++++++----
  1 file changed, 326 insertions(+), 75 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-csi.c b/drivers/media/platform/st/stm32/stm32-csi.c
-index 748c3630ce97..b6310a64e67b 100644
 --- a/drivers/media/platform/st/stm32/stm32-csi.c
 +++ b/drivers/media/platform/st/stm32/stm32-csi.c
 @@ -34,8 +34,10 @@
@@ -44,7 +42,7 @@ index 748c3630ce97..b6310a64e67b 100644
  #define STM32_CSI_INPUT_BPP8			2
  #define STM32_CSI_INPUT_BPP10			3
  #define STM32_CSI_INPUT_BPP12			4
-@@ -162,6 +164,26 @@ static const struct stm32_csi_event stm32_csi_events_sr1[] = {
+@@ -162,6 +164,26 @@ static const struct stm32_csi_event stm3
  
  #define STM32_CSI_NUM_SR1_EVENTS ARRAY_SIZE(stm32_csi_events_sr1)
  
@@ -81,7 +79,7 @@ index 748c3630ce97..b6310a64e67b 100644
  };
  
  struct stm32_csi_fmts {
-@@ -612,72 +637,221 @@ static void stm32_csi_stop(struct stm32_csi_dev *csi2priv)
+@@ -612,72 +637,221 @@ static void stm32_csi_stop(struct stm32_
  	pm_runtime_put(csi2priv->dev);
  }
  
@@ -183,12 +181,12 @@ index 748c3630ce97..b6310a64e67b 100644
  	u32 status;
 +	u32 cfgr1, cfgr1_start;
 +	u32 dt_filter;
-+
-+	/* Get stm32_csi_fmts entry in order to get the input_fmt */
-+	fmt = stm32_csi_code_to_fmt(code);
  
 -	mbus_fmt = v4l2_subdev_state_get_format(state, STM32_CSI_PAD_SOURCE);
 -	fmt = stm32_csi_code_to_fmt(mbus_fmt->code);
++	/* Get stm32_csi_fmts entry in order to get the input_fmt */
++	fmt = stm32_csi_code_to_fmt(code);
++
 +	/* Get current configuration */
 +	cfgr1 = readl_relaxed(csi2priv->base + STM32_CSI_VCXCFGR(vc, 0));
 +	cfgr1_start = cfgr1;
@@ -248,13 +246,13 @@ index 748c3630ce97..b6310a64e67b 100644
 +		}
 +		cfgr1 |= STM32_CSI_VCXCFGR1_DTEN(dt_filter);
  	}
--	writel_relaxed(cfgr1, csi2priv->base + STM32_CSI_VCXCFGR(vc, 0));
++
+ 	writel_relaxed(cfgr1, csi2priv->base + STM32_CSI_VCXCFGR(vc, 0));
  
 -	/* Enable processing of the virtual-channel and wait for its status */
 -	writel_relaxed(STM32_CSI_CR_VCXSTART(vc) | STM32_CSI_CR_CSIEN,
 -		       csi2priv->base + STM32_CSI_CR);
-+	writel_relaxed(cfgr1, csi2priv->base + STM32_CSI_VCXCFGR(vc, 0));
- 
+-
 -	ret = readl_relaxed_poll_timeout(csi2priv->base + STM32_CSI_SR0,
 -					 status,
 -					 status & STM32_CSI_SR0_VCXSTATEF(vc),
@@ -344,7 +342,7 @@ index 748c3630ce97..b6310a64e67b 100644
  
  	return 0;
  }
-@@ -687,19 +861,28 @@ static int stm32_csi_disable_streams(struct v4l2_subdev *sd,
+@@ -687,19 +861,28 @@ static int stm32_csi_disable_streams(str
  				     u64 streams_mask)
  {
  	struct stm32_csi_dev *csi2priv = v4l2_subdev_to_csi2priv(sd);
@@ -380,7 +378,7 @@ index 748c3630ce97..b6310a64e67b 100644
  
  	return 0;
  }
-@@ -709,42 +892,99 @@ static int stm32_csi_enable_streams(struct v4l2_subdev *sd,
+@@ -709,42 +892,99 @@ static int stm32_csi_enable_streams(stru
  				    u64 streams_mask)
  {
  	struct stm32_csi_dev *csi2priv = v4l2_subdev_to_csi2priv(sd);
@@ -500,7 +498,7 @@ index 748c3630ce97..b6310a64e67b 100644
  }
  
  static int stm32_csi_enum_mbus_code(struct v4l2_subdev *sd,
-@@ -766,6 +1006,10 @@ static int stm32_csi_set_pad_format(struct v4l2_subdev *sd,
+@@ -766,6 +1006,10 @@ static int stm32_csi_set_pad_format(stru
  	struct v4l2_mbus_framefmt *framefmt;
  	const struct stm32_csi_fmts *fmt;
  
@@ -511,7 +509,7 @@ index 748c3630ce97..b6310a64e67b 100644
  	fmt = stm32_csi_code_to_fmt(format->format.code);
  	if (!fmt) {
  		dev_dbg(csi2priv->dev, "Unsupported code %d, use default\n",
-@@ -773,14 +1017,18 @@ static int stm32_csi_set_pad_format(struct v4l2_subdev *sd,
+@@ -773,14 +1017,18 @@ static int stm32_csi_set_pad_format(stru
  		format->format.code = stm32_csi_mbus_format_default.code;
  	}
  
@@ -536,7 +534,7 @@ index 748c3630ce97..b6310a64e67b 100644
  	*framefmt = format->format;
  
  	return 0;
-@@ -826,8 +1074,10 @@ static const struct v4l2_subdev_pad_ops stm32_csi_pad_ops = {
+@@ -826,8 +1074,10 @@ static const struct v4l2_subdev_pad_ops
  	.enum_mbus_code	= stm32_csi_enum_mbus_code,
  	.set_fmt	= stm32_csi_set_pad_format,
  	.get_fmt	= v4l2_subdev_get_fmt,
@@ -547,7 +545,7 @@ index 748c3630ce97..b6310a64e67b 100644
  };
  
  static const struct v4l2_subdev_ops stm32_csi_subdev_ops = {
-@@ -1042,7 +1292,8 @@ static int stm32_csi_probe(struct platform_device *pdev)
+@@ -1042,7 +1292,8 @@ static int stm32_csi_probe(struct platfo
  
  	/* Create our media pads */
  	csi2priv->subdev.entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
@@ -557,6 +555,3 @@ index 748c3630ce97..b6310a64e67b 100644
  	csi2priv->pads[STM32_CSI_PAD_SINK].flags = MEDIA_PAD_FL_SINK;
  	csi2priv->pads[STM32_CSI_PAD_SOURCE].flags = MEDIA_PAD_FL_SOURCE;
  
--- 
-2.53.0
-

@@ -17,11 +17,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/usb/dwc2/gadget.c | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 7e0386eb5cf0..cc5a4cf9b343 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -3046,8 +3046,7 @@ static void dwc2_gadget_setup_timeout(struct work_struct *work)
+@@ -3046,8 +3046,7 @@ static void dwc2_gadget_setup_timeout(st
  	dev_dbg(hsotg->dev, "%s: DOEPINT0=0x%08x\n",  __func__, dwc2_readl(hsotg, DOEPINT(0)));
  
  	spin_lock_irqsave(&hsotg->lock, flags);
@@ -31,6 +29,3 @@ index 7e0386eb5cf0..cc5a4cf9b343 100644
  	spin_unlock_irqrestore(&hsotg->lock, flags);
  }
  
--- 
-2.53.0
-

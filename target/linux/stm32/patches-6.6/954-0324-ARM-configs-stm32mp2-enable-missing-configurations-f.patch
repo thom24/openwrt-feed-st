@@ -19,8 +19,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/configs/mp2-fragment-04-multiv7-addons.config | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/arch/arm/configs/mp2-fragment-04-multiv7-addons.config b/arch/arm/configs/mp2-fragment-04-multiv7-addons.config
-index 10d0726afadf..f675ca71b375 100644
 --- a/arch/arm/configs/mp2-fragment-04-multiv7-addons.config
 +++ b/arch/arm/configs/mp2-fragment-04-multiv7-addons.config
 @@ -4,3 +4,8 @@ CONFIG_BACKLIGHT_PWM=m
@@ -32,6 +30,3 @@ index 10d0726afadf..f675ca71b375 100644
 +CONFIG_PREEMPT=y
 +CONFIG_PREEMPT_COUNT=y
 +CONFIG_SCHED_MC=y
--- 
-2.53.0
-

@@ -33,8 +33,6 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  create mode 100644 drivers/pci/endpoint/pci-ep-msi.c
  create mode 100644 include/linux/pci-ep-msi.h
 
-diff --git a/drivers/pci/endpoint/Kconfig b/drivers/pci/endpoint/Kconfig
-index 17bbdc9bbde0..c8ade60835e8 100644
 --- a/drivers/pci/endpoint/Kconfig
 +++ b/drivers/pci/endpoint/Kconfig
 @@ -28,6 +28,15 @@ config PCI_ENDPOINT_CONFIGFS
@@ -53,8 +51,6 @@ index 17bbdc9bbde0..c8ade60835e8 100644
  source "drivers/pci/endpoint/functions/Kconfig"
  
  endmenu
-diff --git a/drivers/pci/endpoint/Makefile b/drivers/pci/endpoint/Makefile
-index 95b2fe47e3b0..b4869d52053a 100644
 --- a/drivers/pci/endpoint/Makefile
 +++ b/drivers/pci/endpoint/Makefile
 @@ -6,3 +6,4 @@
@@ -62,9 +58,6 @@ index 95b2fe47e3b0..b4869d52053a 100644
  obj-$(CONFIG_PCI_ENDPOINT)		+= pci-epc-core.o pci-epf-core.o\
  					   pci-epc-mem.o functions/
 +obj-$(CONFIG_PCI_ENDPOINT_MSI_DOORBELL)	+= pci-ep-msi.o
-diff --git a/drivers/pci/endpoint/pci-ep-msi.c b/drivers/pci/endpoint/pci-ep-msi.c
-new file mode 100644
-index 000000000000..f99d2f0aea1b
 --- /dev/null
 +++ b/drivers/pci/endpoint/pci-ep-msi.c
 @@ -0,0 +1,92 @@
@@ -160,9 +153,6 @@ index 000000000000..f99d2f0aea1b
 +	epf->num_db = 0;
 +}
 +EXPORT_SYMBOL_GPL(pci_epf_free_doorbell);
-diff --git a/include/linux/pci-ep-msi.h b/include/linux/pci-ep-msi.h
-new file mode 100644
-index 000000000000..7c5db90f9620
 --- /dev/null
 +++ b/include/linux/pci-ep-msi.h
 @@ -0,0 +1,28 @@
@@ -194,8 +184,6 @@ index 000000000000..7c5db90f9620
 +#endif /* CONFIG_GENERIC_MSI_IRQ */
 +
 +#endif /* __PCI_EP_MSI__ */
-diff --git a/include/linux/pci-epf.h b/include/linux/pci-epf.h
-index 3f44b6aec477..9ac4f70bf1fe 100644
 --- a/include/linux/pci-epf.h
 +++ b/include/linux/pci-epf.h
 @@ -12,6 +12,7 @@
@@ -206,11 +194,10 @@ index 3f44b6aec477..9ac4f70bf1fe 100644
  #include <linux/pci.h>
  
  struct pci_epf;
-@@ -123,6 +124,16 @@ struct pci_epf_bar {
- 	int		flags;
+@@ -124,6 +125,16 @@ struct pci_epf_bar {
  };
  
-+/**
+ /**
 + * struct pci_epf_doorbell_msg - represents doorbell message
 + * @msg: MSI message
 + * @virq: IRQ number of this doorbell MSI message
@@ -220,9 +207,10 @@ index 3f44b6aec477..9ac4f70bf1fe 100644
 +	int virq;
 +};
 +
- /**
++/**
   * struct pci_epf - represents the PCI EPF device
   * @dev: the PCI EPF device
+  * @name: the name of the PCI EPF device
 @@ -150,6 +161,8 @@ struct pci_epf_bar {
   * @vfunction_num_map: bitmap to manage virtual function number
   * @pci_vepf: list of virtual endpoint functions associated with this function
@@ -241,6 +229,3 @@ index 3f44b6aec477..9ac4f70bf1fe 100644
  };
  
  /**
--- 
-2.53.0
-

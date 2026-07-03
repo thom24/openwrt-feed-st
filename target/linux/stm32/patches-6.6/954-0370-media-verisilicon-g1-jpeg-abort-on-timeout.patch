@@ -26,11 +26,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/media/platform/verisilicon/hantro_g1_jpeg_dec.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/platform/verisilicon/hantro_g1_jpeg_dec.c b/drivers/media/platform/verisilicon/hantro_g1_jpeg_dec.c
-index d06be32e227c..545c5d2e403a 100644
 --- a/drivers/media/platform/verisilicon/hantro_g1_jpeg_dec.c
 +++ b/drivers/media/platform/verisilicon/hantro_g1_jpeg_dec.c
-@@ -239,6 +239,8 @@ int hantro_g1_jpeg_dec_run(struct hantro_ctx *ctx)
+@@ -239,6 +239,8 @@ int hantro_g1_jpeg_dec_run(struct hantro
  	int ret;
  	u32 i;
  
@@ -39,6 +37,3 @@ index d06be32e227c..545c5d2e403a 100644
  	hantro_start_prepare_run(ctx);
  
  	src_buf = hantro_get_src_buf(ctx);
--- 
-2.53.0
-

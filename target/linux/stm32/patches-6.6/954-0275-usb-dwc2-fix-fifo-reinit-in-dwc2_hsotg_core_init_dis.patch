@@ -26,11 +26,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/usb/dwc2/gadget.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 2849d1a8df82..f62ba6de8935 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -3468,8 +3468,6 @@ void dwc2_hsotg_core_init_disconnected(struct dwc2_hsotg *hsotg,
+@@ -3468,8 +3468,6 @@ void dwc2_hsotg_core_init_disconnected(s
  
  	dwc2_phy_init(hsotg, true);
  
@@ -39,7 +37,7 @@ index 2849d1a8df82..f62ba6de8935 100644
  	if (!is_usb_reset)
  		dwc2_set_bit(hsotg, DCTL, DCTL_SFTDISCON);
  
-@@ -3494,6 +3492,8 @@ void dwc2_hsotg_core_init_disconnected(struct dwc2_hsotg *hsotg,
+@@ -3494,6 +3492,8 @@ void dwc2_hsotg_core_init_disconnected(s
  
  	dwc2_writel(hsotg, dcfg,  DCFG);
  
@@ -48,6 +46,3 @@ index 2849d1a8df82..f62ba6de8935 100644
  	/* Clear any pending OTG interrupts */
  	dwc2_writel(hsotg, 0xffffffff, GOTGINT);
  
--- 
-2.53.0
-

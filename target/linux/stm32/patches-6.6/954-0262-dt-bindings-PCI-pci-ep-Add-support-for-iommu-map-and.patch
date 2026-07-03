@@ -32,8 +32,6 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  .../devicetree/bindings/pci/pci-ep.yaml       | 68 +++++++++++++++++++
  1 file changed, 68 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/pci/pci-ep.yaml b/Documentation/devicetree/bindings/pci/pci-ep.yaml
-index d1eef4825207..dbf14dedc3ac 100644
 --- a/Documentation/devicetree/bindings/pci/pci-ep.yaml
 +++ b/Documentation/devicetree/bindings/pci/pci-ep.yaml
 @@ -16,6 +16,24 @@ properties:
@@ -118,6 +116,3 @@ index d1eef4825207..dbf14dedc3ac 100644
    num-lanes:
      description: maximum number of lanes
      $ref: /schemas/types.yaml#/definitions/uint32
--- 
-2.53.0
-

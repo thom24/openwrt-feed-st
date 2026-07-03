@@ -14,8 +14,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/input/touchscreen/goodix.c | 8 ++++++++
  1 file changed, 8 insertions(+)
 
-diff --git a/drivers/input/touchscreen/goodix.c b/drivers/input/touchscreen/goodix.c
-index fd40c27e9cde..67c2b0550f66 100644
 --- a/drivers/input/touchscreen/goodix.c
 +++ b/drivers/input/touchscreen/goodix.c
 @@ -19,6 +19,7 @@
@@ -26,7 +24,7 @@ index fd40c27e9cde..67c2b0550f66 100644
  #include <linux/platform_data/x86/soc.h>
  #include <linux/slab.h>
  #include <linux/acpi.h>
-@@ -1451,6 +1452,10 @@ static int goodix_suspend(struct device *dev)
+@@ -1451,6 +1452,10 @@ static int goodix_suspend(struct device
  	/* We need gpio pins to suspend/resume */
  	if (ts->irq_pin_access_method == IRQ_PIN_ACCESS_NONE) {
  		disable_irq(client->irq);
@@ -37,7 +35,7 @@ index fd40c27e9cde..67c2b0550f66 100644
  		return 0;
  	}
  
-@@ -1495,6 +1500,9 @@ static int goodix_resume(struct device *dev)
+@@ -1495,6 +1500,9 @@ static int goodix_resume(struct device *
  	int error;
  
  	if (ts->irq_pin_access_method == IRQ_PIN_ACCESS_NONE) {
@@ -47,6 +45,3 @@ index fd40c27e9cde..67c2b0550f66 100644
  		enable_irq(client->irq);
  		return 0;
  	}
--- 
-2.53.0
-

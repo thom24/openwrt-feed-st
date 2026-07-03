@@ -20,11 +20,9 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  include/uapi/linux/counter.h    | 3 +++
  2 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/counter/counter-sysfs.c b/drivers/counter/counter-sysfs.c
-index 42c523343d32..8600cdfb9728 100644
 --- a/drivers/counter/counter-sysfs.c
 +++ b/drivers/counter/counter-sysfs.c
-@@ -76,7 +76,10 @@ static const char *const counter_synapse_action_str[] = {
+@@ -76,7 +76,10 @@ static const char *const counter_synapse
  	[COUNTER_SYNAPSE_ACTION_NONE] = "none",
  	[COUNTER_SYNAPSE_ACTION_RISING_EDGE] = "rising edge",
  	[COUNTER_SYNAPSE_ACTION_FALLING_EDGE] = "falling edge",
@@ -36,8 +34,6 @@ index 42c523343d32..8600cdfb9728 100644
  };
  
  static const char *const counter_count_direction_str[] = {
-diff --git a/include/uapi/linux/counter.h b/include/uapi/linux/counter.h
-index fc248ef00e86..411c5ce89f81 100644
 --- a/include/uapi/linux/counter.h
 +++ b/include/uapi/linux/counter.h
 @@ -159,6 +159,9 @@ enum counter_synapse_action {
@@ -50,6 +46,3 @@ index fc248ef00e86..411c5ce89f81 100644
  };
  
  /* Signal polarity values */
--- 
-2.53.0
-

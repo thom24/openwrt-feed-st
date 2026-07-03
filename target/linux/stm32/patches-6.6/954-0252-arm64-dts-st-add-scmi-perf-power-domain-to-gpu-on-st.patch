@@ -22,11 +22,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp255.dtsi | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp255.dtsi b/arch/arm64/boot/dts/st/stm32mp255.dtsi
-index 17233a5dc779..c72ebc4b692b 100644
 --- a/arch/arm64/boot/dts/st/stm32mp255.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp255.dtsi
-@@ -173,7 +173,8 @@ gpu: gpu@48280000 {
+@@ -173,7 +173,8 @@
  		resets = <&rcc GPU_R>;
  		clock-names = "bus", "core";
  		clocks = <&rcc CK_BUS_GPU>, <&rcc CK_KER_GPU>;
@@ -36,6 +34,3 @@ index 17233a5dc779..c72ebc4b692b 100644
  		access-controllers = <&rifsc 79>;
  		status = "disabled";
  
--- 
-2.53.0
-

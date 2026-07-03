@@ -20,8 +20,6 @@ Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
  drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
-index bdb6b77b3805..005b021e9cc2 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
 @@ -105,6 +105,7 @@ struct stm32_dwmac {
@@ -32,7 +30,7 @@ index bdb6b77b3805..005b021e9cc2 100644
  };
  
  struct stm32_syscfg_pmcsetr {
-@@ -402,6 +403,8 @@ static int stm32_dwmac_parse_data(struct stm32_dwmac *dwmac,
+@@ -402,6 +403,8 @@ static int stm32_dwmac_parse_data(struct
  		dwmac->regulator = NULL;
  	}
  
@@ -41,7 +39,7 @@ index bdb6b77b3805..005b021e9cc2 100644
  	return 0;
  }
  
-@@ -544,6 +547,8 @@ static int stm32_dwmac_probe(struct platform_device *pdev)
+@@ -544,6 +547,8 @@ static int stm32_dwmac_probe(struct plat
  	}
  
  	plat_dat->bsp_priv = dwmac;
@@ -50,6 +48,3 @@ index bdb6b77b3805..005b021e9cc2 100644
  
  	ret = stm32_dwmac_init(plat_dat);
  	if (ret)
--- 
-2.53.0
-

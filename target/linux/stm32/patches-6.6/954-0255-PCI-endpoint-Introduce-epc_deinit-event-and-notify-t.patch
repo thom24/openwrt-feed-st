@@ -50,11 +50,9 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  include/linux/pci-epf.h                       |  2 ++
  4 files changed, 37 insertions(+)
 
-diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-index 0fb1c0c115ff..2b02ebedf3c3 100644
 --- a/drivers/pci/endpoint/functions/pci-epf-test.c
 +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
-@@ -738,6 +738,15 @@ static void pci_epf_test_clear_bar(struct pci_epf *epf)
+@@ -741,6 +741,15 @@ static void pci_epf_test_clear_bar(struc
  	}
  }
  
@@ -70,7 +68,7 @@ index 0fb1c0c115ff..2b02ebedf3c3 100644
  static int pci_epf_test_core_init(struct pci_epf *epf)
  {
  	struct pci_epf_test *epf_test = epf_get_drvdata(epf);
-@@ -802,6 +811,7 @@ static int pci_epf_test_link_up(struct pci_epf *epf)
+@@ -805,6 +814,7 @@ static int pci_epf_test_link_up(struct p
  
  static const struct pci_epc_event_ops pci_epf_test_event_ops = {
  	.core_init = pci_epf_test_core_init,
@@ -78,15 +76,12 @@ index 0fb1c0c115ff..2b02ebedf3c3 100644
  	.link_up = pci_epf_test_link_up,
  };
  
-diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
-index 3a82c6a613a3..a097c6818fb3 100644
 --- a/drivers/pci/endpoint/pci-epc-core.c
 +++ b/drivers/pci/endpoint/pci-epc-core.c
-@@ -757,6 +757,30 @@ void pci_epc_init_notify(struct pci_epc *epc)
- }
+@@ -758,6 +758,30 @@ void pci_epc_init_notify(struct pci_epc
  EXPORT_SYMBOL_GPL(pci_epc_init_notify);
  
-+/**
+ /**
 + * pci_epc_deinit_notify() - Notify the EPF device about EPC deinitialization
 + * @epc: the EPC device whose deinitialization is completed
 + *
@@ -110,14 +105,13 @@ index 3a82c6a613a3..a097c6818fb3 100644
 +}
 +EXPORT_SYMBOL_GPL(pci_epc_deinit_notify);
 +
- /**
++/**
   * pci_epc_bme_notify() - Notify the EPF device that the EPC device has received
   *			  the BME event from the Root complex
-diff --git a/include/linux/pci-epc.h b/include/linux/pci-epc.h
-index c7432d727f29..f1a559637353 100644
+  * @epc: the EPC device that received the BME event
 --- a/include/linux/pci-epc.h
 +++ b/include/linux/pci-epc.h
-@@ -207,6 +207,7 @@ int pci_epc_add_epf(struct pci_epc *epc, struct pci_epf *epf,
+@@ -207,6 +207,7 @@ int pci_epc_add_epf(struct pci_epc *epc,
  void pci_epc_linkup(struct pci_epc *epc);
  void pci_epc_linkdown(struct pci_epc *epc);
  void pci_epc_init_notify(struct pci_epc *epc);
@@ -125,8 +119,6 @@ index c7432d727f29..f1a559637353 100644
  void pci_epc_bme_notify(struct pci_epc *epc);
  void pci_epc_remove_epf(struct pci_epc *epc, struct pci_epf *epf,
  			enum pci_epc_interface_type type);
-diff --git a/include/linux/pci-epf.h b/include/linux/pci-epf.h
-index 9ac4f70bf1fe..da3b0fa38c9a 100644
 --- a/include/linux/pci-epf.h
 +++ b/include/linux/pci-epf.h
 @@ -71,12 +71,14 @@ struct pci_epf_ops {
@@ -144,6 +136,3 @@ index 9ac4f70bf1fe..da3b0fa38c9a 100644
  	int (*link_up)(struct pci_epf *epf);
  	int (*link_down)(struct pci_epf *epf);
  	int (*bme)(struct pci_epf *epf);
--- 
-2.53.0
-

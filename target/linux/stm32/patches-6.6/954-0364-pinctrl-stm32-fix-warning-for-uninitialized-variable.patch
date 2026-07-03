@@ -19,11 +19,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/pinctrl/stm32/pinctrl-stm32.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
-index 5d2f66a03db4..4734977b5bcf 100644
 --- a/drivers/pinctrl/stm32/pinctrl-stm32.c
 +++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
-@@ -1822,6 +1822,7 @@ static struct irq_domain *stm32_pctrl_get_irq_domain(struct stm32_pinctrl *pctl)
+@@ -1822,6 +1822,7 @@ static struct irq_domain *stm32_pctrl_ge
  		 * Each entry has 3 values: <&phandle 0 0>
  		 */
  		i = DIV_ROUND_UP(i, 3 * STM32_GPIO_IRQ_LINE * sizeof(u32));
@@ -31,6 +29,3 @@ index 5d2f66a03db4..4734977b5bcf 100644
  
  		while (i--) {
  			ret = of_irq_parse_one(np, i * STM32_GPIO_IRQ_LINE, &out_irq);
--- 
-2.53.0
-

@@ -21,8 +21,6 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml b/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
-index 6911a51bc955..4aaf86933ddb 100644
 --- a/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
 +++ b/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
 @@ -69,6 +69,11 @@ properties:
@@ -37,6 +35,3 @@ index 6911a51bc955..4aaf86933ddb 100644
  required:
    - compatible
    - reg
--- 
-2.53.0
-

@@ -17,11 +17,9 @@ Reviewed-by: Jerome BESNARD <jerome.besnard@st.com>
  arch/arm64/boot/dts/st/stm32mp255.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp255.dtsi b/arch/arm64/boot/dts/st/stm32mp255.dtsi
-index 14602a4057da..5ff3d11d8c57 100644
 --- a/arch/arm64/boot/dts/st/stm32mp255.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp255.dtsi
-@@ -135,7 +135,7 @@ dsi: dsi@48000000 {
+@@ -135,7 +135,7 @@
  	};
  
  	lvds: lvds@48060000 {
@@ -30,6 +28,3 @@ index 14602a4057da..5ff3d11d8c57 100644
  		compatible = "st,stm32mp25-lvds";
  		reg = <0x48060000 0x2000>;
  		clocks = <&rcc CK_BUS_LVDS>, <&rcc CK_KER_LVDSPHY>, <&syscfg 0>;
--- 
-2.53.0
-

@@ -18,11 +18,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/phy/st/phy-stm32-usb2phy.c | 17 +++++++++++++++++
  1 file changed, 17 insertions(+)
 
-diff --git a/drivers/phy/st/phy-stm32-usb2phy.c b/drivers/phy/st/phy-stm32-usb2phy.c
-index 54c4e23cb0ec..f9740a1a3815 100644
 --- a/drivers/phy/st/phy-stm32-usb2phy.c
 +++ b/drivers/phy/st/phy-stm32-usb2phy.c
-@@ -533,11 +533,28 @@ static int stm32_usb2phy_phy_power_off(struct phy *phy)
+@@ -533,11 +533,28 @@ static int stm32_usb2phy_phy_power_off(s
  	return 0;
  }
  
@@ -51,6 +49,3 @@ index 54c4e23cb0ec..f9740a1a3815 100644
  	.set_mode = stm32_usb2phy_set_mode,
  	.owner = THIS_MODULE,
  };
--- 
-2.53.0
-

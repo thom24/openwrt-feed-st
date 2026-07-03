@@ -14,8 +14,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c | 49 +++++--------------
  1 file changed, 12 insertions(+), 37 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
-index 300b4fb7ce65..8502949554f5 100644
 --- a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
 +++ b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
 @@ -254,7 +254,6 @@ struct dw_mipi_dsi {
@@ -26,7 +24,7 @@ index 300b4fb7ce65..8502949554f5 100644
  
  #ifdef CONFIG_DEBUG_FS
  	struct dentry *debugfs;
-@@ -364,12 +363,6 @@ static int dw_mipi_dsi_host_attach(struct mipi_dsi_host *host,
+@@ -364,12 +363,6 @@ static int dw_mipi_dsi_host_attach(struc
  			return ret;
  	}
  
@@ -39,7 +37,7 @@ index 300b4fb7ce65..8502949554f5 100644
  	return 0;
  }
  
-@@ -727,16 +720,11 @@ static void dw_mipi_dsi_video_packet_config(struct dw_mipi_dsi *dsi,
+@@ -727,16 +720,11 @@ static void dw_mipi_dsi_video_packet_con
  	 * DSI_VNPCR.NPSIZE... especially because this driver supports
  	 * non-burst video modes, see dw_mipi_dsi_video_mode_config()...
  	 */
@@ -61,7 +59,7 @@ index 300b4fb7ce65..8502949554f5 100644
  }
  
  static void dw_mipi_dsi_command_mode_config(struct dw_mipi_dsi *dsi)
-@@ -803,15 +791,9 @@ static void dw_mipi_dsi_line_timer_config(struct dw_mipi_dsi *dsi,
+@@ -803,15 +791,9 @@ static void dw_mipi_dsi_line_timer_confi
  {
  	u32 htotal, hsa, hbp, lbcc;
  
@@ -80,7 +78,7 @@ index 300b4fb7ce65..8502949554f5 100644
  
  	/*
  	 * TODO dw drv improvements
-@@ -832,17 +814,10 @@ static void dw_mipi_dsi_vertical_timing_config(struct dw_mipi_dsi *dsi,
+@@ -832,17 +814,10 @@ static void dw_mipi_dsi_vertical_timing_
  {
  	u32 vactive, vsa, vfp, vbp;
  
@@ -102,6 +100,3 @@ index 300b4fb7ce65..8502949554f5 100644
  
  	dsi_write(dsi, DSI_VID_VACTIVE_LINES, vactive);
  	dsi_write(dsi, DSI_VID_VSA_LINES, vsa);
--- 
-2.53.0
-

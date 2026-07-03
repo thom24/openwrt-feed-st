@@ -15,11 +15,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/panel/panel-himax-hx8394.c | 25 +++-------------------
  1 file changed, 3 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-himax-hx8394.c b/drivers/gpu/drm/panel/panel-himax-hx8394.c
-index 2087b8a96338..47ddc08999b6 100644
 --- a/drivers/gpu/drm/panel/panel-himax-hx8394.c
 +++ b/drivers/gpu/drm/panel/panel-himax-hx8394.c
-@@ -475,11 +475,7 @@ static int hx8394_probe(struct mipi_dsi_device *dsi)
+@@ -475,11 +475,7 @@ static int hx8394_probe(struct mipi_dsi_
  	if (!ctx)
  		return -ENOMEM;
  
@@ -32,7 +30,7 @@ index 2087b8a96338..47ddc08999b6 100644
  	if (IS_ERR(ctx->reset_gpio))
  		return dev_err_probe(dev, PTR_ERR(ctx->reset_gpio),
  				     "Failed to get reset gpio\n");
-@@ -518,21 +514,13 @@ static int hx8394_probe(struct mipi_dsi_device *dsi)
+@@ -518,21 +514,13 @@ static int hx8394_probe(struct mipi_dsi_
  	pm_runtime_set_autosuspend_delay(dev, 1000);
  	pm_runtime_use_autosuspend(dev);
  
@@ -55,7 +53,7 @@ index 2087b8a96338..47ddc08999b6 100644
  	}
  
  	dev_dbg(dev, "%ux%u@%u %ubpp dsi %udl - ready\n",
-@@ -541,12 +529,6 @@ static int hx8394_probe(struct mipi_dsi_device *dsi)
+@@ -541,12 +529,6 @@ static int hx8394_probe(struct mipi_dsi_
  		mipi_dsi_pixel_format_to_bpp(dsi->format), dsi->lanes);
  
  	return 0;
@@ -68,7 +66,7 @@ index 2087b8a96338..47ddc08999b6 100644
  }
  
  static void hx8394_shutdown(struct mipi_dsi_device *dsi)
-@@ -597,8 +579,7 @@ static __maybe_unused int himax_hx8394_resume(struct device *dev)
+@@ -597,8 +579,7 @@ static __maybe_unused int himax_hx8394_r
  	struct hx8394 *ctx = dev_get_drvdata(dev);
  	int ret;
  
@@ -78,6 +76,3 @@ index 2087b8a96338..47ddc08999b6 100644
  
  	ret = regulator_enable(ctx->vcc);
  	if (ret) {
--- 
-2.53.0
-

@@ -24,11 +24,9 @@ Reviewed-by: Raphael GALLAIS-POU <raphael.gallais-pou@foss.st.com>
  drivers/clk/stm32/clk-stm32mp2-ca35ss.c | 21 +++++++--------------
  1 file changed, 7 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/clk/stm32/clk-stm32mp2-ca35ss.c b/drivers/clk/stm32/clk-stm32mp2-ca35ss.c
-index 89b8fd51a865..cd41bda417ee 100644
 --- a/drivers/clk/stm32/clk-stm32mp2-ca35ss.c
 +++ b/drivers/clk/stm32/clk-stm32mp2-ca35ss.c
-@@ -143,7 +143,12 @@ static unsigned long clk_stm32mp2_ca35ss_recalc_rate(struct clk_hw *hw,
+@@ -143,7 +143,12 @@ static unsigned long clk_stm32mp2_ca35ss
  						     unsigned long parent_rate)
  {
  	u32 rate = 0;
@@ -42,7 +40,7 @@ index 89b8fd51a865..cd41bda417ee 100644
  	return rate;
  }
  
-@@ -187,7 +192,6 @@ static const struct clk_ops clk_stm32mp2_ca35ss_ops = {
+@@ -187,7 +192,6 @@ static const struct clk_ops clk_stm32mp2
  static int clk_stm32mp2_ca35ss_probe(struct platform_device *pdev)
  {
  	struct device *dev = &pdev->dev;
@@ -50,7 +48,7 @@ index 89b8fd51a865..cd41bda417ee 100644
  	struct clk_init_data init = { NULL };
  	struct clk_hw *hw;
  	u32 status, rate;
-@@ -199,12 +203,6 @@ static int clk_stm32mp2_ca35ss_probe(struct platform_device *pdev)
+@@ -199,12 +203,6 @@ static int clk_stm32mp2_ca35ss_probe(str
  		return -EPERM;
  	}
  
@@ -63,7 +61,7 @@ index 89b8fd51a865..cd41bda417ee 100644
  	hw = devm_kzalloc(dev, sizeof(*hw), GFP_KERNEL);
  	if (!hw)
  		return -ENOMEM;
-@@ -219,12 +217,7 @@ static int clk_stm32mp2_ca35ss_probe(struct platform_device *pdev)
+@@ -219,12 +217,7 @@ static int clk_stm32mp2_ca35ss_probe(str
  		return ret;
  	}
  
@@ -77,6 +75,3 @@ index 89b8fd51a865..cd41bda417ee 100644
  	if (ret) {
  		dev_err(dev, "Failed to add clock provider\n");
  		clk_hw_unregister(hw);
--- 
-2.53.0
-

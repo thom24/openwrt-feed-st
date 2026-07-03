@@ -32,9 +32,6 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  1 file changed, 54 deletions(-)
  delete mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt6795-sys-clock.yaml
 
-diff --git a/Documentation/devicetree/bindings/clock/mediatek,mt6795-sys-clock.yaml b/Documentation/devicetree/bindings/clock/mediatek,mt6795-sys-clock.yaml
-deleted file mode 100644
-index 378b761237d3..000000000000
 --- a/Documentation/devicetree/bindings/clock/mediatek,mt6795-sys-clock.yaml
 +++ /dev/null
 @@ -1,54 +0,0 @@
@@ -92,6 +89,3 @@ index 378b761237d3..000000000000
 -            #clock-cells = <1>;
 -        };
 -    };
--- 
-2.53.0
-

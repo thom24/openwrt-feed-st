@@ -22,11 +22,9 @@ Reviewed-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index 1b007ce31934..694cbd44cfaa 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -55,6 +55,11 @@ clk_ext_cec: clk-ext-cec {
+@@ -55,6 +55,11 @@
  		};
  	};
  
@@ -38,6 +36,3 @@ index 1b007ce31934..694cbd44cfaa 100644
  	dmic0: dmic-0 {
  		compatible = "dmic-codec";
  		#sound-dai-cells = <1>;
--- 
-2.53.0
-

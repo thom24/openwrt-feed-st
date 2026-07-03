@@ -25,11 +25,9 @@ Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  drivers/base/power/domain.c | 33 +++++++++++++++++++++------------
  1 file changed, 21 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 7e5123b0ad20..043f62f790a4 100644
 --- a/drivers/base/power/domain.c
 +++ b/drivers/base/power/domain.c
-@@ -420,6 +420,25 @@ static void genpd_restore_performance_state(struct device *dev,
+@@ -420,6 +420,25 @@ static void genpd_restore_performance_st
  		genpd_set_performance_state(dev, state);
  }
  
@@ -55,7 +53,7 @@ index 7e5123b0ad20..043f62f790a4 100644
  /**
   * dev_pm_genpd_set_performance_state- Set performance state of device's power
   * domain.
-@@ -438,7 +457,6 @@ static void genpd_restore_performance_state(struct device *dev,
+@@ -438,7 +457,6 @@ static void genpd_restore_performance_st
  int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
  {
  	struct generic_pm_domain *genpd;
@@ -63,7 +61,7 @@ index 7e5123b0ad20..043f62f790a4 100644
  
  	genpd = dev_to_genpd_safe(dev);
  	if (!genpd)
-@@ -448,17 +466,7 @@ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
+@@ -448,17 +466,7 @@ int dev_pm_genpd_set_performance_state(s
  		     !dev->power.subsys_data->domain_data))
  		return -EINVAL;
  
@@ -82,7 +80,7 @@ index 7e5123b0ad20..043f62f790a4 100644
  }
  EXPORT_SYMBOL_GPL(dev_pm_genpd_set_performance_state);
  
-@@ -2081,6 +2089,7 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+@@ -2086,6 +2094,7 @@ int pm_genpd_init(struct generic_pm_doma
  	genpd->domain.ops.restore_noirq = genpd_restore_noirq;
  	genpd->domain.ops.complete = genpd_complete;
  	genpd->domain.start = genpd_dev_pm_start;
@@ -90,6 +88,3 @@ index 7e5123b0ad20..043f62f790a4 100644
  
  	if (genpd->flags & GENPD_FLAG_PM_CLK) {
  		genpd->dev_ops.stop = pm_clk_suspend;
--- 
-2.53.0
-

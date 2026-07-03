@@ -15,8 +15,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/configs/mp2-fragment-04-multiv7-addons.config | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm/configs/mp2-fragment-04-multiv7-addons.config b/arch/arm/configs/mp2-fragment-04-multiv7-addons.config
-index ba819395a02f..10d0726afadf 100644
 --- a/arch/arm/configs/mp2-fragment-04-multiv7-addons.config
 +++ b/arch/arm/configs/mp2-fragment-04-multiv7-addons.config
 @@ -1,4 +1,6 @@
@@ -26,6 +24,3 @@ index ba819395a02f..10d0726afadf 100644
 +CONFIG_DRM_PANEL_SIMPLE=m
  CONFIG_IKCONFIG=y
  CONFIG_IKCONFIG_PROC=y
--- 
-2.53.0
-

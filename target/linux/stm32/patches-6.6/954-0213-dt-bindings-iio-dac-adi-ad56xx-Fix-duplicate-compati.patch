@@ -28,8 +28,6 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  .../bindings/iio/dac/adi,ad5696.yaml          |  3 +-
  2 files changed, 19 insertions(+), 37 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/iio/dac/adi,ad5686.yaml b/Documentation/devicetree/bindings/iio/dac/adi,ad5686.yaml
-index b4400c52bec3..713f535bb33a 100644
 --- a/Documentation/devicetree/bindings/iio/dac/adi,ad5686.yaml
 +++ b/Documentation/devicetree/bindings/iio/dac/adi,ad5686.yaml
 @@ -4,7 +4,7 @@
@@ -99,8 +97,6 @@ index b4400c52bec3..713f535bb33a 100644
  
    reg:
      maxItems: 1
-diff --git a/Documentation/devicetree/bindings/iio/dac/adi,ad5696.yaml b/Documentation/devicetree/bindings/iio/dac/adi,ad5696.yaml
-index 56b0cda0f30a..b5a88b03dc2f 100644
 --- a/Documentation/devicetree/bindings/iio/dac/adi,ad5696.yaml
 +++ b/Documentation/devicetree/bindings/iio/dac/adi,ad5696.yaml
 @@ -4,7 +4,7 @@
@@ -120,6 +116,3 @@ index 56b0cda0f30a..b5a88b03dc2f 100644
        - adi,ad5338r
        - adi,ad5671r
        - adi,ad5675r
--- 
-2.53.0
-

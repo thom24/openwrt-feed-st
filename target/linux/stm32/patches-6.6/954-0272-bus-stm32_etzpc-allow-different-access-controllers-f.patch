@@ -24,11 +24,9 @@ Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
  drivers/bus/stm32_etzpc.c | 8 +++++---
  1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/bus/stm32_etzpc.c b/drivers/bus/stm32_etzpc.c
-index 3b6aa421245a..650085d557d5 100644
 --- a/drivers/bus/stm32_etzpc.c
 +++ b/drivers/bus/stm32_etzpc.c
-@@ -107,14 +107,16 @@ static int stm32_etzpc_populate_bus(struct stm32_firewall_controller *ctrl)
+@@ -107,14 +107,16 @@ static int stm32_etzpc_populate_bus(stru
  		}
  
  		for (i = 0; i < len; i++) {
@@ -48,6 +46,3 @@ index 3b6aa421245a..650085d557d5 100644
  			}
  		}
  
--- 
-2.53.0
-

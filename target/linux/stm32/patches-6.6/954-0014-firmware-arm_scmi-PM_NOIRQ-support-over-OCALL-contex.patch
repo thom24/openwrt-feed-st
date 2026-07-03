@@ -21,8 +21,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/firmware/arm_scmi/optee.c | 64 +++++++++++++++++++++++++++++++
  1 file changed, 64 insertions(+)
 
-diff --git a/drivers/firmware/arm_scmi/optee.c b/drivers/firmware/arm_scmi/optee.c
-index abca60496e95..05de39689af4 100644
 --- a/drivers/firmware/arm_scmi/optee.c
 +++ b/drivers/firmware/arm_scmi/optee.c
 @@ -212,6 +212,22 @@ enum scmi_optee_ocall_reply {
@@ -62,7 +60,7 @@ index abca60496e95..05de39689af4 100644
  };
  
  /**
-@@ -1017,6 +1035,51 @@ static int scmi_optee_service_remove(struct device *dev)
+@@ -1017,6 +1035,51 @@ static int scmi_optee_service_remove(str
  	return 0;
  }
  
@@ -114,7 +112,7 @@ index abca60496e95..05de39689af4 100644
  static const struct tee_client_device_id scmi_optee_service_id[] = {
  	{
  		UUID_INIT(0xa8cfe406, 0xd4f5, 0x4a2e,
-@@ -1034,6 +1097,7 @@ static struct tee_client_driver scmi_optee_driver = {
+@@ -1034,6 +1097,7 @@ static struct tee_client_driver scmi_opt
  		.bus = &tee_bus_type,
  		.probe = scmi_optee_service_probe,
  		.remove = scmi_optee_service_remove,
@@ -122,6 +120,3 @@ index abca60496e95..05de39689af4 100644
  	},
  };
  
--- 
-2.53.0
-

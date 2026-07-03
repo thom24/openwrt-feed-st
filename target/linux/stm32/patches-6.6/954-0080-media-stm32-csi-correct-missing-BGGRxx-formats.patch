@@ -19,11 +19,9 @@ Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
  drivers/media/platform/st/stm32/stm32-csi.c | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-csi.c b/drivers/media/platform/st/stm32/stm32-csi.c
-index 3497a5152cd2..7422b52afedc 100644
 --- a/drivers/media/platform/st/stm32/stm32-csi.c
 +++ b/drivers/media/platform/st/stm32/stm32-csi.c
-@@ -231,22 +231,22 @@ static const struct stm32_csi_fmts stm32_csi_formats[] = {
+@@ -231,22 +231,22 @@ static const struct stm32_csi_fmts stm32
  	FMT_MBUS_DT_DTFMT_BPP(SGRBG8_1X8, RAW8, BPP8, 8),
  	FMT_MBUS_DT_DTFMT_BPP(SRGGB8_1X8, RAW8, BPP8, 8),
  	/* 10 bit */
@@ -50,6 +48,3 @@ index 3497a5152cd2..7422b52afedc 100644
  	FMT_MBUS_DT_DTFMT_BPP(SGBRG16_1X16, RAW16, BPP16, 16),
  	FMT_MBUS_DT_DTFMT_BPP(SGRBG16_1X16, RAW16, BPP16, 16),
  	FMT_MBUS_DT_DTFMT_BPP(SRGGB16_1X16, RAW16, BPP16, 16),
--- 
-2.53.0
-

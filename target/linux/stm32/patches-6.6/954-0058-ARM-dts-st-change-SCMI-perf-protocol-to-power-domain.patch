@@ -18,11 +18,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm/boot/dts/st/stm32mp131.dtsi | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index f5287a5dab37..b241c26370f4 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -21,8 +21,8 @@ cpu0: cpu@0 {
+@@ -21,8 +21,8 @@
  			compatible = "arm,cortex-a7";
  			device_type = "cpu";
  			reg = <0>;
@@ -33,7 +31,7 @@ index f5287a5dab37..b241c26370f4 100644
  			#cooling-cells = <2>;
  		};
  	};
-@@ -58,7 +58,7 @@ scmi: scmi {
+@@ -58,7 +58,7 @@
  
  			scmi_perf: protocol@13 {
  				reg = <0x13>;
@@ -42,6 +40,3 @@ index f5287a5dab37..b241c26370f4 100644
  			};
  
  			scmi_clk: protocol@14 {
--- 
-2.53.0
-

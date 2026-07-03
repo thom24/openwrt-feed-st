@@ -16,11 +16,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/misc/stm32_omm.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/misc/stm32_omm.c b/drivers/misc/stm32_omm.c
-index b56fa01682e4..829eafccb307 100644
 --- a/drivers/misc/stm32_omm.c
 +++ b/drivers/misc/stm32_omm.c
-@@ -208,7 +208,7 @@ static int stm32_omm_configure(struct device *dev)
+@@ -208,7 +208,7 @@ static int stm32_omm_configure(struct de
  		if (mux & CR_MUXEN) {
  			ret = of_property_read_u32(dev->of_node, "st,omm-req2ack-ns",
  						  &req2ack);
@@ -29,6 +27,3 @@ index b56fa01682e4..829eafccb307 100644
  				req2ack = DIV_ROUND_UP(req2ack, NSEC_PER_SEC / clk_rate_max) - 1;
  
  				if (req2ack > 256)
--- 
-2.53.0
-

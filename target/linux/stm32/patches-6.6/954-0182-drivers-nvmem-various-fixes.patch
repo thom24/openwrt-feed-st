@@ -17,11 +17,9 @@ Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
  drivers/nvmem/stm32-tamp-nvram.c | 17 +++++++++++------
  1 file changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/nvmem/stm32-tamp-nvram.c b/drivers/nvmem/stm32-tamp-nvram.c
-index fcada8d1c21c..9601f884c556 100644
 --- a/drivers/nvmem/stm32-tamp-nvram.c
 +++ b/drivers/nvmem/stm32-tamp-nvram.c
-@@ -321,7 +321,9 @@ static int stm32_tamp_nvram_write_byte(struct stm32_tamp_nvram_priv *priv, u32 o
+@@ -321,7 +321,9 @@ static int stm32_tamp_nvram_write_byte(s
  	if (!stm32_tamp_nvram_rights(priv, reg_idx, false))
  		return -EIO;
  
@@ -32,7 +30,7 @@ index fcada8d1c21c..9601f884c556 100644
  	to_be_writen_value = read_value & ~(0xFFUL << byte_in_word * 8);
  	to_be_writen_value |=  (u32)byte << (byte_in_word * 8);
  
-@@ -338,7 +340,9 @@ static int stm32_tamp_nvram_read_byte(struct stm32_tamp_nvram_priv *priv, u32 of
+@@ -338,7 +340,9 @@ static int stm32_tamp_nvram_read_byte(st
  	if (!stm32_tamp_nvram_rights(priv, reg_idx, true))
  		return -EIO;
  
@@ -43,7 +41,7 @@ index fcada8d1c21c..9601f884c556 100644
  	*byte = (read_value >> (byte_in_word * 8)) & 0xFF;
  
  	return 0;
-@@ -363,8 +367,8 @@ static int stm32_tamp_nvram_read(void *context, unsigned int offset, void *buf,
+@@ -363,8 +367,8 @@ static int stm32_tamp_nvram_read(void *c
  				dev_dbg(dev, "Backup register %u is not allowed to be read\n",
  					reg_idx);
  				temp_u32 = 0;
@@ -54,7 +52,7 @@ index fcada8d1c21c..9601f884c556 100644
  			}
  			memcpy(buf_u8, &temp_u32, sizeof(u32));
  			buf_u8 += sizeof(u32);
-@@ -401,7 +405,8 @@ static int stm32_tamp_nvram_write(void *context, unsigned int offset, void *buf,
+@@ -401,7 +405,8 @@ static int stm32_tamp_nvram_write(void *
  		if (i + sizeof(u32) <= total && IS_ALIGNED(i, sizeof(u32))) {
  			if (stm32_tamp_nvram_rights(priv, reg_idx, false)) {
  				memcpy(&temp_u32, buf_u8, sizeof(u32));
@@ -64,7 +62,7 @@ index fcada8d1c21c..9601f884c556 100644
  			} else {
  				dev_dbg(dev, "Backup register %u is not allowed to be written",
  					reg_idx);
-@@ -431,8 +436,8 @@ static int *stm32_tamp_nvram_get_backup_zones(struct stm32_tamp_nvram_priv *priv
+@@ -431,8 +436,8 @@ static int *stm32_tamp_nvram_get_backup_
  	u32 offset_field;
  
  	idx_bkpreg_zones_end = devm_kcalloc(dev,
@@ -74,6 +72,3 @@ index fcada8d1c21c..9601f884c556 100644
  					    GFP_KERNEL);
  	if (!idx_bkpreg_zones_end) {
  		dev_err(dev, "Can't allocate registers zones\n");
--- 
-2.53.0
-

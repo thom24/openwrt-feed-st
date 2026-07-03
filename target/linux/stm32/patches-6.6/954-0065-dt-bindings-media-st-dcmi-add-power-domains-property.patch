@@ -22,8 +22,6 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml b/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
-index 62287ca4c612..af9558285d73 100644
 --- a/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
 +++ b/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
 @@ -43,6 +43,9 @@ properties:
@@ -36,6 +34,3 @@ index 62287ca4c612..af9558285d73 100644
    sram:
      $ref: /schemas/types.yaml#/definitions/phandle
      description:
--- 
-2.53.0
-

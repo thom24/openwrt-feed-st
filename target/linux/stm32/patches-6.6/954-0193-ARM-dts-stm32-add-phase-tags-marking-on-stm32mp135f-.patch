@@ -19,11 +19,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp135f-dk.dts | 11 +++++++++++
  1 file changed, 11 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index ea438163f2b4..6d0ce2cba93c 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -609,6 +609,7 @@ timer@13 {
+@@ -609,6 +609,7 @@
  };
  
  &uart4 {
@@ -31,7 +29,7 @@ index ea438163f2b4..6d0ce2cba93c 100644
  	pinctrl-names = "default", "sleep", "idle";
  	pinctrl-0 = <&uart4_pins_a>;
  	pinctrl-1 = <&uart4_sleep_pins_a>;
-@@ -618,6 +619,16 @@ &uart4 {
+@@ -618,6 +619,16 @@
  	status = "okay";
  };
  
@@ -48,6 +46,3 @@ index ea438163f2b4..6d0ce2cba93c 100644
  &uart8 {
  	pinctrl-names = "default", "sleep", "idle";
  	pinctrl-0 = <&uart8_pins_a>;
--- 
-2.53.0
-

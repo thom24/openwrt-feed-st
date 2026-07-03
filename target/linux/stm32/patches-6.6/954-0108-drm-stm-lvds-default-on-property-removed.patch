@@ -16,11 +16,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/stm/lvds.c | 43 +++++++++++++++++++++-----------------
  1 file changed, 24 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
-index 6e8e09a1133e..8c7a7b769f89 100644
 --- a/drivers/gpu/drm/stm/lvds.c
 +++ b/drivers/gpu/drm/stm/lvds.c
-@@ -1073,6 +1073,7 @@ static int lvds_probe(struct platform_device *pdev)
+@@ -1073,6 +1073,7 @@ static int lvds_probe(struct platform_de
  	struct reset_control *rstc;
  	struct stm_lvds *lvds;
  	int ret, dual_link;
@@ -28,7 +26,7 @@ index 6e8e09a1133e..8c7a7b769f89 100644
  
  	dev_dbg(dev, "Probing LVDS driver...\n");
  
-@@ -1115,20 +1116,6 @@ static int lvds_probe(struct platform_device *pdev)
+@@ -1115,20 +1116,6 @@ static int lvds_probe(struct platform_de
  		return  PTR_ERR(lvds->vdda18_supply);
  	}
  
@@ -49,7 +47,7 @@ index 6e8e09a1133e..8c7a7b769f89 100644
  	port1 = of_graph_get_port_by_id(dev->of_node, 1);
  	port2 = of_graph_get_port_by_id(dev->of_node, 2);
  	dual_link = drm_of_lvds_get_dual_link_pixel_order(port1, port2);
-@@ -1191,16 +1178,34 @@ static int lvds_probe(struct platform_device *pdev)
+@@ -1191,16 +1178,34 @@ static int lvds_probe(struct platform_de
  		return ret;
  	}
  
@@ -89,6 +87,3 @@ index 6e8e09a1133e..8c7a7b769f89 100644
  		return ret;
  	}
  
--- 
-2.53.0
-

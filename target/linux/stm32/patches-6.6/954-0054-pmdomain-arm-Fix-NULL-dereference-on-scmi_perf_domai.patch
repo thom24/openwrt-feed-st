@@ -49,11 +49,9 @@ Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  drivers/pmdomain/arm/scmi_perf_domain.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/drivers/pmdomain/arm/scmi_perf_domain.c b/drivers/pmdomain/arm/scmi_perf_domain.c
-index 709bbc448fad..d7ef46ccd9b8 100644
 --- a/drivers/pmdomain/arm/scmi_perf_domain.c
 +++ b/drivers/pmdomain/arm/scmi_perf_domain.c
-@@ -159,6 +159,9 @@ static void scmi_perf_domain_remove(struct scmi_device *sdev)
+@@ -159,6 +159,9 @@ static void scmi_perf_domain_remove(stru
  	struct genpd_onecell_data *scmi_pd_data = dev_get_drvdata(dev);
  	int i;
  
@@ -63,6 +61,3 @@ index 709bbc448fad..d7ef46ccd9b8 100644
  	of_genpd_del_provider(dev->of_node);
  
  	for (i = 0; i < scmi_pd_data->num_domains; i++)
--- 
-2.53.0
-

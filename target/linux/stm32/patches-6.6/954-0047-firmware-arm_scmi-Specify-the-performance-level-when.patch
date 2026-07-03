@@ -23,11 +23,9 @@ Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  drivers/firmware/arm_scmi/perf.c | 6 +++++-
  1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
-index d9b867fe3671..d26eca37dc14 100644
 --- a/drivers/firmware/arm_scmi/perf.c
 +++ b/drivers/firmware/arm_scmi/perf.c
-@@ -801,6 +801,7 @@ static int scmi_dvfs_device_opps_add(const struct scmi_protocol_handle *ph,
+@@ -801,6 +801,7 @@ static int scmi_dvfs_device_opps_add(con
  {
  	int idx, ret;
  	unsigned long freq;
@@ -35,7 +33,7 @@ index d9b867fe3671..d26eca37dc14 100644
  	struct perf_dom_info *dom;
  
  	dom = scmi_perf_domain_lookup(ph, domain);
-@@ -813,7 +814,10 @@ static int scmi_dvfs_device_opps_add(const struct scmi_protocol_handle *ph,
+@@ -813,7 +814,10 @@ static int scmi_dvfs_device_opps_add(con
  		else
  			freq = dom->opp[idx].indicative_freq * dom->mult_factor;
  
@@ -47,6 +45,3 @@ index d9b867fe3671..d26eca37dc14 100644
  		if (ret) {
  			dev_warn(dev, "failed to add opp %luHz\n", freq);
  			dev_pm_opp_remove_all_dynamic(dev);
--- 
-2.53.0
-

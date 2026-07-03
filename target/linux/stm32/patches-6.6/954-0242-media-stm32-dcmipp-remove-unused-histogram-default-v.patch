@@ -19,8 +19,6 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c | 2 --
  1 file changed, 2 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
-index 654cc1dd785c..09ab28ee7ee8 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
 @@ -67,8 +67,6 @@
@@ -32,6 +30,3 @@ index 654cc1dd785c..09ab28ee7ee8 100644
  
  #define DCMIPP_P1HSSTR			0x8b4
  #define DCMIPP_P1HSSTR_START(x, y)	((x) | ((y) << 16))
--- 
-2.53.0
-

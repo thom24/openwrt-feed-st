@@ -26,11 +26,9 @@ Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
  drivers/remoteproc/stm32_rproc.c | 13 ++++---------
  1 file changed, 4 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index 7a7094feee0c..94726df8313d 100644
 --- a/drivers/remoteproc/stm32_rproc.c
 +++ b/drivers/remoteproc/stm32_rproc.c
-@@ -668,7 +668,7 @@ static int stm32_rproc_set_hold_boot(struct rproc *rproc, bool hold)
+@@ -668,7 +668,7 @@ static int stm32_rproc_set_hold_boot(str
  	struct stm32_rproc *ddata = rproc->priv;
  	struct stm32_syscon hold_boot = ddata->hold_boot;
  	struct arm_smccc_res smc_res;
@@ -39,7 +37,7 @@ index 7a7094feee0c..94726df8313d 100644
  
  	/*
  	 * Three ways to manage the hold boot
-@@ -690,7 +690,7 @@ static int stm32_rproc_set_hold_boot(struct rproc *rproc, bool hold)
+@@ -690,7 +690,7 @@ static int stm32_rproc_set_hold_boot(str
  		arm_smccc_smc(STM32_SMC_RCC, STM32_SMC_REG_WRITE,
  			      hold_boot.reg, val, 0, 0, 0, 0, &smc_res);
  		err = smc_res.a0;
@@ -48,7 +46,7 @@ index 7a7094feee0c..94726df8313d 100644
  		/* Use syscon */
  		err = regmap_update_bits(hold_boot.map, hold_boot.reg,
  					 hold_boot.mask, val);
-@@ -1071,7 +1071,7 @@ static int stm32_rproc_parse_dt(struct platform_device *pdev,
+@@ -1071,7 +1071,7 @@ static int stm32_rproc_parse_dt(struct p
  		/* Try legacy fallback method: get it by index */
  		ddata->rst = devm_reset_control_get_by_index(dev, 0);
  	}
@@ -57,7 +55,7 @@ index 7a7094feee0c..94726df8313d 100644
  		return dev_err_probe(dev, PTR_ERR(ddata->rst),
  				     "failed to get mcu_reset\n");
  
-@@ -1106,12 +1106,7 @@ static int stm32_rproc_parse_dt(struct platform_device *pdev,
+@@ -1106,12 +1106,7 @@ static int stm32_rproc_parse_dt(struct p
  
  	if (!ddata->hold_boot_rst && !ddata->hold_boot_smc) {
  		/* Default: hold boot manage it through the syscon controller */
@@ -71,6 +69,3 @@ index 7a7094feee0c..94726df8313d 100644
  	}
  
  	err = stm32_rproc_get_syscon(np, "st,syscfg-pdds", &ddata->pdds);
--- 
-2.53.0
-

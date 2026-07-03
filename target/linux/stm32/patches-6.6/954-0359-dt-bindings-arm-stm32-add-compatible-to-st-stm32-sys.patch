@@ -21,11 +21,9 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  .../devicetree/bindings/arm/stm32/st,stm32-syscon.yaml    | 8 ++++++++
  1 file changed, 8 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
-index ef5e17ce6f23..628c8a84097f 100644
 --- a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
 +++ b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
-@@ -9,6 +9,7 @@ title: STMicroelectronics STM32 Platforms System Controller
+@@ -9,6 +9,7 @@ title: STMicroelectronics STM32 Platform
  maintainers:
    - Alexandre Torgue <alexandre.torgue@foss.st.com>
    - Christophe Roullier <christophe.roullier@foss.st.com>
@@ -52,6 +50,3 @@ index ef5e17ce6f23..628c8a84097f 100644
 +    };
 +
  ...
--- 
-2.53.0
-

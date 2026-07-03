@@ -21,11 +21,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/usb/dwc2/gadget.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 3e12fd8ab5ce..24c3da25d3f0 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -3452,6 +3452,7 @@ void dwc2_hsotg_disconnect(struct dwc2_hsotg *hsotg)
+@@ -3452,6 +3452,7 @@ void dwc2_hsotg_disconnect(struct dwc2_h
  	hsotg->lx_state = DWC2_L3;
  
  	usb_gadget_set_state(&hsotg->gadget, USB_STATE_NOTATTACHED);
@@ -33,6 +31,3 @@ index 3e12fd8ab5ce..24c3da25d3f0 100644
  }
  
  /**
--- 
-2.53.0
-

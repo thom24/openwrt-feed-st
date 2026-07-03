@@ -42,8 +42,6 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  3 files changed, 73 deletions(-)
  delete mode 100644 include/linux/platform_data/syscon.h
 
-diff --git a/drivers/mfd/syscon.c b/drivers/mfd/syscon.c
-index 729e79e1be49..3dadbc8a63f7 100644
 --- a/drivers/mfd/syscon.c
 +++ b/drivers/mfd/syscon.c
 @@ -12,22 +12,15 @@
@@ -69,7 +67,7 @@ index 729e79e1be49..3dadbc8a63f7 100644
  static DEFINE_MUTEX(syscon_list_lock);
  static LIST_HEAD(syscon_list);
  
-@@ -335,59 +328,3 @@ struct regmap *syscon_regmap_lookup_by_phandle_optional(struct device_node *np,
+@@ -335,59 +328,3 @@ struct regmap *syscon_regmap_lookup_by_p
  	return regmap;
  }
  EXPORT_SYMBOL_GPL(syscon_regmap_lookup_by_phandle_optional);
@@ -129,8 +127,6 @@ index 729e79e1be49..3dadbc8a63f7 100644
 -	return platform_driver_register(&syscon_driver);
 -}
 -postcore_initcall(syscon_init);
-diff --git a/drivers/mfd/vexpress-sysreg.c b/drivers/mfd/vexpress-sysreg.c
-index 8e4194208113..b598ec096906 100644
 --- a/drivers/mfd/vexpress-sysreg.c
 +++ b/drivers/mfd/vexpress-sysreg.c
 @@ -10,7 +10,6 @@
@@ -141,9 +137,6 @@ index 8e4194208113..b598ec096906 100644
  #include <linux/platform_device.h>
  #include <linux/slab.h>
  #include <linux/stat.h>
-diff --git a/include/linux/platform_data/syscon.h b/include/linux/platform_data/syscon.h
-deleted file mode 100644
-index 2c089dd3e2bd..000000000000
 --- a/include/linux/platform_data/syscon.h
 +++ /dev/null
 @@ -1,9 +0,0 @@
@@ -156,6 +149,3 @@ index 2c089dd3e2bd..000000000000
 -};
 -
 -#endif
--- 
-2.53.0
-

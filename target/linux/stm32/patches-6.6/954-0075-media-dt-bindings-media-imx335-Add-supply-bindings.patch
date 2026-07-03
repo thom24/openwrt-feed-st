@@ -25,8 +25,6 @@ Tested-by: Alain VOLMAT <alain.volmat@st.com>
  .../devicetree/bindings/media/i2c/sony,imx335.yaml  | 13 +++++++++++++
  1 file changed, 13 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml
-index a167dcdb3a32..106c36ee966d 100644
 --- a/Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml
 +++ b/Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml
 @@ -32,6 +32,15 @@ properties:
@@ -56,6 +54,3 @@ index a167dcdb3a32..106c36ee966d 100644
              port {
                  imx335: endpoint {
                      remote-endpoint = <&cam>;
--- 
-2.53.0
-

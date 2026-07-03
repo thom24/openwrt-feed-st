@@ -18,11 +18,9 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/pci/controller/dwc/pcie-stm32-ep.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/pci/controller/dwc/pcie-stm32-ep.c b/drivers/pci/controller/dwc/pcie-stm32-ep.c
-index 4e2870b89046..b5ea0deb75e3 100644
 --- a/drivers/pci/controller/dwc/pcie-stm32-ep.c
 +++ b/drivers/pci/controller/dwc/pcie-stm32-ep.c
-@@ -314,6 +314,8 @@ static int stm32_add_pcie_ep(struct stm32_pcie *stm32_pcie,
+@@ -314,6 +314,8 @@ static int stm32_add_pcie_ep(struct stm3
  		return ret;
  	}
  
@@ -31,6 +29,3 @@ index 4e2870b89046..b5ea0deb75e3 100644
  	ret = dw_pcie_ep_init(ep);
  	if (ret) {
  		dev_err(dev, "failed to initialize ep: %d\n", ret);
--- 
-2.53.0
-

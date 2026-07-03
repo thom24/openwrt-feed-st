@@ -16,11 +16,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  MAINTAINERS | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a1eb4ca1a223..4ade78f05406 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -20360,6 +20360,12 @@ L:	linux-spi@vger.kernel.org
+@@ -20363,6 +20363,12 @@ L:	linux-spi@vger.kernel.org
  S:	Maintained
  F:	drivers/spi/spi-stm32.c
  
@@ -33,6 +31,3 @@ index a1eb4ca1a223..4ade78f05406 100644
  ST STPDDC60 DRIVER
  M:	Daniel Nilsson <daniel.nilsson@flex.com>
  L:	linux-hwmon@vger.kernel.org
--- 
-2.53.0
-

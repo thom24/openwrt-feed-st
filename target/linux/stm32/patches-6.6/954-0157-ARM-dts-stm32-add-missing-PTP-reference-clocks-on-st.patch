@@ -26,11 +26,9 @@ Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
  arch/arm/boot/dts/st/stm32mp133.dtsi | 2 ++
  2 files changed, 4 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index b241c26370f4..50f3e02ba508 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -1792,11 +1792,13 @@ ethernet1: ethernet@5800a000 {
+@@ -1792,11 +1792,13 @@
  					      "mac-clk-tx",
  					      "mac-clk-rx",
  					      "ethstp",
@@ -44,11 +42,9 @@ index b241c26370f4..50f3e02ba508 100644
  					 <&rcc ETH1CK_K>;
  				st,syscon = <&syscfg 0x4 0xff0000>;
  				snps,mixed-burst;
-diff --git a/arch/arm/boot/dts/st/stm32mp133.dtsi b/arch/arm/boot/dts/st/stm32mp133.dtsi
-index 4b6e7ae12937..feff4f5fb248 100644
 --- a/arch/arm/boot/dts/st/stm32mp133.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp133.dtsi
-@@ -81,11 +81,13 @@ ethernet2: ethernet@5800e000 {
+@@ -81,11 +81,13 @@
  			      "mac-clk-tx",
  			      "mac-clk-rx",
  			      "ethstp",
@@ -62,6 +58,3 @@ index 4b6e7ae12937..feff4f5fb248 100644
  			 <&rcc ETH2CK_K>;
  		st,syscon = <&syscfg 0x4 0xff000000>;
  		snps,mixed-burst;
--- 
-2.53.0
-

@@ -25,8 +25,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  include/uapi/linux/counter.h                |  5 ++++
  3 files changed, 36 insertions(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-counter b/Documentation/ABI/testing/sysfs-bus-counter
-index 73ac84c0bca7..ec358cae3123 100644
 --- a/Documentation/ABI/testing/sysfs-bus-counter
 +++ b/Documentation/ABI/testing/sysfs-bus-counter
 @@ -144,6 +144,32 @@ Description:
@@ -62,11 +60,9 @@ index 73ac84c0bca7..ec358cae3123 100644
  What:		/sys/bus/counter/devices/counterX/countY/count_mode_available
  What:		/sys/bus/counter/devices/counterX/countY/error_noise_available
  What:		/sys/bus/counter/devices/counterX/countY/function_available
-diff --git a/drivers/counter/counter-sysfs.c b/drivers/counter/counter-sysfs.c
-index 8600cdfb9728..a9f11c74cd9f 100644
 --- a/drivers/counter/counter-sysfs.c
 +++ b/drivers/counter/counter-sysfs.c
-@@ -98,6 +98,11 @@ static const char *const counter_count_mode_str[] = {
+@@ -98,6 +98,11 @@ static const char *const counter_count_m
  	[COUNTER_COUNT_MODE_SQUARE_WAVE_MODE] = "square wave mode",
  	[COUNTER_COUNT_MODE_SOFTWARE_TRIGGERED_STROBE] = "software triggered strobe",
  	[COUNTER_COUNT_MODE_HARDWARE_TRIGGERED_STROBE] = "hardware triggered strobe",
@@ -78,8 +74,6 @@ index 8600cdfb9728..a9f11c74cd9f 100644
  };
  
  static const char *const counter_signal_polarity_str[] = {
-diff --git a/include/uapi/linux/counter.h b/include/uapi/linux/counter.h
-index 411c5ce89f81..13002a45e23d 100644
 --- a/include/uapi/linux/counter.h
 +++ b/include/uapi/linux/counter.h
 @@ -133,6 +133,11 @@ enum counter_count_mode {
@@ -94,6 +88,3 @@ index 411c5ce89f81..13002a45e23d 100644
  };
  
  /* Count function values */
--- 
-2.53.0
-

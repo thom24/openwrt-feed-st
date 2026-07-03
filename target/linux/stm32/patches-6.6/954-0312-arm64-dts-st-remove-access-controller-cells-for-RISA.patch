@@ -20,11 +20,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 4 ----
  1 file changed, 4 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index e45d0ec92a02..a8d06e23329e 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -1920,7 +1920,6 @@ risab1: risab@420f0000 {
+@@ -1920,7 +1920,6 @@
  			reg = <0x420f0000 0x0 0x1000>;
  			clocks = <&scmi_clk CK_SCMI_ICN_LS_MCU>;
  			st,mem-map = <0xa000000 0x20000>;
@@ -32,7 +30,7 @@ index e45d0ec92a02..a8d06e23329e 100644
  		};
  
  		risab2: risab@42100000 {
-@@ -1928,7 +1927,6 @@ risab2: risab@42100000 {
+@@ -1928,7 +1927,6 @@
  			reg = <0x42100000 0x0 0x1000>;
  			clocks = <&scmi_clk CK_SCMI_ICN_LS_MCU>;
  			st,mem-map = <0xa020000 0x20000>;
@@ -40,7 +38,7 @@ index e45d0ec92a02..a8d06e23329e 100644
  		};
  
  		risab3: risab@42110000 {
-@@ -1936,7 +1934,6 @@ risab3: risab@42110000 {
+@@ -1936,7 +1934,6 @@
  			reg = <0x42110000 0x0 0x1000>;
  			clocks = <&scmi_clk CK_SCMI_ICN_LS_MCU>;
  			st,mem-map = <0x0a060000 0x10000>;
@@ -48,7 +46,7 @@ index e45d0ec92a02..a8d06e23329e 100644
  		};
  
  		risab5: risab@42130000 {
-@@ -1944,7 +1941,6 @@ risab5: risab@42130000 {
+@@ -1944,7 +1941,6 @@
  			reg = <0x42130000 0x0 0x1000>;
  			clocks = <&scmi_clk CK_SCMI_ICN_LS_MCU>;
  			st,mem-map = <0x0a040000 0x20000>;
@@ -56,6 +54,3 @@ index e45d0ec92a02..a8d06e23329e 100644
  		};
  
  		bsec: efuse@44000000 {
--- 
-2.53.0
-

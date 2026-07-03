@@ -19,8 +19,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  include/dt-bindings/clock/stm32mp1-clks.h | 11 +++++++++++
  1 file changed, 11 insertions(+)
 
-diff --git a/include/dt-bindings/clock/stm32mp1-clks.h b/include/dt-bindings/clock/stm32mp1-clks.h
-index ff3a40ac5b59..7b3952a0e693 100644
 --- a/include/dt-bindings/clock/stm32mp1-clks.h
 +++ b/include/dt-bindings/clock/stm32mp1-clks.h
 @@ -276,5 +276,16 @@
@@ -40,6 +38,3 @@ index ff3a40ac5b59..7b3952a0e693 100644
 +#define CK_SCMI_GPIOK		31
  
  #endif /* _DT_BINDINGS_STM32MP1_CLKS_H_ */
--- 
-2.53.0
-

@@ -20,8 +20,6 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/misc/pci_endpoint_test.c | 11 +++++++++++
  1 file changed, 11 insertions(+)
 
-diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
-index c95a2b0b9012..7d19070f5166 100644
 --- a/drivers/misc/pci_endpoint_test.c
 +++ b/drivers/misc/pci_endpoint_test.c
 @@ -84,6 +84,8 @@
@@ -33,7 +31,7 @@ index c95a2b0b9012..7d19070f5166 100644
  static DEFINE_IDA(pci_endpoint_test_ida);
  
  #define to_endpoint_test(priv) container_of((priv), struct pci_endpoint_test, \
-@@ -974,6 +976,12 @@ static const struct pci_endpoint_test_data j721e_data = {
+@@ -974,6 +976,12 @@ static const struct pci_endpoint_test_da
  	.irq_type = IRQ_TYPE_MSI,
  };
  
@@ -46,7 +44,7 @@ index c95a2b0b9012..7d19070f5166 100644
  static const struct pci_device_id pci_endpoint_test_tbl[] = {
  	{ PCI_DEVICE(PCI_VENDOR_ID_TI, PCI_DEVICE_ID_TI_DRA74x),
  	  .driver_data = (kernel_ulong_t)&default_data,
-@@ -1011,6 +1019,9 @@ static const struct pci_device_id pci_endpoint_test_tbl[] = {
+@@ -1011,6 +1019,9 @@ static const struct pci_device_id pci_en
  	{ PCI_DEVICE(PCI_VENDOR_ID_TI, PCI_DEVICE_ID_TI_J721S2),
  	  .driver_data = (kernel_ulong_t)&j721e_data,
  	},
@@ -56,6 +54,3 @@ index c95a2b0b9012..7d19070f5166 100644
  	{ }
  };
  MODULE_DEVICE_TABLE(pci, pci_endpoint_test_tbl);
--- 
-2.53.0
-

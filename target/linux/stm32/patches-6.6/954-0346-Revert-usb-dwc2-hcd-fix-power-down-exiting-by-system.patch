@@ -21,11 +21,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/usb/dwc2/hcd.c | 26 +++++++++++++-------------
  1 file changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index 5900ea68077e..2469c492d566 100644
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
-@@ -4433,21 +4433,21 @@ static int _dwc2_hcd_resume(struct usb_hcd *hcd)
+@@ -4430,21 +4430,21 @@ static int _dwc2_hcd_resume(struct usb_h
  	if (hsotg->lx_state != DWC2_L2)
  		goto unlock;
  
@@ -60,6 +58,3 @@ index 5900ea68077e..2469c492d566 100644
  		ret = dwc2_exit_partial_power_down(hsotg, 0, true);
  		if (ret)
  			dev_err(hsotg->dev,
--- 
-2.53.0
-

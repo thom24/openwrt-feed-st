@@ -23,11 +23,9 @@ Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
  drivers/usb/host/usbh-stm32.c | 14 +++++++-------
  1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/usb/host/usbh-stm32.c b/drivers/usb/host/usbh-stm32.c
-index a3b516c804d1..e329134244c3 100644
 --- a/drivers/usb/host/usbh-stm32.c
 +++ b/drivers/usb/host/usbh-stm32.c
-@@ -135,20 +135,20 @@ static int stm32_usbh_probe(struct platform_device *pdev)
+@@ -135,20 +135,20 @@ static int stm32_usbh_probe(struct platf
  		device_set_wakeup_capable(dev, true);
  	}
  
@@ -55,6 +53,3 @@ index a3b516c804d1..e329134244c3 100644
  
  	return 0;
  }
--- 
-2.53.0
-

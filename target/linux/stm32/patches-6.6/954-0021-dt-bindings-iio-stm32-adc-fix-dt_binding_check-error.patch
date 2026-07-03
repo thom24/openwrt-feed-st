@@ -20,8 +20,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  .../bindings/iio/adc/st,stm32-adc.yaml        | 48 +++++++++----------
  1 file changed, 24 insertions(+), 24 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
-index b600e337b6a3..11503d340c01 100644
 --- a/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
 +++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
 @@ -559,30 +559,30 @@ patternProperties:
@@ -79,6 +77,3 @@ index b600e337b6a3..11503d340c01 100644
  
        - if:
            properties:
--- 
-2.53.0
-

@@ -22,11 +22,9 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  include/linux/pm_opp.h | 2 ++
  2 files changed, 3 insertions(+)
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index a8415f519bc9..297cf3638b42 100644
 --- a/drivers/opp/core.c
 +++ b/drivers/opp/core.c
-@@ -2058,6 +2058,7 @@ int _opp_add_v1(struct opp_table *opp_table, struct device *dev,
+@@ -2059,6 +2059,7 @@ int _opp_add_v1(struct opp_table *opp_ta
  
  	/* populate the opp table */
  	new_opp->rates[0] = data->freq;
@@ -34,11 +32,9 @@ index a8415f519bc9..297cf3638b42 100644
  	tol = u_volt * opp_table->voltage_tolerance_v1 / 100;
  	new_opp->supplies[0].u_volt = u_volt;
  	new_opp->supplies[0].u_volt_min = u_volt - tol;
-diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-index a8ee93ba41d8..9ad168f4cbf1 100644
 --- a/include/linux/pm_opp.h
 +++ b/include/linux/pm_opp.h
-@@ -94,10 +94,12 @@ struct dev_pm_opp_config {
+@@ -95,10 +95,12 @@ struct dev_pm_opp_config {
  
  /**
   * struct dev_pm_opp_data - The data to use to initialize an OPP.
@@ -51,6 +47,3 @@ index a8ee93ba41d8..9ad168f4cbf1 100644
  	unsigned long freq;
  	unsigned long u_volt;
  };
--- 
-2.53.0
-

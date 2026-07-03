@@ -19,8 +19,6 @@ Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
  .../devicetree/bindings/phy/st,stm32-usb2phy.yaml         | 8 +++++---
  1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml b/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml
-index 81b1605dcd94..76b7219f515b 100644
 --- a/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml
 +++ b/Documentation/devicetree/bindings/phy/st,stm32-usb2phy.yaml
 @@ -153,8 +153,10 @@ properties:
@@ -45,6 +43,3 @@ index 81b1605dcd94..76b7219f515b 100644
          st,syscfg       = <&syscfg 0x2800>;
          clocks          = <&rcc CK_KER_USB2PHY2>;
          resets          = <&rcc USB2PHY2_R>;
--- 
-2.53.0
-

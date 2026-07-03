@@ -21,11 +21,9 @@ Tested-by: Alain VOLMAT <alain.volmat@st.com>
  drivers/i2c/busses/i2c-stm32f7.c | 17 +++++++++++++----
  1 file changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index 5d84eb85d085..20e8045baaf3 100644
 --- a/drivers/i2c/busses/i2c-stm32f7.c
 +++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -1525,10 +1525,16 @@ static irqreturn_t stm32f7_i2c_handle_isr_errs(struct stm32f7_i2c_dev *i2c_dev,
+@@ -1526,10 +1526,16 @@ static irqreturn_t stm32f7_i2c_handle_is
  
  	/* Bus error */
  	if (status & STM32F7_I2C_ISR_BERR) {
@@ -45,7 +43,7 @@ index 5d84eb85d085..20e8045baaf3 100644
  	}
  
  	/* Arbitration loss */
-@@ -1548,9 +1554,12 @@ static irqreturn_t stm32f7_i2c_handle_isr_errs(struct stm32f7_i2c_dev *i2c_dev,
+@@ -1549,9 +1555,12 @@ static irqreturn_t stm32f7_i2c_handle_is
  		dev_dbg(dev, "SMBus alert received\n");
  		writel_relaxed(STM32F7_I2C_ICR_ALERTCF, base + STM32F7_I2C_ICR);
  		i2c_handle_smbus_alert(i2c_dev->alert->ara);
@@ -59,6 +57,3 @@ index 5d84eb85d085..20e8045baaf3 100644
  	if (!i2c_dev->slave_running) {
  		u32 mask;
  		/* Disable interrupts */
--- 
-2.53.0
-

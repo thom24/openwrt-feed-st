@@ -17,8 +17,6 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  .../devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml          | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
-index b3222e6b6f00..da9cd9f8f412 100644
 --- a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
 +++ b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
 @@ -45,8 +45,7 @@ properties:
@@ -31,6 +29,3 @@ index b3222e6b6f00..da9cd9f8f412 100644
  
    st,syscfg:
      description: Phandle+args to the syscon node which includes IRQ mux selection.
--- 
-2.53.0
-

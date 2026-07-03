@@ -24,11 +24,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  .../media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c | 6 +++---
  4 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-index ac7293ed09f9..0c308189f591 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-@@ -687,7 +687,7 @@ static int dcmipp_byteproc_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -687,7 +687,7 @@ static int dcmipp_byteproc_s_stream(stru
  		ret = v4l2_subdev_enable_streams(s_subdev, pad->index, 1);
  		if (ret < 0) {
  			dev_err(byteproc->dev,
@@ -37,7 +35,7 @@ index ac7293ed09f9..0c308189f591 100644
  				ret);
  			return ret;
  		}
-@@ -695,7 +695,7 @@ static int dcmipp_byteproc_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -695,7 +695,7 @@ static int dcmipp_byteproc_s_stream(stru
  		ret = v4l2_subdev_disable_streams(s_subdev, pad->index, 1);
  		if (ret < 0) {
  			dev_err(byteproc->dev,
@@ -46,11 +44,9 @@ index ac7293ed09f9..0c308189f591 100644
  				ret);
  			return ret;
  		}
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
-index b88eb012bcc3..291c0ccc4f86 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
-@@ -640,7 +640,7 @@ static int dcmipp_inp_enable_streams(struct v4l2_subdev *sd,
+@@ -640,7 +640,7 @@ static int dcmipp_inp_enable_streams(str
  	ret = v4l2_subdev_enable_streams(s_subdev, s_pad->index, sink_streams_apply);
  	if (ret) {
  		dev_err(inp->dev,
@@ -59,7 +55,7 @@ index b88eb012bcc3..291c0ccc4f86 100644
  
  		for (i = 0; i < STM32_DCMIPP_STREAM_MAX; i++) {
  			if (!(sink_streams & BIT(i)))
-@@ -702,7 +702,7 @@ static int dcmipp_inp_disable_streams(struct v4l2_subdev *sd,
+@@ -702,7 +702,7 @@ static int dcmipp_inp_disable_streams(st
  	ret = v4l2_subdev_disable_streams(s_subdev, s_pad->index, sink_streams_apply);
  	if (ret) {
  		dev_err(inp->dev,
@@ -68,11 +64,9 @@ index b88eb012bcc3..291c0ccc4f86 100644
  
  		for (i = 0; i < STM32_DCMIPP_STREAM_MAX; i++) {
  			if (!(sink_streams & BIT(i)))
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
-index db5c5c61d891..5388f2472f12 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
-@@ -604,7 +604,7 @@ static int dcmipp_isp_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -604,7 +604,7 @@ static int dcmipp_isp_s_stream(struct v4
  		ret = v4l2_subdev_enable_streams(s_subdev, pad->index, 1);
  		if (ret < 0) {
  			dev_err(isp->dev,
@@ -81,7 +75,7 @@ index db5c5c61d891..5388f2472f12 100644
  			goto error_s_stream;
  		}
  	} else {
-@@ -619,7 +619,7 @@ static int dcmipp_isp_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -619,7 +619,7 @@ static int dcmipp_isp_s_stream(struct v4
  		ret = v4l2_subdev_disable_streams(s_subdev, pad->index, 1);
  		if (ret < 0) {
  			dev_err(isp->dev,
@@ -90,11 +84,9 @@ index db5c5c61d891..5388f2472f12 100644
  			goto error_s_stream;
  		}
  	}
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
-index 13df97d4efd8..145e07b3d904 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
-@@ -1060,7 +1060,7 @@ static int dcmipp_pixelproc_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -1060,7 +1060,7 @@ static int dcmipp_pixelproc_s_stream(str
  			ret = v4l2_subdev_call(s_subdev, video, s_stream, enable);
  		if (ret < 0)
  			dev_err(pixelproc->dev,
@@ -103,7 +95,7 @@ index 13df97d4efd8..145e07b3d904 100644
  				ret);
  		return ret;
  	}
-@@ -1099,7 +1099,7 @@ static int dcmipp_pixelproc_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -1099,7 +1099,7 @@ static int dcmipp_pixelproc_s_stream(str
  	ret =  v4l2_ctrl_handler_setup(pixelproc->sd.ctrl_handler);
  	if (ret < 0) {
  		dev_err(pixelproc->dev,
@@ -112,7 +104,7 @@ index 13df97d4efd8..145e07b3d904 100644
  		return ret;
  	}
  
-@@ -1110,7 +1110,7 @@ static int dcmipp_pixelproc_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -1110,7 +1110,7 @@ static int dcmipp_pixelproc_s_stream(str
  		ret = v4l2_subdev_call(s_subdev, video, s_stream, enable);
  	if (ret < 0) {
  		dev_err(pixelproc->dev,
@@ -121,6 +113,3 @@ index 13df97d4efd8..145e07b3d904 100644
  		return ret;
  	}
  
--- 
-2.53.0
-

@@ -18,11 +18,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/usb/dwc2/core_intr.c | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
-index 3bb7bf90c145..276f10706486 100644
 --- a/drivers/usb/dwc2/core_intr.c
 +++ b/drivers/usb/dwc2/core_intr.c
-@@ -419,6 +419,10 @@ static void dwc2_handle_wakeup_detected_intr(struct dwc2_hsotg *hsotg)
+@@ -419,6 +419,10 @@ static void dwc2_handle_wakeup_detected_
  	}
  
  	if (dwc2_is_device_mode(hsotg)) {
@@ -33,6 +31,3 @@ index 3bb7bf90c145..276f10706486 100644
  		dev_dbg(hsotg->dev, "DSTS=0x%0x\n",
  			dwc2_readl(hsotg, DSTS));
  		if (hsotg->lx_state == DWC2_L2) {
--- 
-2.53.0
-

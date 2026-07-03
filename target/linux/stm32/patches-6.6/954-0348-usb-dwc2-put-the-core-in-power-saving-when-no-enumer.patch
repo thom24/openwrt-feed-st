@@ -31,8 +31,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/usb/dwc2/gadget.c    | 24 ++++++++++++++++++++++--
  3 files changed, 32 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index 1f3d76668c8e..1b457463641a 100644
 --- a/drivers/usb/dwc2/core.h
 +++ b/drivers/usb/dwc2/core.h
 @@ -1107,6 +1107,7 @@ struct dwc2_hsotg {
@@ -43,11 +41,9 @@ index 1f3d76668c8e..1b457463641a 100644
  	struct timer_list wkp_timer;
  	enum dwc2_lx_state lx_state;
  	struct dwc2_gregs_backup gr_backup;
-diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
-index 276f10706486..96b79af05889 100644
 --- a/drivers/usb/dwc2/core_intr.c
 +++ b/drivers/usb/dwc2/core_intr.c
-@@ -554,6 +554,15 @@ static void dwc2_handle_usb_suspend_intr(struct dwc2_hsotg *hsotg)
+@@ -554,6 +554,15 @@ static void dwc2_handle_usb_suspend_intr
  		if (!dwc2_is_device_connected(hsotg)) {
  			dev_dbg(hsotg->dev,
  				"ignore suspend request before enumeration\n");
@@ -63,11 +59,9 @@ index 276f10706486..96b79af05889 100644
  			return;
  		}
  		if (dsts & DSTS_SUSPSTS) {
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 7a4a7ee3353a..3e12fd8ab5ce 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -3293,6 +3293,18 @@ static void dwc2_gadget_enter_lp(struct dwc2_hsotg *hsotg)
+@@ -3293,6 +3293,18 @@ static void dwc2_gadget_enter_lp(struct
  	}
  }
  
@@ -86,7 +80,7 @@ index 7a4a7ee3353a..3e12fd8ab5ce 100644
  /**
   * dwc2_hsotg_irq_enumdone - Handle EnumDone interrupt (enumeration done)
   * @hsotg: The device state.
-@@ -3723,9 +3735,14 @@ void dwc2_hsotg_core_disconnect(struct dwc2_hsotg *hsotg)
+@@ -3723,9 +3735,14 @@ void dwc2_hsotg_core_disconnect(struct d
  
  void dwc2_hsotg_core_connect(struct dwc2_hsotg *hsotg)
  {
@@ -103,7 +97,7 @@ index 7a4a7ee3353a..3e12fd8ab5ce 100644
  }
  
  /**
-@@ -3898,6 +3915,8 @@ static irqreturn_t dwc2_hsotg_irq(int irq, void *pw)
+@@ -3898,6 +3915,8 @@ irq_retry:
  	if (gintsts & GINTSTS_ENUMDONE) {
  		dwc2_writel(hsotg, GINTSTS_ENUMDONE, GINTSTS);
  
@@ -112,7 +106,7 @@ index 7a4a7ee3353a..3e12fd8ab5ce 100644
  		dwc2_hsotg_irq_enumdone(hsotg);
  	}
  
-@@ -5303,6 +5322,7 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
+@@ -5302,6 +5321,7 @@ int dwc2_gadget_init(struct dwc2_hsotg *
  	}
  	INIT_WORK(&hsotg->wf_gadget, dwc2_gadget_remote_wkup_change);
  	INIT_DELAYED_WORK(&hsotg->dw_gsetup, dwc2_gadget_setup_timeout);
@@ -120,6 +114,3 @@ index 7a4a7ee3353a..3e12fd8ab5ce 100644
  
  	/* setup endpoint information */
  
--- 
-2.53.0
-

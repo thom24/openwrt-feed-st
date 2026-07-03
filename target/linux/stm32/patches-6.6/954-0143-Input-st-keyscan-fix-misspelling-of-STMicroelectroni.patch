@@ -14,8 +14,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/input/keyboard/st-keyscan.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/input/keyboard/st-keyscan.c b/drivers/input/keyboard/st-keyscan.c
-index 0d27324af809..f6b1af6dde46 100644
 --- a/drivers/input/keyboard/st-keyscan.c
 +++ b/drivers/input/keyboard/st-keyscan.c
 @@ -2,7 +2,7 @@
@@ -27,6 +25,3 @@ index 0d27324af809..f6b1af6dde46 100644
   * Author: Stuart Menefy <stuart.menefy@st.com>
   *
   * Based on sh_keysc.c, copyright 2008 Magnus Damm
--- 
-2.53.0
-

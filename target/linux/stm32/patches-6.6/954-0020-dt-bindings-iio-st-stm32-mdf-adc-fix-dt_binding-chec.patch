@@ -22,8 +22,6 @@ Reviewed-by: Eric FOURMONT <eric.fourmont-ext@st.com>
  .../devicetree/bindings/iio/adc/st,stm32-mdf-adc.yaml       | 6 ++++--
  1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-mdf-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-mdf-adc.yaml
-index 749caf76d293..3dd9cc042e16 100644
 --- a/Documentation/devicetree/bindings/iio/adc/st,stm32-mdf-adc.yaml
 +++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-mdf-adc.yaml
 @@ -124,7 +124,7 @@ patternProperties:
@@ -49,6 +47,3 @@ index 749caf76d293..3dd9cc042e16 100644
          description: Represents the external channel which is connected to the MDF.
  
          properties:
--- 
-2.53.0
-

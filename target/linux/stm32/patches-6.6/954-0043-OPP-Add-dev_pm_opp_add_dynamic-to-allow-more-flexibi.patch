@@ -24,11 +24,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  include/linux/pm_opp.h | 29 +++++++++++++++++++++++++----
  4 files changed, 42 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 218cb2e7f360..a8415f519bc9 100644
 --- a/drivers/opp/core.c
 +++ b/drivers/opp/core.c
-@@ -2025,8 +2025,7 @@ int _opp_add(struct device *dev, struct dev_pm_opp *new_opp,
+@@ -2026,8 +2026,7 @@ int _opp_add(struct device *dev, struct
   * _opp_add_v1() - Allocate a OPP based on v1 bindings.
   * @opp_table:	OPP table
   * @dev:	device for which we do this operation
@@ -38,7 +36,7 @@ index 218cb2e7f360..a8415f519bc9 100644
   * @dynamic:	Dynamically added OPPs.
   *
   * This function adds an opp definition to the opp table and returns status.
-@@ -2044,10 +2043,10 @@ int _opp_add(struct device *dev, struct dev_pm_opp *new_opp,
+@@ -2045,10 +2044,10 @@ int _opp_add(struct device *dev, struct
   * -ENOMEM	Memory allocation failure
   */
  int _opp_add_v1(struct opp_table *opp_table, struct device *dev,
@@ -51,7 +49,7 @@ index 218cb2e7f360..a8415f519bc9 100644
  	int ret;
  
  	if (!assert_single_clk(opp_table, 0))
-@@ -2058,7 +2057,7 @@ int _opp_add_v1(struct opp_table *opp_table, struct device *dev,
+@@ -2059,7 +2058,7 @@ int _opp_add_v1(struct opp_table *opp_ta
  		return -ENOMEM;
  
  	/* populate the opp table */
@@ -60,7 +58,7 @@ index 218cb2e7f360..a8415f519bc9 100644
  	tol = u_volt * opp_table->voltage_tolerance_v1 / 100;
  	new_opp->supplies[0].u_volt = u_volt;
  	new_opp->supplies[0].u_volt_min = u_volt - tol;
-@@ -2848,10 +2847,9 @@ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table,
+@@ -2849,10 +2848,9 @@ unlock:
  }
  
  /**
@@ -74,7 +72,7 @@ index 218cb2e7f360..a8415f519bc9 100644
   *
   * This function adds an opp definition to the opp table and returns status.
   * The opp is made available by default and it can be controlled using
-@@ -2864,7 +2862,7 @@ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table,
+@@ -2865,7 +2863,7 @@ unlock:
   *		Duplicate OPPs (both freq and volt are same) and !opp->available
   * -ENOMEM	Memory allocation failure
   */
@@ -83,7 +81,7 @@ index 218cb2e7f360..a8415f519bc9 100644
  {
  	struct opp_table *opp_table;
  	int ret;
-@@ -2876,13 +2874,13 @@ int dev_pm_opp_add(struct device *dev, unsigned long freq, unsigned long u_volt)
+@@ -2877,13 +2875,13 @@ int dev_pm_opp_add(struct device *dev, u
  	/* Fix regulator count for dynamic OPPs */
  	opp_table->regulator_count = 1;
  
@@ -99,11 +97,9 @@ index 218cb2e7f360..a8415f519bc9 100644
  
  /**
   * _opp_set_availability() - helper to set the availability of an opp
-diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index 657c08d0ad97..a8372623442c 100644
 --- a/drivers/opp/of.c
 +++ b/drivers/opp/of.c
-@@ -1079,13 +1079,15 @@ static int _of_add_opp_table_v1(struct device *dev, struct opp_table *opp_table)
+@@ -1079,13 +1079,15 @@ static int _of_add_opp_table_v1(struct d
  
  	val = prop->value;
  	while (nr) {
@@ -123,11 +119,9 @@ index 657c08d0ad97..a8372623442c 100644
  			goto remove_static_opp;
  		}
  		nr -= 2;
-diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
-index 8a5ea38f3a3d..fefdf9845692 100644
 --- a/drivers/opp/opp.h
 +++ b/drivers/opp/opp.h
-@@ -251,7 +251,7 @@ struct dev_pm_opp *_opp_allocate(struct opp_table *opp_table);
+@@ -251,7 +251,7 @@ struct dev_pm_opp *_opp_allocate(struct
  void _opp_free(struct dev_pm_opp *opp);
  int _opp_compare_key(struct opp_table *opp_table, struct dev_pm_opp *opp1, struct dev_pm_opp *opp2);
  int _opp_add(struct device *dev, struct dev_pm_opp *new_opp, struct opp_table *opp_table);
@@ -136,11 +130,9 @@ index 8a5ea38f3a3d..fefdf9845692 100644
  void _dev_pm_opp_cpumask_remove_table(const struct cpumask *cpumask, int last_cpu);
  struct opp_table *_add_opp_table_indexed(struct device *dev, int index, bool getclk);
  void _put_opp_list_kref(struct opp_table *opp_table);
-diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-index 91f87d7e807c..a8ee93ba41d8 100644
 --- a/include/linux/pm_opp.h
 +++ b/include/linux/pm_opp.h
-@@ -92,6 +92,16 @@ struct dev_pm_opp_config {
+@@ -93,6 +93,16 @@ struct dev_pm_opp_config {
  	struct device ***virt_devs;
  };
  
@@ -157,7 +149,7 @@ index 91f87d7e807c..a8ee93ba41d8 100644
  #if defined(CONFIG_PM_OPP)
  
  struct opp_table *dev_pm_opp_get_opp_table(struct device *dev);
-@@ -152,8 +162,8 @@ struct dev_pm_opp *dev_pm_opp_find_bw_floor(struct device *dev,
+@@ -153,8 +163,8 @@ struct dev_pm_opp *dev_pm_opp_find_bw_fl
  
  void dev_pm_opp_put(struct dev_pm_opp *opp);
  
@@ -168,7 +160,7 @@ index 91f87d7e807c..a8ee93ba41d8 100644
  void dev_pm_opp_remove(struct device *dev, unsigned long freq);
  void dev_pm_opp_remove_all_dynamic(struct device *dev);
  
-@@ -322,8 +332,8 @@ static inline struct dev_pm_opp *dev_pm_opp_find_bw_floor(struct device *dev,
+@@ -323,8 +333,8 @@ static inline struct dev_pm_opp *dev_pm_
  
  static inline void dev_pm_opp_put(struct dev_pm_opp *opp) {}
  
@@ -179,7 +171,7 @@ index 91f87d7e807c..a8ee93ba41d8 100644
  {
  	return -EOPNOTSUPP;
  }
-@@ -519,6 +529,17 @@ static inline int dev_pm_opp_of_find_icc_paths(struct device *dev, struct opp_ta
+@@ -520,6 +530,17 @@ static inline int dev_pm_opp_of_find_icc
  
  /* OPP Configuration helpers */
  
@@ -197,6 +189,3 @@ index 91f87d7e807c..a8ee93ba41d8 100644
  /* Regulators helpers */
  static inline int dev_pm_opp_set_regulators(struct device *dev,
  					    const char * const names[])
--- 
-2.53.0
-

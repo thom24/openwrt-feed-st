@@ -24,8 +24,6 @@ Tested-by: Eric FOURMONT <eric.fourmont-ext@st.com>
  .../bindings/media/st,stm32-dcmipp.yaml       | 26 ++++++++++++++-----
  1 file changed, 19 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml b/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
-index 484ff8a2ade4..fc1ad613b8ee 100644
 --- a/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
 +++ b/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
 @@ -24,16 +24,24 @@ properties:
@@ -97,6 +95,3 @@ index 484ff8a2ade4..fc1ad613b8ee 100644
  
  additionalProperties: false
  
--- 
-2.53.0
-

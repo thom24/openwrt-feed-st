@@ -19,11 +19,9 @@ Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp231.dtsi | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index 7cfe946230ee..83adc4fa5ef8 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -1953,6 +1953,7 @@ csi: csi@48020000 {
+@@ -1953,6 +1953,7 @@
  					 <&rcc CK_KER_CSIPHY>;
  				clock-names = "pclk", "txesc", "csi2phy";
  				access-controllers = <&rifsc 86>;
@@ -31,6 +29,3 @@ index 7cfe946230ee..83adc4fa5ef8 100644
  				status = "disabled";
  			};
  
--- 
-2.53.0
-

@@ -24,11 +24,9 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  .../st/stm32/stm32-dcmipp/dcmipp-core.c       | 12 --------
  2 files changed, 30 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
-index a260f3b0d283..33f1b5dd3d7f 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
-@@ -290,6 +290,36 @@ static inline void __reg_clear(struct device *dev, void __iomem *base, u32 reg,
+@@ -290,6 +290,36 @@ static inline void __reg_clear(struct de
  	__reg_write(dev, base, reg, readl_relaxed(base + reg) & ~mask);
  }
  
@@ -65,11 +63,9 @@ index a260f3b0d283..33f1b5dd3d7f 100644
  /* DCMIPP subdev init / release entry points */
  struct dcmipp_ent_device *dcmipp_tpg_ent_init(const char *entity_name,
  					      struct dcmipp_device *dcmipp);
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
-index a891e5da83b0..27f1aab11149 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
-@@ -64,10 +64,6 @@ static const struct dcmipp_ent_config stm32mp13_ent_config[] = {
+@@ -64,10 +64,6 @@ static const struct dcmipp_ent_config st
  	},
  };
  
@@ -80,7 +76,7 @@ index a891e5da83b0..27f1aab11149 100644
  static const struct dcmipp_ent_link stm32mp13_ent_links[] = {
  	DCMIPP_ENT_LINK(ID_INPUT, 1, ID_DUMP_BYTEPROC, 0,
  			MEDIA_LNK_FL_ENABLED | MEDIA_LNK_FL_IMMUTABLE),
-@@ -85,14 +81,6 @@ static const struct dcmipp_pipeline_config stm32mp13_pipe_cfg = {
+@@ -85,14 +81,6 @@ static const struct dcmipp_pipeline_conf
  	.pipe_nb	= 1
  };
  
@@ -95,6 +91,3 @@ index a891e5da83b0..27f1aab11149 100644
  static const struct dcmipp_ent_config stm32mp25_ent_config[] = {
  	{
  		.name = "dcmipp_input",
--- 
-2.53.0
-

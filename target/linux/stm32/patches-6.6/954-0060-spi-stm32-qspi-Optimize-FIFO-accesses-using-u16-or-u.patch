@@ -21,11 +21,9 @@ Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
  drivers/spi/spi-stm32-qspi.c | 51 ++++++++++++++++++++++++++++--------
  1 file changed, 40 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
-index e24bdbec23ef..a900f3c857e4 100644
 --- a/drivers/spi/spi-stm32-qspi.c
 +++ b/drivers/spi/spi-stm32-qspi.c
-@@ -153,34 +153,53 @@ static irqreturn_t stm32_qspi_irq(int irq, void *dev_id)
+@@ -153,34 +153,53 @@ static irqreturn_t stm32_qspi_irq(int ir
  	return IRQ_HANDLED;
  }
  
@@ -89,7 +87,7 @@ index e24bdbec23ef..a900f3c857e4 100644
  		ret = readl_relaxed_poll_timeout_atomic(qspi->io_base + QSPI_SR,
  							sr, (sr & SR_FTF), 1,
  							STM32_FIFO_TIMEOUT_US);
-@@ -189,7 +208,17 @@ static int stm32_qspi_tx_poll(struct stm32_qspi *qspi,
+@@ -189,7 +208,17 @@ static int stm32_qspi_tx_poll(struct stm
  				len, sr);
  			return ret;
  		}
@@ -108,6 +106,3 @@ index e24bdbec23ef..a900f3c857e4 100644
  	}
  
  	return 0;
--- 
-2.53.0
-

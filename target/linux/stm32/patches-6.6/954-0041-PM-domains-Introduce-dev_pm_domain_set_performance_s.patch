@@ -33,11 +33,9 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  include/linux/pm_domain.h   |  6 ++++++
  3 files changed, 29 insertions(+)
 
-diff --git a/drivers/base/power/common.c b/drivers/base/power/common.c
-index 299496e1381d..327d168dd37a 100644
 --- a/drivers/base/power/common.c
 +++ b/drivers/base/power/common.c
-@@ -362,3 +362,24 @@ void dev_pm_domain_set(struct device *dev, struct dev_pm_domain *pd)
+@@ -362,3 +362,24 @@ void dev_pm_domain_set(struct device *de
  	device_pm_check_callbacks(dev);
  }
  EXPORT_SYMBOL_GPL(dev_pm_domain_set);
@@ -62,11 +60,9 @@ index 299496e1381d..327d168dd37a 100644
 +	return 0;
 +}
 +EXPORT_SYMBOL_GPL(dev_pm_domain_set_performance_state);
-diff --git a/include/linux/pm.h b/include/linux/pm.h
-index 629c1633bbd0..92a4f69de0e8 100644
 --- a/include/linux/pm.h
 +++ b/include/linux/pm.h
-@@ -734,6 +734,7 @@ extern void dev_pm_put_subsys_data(struct device *dev);
+@@ -734,6 +734,7 @@ extern void dev_pm_put_subsys_data(struc
   * @activate: Called before executing probe routines for bus types and drivers.
   * @sync: Called after successful driver probe.
   * @dismiss: Called after unsuccessful driver probe and after driver removal.
@@ -82,11 +78,9 @@ index 629c1633bbd0..92a4f69de0e8 100644
  };
  
  /*
-diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-index 325831a7cbd2..6b71fb69c349 100644
 --- a/include/linux/pm_domain.h
 +++ b/include/linux/pm_domain.h
-@@ -466,6 +466,7 @@ void dev_pm_domain_detach(struct device *dev, bool power_off);
+@@ -466,6 +466,7 @@ void dev_pm_domain_detach(struct device
  void dev_pm_domain_detach_list(struct dev_pm_domain_list *list);
  int dev_pm_domain_start(struct device *dev);
  void dev_pm_domain_set(struct device *dev, struct dev_pm_domain *pd);
@@ -94,7 +88,7 @@ index 325831a7cbd2..6b71fb69c349 100644
  #else
  static inline int dev_pm_domain_attach(struct device *dev, bool power_on)
  {
-@@ -495,6 +496,11 @@ static inline int dev_pm_domain_start(struct device *dev)
+@@ -495,6 +496,11 @@ static inline int dev_pm_domain_start(st
  }
  static inline void dev_pm_domain_set(struct device *dev,
  				     struct dev_pm_domain *pd) {}
@@ -106,6 +100,3 @@ index 325831a7cbd2..6b71fb69c349 100644
  #endif
  
  #endif /* _LINUX_PM_DOMAIN_H */
--- 
-2.53.0
-

@@ -23,11 +23,9 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  drivers/remoteproc/stm32_rproc.c | 19 ++++++++++++++++---
  1 file changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index 94726df8313d..a5a9489f3e3a 100644
 --- a/drivers/remoteproc/stm32_rproc.c
 +++ b/drivers/remoteproc/stm32_rproc.c
-@@ -729,6 +729,11 @@ static int stm32_rproc_start(struct rproc *rproc)
+@@ -729,6 +729,11 @@ static int stm32_rproc_start(struct rpro
  	struct stm32_rproc *ddata = rproc->priv;
  	int err;
  
@@ -39,7 +37,7 @@ index 94726df8313d..a5a9489f3e3a 100644
  	stm32_rproc_add_coredump_trace(rproc);
  
  	/* clear remote proc Deep Sleep */
-@@ -806,6 +811,11 @@ static int stm32_rproc_stop(struct rproc *rproc)
+@@ -806,6 +811,11 @@ static int stm32_rproc_stop(struct rproc
  	struct stm32_rproc *ddata = rproc->priv;
  	int err;
  
@@ -51,7 +49,7 @@ index 94726df8313d..a5a9489f3e3a 100644
  	stm32_rproc_request_shutdown(rproc);
  
  	err = stm32_rproc_set_hold_boot(rproc, true);
-@@ -1071,9 +1081,12 @@ static int stm32_rproc_parse_dt(struct platform_device *pdev,
+@@ -1071,9 +1081,12 @@ static int stm32_rproc_parse_dt(struct p
  		/* Try legacy fallback method: get it by index */
  		ddata->rst = devm_reset_control_get_by_index(dev, 0);
  	}
@@ -67,6 +65,3 @@ index 94726df8313d..a5a9489f3e3a 100644
  
  	/*
  	 * Three ways to manage the hold boot
--- 
-2.53.0
-

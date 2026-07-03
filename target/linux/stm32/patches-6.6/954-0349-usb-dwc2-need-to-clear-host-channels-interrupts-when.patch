@@ -18,11 +18,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/usb/dwc2/core_intr.c | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
-index 96b79af05889..3d4d3f81b4bf 100644
 --- a/drivers/usb/dwc2/core_intr.c
 +++ b/drivers/usb/dwc2/core_intr.c
-@@ -259,6 +259,10 @@ static void dwc2_handle_conn_id_status_change_intr(struct dwc2_hsotg *hsotg)
+@@ -259,6 +259,10 @@ static void dwc2_handle_conn_id_status_c
  	gintmsk &= ~GINTSTS_SOF;
  	dwc2_writel(hsotg, gintmsk, GINTMSK);
  
@@ -33,6 +31,3 @@ index 96b79af05889..3d4d3f81b4bf 100644
  	dev_dbg(hsotg->dev, " ++Connector ID Status Change Interrupt++  (%s)\n",
  		dwc2_is_host_mode(hsotg) ? "Host" : "Device");
  
--- 
-2.53.0
-

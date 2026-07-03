@@ -26,11 +26,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  include/linux/smscphy.h |  2 ++
  2 files changed, 31 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/phy/smsc.c b/drivers/net/phy/smsc.c
-index c88edb19d2e7..454c3df5371f 100644
 --- a/drivers/net/phy/smsc.c
 +++ b/drivers/net/phy/smsc.c
-@@ -490,14 +490,37 @@ static int lan874x_set_wol(struct phy_device *phydev,
+@@ -537,14 +537,37 @@ static int lan874x_set_wol(struct phy_de
  		}
  	}
  
@@ -70,7 +68,7 @@ index c88edb19d2e7..454c3df5371f 100644
  static int smsc_get_sset_count(struct phy_device *phydev)
  {
  	return ARRAY_SIZE(smsc_hw_stats);
-@@ -628,6 +651,9 @@ int smsc_phy_probe(struct phy_device *phydev)
+@@ -675,6 +698,9 @@ int smsc_phy_probe(struct phy_device *ph
  
  	phydev->priv = priv;
  
@@ -80,7 +78,7 @@ index c88edb19d2e7..454c3df5371f 100644
  	/* Make clk optional to keep DTB backward compatibility. */
  	refclk = devm_clk_get_optional_enabled(dev, NULL);
  	if (IS_ERR(refclk))
-@@ -830,7 +856,7 @@ static struct phy_driver smsc_phy_driver[] = {
+@@ -878,7 +904,7 @@ static struct phy_driver smsc_phy_driver
  	.get_wol	= lan874x_get_wol,
  
  	.suspend	= genphy_suspend,
@@ -89,11 +87,9 @@ index c88edb19d2e7..454c3df5371f 100644
  } };
  
  module_phy_driver(smsc_phy_driver);
-diff --git a/include/linux/smscphy.h b/include/linux/smscphy.h
-index 1a6a851d2cf8..cdf266960032 100644
 --- a/include/linux/smscphy.h
 +++ b/include/linux/smscphy.h
-@@ -65,6 +65,8 @@ int smsc_phy_probe(struct phy_device *phydev);
+@@ -65,6 +65,8 @@ int smsc_phy_probe(struct phy_device *ph
  #define MII_LAN874X_PHY_WOL_WUEN		BIT(2)
  #define MII_LAN874X_PHY_WOL_MPEN		BIT(1)
  #define MII_LAN874X_PHY_WOL_BCSTEN		BIT(0)
@@ -102,6 +98,3 @@ index 1a6a851d2cf8..cdf266960032 100644
  
  #define MII_LAN874X_PHY_WOL_FILTER_EN		BIT(15)
  #define MII_LAN874X_PHY_WOL_FILTER_MCASTTEN	BIT(9)
--- 
-2.53.0
-

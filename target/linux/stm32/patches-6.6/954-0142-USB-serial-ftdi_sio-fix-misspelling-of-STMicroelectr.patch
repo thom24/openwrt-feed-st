@@ -15,11 +15,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/usb/serial/ftdi_sio_ids.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_sio_ids.h
-index 4cc1fae8acb9..02ba42df3a2f 100644
 --- a/drivers/usb/serial/ftdi_sio_ids.h
 +++ b/drivers/usb/serial/ftdi_sio_ids.h
-@@ -1366,7 +1366,7 @@
+@@ -1368,7 +1368,7 @@
  #define WHT_PID			0x0004 /* Wireless Handheld Terminal */
  
  /*
@@ -28,6 +26,3 @@ index 4cc1fae8acb9..02ba42df3a2f 100644
   */
  #define ST_VID			0x0483
  #define ST_STMCLT_2232_PID	0x3746
--- 
-2.53.0
-

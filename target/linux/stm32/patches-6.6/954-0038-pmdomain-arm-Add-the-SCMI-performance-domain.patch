@@ -35,11 +35,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  create mode 100644 drivers/pmdomain/arm/Makefile
  create mode 100644 drivers/pmdomain/arm/scmi_perf_domain.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 518c7fe7811c..0a4f54ff3e64 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -20971,6 +20971,7 @@ F:	drivers/clk/clk-sc[mp]i.c
+@@ -20968,6 +20968,7 @@ F:	drivers/clk/clk-sc[mp]i.c
  F:	drivers/cpufreq/sc[mp]i-cpufreq.c
  F:	drivers/firmware/arm_scmi/
  F:	drivers/firmware/arm_scpi.c
@@ -47,8 +45,6 @@ index 518c7fe7811c..0a4f54ff3e64 100644
  F:	drivers/powercap/arm_scmi_powercap.c
  F:	drivers/regulator/scmi-regulator.c
  F:	drivers/reset/reset-scmi.c
-diff --git a/drivers/firmware/arm_scmi/Kconfig b/drivers/firmware/arm_scmi/Kconfig
-index 308a7e979606..b42a7d537636 100644
 --- a/drivers/firmware/arm_scmi/Kconfig
 +++ b/drivers/firmware/arm_scmi/Kconfig
 @@ -201,6 +201,18 @@ config ARM_SCMI_POWER_DOMAIN
@@ -70,8 +66,6 @@ index 308a7e979606..b42a7d537636 100644
  config ARM_SCMI_POWER_CONTROL
  	tristate "SCMI system power control driver"
  	depends on ARM_SCMI_PROTOCOL || (COMPILE_TEST && OF)
-diff --git a/drivers/pmdomain/Makefile b/drivers/pmdomain/Makefile
-index 666753676e5c..f0326b27b30b 100644
 --- a/drivers/pmdomain/Makefile
 +++ b/drivers/pmdomain/Makefile
 @@ -2,6 +2,7 @@
@@ -82,18 +76,12 @@ index 666753676e5c..f0326b27b30b 100644
  obj-y					+= bcm/
  obj-y					+= imx/
  obj-y					+= mediatek/
-diff --git a/drivers/pmdomain/arm/Makefile b/drivers/pmdomain/arm/Makefile
-new file mode 100644
-index 000000000000..7128db96deac
 --- /dev/null
 +++ b/drivers/pmdomain/arm/Makefile
 @@ -0,0 +1,3 @@
 +# SPDX-License-Identifier: GPL-2.0-only
 +
 +obj-$(CONFIG_ARM_SCMI_PERF_DOMAIN) += scmi_perf_domain.o
-diff --git a/drivers/pmdomain/arm/scmi_perf_domain.c b/drivers/pmdomain/arm/scmi_perf_domain.c
-new file mode 100644
-index 000000000000..aa100270500f
 --- /dev/null
 +++ b/drivers/pmdomain/arm/scmi_perf_domain.c
 @@ -0,0 +1,150 @@
@@ -247,6 +235,3 @@ index 000000000000..aa100270500f
 +MODULE_AUTHOR("Ulf Hansson <ulf.hansson@linaro.org>");
 +MODULE_DESCRIPTION("ARM SCMI perf domain driver");
 +MODULE_LICENSE("GPL v2");
--- 
-2.53.0
-

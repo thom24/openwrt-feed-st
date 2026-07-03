@@ -19,11 +19,9 @@ Reviewed-by: Patrice CHOTARD <patrice.chotard@foss.st.com>
  arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi | 11 +++++++++++
  1 file changed, 11 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-index 4b7e3a317918..ccb2dafe3252 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-@@ -745,6 +745,7 @@ timer@11 {
+@@ -745,6 +745,7 @@
  };
  
  &uart4 {
@@ -31,7 +29,7 @@ index 4b7e3a317918..ccb2dafe3252 100644
  	pinctrl-names = "default", "sleep", "idle";
  	pinctrl-0 = <&uart4_pins_a>;
  	pinctrl-1 = <&uart4_sleep_pins_a>;
-@@ -754,6 +755,16 @@ &uart4 {
+@@ -754,6 +755,16 @@
  	status = "okay";
  };
  
@@ -48,6 +46,3 @@ index 4b7e3a317918..ccb2dafe3252 100644
  &uart7 {
  	pinctrl-names = "default", "sleep", "idle";
  	pinctrl-0 = <&uart7_pins_c>;
--- 
-2.53.0
-

@@ -53,11 +53,9 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  drivers/pmdomain/arm/scmi_pm_domain.c | 8 ++++++++
  1 file changed, 8 insertions(+)
 
-diff --git a/drivers/pmdomain/arm/scmi_pm_domain.c b/drivers/pmdomain/arm/scmi_pm_domain.c
-index 4399216a2173..8133eb493959 100644
 --- a/drivers/pmdomain/arm/scmi_pm_domain.c
 +++ b/drivers/pmdomain/arm/scmi_pm_domain.c
-@@ -89,6 +89,14 @@ static int scmi_pm_domain_probe(struct scmi_device *sdev)
+@@ -89,6 +89,14 @@ static int scmi_pm_domain_probe(struct s
  			continue;
  		}
  
@@ -72,6 +70,3 @@ index 4399216a2173..8133eb493959 100644
  		scmi_pd->domain = i;
  		scmi_pd->ph = ph;
  		scmi_pd->name = power_ops->name_get(ph, i);
--- 
-2.53.0
-

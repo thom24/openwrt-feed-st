@@ -22,11 +22,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp157f-ev1.dts | 4 ----
  7 files changed, 22 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index d49a0ab5d8ea..5e27cd5cc94f 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -115,7 +115,6 @@ panel_rgb: panel-rgb {
+@@ -115,7 +115,6 @@
  		backlight = <&panel_backlight>;
  		power-supply = <&scmi_v3v3_sw>;
  		data-mapping = "bgr666";
@@ -34,7 +32,7 @@ index d49a0ab5d8ea..5e27cd5cc94f 100644
  		status = "okay";
  
  		width-mm = <105>;
-@@ -424,7 +423,6 @@ &ltdc {
+@@ -424,7 +423,6 @@
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&ltdc_pins_a>;
  	pinctrl-1 = <&ltdc_sleep_pins_a>;
@@ -42,11 +40,9 @@ index d49a0ab5d8ea..5e27cd5cc94f 100644
  	status = "okay";
  
  	port {
-diff --git a/arch/arm/boot/dts/st/stm32mp157a-ev1.dts b/arch/arm/boot/dts/st/stm32mp157a-ev1.dts
-index 362db3704bb5..9bcf84f705a4 100644
 --- a/arch/arm/boot/dts/st/stm32mp157a-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157a-ev1.dts
-@@ -134,7 +134,6 @@ panel_backlight: panel-backlight {
+@@ -134,7 +134,6 @@
  		compatible = "gpio-backlight";
  		gpios = <&gpiod 13 GPIO_ACTIVE_LOW>;
  		default-on;
@@ -54,7 +50,7 @@ index 362db3704bb5..9bcf84f705a4 100644
  		status = "okay";
  	};
  
-@@ -340,7 +339,6 @@ dfsdm_endpoint3: endpoint {
+@@ -340,7 +339,6 @@
  &dsi {
  	#address-cells = <1>;
  	#size-cells = <0>;
@@ -62,7 +58,7 @@ index 362db3704bb5..9bcf84f705a4 100644
  	status = "okay";
  
  	panel_dsi: panel@0 {
-@@ -351,7 +349,6 @@ panel_dsi: panel@0 {
+@@ -351,7 +349,6 @@
  		power-supply = <&v3v3>;
  		vcc-supply = <&v3v3>;
  		iovcc-supply = <&v3v3>;
@@ -70,7 +66,7 @@ index 362db3704bb5..9bcf84f705a4 100644
  		status = "okay";
  
  		port {
-@@ -550,7 +547,6 @@ &i2c5 {
+@@ -550,7 +547,6 @@
  };
  
  &ltdc {
@@ -78,11 +74,9 @@ index 362db3704bb5..9bcf84f705a4 100644
  	status = "okay";
  
  	port {
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
-index ef430bc99190..f3469e99cfc3 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
-@@ -56,7 +56,6 @@ panel_otm8009a: panel-otm8009a@0 {
+@@ -56,7 +56,6 @@
  		reg = <0>;
  		reset-gpios = <&gpioe 4 GPIO_ACTIVE_LOW>;
  		power-supply = <&v3v3>;
@@ -90,7 +84,7 @@ index ef430bc99190..f3469e99cfc3 100644
  		status = "okay";
  
  		port {
-@@ -91,7 +90,6 @@ touchscreen@38 {
+@@ -91,7 +90,6 @@
  };
  
  &ltdc {
@@ -98,11 +92,9 @@ index ef430bc99190..f3469e99cfc3 100644
  	status = "okay";
  
  	port {
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
-index 23f863ac8fa2..321346453719 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
-@@ -134,7 +134,6 @@ panel_backlight: panel-backlight {
+@@ -134,7 +134,6 @@
  		compatible = "gpio-backlight";
  		gpios = <&gpiod 13 GPIO_ACTIVE_LOW>;
  		default-on;
@@ -110,7 +102,7 @@ index 23f863ac8fa2..321346453719 100644
  		status = "okay";
  	};
  
-@@ -340,7 +339,6 @@ dfsdm_endpoint3: endpoint {
+@@ -340,7 +339,6 @@
  &dsi {
  	#address-cells = <1>;
  	#size-cells = <0>;
@@ -118,7 +110,7 @@ index 23f863ac8fa2..321346453719 100644
  	status = "okay";
  
  	panel_dsi: panel@0 {
-@@ -351,7 +349,6 @@ panel_dsi: panel@0 {
+@@ -351,7 +349,6 @@
  		power-supply = <&v3v3>;
  		vcc-supply = <&v3v3>;
  		iovcc-supply = <&v3v3>;
@@ -126,7 +118,7 @@ index 23f863ac8fa2..321346453719 100644
  		status = "okay";
  
  		port {
-@@ -550,7 +547,6 @@ &i2c5 {
+@@ -550,7 +547,6 @@
  };
  
  &ltdc {
@@ -134,11 +126,9 @@ index 23f863ac8fa2..321346453719 100644
  	status = "okay";
  
  	port {
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-index 877a8c00bfbc..f584420b2007 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-@@ -134,7 +134,6 @@ panel_backlight: panel-backlight {
+@@ -134,7 +134,6 @@
  		compatible = "gpio-backlight";
  		gpios = <&gpiod 13 GPIO_ACTIVE_LOW>;
  		default-on;
@@ -146,7 +136,7 @@ index 877a8c00bfbc..f584420b2007 100644
  		status = "okay";
  	};
  
-@@ -340,7 +339,6 @@ dfsdm_endpoint3: endpoint {
+@@ -340,7 +339,6 @@
  &dsi {
  	#address-cells = <1>;
  	#size-cells = <0>;
@@ -154,7 +144,7 @@ index 877a8c00bfbc..f584420b2007 100644
  	status = "okay";
  
  	panel_dsi: panel@0 {
-@@ -351,7 +349,6 @@ panel_dsi: panel@0 {
+@@ -351,7 +349,6 @@
  		power-supply = <&v3v3>;
  		vcc-supply = <&v3v3>;
  		iovcc-supply = <&v3v3>;
@@ -162,7 +152,7 @@ index 877a8c00bfbc..f584420b2007 100644
  		status = "okay";
  
  		port {
-@@ -550,7 +547,6 @@ &i2c5 {
+@@ -550,7 +547,6 @@
  };
  
  &ltdc {
@@ -170,11 +160,9 @@ index 877a8c00bfbc..f584420b2007 100644
  	status = "okay";
  
  	port {
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
-index f1cf2cbd23c3..14b3290a7b7e 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
-@@ -59,7 +59,6 @@ panel_otm8009a: panel-otm8009a@0 {
+@@ -59,7 +59,6 @@
  		reg = <0>;
  		reset-gpios = <&gpioe 4 GPIO_ACTIVE_LOW>;
  		power-supply = <&v3v3>;
@@ -182,7 +170,7 @@ index f1cf2cbd23c3..14b3290a7b7e 100644
  		status = "okay";
  
  		port {
-@@ -102,7 +101,6 @@ touchscreen@38 {
+@@ -102,7 +101,6 @@
  };
  
  &ltdc {
@@ -190,11 +178,9 @@ index f1cf2cbd23c3..14b3290a7b7e 100644
  	status = "okay";
  
  	port {
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-index d525c2e6d352..41aa9b048f9a 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-@@ -134,7 +134,6 @@ panel_backlight: panel-backlight {
+@@ -134,7 +134,6 @@
  		compatible = "gpio-backlight";
  		gpios = <&gpiod 13 GPIO_ACTIVE_LOW>;
  		default-on;
@@ -202,7 +188,7 @@ index d525c2e6d352..41aa9b048f9a 100644
  		status = "okay";
  	};
  
-@@ -341,7 +340,6 @@ dfsdm_endpoint3: endpoint {
+@@ -341,7 +340,6 @@
  &dsi {
  	#address-cells = <1>;
  	#size-cells = <0>;
@@ -210,7 +196,7 @@ index d525c2e6d352..41aa9b048f9a 100644
  	status = "okay";
  
  	panel_dsi: panel@0 {
-@@ -352,7 +350,6 @@ panel_dsi: panel@0 {
+@@ -352,7 +350,6 @@
  		power-supply = <&v3v3>;
  		vcc-supply = <&v3v3>;
  		iovcc-supply = <&v3v3>;
@@ -218,7 +204,7 @@ index d525c2e6d352..41aa9b048f9a 100644
  		status = "okay";
  
  		port {
-@@ -551,7 +548,6 @@ &i2c5 {
+@@ -551,7 +548,6 @@
  };
  
  &ltdc {
@@ -226,6 +212,3 @@ index d525c2e6d352..41aa9b048f9a 100644
  	status = "okay";
  
  	port {
--- 
-2.53.0
-

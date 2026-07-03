@@ -17,11 +17,9 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/iio/adc/stm32-mdf-adc.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/drivers/iio/adc/stm32-mdf-adc.c b/drivers/iio/adc/stm32-mdf-adc.c
-index 66516ad8ca11..f19a67c8d113 100644
 --- a/drivers/iio/adc/stm32-mdf-adc.c
 +++ b/drivers/iio/adc/stm32-mdf-adc.c
-@@ -1333,8 +1333,10 @@ static int stm32_mdf_adc_single_conv(struct iio_dev *indio_dev,
+@@ -1333,8 +1333,10 @@ static int stm32_mdf_adc_single_conv(str
  	if (timeout == 0) {
  		dev_err(&indio_dev->dev, "Timeout reached on channel [%d]", chan->channel);
  		ret = -ETIMEDOUT;
@@ -32,7 +30,7 @@ index 66516ad8ca11..f19a67c8d113 100644
  	} else {
  		ret = IIO_VAL_INT;
  	}
-@@ -1344,6 +1346,7 @@ static int stm32_mdf_adc_single_conv(struct iio_dev *indio_dev,
+@@ -1344,6 +1346,7 @@ static int stm32_mdf_adc_single_conv(str
  	else
  		*res = adc->buffer[0];
  
@@ -40,6 +38,3 @@ index 66516ad8ca11..f19a67c8d113 100644
  	stm32_mdf_adc_stop_conv(indio_dev);
  
  err_conv:
--- 
-2.53.0
-

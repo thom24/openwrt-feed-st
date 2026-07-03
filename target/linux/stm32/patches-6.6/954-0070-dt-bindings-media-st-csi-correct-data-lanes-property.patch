@@ -22,8 +22,6 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  .../devicetree/bindings/media/st,stm32-csi.yaml        | 10 +++-------
  1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/st,stm32-csi.yaml b/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
-index ef66f80eda1b..81059d81b331 100644
 --- a/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
 +++ b/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
 @@ -62,14 +62,10 @@ properties:
@@ -44,6 +42,3 @@ index ef66f80eda1b..81059d81b331 100644
  
              required:
                - data-lanes
--- 
-2.53.0
-

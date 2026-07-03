@@ -22,11 +22,9 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  drivers/i2c/busses/i2c-rpmsg.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-rpmsg.c b/drivers/i2c/busses/i2c-rpmsg.c
-index fa0514da97bd..439cfa6749e6 100644
 --- a/drivers/i2c/busses/i2c-rpmsg.c
 +++ b/drivers/i2c/busses/i2c-rpmsg.c
-@@ -175,7 +175,7 @@ static int rpmsg_i2c_read(struct rpmsg_i2c_dev *ri2c_dev, struct i2c_msg *msg)
+@@ -175,7 +175,7 @@ static int rpmsg_i2c_read(struct rpmsg_i
  	ri2c_dev->is_read = false;
  	if (time_left) {
  		if (r_msg->result & RPMSG_I2C_NACK)
@@ -35,6 +33,3 @@ index fa0514da97bd..439cfa6749e6 100644
  
  		if (msg->len != r_msg->count)
  			dev_warn(&rpdev->dev, "Unexpected read size (%u), expected (%u)\n",
--- 
-2.53.0
-

@@ -20,8 +20,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm/boot/dts/st/stm32mp151.dtsi     | 31 ++++++++++++++++++++++++
  2 files changed, 33 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp15-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp15-scmi.dtsi
-index f113ba003673..a7a3e6634c22 100644
 --- a/arch/arm/boot/dts/st/stm32mp15-scmi.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15-scmi.dtsi
 @@ -7,6 +7,7 @@
@@ -32,7 +30,7 @@ index f113ba003673..a7a3e6634c22 100644
  			compatible = "linaro,optee-tz";
  			method = "smc";
  			interrupt-parent = <&intc>;
-@@ -14,6 +15,7 @@ optee: optee {
+@@ -14,6 +15,7 @@
  		};
  
  		scmi: scmi {
@@ -40,11 +38,9 @@ index f113ba003673..a7a3e6634c22 100644
  			compatible = "linaro,scmi-optee";
  			#address-cells = <1>;
  			#size-cells = <0>;
-diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
-index b7f870f1625d..a3a78ced375b 100644
 --- a/arch/arm/boot/dts/st/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
-@@ -29,16 +29,19 @@ cpu0: cpu@0 {
+@@ -29,16 +29,19 @@
  	};
  
  	cpu0_opp_table: cpu0-opp-table {
@@ -64,7 +60,7 @@ index b7f870f1625d..a3a78ced375b 100644
  			opp-hz = /bits/ 64 <800000000>;
  			opp-microvolt = <1350000>;
  			opp-supported-hw = <0x2>;
-@@ -59,6 +62,7 @@ arm_wdt: watchdog {
+@@ -59,6 +62,7 @@
  	};
  
  	psci {
@@ -72,7 +68,7 @@ index b7f870f1625d..a3a78ced375b 100644
  		compatible = "arm,psci-1.0";
  		method = "smc";
  	};
-@@ -82,31 +86,37 @@ timer {
+@@ -82,31 +86,37 @@
  	};
  
  	clocks {
@@ -110,7 +106,7 @@ index b7f870f1625d..a3a78ced375b 100644
  			#clock-cells = <0>;
  			compatible = "fixed-clock";
  			clock-frequency = <32000>;
-@@ -159,6 +169,7 @@ booster: regulator-booster {
+@@ -159,6 +169,7 @@
  	};
  
  	soc {
@@ -118,7 +114,7 @@ index b7f870f1625d..a3a78ced375b 100644
  		compatible = "simple-bus";
  		#address-cells = <1>;
  		#size-cells = <1>;
-@@ -197,6 +208,7 @@ ipcc: mailbox@4c001000 {
+@@ -197,6 +208,7 @@
  		};
  
  		rcc: rcc@50000000 {
@@ -126,7 +122,7 @@ index b7f870f1625d..a3a78ced375b 100644
  			compatible = "st,stm32mp1-rcc", "syscon";
  			reg = <0x50000000 0x1000>;
  			#clock-cells = <1>;
-@@ -208,6 +220,7 @@ rcc: rcc@50000000 {
+@@ -208,6 +220,7 @@
  		};
  
  		pwr_regulators: pwr@50001000 {
@@ -134,7 +130,7 @@ index b7f870f1625d..a3a78ced375b 100644
  			compatible = "st,stm32mp1,pwr-reg";
  			reg = <0x50001000 0x10>;
  			st,tzcr = <&rcc 0x0 0x1>;
-@@ -252,6 +265,7 @@ pwr_irq: pwr@50001020 {
+@@ -252,6 +265,7 @@
  		};
  
  		pinctrl: pinctrl@50002000 {
@@ -142,7 +138,7 @@ index b7f870f1625d..a3a78ced375b 100644
  			#address-cells = <1>;
  			#size-cells = <1>;
  			compatible = "st,stm32mp157-pinctrl";
-@@ -260,6 +274,7 @@ pinctrl: pinctrl@50002000 {
+@@ -260,6 +274,7 @@
  			hwlocks = <&hsem 0 1>;
  
  			gpioa: gpio@50002000 {
@@ -150,7 +146,7 @@ index b7f870f1625d..a3a78ced375b 100644
  				gpio-controller;
  				#gpio-cells = <2>;
  				interrupt-controller;
-@@ -271,6 +286,7 @@ gpioa: gpio@50002000 {
+@@ -271,6 +286,7 @@
  			};
  
  			gpiob: gpio@50003000 {
@@ -158,7 +154,7 @@ index b7f870f1625d..a3a78ced375b 100644
  				gpio-controller;
  				#gpio-cells = <2>;
  				interrupt-controller;
-@@ -282,6 +298,7 @@ gpiob: gpio@50003000 {
+@@ -282,6 +298,7 @@
  			};
  
  			gpioc: gpio@50004000 {
@@ -166,7 +162,7 @@ index b7f870f1625d..a3a78ced375b 100644
  				gpio-controller;
  				#gpio-cells = <2>;
  				interrupt-controller;
-@@ -293,6 +310,7 @@ gpioc: gpio@50004000 {
+@@ -293,6 +310,7 @@
  			};
  
  			gpiod: gpio@50005000 {
@@ -174,7 +170,7 @@ index b7f870f1625d..a3a78ced375b 100644
  				gpio-controller;
  				#gpio-cells = <2>;
  				interrupt-controller;
-@@ -304,6 +322,7 @@ gpiod: gpio@50005000 {
+@@ -304,6 +322,7 @@
  			};
  
  			gpioe: gpio@50006000 {
@@ -182,7 +178,7 @@ index b7f870f1625d..a3a78ced375b 100644
  				gpio-controller;
  				#gpio-cells = <2>;
  				interrupt-controller;
-@@ -315,6 +334,7 @@ gpioe: gpio@50006000 {
+@@ -315,6 +334,7 @@
  			};
  
  			gpiof: gpio@50007000 {
@@ -190,7 +186,7 @@ index b7f870f1625d..a3a78ced375b 100644
  				gpio-controller;
  				#gpio-cells = <2>;
  				interrupt-controller;
-@@ -326,6 +346,7 @@ gpiof: gpio@50007000 {
+@@ -326,6 +346,7 @@
  			};
  
  			gpiog: gpio@50008000 {
@@ -198,7 +194,7 @@ index b7f870f1625d..a3a78ced375b 100644
  				gpio-controller;
  				#gpio-cells = <2>;
  				interrupt-controller;
-@@ -337,6 +358,7 @@ gpiog: gpio@50008000 {
+@@ -337,6 +358,7 @@
  			};
  
  			gpioh: gpio@50009000 {
@@ -206,7 +202,7 @@ index b7f870f1625d..a3a78ced375b 100644
  				gpio-controller;
  				#gpio-cells = <2>;
  				interrupt-controller;
-@@ -348,6 +370,7 @@ gpioh: gpio@50009000 {
+@@ -348,6 +370,7 @@
  			};
  
  			gpioi: gpio@5000a000 {
@@ -214,7 +210,7 @@ index b7f870f1625d..a3a78ced375b 100644
  				gpio-controller;
  				#gpio-cells = <2>;
  				interrupt-controller;
-@@ -359,6 +382,7 @@ gpioi: gpio@5000a000 {
+@@ -359,6 +382,7 @@
  			};
  
  			gpioj: gpio@5000b000 {
@@ -222,7 +218,7 @@ index b7f870f1625d..a3a78ced375b 100644
  				gpio-controller;
  				#gpio-cells = <2>;
  				interrupt-controller;
-@@ -370,6 +394,7 @@ gpioj: gpio@5000b000 {
+@@ -370,6 +394,7 @@
  			};
  
  			gpiok: gpio@5000c000 {
@@ -230,7 +226,7 @@ index b7f870f1625d..a3a78ced375b 100644
  				gpio-controller;
  				#gpio-cells = <2>;
  				interrupt-controller;
-@@ -488,6 +513,7 @@ hdp: pinctrl@5002a000 {
+@@ -488,6 +513,7 @@
  		};
  
  		pinctrl_z: pinctrl@54004000 {
@@ -238,7 +234,7 @@ index b7f870f1625d..a3a78ced375b 100644
  			#address-cells = <1>;
  			#size-cells = <1>;
  			compatible = "st,stm32mp157-z-pinctrl";
-@@ -496,6 +522,7 @@ pinctrl_z: pinctrl@54004000 {
+@@ -496,6 +522,7 @@
  			hwlocks = <&hsem 0 1>;
  
  			gpioz: gpio@54004000 {
@@ -246,7 +242,7 @@ index b7f870f1625d..a3a78ced375b 100644
  				gpio-controller;
  				#gpio-cells = <2>;
  				interrupt-controller;
-@@ -576,6 +603,7 @@ usbh_ehci: usb@5800d000 {
+@@ -576,6 +603,7 @@
  		};
  
  		ltdc: display-controller@5a001000 {
@@ -254,7 +250,7 @@ index b7f870f1625d..a3a78ced375b 100644
  			compatible = "st,stm32-ltdc";
  			reg = <0x5a001000 0x400>;
  			interrupts = <GIC_SPI 88 IRQ_TYPE_LEVEL_HIGH>,
-@@ -587,6 +615,7 @@ ltdc: display-controller@5a001000 {
+@@ -587,6 +615,7 @@
  		};
  
  		iwdg2: watchdog@5a002000 {
@@ -262,7 +258,7 @@ index b7f870f1625d..a3a78ced375b 100644
  			compatible = "st,stm32mp1-iwdg";
  			reg = <0x5a002000 0x400>;
  			interrupts = <GIC_SPI 151 IRQ_TYPE_LEVEL_HIGH>;
-@@ -645,6 +674,7 @@ rtc: rtc@5c004000 {
+@@ -645,6 +674,7 @@
  		};
  
  		bsec: efuse@5c005000 {
@@ -270,7 +266,7 @@ index b7f870f1625d..a3a78ced375b 100644
  			compatible = "st,stm32mp15-bsec";
  			reg = <0x5c005000 0x400>;
  			#address-cells = <1>;
-@@ -667,6 +697,7 @@ ethernet_mac_address: mac@e4 {
+@@ -667,6 +697,7 @@
  		};
  
  		etzpc: bus@5c007000 {
@@ -278,6 +274,3 @@ index b7f870f1625d..a3a78ced375b 100644
  			compatible = "st,stm32-etzpc", "simple-bus";
  			reg = <0x5c007000 0x400>;
  			#address-cells = <1>;
--- 
-2.53.0
-

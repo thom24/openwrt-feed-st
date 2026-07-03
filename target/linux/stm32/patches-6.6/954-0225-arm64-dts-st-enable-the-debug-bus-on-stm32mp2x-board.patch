@@ -22,11 +22,9 @@ Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 4 ++++
  4 files changed, 16 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-index 194de2b62ed3..77b5159d875b 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-@@ -267,6 +267,10 @@ csi_source: endpoint {
+@@ -267,6 +267,10 @@
  	};
  };
  
@@ -37,11 +35,9 @@ index 194de2b62ed3..77b5159d875b 100644
  &dcmipp {
  	status = "okay";
  	port {
-diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-index a1a1dfac1e4c..85ab93aeff7b 100644
 --- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-@@ -203,6 +203,10 @@ csi_source: endpoint {
+@@ -203,6 +203,10 @@
  	};
  };
  
@@ -52,11 +48,9 @@ index a1a1dfac1e4c..85ab93aeff7b 100644
  &dcmipp {
  	status = "okay";
  	port {
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index e148f056b74f..c89add9ce07d 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -250,6 +250,10 @@ csi_source: endpoint {
+@@ -250,6 +250,10 @@
  	};
  };
  
@@ -67,11 +61,9 @@ index e148f056b74f..c89add9ce07d 100644
  &dcmipp {
  	status = "okay";
  	port {
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-index ae7d845fc350..c3e6e913bdcc 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-@@ -243,6 +243,10 @@ csi_source: endpoint {
+@@ -243,6 +243,10 @@
  	};
  };
  
@@ -82,6 +74,3 @@ index ae7d845fc350..c3e6e913bdcc 100644
  &dcmipp {
  	status = "okay";
  	port {
--- 
-2.53.0
-

@@ -20,11 +20,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/tty/serial/stm32-usart.c | 26 +++++---------------------
  1 file changed, 5 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 5dae07643a78..00e0d8d46df0 100644
 --- a/drivers/tty/serial/stm32-usart.c
 +++ b/drivers/tty/serial/stm32-usart.c
-@@ -113,7 +113,6 @@ static struct stm32_usart_info __maybe_unused stm32h7_info = {
+@@ -113,7 +113,6 @@ static struct stm32_usart_info __maybe_u
  static void stm32_usart_stop_tx(struct uart_port *port);
  static void stm32_usart_transmit_chars(struct uart_port *port);
  static void __maybe_unused stm32_usart_console_putchar(struct uart_port *port, unsigned char ch);
@@ -32,7 +30,7 @@ index 5dae07643a78..00e0d8d46df0 100644
  
  static inline struct stm32_port *to_stm32_port(struct uart_port *port)
  {
-@@ -652,33 +651,18 @@ static unsigned int stm32_usart_receive_chars(struct uart_port *port, bool force
+@@ -652,33 +651,18 @@ static unsigned int stm32_usart_receive_
  {
  	struct stm32_port *stm32_port = to_stm32_port(port);
  	const struct stm32_usart_offsets *ofs = &stm32_port->info->ofs;
@@ -70,7 +68,7 @@ index 5dae07643a78..00e0d8d46df0 100644
  			sr = readl_relaxed(port->membase + ofs->isr);
  			if (sr & USART_SR_ERR_MASK) {
  				/* Disable DMA request line */
-@@ -1172,7 +1156,7 @@ static irqreturn_t stm32_usart_interrupt(int irq, void *ptr)
+@@ -1172,7 +1156,7 @@ static irqreturn_t stm32_usart_interrupt
  	/* Receiver timeout irq for DMA RX */
  	if (stm32_usart_rx_dma_started(stm32_port) && !stm32_port->throttled) {
  		spin_lock(&port->lock);
@@ -79,6 +77,3 @@ index 5dae07643a78..00e0d8d46df0 100644
  		if (size)
  			tty_flip_buffer_push(tport);
  		uart_unlock_and_check_sysrq(port);
--- 
-2.53.0
-

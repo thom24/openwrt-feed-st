@@ -22,11 +22,9 @@ Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
  .../st/stm32/stm32-dcmipp/dcmipp-isp.c        | 22 ++++++++++++++-----
  1 file changed, 17 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
-index cd5dae8add66..c0e87a864875 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
-@@ -518,8 +518,19 @@ static void dcmipp_isp_config_decimation(struct dcmipp_isp_device *isp,
+@@ -518,8 +518,19 @@ static void dcmipp_isp_config_decimation
  
  /* Histogram block - only available starting from stm32mp21 */
  #define DCMIPP_P1HSCR			0x8b0
@@ -48,7 +46,7 @@ index cd5dae8add66..c0e87a864875 100644
  
  #define DCMIPP_P1HSSTR			0x8b4
  #define DCMIPP_P1HSSTR_START(x, y)	((x) | ((y) << 16))
-@@ -539,10 +550,11 @@ static void dcmipp_isp_config_histo(struct dcmipp_isp_device *isp,
+@@ -539,10 +550,11 @@ static void dcmipp_isp_config_histo(stru
  	 * valid settings
  	 */
  	reg_write(isp, DCMIPP_P1HSCR, DCMIPP_P1HSCR_DEFAULT);
@@ -63,6 +61,3 @@ index cd5dae8add66..c0e87a864875 100644
  }
  
  static int dcmipp_isp_s_stream(struct v4l2_subdev *sd, int enable)
--- 
-2.53.0
-

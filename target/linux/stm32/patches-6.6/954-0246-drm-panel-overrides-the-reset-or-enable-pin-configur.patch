@@ -19,11 +19,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/panel/panel-simple.c             | 2 ++
  5 files changed, 10 insertions(+)
 
-diff --git a/drivers/gpu/drm/panel/panel-himax-hx8394.c b/drivers/gpu/drm/panel/panel-himax-hx8394.c
-index 5e8537039703..636ceb00f2fa 100644
 --- a/drivers/gpu/drm/panel/panel-himax-hx8394.c
 +++ b/drivers/gpu/drm/panel/panel-himax-hx8394.c
-@@ -500,6 +500,8 @@ static int hx8394_probe(struct mipi_dsi_device *dsi)
+@@ -500,6 +500,8 @@ static int hx8394_probe(struct mipi_dsi_
  		ret = gpiod_get_direction(ctx->reset_gpio);
  		if (ret != 0)
  			gpiod_direction_output(ctx->reset_gpio, 1);
@@ -32,11 +30,9 @@ index 5e8537039703..636ceb00f2fa 100644
  	}
  
  	mipi_dsi_set_drvdata(dsi, ctx);
-diff --git a/drivers/gpu/drm/panel/panel-lvds.c b/drivers/gpu/drm/panel/panel-lvds.c
-index ba1d936d2c96..8b2c6be3e3a1 100644
 --- a/drivers/gpu/drm/panel/panel-lvds.c
 +++ b/drivers/gpu/drm/panel/panel-lvds.c
-@@ -210,6 +210,8 @@ static int panel_lvds_probe(struct platform_device *pdev)
+@@ -210,6 +210,8 @@ static int panel_lvds_probe(struct platf
  		ret = gpiod_get_direction(lvds->enable_gpio);
  		if (ret != 0)
  			gpiod_direction_output(lvds->enable_gpio, 0);
@@ -45,11 +41,9 @@ index ba1d936d2c96..8b2c6be3e3a1 100644
  	}
  
  	lvds->reset_gpio = devm_gpiod_get_optional(lvds->dev, "reset",
-diff --git a/drivers/gpu/drm/panel/panel-orisetech-otm8009a.c b/drivers/gpu/drm/panel/panel-orisetech-otm8009a.c
-index 157c3e05e17b..8b74b5b94fc3 100644
 --- a/drivers/gpu/drm/panel/panel-orisetech-otm8009a.c
 +++ b/drivers/gpu/drm/panel/panel-orisetech-otm8009a.c
-@@ -463,6 +463,8 @@ static int otm8009a_probe(struct mipi_dsi_device *dsi)
+@@ -463,6 +463,8 @@ static int otm8009a_probe(struct mipi_ds
  		ret = gpiod_get_direction(ctx->reset_gpio);
  		if (ret != 0)
  			gpiod_direction_output(ctx->reset_gpio, 1);
@@ -58,11 +52,9 @@ index 157c3e05e17b..8b74b5b94fc3 100644
  	}
  
  	ctx->supply = devm_regulator_get(dev, "power");
-diff --git a/drivers/gpu/drm/panel/panel-raydium-rm68200.c b/drivers/gpu/drm/panel/panel-raydium-rm68200.c
-index 1f7b867bc1ef..cd648cfaaab0 100644
 --- a/drivers/gpu/drm/panel/panel-raydium-rm68200.c
 +++ b/drivers/gpu/drm/panel/panel-raydium-rm68200.c
-@@ -406,6 +406,8 @@ static int rm68200_probe(struct mipi_dsi_device *dsi)
+@@ -406,6 +406,8 @@ static int rm68200_probe(struct mipi_dsi
  		ret = gpiod_get_direction(ctx->reset_gpio);
  		if (ret != 0)
  			gpiod_direction_output(ctx->reset_gpio, 1);
@@ -71,11 +63,9 @@ index 1f7b867bc1ef..cd648cfaaab0 100644
  	}
  
  	ctx->supply = devm_regulator_get(dev, "power");
-diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
-index b7697f5a247f..a708bd1566a3 100644
 --- a/drivers/gpu/drm/panel/panel-simple.c
 +++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -603,6 +603,8 @@ static int panel_simple_probe(struct device *dev, const struct panel_desc *desc)
+@@ -603,6 +603,8 @@ static int panel_simple_probe(struct dev
  		err = gpiod_get_direction(panel->enable_gpio);
  		if (err != 0)
  			gpiod_direction_output(panel->enable_gpio, 0);
@@ -84,6 +74,3 @@ index b7697f5a247f..a708bd1566a3 100644
  	}
  
  	err = of_drm_get_panel_orientation(dev->of_node, &panel->orientation);
--- 
-2.53.0
-

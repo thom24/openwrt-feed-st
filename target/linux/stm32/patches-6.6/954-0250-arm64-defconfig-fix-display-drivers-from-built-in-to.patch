@@ -15,8 +15,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  .../arm64/configs/fragment-02-defconfig-addons.config | 11 +----------
  1 file changed, 1 insertion(+), 10 deletions(-)
 
-diff --git a/arch/arm64/configs/fragment-02-defconfig-addons.config b/arch/arm64/configs/fragment-02-defconfig-addons.config
-index 646a90b89d4e..5101540f27a0 100644
 --- a/arch/arm64/configs/fragment-02-defconfig-addons.config
 +++ b/arch/arm64/configs/fragment-02-defconfig-addons.config
 @@ -20,19 +20,10 @@ CONFIG_CRYPTO_DEV_STM32_CRC=m
@@ -40,6 +38,3 @@ index 646a90b89d4e..5101540f27a0 100644
  CONFIG_DRM_STM_DSI=m
  CONFIG_DRM_STM_LVDS=m
  CONFIG_DWMAC_GENERIC=y
--- 
-2.53.0
-

@@ -25,11 +25,9 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  include/linux/pci-epf.h             |  3 +++
  2 files changed, 41 insertions(+)
 
-diff --git a/drivers/pci/endpoint/pci-epf-core.c b/drivers/pci/endpoint/pci-epf-core.c
-index 059f8639f21e..d4a9211268f0 100644
 --- a/drivers/pci/endpoint/pci-epf-core.c
 +++ b/drivers/pci/endpoint/pci-epf-core.c
-@@ -450,6 +450,44 @@ struct pci_epf *pci_epf_create(const char *name)
+@@ -450,6 +450,44 @@ struct pci_epf *pci_epf_create(const cha
  }
  EXPORT_SYMBOL_GPL(pci_epf_create);
  
@@ -74,11 +72,9 @@ index 059f8639f21e..d4a9211268f0 100644
  static void pci_epf_dev_release(struct device *dev)
  {
  	struct pci_epf *epf = to_pci_epf(dev);
-diff --git a/include/linux/pci-epf.h b/include/linux/pci-epf.h
-index da3b0fa38c9a..1aa1c4fb1687 100644
 --- a/include/linux/pci-epf.h
 +++ b/include/linux/pci-epf.h
-@@ -236,6 +236,9 @@ void *pci_epf_alloc_space(struct pci_epf *epf, size_t size, enum pci_barno bar,
+@@ -236,6 +236,9 @@ void *pci_epf_alloc_space(struct pci_epf
  			  size_t align, enum pci_epc_interface_type type);
  void pci_epf_free_space(struct pci_epf *epf, void *addr, enum pci_barno bar,
  			enum pci_epc_interface_type type);
@@ -88,6 +84,3 @@ index da3b0fa38c9a..1aa1c4fb1687 100644
  int pci_epf_bind(struct pci_epf *epf);
  void pci_epf_unbind(struct pci_epf *epf);
  int pci_epf_add_vepf(struct pci_epf *epf_pf, struct pci_epf *epf_vf);
--- 
-2.53.0
-

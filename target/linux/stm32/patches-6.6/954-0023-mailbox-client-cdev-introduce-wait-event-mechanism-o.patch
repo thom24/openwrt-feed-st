@@ -24,8 +24,6 @@ Domain-Review: Eric FOURMONT <eric.fourmont-ext@st.com>
  drivers/mailbox/mailbox-client_cdev.c | 18 ++++++++++--------
  1 file changed, 10 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/mailbox/mailbox-client_cdev.c b/drivers/mailbox/mailbox-client_cdev.c
-index d159c59655e2..a02008adf7e8 100644
 --- a/drivers/mailbox/mailbox-client_cdev.c
 +++ b/drivers/mailbox/mailbox-client_cdev.c
 @@ -15,6 +15,7 @@
@@ -52,7 +50,7 @@ index d159c59655e2..a02008adf7e8 100644
  };
  
  static void mbox_cdev_mb_callback(struct mbox_client *cl, void *data)
-@@ -66,6 +69,9 @@ static void mbox_cdev_mb_callback(struct mbox_client *cl, void *data)
+@@ -66,6 +69,9 @@ static void mbox_cdev_mb_callback(struct
  
  	dev_dbg(&mbxdev->dev, "Answer received\n");
  	mbxdev->req_state = REQ_ANSWERED;
@@ -62,7 +60,7 @@ index d159c59655e2..a02008adf7e8 100644
  }
  
  static const struct mbox_cdev_mbox rx_tx_mbox = {
-@@ -83,14 +89,8 @@ static ssize_t mbox_cdev_read(struct file *filep, char *buffer, size_t len, loff
+@@ -83,14 +89,8 @@ static ssize_t mbox_cdev_read(struct fil
  {
  	struct mbox_cdev_ddata *mbxdev = cdev_to_mbxdev(filep->f_inode->i_cdev);
  
@@ -79,7 +77,7 @@ index d159c59655e2..a02008adf7e8 100644
  
  	if (copy_to_user(buffer, mbxdev->resm, min(len, mbxdev->resm_size)))
  		return -EFAULT;
-@@ -241,6 +241,8 @@ static int mbox_cdev_driver_probe(struct platform_device *pdev)
+@@ -241,6 +241,8 @@ static int mbox_cdev_driver_probe(struct
  	if (ret)
  		goto free_mbx;
  
@@ -88,6 +86,3 @@ index d159c59655e2..a02008adf7e8 100644
  	platform_set_drvdata(pdev, mbxdev);
  
  	return 0;
--- 
-2.53.0
-

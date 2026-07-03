@@ -20,11 +20,9 @@ Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
  drivers/char/hw_random/stm32-rng.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
-index f1f219de2dcb..fddebf164a79 100644
 --- a/drivers/char/hw_random/stm32-rng.c
 +++ b/drivers/char/hw_random/stm32-rng.c
-@@ -568,7 +568,7 @@ static const struct stm32_rng_data stm32mp25_rng_data = {
+@@ -568,7 +568,7 @@ static const struct stm32_rng_data stm32
  
  static const struct stm32_rng_data stm32mp21_rng_data = {
  	.has_cond_reset = true,
@@ -33,6 +31,3 @@ index f1f219de2dcb..fddebf164a79 100644
  	.nb_clock = 2,
  	.cr_config1_mask = GENMASK(27, 20),
  	.cr = 0x00800D00,
--- 
-2.53.0
-

@@ -20,8 +20,6 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  Documentation/devicetree/bindings/trivial-devices.yaml | 2 --
  1 file changed, 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-index 0bb132040904..2850a50ef908 100644
 --- a/Documentation/devicetree/bindings/trivial-devices.yaml
 +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
 @@ -189,8 +189,6 @@ properties:
@@ -33,6 +31,3 @@ index 0bb132040904..2850a50ef908 100644
              # Temperature Sensor, I2C interface
            - maxim,max1619
              # 10-bit 10 kOhm linear programmable voltage divider
--- 
-2.53.0
-

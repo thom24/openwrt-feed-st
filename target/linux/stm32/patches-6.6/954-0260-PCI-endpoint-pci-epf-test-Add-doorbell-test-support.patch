@@ -41,8 +41,6 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/pci/endpoint/functions/pci-epf-test.c | 128 ++++++++++++++++++
  1 file changed, 128 insertions(+)
 
-diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-index 2b02ebedf3c3..4f28b942e7d8 100644
 --- a/drivers/pci/endpoint/functions/pci-epf-test.c
 +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
 @@ -11,12 +11,14 @@
@@ -100,7 +98,7 @@ index 2b02ebedf3c3..4f28b942e7d8 100644
  } __packed;
  
  static struct pci_epf_header test_header = {
-@@ -630,6 +644,112 @@ static void pci_epf_test_raise_irq(struct pci_epf_test *epf_test,
+@@ -633,6 +647,112 @@ static void pci_epf_test_raise_irq(struc
  	}
  }
  
@@ -213,7 +211,7 @@ index 2b02ebedf3c3..4f28b942e7d8 100644
  static void pci_epf_test_cmd_handler(struct work_struct *work)
  {
  	u32 command;
-@@ -676,6 +796,14 @@ static void pci_epf_test_cmd_handler(struct work_struct *work)
+@@ -679,6 +799,14 @@ static void pci_epf_test_cmd_handler(str
  		pci_epf_test_copy(epf_test, reg);
  		pci_epf_test_raise_irq(epf_test, reg);
  		break;
@@ -228,6 +226,3 @@ index 2b02ebedf3c3..4f28b942e7d8 100644
  	default:
  		dev_err(dev, "Invalid command 0x%x\n", command);
  		break;
--- 
-2.53.0
-

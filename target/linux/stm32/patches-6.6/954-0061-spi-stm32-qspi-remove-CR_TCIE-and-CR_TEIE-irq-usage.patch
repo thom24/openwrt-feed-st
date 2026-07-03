@@ -20,8 +20,6 @@ Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
  drivers/spi/spi-stm32-qspi.c | 45 +++++++++++-------------------------
  1 file changed, 14 insertions(+), 31 deletions(-)
 
-diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
-index a900f3c857e4..8526db7e7912 100644
 --- a/drivers/spi/spi-stm32-qspi.c
 +++ b/drivers/spi/spi-stm32-qspi.c
 @@ -86,11 +86,12 @@
@@ -50,7 +48,7 @@ index a900f3c857e4..8526db7e7912 100644
  	struct completion match_completion;
  	u32 fmode;
  
-@@ -134,20 +134,11 @@ static irqreturn_t stm32_qspi_irq(int irq, void *dev_id)
+@@ -134,20 +134,11 @@ static irqreturn_t stm32_qspi_irq(int ir
  	cr = readl_relaxed(qspi->io_base + QSPI_CR);
  	sr = readl_relaxed(qspi->io_base + QSPI_SR);
  
@@ -72,7 +70,7 @@ index a900f3c857e4..8526db7e7912 100644
  	}
  
  	return IRQ_HANDLED;
-@@ -330,25 +321,18 @@ static int stm32_qspi_wait_nobusy(struct stm32_qspi *qspi)
+@@ -330,25 +321,18 @@ static int stm32_qspi_wait_nobusy(struct
  
  static int stm32_qspi_wait_cmd(struct stm32_qspi *qspi)
  {
@@ -105,7 +103,7 @@ index a900f3c857e4..8526db7e7912 100644
  
  out:
  	/* clear flags */
-@@ -845,7 +829,6 @@ static int stm32_qspi_probe(struct platform_device *pdev)
+@@ -845,7 +829,6 @@ static int stm32_qspi_probe(struct platf
  		return ret;
  	}
  
@@ -113,6 +111,3 @@ index a900f3c857e4..8526db7e7912 100644
  	init_completion(&qspi->match_completion);
  
  	qspi->clk = devm_clk_get(dev, NULL);
--- 
-2.53.0
-

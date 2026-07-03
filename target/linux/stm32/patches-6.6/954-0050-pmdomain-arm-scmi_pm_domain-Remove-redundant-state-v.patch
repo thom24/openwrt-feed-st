@@ -38,8 +38,6 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  drivers/pmdomain/arm/scmi_pm_domain.c | 11 ++---------
  1 file changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/pmdomain/arm/scmi_pm_domain.c b/drivers/pmdomain/arm/scmi_pm_domain.c
-index 0e05a79de82d..4399216a2173 100644
 --- a/drivers/pmdomain/arm/scmi_pm_domain.c
 +++ b/drivers/pmdomain/arm/scmi_pm_domain.c
 @@ -24,8 +24,7 @@ struct scmi_pm_domain {
@@ -52,7 +50,7 @@ index 0e05a79de82d..4399216a2173 100644
  	struct scmi_pm_domain *pd = to_scmi_pd(domain);
  
  	if (power_on)
-@@ -33,13 +32,7 @@ static int scmi_pd_power(struct generic_pm_domain *domain, bool power_on)
+@@ -33,13 +32,7 @@ static int scmi_pd_power(struct generic_
  	else
  		state = SCMI_POWER_STATE_GENERIC_OFF;
  
@@ -67,6 +65,3 @@ index 0e05a79de82d..4399216a2173 100644
  }
  
  static int scmi_pd_power_on(struct generic_pm_domain *domain)
--- 
-2.53.0
-

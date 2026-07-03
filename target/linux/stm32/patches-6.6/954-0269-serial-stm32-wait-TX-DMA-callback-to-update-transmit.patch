@@ -25,11 +25,9 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  drivers/tty/serial/stm32-usart.h |  1 +
  2 files changed, 23 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 05d2fada8ff7..5dae07643a78 100644
 --- a/drivers/tty/serial/stm32-usart.c
 +++ b/drivers/tty/serial/stm32-usart.c
-@@ -836,15 +836,33 @@ static void stm32_usart_tx_dma_complete(void *arg)
+@@ -836,15 +836,33 @@ static void stm32_usart_tx_dma_complete(
  {
  	struct uart_port *port = arg;
  	struct stm32_port *stm32port = to_stm32_port(port);
@@ -66,7 +64,7 @@ index 05d2fada8ff7..5dae07643a78 100644
  	spin_unlock_irqrestore(&port->lock, flags);
  
  	pm_runtime_mark_last_busy(port->dev);
-@@ -971,6 +989,7 @@ static void stm32_usart_transmit_chars_dma(struct uart_port *port)
+@@ -971,6 +989,7 @@ static void stm32_usart_transmit_chars_d
  	 * if the callback of the previous is not yet called.
  	 */
  	stm32port->tx_dma_busy = true;
@@ -74,7 +72,7 @@ index 05d2fada8ff7..5dae07643a78 100644
  
  	desc->callback = stm32_usart_tx_dma_complete;
  	desc->callback_param = port;
-@@ -987,8 +1006,6 @@ static void stm32_usart_transmit_chars_dma(struct uart_port *port)
+@@ -987,8 +1006,6 @@ static void stm32_usart_transmit_chars_d
  	/* Issue pending DMA TX requests */
  	dma_async_issue_pending(stm32port->tx_ch);
  
@@ -83,8 +81,6 @@ index 05d2fada8ff7..5dae07643a78 100644
  	return;
  
  fallback_err:
-diff --git a/drivers/tty/serial/stm32-usart.h b/drivers/tty/serial/stm32-usart.h
-index aff60429fb0a..fc280d314b94 100644
 --- a/drivers/tty/serial/stm32-usart.h
 +++ b/drivers/tty/serial/stm32-usart.h
 @@ -237,6 +237,7 @@ struct stm32_port {
@@ -95,6 +91,3 @@ index aff60429fb0a..fc280d314b94 100644
  	bool tx_dma_busy;	 /* dma tx transaction in progress */
  	bool rx_dma_busy;	 /* dma rx transaction in progress */
  	bool throttled;		 /* port throttled            */
--- 
-2.53.0
-

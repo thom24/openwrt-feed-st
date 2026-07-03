@@ -21,8 +21,6 @@ Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
  include/linux/smscphy.h |  34 ++++++
  3 files changed, 285 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
-index 51659f94921e..073a479cb7f3 100644
 --- a/drivers/net/phy/Kconfig
 +++ b/drivers/net/phy/Kconfig
 @@ -418,6 +418,7 @@ config ROCKCHIP_PHY
@@ -33,8 +31,6 @@ index 51659f94921e..073a479cb7f3 100644
  	help
  	  Currently supports the LAN83C185, LAN8187 and LAN8700 PHYs
  
-diff --git a/drivers/net/phy/smsc.c b/drivers/net/phy/smsc.c
-index a8fc5c3450bd..5f9bb0ebe455 100644
 --- a/drivers/net/phy/smsc.c
 +++ b/drivers/net/phy/smsc.c
 @@ -20,6 +20,8 @@
@@ -54,7 +50,7 @@ index a8fc5c3450bd..5f9bb0ebe455 100644
  };
  
  static int smsc_phy_ack_interrupt(struct phy_device *phydev)
-@@ -305,6 +308,243 @@ static int lan87xx_phy_config_init(struct phy_device *phydev)
+@@ -305,6 +308,243 @@ static int lan87xx_phy_config_init(struc
  	return smsc_phy_config_init(phydev);
  }
  
@@ -298,7 +294,7 @@ index a8fc5c3450bd..5f9bb0ebe455 100644
  static int smsc_get_sset_count(struct phy_device *phydev)
  {
  	return ARRAY_SIZE(smsc_hw_stats);
-@@ -581,7 +821,7 @@ static struct phy_driver smsc_phy_driver[] = {
+@@ -581,7 +821,7 @@ static struct phy_driver smsc_phy_driver
  
  	/* basic functions */
  	.read_status	= lan87xx_read_status,
@@ -307,7 +303,7 @@ index a8fc5c3450bd..5f9bb0ebe455 100644
  	.soft_reset	= smsc_phy_reset,
  
  	/* IRQ related */
-@@ -596,6 +836,10 @@ static struct phy_driver smsc_phy_driver[] = {
+@@ -596,6 +836,10 @@ static struct phy_driver smsc_phy_driver
  	.get_tunable	= smsc_phy_get_tunable,
  	.set_tunable	= smsc_phy_set_tunable,
  
@@ -318,7 +314,7 @@ index a8fc5c3450bd..5f9bb0ebe455 100644
  	.suspend	= genphy_suspend,
  	.resume		= genphy_resume,
  }, {
-@@ -614,7 +858,7 @@ static struct phy_driver smsc_phy_driver[] = {
+@@ -614,7 +858,7 @@ static struct phy_driver smsc_phy_driver
  
  	/* basic functions */
  	.read_status	= lan87xx_read_status,
@@ -327,7 +323,7 @@ index a8fc5c3450bd..5f9bb0ebe455 100644
  	.soft_reset	= smsc_phy_reset,
  
  	/* IRQ related */
-@@ -629,6 +873,10 @@ static struct phy_driver smsc_phy_driver[] = {
+@@ -629,6 +873,10 @@ static struct phy_driver smsc_phy_driver
  	.get_tunable	= smsc_phy_get_tunable,
  	.set_tunable	= smsc_phy_set_tunable,
  
@@ -338,11 +334,9 @@ index a8fc5c3450bd..5f9bb0ebe455 100644
  	.suspend	= genphy_suspend,
  	.resume		= genphy_resume,
  } };
-diff --git a/include/linux/smscphy.h b/include/linux/smscphy.h
-index e1c88627755a..1a6a851d2cf8 100644
 --- a/include/linux/smscphy.h
 +++ b/include/linux/smscphy.h
-@@ -38,4 +38,38 @@ int smsc_phy_set_tunable(struct phy_device *phydev,
+@@ -38,4 +38,38 @@ int smsc_phy_set_tunable(struct phy_devi
  			 struct ethtool_tunable *tuna, const void *data);
  int smsc_phy_probe(struct phy_device *phydev);
  
@@ -381,6 +375,3 @@ index e1c88627755a..1a6a851d2cf8 100644
 +#define MII_LAN874X_PHY_PME_SELF_CLEAR_DELAY	0x1000 /* 81 milliseconds */
 +
  #endif /* __LINUX_SMSCPHY_H__ */
--- 
-2.53.0
-

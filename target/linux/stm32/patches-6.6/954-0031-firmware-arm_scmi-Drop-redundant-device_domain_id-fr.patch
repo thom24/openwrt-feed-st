@@ -23,11 +23,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  include/linux/scmi_protocol.h    |  2 --
  2 files changed, 15 deletions(-)
 
-diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
-index d1a093f8343c..d9b867fe3671 100644
 --- a/drivers/firmware/arm_scmi/perf.c
 +++ b/drivers/firmware/arm_scmi/perf.c
-@@ -796,18 +796,6 @@ static void scmi_perf_domain_init_fc(const struct scmi_protocol_handle *ph,
+@@ -796,18 +796,6 @@ static void scmi_perf_domain_init_fc(con
  	*p_fc = fc;
  }
  
@@ -46,7 +44,7 @@ index d1a093f8343c..d9b867fe3671 100644
  static int scmi_dvfs_device_opps_add(const struct scmi_protocol_handle *ph,
  				     struct device *dev, u32 domain)
  {
-@@ -966,7 +954,6 @@ static const struct scmi_perf_proto_ops perf_proto_ops = {
+@@ -966,7 +954,6 @@ static const struct scmi_perf_proto_ops
  	.limits_get = scmi_perf_limits_get,
  	.level_set = scmi_perf_level_set,
  	.level_get = scmi_perf_level_get,
@@ -54,8 +52,6 @@ index d1a093f8343c..d9b867fe3671 100644
  	.transition_latency_get = scmi_dvfs_transition_latency_get,
  	.device_opps_add = scmi_dvfs_device_opps_add,
  	.freq_set = scmi_dvfs_freq_set,
-diff --git a/include/linux/scmi_protocol.h b/include/linux/scmi_protocol.h
-index 0dbae5634290..c6b47d42320e 100644
 --- a/include/linux/scmi_protocol.h
 +++ b/include/linux/scmi_protocol.h
 @@ -123,7 +123,6 @@ struct scmi_perf_domain_info {
@@ -74,6 +70,3 @@ index 0dbae5634290..c6b47d42320e 100644
  	int (*transition_latency_get)(const struct scmi_protocol_handle *ph,
  				      u32 domain);
  	int (*device_opps_add)(const struct scmi_protocol_handle *ph,
--- 
-2.53.0
-

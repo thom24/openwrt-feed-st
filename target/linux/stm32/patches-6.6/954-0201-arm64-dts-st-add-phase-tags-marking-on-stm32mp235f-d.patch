@@ -20,11 +20,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 11 +++++++++++
  1 file changed, 11 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-index 34b29d1675cc..6881e2fefaeb 100644
 --- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-@@ -630,6 +630,7 @@ bluetooth {
+@@ -630,6 +630,7 @@
  };
  
  &usart2 {
@@ -32,7 +30,7 @@ index 34b29d1675cc..6881e2fefaeb 100644
  	pinctrl-names = "default", "idle", "sleep";
  	pinctrl-0 = <&usart2_pins_a>;
  	pinctrl-1 = <&usart2_idle_pins_a>;
-@@ -639,6 +640,16 @@ &usart2 {
+@@ -639,6 +640,16 @@
  	status = "okay";
  };
  
@@ -49,6 +47,3 @@ index 34b29d1675cc..6881e2fefaeb 100644
  &usart6 {
  	pinctrl-names = "default", "idle", "sleep";
  	pinctrl-0 = <&usart6_pins_a>;
--- 
-2.53.0
-

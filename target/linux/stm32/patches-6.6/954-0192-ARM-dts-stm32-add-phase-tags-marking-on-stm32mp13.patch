@@ -20,11 +20,9 @@ Reviewed-by: Patrice CHOTARD <patrice.chotard@foss.st.com>
  arch/arm/boot/dts/st/stm32mp135.dtsi |  1 +
  2 files changed, 23 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index 50f3e02ba508..99934b8e6ff4 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -42,6 +42,7 @@ arm_wdt: watchdog {
+@@ -42,6 +42,7 @@
  
  	firmware {
  		optee: optee {
@@ -32,7 +30,7 @@ index 50f3e02ba508..99934b8e6ff4 100644
  			method = "smc";
  			compatible = "linaro,optee-tz";
  			interrupt-parent = <&intc>;
-@@ -51,6 +52,7 @@ optee: optee {
+@@ -51,6 +52,7 @@
  		};
  
  		scmi: scmi {
@@ -40,7 +38,7 @@ index 50f3e02ba508..99934b8e6ff4 100644
  			compatible = "linaro,scmi-optee";
  			#address-cells = <1>;
  			#size-cells = <0>;
-@@ -62,11 +64,13 @@ scmi_perf: protocol@13 {
+@@ -62,11 +64,13 @@
  			};
  
  			scmi_clk: protocol@14 {
@@ -54,7 +52,7 @@ index 50f3e02ba508..99934b8e6ff4 100644
  				reg = <0x16>;
  				#reset-cells = <1>;
  			};
-@@ -104,6 +108,7 @@ intc: interrupt-controller@a0021000 {
+@@ -104,6 +108,7 @@
  	};
  
  	psci {
@@ -62,7 +60,7 @@ index 50f3e02ba508..99934b8e6ff4 100644
  		compatible = "arm,psci-1.0";
  		method = "smc";
  	};
-@@ -155,6 +160,7 @@ cpu_crit: cpu-crit0 {
+@@ -155,6 +160,7 @@
  	};
  
  	soc {
@@ -70,7 +68,7 @@ index 50f3e02ba508..99934b8e6ff4 100644
  		compatible = "simple-bus";
  		#address-cells = <1>;
  		#size-cells = <1>;
-@@ -841,6 +847,7 @@ dmamux1: dma-router@48002000 {
+@@ -841,6 +847,7 @@
  		};
  
  		rcc: rcc@50000000 {
@@ -78,7 +76,7 @@ index 50f3e02ba508..99934b8e6ff4 100644
  			compatible = "st,stm32mp13-rcc", "syscon";
  			reg = <0x50000000 0x1000>;
  			#clock-cells = <1>;
-@@ -854,6 +861,7 @@ rcc: rcc@50000000 {
+@@ -854,6 +861,7 @@
  		};
  
  		pinctrl: pinctrl@50002000 {
@@ -86,7 +84,7 @@ index 50f3e02ba508..99934b8e6ff4 100644
  			#address-cells = <1>;
  			#size-cells = <1>;
  			compatible = "st,stm32mp135-pinctrl";
-@@ -861,6 +869,7 @@ pinctrl: pinctrl@50002000 {
+@@ -861,6 +869,7 @@
  			interrupt-parent = <&exti>;
  
  			gpioa: gpio@50002000 {
@@ -94,7 +92,7 @@ index 50f3e02ba508..99934b8e6ff4 100644
  				gpio-controller;
  				#gpio-cells = <2>;
  				interrupt-controller;
-@@ -873,6 +882,7 @@ gpioa: gpio@50002000 {
+@@ -873,6 +882,7 @@
  			};
  
  			gpiob: gpio@50003000 {
@@ -102,7 +100,7 @@ index 50f3e02ba508..99934b8e6ff4 100644
  				gpio-controller;
  				#gpio-cells = <2>;
  				interrupt-controller;
-@@ -885,6 +895,7 @@ gpiob: gpio@50003000 {
+@@ -885,6 +895,7 @@
  			};
  
  			gpioc: gpio@50004000 {
@@ -110,7 +108,7 @@ index 50f3e02ba508..99934b8e6ff4 100644
  				gpio-controller;
  				#gpio-cells = <2>;
  				interrupt-controller;
-@@ -897,6 +908,7 @@ gpioc: gpio@50004000 {
+@@ -897,6 +908,7 @@
  			};
  
  			gpiod: gpio@50005000 {
@@ -118,7 +116,7 @@ index 50f3e02ba508..99934b8e6ff4 100644
  				gpio-controller;
  				#gpio-cells = <2>;
  				interrupt-controller;
-@@ -909,6 +921,7 @@ gpiod: gpio@50005000 {
+@@ -909,6 +921,7 @@
  			};
  
  			gpioe: gpio@50006000 {
@@ -126,7 +124,7 @@ index 50f3e02ba508..99934b8e6ff4 100644
  				gpio-controller;
  				#gpio-cells = <2>;
  				interrupt-controller;
-@@ -921,6 +934,7 @@ gpioe: gpio@50006000 {
+@@ -921,6 +934,7 @@
  			};
  
  			gpiof: gpio@50007000 {
@@ -134,7 +132,7 @@ index 50f3e02ba508..99934b8e6ff4 100644
  				gpio-controller;
  				#gpio-cells = <2>;
  				interrupt-controller;
-@@ -933,6 +947,7 @@ gpiof: gpio@50007000 {
+@@ -933,6 +947,7 @@
  			};
  
  			gpiog: gpio@50008000 {
@@ -142,7 +140,7 @@ index 50f3e02ba508..99934b8e6ff4 100644
  				gpio-controller;
  				#gpio-cells = <2>;
  				interrupt-controller;
-@@ -945,6 +960,7 @@ gpiog: gpio@50008000 {
+@@ -945,6 +960,7 @@
  			};
  
  			gpioh: gpio@50009000 {
@@ -150,7 +148,7 @@ index 50f3e02ba508..99934b8e6ff4 100644
  				gpio-controller;
  				#gpio-cells = <2>;
  				interrupt-controller;
-@@ -957,6 +973,7 @@ gpioh: gpio@50009000 {
+@@ -957,6 +973,7 @@
  			};
  
  			gpioi: gpio@5000a000 {
@@ -158,7 +156,7 @@ index 50f3e02ba508..99934b8e6ff4 100644
  				gpio-controller;
  				#gpio-cells = <2>;
  				interrupt-controller;
-@@ -1049,6 +1066,7 @@ exti: interrupt-controller@5000d000 {
+@@ -1049,6 +1066,7 @@
  		};
  
  		syscfg: syscon@50020000 {
@@ -166,7 +164,7 @@ index 50f3e02ba508..99934b8e6ff4 100644
  			compatible = "st,stm32mp157-syscfg", "syscon";
  			reg = <0x50020000 0x400>;
  			clocks = <&rcc SYSCFG>;
-@@ -1156,6 +1174,7 @@ usbh_ehci: usb@5800d000 {
+@@ -1156,6 +1174,7 @@
  		};
  
  		iwdg2: watchdog@5a002000 {
@@ -174,7 +172,7 @@ index 50f3e02ba508..99934b8e6ff4 100644
  			compatible = "st,stm32mp1-iwdg";
  			reg = <0x5a002000 0x400>;
  			interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_HIGH>;
-@@ -1192,6 +1211,7 @@ rtc: rtc@5c004000 {
+@@ -1192,6 +1211,7 @@
  		};
  
  		bsec: efuse@5c005000 {
@@ -182,7 +180,7 @@ index 50f3e02ba508..99934b8e6ff4 100644
  			compatible = "st,stm32mp13-bsec";
  			reg = <0x5c005000 0x400>;
  			#address-cells = <1>;
-@@ -1219,6 +1239,7 @@ ethernet_mac2_address: mac2@ea {
+@@ -1219,6 +1239,7 @@
  		};
  
  		etzpc: bus@5c007000 {
@@ -190,7 +188,7 @@ index 50f3e02ba508..99934b8e6ff4 100644
  			compatible = "st,stm32-etzpc", "simple-bus";
  			reg = <0x5c007000 0x400>;
  			#address-cells = <1>;
-@@ -1816,6 +1837,7 @@ stmmac_axi_config_1: stmmac-axi-config {
+@@ -1816,6 +1837,7 @@
  			};
  
  			usbphyc: usbphyc@5a006000 {
@@ -198,11 +196,9 @@ index 50f3e02ba508..99934b8e6ff4 100644
  				#address-cells = <1>;
  				#size-cells = <0>;
  				#clock-cells = <0>;
-diff --git a/arch/arm/boot/dts/st/stm32mp135.dtsi b/arch/arm/boot/dts/st/stm32mp135.dtsi
-index d95b3d6d947f..850929fd9bc0 100644
 --- a/arch/arm/boot/dts/st/stm32mp135.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp135.dtsi
-@@ -19,6 +19,7 @@ dcmipp: dcmipp@5a000000 {
+@@ -19,6 +19,7 @@
  	};
  
  	ltdc: display-controller@5a001000 {
@@ -210,6 +206,3 @@ index d95b3d6d947f..850929fd9bc0 100644
  		compatible = "st,stm32-ltdc";
  		reg = <0x5a001000 0x400>;
  		interrupts = <GIC_SPI 88 IRQ_TYPE_LEVEL_HIGH>,
--- 
-2.53.0
-

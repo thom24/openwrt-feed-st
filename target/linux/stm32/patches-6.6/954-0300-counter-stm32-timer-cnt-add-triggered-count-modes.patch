@@ -62,11 +62,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  include/linux/mfd/stm32-timers.h  |   5 ++
  2 files changed, 110 insertions(+)
 
-diff --git a/drivers/counter/stm32-timer-cnt.c b/drivers/counter/stm32-timer-cnt.c
-index 621509e0f8b7..a3ea2fc1d4ae 100644
 --- a/drivers/counter/stm32-timer-cnt.c
 +++ b/drivers/counter/stm32-timer-cnt.c
-@@ -100,6 +100,11 @@ static int stm32_count_function_read(struct counter_device *counter,
+@@ -100,6 +100,11 @@ static int stm32_count_function_read(str
  	switch (smcr & TIM_SMCR_SMS) {
  	case TIM_SMCR_SMS_SLAVE_MODE_DISABLED:
  	case TIM_SMCR_SMS_EXTERNAL_CLOCK_MODE_1:
@@ -78,7 +76,7 @@ index 621509e0f8b7..a3ea2fc1d4ae 100644
  		*function = COUNTER_FUNCTION_INCREASE;
  		return 0;
  	case TIM_SMCR_SMS_ENCODER_MODE_1:
-@@ -464,6 +469,104 @@ static int stm32_capture_source_write(struct counter_device *counter,
+@@ -464,6 +469,104 @@ static int stm32_capture_source_write(st
  	return 0;
  }
  
@@ -183,7 +181,7 @@ index 621509e0f8b7..a3ea2fc1d4ae 100644
  static DEFINE_COUNTER_ARRAY_U64(stm32_count_capture_sources, 4);
  static DEFINE_COUNTER_ARRAY_CAPTURE(stm32_count_cap_array, 4);
  
-@@ -472,6 +575,8 @@ static struct counter_comp stm32_count_ext[] = {
+@@ -472,6 +575,8 @@ static struct counter_comp stm32_count_e
  	COUNTER_COMP_ENABLE(stm32_count_enable_read, stm32_count_enable_write),
  	COUNTER_COMP_CEILING(stm32_count_ceiling_read,
  			     stm32_count_ceiling_write),
@@ -192,8 +190,6 @@ index 621509e0f8b7..a3ea2fc1d4ae 100644
  	COUNTER_COMP_COUNT_U64("prescaler", stm32_count_prescaler_read,
  			       stm32_count_prescaler_write),
  	COUNTER_COMP_ARRAY_CAPTURE(stm32_count_cap_read, NULL, stm32_count_cap_array),
-diff --git a/include/linux/mfd/stm32-timers.h b/include/linux/mfd/stm32-timers.h
-index d2bfafdbb41e..05067a7ad7b7 100644
 --- a/include/linux/mfd/stm32-timers.h
 +++ b/include/linux/mfd/stm32-timers.h
 @@ -115,7 +115,12 @@
@@ -209,6 +205,3 @@ index d2bfafdbb41e..05067a7ad7b7 100644
  #define TIM_SMCR_TS_SHIFT	4
  #define TIM_BDTR_BKF_MASK	0xF
  #define TIM_BDTR_BKF_SHIFT(x)	(16 + (x) * 4)
--- 
-2.53.0
-

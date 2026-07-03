@@ -23,11 +23,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi | 4 ++++
  6 files changed, 24 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index e91764a9bbae..62ac7600dede 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -197,6 +197,10 @@ &cryp {
+@@ -197,6 +197,10 @@
  	status = "okay";
  };
  
@@ -38,11 +36,9 @@ index e91764a9bbae..62ac7600dede 100644
  &dcmipp {
  	status = "okay";
  	pinctrl-names = "default", "sleep";
-diff --git a/arch/arm/boot/dts/st/stm32mp157a-ev1.dts b/arch/arm/boot/dts/st/stm32mp157a-ev1.dts
-index a390e316d027..c8a05abc77d7 100644
 --- a/arch/arm/boot/dts/st/stm32mp157a-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157a-ev1.dts
-@@ -182,6 +182,10 @@ &cec {
+@@ -182,6 +182,10 @@
  	status = "okay";
  };
  
@@ -53,11 +49,9 @@ index a390e316d027..c8a05abc77d7 100644
  &dcmi {
  	status = "okay";
  	pinctrl-names = "default", "sleep";
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
-index 92f97f505df2..21226662c376 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
-@@ -182,6 +182,10 @@ &cec {
+@@ -182,6 +182,10 @@
  	status = "okay";
  };
  
@@ -68,11 +62,9 @@ index 92f97f505df2..21226662c376 100644
  &dcmi {
  	status = "okay";
  	pinctrl-names = "default", "sleep";
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-index 5c0c7d6d0c0d..e7c517ec95cc 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-@@ -182,6 +182,10 @@ &cec {
+@@ -182,6 +182,10 @@
  	status = "okay";
  };
  
@@ -83,11 +75,9 @@ index 5c0c7d6d0c0d..e7c517ec95cc 100644
  &dcmi {
  	status = "okay";
  	pinctrl-names = "default", "sleep";
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-index 42b05d502387..25d823b3f863 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-@@ -182,6 +182,10 @@ &cec {
+@@ -182,6 +182,10 @@
  	status = "okay";
  };
  
@@ -98,11 +88,9 @@ index 42b05d502387..25d823b3f863 100644
  &dcmi {
  	status = "okay";
  	pinctrl-names = "default", "sleep";
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-index ccb2dafe3252..2cb89211026f 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-@@ -189,6 +189,10 @@ &crc1 {
+@@ -189,6 +189,10 @@
  	status = "okay";
  };
  
@@ -113,6 +101,3 @@ index ccb2dafe3252..2cb89211026f 100644
  &dts {
  	status = "okay";
  };
--- 
-2.53.0
-

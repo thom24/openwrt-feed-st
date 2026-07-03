@@ -29,8 +29,6 @@ Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
  .../net/ethernet/stmicro/stmmac/stmmac_ptp.c  | 35 ++++++++++++++++++-
  1 file changed, 34 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c
-index 80ecbd73333d..adb9451cd498 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c
 @@ -11,6 +11,8 @@
@@ -42,7 +40,7 @@ index 80ecbd73333d..adb9451cd498 100644
  /**
   * stmmac_adjust_freq
   *
-@@ -172,7 +174,11 @@ static int stmmac_enable(struct ptp_clock_info *ptp,
+@@ -172,7 +174,11 @@ static int stmmac_enable(struct ptp_cloc
  	u32 acr_value;
  
  	switch (rq->type) {
@@ -55,7 +53,7 @@ index 80ecbd73333d..adb9451cd498 100644
  		/* Reject requests with unsupported flags */
  		if (rq->perout.flags)
  			return -EOPNOTSUPP;
-@@ -181,6 +187,31 @@ static int stmmac_enable(struct ptp_clock_info *ptp,
+@@ -181,6 +187,31 @@ static int stmmac_enable(struct ptp_cloc
  
  		cfg->start.tv_sec = rq->perout.start.sec;
  		cfg->start.tv_nsec = rq->perout.start.nsec;
@@ -87,7 +85,7 @@ index 80ecbd73333d..adb9451cd498 100644
  		cfg->period.tv_sec = rq->perout.period.sec;
  		cfg->period.tv_nsec = rq->perout.period.nsec;
  
-@@ -191,6 +222,8 @@ static int stmmac_enable(struct ptp_clock_info *ptp,
+@@ -191,6 +222,8 @@ static int stmmac_enable(struct ptp_cloc
  					     priv->systime_flags);
  		write_unlock_irqrestore(&priv->ptp_lock, flags);
  		break;
@@ -96,6 +94,3 @@ index 80ecbd73333d..adb9451cd498 100644
  	case PTP_CLK_REQ_EXTTS:
  		if (on)
  			priv->plat->flags |= STMMAC_FLAG_EXT_SNAPSHOT_EN;
--- 
-2.53.0
-

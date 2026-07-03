@@ -20,8 +20,6 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  Documentation/devicetree/bindings/trivial-devices.yaml | 8 --------
  1 file changed, 8 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-index 430a814f64a5..0bb132040904 100644
 --- a/Documentation/devicetree/bindings/trivial-devices.yaml
 +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
 @@ -73,14 +73,10 @@ properties:
@@ -57,6 +55,3 @@ index 430a814f64a5..0bb132040904 100644
              # TI DC-DC converter on PMBus
            - ti,tps40400
              # TI Dual channel DCAP+ multiphase controller TPS53676 with AVSBus
--- 
-2.53.0
-

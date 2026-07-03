@@ -20,11 +20,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/usb/dwc2/gadget.c | 13 ++++++++++---
  1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index cc5a4cf9b343..8907c841ef2a 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -1759,9 +1759,16 @@ static void dwc2_gadget_start_next_request(struct dwc2_hsotg_ep *hs_ep)
+@@ -1759,9 +1759,16 @@ static void dwc2_gadget_start_next_reque
  	}
  	if (!hs_ep->isochronous) {
  		if (hs_ep->index && !dir_in) {
@@ -44,6 +42,3 @@ index cc5a4cf9b343..8907c841ef2a 100644
  		}
  		return;
  	}
--- 
-2.53.0
-

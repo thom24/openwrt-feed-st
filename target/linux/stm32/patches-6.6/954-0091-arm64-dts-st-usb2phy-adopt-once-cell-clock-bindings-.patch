@@ -18,11 +18,9 @@ Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index 6911ce15e143..ef95ba2264b7 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -255,7 +255,7 @@ timer {
+@@ -255,7 +255,7 @@
  	usb2_phy1: usb2-phy1 {
  		compatible      = "st,stm32mp21-usb2phy";
  		#phy-cells      = <0>;
@@ -31,7 +29,7 @@ index 6911ce15e143..ef95ba2264b7 100644
  		st,syscfg       = <&syscfg 0x2400>;
  		clocks          = <&rcc CK_KER_USB2PHY1>;
  		resets          = <&rcc USB2PHY1_R>;
-@@ -265,7 +265,7 @@ usb2_phy1: usb2-phy1 {
+@@ -265,7 +265,7 @@
  	usb2_phy2: usb2-phy2 {
  		compatible      = "st,stm32mp21-usb2phy";
  		#phy-cells      = <0>;
@@ -40,7 +38,7 @@ index 6911ce15e143..ef95ba2264b7 100644
  		st,syscfg       = <&syscfg 0x2800>;
  		clocks          = <&rcc CK_KER_USB2PHY2EN>;
  		resets          = <&rcc USB2PHY2_R>;
-@@ -1880,7 +1880,7 @@ usbh: usb@482e0000 {
+@@ -1880,7 +1880,7 @@
  				usbh_ohci: usb@482e0000 {
  					compatible = "generic-ohci";
  					reg = <0x482e0000 0x1000>;
@@ -49,7 +47,7 @@ index 6911ce15e143..ef95ba2264b7 100644
  					resets = <&rcc USBH_R>;
  					interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_HIGH>;
  					phys = <&usb2_phy1>;
-@@ -1891,7 +1891,7 @@ usbh_ohci: usb@482e0000 {
+@@ -1891,7 +1891,7 @@
  				usbh_ehci: usb@482f0000 {
  					compatible = "generic-ehci";
  					reg = <0x482f0000 0x1000>;
@@ -58,7 +56,7 @@ index 6911ce15e143..ef95ba2264b7 100644
  					resets = <&rcc USBH_R>;
  					interrupts = <GIC_SPI 126 IRQ_TYPE_LEVEL_HIGH>;
  					companion = <&usbh_ohci>;
-@@ -1904,7 +1904,7 @@ usbh_ehci: usb@482f0000 {
+@@ -1904,7 +1904,7 @@
  			usbotg_hs: usb@48300000 {
  				compatible = "st,stm32mp21-hsotg", "snps,dwc2";
  				reg = <0x48300000 0x0 0x10000>;
@@ -67,6 +65,3 @@ index 6911ce15e143..ef95ba2264b7 100644
  				clock-names = "otg", "utmi";
  				resets = <&rcc OTG_R>;
  				reset-names = "dwc2";
--- 
-2.53.0
-

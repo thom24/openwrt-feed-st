@@ -20,11 +20,9 @@ Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
  drivers/usb/dwc2/drd.c | 10 ++++++++++
  1 file changed, 10 insertions(+)
 
-diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
-index ad7063e15fbe..02d2ace62188 100644
 --- a/drivers/usb/dwc2/drd.c
 +++ b/drivers/usb/dwc2/drd.c
-@@ -259,6 +259,16 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+@@ -259,6 +259,16 @@ static int dwc2_drd_role_sw_set(struct u
  		/* This will raise a Connector ID Status Change Interrupt */
  		dwc2_force_mode(hsotg, role == USB_ROLE_HOST);
  
@@ -41,6 +39,3 @@ index ad7063e15fbe..02d2ace62188 100644
  skip:
  	if (!hsotg->ll_hw_enabled && hsotg->clk)
  		clk_disable_unprepare(hsotg->clk);
--- 
-2.53.0
-

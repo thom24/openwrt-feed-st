@@ -46,11 +46,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c | 6 ++++--
  1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
-index 005b021e9cc2..76a01cddcbf5 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
-@@ -616,7 +616,8 @@ static int stm32mp1_suspend(struct stm32_dwmac *dwmac)
+@@ -616,7 +616,8 @@ static int stm32mp1_suspend(struct stm32
  	clk_disable_unprepare(dwmac->syscfg_clk);
  	if (dwmac->enable_eth_ck)
  		clk_disable_unprepare(dwmac->clk_eth_ck);
@@ -60,7 +58,7 @@ index 005b021e9cc2..76a01cddcbf5 100644
  
  	/* Keep the PHY up if we use Wake-on-Lan. */
  	if (!device_may_wakeup(dwmac->dev))
-@@ -631,7 +632,8 @@ static void stm32mp1_resume(struct stm32_dwmac *dwmac)
+@@ -631,7 +632,8 @@ static void stm32mp1_resume(struct stm32
  	struct stmmac_priv *priv = netdev_priv(ndev);
  
  	clk_disable_unprepare(dwmac->clk_ethstp);
@@ -70,6 +68,3 @@ index 005b021e9cc2..76a01cddcbf5 100644
  
  	/* The PHY was up for Wake-on-Lan. */
  	if (!device_may_wakeup(dwmac->dev))
--- 
-2.53.0
-

@@ -28,11 +28,9 @@ Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  drivers/firmware/arm_scmi/powercap.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/firmware/arm_scmi/powercap.c b/drivers/firmware/arm_scmi/powercap.c
-index 244929cb4f3e..cb5617443a14 100644
 --- a/drivers/firmware/arm_scmi/powercap.c
 +++ b/drivers/firmware/arm_scmi/powercap.c
-@@ -360,8 +360,8 @@ static int scmi_powercap_xfer_cap_set(const struct scmi_protocol_handle *ph,
+@@ -360,8 +360,8 @@ static int scmi_powercap_xfer_cap_set(co
  	msg = t->tx.buf;
  	msg->domain = cpu_to_le32(pc->id);
  	msg->flags =
@@ -43,6 +41,3 @@ index 244929cb4f3e..cb5617443a14 100644
  	msg->value = cpu_to_le32(power_cap);
  
  	if (!pc->async_powercap_cap_set || ignore_dresp) {
--- 
-2.53.0
-

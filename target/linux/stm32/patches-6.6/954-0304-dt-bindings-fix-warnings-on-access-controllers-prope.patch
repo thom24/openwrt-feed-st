@@ -22,8 +22,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  Documentation/devicetree/bindings/clock/st,stm32mp25-rcc.yaml | 4 ++++
  2 files changed, 8 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/clock/st,stm32mp21-rcc.yaml b/Documentation/devicetree/bindings/clock/st,stm32mp21-rcc.yaml
-index b1156049e48e..9473d0c7e8d8 100644
 --- a/Documentation/devicetree/bindings/clock/st,stm32mp21-rcc.yaml
 +++ b/Documentation/devicetree/bindings/clock/st,stm32mp21-rcc.yaml
 @@ -102,6 +102,10 @@ properties:
@@ -37,8 +35,6 @@ index b1156049e48e..9473d0c7e8d8 100644
  required:
    - compatible
    - reg
-diff --git a/Documentation/devicetree/bindings/clock/st,stm32mp25-rcc.yaml b/Documentation/devicetree/bindings/clock/st,stm32mp25-rcc.yaml
-index 4c8be6c39443..027c192d6310 100644
 --- a/Documentation/devicetree/bindings/clock/st,stm32mp25-rcc.yaml
 +++ b/Documentation/devicetree/bindings/clock/st,stm32mp25-rcc.yaml
 @@ -121,6 +121,10 @@ properties:
@@ -52,6 +48,3 @@ index 4c8be6c39443..027c192d6310 100644
  required:
    - compatible
    - reg
--- 
-2.53.0
-

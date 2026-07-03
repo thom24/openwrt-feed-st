@@ -22,8 +22,6 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/usb/dwc2/params.c |  1 +
  4 files changed, 25 insertions(+)
 
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index c1f0c8f51217..99035e802a74 100644
 --- a/drivers/usb/dwc2/core.h
 +++ b/drivers/usb/dwc2/core.h
 @@ -509,6 +509,7 @@ struct dwc2_core_params {
@@ -34,11 +32,9 @@ index c1f0c8f51217..99035e802a74 100644
  };
  
  /**
-diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
-index 0ad2d09810e7..4c4afbb8d86e 100644
 --- a/drivers/usb/dwc2/drd.c
 +++ b/drivers/usb/dwc2/drd.c
-@@ -200,6 +200,18 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+@@ -200,6 +200,18 @@ static int dwc2_drd_role_sw_set(struct u
  		if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
  		    !hsotg->params.no_clock_gating)
  			dwc2_gadget_exit_clock_gating(hsotg, 0);
@@ -57,11 +53,9 @@ index 0ad2d09810e7..4c4afbb8d86e 100644
  	}
  
  	if (role == USB_ROLE_HOST) {
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index a657387aed5c..6fb5449d2269 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -4685,6 +4685,17 @@ static int dwc2_hsotg_udc_start(struct usb_gadget *gadget,
+@@ -4685,6 +4685,17 @@ static int dwc2_hsotg_udc_start(struct u
  			goto err;
  	}
  
@@ -79,11 +73,9 @@ index a657387aed5c..6fb5449d2269 100644
  	if (!IS_ERR_OR_NULL(hsotg->uphy))
  		otg_set_peripheral(hsotg->uphy->otg, &hsotg->gadget);
  
-diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-index 1b0b8eee2ad8..f62a2e6db39f 100644
 --- a/drivers/usb/dwc2/params.c
 +++ b/drivers/usb/dwc2/params.c
-@@ -285,6 +285,7 @@ static void dwc2_set_stm32mp21_hsotg_params(struct dwc2_hsotg *hsotg)
+@@ -285,6 +285,7 @@ static void dwc2_set_stm32mp21_hsotg_par
  	p->activate_stm32_bvaloval_en = true;
  	p->activate_stm32_otgarcr_en = true;
  	p->stm32_has_batt_chg_det = true;
@@ -91,6 +83,3 @@ index 1b0b8eee2ad8..f62a2e6db39f 100644
  }
  
  const struct of_device_id dwc2_of_match_table[] = {
--- 
-2.53.0
-

@@ -17,11 +17,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/pinctrl/stm32/pinctrl-stm32.c | 33 ---------------------------
  1 file changed, 33 deletions(-)
 
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
-index fe8987793598..741ef86813c4 100644
 --- a/drivers/pinctrl/stm32/pinctrl-stm32.c
 +++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
-@@ -1078,9 +1078,6 @@ void stm32_pmx_get_mode(struct stm32_gpio_bank *bank, int pin, u32 *mode,
+@@ -1078,9 +1078,6 @@ void stm32_pmx_get_mode(struct stm32_gpi
  	u32 val;
  	int alt_shift = (pin % 8) * 4;
  	int alt_offset = STM32_GPIO_AFRL + (pin / 8) * 4;
@@ -31,7 +29,7 @@ index fe8987793598..741ef86813c4 100644
  
  	val = readl_relaxed(bank->base + alt_offset);
  	val &= GENMASK(alt_shift + 3, alt_shift);
-@@ -1089,8 +1086,6 @@ void stm32_pmx_get_mode(struct stm32_gpio_bank *bank, int pin, u32 *mode,
+@@ -1089,8 +1086,6 @@ void stm32_pmx_get_mode(struct stm32_gpi
  	val = readl_relaxed(bank->base + STM32_GPIO_MODER);
  	val &= GENMASK(pin * 2 + 1, pin * 2);
  	*mode = val >> (pin * 2);
@@ -40,7 +38,7 @@ index fe8987793598..741ef86813c4 100644
  }
  
  static int stm32_pmx_set_mux(struct pinctrl_dev *pctldev,
-@@ -1219,16 +1214,11 @@ static int stm32_pconf_set_driving(struct stm32_gpio_bank *bank,
+@@ -1219,16 +1214,11 @@ unlock:
  static u32 stm32_pconf_get_driving(struct stm32_gpio_bank *bank,
  	unsigned int offset)
  {
@@ -57,7 +55,7 @@ index fe8987793598..741ef86813c4 100644
  	return (val >> offset);
  }
  
-@@ -1270,16 +1260,11 @@ static int stm32_pconf_set_speed(struct stm32_gpio_bank *bank,
+@@ -1270,16 +1260,11 @@ unlock:
  static u32 stm32_pconf_get_speed(struct stm32_gpio_bank *bank,
  	unsigned int offset)
  {
@@ -74,7 +72,7 @@ index fe8987793598..741ef86813c4 100644
  	return (val >> (offset * 2));
  }
  
-@@ -1321,16 +1306,11 @@ static int stm32_pconf_set_bias(struct stm32_gpio_bank *bank,
+@@ -1321,16 +1306,11 @@ unlock:
  static u32 stm32_pconf_get_bias(struct stm32_gpio_bank *bank,
  	unsigned int offset)
  {
@@ -91,7 +89,7 @@ index fe8987793598..741ef86813c4 100644
  	return (val >> (offset * 2));
  }
  
-@@ -1376,15 +1356,11 @@ static u32 stm32_pconf_get_advcfgr(struct stm32_gpio_bank *bank, int offset, u32
+@@ -1376,15 +1356,11 @@ static u32 stm32_pconf_get_advcfgr(struc
  {
  	int advcfgr_offset = STM32_GPIO_ADVCFGRL + (offset / 8) * 4;
  	int advcfgr_bit = bpos + (offset % 8) * 4;
@@ -107,7 +105,7 @@ index fe8987793598..741ef86813c4 100644
  	return (val >> advcfgr_bit);
  }
  
-@@ -1430,26 +1406,19 @@ static u32 stm32_pconf_get_delay(struct stm32_gpio_bank *bank, int offset)
+@@ -1430,26 +1406,19 @@ static u32 stm32_pconf_get_delay(struct
  {
  	int delay_offset = STM32_GPIO_DELAYRL + (offset / 8) * 4;
  	int delay_shift = (offset % 8) * 4;
@@ -134,7 +132,7 @@ index fe8987793598..741ef86813c4 100644
  	if (dir)
  		val = !!(readl_relaxed(bank->base + STM32_GPIO_IDR) &
  			 BIT(offset));
-@@ -1457,8 +1426,6 @@ static bool stm32_pconf_get(struct stm32_gpio_bank *bank,
+@@ -1457,8 +1426,6 @@ static bool stm32_pconf_get(struct stm32
  		val = !!(readl_relaxed(bank->base + STM32_GPIO_ODR) &
  			 BIT(offset));
  
@@ -143,6 +141,3 @@ index fe8987793598..741ef86813c4 100644
  	return val;
  }
  
--- 
-2.53.0
-

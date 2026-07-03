@@ -16,11 +16,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-index 0417a02ff9cc..194de2b62ed3 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-@@ -483,6 +483,7 @@ mdf_endpoint1: endpoint {
+@@ -483,6 +483,7 @@
  };
  
  &rtc {
@@ -28,6 +26,3 @@ index 0417a02ff9cc..194de2b62ed3 100644
  	st,lsco = <RTC_OUT1>;
  	pinctrl-0 = <&rtc_out1_pins_a>;
  	pinctrl-names = "default";
--- 
-2.53.0
-

@@ -23,11 +23,9 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  drivers/remoteproc/stm32_rproc.c | 9 ++++++++-
  1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index d21f22164814..7a7094feee0c 100644
 --- a/drivers/remoteproc/stm32_rproc.c
 +++ b/drivers/remoteproc/stm32_rproc.c
-@@ -1196,6 +1196,7 @@ static int stm32_rproc_probe(struct platform_device *pdev)
+@@ -1196,6 +1196,7 @@ static int stm32_rproc_probe(struct plat
  	struct device_node *np = dev->of_node;
  	const struct stm32_rproc_data *desc;
  	struct tee_rproc *trproc = NULL;
@@ -35,7 +33,7 @@ index d21f22164814..7a7094feee0c 100644
  	struct rproc *rproc;
  	int ret;
  
-@@ -1219,9 +1220,15 @@ static int stm32_rproc_probe(struct platform_device *pdev)
+@@ -1219,9 +1220,15 @@ static int stm32_rproc_probe(struct plat
  		 */
  		dev_info(dev, "Support of signed firmware only\n");
  	}
@@ -52,6 +50,3 @@ index d21f22164814..7a7094feee0c 100644
  	if (!rproc) {
  		ret = -ENOMEM;
  		goto free_tee;
--- 
-2.53.0
-

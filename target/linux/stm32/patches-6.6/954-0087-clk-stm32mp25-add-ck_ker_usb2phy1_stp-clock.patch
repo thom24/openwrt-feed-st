@@ -19,8 +19,6 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  drivers/clk/stm32/clk-stm32mp25.c | 39 +++++++++++++++++++++++++++++++
  1 file changed, 39 insertions(+)
 
-diff --git a/drivers/clk/stm32/clk-stm32mp25.c b/drivers/clk/stm32/clk-stm32mp25.c
-index e3f48aa0f363..ddf689e4120b 100644
 --- a/drivers/clk/stm32/clk-stm32mp25.c
 +++ b/drivers/clk/stm32/clk-stm32mp25.c
 @@ -388,6 +388,7 @@ enum enum_gate_cfg {
@@ -31,7 +29,7 @@ index e3f48aa0f363..ddf689e4120b 100644
  	GATE_USB2PHY2,
  	GATE_USB3DR,
  	GATE_USB3PCIEPHY,
-@@ -604,6 +605,7 @@ static const struct stm32_gate_cfg stm32mp25_gates[GATE_NB] = {
+@@ -604,6 +605,7 @@ static const struct stm32_gate_cfg stm32
  	GATE_CFG(GATE_USART6,		RCC_USART6CFGR,		1,	0),
  	GATE_CFG(GATE_USB2,		RCC_USB2CFGR,		1,	0),
  	GATE_CFG(GATE_USB2PHY1,		RCC_USB2PHY1CFGR,	1,	0),
@@ -39,7 +37,7 @@ index e3f48aa0f363..ddf689e4120b 100644
  	GATE_CFG(GATE_USB2PHY2,		RCC_USB2PHY2CFGR,	1,	0),
  	GATE_CFG(GATE_USB3DR,		RCC_USB3DRCFGR,		1,	0),
  	GATE_CFG(GATE_USB3PCIEPHY,	RCC_USB3PCIEPHYCFGR,	1,	0),
-@@ -1839,6 +1841,42 @@ static struct clk_stm32_composite ck_ker_usb2phy1 = {
+@@ -1839,6 +1841,42 @@ static struct clk_stm32_composite ck_ker
  					    &clk_stm32_composite_ops, 0),
  };
  
@@ -82,7 +80,7 @@ index e3f48aa0f363..ddf689e4120b 100644
  /* USBH */
  static struct clk_stm32_gate ck_icn_m_usb2ehci = {
  	.gate_id = GATE_USB2,
-@@ -2200,6 +2238,7 @@ static const struct clock_config stm32mp25_clock_cfg[] = {
+@@ -2200,6 +2238,7 @@ static const struct clock_config stm32mp
  	STM32_COMPOSITE_CFG(CK_KER_ADC12, ck_ker_adc12, SEC_RIFSC(58)),
  	STM32_COMPOSITE_CFG(CK_KER_ADC3, ck_ker_adc3, SEC_RIFSC(59)),
  	STM32_COMPOSITE_CFG(CK_KER_USB2PHY1, ck_ker_usb2phy1, SEC_RIFSC(63)),
@@ -90,6 +88,3 @@ index e3f48aa0f363..ddf689e4120b 100644
  	STM32_GATE_CFG(CK_KER_USB2PHY2, ck_ker_usb2phy2, SEC_RIFSC(66)),
  	STM32_COMPOSITE_CFG(CK_KER_USB2PHY2EN, ck_ker_usb2phy2_en, SEC_RIFSC(66)),
  	STM32_COMPOSITE_CFG(CK_KER_USB3PCIEPHY, ck_ker_usb3pciephy, SEC_RIFSC(67)),
--- 
-2.53.0
-

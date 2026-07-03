@@ -24,11 +24,9 @@ Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
  kernel/time/time.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/kernel/time/time.c b/kernel/time/time.c
-index 1ad88e97b4eb..d5288d2ff37e 100644
 --- a/kernel/time/time.c
 +++ b/kernel/time/time.c
-@@ -858,6 +858,7 @@ struct timespec64 timespec64_add_safe(const struct timespec64 lhs,
+@@ -858,6 +858,7 @@ struct timespec64 timespec64_add_safe(co
  
  	return res;
  }
@@ -36,6 +34,3 @@ index 1ad88e97b4eb..d5288d2ff37e 100644
  
  /**
   * get_timespec64 - get user's time value into kernel space
--- 
-2.53.0
-

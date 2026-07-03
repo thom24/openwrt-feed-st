@@ -22,11 +22,9 @@ Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
  arch/arm/boot/dts/st/stm32mp131.dtsi | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index 471ac5183857..f5287a5dab37 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -1742,8 +1742,8 @@ qspi: spi@58003000 {
+@@ -1742,8 +1742,8 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				interrupts = <GIC_SPI 91 IRQ_TYPE_LEVEL_HIGH>;
@@ -37,6 +35,3 @@ index 471ac5183857..f5287a5dab37 100644
  				dma-names = "tx", "rx";
  				clocks = <&rcc QSPI_K>;
  				resets = <&rcc QSPI_R>;
--- 
-2.53.0
-

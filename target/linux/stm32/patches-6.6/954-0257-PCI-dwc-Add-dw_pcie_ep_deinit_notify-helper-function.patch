@@ -17,11 +17,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/pci/controller/dwc/pcie-designware.h    | 5 +++++
  2 files changed, 13 insertions(+)
 
-diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
-index cd5d376ae2c6..e20dc5cd509f 100644
 --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
 +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
-@@ -30,6 +30,14 @@ void dw_pcie_ep_init_notify(struct dw_pcie_ep *ep)
+@@ -30,6 +30,14 @@ void dw_pcie_ep_init_notify(struct dw_pc
  }
  EXPORT_SYMBOL_GPL(dw_pcie_ep_init_notify);
  
@@ -36,11 +34,9 @@ index cd5d376ae2c6..e20dc5cd509f 100644
  struct dw_pcie_ep_func *
  dw_pcie_ep_get_func_from_ep(struct dw_pcie_ep *ep, u8 func_no)
  {
-diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
-index ef0b2efa9f93..32801a4c8def 100644
 --- a/drivers/pci/controller/dwc/pcie-designware.h
 +++ b/drivers/pci/controller/dwc/pcie-designware.h
-@@ -574,6 +574,7 @@ void dw_pcie_ep_linkup(struct dw_pcie_ep *ep);
+@@ -575,6 +575,7 @@ void dw_pcie_ep_linkup(struct dw_pcie_ep
  int dw_pcie_ep_init(struct dw_pcie_ep *ep);
  int dw_pcie_ep_init_complete(struct dw_pcie_ep *ep);
  void dw_pcie_ep_init_notify(struct dw_pcie_ep *ep);
@@ -48,7 +44,7 @@ index ef0b2efa9f93..32801a4c8def 100644
  void dw_pcie_ep_exit(struct dw_pcie_ep *ep);
  int dw_pcie_ep_raise_legacy_irq(struct dw_pcie_ep *ep, u8 func_no);
  int dw_pcie_ep_raise_msi_irq(struct dw_pcie_ep *ep, u8 func_no,
-@@ -604,6 +605,10 @@ static inline void dw_pcie_ep_init_notify(struct dw_pcie_ep *ep)
+@@ -605,6 +606,10 @@ static inline void dw_pcie_ep_init_notif
  {
  }
  
@@ -59,6 +55,3 @@ index ef0b2efa9f93..32801a4c8def 100644
  static inline void dw_pcie_ep_exit(struct dw_pcie_ep *ep)
  {
  }
--- 
-2.53.0
-

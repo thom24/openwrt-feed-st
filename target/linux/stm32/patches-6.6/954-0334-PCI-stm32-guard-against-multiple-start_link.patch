@@ -17,8 +17,6 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/pci/controller/dwc/pcie-stm32-ep.c | 32 ++++++++++++++++++++++
  1 file changed, 32 insertions(+)
 
-diff --git a/drivers/pci/controller/dwc/pcie-stm32-ep.c b/drivers/pci/controller/dwc/pcie-stm32-ep.c
-index 2d6c42b4fa78..ad13eeaf2ee0 100644
 --- a/drivers/pci/controller/dwc/pcie-stm32-ep.c
 +++ b/drivers/pci/controller/dwc/pcie-stm32-ep.c
 @@ -18,6 +18,9 @@
@@ -39,7 +37,7 @@ index 2d6c42b4fa78..ad13eeaf2ee0 100644
  	unsigned int perst_irq;
  };
  
-@@ -46,6 +50,13 @@ static int stm32_pcie_start_link(struct dw_pcie *pci)
+@@ -46,6 +50,13 @@ static int stm32_pcie_start_link(struct
  {
  	struct stm32_pcie *stm32_pcie = to_stm32_pcie(pci);
  
@@ -53,7 +51,7 @@ index 2d6c42b4fa78..ad13eeaf2ee0 100644
  	enable_irq(stm32_pcie->perst_irq);
  
  	return 0;
-@@ -55,7 +66,14 @@ static void stm32_pcie_stop_link(struct dw_pcie *pci)
+@@ -55,7 +66,14 @@ static void stm32_pcie_stop_link(struct
  {
  	struct stm32_pcie *stm32_pcie = to_stm32_pcie(pci);
  
@@ -68,7 +66,7 @@ index 2d6c42b4fa78..ad13eeaf2ee0 100644
  }
  
  static int stm32_pcie_raise_irq(struct dw_pcie_ep *ep, u8 func_no,
-@@ -127,6 +145,11 @@ static void stm32_pcie_perst_assert(struct dw_pcie *pci)
+@@ -127,6 +145,11 @@ static void stm32_pcie_perst_assert(stru
  	struct device *dev = pci->dev;
  	struct dw_pcie_ep *ep = &pci->ep;
  
@@ -80,7 +78,7 @@ index 2d6c42b4fa78..ad13eeaf2ee0 100644
  	dev_dbg(dev, "PERST asserted by host. Shutting down the PCIe link\n");
  
  	regmap_update_bits(stm32_pcie->regmap, SYSCFG_PCIECR, STM32MP25_PCIECR_LTSSM_EN, 0);
-@@ -136,6 +159,8 @@ static void stm32_pcie_perst_assert(struct dw_pcie *pci)
+@@ -136,6 +159,8 @@ static void stm32_pcie_perst_assert(stru
  	stm32_pcie_disable_resources(stm32_pcie);
  
  	pm_runtime_put_sync(dev);
@@ -89,7 +87,7 @@ index 2d6c42b4fa78..ad13eeaf2ee0 100644
  }
  
  static void stm32_pcie_perst_deassert(struct dw_pcie *pci)
-@@ -145,6 +170,11 @@ static void stm32_pcie_perst_deassert(struct dw_pcie *pci)
+@@ -145,6 +170,11 @@ static void stm32_pcie_perst_deassert(st
  	struct dw_pcie_ep *ep = &pci->ep;
  	int ret;
  
@@ -101,7 +99,7 @@ index 2d6c42b4fa78..ad13eeaf2ee0 100644
  	dev_dbg(dev, "PERST de-asserted by host. Starting link training\n");
  
  	ret = pm_runtime_resume_and_get(dev);
-@@ -176,6 +206,8 @@ static void stm32_pcie_perst_deassert(struct dw_pcie *pci)
+@@ -176,6 +206,8 @@ static void stm32_pcie_perst_deassert(st
  			   STM32MP25_PCIECR_LTSSM_EN);
  
  	dw_pcie_ep_linkup(ep);
@@ -110,6 +108,3 @@ index 2d6c42b4fa78..ad13eeaf2ee0 100644
  }
  
  static irqreturn_t stm32_pcie_ep_perst_irq_thread(int irq, void *data)
--- 
-2.53.0
-

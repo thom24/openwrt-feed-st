@@ -19,8 +19,6 @@ Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
  .../devicetree/bindings/net/stm32-dwmac.yaml  | 155 +++++++++++-------
  1 file changed, 100 insertions(+), 55 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
-index 7ebc8688bfde..2b86ec21ba63 100644
 --- a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
 +++ b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
 @@ -22,18 +22,22 @@ select:
@@ -38,12 +36,12 @@ index 7ebc8688bfde..2b86ec21ba63 100644
  properties:
    compatible:
      oneOf:
-+      - items:
-+          - enum:
-+              - st,stm32mp25-dwmac
-+          - const: snps,dwmac-5.20
        - items:
            - enum:
++              - st,stm32mp25-dwmac
++          - const: snps,dwmac-5.20
++      - items:
++          - enum:
                - st,stm32mp1-dwmac
 +              - st,stm32mp13-dwmac
            - const: snps,dwmac-4.20a
@@ -234,6 +232,3 @@ index 7ebc8688bfde..2b86ec21ba63 100644
 +        snps,pbl = <8>;
 +        phy-mode = "mii";
 +    };
--- 
-2.53.0
-

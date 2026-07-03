@@ -17,11 +17,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/usb/dwc2/hcd.c | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index cbb5e7041b2c..2ea26e3c9eab 100644
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
-@@ -4392,7 +4392,6 @@ static int _dwc2_hcd_suspend(struct usb_hcd *hcd)
+@@ -4389,7 +4389,6 @@ static int _dwc2_hcd_suspend(struct usb_
  		 * clock gating is used to save power.
  		 */
  		if (!hsotg->params.no_clock_gating) {
@@ -29,6 +27,3 @@ index cbb5e7041b2c..2ea26e3c9eab 100644
  			dwc2_host_enter_clock_gating(hsotg);
  
  			/* After entering suspend, hardware is not accessible */
--- 
-2.53.0
-

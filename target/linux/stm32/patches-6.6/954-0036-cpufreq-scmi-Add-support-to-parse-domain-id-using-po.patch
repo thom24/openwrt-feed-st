@@ -23,23 +23,20 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  drivers/cpufreq/scmi-cpufreq.c | 24 ++++++++++++++++++------
  1 file changed, 18 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-index 1cf271fdfa69..d36503322848 100644
 --- a/drivers/cpufreq/scmi-cpufreq.c
 +++ b/drivers/cpufreq/scmi-cpufreq.c
-@@ -78,13 +78,25 @@ static unsigned int scmi_cpufreq_fast_switch(struct cpufreq_policy *policy,
+@@ -79,13 +79,25 @@ static unsigned int scmi_cpufreq_fast_sw
  
  static int scmi_cpu_domain_id(struct device *cpu_dev)
  {
 -	struct of_phandle_args clkspec;
--
--	if (of_parse_phandle_with_args(cpu_dev->of_node, "clocks",
--				       "#clock-cells", 0, &clkspec))
--		return -EINVAL;
 +	struct device_node *np = cpu_dev->of_node;
 +	struct of_phandle_args domain_id;
 +	int index;
-+
+ 
+-	if (of_parse_phandle_with_args(cpu_dev->of_node, "clocks",
+-				       "#clock-cells", 0, &clkspec))
+-		return -EINVAL;
 +	if (of_parse_phandle_with_args(np, "clocks", "#clock-cells", 0,
 +				       &domain_id)) {
 +		/* Find the corresponding index for power-domain "perf". */
@@ -47,18 +44,15 @@ index 1cf271fdfa69..d36503322848 100644
 +						 "perf");
 +		if (index < 0)
 +			return -EINVAL;
-+
+ 
+-	return clkspec.args[0];
 +		if (of_parse_phandle_with_args(np, "power-domains",
 +					       "#power-domain-cells", index,
 +					       &domain_id))
 +			return -EINVAL;
 +	}
- 
--	return clkspec.args[0];
++
 +	return domain_id.args[0];
  }
  
  static int
--- 
-2.53.0
-

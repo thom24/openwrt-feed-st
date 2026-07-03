@@ -20,8 +20,6 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  .../devicetree/bindings/rtc/st,stm32-rtc.yaml    | 16 ++++++++++++++++
  1 file changed, 16 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
-index 8d67c5f34fc6..51a609189766 100644
 --- a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
 +++ b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
 @@ -60,6 +60,9 @@ properties:
@@ -61,6 +59,3 @@ index 8d67c5f34fc6..51a609189766 100644
        interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
        st,alarm = <RTC_OUT1>;
        st,lsco = <RTC_OUT2_RMP>;
--- 
-2.53.0
-

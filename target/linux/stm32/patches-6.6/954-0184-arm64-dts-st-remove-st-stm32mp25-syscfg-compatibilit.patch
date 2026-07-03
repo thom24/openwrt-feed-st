@@ -18,11 +18,9 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index 84b84958aff2..cfdc05921985 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -2188,7 +2188,7 @@ exti1: interrupt-controller@44220000 {
+@@ -2188,7 +2188,7 @@
  		};
  
  		syscfg: syscon@44230000 {
@@ -31,6 +29,3 @@ index 84b84958aff2..cfdc05921985 100644
  			reg = <0x44230000 0x0 0x10000>;
  		};
  
--- 
-2.53.0
-

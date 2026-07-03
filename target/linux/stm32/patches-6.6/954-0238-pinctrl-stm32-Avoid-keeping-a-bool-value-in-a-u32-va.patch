@@ -17,11 +17,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/pinctrl/stm32/pinctrl-stm32.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
-index 741ef86813c4..5d2f66a03db4 100644
 --- a/drivers/pinctrl/stm32/pinctrl-stm32.c
 +++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
-@@ -1417,7 +1417,7 @@ static u32 stm32_pconf_get_delay(struct stm32_gpio_bank *bank, int offset)
+@@ -1417,7 +1417,7 @@ static u32 stm32_pconf_get_delay(struct
  static bool stm32_pconf_get(struct stm32_gpio_bank *bank,
  	unsigned int offset, bool dir)
  {
@@ -30,6 +28,3 @@ index 741ef86813c4..5d2f66a03db4 100644
  
  	if (dir)
  		val = !!(readl_relaxed(bank->base + STM32_GPIO_IDR) &
--- 
-2.53.0
-

@@ -19,11 +19,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp251.dtsi | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 4e6f6e534165..de07db8095bf 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -2201,6 +2201,7 @@ csi: csi@48020000 {
+@@ -2201,6 +2201,7 @@
  					 <&rcc CK_KER_CSIPHY>;
  				clock-names = "pclk", "txesc", "csi2phy";
  				access-controllers = <&rifsc 86>;
@@ -31,6 +29,3 @@ index 4e6f6e534165..de07db8095bf 100644
  				status = "disabled";
  			};
  
--- 
-2.53.0
-

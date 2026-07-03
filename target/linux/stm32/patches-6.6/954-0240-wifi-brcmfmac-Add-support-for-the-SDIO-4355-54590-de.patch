@@ -20,8 +20,6 @@ Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
  include/linux/mmc/sdio_ids.h                  |  3 +++
  4 files changed, 33 insertions(+)
 
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
-index 14f3c4900f56..141ddb5a3493 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
 +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
 @@ -46,6 +46,7 @@
@@ -32,7 +30,7 @@ index 14f3c4900f56..141ddb5a3493 100644
  /* Maximum milliseconds to wait for F2 to come up */
  #define SDIO_WAIT_F2RDY	3000
  
-@@ -917,6 +918,10 @@ int brcmf_sdiod_probe(struct brcmf_sdio_dev *sdiodev)
+@@ -917,6 +918,10 @@ int brcmf_sdiod_probe(struct brcmf_sdio_
  	case SDIO_DEVICE_ID_BROADCOM_4329:
  		f2_blksz = SDIO_4329_FUNC2_BLOCKSIZE;
  		break;
@@ -43,7 +41,7 @@ index 14f3c4900f56..141ddb5a3493 100644
  	default:
  		break;
  	}
-@@ -996,6 +1001,8 @@ static const struct sdio_device_id brcmf_sdmmc_ids[] = {
+@@ -996,6 +1001,8 @@ static const struct sdio_device_id brcmf
  	BRCMF_SDIO_DEVICE(SDIO_DEVICE_ID_BROADCOM_CYPRESS_43752, CYW),
  	BRCMF_SDIO_DEVICE(SDIO_DEVICE_ID_BROADCOM_CYPRESS_89359, CYW),
  	CYW_SDIO_DEVICE(SDIO_DEVICE_ID_BROADCOM_CYPRESS_43439, CYW),
@@ -52,8 +50,6 @@ index 14f3c4900f56..141ddb5a3493 100644
  	{ /* end: all zeroes */ }
  };
  MODULE_DEVICE_TABLE(sdio, brcmf_sdmmc_ids);
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
-index 6b38d9de71af..79c19b5fe4f5 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
 +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
 @@ -59,6 +59,10 @@
@@ -67,7 +63,7 @@ index 6b38d9de71af..79c19b5fe4f5 100644
  #ifdef DEBUG
  
  #define BRCMF_TRAP_INFO_SIZE	80
-@@ -620,8 +624,10 @@ BRCMF_FW_CLM_DEF(43439, "brcmfmac43439-sdio");
+@@ -620,8 +624,10 @@ BRCMF_FW_CLM_DEF(43439, "brcmfmac43439-s
  BRCMF_FW_CLM_DEF(43455, "brcmfmac43455-sdio");
  BRCMF_FW_DEF(43456, "brcmfmac43456-sdio");
  BRCMF_FW_CLM_DEF(4354, "brcmfmac4354-sdio");
@@ -78,7 +74,7 @@ index 6b38d9de71af..79c19b5fe4f5 100644
  BRCMF_FW_CLM_DEF(4373, "brcmfmac4373-sdio");
  BRCMF_FW_CLM_DEF(43012, "brcmfmac43012-sdio");
  BRCMF_FW_CLM_DEF(43752, "brcmfmac43752-sdio");
-@@ -652,9 +658,11 @@ static const struct brcmf_firmware_mapping brcmf_sdio_fwnames[] = {
+@@ -652,9 +658,11 @@ static const struct brcmf_firmware_mappi
  	BRCMF_FW_ENTRY(BRCM_CC_4345_CHIP_ID, 0xFFFFFDC0, 43455),
  	BRCMF_FW_ENTRY(BRCM_CC_43454_CHIP_ID, 0x00000040, 43455),
  	BRCMF_FW_ENTRY(BRCM_CC_4354_CHIP_ID, 0xFFFFFFFF, 4354),
@@ -90,7 +86,7 @@ index 6b38d9de71af..79c19b5fe4f5 100644
  	BRCMF_FW_ENTRY(CY_CC_43012_CHIP_ID, 0xFFFFFFFF, 43012),
  	BRCMF_FW_ENTRY(CY_CC_43439_CHIP_ID, 0xFFFFFFFF, 43439),
  	BRCMF_FW_ENTRY(CY_CC_43752_CHIP_ID, 0xFFFFFFFF, 43752)
-@@ -4329,6 +4337,7 @@ static void brcmf_sdio_firmware_callback(struct device *dev, int err,
+@@ -4329,6 +4337,7 @@ static void brcmf_sdio_firmware_callback
  			break;
  		case SDIO_DEVICE_ID_BROADCOM_4359:
  		case SDIO_DEVICE_ID_BROADCOM_4354:
@@ -98,7 +94,7 @@ index 6b38d9de71af..79c19b5fe4f5 100644
  		case SDIO_DEVICE_ID_BROADCOM_4356:
  			brcmf_dbg(INFO, "set F2 watermark to 0x%x*4 bytes\n",
  				  CY_435X_F2_WATERMARK);
-@@ -4342,6 +4351,19 @@ static void brcmf_sdio_firmware_callback(struct device *dev, int err,
+@@ -4342,6 +4351,19 @@ static void brcmf_sdio_firmware_callback
  			brcmf_sdiod_writeb(sdiod, SBSDIO_FUNC1_MESBUSYCTRL,
  					   CY_435X_F1_MESBUSYCTRL, &err);
  			break;
@@ -118,8 +114,6 @@ index 6b38d9de71af..79c19b5fe4f5 100644
  		default:
  			brcmf_sdiod_writeb(sdiod, SBSDIO_WATERMARK,
  					   DEFAULT_F2_WATERMARK, &err);
-diff --git a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
-index 44684bf1b9ac..5b42a1883523 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
 +++ b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
 @@ -56,6 +56,7 @@
@@ -130,8 +124,6 @@ index 44684bf1b9ac..5b42a1883523 100644
  #define CY_CC_43012_CHIP_ID		43012
  #define CY_CC_43439_CHIP_ID		43439
  #define CY_CC_43752_CHIP_ID		43752
-diff --git a/include/linux/mmc/sdio_ids.h b/include/linux/mmc/sdio_ids.h
-index 7fada7a714fe..e24aa2bb0f59 100644
 --- a/include/linux/mmc/sdio_ids.h
 +++ b/include/linux/mmc/sdio_ids.h
 @@ -63,6 +63,7 @@
@@ -151,6 +143,3 @@ index 7fada7a714fe..e24aa2bb0f59 100644
  #define SDIO_DEVICE_ID_BROADCOM_CYPRESS_43439	0xbd3d
  
  #define SDIO_VENDOR_ID_MARVELL			0x02df
--- 
-2.53.0
-

@@ -22,8 +22,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/firmware/arm_scpi.c | 13 +++++--------
  1 file changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/firmware/arm_scpi.c b/drivers/firmware/arm_scpi.c
-index 3de25e9d18ef..fa6e1c84197a 100644
 --- a/drivers/firmware/arm_scpi.c
 +++ b/drivers/firmware/arm_scpi.c
 @@ -26,9 +26,12 @@
@@ -39,7 +37,7 @@ index 3de25e9d18ef..fa6e1c84197a 100644
  #include <linux/pm_opp.h>
  #include <linux/scpi_protocol.h>
  #include <linux/slab.h>
-@@ -897,11 +900,6 @@ static int scpi_alloc_xfer_list(struct device *dev, struct scpi_chan *ch)
+@@ -897,11 +900,6 @@ static int scpi_alloc_xfer_list(struct d
  	return 0;
  }
  
@@ -51,7 +49,7 @@ index 3de25e9d18ef..fa6e1c84197a 100644
  static const struct of_device_id shmem_of_match[] __maybe_unused = {
  	{ .compatible = "amlogic,meson-gxbb-scp-shmem", },
  	{ .compatible = "amlogic,meson-axg-scp-shmem", },
-@@ -922,8 +920,7 @@ static int scpi_probe(struct platform_device *pdev)
+@@ -922,8 +920,7 @@ static int scpi_probe(struct platform_de
  	if (!scpi_drvinfo)
  		return -ENOMEM;
  
@@ -61,7 +59,7 @@ index 3de25e9d18ef..fa6e1c84197a 100644
  
  	count = of_count_phandle_with_args(np, "mboxes", "#mbox-cells");
  	if (count < 0) {
-@@ -1041,7 +1038,7 @@ static int scpi_probe(struct platform_device *pdev)
+@@ -1041,7 +1038,7 @@ static int scpi_probe(struct platform_de
  
  static const struct of_device_id scpi_of_match[] = {
  	{.compatible = "arm,scpi"},
@@ -70,6 +68,3 @@ index 3de25e9d18ef..fa6e1c84197a 100644
  	{},
  };
  
--- 
-2.53.0
-

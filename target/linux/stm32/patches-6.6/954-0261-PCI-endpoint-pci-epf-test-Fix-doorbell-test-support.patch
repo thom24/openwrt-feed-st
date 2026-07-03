@@ -27,11 +27,9 @@ Change-Id: I23027a65b4b8c77d4c7f13871eec28e9cd4d7639
  drivers/pci/endpoint/functions/pci-epf-test.c | 15 +++++++++++++++
  1 file changed, 15 insertions(+)
 
-diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-index 4f28b942e7d8..d9017999165e 100644
 --- a/drivers/pci/endpoint/functions/pci-epf-test.c
 +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
-@@ -734,12 +734,27 @@ static void pci_epf_test_disable_doorbell(struct pci_epf_test *epf_test,
+@@ -737,12 +737,27 @@ static void pci_epf_test_disable_doorbel
  {
  	enum pci_barno bar = le32_to_cpu(reg->doorbell_bar);
  	u32 status = le32_to_cpu(reg->status);
@@ -59,6 +57,3 @@ index 4f28b942e7d8..d9017999165e 100644
  	status |= STATUS_DOORBELL_DISABLE_SUCCESS;
  	reg->status = cpu_to_le32(status);
  
--- 
-2.53.0
-

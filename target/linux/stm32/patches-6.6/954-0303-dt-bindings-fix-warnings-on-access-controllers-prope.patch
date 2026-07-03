@@ -28,8 +28,6 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml | 4 ++++
  8 files changed, 32 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml
-index 0a6bc03ebe00..f201f7710900 100644
 --- a/Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml
 +++ b/Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml
 @@ -60,6 +60,10 @@ properties:
@@ -43,8 +41,6 @@ index 0a6bc03ebe00..f201f7710900 100644
  required:
    - compatible
    - reg
-diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml
-index 6216cfb0a188..002aa1abd751 100644
 --- a/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml
 +++ b/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml
 @@ -127,6 +127,10 @@ properties:
@@ -58,8 +54,6 @@ index 6216cfb0a188..002aa1abd751 100644
  patternProperties:
    '^trig-conns@([0-9]+)$':
      type: object
-diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml
-index 44a1041cb0fc..0c391a4e7baf 100644
 --- a/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml
 +++ b/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml
 @@ -74,6 +74,10 @@ properties:
@@ -73,8 +67,6 @@ index 44a1041cb0fc..0c391a4e7baf 100644
  required:
    - compatible
    - reg
-diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-replicator.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-replicator.yaml
-index 03792e9bd97a..4f5d777e8201 100644
 --- a/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-replicator.yaml
 +++ b/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-replicator.yaml
 @@ -80,6 +80,10 @@ properties:
@@ -88,8 +80,6 @@ index 03792e9bd97a..4f5d777e8201 100644
  required:
    - compatible
    - reg
-diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml
-index 01200f67504a..1fd9ab53767b 100644
 --- a/Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml
 +++ b/Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml
 @@ -114,6 +114,10 @@ properties:
@@ -103,8 +93,6 @@ index 01200f67504a..1fd9ab53767b 100644
  required:
    - compatible
    - clocks
-diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml
-index 378380c3f5aa..46baa43a2522 100644
 --- a/Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml
 +++ b/Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml
 @@ -73,6 +73,10 @@ properties:
@@ -118,8 +106,6 @@ index 378380c3f5aa..46baa43a2522 100644
  required:
    - compatible
    - reg
-diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
-index cb8dceaca70e..1b15650ef163 100644
 --- a/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
 +++ b/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
 @@ -101,6 +101,10 @@ properties:
@@ -133,8 +119,6 @@ index cb8dceaca70e..1b15650ef163 100644
  required:
    - compatible
    - reg
-diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml
-index 61a0cdc27745..32fdd4307a82 100644
 --- a/Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml
 +++ b/Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml
 @@ -66,6 +66,10 @@ properties:
@@ -148,6 +132,3 @@ index 61a0cdc27745..32fdd4307a82 100644
  required:
    - compatible
    - reg
--- 
-2.53.0
-

@@ -22,11 +22,9 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi | 32 +++++++++++++++++++
  1 file changed, 32 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
-index 253a840a7aa7..33f1ce973421 100644
 --- a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
-@@ -964,6 +964,38 @@ pins {
+@@ -964,6 +964,38 @@
  		};
  	};
  
@@ -65,6 +63,3 @@ index 253a840a7aa7..33f1ce973421 100644
  	lpuart1_pins_a: lpuart1-0 {
  		pins1 {
  			pinmux = <STM32_PINMUX('Z', 7, AF6)>, /* LPUART1_TX */
--- 
-2.53.0
-

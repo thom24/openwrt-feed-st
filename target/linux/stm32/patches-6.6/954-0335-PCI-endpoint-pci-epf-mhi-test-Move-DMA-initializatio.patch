@@ -33,11 +33,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/pci/endpoint/functions/pci-epf-test.c | 12 ++++++------
  2 files changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/pci/endpoint/functions/pci-epf-mhi.c b/drivers/pci/endpoint/functions/pci-epf-mhi.c
-index 87154992ea11..6ebf1c6684b9 100644
 --- a/drivers/pci/endpoint/functions/pci-epf-mhi.c
 +++ b/drivers/pci/endpoint/functions/pci-epf-mhi.c
-@@ -506,6 +506,14 @@ static int pci_epf_mhi_core_init(struct pci_epf *epf)
+@@ -506,6 +506,14 @@ static int pci_epf_mhi_core_init(struct
  	if (!epf_mhi->epc_features)
  		return -ENODATA;
  
@@ -52,7 +50,7 @@ index 87154992ea11..6ebf1c6684b9 100644
  	return 0;
  }
  
-@@ -518,14 +526,6 @@ static int pci_epf_mhi_link_up(struct pci_epf *epf)
+@@ -518,14 +526,6 @@ static int pci_epf_mhi_link_up(struct pc
  	struct device *dev = &epf->dev;
  	int ret;
  
@@ -67,11 +65,9 @@ index 87154992ea11..6ebf1c6684b9 100644
  	mhi_cntrl->mmio = epf_mhi->mmio;
  	mhi_cntrl->irq = epf_mhi->irq;
  	mhi_cntrl->mru = info->mru;
-diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-index f7839b312166..fc5d714b8f9e 100644
 --- a/drivers/pci/endpoint/functions/pci-epf-test.c
 +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
-@@ -904,6 +904,12 @@ static int pci_epf_test_core_init(struct pci_epf *epf)
+@@ -904,6 +904,12 @@ static int pci_epf_test_core_init(struct
  	bool msi_capable = true;
  	int ret;
  
@@ -84,7 +80,7 @@ index f7839b312166..fc5d714b8f9e 100644
  	epc_features = pci_epc_get_features(epc, epf->func_no, epf->vfunc_no);
  	if (epc_features) {
  		msix_capable = epc_features->msix_capable;
-@@ -1099,12 +1105,6 @@ static int pci_epf_test_bind(struct pci_epf *epf)
+@@ -1099,12 +1105,6 @@ static int pci_epf_test_bind(struct pci_
  		}
  	}
  
@@ -97,6 +93,3 @@ index f7839b312166..fc5d714b8f9e 100644
  	if (!linkup_notifier && !core_init_notifier)
  		queue_work(kpcitest_workqueue, &epf_test->cmd_handler.work);
  
--- 
-2.53.0
-

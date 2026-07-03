@@ -27,11 +27,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/cpufreq/scmi-cpufreq.c | 19 +++++++++++++++----
  1 file changed, 15 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-index 6ff77003a96e..a1acc4a436c8 100644
 --- a/drivers/cpufreq/scmi-cpufreq.c
 +++ b/drivers/cpufreq/scmi-cpufreq.c
-@@ -76,13 +76,24 @@ static unsigned int scmi_cpufreq_fast_switch(struct cpufreq_policy *policy,
+@@ -77,13 +77,24 @@ static unsigned int scmi_cpufreq_fast_sw
  	return 0;
  }
  
@@ -57,7 +55,7 @@ index 6ff77003a96e..a1acc4a436c8 100644
  	if (domain < 0)
  		return domain;
  
-@@ -94,7 +105,7 @@ scmi_get_sharing_cpus(struct device *cpu_dev, struct cpumask *cpumask)
+@@ -95,7 +106,7 @@ scmi_get_sharing_cpus(struct device *cpu
  		if (!tcpu_dev)
  			continue;
  
@@ -66,7 +64,7 @@ index 6ff77003a96e..a1acc4a436c8 100644
  		if (tdomain == domain)
  			cpumask_set_cpu(cpu, cpumask);
  	}
-@@ -110,7 +121,7 @@ scmi_get_cpu_power(struct device *cpu_dev, unsigned long *power,
+@@ -111,7 +122,7 @@ scmi_get_cpu_power(struct device *cpu_de
  	unsigned long Hz;
  	int ret, domain;
  
@@ -75,7 +73,7 @@ index 6ff77003a96e..a1acc4a436c8 100644
  	if (domain < 0)
  		return domain;
  
-@@ -215,7 +226,7 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+@@ -216,7 +227,7 @@ static int scmi_cpufreq_init(struct cpuf
  	}
  
  	priv->cpu_dev = cpu_dev;
@@ -84,6 +82,3 @@ index 6ff77003a96e..a1acc4a436c8 100644
  
  	policy->driver_data = priv;
  	policy->freq_table = freq_table;
--- 
-2.53.0
-

@@ -22,8 +22,6 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  drivers/pmdomain/arm/scmi_perf_domain.c | 34 +++++++++++++++++++++++++
  1 file changed, 34 insertions(+)
 
-diff --git a/drivers/pmdomain/arm/scmi_perf_domain.c b/drivers/pmdomain/arm/scmi_perf_domain.c
-index aa100270500f..bc3f78abb6da 100644
 --- a/drivers/pmdomain/arm/scmi_perf_domain.c
 +++ b/drivers/pmdomain/arm/scmi_perf_domain.c
 @@ -9,6 +9,7 @@
@@ -34,7 +32,7 @@ index aa100270500f..bc3f78abb6da 100644
  #include <linux/scmi_protocol.h>
  #include <linux/slab.h>
  
-@@ -42,6 +43,37 @@ scmi_pd_set_perf_state(struct generic_pm_domain *genpd, unsigned int state)
+@@ -42,6 +43,37 @@ scmi_pd_set_perf_state(struct generic_pm
  	return ret;
  }
  
@@ -72,7 +70,7 @@ index aa100270500f..bc3f78abb6da 100644
  static int scmi_perf_domain_probe(struct scmi_device *sdev)
  {
  	struct device *dev = &sdev->dev;
-@@ -95,6 +127,8 @@ static int scmi_perf_domain_probe(struct scmi_device *sdev)
+@@ -95,6 +127,8 @@ static int scmi_perf_domain_probe(struct
  		scmi_pd->genpd.flags = GENPD_FLAG_ALWAYS_ON |
  				       GENPD_FLAG_OPP_TABLE_FW;
  		scmi_pd->genpd.set_performance_state = scmi_pd_set_perf_state;
@@ -81,6 +79,3 @@ index aa100270500f..bc3f78abb6da 100644
  
  		ret = pm_genpd_init(&scmi_pd->genpd, NULL, false);
  		if (ret)
--- 
-2.53.0
-

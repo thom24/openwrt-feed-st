@@ -26,11 +26,9 @@ Tested-by: Alain VOLMAT <alain.volmat@st.com>
  drivers/tty/serial/stm32-usart.c | 6 +++++-
  1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 63b6e0b7e588..d81a0ea154e1 100644
 --- a/drivers/tty/serial/stm32-usart.c
 +++ b/drivers/tty/serial/stm32-usart.c
-@@ -2478,7 +2478,11 @@ static int __maybe_unused stm32_usart_serial_en_wakeup(struct uart_port *port,
+@@ -2478,7 +2478,11 @@ static int __maybe_unused stm32_usart_se
  		}
  
  		/* Poll data from RX FIFO if any */
@@ -43,6 +41,3 @@ index 63b6e0b7e588..d81a0ea154e1 100644
  	} else {
  		if (stm32_port->tx_ch)
  			stm32_usart_set_bits(port, ofs->cr3, USART_CR3_DMAT);
--- 
-2.53.0
-

@@ -18,11 +18,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp231.dtsi | 10 ----------
  1 file changed, 10 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index 3182cac784d2..dd58bd3f3c77 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -174,16 +174,6 @@ intc: interrupt-controller@4ac00000 {
+@@ -174,16 +174,6 @@
  		      <0x0 0x4ac40000 0x0 0x2000>,
  		      <0x0 0x4ac60000 0x0 0x2000>;
  		interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
@@ -39,6 +37,3 @@ index 3182cac784d2..dd58bd3f3c77 100644
  	};
  
  	d1_pd: power-domain-d1 {
--- 
-2.53.0
-

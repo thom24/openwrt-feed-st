@@ -99,8 +99,6 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/usb/typec/ucsi/ucsi.c | 10 +++++++---
  1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index e5c001ee0cd7..a69417147398 100644
 --- a/drivers/usb/typec/ucsi/ucsi.c
 +++ b/drivers/usb/typec/ucsi/ucsi.c
 @@ -217,6 +217,7 @@ struct ucsi_work {
@@ -111,7 +109,7 @@ index e5c001ee0cd7..a69417147398 100644
  };
  
  static void ucsi_poll_worker(struct work_struct *work)
-@@ -236,7 +237,7 @@ static void ucsi_poll_worker(struct work_struct *work)
+@@ -236,7 +237,7 @@ static void ucsi_poll_worker(struct work
  
  	ret = uwork->cb(con);
  
@@ -120,7 +118,7 @@ index e5c001ee0cd7..a69417147398 100644
  		queue_delayed_work(con->wq, &uwork->work, uwork->delay);
  	} else {
  		list_del(&uwork->node);
-@@ -1688,15 +1689,18 @@ void ucsi_unregister(struct ucsi *ucsi)
+@@ -1694,15 +1695,18 @@ void ucsi_unregister(struct ucsi *ucsi)
  		cancel_work_sync(&ucsi->connector[i].work);
  
  		if (ucsi->connector[i].wq) {
@@ -141,6 +139,3 @@ index e5c001ee0cd7..a69417147398 100644
  			mutex_unlock(&ucsi->connector[i].lock);
  			destroy_workqueue(ucsi->connector[i].wq);
  		}
--- 
-2.53.0
-

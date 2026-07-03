@@ -17,11 +17,9 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp135f-dk.dts | 20 ++++++++++++++++++++
  1 file changed, 20 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index 62ac7600dede..a7f9e1442abc 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -197,6 +197,26 @@ &cryp {
+@@ -197,6 +197,26 @@
  	status = "okay";
  };
  
@@ -48,6 +46,3 @@ index 62ac7600dede..a7f9e1442abc 100644
  &dbg_bus {
  	status = "okay";
  };
--- 
-2.53.0
-

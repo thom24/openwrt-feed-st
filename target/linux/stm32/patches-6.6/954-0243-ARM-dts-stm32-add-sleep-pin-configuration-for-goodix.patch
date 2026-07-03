@@ -17,11 +17,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp135f-dk.dts     | 3 ++-
  2 files changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
-index 08042e87b1bb..a19fa5d7af93 100644
 --- a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
-@@ -178,6 +178,13 @@ pins2 {
+@@ -178,6 +178,13 @@
  		};
  	};
  
@@ -35,11 +33,9 @@ index 08042e87b1bb..a19fa5d7af93 100644
  	i2c1_pins_a: i2c1-0 {
  		pins {
  			pinmux = <STM32_PINMUX('D', 12, AF5)>, /* I2C1_SCL */
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index a7f9e1442abc..f54ef5abe10d 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -433,8 +433,9 @@ ov5640_0: endpoint {
+@@ -433,8 +433,9 @@
  	goodix: goodix-ts@5d {
  		compatible = "goodix,gt911";
  		reg = <0x5d>;
@@ -50,6 +46,3 @@ index a7f9e1442abc..f54ef5abe10d 100644
  		interrupt-parent = <&gpiof>;
  		interrupts = <5 IRQ_TYPE_EDGE_FALLING>;
  		AVDD28-supply = <&scmi_v3v3_sw>;
--- 
-2.53.0
-

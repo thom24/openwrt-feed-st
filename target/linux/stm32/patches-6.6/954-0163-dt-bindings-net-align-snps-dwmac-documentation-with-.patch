@@ -20,8 +20,6 @@ Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
  .../devicetree/bindings/net/snps,dwmac.yaml   | 220 ++++++++----------
  1 file changed, 101 insertions(+), 119 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-index 0865de5183d1..90b79283e228 100644
 --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
 +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
 @@ -26,11 +26,13 @@ select:
@@ -408,6 +406,3 @@ index 0865de5183d1..90b79283e228 100644
              #address-cells = <1>;
              #size-cells = <0>;
              compatible = "snps,dwmac-mdio";
--- 
-2.53.0
-

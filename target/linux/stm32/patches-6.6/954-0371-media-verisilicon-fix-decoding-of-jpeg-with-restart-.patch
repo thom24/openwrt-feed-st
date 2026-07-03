@@ -19,11 +19,9 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  drivers/media/platform/verisilicon/hantro_g1_jpeg_dec.c | 6 +++++-
  1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/verisilicon/hantro_g1_jpeg_dec.c b/drivers/media/platform/verisilicon/hantro_g1_jpeg_dec.c
-index 545c5d2e403a..9fba6f6f9929 100644
 --- a/drivers/media/platform/verisilicon/hantro_g1_jpeg_dec.c
 +++ b/drivers/media/platform/verisilicon/hantro_g1_jpeg_dec.c
-@@ -390,8 +390,12 @@ int hantro_g1_jpeg_dec_run(struct hantro_ctx *ctx)
+@@ -390,8 +390,12 @@ int hantro_g1_jpeg_dec_run(struct hantro
  
  	reg |= G1_REG_DEC_CTRL2_STRM_START_BIT(stream_bit_offset(&header));
  
@@ -37,6 +35,3 @@ index 545c5d2e403a..9fba6f6f9929 100644
  
  	vdpu_write_relaxed(vpu, reg, G1_REG_DEC_CTRL2);
  
--- 
-2.53.0
-

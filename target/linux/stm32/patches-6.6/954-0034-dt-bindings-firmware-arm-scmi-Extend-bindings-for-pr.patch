@@ -33,8 +33,6 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  .../devicetree/bindings/firmware/arm,scmi.yaml        | 11 +++++++++--
  1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
-index b138f3d23df8..563a87dfb31a 100644
 --- a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
 +++ b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
 @@ -149,8 +149,15 @@ properties:
@@ -55,6 +53,3 @@ index b138f3d23df8..563a87dfb31a 100644
  
    protocol@14:
      $ref: '#/$defs/protocol-node'
--- 
-2.53.0
-

@@ -16,11 +16,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/clk/stm32/clk-stm32mp1.c | 8 +++++++-
  1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/stm32/clk-stm32mp1.c b/drivers/clk/stm32/clk-stm32mp1.c
-index ff2ab13cd58f..22a7f5e01b61 100644
 --- a/drivers/clk/stm32/clk-stm32mp1.c
 +++ b/drivers/clk/stm32/clk-stm32mp1.c
-@@ -913,6 +913,8 @@ static const struct clk_ops clk_pll_frac_div_ops = {
+@@ -913,6 +913,8 @@ static const struct clk_ops clk_pll_frac
  #define PLL_FRAC_SHIFT		3
  #define PLL_FRAC_WIDTH		13
  
@@ -45,6 +43,3 @@ index ff2ab13cd58f..22a7f5e01b61 100644
  }
  
  const struct clk_ops pll_gate_ops = {
--- 
-2.53.0
-

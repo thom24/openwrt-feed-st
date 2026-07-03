@@ -22,8 +22,6 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  .../devicetree/bindings/remoteproc/st,stm32-rproc.yaml        | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
-index 8b4d04571fb3..b19d9d4cbdf1 100644
 --- a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
 +++ b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
 @@ -147,6 +147,10 @@ properties:
@@ -37,6 +35,3 @@ index 8b4d04571fb3..b19d9d4cbdf1 100644
    power-domains:
      items:
        - description: CLUSTER power domain
--- 
-2.53.0
-

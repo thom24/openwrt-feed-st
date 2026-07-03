@@ -21,11 +21,9 @@ Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
  drivers/pinctrl/stm32/pinctrl-stm32.c | 35 +++++++++++++++++++++------
  1 file changed, 27 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
-index 4d2899f496f9..fe8987793598 100644
 --- a/drivers/pinctrl/stm32/pinctrl-stm32.c
 +++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
-@@ -360,11 +360,9 @@ static int stm32_gpio_request(struct gpio_chip *chip, unsigned offset)
+@@ -360,11 +360,9 @@ static int stm32_gpio_request(struct gpi
  		return -EINVAL;
  	}
  
@@ -40,7 +38,7 @@ index 4d2899f496f9..fe8987793598 100644
  	}
  
  	return pinctrl_gpio_request(chip->base + offset);
-@@ -1144,7 +1142,9 @@ static int stm32_pmx_gpio_set_direction(struct pinctrl_dev *pctldev,
+@@ -1144,7 +1142,9 @@ static int stm32_pmx_gpio_set_direction(
  static int stm32_pmx_request(struct pinctrl_dev *pctldev, unsigned int gpio)
  {
  	struct stm32_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
@@ -50,7 +48,7 @@ index 4d2899f496f9..fe8987793598 100644
  
  	range = pinctrl_find_gpio_range_from_pin_nolock(pctldev, gpio);
  	if (!range) {
-@@ -1152,11 +1152,20 @@ static int stm32_pmx_request(struct pinctrl_dev *pctldev, unsigned int gpio)
+@@ -1152,11 +1152,20 @@ static int stm32_pmx_request(struct pinc
  		return -EINVAL;
  	}
  
@@ -72,7 +70,7 @@ index 4d2899f496f9..fe8987793598 100644
  	return 0;
  }
  
-@@ -1476,6 +1485,11 @@ static int stm32_pconf_parse_conf(struct pinctrl_dev *pctldev,
+@@ -1476,6 +1485,11 @@ static int stm32_pconf_parse_conf(struct
  		return -EACCES;
  	}
  
@@ -84,7 +82,7 @@ index 4d2899f496f9..fe8987793598 100644
  	switch ((unsigned int)param) {
  	case PIN_CONFIG_DRIVE_PUSH_PULL:
  		ret = stm32_pconf_set_driving(bank, offset, 0);
-@@ -2199,16 +2213,21 @@ static int __maybe_unused stm32_pinctrl_restore_gpio_regs(
+@@ -2199,16 +2213,21 @@ static int __maybe_unused stm32_pinctrl_
  	if (!range)
  		return 0;
  
@@ -108,6 +106,3 @@ index 4d2899f496f9..fe8987793598 100644
  	alt = bank->pin_backup[offset] & STM32_GPIO_BKP_ALT_MASK;
  	alt >>= STM32_GPIO_BKP_ALT_SHIFT;
  	mode = bank->pin_backup[offset] & STM32_GPIO_BKP_MODE_MASK;
--- 
-2.53.0
-

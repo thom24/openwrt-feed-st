@@ -18,11 +18,9 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index e24154a0c2c9..e148f056b74f 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -188,6 +188,8 @@ sound {
+@@ -188,6 +188,8 @@
  	wifi_pwrseq: wifi-pwrseq {
  		compatible = "mmc-pwrseq-simple";
  		reset-gpios = <&gpiog 8 GPIO_ACTIVE_LOW>;
@@ -31,7 +29,7 @@ index e24154a0c2c9..e148f056b74f 100644
  	};
  };
  
-@@ -650,6 +652,7 @@ typec_ep: endpoint {
+@@ -650,6 +652,7 @@
  };
  
  &rtc {
@@ -39,7 +37,7 @@ index e24154a0c2c9..e148f056b74f 100644
  	st,lsco = <RTC_OUT2_RMP>;
  	pinctrl-0 = <&rtc_out2_rmp_pins_a>;
  	pinctrl-names = "default";
-@@ -784,6 +787,8 @@ &usart1 {
+@@ -784,6 +787,8 @@
  	bluetooth {
  		shutdown-gpios = <&gpiog 4 GPIO_ACTIVE_HIGH>;
  		compatible = "brcm,bcm43438-bt";
@@ -48,6 +46,3 @@ index e24154a0c2c9..e148f056b74f 100644
  		max-speed = <2000000>;
  		vbat-supply = <&scmi_v3v3>;
  		vddio-supply = <&scmi_v3v3>;
--- 
-2.53.0
-

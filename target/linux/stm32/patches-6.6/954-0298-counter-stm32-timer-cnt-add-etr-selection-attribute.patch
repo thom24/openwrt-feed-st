@@ -26,11 +26,9 @@ Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
  include/linux/mfd/stm32-timers.h  |  2 ++
  2 files changed, 39 insertions(+)
 
-diff --git a/drivers/counter/stm32-timer-cnt.c b/drivers/counter/stm32-timer-cnt.c
-index b461587de4bf..621509e0f8b7 100644
 --- a/drivers/counter/stm32-timer-cnt.c
 +++ b/drivers/counter/stm32-timer-cnt.c
-@@ -945,6 +945,41 @@ static struct counter_comp stm32_count_channel_ext[] = {
+@@ -945,6 +945,41 @@ static struct counter_comp stm32_count_c
  	COUNTER_COMP_SIGNAL_U8("tisel", stm32_count_tisel_get, stm32_count_tisel_set),
  };
  
@@ -72,7 +70,7 @@ index b461587de4bf..621509e0f8b7 100644
  static struct counter_signal stm32_signals[] = {
  	/*
  	 * Need to declare all the signals as a static array, and keep the signals order here,
-@@ -988,6 +1023,8 @@ static struct counter_signal stm32_signals[] = {
+@@ -988,6 +1023,8 @@ static struct counter_signal stm32_signa
  	{
  		.id = STM32_ETR_SIG,
  		.name = "ETR",
@@ -81,8 +79,6 @@ index b461587de4bf..621509e0f8b7 100644
  	},
  };
  
-diff --git a/include/linux/mfd/stm32-timers.h b/include/linux/mfd/stm32-timers.h
-index b1f0f0bf6121..d2bfafdbb41e 100644
 --- a/include/linux/mfd/stm32-timers.h
 +++ b/include/linux/mfd/stm32-timers.h
 @@ -31,6 +31,7 @@
@@ -101,6 +97,3 @@ index b1f0f0bf6121..d2bfafdbb41e 100644
  #define TIM_TISEL_TI1	GENMASK(3, 0)	/* TI1 Input Selection mask*/
  #define TIM_TISEL_TI2	GENMASK(11, 8)	/* TI2 Input Selection mask*/
  #define TIM_TISEL_TI3	GENMASK(19, 16)	/* TI3 Input Selection mask*/
--- 
-2.53.0
-

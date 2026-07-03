@@ -21,8 +21,6 @@ Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
  drivers/pinctrl/stm32/pinctrl-stm32-hdp.c | 90 ++++++++++++++++++++---
  1 file changed, 79 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32-hdp.c b/drivers/pinctrl/stm32/pinctrl-stm32-hdp.c
-index 48a673b247cb..3729d05e6c01 100644
 --- a/drivers/pinctrl/stm32/pinctrl-stm32-hdp.c
 +++ b/drivers/pinctrl/stm32/pinctrl-stm32-hdp.c
 @@ -4,6 +4,7 @@
@@ -33,7 +31,7 @@ index 48a673b247cb..3729d05e6c01 100644
  #include <linux/clk.h>
  #include <linux/gpio/driver.h>
  #include <linux/io.h>
-@@ -196,6 +197,7 @@ static const struct of_device_id stm32_hdp_of_match[] = {
+@@ -196,6 +197,7 @@ static const struct of_device_id stm32_h
  	},
  	{}
  };
@@ -41,7 +39,7 @@ index 48a673b247cb..3729d05e6c01 100644
  
  static int stm32_hdp_syscfg_setup(struct stm32_hdp *hdp)
  {
-@@ -222,40 +224,93 @@ static int stm32_hdp_syscfg_setup(struct stm32_hdp *hdp)
+@@ -222,40 +224,93 @@ static int stm32_hdp_syscfg_setup(struct
  
  static int stm32_hdp_probe(struct platform_device *pdev)
  {
@@ -145,7 +143,7 @@ index 48a673b247cb..3729d05e6c01 100644
  	}
  
  	hdp->gpio_chip.label	     = "stm32-hdp";
-@@ -271,7 +326,7 @@ static int stm32_hdp_probe(struct platform_device *pdev)
+@@ -271,7 +326,7 @@ static int stm32_hdp_probe(struct platfo
  	err = devm_gpiochip_add_data(dev, &hdp->gpio_chip, hdp);
  	if (err) {
  		dev_err(dev, "Failed to add gpiochip\n");
@@ -154,7 +152,7 @@ index 48a673b247cb..3729d05e6c01 100644
  	}
  
  	writel_relaxed(HDP_CTRL_ENABLE, hdp->base + HDP_CTRL);
-@@ -279,7 +334,20 @@ static int stm32_hdp_probe(struct platform_device *pdev)
+@@ -279,7 +334,20 @@ static int stm32_hdp_probe(struct platfo
  	version = readl_relaxed(hdp->base + HDP_VERR);
  	dev_dbg(dev, "STM32 HDP version %u.%u initialized\n", version >> 4, version & 0x0F);
  
@@ -175,6 +173,3 @@ index 48a673b247cb..3729d05e6c01 100644
  }
  
  static int stm32_hdp_remove(struct platform_device *pdev)
--- 
-2.53.0
-

@@ -22,11 +22,9 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  drivers/tty/serial/stm32-usart.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 7ed9161ae243..074fc8558f15 100644
 --- a/drivers/tty/serial/stm32-usart.c
 +++ b/drivers/tty/serial/stm32-usart.c
-@@ -713,9 +713,9 @@ static void stm32_usart_rx_dma_complete(void *arg)
+@@ -713,9 +713,9 @@ static void stm32_usart_rx_dma_complete(
  
  	spin_lock_irqsave(&port->lock, flags);
  	size = stm32_usart_receive_chars(port, false);
@@ -37,6 +35,3 @@ index 7ed9161ae243..074fc8558f15 100644
  	if (!stm32port->has_rtor)
  		mod_timer(&stm32port->rx_dma_timer,
  			  jiffies + msecs_to_jiffies(LPUART_RECEIVE_TIMEOUT_MS));
--- 
-2.53.0
-

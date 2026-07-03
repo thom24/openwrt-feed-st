@@ -38,15 +38,12 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/usb/dwc2/hcd.c       | 121 ++++++++++++++++-------------------
  6 files changed, 122 insertions(+), 192 deletions(-)
 
-diff --git a/drivers/usb/dwc2/core.c b/drivers/usb/dwc2/core.c
-index d8465237bf39..05a8d22bec83 100644
 --- a/drivers/usb/dwc2/core.c
 +++ b/drivers/usb/dwc2/core.c
-@@ -123,19 +123,6 @@ int dwc2_exit_partial_power_down(struct dwc2_hsotg *hsotg, int rem_wakeup,
- 		return dwc2_gadget_exit_partial_power_down(hsotg, rem_wakeup, restore);
+@@ -124,19 +124,6 @@ int dwc2_exit_partial_power_down(struct
  }
  
--/**
+ /**
 - * dwc2_enter_partial_power_down() - Put controller in Partial Power Down.
 - *
 - * @hsotg: Programming view of the DWC_otg controller
@@ -59,14 +56,14 @@ index d8465237bf39..05a8d22bec83 100644
 -		return dwc2_gadget_enter_partial_power_down(hsotg);
 -}
 -
- /**
+-/**
   * dwc2_restore_essential_regs() - Restore essiential regs of core.
   *
-@@ -351,22 +338,6 @@ static bool dwc2_iddig_filter_enabled(struct dwc2_hsotg *hsotg)
- 	return true;
+  * @hsotg: Programming view of the DWC_otg controller
+@@ -352,22 +339,6 @@ static bool dwc2_iddig_filter_enabled(st
  }
  
--/*
+ /*
 - * dwc2_enter_hibernation() - Common function to enter hibernation.
 - *
 - * @hsotg: Programming view of the DWC_otg controller
@@ -82,14 +79,13 @@ index d8465237bf39..05a8d22bec83 100644
 -		return dwc2_gadget_enter_hibernation(hsotg);
 -}
 -
- /*
+-/*
   * dwc2_exit_hibernation() - Common function to exit from hibernation.
   *
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index a4f1eb841d1e..89f590b02bae 100644
+  * @hsotg: Programming view of the DWC_otg controller
 --- a/drivers/usb/dwc2/core.h
 +++ b/drivers/usb/dwc2/core.h
-@@ -1331,10 +1331,8 @@ static inline bool dwc2_is_hs_iot(struct dwc2_hsotg *hsotg)
+@@ -1331,10 +1331,8 @@ static inline bool dwc2_is_hs_iot(struct
   * and the DWC_otg controller
   */
  int dwc2_core_reset(struct dwc2_hsotg *hsotg, bool skip_wait);
@@ -100,7 +96,7 @@ index a4f1eb841d1e..89f590b02bae 100644
  int dwc2_exit_hibernation(struct dwc2_hsotg *hsotg, int rem_wakeup,
  		int reset, int is_host);
  void dwc2_init_fs_ls_pclk_sel(struct dwc2_hsotg *hsotg);
-@@ -1449,15 +1447,13 @@ int dwc2_hsotg_set_test_mode(struct dwc2_hsotg *hsotg, int testmode);
+@@ -1449,15 +1447,13 @@ int dwc2_hsotg_set_test_mode(struct dwc2
  #define dwc2_is_device_enabled(hsotg) (hsotg->enabled)
  int dwc2_backup_device_registers(struct dwc2_hsotg *hsotg);
  int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg, int remote_wakeup);
@@ -117,7 +113,7 @@ index a4f1eb841d1e..89f590b02bae 100644
  int dwc2_hsotg_tx_fifo_count(struct dwc2_hsotg *hsotg);
  int dwc2_hsotg_tx_fifo_total_depth(struct dwc2_hsotg *hsotg);
  int dwc2_hsotg_tx_fifo_average_depth(struct dwc2_hsotg *hsotg);
-@@ -1491,19 +1487,16 @@ static inline int dwc2_backup_device_registers(struct dwc2_hsotg *hsotg)
+@@ -1491,19 +1487,16 @@ static inline int dwc2_backup_device_reg
  static inline int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg,
  						int remote_wakeup)
  { return 0; }
@@ -139,7 +135,7 @@ index a4f1eb841d1e..89f590b02bae 100644
  static inline int dwc2_hsotg_tx_fifo_count(struct dwc2_hsotg *hsotg)
  { return 0; }
  static inline int dwc2_hsotg_tx_fifo_total_depth(struct dwc2_hsotg *hsotg)
-@@ -1526,14 +1519,12 @@ int dwc2_port_suspend(struct dwc2_hsotg *hsotg, u16 windex);
+@@ -1526,14 +1519,12 @@ int dwc2_port_suspend(struct dwc2_hsotg
  int dwc2_port_resume(struct dwc2_hsotg *hsotg);
  int dwc2_backup_host_registers(struct dwc2_hsotg *hsotg);
  int dwc2_restore_host_registers(struct dwc2_hsotg *hsotg);
@@ -155,7 +151,7 @@ index a4f1eb841d1e..89f590b02bae 100644
  bool dwc2_host_can_poweroff_phy(struct dwc2_hsotg *dwc2);
  static inline void dwc2_host_schedule_phy_reset(struct dwc2_hsotg *hsotg)
  { schedule_work(&hsotg->phy_reset_work); }
-@@ -1559,19 +1550,16 @@ static inline int dwc2_backup_host_registers(struct dwc2_hsotg *hsotg)
+@@ -1559,19 +1550,16 @@ static inline int dwc2_backup_host_regis
  { return 0; }
  static inline int dwc2_restore_host_registers(struct dwc2_hsotg *hsotg)
  { return 0; }
@@ -177,11 +173,9 @@ index a4f1eb841d1e..89f590b02bae 100644
  static inline bool dwc2_host_can_poweroff_phy(struct dwc2_hsotg *dwc2)
  { return false; }
  static inline void dwc2_host_schedule_phy_reset(struct dwc2_hsotg *hsotg) {}
-diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
-index e1f69471d149..6b6668648cd0 100644
 --- a/drivers/usb/dwc2/core_intr.c
 +++ b/drivers/usb/dwc2/core_intr.c
-@@ -521,7 +521,6 @@ static void dwc2_handle_usb_suspend_intr(struct dwc2_hsotg *hsotg)
+@@ -521,7 +521,6 @@ static void dwc2_handle_usb_suspend_intr
  {
  	u32 gintsts = dwc2_readl(hsotg, GINTSTS) & dwc2_readl(hsotg, GINTMSK);
  	u32 dsts;
@@ -189,7 +183,7 @@ index e1f69471d149..6b6668648cd0 100644
  
  	if (gintsts & GINTSTS_ERLYSUSP) {
  		dev_dbg(hsotg->dev, "USBSUSP temporarily ignored, raced with ERLYSUSP\n");
-@@ -572,33 +571,7 @@ static void dwc2_handle_usb_suspend_intr(struct dwc2_hsotg *hsotg)
+@@ -572,33 +571,7 @@ static void dwc2_handle_usb_suspend_intr
  			return;
  		}
  		if (dsts & DSTS_SUSPSTS) {
@@ -224,11 +218,9 @@ index e1f69471d149..6b6668648cd0 100644
  
  			/*
  			 * Change to L2 (suspend) state before releasing
-diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
-index 3657d638eb9c..700bb092357c 100644
 --- a/drivers/usb/dwc2/drd.c
 +++ b/drivers/usb/dwc2/drd.c
-@@ -282,33 +282,16 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+@@ -282,33 +282,16 @@ skip:
  		role == USB_ROLE_NONE ? "No" :
  		role == USB_ROLE_HOST ? "A" : "B");
  
@@ -266,11 +258,9 @@ index 3657d638eb9c..700bb092357c 100644
  
  	return 0;
  }
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index a577f5b0b430..326b17141cd9 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -3271,28 +3271,6 @@ static void dwc2_gadget_exit_lp(struct dwc2_hsotg *hsotg)
+@@ -3271,28 +3271,6 @@ static void dwc2_gadget_exit_lp(struct d
  	}
  }
  
@@ -299,7 +289,7 @@ index a577f5b0b430..326b17141cd9 100644
  static void dwc2_gadget_enum_timeout(struct work_struct *work)
  {
  	struct dwc2_hsotg *hsotg = container_of(work, struct dwc2_hsotg, dw_enumtimeout.work);
-@@ -5620,7 +5598,7 @@ void dwc2_gadget_program_ref_clk(struct dwc2_hsotg *hsotg)
+@@ -5619,7 +5597,7 @@ void dwc2_gadget_program_ref_clk(struct
   *
   * Return non-zero if failed to enter to hibernation.
   */
@@ -308,7 +298,7 @@ index a577f5b0b430..326b17141cd9 100644
  {
  	u32 gpwrdn;
  	int ret = 0;
-@@ -5806,7 +5784,7 @@ int dwc2_gadget_exit_hibernation(struct dwc2_hsotg *hsotg,
+@@ -5805,7 +5783,7 @@ int dwc2_gadget_exit_hibernation(struct
   *
   * This function is for entering device mode partial power down.
   */
@@ -317,7 +307,7 @@ index a577f5b0b430..326b17141cd9 100644
  {
  	u32 pcgcctl;
  	int ret = 0;
-@@ -5853,8 +5831,6 @@ int dwc2_gadget_enter_partial_power_down(struct dwc2_hsotg *hsotg)
+@@ -5852,8 +5830,6 @@ int dwc2_gadget_enter_partial_power_down
  	hsotg->lx_state = DWC2_L2;
  	queue_work(hsotg->wq_gadget, &hsotg->wf_gadget);
  
@@ -326,7 +316,7 @@ index a577f5b0b430..326b17141cd9 100644
  	dev_dbg(hsotg->dev, "Entering device partial power down completed.\n");
  
  	return ret;
-@@ -5961,7 +5937,7 @@ int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+@@ -5960,7 +5936,7 @@ int dwc2_gadget_exit_partial_power_down(
   *
   * This function is for entering device mode clock gating.
   */
@@ -335,7 +325,7 @@ index a577f5b0b430..326b17141cd9 100644
  {
  	u32 pcgctl;
  
-@@ -5982,9 +5958,6 @@ void dwc2_gadget_enter_clock_gating(struct dwc2_hsotg *hsotg)
+@@ -5981,9 +5957,6 @@ void dwc2_gadget_enter_clock_gating(stru
  	hsotg->lx_state = DWC2_L2;
  	hsotg->bus_suspended = true;
  	queue_work(hsotg->wq_gadget, &hsotg->wf_gadget);
@@ -345,7 +335,7 @@ index a577f5b0b430..326b17141cd9 100644
  }
  
  /*
-@@ -6036,3 +6009,56 @@ void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
+@@ -6035,3 +6008,56 @@ void dwc2_gadget_exit_clock_gating(struc
  	hsotg->bus_suspended = false;
  	queue_work(hsotg->wq_gadget, &hsotg->wf_gadget);
  }
@@ -402,11 +392,9 @@ index a577f5b0b430..326b17141cd9 100644
 +
 +	return 0;
 +}
-diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index b3b56c9da532..d10de4244e05 100644
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
-@@ -3316,34 +3316,10 @@ int dwc2_port_suspend(struct dwc2_hsotg *hsotg, u16 windex)
+@@ -3316,34 +3316,10 @@ int dwc2_port_suspend(struct dwc2_hsotg
  		hsotg->op_state = OTG_STATE_A_SUSPEND;
  	}
  
@@ -443,7 +431,7 @@ index b3b56c9da532..d10de4244e05 100644
  	}
  
  	/* For HNP the bus must be suspended for at least 200ms */
-@@ -4384,48 +4360,14 @@ static int _dwc2_hcd_suspend(struct usb_hcd *hcd)
+@@ -4381,48 +4357,14 @@ static int _dwc2_hcd_suspend(struct usb_
  	if (!(dwc2_read_hprt0(hsotg) & HPRT0_CONNSTS))
  		goto skip_power_saving;
  
@@ -495,7 +483,7 @@ index b3b56c9da532..d10de4244e05 100644
  	}
  
  skip_power_saving:
-@@ -5506,7 +5448,7 @@ int dwc2_restore_host_registers(struct dwc2_hsotg *hsotg)
+@@ -5503,7 +5445,7 @@ int dwc2_restore_host_registers(struct d
   *
   * @hsotg: Programming view of the DWC_otg controller
   */
@@ -504,7 +492,7 @@ index b3b56c9da532..d10de4244e05 100644
  {
  	unsigned long flags;
  	int ret = 0;
-@@ -5774,7 +5716,7 @@ bool dwc2_host_can_poweroff_phy(struct dwc2_hsotg *dwc2)
+@@ -5771,7 +5713,7 @@ bool dwc2_host_can_poweroff_phy(struct d
   *
   * This function is for entering Host mode partial power down.
   */
@@ -513,7 +501,7 @@ index b3b56c9da532..d10de4244e05 100644
  {
  	u32 pcgcctl;
  	u32 hprt0;
-@@ -5952,7 +5894,7 @@ int dwc2_host_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+@@ -5949,7 +5891,7 @@ out:
   *
   * This function is for entering Host mode clock gating.
   */
@@ -522,7 +510,7 @@ index b3b56c9da532..d10de4244e05 100644
  {
  	u32 hprt0;
  	u32 pcgctl;
-@@ -6053,3 +5995,50 @@ void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg, int flags)
+@@ -6050,3 +5992,50 @@ void dwc2_host_exit_clock_gating(struct
  			  jiffies + msecs_to_jiffies(71));
  	}
  }
@@ -573,6 +561,3 @@ index b3b56c9da532..d10de4244e05 100644
 +
 +	return 0;
 +}
--- 
-2.53.0
-

@@ -16,11 +16,9 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 8 ++++++++
  1 file changed, 8 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index 078dd24bf8ab..da066d58c7e9 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -441,6 +441,14 @@ i2s2_endpoint: endpoint {
+@@ -441,6 +441,14 @@
  	};
  };
  
@@ -35,6 +33,3 @@ index 078dd24bf8ab..da066d58c7e9 100644
  &ipcc1 {
  	status = "okay";
  };
--- 
-2.53.0
-

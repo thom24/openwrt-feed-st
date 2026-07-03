@@ -16,11 +16,9 @@ Reviewed-by: Patrice CHOTARD <patrice.chotard@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 20 ++++++++++----------
  1 file changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-index 5826a44fb8d9..0417a02ff9cc 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-@@ -588,6 +588,16 @@ &uart4 {
+@@ -588,6 +588,16 @@
  	status = "disabled";
  };
  
@@ -37,7 +35,7 @@ index 5826a44fb8d9..0417a02ff9cc 100644
  &usart2 {
  	bootph-all;
  	pinctrl-names = "default", "idle", "sleep";
-@@ -609,16 +619,6 @@ pins2 {
+@@ -609,16 +619,6 @@
  	};
  };
  
@@ -54,6 +52,3 @@ index 5826a44fb8d9..0417a02ff9cc 100644
  &usart6 {
  	pinctrl-names = "default", "idle", "sleep";
  	pinctrl-0 = <&usart6_pins_a>;
--- 
-2.53.0
-

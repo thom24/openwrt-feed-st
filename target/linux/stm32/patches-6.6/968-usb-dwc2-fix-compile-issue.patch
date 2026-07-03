@@ -12,11 +12,9 @@ Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
  drivers/usb/dwc2/debugfs.c   |  3 +++
  2 files changed, 23 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
-index b96a49e0c9a8..58b08ef52450 100644
 --- a/drivers/usb/dwc2/core_intr.c
 +++ b/drivers/usb/dwc2/core_intr.c
-@@ -385,9 +385,11 @@ void dwc2_wakeup_from_lpm_l1(struct dwc2_hsotg *hsotg, bool remotewakeup)
+@@ -385,9 +385,11 @@ void dwc2_wakeup_from_lpm_l1(struct dwc2
  			goto fail;
  			return;
  		}
@@ -29,7 +27,7 @@ index b96a49e0c9a8..58b08ef52450 100644
  		call_gadget(hsotg, resume);
  		/* Change to L0 state */
  		hsotg->lx_state = DWC2_L0;
-@@ -451,11 +453,19 @@ static void dwc2_handle_wakeup_detected_intr(struct dwc2_hsotg *hsotg)
+@@ -451,11 +453,19 @@ static void dwc2_handle_wakeup_detected_
  
  			/* Change to L0 state, when no_clock_gating == true */
  			hsotg->lx_state = DWC2_L0;
@@ -49,7 +47,7 @@ index b96a49e0c9a8..58b08ef52450 100644
  		call_gadget(hsotg, resume);
  	} else {
  		if (hsotg->lx_state == DWC2_L2) {
-@@ -588,10 +598,11 @@ static void dwc2_handle_usb_suspend_intr(struct dwc2_hsotg *hsotg)
+@@ -588,10 +598,11 @@ static void dwc2_handle_usb_suspend_intr
  			 * spinlock
  			 */
  			hsotg->lx_state = DWC2_L2;
@@ -63,7 +61,7 @@ index b96a49e0c9a8..58b08ef52450 100644
  			/* Call gadget suspend callback */
  			call_gadget(hsotg, suspend);
  		}
-@@ -668,9 +679,11 @@ static void dwc2_handle_lpm_intr(struct dwc2_hsotg *hsotg)
+@@ -668,9 +679,11 @@ static void dwc2_handle_lpm_intr(struct
  			dev_dbg(hsotg->dev,
  				"Core is in L1 sleep glpmcfg=%08x\n", glpmcfg);
  
@@ -76,7 +74,7 @@ index b96a49e0c9a8..58b08ef52450 100644
  			/* Inform gadget that we are in L1 state */
  			call_gadget(hsotg, suspend);
  		}
-@@ -822,8 +835,10 @@ static int dwc2_handle_gpwrdn_intr(struct dwc2_hsotg *hsotg)
+@@ -822,8 +835,10 @@ static int dwc2_handle_gpwrdn_intr(struc
  				if (ret)
  					dev_err(hsotg->dev,
  						"exit hibernation failed.\n");
@@ -88,11 +86,9 @@ index b96a49e0c9a8..58b08ef52450 100644
  				call_gadget(hsotg, resume);
  			} else {
  				ret = dwc2_exit_hibernation(hsotg, 1, 0, 1);
-diff --git a/drivers/usb/dwc2/debugfs.c b/drivers/usb/dwc2/debugfs.c
-index d37a63385a6e..668f20633890 100644
 --- a/drivers/usb/dwc2/debugfs.c
 +++ b/drivers/usb/dwc2/debugfs.c
-@@ -822,7 +822,10 @@ static int dwc2_debugfs_runtime_suspend(struct device *dev)
+@@ -822,7 +822,10 @@ static int dwc2_debugfs_runtime_suspend(
  		 * put it back to suspend state, as there won't be a suspend IRQ here.
  		 */
  		if (hsotg->suspended_from == USB_STATE_CONFIGURED) {
@@ -103,6 +99,3 @@ index d37a63385a6e..668f20633890 100644
  			call_gadget(hsotg, suspend);
  		}
  	}
--- 
-2.53.0
-

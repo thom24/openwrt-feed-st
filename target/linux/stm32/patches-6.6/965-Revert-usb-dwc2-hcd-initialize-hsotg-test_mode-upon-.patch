@@ -11,7 +11,7 @@ This reverts commit 10c68f514e6aedf8e91f8905fb924fe12b01765c.
 
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
-@@ -3728,7 +3728,6 @@ static int dwc2_hcd_hub_control(struct d
+@@ -3725,7 +3725,6 @@ static int dwc2_hcd_hub_control(struct d
  			hprt0 &= ~HPRT0_TSTCTL_MASK;
  			hprt0 |= (windex >> 8) << HPRT0_TSTCTL_SHIFT;
  			dwc2_writel(hsotg, hprt0, HPRT0);

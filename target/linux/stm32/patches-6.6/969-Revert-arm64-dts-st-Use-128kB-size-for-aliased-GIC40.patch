@@ -65,7 +65,7 @@ crash.
 
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -203,9 +203,9 @@
+@@ -170,9 +170,9 @@
  		interrupt-controller;
  		interrupt-parent = <&intc>;
  		reg = <0x0 0x4ac10000 0x0 0x1000>,

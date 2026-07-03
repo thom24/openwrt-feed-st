@@ -19,11 +19,9 @@ Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 14 +++++++-------
  1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index 04e2fd09a7d4..f1b9f26719aa 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -1979,13 +1979,6 @@ risab5: risab@42130000 {
+@@ -1979,13 +1979,6 @@
  			#access-controller-cells = <1>;
  		};
  
@@ -37,7 +35,7 @@ index 04e2fd09a7d4..f1b9f26719aa 100644
  		bsec: efuse@44000000 {
  			bootph-all;
  			compatible = "st,stm32mp25-bsec";
-@@ -2019,6 +2012,13 @@ dts: thermal-sensor@44070000 {
+@@ -2019,6 +2012,13 @@
  			#thermal-sensor-cells = <1>;
  		};
  
@@ -51,6 +49,3 @@ index 04e2fd09a7d4..f1b9f26719aa 100644
  		rcc: clock-controller@44200000 {
  			bootph-all;
  			compatible = "st,stm32mp21-rcc";
--- 
-2.53.0
-

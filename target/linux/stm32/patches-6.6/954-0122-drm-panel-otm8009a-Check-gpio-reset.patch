@@ -17,11 +17,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/panel/panel-orisetech-otm8009a.c | 8 +++++++-
  1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-orisetech-otm8009a.c b/drivers/gpu/drm/panel/panel-orisetech-otm8009a.c
-index ad88517198e7..157c3e05e17b 100644
 --- a/drivers/gpu/drm/panel/panel-orisetech-otm8009a.c
 +++ b/drivers/gpu/drm/panel/panel-orisetech-otm8009a.c
-@@ -454,11 +454,17 @@ static int otm8009a_probe(struct mipi_dsi_device *dsi)
+@@ -454,11 +454,17 @@ static int otm8009a_probe(struct mipi_ds
  	if (!ctx)
  		return -ENOMEM;
  
@@ -40,6 +38,3 @@ index ad88517198e7..157c3e05e17b 100644
  	ctx->supply = devm_regulator_get(dev, "power");
  	if (IS_ERR(ctx->supply))
  		return dev_err_probe(dev, PTR_ERR(ctx->supply),
--- 
-2.53.0
-

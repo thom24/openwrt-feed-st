@@ -23,11 +23,9 @@ Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  drivers/pmdomain/arm/scmi_perf_domain.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/pmdomain/arm/scmi_perf_domain.c b/drivers/pmdomain/arm/scmi_perf_domain.c
-index bc3f78abb6da..709bbc448fad 100644
 --- a/drivers/pmdomain/arm/scmi_perf_domain.c
 +++ b/drivers/pmdomain/arm/scmi_perf_domain.c
-@@ -35,7 +35,7 @@ scmi_pd_set_perf_state(struct generic_pm_domain *genpd, unsigned int state)
+@@ -35,7 +35,7 @@ scmi_pd_set_perf_state(struct generic_pm
  	if (!state)
  		return -EINVAL;
  
@@ -36,6 +34,3 @@ index bc3f78abb6da..709bbc448fad 100644
  	if (ret)
  		dev_warn(&genpd->dev, "Failed with %d when trying to set %d perf level",
  			 ret, state);
--- 
-2.53.0
-

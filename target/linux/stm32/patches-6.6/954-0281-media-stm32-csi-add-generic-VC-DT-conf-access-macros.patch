@@ -20,8 +20,6 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  drivers/media/platform/st/stm32/stm32-csi.c | 23 ++++++++-------------
  1 file changed, 9 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-csi.c b/drivers/media/platform/st/stm32/stm32-csi.c
-index db5781a8b63d..748c3630ce97 100644
 --- a/drivers/media/platform/st/stm32/stm32-csi.c
 +++ b/drivers/media/platform/st/stm32/stm32-csi.c
 @@ -30,16 +30,12 @@
@@ -45,7 +43,7 @@ index db5781a8b63d..748c3630ce97 100644
  #define STM32_CSI_INPUT_BPP8			2
  #define STM32_CSI_INPUT_BPP10			3
  #define STM32_CSI_INPUT_BPP12			4
-@@ -634,13 +630,12 @@ static int stm32_csi_start_vc(struct stm32_csi_dev *csi2priv,
+@@ -634,13 +630,12 @@ static int stm32_csi_start_vc(struct stm
  		cfgr1 |= fmt->input_fmt << STM32_CSI_VCXCFGR1_CDTFT_SHIFT;
  		dev_dbg(csi2priv->dev, "VC%d: enable AllDT mode\n", vc);
  	} else {
@@ -62,7 +60,7 @@ index db5781a8b63d..748c3630ce97 100644
  
  	/* Enable processing of the virtual-channel and wait for its status */
  	writel_relaxed(STM32_CSI_CR_VCXSTART(vc) | STM32_CSI_CR_CSIEN,
-@@ -681,8 +676,8 @@ static int stm32_csi_stop_vc(struct stm32_csi_dev *csi2priv, uint32_t vc)
+@@ -681,8 +676,8 @@ static int stm32_csi_stop_vc(struct stm3
  	}
  
  	/* Disable all DTs */
@@ -73,6 +71,3 @@ index db5781a8b63d..748c3630ce97 100644
  
  	return 0;
  }
--- 
-2.53.0
-

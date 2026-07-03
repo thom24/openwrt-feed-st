@@ -19,8 +19,6 @@ Tested-by: Alain VOLMAT <alain.volmat@st.com>
  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-index 8fd8be76875e..6c3e76d61b9e 100644
 --- a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
 +++ b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
 @@ -127,6 +127,9 @@ properties:
@@ -33,6 +31,3 @@ index 8fd8be76875e..6c3e76d61b9e 100644
    access-controllers:
      minItems: 1
      maxItems: 2
--- 
-2.53.0
-

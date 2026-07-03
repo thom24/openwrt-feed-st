@@ -15,8 +15,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  Documentation/devicetree/bindings/gpio/st,stmpe-gpio.yaml | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/gpio/st,stmpe-gpio.yaml b/Documentation/devicetree/bindings/gpio/st,stmpe-gpio.yaml
-index 4555f1644a4d..24a3255eb1a0 100644
 --- a/Documentation/devicetree/bindings/gpio/st,stmpe-gpio.yaml
 +++ b/Documentation/devicetree/bindings/gpio/st,stmpe-gpio.yaml
 @@ -4,7 +4,7 @@
@@ -28,6 +26,3 @@ index 4555f1644a4d..24a3255eb1a0 100644
  
  description:
    STMicroelectronics Port Expander (STMPE) is a series of slow
--- 
-2.53.0
-

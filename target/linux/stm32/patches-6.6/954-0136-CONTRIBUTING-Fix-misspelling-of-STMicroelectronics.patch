@@ -15,11 +15,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  CONTRIBUTING.md | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/CONTRIBUTING.md b/CONTRIBUTING.md
-index 3d1bacd78a54..75f5671d2a8d 100644
 --- a/CONTRIBUTING.md
 +++ b/CONTRIBUTING.md
-@@ -10,7 +10,7 @@ STM32MPU projects do not activate "Github issues" feature for the time being. If
+@@ -10,7 +10,7 @@ STM32MPU projects do not activate "Githu
  
  ## 2. Pull Requests
  
@@ -28,6 +26,3 @@ index 3d1bacd78a54..75f5671d2a8d 100644
  
  * If you are an individual writing original source code and you are sure **you own the intellectual property**, then you need to sign an Individual CLA (https://cla.st.com).
  * If you work for a company that wants also to allow you to contribute with your work, your company needs to provide a Corporate CLA (https://cla.st.com) mentioning your GitHub account name.
--- 
-2.53.0
-

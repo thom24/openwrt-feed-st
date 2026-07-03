@@ -19,11 +19,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/usb/dwc2/hcd.c | 10 +++-------
  1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index 2ea26e3c9eab..613fabaeb7dc 100644
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
-@@ -5732,17 +5732,13 @@ bool dwc2_host_can_poweroff_phy(struct dwc2_hsotg *dwc2)
+@@ -5729,17 +5729,13 @@ bool dwc2_host_can_poweroff_phy(struct d
  	if (dwc2_is_device_mode(dwc2) || dwc2->dr_mode == USB_DR_MODE_PERIPHERAL)
  		return false;
  
@@ -44,6 +42,3 @@ index 2ea26e3c9eab..613fabaeb7dc 100644
  		return false;
  
  	/* No reason to keep the PHY powered, so allow poweroff */
--- 
-2.53.0
-

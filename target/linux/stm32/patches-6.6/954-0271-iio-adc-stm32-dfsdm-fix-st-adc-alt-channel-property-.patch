@@ -24,11 +24,9 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/iio/adc/stm32-dfsdm-adc.c | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/adc/stm32-dfsdm-adc.c b/drivers/iio/adc/stm32-dfsdm-adc.c
-index b18e1df55821..b56c8fad21b6 100644
 --- a/drivers/iio/adc/stm32-dfsdm-adc.c
 +++ b/drivers/iio/adc/stm32-dfsdm-adc.c
-@@ -724,9 +724,8 @@ static int stm32_dfsdm_generic_channel_parse_of(struct stm32_dfsdm *dfsdm,
+@@ -724,9 +724,8 @@ static int stm32_dfsdm_generic_channel_p
  	}
  	df_ch->src = val;
  
@@ -40,6 +38,3 @@ index b18e1df55821..b56c8fad21b6 100644
  
  	if (adc->dev_data->type == DFSDM_IIO) {
  		backend = devm_iio_backend_fwnode_get(&indio_dev->dev, NULL, node);
--- 
-2.53.0
-

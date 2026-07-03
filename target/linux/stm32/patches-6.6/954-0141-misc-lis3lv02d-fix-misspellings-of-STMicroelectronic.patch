@@ -17,8 +17,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/misc/lis3lv02d/Makefile | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/misc/lis3lv02d/Kconfig b/drivers/misc/lis3lv02d/Kconfig
-index bb2fec4b5880..368a8001537a 100644
 --- a/drivers/misc/lis3lv02d/Kconfig
 +++ b/drivers/misc/lis3lv02d/Kconfig
 @@ -1,10 +1,10 @@
@@ -43,8 +41,6 @@ index bb2fec4b5880..368a8001537a 100644
  	depends on I2C && INPUT
  	select SENSORS_LIS3LV02D
  	help
-diff --git a/drivers/misc/lis3lv02d/Makefile b/drivers/misc/lis3lv02d/Makefile
-index 137e7020c127..bcf208439c64 100644
 --- a/drivers/misc/lis3lv02d/Makefile
 +++ b/drivers/misc/lis3lv02d/Makefile
 @@ -1,6 +1,6 @@
@@ -55,6 +51,3 @@ index 137e7020c127..bcf208439c64 100644
  #
  
  obj-$(CONFIG_SENSORS_LIS3LV02D) += lis3lv02d.o
--- 
-2.53.0
-

@@ -16,11 +16,9 @@ Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
  drivers/usb/host/ehci-platform.c | 12 ++++++++++++
  1 file changed, 12 insertions(+)
 
-diff --git a/drivers/usb/host/ehci-platform.c b/drivers/usb/host/ehci-platform.c
-index c1e08eec6a25..f85083ff8640 100644
 --- a/drivers/usb/host/ehci-platform.c
 +++ b/drivers/usb/host/ehci-platform.c
-@@ -370,6 +370,18 @@ static int ehci_platform_probe(struct platform_device *dev)
+@@ -370,6 +370,18 @@ static int ehci_platform_probe(struct pl
  
  	hcd->tpl_support = of_usb_host_tpl_support(dev->dev.of_node);
  
@@ -39,6 +37,3 @@ index c1e08eec6a25..f85083ff8640 100644
  	err = usb_add_hcd(hcd, irq, IRQF_SHARED);
  	if (err)
  		goto err_power;
--- 
-2.53.0
-

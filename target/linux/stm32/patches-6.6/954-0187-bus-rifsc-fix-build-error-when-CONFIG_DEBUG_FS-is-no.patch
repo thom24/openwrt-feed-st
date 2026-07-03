@@ -20,11 +20,9 @@ Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
  drivers/bus/stm32_rifsc.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/bus/stm32_rifsc.c b/drivers/bus/stm32_rifsc.c
-index 022baa7ed46e..4856d8d88ea2 100644
 --- a/drivers/bus/stm32_rifsc.c
 +++ b/drivers/bus/stm32_rifsc.c
-@@ -633,7 +633,7 @@ static int stm32_rifsc_register_debugfs(struct rifsc_private *priv)
+@@ -633,7 +633,7 @@ static int stm32_rifsc_register_debugfs(
  	return 0;
  }
  #else /* CONFIG_DEBUG_FS */
@@ -33,6 +31,3 @@ index 022baa7ed46e..4856d8d88ea2 100644
  {
  	return 0;
  }
--- 
-2.53.0
-

@@ -20,9 +20,6 @@ Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
  1 file changed, 83 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/bus/st,stm32mp131-dbg-bus.yaml
 
-diff --git a/Documentation/devicetree/bindings/bus/st,stm32mp131-dbg-bus.yaml b/Documentation/devicetree/bindings/bus/st,stm32mp131-dbg-bus.yaml
-new file mode 100644
-index 000000000000..4dced89abd25
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/bus/st,stm32mp131-dbg-bus.yaml
 @@ -0,0 +1,83 @@
@@ -109,6 +106,3 @@ index 000000000000..4dced89abd25
 +        status = "disabled";
 +      };
 +    };
--- 
-2.53.0
-

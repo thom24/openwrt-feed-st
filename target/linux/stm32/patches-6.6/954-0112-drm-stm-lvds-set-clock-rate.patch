@@ -15,11 +15,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/stm/lvds.c | 80 ++++++++++++++++++++++++--------------
  1 file changed, 51 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
-index 08499c48b277..5d95c79ef80b 100644
 --- a/drivers/gpu/drm/stm/lvds.c
 +++ b/drivers/gpu/drm/stm/lvds.c
-@@ -667,55 +667,49 @@ static unsigned long lvds_pixel_clk_recalc_rate(struct clk_hw *hw,
+@@ -667,55 +667,49 @@ static unsigned long lvds_pixel_clk_reca
  	drm_dbg(drm, "ndiv %d , bdiv %d, mdiv %d, pll_out_khz %d\n",
  		ndiv, bdiv, mdiv, pll_out_khz);
  
@@ -86,16 +84,16 @@ index 08499c48b277..5d95c79ef80b 100644
 +				   unsigned long parent_rate)
 +{
 +	struct stm_lvds *lvds = container_of(hw, struct stm_lvds, lvds_ck_px);
- 
--	return lvds->pixel_clock_rate;
++
 +	/* Save pixel clock rate */
 +	lvds->pixel_clock_rate = lvds_pixel_clk_round_rate(hw, rate, &parent_rate);
-+
+ 
+-	return lvds->pixel_clock_rate;
 +	return 0;
  }
  
  static const struct clk_ops lvds_pixel_clk_ops = {
-@@ -723,6 +717,7 @@ static const struct clk_ops lvds_pixel_clk_ops = {
+@@ -723,6 +717,7 @@ static const struct clk_ops lvds_pixel_c
  	.disable = lvds_pixel_clk_disable,
  	.recalc_rate = lvds_pixel_clk_recalc_rate,
  	.round_rate = lvds_pixel_clk_round_rate,
@@ -103,7 +101,7 @@ index 08499c48b277..5d95c79ef80b 100644
  };
  
  static const struct clk_init_data clk_data = {
-@@ -744,12 +739,39 @@ static void lvds_pixel_clk_unregister(void *data)
+@@ -744,12 +739,39 @@ static void lvds_pixel_clk_unregister(vo
  static int lvds_pixel_clk_register(struct stm_lvds *lvds)
  {
  	struct device_node *node = lvds->dev->of_node;
@@ -146,6 +144,3 @@ index 08499c48b277..5d95c79ef80b 100644
  
  	ret = clk_hw_register(lvds->dev, &lvds->lvds_ck_px);
  	if (ret)
--- 
-2.53.0
-

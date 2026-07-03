@@ -21,11 +21,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/tty/n_tty.c | 13 ++++---------
  1 file changed, 4 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/tty/n_tty.c b/drivers/tty/n_tty.c
-index e0471489f959..788035f0c1ab 100644
 --- a/drivers/tty/n_tty.c
 +++ b/drivers/tty/n_tty.c
-@@ -1457,15 +1457,10 @@ static void n_tty_receive_char_closing(struct tty_struct *tty, u8 c,
+@@ -1457,15 +1457,10 @@ static void n_tty_receive_char_closing(s
  		c = tolower(c);
  
  	if (I_IXON(tty)) {
@@ -45,6 +43,3 @@ index e0471489f959..788035f0c1ab 100644
  			start_tty(tty);
  			process_echoes(tty);
  		}
--- 
-2.53.0
-

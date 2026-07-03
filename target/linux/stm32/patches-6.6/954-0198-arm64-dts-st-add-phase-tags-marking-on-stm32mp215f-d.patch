@@ -20,11 +20,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 12 ++++++++++++
  1 file changed, 12 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-index 7b5a2acb66c8..5826a44fb8d9 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-@@ -395,6 +395,7 @@ timer {
+@@ -395,6 +395,7 @@
  };
  
  &ltdc {
@@ -32,7 +30,7 @@ index 7b5a2acb66c8..5826a44fb8d9 100644
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&ltdc_pins_a>;
  	pinctrl-1 = <&ltdc_sleep_pins_a>;
-@@ -588,6 +589,7 @@ &uart4 {
+@@ -588,6 +589,7 @@
  };
  
  &usart2 {
@@ -40,7 +38,7 @@ index 7b5a2acb66c8..5826a44fb8d9 100644
  	pinctrl-names = "default", "idle", "sleep";
  	pinctrl-0 = <&usart2_pins_a>;
  	pinctrl-1 = <&usart2_idle_pins_a>;
-@@ -597,6 +599,16 @@ &usart2 {
+@@ -597,6 +599,16 @@
  	status = "okay";
  };
  
@@ -57,6 +55,3 @@ index 7b5a2acb66c8..5826a44fb8d9 100644
  /* Bluetooth */
  &usart1 {
  	pinctrl-names = "default", "sleep", "idle";
--- 
-2.53.0
-

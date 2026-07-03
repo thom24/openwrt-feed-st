@@ -18,11 +18,9 @@ Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp251.dtsi | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 90b5aed660c5..8915011e6024 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -303,7 +303,8 @@ usb2_phy1: usb2-phy1 {
+@@ -303,7 +303,8 @@
  		#phy-cells      = <0>;
  		#clock-cells    = <1>;
  		st,syscfg       = <&syscfg 0x2400>;
@@ -32,7 +30,7 @@ index 90b5aed660c5..8915011e6024 100644
  		resets          = <&rcc USB2PHY1_R>;
  		status          = "disabled";
  	};
-@@ -314,6 +315,7 @@ usb2_phy2: usb2-phy2 {
+@@ -314,6 +315,7 @@
  		#clock-cells    = <1>;
  		st,syscfg       = <&syscfg 0x2800>;
  		clocks          = <&rcc CK_KER_USB2PHY2EN>;
@@ -40,6 +38,3 @@ index 90b5aed660c5..8915011e6024 100644
  		resets          = <&rcc USB2PHY2_R>;
  		status          = "disabled";
  	};
--- 
-2.53.0
-

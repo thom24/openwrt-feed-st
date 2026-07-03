@@ -31,11 +31,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  include/linux/mfd/stm32-timers.h  |   2 +
  2 files changed, 158 insertions(+), 54 deletions(-)
 
-diff --git a/drivers/counter/stm32-timer-cnt.c b/drivers/counter/stm32-timer-cnt.c
-index 85f67785b39d..1a5afd600db9 100644
 --- a/drivers/counter/stm32-timer-cnt.c
 +++ b/drivers/counter/stm32-timer-cnt.c
-@@ -98,6 +98,7 @@ static int stm32_count_function_read(struct counter_device *counter,
+@@ -98,6 +98,7 @@ static int stm32_count_function_read(str
  
  	switch (smcr & TIM_SMCR_SMS) {
  	case TIM_SMCR_SMS_SLAVE_MODE_DISABLED:
@@ -43,7 +41,7 @@ index 85f67785b39d..1a5afd600db9 100644
  		*function = COUNTER_FUNCTION_INCREASE;
  		return 0;
  	case TIM_SMCR_SMS_ENCODER_MODE_1:
-@@ -119,11 +120,24 @@ static int stm32_count_function_write(struct counter_device *counter,
+@@ -119,11 +120,24 @@ static int stm32_count_function_write(st
  				      enum counter_function function)
  {
  	struct stm32_timer_cnt *const priv = counter_priv(counter);
@@ -70,7 +68,7 @@ index 85f67785b39d..1a5afd600db9 100644
  		break;
  	case COUNTER_FUNCTION_QUADRATURE_X2_A:
  		if (!priv->has_encoder)
-@@ -466,17 +480,25 @@ static struct counter_comp stm32_count_ext[] = {
+@@ -466,17 +480,25 @@ static struct counter_comp stm32_count_e
  };
  
  static const enum counter_synapse_action stm32_clock_synapse_actions[] = {
@@ -97,7 +95,7 @@ index 85f67785b39d..1a5afd600db9 100644
  static int stm32_action_read(struct counter_device *counter,
  			     struct counter_count *count,
  			     struct counter_synapse *synapse,
-@@ -485,7 +507,9 @@ static int stm32_action_read(struct counter_device *counter,
+@@ -485,7 +507,9 @@ static int stm32_action_read(struct coun
  	struct stm32_timer_cnt *const priv = counter_priv(counter);
  	const struct stm32_count_ccer_reg *ccer;
  	enum counter_function function;
@@ -108,7 +106,7 @@ index 85f67785b39d..1a5afd600db9 100644
  	u32 ccer_val;
  	int err;
  
-@@ -493,50 +517,81 @@ static int stm32_action_read(struct counter_device *counter,
+@@ -493,50 +517,81 @@ static int stm32_action_read(struct coun
  	if (err)
  		return err;
  
@@ -149,18 +147,7 @@ index 85f67785b39d..1a5afd600db9 100644
 +				*action = COUNTER_SYNAPSE_ACTION_RISING_EDGE;
 +				return 0;
 +			}
- 
--		/* Configure capture channel polarity */
--		ccer_val &= (ccer->ccp | ccer->ccnp);
--		if (!ccer_val) {
--			*action = COUNTER_SYNAPSE_CAPTURE_RISING_EDGE;
--		} else if (ccer_val == ccer->ccp) {
--			*action = COUNTER_SYNAPSE_CAPTURE_FALLING_EDGE;
--		} else if (ccer_val == (ccer->ccp | ccer->ccnp)) {
--			*action = COUNTER_SYNAPSE_CAPTURE_BOTH_EDGES;
--		} else {
--			dev_err(counter->parent, "Unknown action\n");
--			return -EINVAL;
++
 +			/* rising edge on ti2fp2 clocks the counter */
 +			if (signal_id == STM32_CH2_SIG &&
 +			    sms == TIM_SMCR_SMS_EXTERNAL_CLOCK_MODE_1 && ts == 6) {
@@ -179,7 +166,18 @@ index 85f67785b39d..1a5afd600db9 100644
 +				dev_err(counter->parent, "Unexpected state CCER=0x%x\n", ccer_val);
 +				return -EINVAL;
 +			}
-+
+ 
+-		/* Configure capture channel polarity */
+-		ccer_val &= (ccer->ccp | ccer->ccnp);
+-		if (!ccer_val) {
+-			*action = COUNTER_SYNAPSE_CAPTURE_RISING_EDGE;
+-		} else if (ccer_val == ccer->ccp) {
+-			*action = COUNTER_SYNAPSE_CAPTURE_FALLING_EDGE;
+-		} else if (ccer_val == (ccer->ccp | ccer->ccnp)) {
+-			*action = COUNTER_SYNAPSE_CAPTURE_BOTH_EDGES;
+-		} else {
+-			dev_err(counter->parent, "Unknown action\n");
+-			return -EINVAL;
 +			return 0;
 +		default:
 +			dev_err(counter->parent, "Unknown signal [%d]\n", signal_id);
@@ -209,7 +207,7 @@ index 85f67785b39d..1a5afd600db9 100644
  			*action = COUNTER_SYNAPSE_ACTION_BOTH_EDGES;
  		else
  			*action = COUNTER_SYNAPSE_ACTION_NONE;
-@@ -553,10 +608,10 @@ static int stm32_action_write(struct counter_device *counter,
+@@ -553,10 +608,10 @@ static int stm32_action_write(struct cou
  {
  	struct stm32_timer_cnt *const priv = counter_priv(counter);
  	enum counter_function function;
@@ -223,7 +221,7 @@ index 85f67785b39d..1a5afd600db9 100644
  	bool enabled = false;
  	int err;
  
-@@ -567,50 +622,97 @@ static int stm32_action_write(struct counter_device *counter,
+@@ -567,50 +622,97 @@ static int stm32_action_write(struct cou
  	if (function != COUNTER_FUNCTION_INCREASE)
  		return -EINVAL;
  
@@ -314,7 +312,9 @@ index 85f67785b39d..1a5afd600db9 100644
 +	else
 +		regmap_clear_bits(priv->regmap, TIM_SMCR, TIM_SMCR_SMS3);
 +	regmap_update_bits(priv->regmap, TIM_SMCR, TIM_SMCR_TS, FIELD_PREP(TIM_SMCR_TS, ts));
-+
+ 
+-	dev_dbg(counter->parent, "Action [%d] set for signal [%d] / channel [%d]\n",
+-		action, synapse->signal->id, ch);
 +	/* Make sure that registers are updated */
 +	regmap_update_bits(priv->regmap, TIM_EGR, TIM_EGR_UG, TIM_EGR_UG);
 +
@@ -327,9 +327,7 @@ index 85f67785b39d..1a5afd600db9 100644
 +			regmap_clear_bits(priv->regmap, TIM_CCER, ccer->cce);
 +			enabled = true;
 +		}
- 
--	dev_dbg(counter->parent, "Action [%d] set for signal [%d] / channel [%d]\n",
--		action, synapse->signal->id, ch);
++
 +		regmap_update_bits(priv->regmap, TIM_CCER, ccer->ccp | ccer->ccnp, ccer_val);
 +
 +		if (enabled)
@@ -345,7 +343,7 @@ index 85f67785b39d..1a5afd600db9 100644
  
  static int stm32_count_capture_configure(struct counter_device *counter, unsigned int ch,
  					 bool enable)
-@@ -869,13 +971,13 @@ static struct counter_signal stm32_signals[] = {
+@@ -869,13 +971,13 @@ static struct counter_signal stm32_signa
  
  static struct counter_synapse stm32_count_synapses[] = {
  	{
@@ -363,8 +361,6 @@ index 85f67785b39d..1a5afd600db9 100644
  		.signal = &stm32_signals[STM32_CH2_SIG]
  	},
  	{
-diff --git a/include/linux/mfd/stm32-timers.h b/include/linux/mfd/stm32-timers.h
-index 98ba3f92618b..b1f0f0bf6121 100644
 --- a/include/linux/mfd/stm32-timers.h
 +++ b/include/linux/mfd/stm32-timers.h
 @@ -45,6 +45,7 @@
@@ -383,6 +379,3 @@ index 98ba3f92618b..b1f0f0bf6121 100644
  #define TIM_SMCR_TS_SHIFT	4
  #define TIM_BDTR_BKF_MASK	0xF
  #define TIM_BDTR_BKF_SHIFT(x)	(16 + (x) * 4)
--- 
-2.53.0
-

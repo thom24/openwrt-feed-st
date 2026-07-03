@@ -27,11 +27,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  4 files changed, 353 insertions(+)
  create mode 100644 drivers/bus/stm32_dbg_bus.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 0a4f54ff3e64..a1eb4ca1a223 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -20335,6 +20335,7 @@ F:	drivers/perf/stm32_ddr_pmu.c
+@@ -20338,6 +20338,7 @@ F:	drivers/perf/stm32_ddr_pmu.c
  ST STM32 FIREWALL
  M:	Gatien Chevallier <gatien.chevallier@foss.st.com>
  S:	Maintained
@@ -39,8 +37,6 @@ index 0a4f54ff3e64..a1eb4ca1a223 100644
  F:	drivers/bus/stm32_etzpc.c
  F:	drivers/bus/stm32_firewall.c
  F:	drivers/bus/stm32_rifsc.c
-diff --git a/drivers/bus/Kconfig b/drivers/bus/Kconfig
-index 8f1d380cbc57..e9a237767ed4 100644
 --- a/drivers/bus/Kconfig
 +++ b/drivers/bus/Kconfig
 @@ -163,6 +163,16 @@ config QCOM_SSC_BLOCK_BUS
@@ -60,11 +56,9 @@ index 8f1d380cbc57..e9a237767ed4 100644
  config STM32_FIREWALL
  	bool "STM32 Firewall framework"
  	depends on (ARCH_STM32 || COMPILE_TEST) && OF
-diff --git a/drivers/bus/Makefile b/drivers/bus/Makefile
-index cddd4984d6af..ee4b1c9173cf 100644
 --- a/drivers/bus/Makefile
 +++ b/drivers/bus/Makefile
-@@ -26,6 +26,7 @@ obj-$(CONFIG_OMAP_INTERCONNECT)	+= omap_l3_smx.o omap_l3_noc.o
+@@ -26,6 +26,7 @@ obj-$(CONFIG_OMAP_INTERCONNECT)	+= omap_
  obj-$(CONFIG_OMAP_OCP2SCP)	+= omap-ocp2scp.o
  obj-$(CONFIG_QCOM_EBI2)		+= qcom-ebi2.o
  obj-$(CONFIG_QCOM_SSC_BLOCK_BUS)	+= qcom-ssc-block-bus.o
@@ -72,9 +66,6 @@ index cddd4984d6af..ee4b1c9173cf 100644
  obj-$(CONFIG_STM32_FIREWALL)	+= stm32_firewall.o stm32_rifsc.o stm32_etzpc.o
  obj-$(CONFIG_SUN50I_DE2_BUS)	+= sun50i-de2.o
  obj-$(CONFIG_SUNXI_RSB)		+= sunxi-rsb.o
-diff --git a/drivers/bus/stm32_dbg_bus.c b/drivers/bus/stm32_dbg_bus.c
-new file mode 100644
-index 000000000000..af8e2d4f2440
 --- /dev/null
 +++ b/drivers/bus/stm32_dbg_bus.c
 @@ -0,0 +1,341 @@
@@ -419,6 +410,3 @@ index 000000000000..af8e2d4f2440
 +MODULE_LICENSE("GPL");
 +MODULE_AUTHOR("Gatien Chevallier <gatien.chevallier@foss.st.com>");
 +MODULE_DESCRIPTION("OP-TEE based STM32 debug access bus driver");
--- 
-2.53.0
-

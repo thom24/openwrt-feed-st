@@ -21,11 +21,9 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.c
-index bf6203c9116e..bdaceae8f990 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.c
-@@ -72,6 +72,9 @@ int dcmipp_ent_sd_register(struct dcmipp_ent_device *ved,
+@@ -72,6 +72,9 @@ int dcmipp_ent_sd_register(struct dcmipp
  	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
  	if (sd->ctrl_handler)
  		sd->flags |= V4L2_SUBDEV_FL_HAS_EVENTS;
@@ -35,6 +33,3 @@ index bf6203c9116e..bdaceae8f990 100644
  
  	/* Initialize the media entity */
  	ret = media_entity_pads_init(&sd->entity, num_pads, ved->pads);
--- 
-2.53.0
-

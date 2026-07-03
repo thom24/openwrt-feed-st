@@ -20,11 +20,9 @@ Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
  arch/arm64/boot/dts/st/stm32mp231.dtsi | 7 +------
  1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index d3585860b96e..3182cac784d2 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -2133,7 +2133,6 @@ risab1: risab@420f0000 {
+@@ -2133,7 +2133,6 @@
  			reg = <0x420f0000 0x1000>;
  			clocks = <&scmi_clk CK_SCMI_ICN_LS_MCU>;
  			st,mem-map = <0xa000000 0x20000>;
@@ -32,7 +30,7 @@ index d3585860b96e..3182cac784d2 100644
  		};
  
  		risab2: risab@42100000 {
-@@ -2141,7 +2140,6 @@ risab2: risab@42100000 {
+@@ -2141,7 +2140,6 @@
  			reg = <0x42100000 0x1000>;
  			clocks = <&scmi_clk CK_SCMI_ICN_LS_MCU>;
  			st,mem-map = <0xa020000 0x20000>;
@@ -40,7 +38,7 @@ index d3585860b96e..3182cac784d2 100644
  		};
  
  		risab3: risab@42110000 {
-@@ -2149,7 +2147,6 @@ risab3: risab@42110000 {
+@@ -2149,7 +2147,6 @@
  			reg = <0x42110000 0x1000>;
  			clocks = <&scmi_clk CK_SCMI_ICN_LS_MCU>;
  			st,mem-map = <0xa040000 0x20000>;
@@ -48,7 +46,7 @@ index d3585860b96e..3182cac784d2 100644
  		};
  
  		risab4: risab@42120000 {
-@@ -2157,7 +2154,6 @@ risab4: risab@42120000 {
+@@ -2157,7 +2154,6 @@
  			reg = <0x42120000 0x1000>;
  			clocks = <&scmi_clk CK_SCMI_ICN_LS_MCU>;
  			st,mem-map = <0xa060000 0x20000>;
@@ -56,7 +54,7 @@ index d3585860b96e..3182cac784d2 100644
  		};
  
  		risab5: risab@42130000 {
-@@ -2165,7 +2161,6 @@ risab5: risab@42130000 {
+@@ -2165,7 +2161,6 @@
  			reg = <0x42130000 0x1000>;
  			clocks = <&scmi_clk CK_SCMI_ICN_LS_MCU>;
  			st,mem-map = <0xa080000 0x20000>;
@@ -64,7 +62,7 @@ index d3585860b96e..3182cac784d2 100644
  		};
  
  		risab6: risab@42140000 {
-@@ -2173,7 +2168,6 @@ risab6: risab@42140000 {
+@@ -2173,7 +2168,6 @@
  			reg = <0x42140000 0x1000>;
  			clocks = <&scmi_clk CK_SCMI_ICN_LS_MCU>;
  			st,mem-map = <0xa0a0000 0x20000>;
@@ -72,7 +70,7 @@ index d3585860b96e..3182cac784d2 100644
  			status = "disabled";
  		};
  
-@@ -3002,6 +2996,7 @@ cs_cpu_debug0: cpu-debug@4a210000 {
+@@ -3002,6 +2996,7 @@
  				reg = <0x4a210000 0x1000>;
  				clocks = <&scmi_clk CK_SCMI_SYSDBG>;
  				clock-names = "apb_pclk";
@@ -80,6 +78,3 @@ index d3585860b96e..3182cac784d2 100644
  				access-controllers = <&dbg_bus 0>;
  				status = "disabled";
  			};
--- 
-2.53.0
-

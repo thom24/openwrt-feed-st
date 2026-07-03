@@ -19,11 +19,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/usb/dwc2/hcd.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index 30deffd7a1c0..57ffea6db253 100644
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
-@@ -1816,7 +1816,8 @@ void dwc2_hcd_disconnect(struct dwc2_hsotg *hsotg, bool force)
+@@ -1816,7 +1816,8 @@ void dwc2_hcd_disconnect(struct dwc2_hso
   */
  static void dwc2_hcd_rem_wakeup(struct dwc2_hsotg *hsotg)
  {
@@ -33,6 +31,3 @@ index 30deffd7a1c0..57ffea6db253 100644
  		hsotg->flags.b.port_suspend_change = 1;
  		usb_hcd_resume_root_hub(hsotg->priv);
  	}
--- 
-2.53.0
-

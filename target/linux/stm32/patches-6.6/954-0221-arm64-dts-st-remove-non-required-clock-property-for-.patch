@@ -22,11 +22,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp251.dtsi | 2 --
  3 files changed, 6 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index c65f6cae61c5..04e2fd09a7d4 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -82,8 +82,6 @@ clk_rcbsec: clk-rcbsec {
+@@ -82,8 +82,6 @@
  
  	cs_replicator: replicator {
  		compatible = "arm,coresight-static-replicator";
@@ -35,11 +33,9 @@ index c65f6cae61c5..04e2fd09a7d4 100644
  		status = "disabled";
  
  		in-ports {
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index a14ac6163615..4f603883bdbc 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -91,8 +91,6 @@ clk_rcbsec: clk-rcbsec {
+@@ -91,8 +91,6 @@
  
  	cs_replicator: replicator {
  		compatible = "arm,coresight-static-replicator";
@@ -48,11 +44,9 @@ index a14ac6163615..4f603883bdbc 100644
  		status = "disabled";
  
  		in-ports {
-diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 617aeaba7736..f41b30d7561b 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -91,8 +91,6 @@ clk_rcbsec: clk-rcbsec {
+@@ -91,8 +91,6 @@
  
  	cs_replicator: replicator {
  		compatible = "arm,coresight-static-replicator";
@@ -61,6 +55,3 @@ index 617aeaba7736..f41b30d7561b 100644
  		status = "disabled";
  
  		in-ports {
--- 
-2.53.0
-

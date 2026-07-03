@@ -20,11 +20,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 4 ----
  4 files changed, 14 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-index 8ce90995757b..4771d4e7849f 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-@@ -124,7 +124,6 @@ panel_backlight: panel-backlight {
+@@ -124,7 +124,6 @@
  		compatible = "gpio-backlight";
  		gpios = <&gpiof 9 GPIO_ACTIVE_HIGH>;
  		default-on;
@@ -32,7 +30,7 @@ index 8ce90995757b..4771d4e7849f 100644
  		status = "okay";
  	};
  
-@@ -134,7 +133,6 @@ panel_rgb: panel-rgb {
+@@ -134,7 +133,6 @@
  		backlight = <&panel_backlight>;
  		power-supply = <&scmi_v3v3>;
  		data-mapping = "bgr666";
@@ -40,7 +38,7 @@ index 8ce90995757b..4771d4e7849f 100644
  		status = "okay";
  
  		width-mm = <105>;
-@@ -400,7 +398,6 @@ &ltdc {
+@@ -400,7 +398,6 @@
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&ltdc_pins_a>;
  	pinctrl-1 = <&ltdc_sleep_pins_a>;
@@ -48,11 +46,9 @@ index 8ce90995757b..4771d4e7849f 100644
  	status = "okay";
  
  	port {
-diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-index b8a01b0b460c..340da5dadd46 100644
 --- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-@@ -115,7 +115,6 @@ panel_lvds: panel-lvds {
+@@ -115,7 +115,6 @@
  		compatible = "edt,etml0700z9ndha", "panel-lvds";
  		enable-gpios = <&gpioi 4 GPIO_ACTIVE_HIGH>;
  		backlight = <&panel_lvds_backlight>;
@@ -60,7 +56,7 @@ index b8a01b0b460c..340da5dadd46 100644
  		status = "okay";
  
  		width-mm = <156>;
-@@ -145,7 +144,6 @@ panel_lvds_backlight: panel-lvds-backlight {
+@@ -145,7 +144,6 @@
  		compatible = "gpio-backlight";
  		gpios = <&gpioi 7 GPIO_ACTIVE_HIGH>;
  		default-on;
@@ -68,7 +64,7 @@ index b8a01b0b460c..340da5dadd46 100644
  		status = "okay";
  	};
  
-@@ -410,7 +408,6 @@ timer {
+@@ -410,7 +408,6 @@
  };
  
  &ltdc {
@@ -76,7 +72,7 @@ index b8a01b0b460c..340da5dadd46 100644
  	status = "okay";
  
  	port {
-@@ -430,7 +427,6 @@ ltdc_ep1_out: endpoint@1 {
+@@ -430,7 +427,6 @@
  };
  
  &lvds {
@@ -84,11 +80,9 @@ index b8a01b0b460c..340da5dadd46 100644
  	vdd-supply =  <&scmi_vddcore>;
  	vdda18-supply = <&scmi_v1v8>;
  	status = "okay";
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index 05bbc3ef16e5..078dd24bf8ab 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -144,7 +144,6 @@ panel_lvds: panel-lvds {
+@@ -144,7 +144,6 @@
  		enable-gpios = <&gpioi 4 GPIO_ACTIVE_HIGH>;
  		backlight = <&panel_lvds_backlight>;
  		power-supply = <&scmi_v3v3>;
@@ -96,7 +90,7 @@ index 05bbc3ef16e5..078dd24bf8ab 100644
  		status = "okay";
  
  		width-mm = <156>;
-@@ -460,7 +459,6 @@ timer {
+@@ -460,7 +459,6 @@
  };
  
  &ltdc {
@@ -104,7 +98,7 @@ index 05bbc3ef16e5..078dd24bf8ab 100644
  	status = "okay";
  
  	port {
-@@ -480,7 +478,6 @@ ltdc_ep1_out: endpoint@1 {
+@@ -480,7 +478,6 @@
  };
  
  &lvds {
@@ -112,11 +106,9 @@ index 05bbc3ef16e5..078dd24bf8ab 100644
  	vdd-supply =  <&scmi_vddcore>;
  	vdda18-supply = <&scmi_v1v8>;
  	status = "okay";
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-index 02adac46b0cc..81da498a6401 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-@@ -122,7 +122,6 @@ panel_lvds: panel-lvds {
+@@ -122,7 +122,6 @@
  		enable-gpios = <&gpiog 15 GPIO_ACTIVE_HIGH>;
  		backlight = <&panel_lvds_backlight>;
  		power-supply = <&scmi_v3v3>;
@@ -124,7 +116,7 @@ index 02adac46b0cc..81da498a6401 100644
  		status = "okay";
  
  		width-mm = <156>;
-@@ -152,7 +151,6 @@ panel_lvds_backlight: panel-lvds-backlight {
+@@ -152,7 +151,6 @@
  		compatible = "gpio-backlight";
  		gpios = <&gpioi 5 GPIO_ACTIVE_HIGH>;
  		default-on;
@@ -132,7 +124,7 @@ index 02adac46b0cc..81da498a6401 100644
  		status = "okay";
  	};
  
-@@ -497,7 +495,6 @@ &lpuart1 {
+@@ -497,7 +495,6 @@
  };
  
  &ltdc {
@@ -140,7 +132,7 @@ index 02adac46b0cc..81da498a6401 100644
  	rotation-memory = <&ltdc_sec_rotation>;
  	status = "okay";
  
-@@ -518,7 +515,6 @@ ltdc_ep1_out: endpoint@1 {
+@@ -518,7 +515,6 @@
  };
  
  &lvds {
@@ -148,6 +140,3 @@ index 02adac46b0cc..81da498a6401 100644
  	vdd-supply =  <&scmi_vddcore>;
  	vdda18-supply = <&scmi_v1v8>;
  	status = "okay";
--- 
-2.53.0
-

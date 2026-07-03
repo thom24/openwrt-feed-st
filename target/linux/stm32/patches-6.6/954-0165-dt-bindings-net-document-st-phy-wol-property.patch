@@ -20,8 +20,6 @@ Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
  Documentation/devicetree/bindings/net/stm32-dwmac.yaml | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
-index 2b86ec21ba63..e8267b28db20 100644
 --- a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
 +++ b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
 @@ -132,6 +132,12 @@ properties:
@@ -37,6 +35,3 @@ index 2b86ec21ba63..e8267b28db20 100644
  required:
    - compatible
    - clocks
--- 
-2.53.0
-

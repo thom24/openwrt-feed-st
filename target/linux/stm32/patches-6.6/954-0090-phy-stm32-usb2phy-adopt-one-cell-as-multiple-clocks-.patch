@@ -24,8 +24,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/phy/st/phy-stm32-usb2phy.c | 188 ++++++++++++++++-------------
  1 file changed, 107 insertions(+), 81 deletions(-)
 
-diff --git a/drivers/phy/st/phy-stm32-usb2phy.c b/drivers/phy/st/phy-stm32-usb2phy.c
-index 860694c1d7ce..27068d937325 100644
 --- a/drivers/phy/st/phy-stm32-usb2phy.c
 +++ b/drivers/phy/st/phy-stm32-usb2phy.c
 @@ -73,6 +73,8 @@
@@ -47,7 +45,7 @@ index 860694c1d7ce..27068d937325 100644
  	atomic_t en_refcnt;
  	const struct stm32mp2_usb2phy_hw_data *hw_data;
  	bool do_wakeup;
-@@ -252,21 +255,6 @@ static int stm32_usb2phy_enable(struct stm32_usb2phy *phy_dev)
+@@ -252,21 +255,6 @@ static int stm32_usb2phy_enable(struct s
  		return ret;
  	}
  
@@ -69,7 +67,7 @@ index 860694c1d7ce..27068d937325 100644
  	if (phy_dev->mask_trim1) {
  		ret = regmap_update_bits(phy_dev->regmap, phy_dev->hw_data->trim1_offset,
  					 phy_dev->mask_trim1, phy_dev->value_trim1);
-@@ -399,34 +387,25 @@ static int stm32_usb2phy_set_mode(struct phy *phy, enum phy_mode mode, int submo
+@@ -399,34 +387,25 @@ static int stm32_usb2phy_set_mode(struct
  	const struct stm32mp2_usb2phy_hw_data *phy_data = phy_dev->hw_data;
  	struct device *dev = &phy->dev;
  
@@ -117,7 +115,7 @@ index 860694c1d7ce..27068d937325 100644
  		}
  		if (ret) {
  			dev_err(dev, "can't set usb2phycr (%d)\n", ret);
-@@ -435,32 +414,25 @@ static int stm32_usb2phy_set_mode(struct phy *phy, enum phy_mode mode, int submo
+@@ -435,32 +414,25 @@ static int stm32_usb2phy_set_mode(struct
  		break;
  
  	case PHY_MODE_USB_DEVICE:
@@ -167,7 +165,7 @@ index 860694c1d7ce..27068d937325 100644
  		}
  		if (ret) {
  			dev_err(dev, "can't set usb2phycr (%d)\n", ret);
-@@ -569,55 +541,109 @@ static const struct phy_ops stm32_usb2phy_data = {
+@@ -569,55 +541,109 @@ static const struct phy_ops stm32_usb2ph
  	.owner = THIS_MODULE,
  };
  
@@ -253,30 +251,30 @@ index 860694c1d7ce..27068d937325 100644
  	init.name = name;
 -	init.ops = &stm32_usb2phy_clk48_ops;
 +	init.ops = &stm32_usb2phy_clkpll_ops;
-+
-+	phy_dev->clkpll_hw.init = &init;
-+
-+	ret = devm_clk_hw_register(phy_dev->dev, &phy_dev->clkpll_hw);
-+	if (ret) {
-+		dev_err(phy_dev->dev, "failed to register pll clk\n");
-+		return ret;
-+	}
-+
-+	snprintf(name, sizeof(name), "ck_usb2phy%x_48m", phy_dev->hw_data->cr_offset);
  
 -	phy_dev->clk48_hw.init = &init;
-+	phy_dev->clkohci_hw.init = CLK_HW_INIT_HW(name, &phy_dev->clkpll_hw,
-+						  &stm32_usb2phy_clkohci_ops, 0);
++	phy_dev->clkpll_hw.init = &init;
  
 -	ret = devm_clk_hw_register(phy_dev->dev, &phy_dev->clk48_hw);
-+	ret = devm_clk_hw_register(phy_dev->dev, &phy_dev->clkohci_hw);
++	ret = devm_clk_hw_register(phy_dev->dev, &phy_dev->clkpll_hw);
  	if (ret) {
 -		dev_err(phy_dev->dev, "failed to register 48m clk\n");
-+		dev_err(phy_dev->dev, "failed to register ohci clk\n");
++		dev_err(phy_dev->dev, "failed to register pll clk\n");
  		return ret;
  	}
  
 -	ret = devm_of_clk_add_hw_provider(phy_dev->dev, of_clk_hw_simple_get, &phy_dev->clk48_hw);
++	snprintf(name, sizeof(name), "ck_usb2phy%x_48m", phy_dev->hw_data->cr_offset);
++
++	phy_dev->clkohci_hw.init = CLK_HW_INIT_HW(name, &phy_dev->clkpll_hw,
++						  &stm32_usb2phy_clkohci_ops, 0);
++
++	ret = devm_clk_hw_register(phy_dev->dev, &phy_dev->clkohci_hw);
++	if (ret) {
++		dev_err(phy_dev->dev, "failed to register ohci clk\n");
++		return ret;
++	}
++
 +	/*
 +	 * USB2PHY provides several clocks used either by either USHB (EHCI/OHCI), OTG or USB3DR.
 +	 * In case of OHCI, CMN bit must be cleared (clkohci_hw). This clock is required to access
@@ -296,6 +294,3 @@ index 860694c1d7ce..27068d937325 100644
  
  	return ret;
  }
--- 
-2.53.0
-

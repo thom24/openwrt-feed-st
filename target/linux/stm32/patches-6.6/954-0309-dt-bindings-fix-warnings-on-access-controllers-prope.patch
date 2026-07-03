@@ -21,8 +21,6 @@ Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
  .../devicetree/bindings/media/st,stm32mp25-video-codec.yaml    | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml b/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml
-index 479566171568..45ccc449f780 100644
 --- a/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml
 +++ b/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml
 @@ -32,6 +32,9 @@ properties:
@@ -35,6 +33,3 @@ index 479566171568..45ccc449f780 100644
  required:
    - compatible
    - reg
--- 
-2.53.0
-

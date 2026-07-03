@@ -21,11 +21,9 @@ Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
  include/linux/smscphy.h |  2 ++
  2 files changed, 24 insertions(+)
 
-diff --git a/drivers/net/phy/smsc.c b/drivers/net/phy/smsc.c
-index 454c3df5371f..323a8e952914 100644
 --- a/drivers/net/phy/smsc.c
 +++ b/drivers/net/phy/smsc.c
-@@ -110,6 +110,28 @@ irqreturn_t smsc_phy_handle_interrupt(struct phy_device *phydev)
+@@ -110,6 +110,28 @@ irqreturn_t smsc_phy_handle_interrupt(st
  		return IRQ_NONE;
  	}
  
@@ -54,17 +52,12 @@ index 454c3df5371f..323a8e952914 100644
  	if (!(irq_status & MII_LAN83C185_ISF_INT_PHYLIB_EVENTS))
  		return IRQ_NONE;
  
-diff --git a/include/linux/smscphy.h b/include/linux/smscphy.h
-index cdf266960032..7e00df78bf04 100644
 --- a/include/linux/smscphy.h
 +++ b/include/linux/smscphy.h
-@@ -74,4 +74,6 @@ int smsc_phy_probe(struct phy_device *phydev);
+@@ -74,4 +74,6 @@ int smsc_phy_probe(struct phy_device *ph
  
  #define MII_LAN874X_PHY_PME_SELF_CLEAR_DELAY	0x1000 /* 81 milliseconds */
  
 +#define MII_LAN874X_ISF_INT8 (1<<8)		/* WoL event */
 +
  #endif /* __LINUX_SMSCPHY_H__ */
--- 
-2.53.0
-

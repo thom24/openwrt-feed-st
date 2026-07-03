@@ -15,8 +15,6 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  tools/pci/pcitest.c | 16 +++++++++++++++-
  1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/tools/pci/pcitest.c b/tools/pci/pcitest.c
-index 441b54234635..8139f4b40446 100644
 --- a/tools/pci/pcitest.c
 +++ b/tools/pci/pcitest.c
 @@ -36,6 +36,7 @@ struct pci_test {
@@ -27,7 +25,7 @@ index 441b54234635..8139f4b40446 100644
  };
  
  static int run_test(struct pci_test *test)
-@@ -149,6 +150,15 @@ static int run_test(struct pci_test *test)
+@@ -149,6 +150,15 @@ static int run_test(struct pci_test *tes
  			fprintf(stdout, "%s\n", result[ret]);
  	}
  
@@ -62,7 +60,7 @@ index 441b54234635..8139f4b40446 100644
  	case 'h':
  	default:
  usage:
-@@ -243,6 +256,7 @@ int main(int argc, char **argv)
+@@ -243,6 +256,7 @@ usage:
  			"\t-w			Write buffer test\n"
  			"\t-c			Copy buffer test\n"
  			"\t-s <size>		Size of buffer {default: 100KB}\n"
@@ -70,6 +68,3 @@ index 441b54234635..8139f4b40446 100644
  			"\t-h			Print this help message\n",
  			argv[0]);
  		return -EINVAL;
--- 
-2.53.0
-

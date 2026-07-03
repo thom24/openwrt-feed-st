@@ -24,11 +24,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/usb/dwc2/gadget.c | 8 +++++++-
  1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 088aff91041c..a657387aed5c 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -5326,7 +5326,13 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
+@@ -5327,7 +5327,13 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg
  
  	flush_workqueue(hsotg->wq_gadget);
  
@@ -43,6 +41,3 @@ index 088aff91041c..a657387aed5c 100644
  		hsotg->gadget_off_for_suspend = false;
  		return 0;
  	}
--- 
-2.53.0
-

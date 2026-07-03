@@ -21,8 +21,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  include/memory/stm32-omi.h   |  2 +-
  3 files changed, 40 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/memory/stm32-omi.c b/drivers/memory/stm32-omi.c
-index 85175480dae8..7e498580568b 100644
 --- a/drivers/memory/stm32-omi.c
 +++ b/drivers/memory/stm32-omi.c
 @@ -6,14 +6,32 @@
@@ -62,7 +60,7 @@ index 85175480dae8..7e498580568b 100644
  }
  
  int stm32_omi_abort(struct stm32_omi *omi)
-@@ -37,19 +55,20 @@ int stm32_omi_abort(struct stm32_omi *omi)
+@@ -37,19 +55,20 @@ int stm32_omi_abort(struct stm32_omi *om
  }
  EXPORT_SYMBOL(stm32_omi_abort);
  
@@ -86,7 +84,7 @@ index 85175480dae8..7e498580568b 100644
  		ret = readl_relaxed_poll_timeout_atomic(regs_base + OSPI_SR,
  							sr, sr & SR_FTF, 1,
  							STM32_FIFO_TIMEOUT_US);
-@@ -60,7 +79,17 @@ int stm32_omi_tx_poll(struct stm32_omi *omi, u8 *buf, u32 len, bool read)
+@@ -60,7 +79,17 @@ int stm32_omi_tx_poll(struct stm32_omi *
  					len, sr);
  			return ret;
  		}
@@ -105,11 +103,9 @@ index 85175480dae8..7e498580568b 100644
  	}
  
  	return 0;
-diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
-index a546f70ceb84..f37cb0784335 100644
 --- a/drivers/spi/spi-stm32-ospi.c
 +++ b/drivers/spi/spi-stm32-ospi.c
-@@ -144,7 +144,7 @@ static int stm32_ospi_tx(struct stm32_ospi *ospi, const struct spi_mem_op *op)
+@@ -144,7 +144,7 @@ static int stm32_ospi_tx(struct stm32_os
  {
  	struct stm32_omi *omi = ospi->omi;
  	struct stm32_ospi_flash *flash = &ospi->flash[ospi->last_cs];
@@ -118,7 +114,7 @@ index a546f70ceb84..f37cb0784335 100644
  	u8 dummy = 0xff;
  	int ret;
  
-@@ -162,7 +162,7 @@ static int stm32_ospi_tx(struct stm32_ospi *ospi, const struct spi_mem_op *op)
+@@ -162,7 +162,7 @@ static int stm32_ospi_tx(struct stm32_os
  	if (op->data.dir == SPI_MEM_DATA_IN)
  		buf = op->data.buf.in;
  	else
@@ -127,11 +123,9 @@ index a546f70ceb84..f37cb0784335 100644
  
  	if (flash->octal_dtr && op->addr.val % 2) {
  		/* Read/write dummy byte */
-diff --git a/include/memory/stm32-omi.h b/include/memory/stm32-omi.h
-index 472f92f6d90b..b4c1f181629a 100644
 --- a/include/memory/stm32-omi.h
 +++ b/include/memory/stm32-omi.h
-@@ -195,7 +195,7 @@ void stm32_omi_dlyb_stop(struct stm32_omi *omi);
+@@ -195,7 +195,7 @@ void stm32_omi_dlyb_stop(struct stm32_om
  void stm32_omi_dma_callback(void *arg);
  int stm32_omi_dma_setup(struct stm32_omi *omi,
  			struct dma_slave_config *dma_cfg);
@@ -140,6 +134,3 @@ index 472f92f6d90b..b4c1f181629a 100644
  int stm32_omi_wait_cmd(struct stm32_omi *omi);
  int stm32_omi_wait_nobusy(struct stm32_omi *omi);
  
--- 
-2.53.0
-

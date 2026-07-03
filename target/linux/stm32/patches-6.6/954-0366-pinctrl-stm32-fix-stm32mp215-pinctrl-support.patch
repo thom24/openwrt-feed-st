@@ -16,11 +16,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/pinctrl/stm32/pinctrl-stm32mp215.c | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32mp215.c b/drivers/pinctrl/stm32/pinctrl-stm32mp215.c
-index 972fa4695903..322c95ad6649 100644
 --- a/drivers/pinctrl/stm32/pinctrl-stm32mp215.c
 +++ b/drivers/pinctrl/stm32/pinctrl-stm32mp215.c
-@@ -1000,7 +1000,7 @@ static const struct stm32_desc_pin stm32mp215_pins[] = {
+@@ -1000,7 +1000,7 @@ static const struct stm32_desc_pin stm32
  	),
  	STM32_PIN_PKG(
  		PINCTRL_PIN(74, "PE10"),
@@ -29,7 +27,7 @@ index 972fa4695903..322c95ad6649 100644
  		STM32_FUNCTION(0, "GPIOE10"),
  		STM32_FUNCTION(2, "SPI4_SCK"),
  		STM32_FUNCTION(4, "SAI4_D1"),
-@@ -1045,7 +1045,7 @@ static const struct stm32_desc_pin stm32mp215_pins[] = {
+@@ -1045,7 +1045,7 @@ static const struct stm32_desc_pin stm32
  	),
  	STM32_PIN_PKG(
  		PINCTRL_PIN(77, "PE13"),
@@ -38,7 +36,7 @@ index 972fa4695903..322c95ad6649 100644
  		STM32_FUNCTION(0, "GPIOE13"),
  		STM32_FUNCTION(5, "SAI1_SD_A"),
  		STM32_FUNCTION(8, "TIM15_CH1"),
-@@ -1397,7 +1397,7 @@ static const struct stm32_desc_pin stm32mp215_pins[] = {
+@@ -1397,7 +1397,7 @@ static const struct stm32_desc_pin stm32
  	),
  	STM32_PIN_PKG(
  		PINCTRL_PIN(103, "PG7"),
@@ -47,7 +45,7 @@ index 972fa4695903..322c95ad6649 100644
  		STM32_FUNCTION(0, "GPIOG7"),
  		STM32_FUNCTION(1, "TRACED5"),
  		STM32_FUNCTION(2, "HDP5"),
-@@ -1505,7 +1505,7 @@ static const struct stm32_desc_pin stm32mp215_pins[] = {
+@@ -1505,7 +1505,7 @@ static const struct stm32_desc_pin stm32
  	),
  	STM32_PIN_PKG(
  		PINCTRL_PIN(111, "PG15"),
@@ -56,6 +54,3 @@ index 972fa4695903..322c95ad6649 100644
  		STM32_FUNCTION(0, "GPIOG15"),
  		STM32_FUNCTION(1, "TRACED13"),
  		STM32_FUNCTION(2, "HDP5"),
--- 
-2.53.0
-

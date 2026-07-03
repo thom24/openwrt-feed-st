@@ -21,8 +21,6 @@ Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
  Documentation/devicetree/bindings/phy/st,stm32-combophy.yaml | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/phy/st,stm32-combophy.yaml b/Documentation/devicetree/bindings/phy/st,stm32-combophy.yaml
-index 132a7c3e4f9f..8035a0e01c81 100644
 --- a/Documentation/devicetree/bindings/phy/st,stm32-combophy.yaml
 +++ b/Documentation/devicetree/bindings/phy/st,stm32-combophy.yaml
 @@ -63,6 +63,10 @@ properties:
@@ -36,6 +34,3 @@ index 132a7c3e4f9f..8035a0e01c81 100644
    st,ssc-on:
      type: boolean
      description:
--- 
-2.53.0
-

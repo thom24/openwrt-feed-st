@@ -17,9 +17,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  1 file changed, 37 insertions(+)
  create mode 100644 include/dt-bindings/regulator/st,stm32mp15-regulator.h
 
-diff --git a/include/dt-bindings/regulator/st,stm32mp15-regulator.h b/include/dt-bindings/regulator/st,stm32mp15-regulator.h
-new file mode 100644
-index 000000000000..08b4ca2cb09c
 --- /dev/null
 +++ b/include/dt-bindings/regulator/st,stm32mp15-regulator.h
 @@ -0,0 +1,37 @@
@@ -60,6 +57,3 @@ index 000000000000..08b4ca2cb09c
 +#define VOLTD_SCMI_REGU4		22
 +
 +#endif /*__DT_BINDINGS_REGULATOR_ST_STM32MP15_REGULATOR_H */
--- 
-2.53.0
-

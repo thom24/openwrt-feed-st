@@ -16,11 +16,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index ef95ba2264b7..bedb23303b68 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -258,6 +258,7 @@ usb2_phy1: usb2-phy1 {
+@@ -258,6 +258,7 @@
  		#clock-cells    = <1>;
  		st,syscfg       = <&syscfg 0x2400>;
  		clocks          = <&rcc CK_KER_USB2PHY1>;
@@ -28,7 +26,7 @@ index ef95ba2264b7..bedb23303b68 100644
  		resets          = <&rcc USB2PHY1_R>;
  		status          = "disabled";
  	};
-@@ -268,6 +269,7 @@ usb2_phy2: usb2-phy2 {
+@@ -268,6 +269,7 @@
  		#clock-cells    = <1>;
  		st,syscfg       = <&syscfg 0x2800>;
  		clocks          = <&rcc CK_KER_USB2PHY2EN>;
@@ -36,6 +34,3 @@ index ef95ba2264b7..bedb23303b68 100644
  		resets          = <&rcc USB2PHY2_R>;
  		interrupts-extended = <&exti1 44 IRQ_TYPE_EDGE_RISING>;
  		wakeup-source;
--- 
-2.53.0
-

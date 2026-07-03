@@ -16,11 +16,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/tee/optee/optee_smc.h | 12 ++++++------
  1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/tee/optee/optee_smc.h b/drivers/tee/optee/optee_smc.h
-index b0972f630efb..bf4a92002d9f 100644
 --- a/drivers/tee/optee/optee_smc.h
 +++ b/drivers/tee/optee/optee_smc.h
-@@ -449,6 +449,12 @@ struct optee_smc_disable_shm_cache_result {
+@@ -449,6 +449,12 @@ struct optee_smc_disable_shm_cache_resul
  #define OPTEE_SMC_IT_NOTIF_VALUE_VALID		BIT(0)
  #define OPTEE_SMC_IT_NOTIF_VALUE_PENDING	BIT(1)
  
@@ -33,7 +31,7 @@ index b0972f630efb..bf4a92002d9f 100644
  /*
   * Notification that OP-TEE generates and interruption.
   */
-@@ -460,12 +466,6 @@ struct optee_smc_disable_shm_cache_result {
+@@ -460,12 +466,6 @@ struct optee_smc_disable_shm_cache_resul
  #define OPTEE_SMC_SET_IT_NOTIF_MASK \
  	OPTEE_SMC_FAST_CALL_VAL(OPTEE_SMC_FUNCID_SET_IT_NOTIF_MASK)
  
@@ -46,6 +44,3 @@ index b0972f630efb..bf4a92002d9f 100644
  /*
   * Resume from RPC (for example after processing a foreign interrupt)
   *
--- 
-2.53.0
-

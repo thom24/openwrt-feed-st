@@ -22,8 +22,6 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  Documentation/devicetree/bindings/rtc/trivial-rtc.yaml | 7 -------
  1 file changed, 7 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-index 2a65f31ac5a0..a0a8bc06d016 100644
 --- a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
 +++ b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
 @@ -35,22 +35,15 @@ properties:
@@ -49,6 +47,3 @@ index 2a65f31ac5a0..a0a8bc06d016 100644
        # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
        - ricoh,r2025sd
        # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
--- 
-2.53.0
-

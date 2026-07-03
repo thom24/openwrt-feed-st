@@ -17,11 +17,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/panel/panel-lvds.c | 8 +++++++-
  1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-lvds.c b/drivers/gpu/drm/panel/panel-lvds.c
-index 525f95d52657..ba1d936d2c96 100644
 --- a/drivers/gpu/drm/panel/panel-lvds.c
 +++ b/drivers/gpu/drm/panel/panel-lvds.c
-@@ -198,7 +198,7 @@ static int panel_lvds_probe(struct platform_device *pdev)
+@@ -198,7 +198,7 @@ static int panel_lvds_probe(struct platf
  
  	/* Get GPIOs and backlight controller. */
  	lvds->enable_gpio = devm_gpiod_get_optional(lvds->dev, "enable",
@@ -30,7 +28,7 @@ index 525f95d52657..ba1d936d2c96 100644
  	if (IS_ERR(lvds->enable_gpio)) {
  		ret = PTR_ERR(lvds->enable_gpio);
  		dev_err(lvds->dev, "failed to request %s GPIO: %d\n",
-@@ -206,6 +206,12 @@ static int panel_lvds_probe(struct platform_device *pdev)
+@@ -206,6 +206,12 @@ static int panel_lvds_probe(struct platf
  		return ret;
  	}
  
@@ -43,6 +41,3 @@ index 525f95d52657..ba1d936d2c96 100644
  	lvds->reset_gpio = devm_gpiod_get_optional(lvds->dev, "reset",
  						   GPIOD_OUT_HIGH);
  	if (IS_ERR(lvds->reset_gpio)) {
--- 
-2.53.0
-

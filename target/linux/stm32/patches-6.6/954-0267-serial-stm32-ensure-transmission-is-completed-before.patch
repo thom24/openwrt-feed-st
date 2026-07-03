@@ -22,11 +22,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/tty/serial/stm32-usart.c | 20 +++++++++++---------
  1 file changed, 11 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index d81a0ea154e1..677a1a9364c3 100644
 --- a/drivers/tty/serial/stm32-usart.c
 +++ b/drivers/tty/serial/stm32-usart.c
-@@ -1411,8 +1411,18 @@ static void stm32_usart_shutdown(struct uart_port *port)
+@@ -1411,8 +1411,18 @@ static void stm32_usart_shutdown(struct
  
  	pm_runtime_get(port->dev);
  
@@ -46,7 +44,7 @@ index d81a0ea154e1..677a1a9364c3 100644
  
  	if (stm32_port->tx_ch)
  		stm32_usart_clr_bits(port, ofs->cr3, USART_CR3_DMAT);
-@@ -1426,14 +1436,6 @@ static void stm32_usart_shutdown(struct uart_port *port)
+@@ -1426,14 +1436,6 @@ static void stm32_usart_shutdown(struct
  	if (stm32_port->fifoen)
  		val |= USART_CR1_FIFOEN;
  
@@ -61,6 +59,3 @@ index d81a0ea154e1..677a1a9364c3 100644
  	/* Disable RX DMA. */
  	if (stm32_port->rx_ch) {
  		stm32_usart_rx_dma_terminate(stm32_port);
--- 
-2.53.0
-

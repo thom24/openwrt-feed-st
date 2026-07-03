@@ -19,11 +19,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/usb/dwc2/platform.c | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index f38c404eb3f4..8b0e06600369 100644
 --- a/drivers/usb/dwc2/platform.c
 +++ b/drivers/usb/dwc2/platform.c
-@@ -981,7 +981,8 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+@@ -981,7 +981,8 @@ static int __maybe_unused dwc2_suspend(s
  		dwc2->phy_off_for_suspend = true;
  	}
  
@@ -33,7 +31,7 @@ index f38c404eb3f4..8b0e06600369 100644
  		enable_irq_wake(dwc2->irq);
  
  	return ret;
-@@ -996,7 +997,7 @@ static int __maybe_unused dwc2_resume(struct device *dev)
+@@ -996,7 +997,7 @@ static int __maybe_unused dwc2_resume(st
  	if (!dwc2->ll_hw_enabled)
  		return 0;
  
@@ -42,6 +40,3 @@ index f38c404eb3f4..8b0e06600369 100644
  		disable_irq_wake(dwc2->irq);
  
  	if (!ll_hw_enabled) {
--- 
-2.53.0
-

@@ -20,8 +20,6 @@ Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
  .../devicetree/bindings/pinctrl/st,stm32-pinctrl-hdp.yaml     | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl-hdp.yaml b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl-hdp.yaml
-index be5596c9e2b8..5de672840462 100644
 --- a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl-hdp.yaml
 +++ b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl-hdp.yaml
 @@ -35,6 +35,10 @@ properties:
@@ -35,6 +33,3 @@ index be5596c9e2b8..5de672840462 100644
  patternProperties:
    '-pins$':
      type: object
--- 
-2.53.0
-

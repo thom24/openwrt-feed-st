@@ -15,11 +15,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/stm/lvds.c | 7 ++++---
  1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
-index 5d95c79ef80b..c02b0f40dede 100644
 --- a/drivers/gpu/drm/stm/lvds.c
 +++ b/drivers/gpu/drm/stm/lvds.c
-@@ -768,11 +768,12 @@ static int lvds_pixel_clk_register(struct stm_lvds *lvds)
+@@ -768,11 +768,12 @@ static int lvds_pixel_clk_register(struc
  		 * We want pixclk, not bitclk
  		 */
  		lvds->pixel_clock_rate = (unsigned long)pll_out_khz * 1000 * multiplier / 7;
@@ -35,6 +33,3 @@ index 5d95c79ef80b..c02b0f40dede 100644
  	ret = clk_hw_register(lvds->dev, &lvds->lvds_ck_px);
  	if (ret)
  		return ret;
--- 
-2.53.0
-

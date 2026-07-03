@@ -24,11 +24,9 @@ Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
  drivers/usb/dwc2/platform.c | 9 +++++++++
  1 file changed, 9 insertions(+)
 
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index 93f41019c14b..4d384508fb2f 100644
 --- a/drivers/usb/dwc2/platform.c
 +++ b/drivers/usb/dwc2/platform.c
-@@ -677,6 +677,12 @@ static int dwc2_driver_probe(struct platform_device *dev)
+@@ -671,6 +671,12 @@ static int dwc2_driver_probe(struct plat
  	if (retval)
  		return dev_err_probe(&dev->dev, retval, "Failed to enable pm runtime\n");
  
@@ -41,7 +39,7 @@ index 93f41019c14b..4d384508fb2f 100644
  	spin_lock_init(&hsotg->lock);
  
  	hsotg->vbus_supply = devm_regulator_get_optional(hsotg->dev, "vbus");
-@@ -858,6 +864,9 @@ static int dwc2_driver_probe(struct platform_device *dev)
+@@ -852,6 +858,9 @@ static int dwc2_driver_probe(struct plat
  	platform_set_drvdata(dev, hsotg);
  	hsotg->hibernated = 0;
  
@@ -51,6 +49,3 @@ index 93f41019c14b..4d384508fb2f 100644
  	dwc2_debugfs_init(hsotg);
  
  	/* Gadget code manages lowlevel hw on its own */
--- 
-2.53.0
-

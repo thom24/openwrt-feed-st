@@ -19,11 +19,9 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  include/linux/mfd/stm32-lptimer.h    |  2 ++
  2 files changed, 38 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/clocksource/timer-stm32-lp.c b/drivers/clocksource/timer-stm32-lp.c
-index 815abee7ce4a..b5fe0e89a80e 100644
 --- a/drivers/clocksource/timer-stm32-lp.c
 +++ b/drivers/clocksource/timer-stm32-lp.c
-@@ -41,7 +41,9 @@ to_priv(struct clock_event_device *clkevt)
+@@ -41,7 +41,9 @@ to_priv(struct clock_event_device *clkev
  static int stm32_clkevent_lp_shutdown(struct clock_event_device *clkevt)
  {
  	struct stm32_lp_private *priv = to_priv(clkevt);
@@ -34,7 +32,7 @@ index 815abee7ce4a..b5fe0e89a80e 100644
  
  	if (clockevent_state_oneshot(clkevt) || clockevent_state_periodic(clkevt)) {
  		ret = pm_runtime_put(priv->dev);
-@@ -51,12 +53,42 @@ static int stm32_clkevent_lp_shutdown(struct clock_event_device *clkevt)
+@@ -51,12 +53,42 @@ static int stm32_clkevent_lp_shutdown(st
  		}
  	}
  
@@ -80,8 +78,6 @@ index 815abee7ce4a..b5fe0e89a80e 100644
  }
  
  static int stm32mp25_clkevent_lp_set_evt(struct stm32_lp_private *priv, unsigned long evt)
-diff --git a/include/linux/mfd/stm32-lptimer.h b/include/linux/mfd/stm32-lptimer.h
-index 0fa2b34d8fff..cf295a5c1d0d 100644
 --- a/include/linux/mfd/stm32-lptimer.h
 +++ b/include/linux/mfd/stm32-lptimer.h
 @@ -28,6 +28,7 @@
@@ -100,6 +96,3 @@ index 0fa2b34d8fff..cf295a5c1d0d 100644
  #define STM32_LPTIM_DIEROKCF_ARROKCF	(BIT(24) | BIT(4)) /* MP25 */
  #define STM32_LPTIM_CMP2OKCF_ARROKCF	(BIT(19) | BIT(4))
  #define STM32_LPTIM_CMPOKCF_ARROKCF	GENMASK(4, 3)
--- 
-2.53.0
-

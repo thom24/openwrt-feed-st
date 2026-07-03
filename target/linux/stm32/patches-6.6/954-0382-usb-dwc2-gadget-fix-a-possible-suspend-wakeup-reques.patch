@@ -33,11 +33,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/usb/dwc2/gadget.c    | 3 ---
  2 files changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
-index 3d4d3f81b4bf..0bcd95757249 100644
 --- a/drivers/usb/dwc2/core_intr.c
 +++ b/drivers/usb/dwc2/core_intr.c
-@@ -450,12 +450,12 @@ static void dwc2_handle_wakeup_detected_intr(struct dwc2_hsotg *hsotg)
+@@ -450,12 +450,12 @@ static void dwc2_handle_wakeup_detected_
  
  			/* Change to L0 state, when no_clock_gating == true */
  			hsotg->lx_state = DWC2_L0;
@@ -52,11 +50,9 @@ index 3d4d3f81b4bf..0bcd95757249 100644
  	} else {
  		if (hsotg->lx_state == DWC2_L2) {
  			if (hsotg->in_ppd) {
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 24c3da25d3f0..a577f5b0b430 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -4878,9 +4878,6 @@ static int dwc2_hsotg_wakeup(struct usb_gadget *gadget)
+@@ -4877,9 +4877,6 @@ static int dwc2_hsotg_wakeup(struct usb_
  		hsotg->lx_state = DWC2_L0;
  	}
  
@@ -66,6 +62,3 @@ index 24c3da25d3f0..a577f5b0b430 100644
  	spin_unlock_irqrestore(&hsotg->lock, flags);
  
  	return 0;
--- 
-2.53.0
-

@@ -27,11 +27,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/pinctrl/stm32/pinctrl-stm32.c | 6 ++++--
  1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
-index b4eccd00744f..4d2899f496f9 100644
 --- a/drivers/pinctrl/stm32/pinctrl-stm32.c
 +++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
-@@ -2276,7 +2276,8 @@ static int __maybe_unused stm32_pinctrl_restore_gpio_regs(
+@@ -2276,7 +2276,8 @@ static int __maybe_unused stm32_pinctrl_
  	return 0;
  }
  
@@ -41,7 +39,7 @@ index b4eccd00744f..4d2899f496f9 100644
  {
  	struct stm32_pinctrl *pctl = dev_get_drvdata(dev);
  
-@@ -2286,7 +2287,7 @@ int __maybe_unused stm32_pinctrl_suspend(struct device *dev)
+@@ -2286,7 +2287,7 @@ int __maybe_unused stm32_pinctrl_suspend
  }
  EXPORT_SYMBOL(stm32_pinctrl_suspend);
  
@@ -50,7 +48,7 @@ index b4eccd00744f..4d2899f496f9 100644
  {
  	struct stm32_pinctrl *pctl = dev_get_drvdata(dev);
  	struct stm32_pinctrl_group *g = pctl->groups;
-@@ -2302,6 +2303,7 @@ int __maybe_unused stm32_pinctrl_resume(struct device *dev)
+@@ -2302,6 +2303,7 @@ int __maybe_unused stm32_pinctrl_resume(
  	return 0;
  }
  EXPORT_SYMBOL(stm32_pinctrl_resume);
@@ -58,6 +56,3 @@ index b4eccd00744f..4d2899f496f9 100644
  
  MODULE_DESCRIPTION("STM32 core pinctrl driver");
  MODULE_LICENSE("GPL");
--- 
-2.53.0
-

@@ -17,8 +17,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  Documentation/devicetree/bindings/mfd/st,stpmic1.yaml | 2 +-
  3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/mfd/st,stmfx.yaml b/Documentation/devicetree/bindings/mfd/st,stmfx.yaml
-index 76551c90b128..84308f8a6427 100644
 --- a/Documentation/devicetree/bindings/mfd/st,stmfx.yaml
 +++ b/Documentation/devicetree/bindings/mfd/st,stmfx.yaml
 @@ -4,7 +4,7 @@
@@ -30,8 +28,6 @@ index 76551c90b128..84308f8a6427 100644
  
  description: ST Multi-Function eXpander (STMFX) is a slave controller using I2C for
                 communication with the main MCU. Its main features are GPIO expansion,
-diff --git a/Documentation/devicetree/bindings/mfd/st,stmpe.yaml b/Documentation/devicetree/bindings/mfd/st,stmpe.yaml
-index b77cc3f3075d..5d74f5c2b989 100644
 --- a/Documentation/devicetree/bindings/mfd/st,stmpe.yaml
 +++ b/Documentation/devicetree/bindings/mfd/st,stmpe.yaml
 @@ -4,7 +4,7 @@
@@ -43,8 +39,6 @@ index b77cc3f3075d..5d74f5c2b989 100644
  
  description: STMicroelectronics Port Expander (STMPE) is a series of slow
    bus controllers for various expanded peripherals such as GPIO, keypad,
-diff --git a/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml b/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
-index b17ebeb0a42f..48d7db748c41 100644
 --- a/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
 +++ b/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
 @@ -4,7 +4,7 @@
@@ -56,6 +50,3 @@ index b17ebeb0a42f..48d7db748c41 100644
  
  description: STMicroelectronics STPMIC1 Power Management IC
  
--- 
-2.53.0
-

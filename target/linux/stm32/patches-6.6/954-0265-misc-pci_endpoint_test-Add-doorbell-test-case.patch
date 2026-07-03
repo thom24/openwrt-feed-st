@@ -31,8 +31,6 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  include/uapi/linux/pcitest.h     |  2 +
  2 files changed, 85 insertions(+)
 
-diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
-index 7d19070f5166..085a7701821b 100644
 --- a/drivers/misc/pci_endpoint_test.c
 +++ b/drivers/misc/pci_endpoint_test.c
 @@ -41,6 +41,8 @@
@@ -78,7 +76,7 @@ index 7d19070f5166..085a7701821b 100644
  };
  
  struct pci_endpoint_test {
-@@ -721,6 +734,73 @@ static bool pci_endpoint_test_set_irq(struct pci_endpoint_test *test,
+@@ -721,6 +734,73 @@ err:
  	return false;
  }
  
@@ -152,7 +150,7 @@ index 7d19070f5166..085a7701821b 100644
  static long pci_endpoint_test_ioctl(struct file *file, unsigned int cmd,
  				    unsigned long arg)
  {
-@@ -768,6 +848,9 @@ static long pci_endpoint_test_ioctl(struct file *file, unsigned int cmd,
+@@ -768,6 +848,9 @@ static long pci_endpoint_test_ioctl(stru
  	case PCITEST_CLEAR_IRQ:
  		ret = pci_endpoint_test_clear_irq(test);
  		break;
@@ -162,8 +160,6 @@ index 7d19070f5166..085a7701821b 100644
  	}
  
  ret:
-diff --git a/include/uapi/linux/pcitest.h b/include/uapi/linux/pcitest.h
-index f9c1af8d141b..0c9d03cc094b 100644
 --- a/include/uapi/linux/pcitest.h
 +++ b/include/uapi/linux/pcitest.h
 @@ -19,6 +19,8 @@
@@ -175,6 +171,3 @@ index f9c1af8d141b..0c9d03cc094b 100644
  #define PCITEST_CLEAR_IRQ	_IO('P', 0x10)
  
  #define PCITEST_FLAGS_USE_DMA	0x00000001
--- 
-2.53.0
-

@@ -17,14 +17,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm/configs/mp2-fragment-03-multiv7-cleanup.config | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/configs/mp2-fragment-03-multiv7-cleanup.config b/arch/arm/configs/mp2-fragment-03-multiv7-cleanup.config
-index 96ea456b8049..6d90a2c7f095 100644
 --- a/arch/arm/configs/mp2-fragment-03-multiv7-cleanup.config
 +++ b/arch/arm/configs/mp2-fragment-03-multiv7-cleanup.config
 @@ -1,2 +1,3 @@
 +# CONFIG_ARM_CPUIDLE is not set
  # CONFIG_MACH_STM32MP13 is not set
  # CONFIG_MACH_STM32MP157 is not set
--- 
-2.53.0
-

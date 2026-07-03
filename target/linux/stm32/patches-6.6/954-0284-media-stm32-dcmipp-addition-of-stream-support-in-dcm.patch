@@ -22,8 +22,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  .../st/stm32/stm32-dcmipp/dcmipp-input.c      | 402 +++++++++++++-----
  1 file changed, 284 insertions(+), 118 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
-index 9205936c2344..b88eb012bcc3 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
 @@ -45,6 +45,8 @@
@@ -35,7 +33,7 @@ index 9205936c2344..b88eb012bcc3 100644
  #define DCMIPP_P1FSCR_PIPEDIFF		BIT(18)
  #define DCMIPP_PxFSCR_DTMODE_MASK	GENMASK(17, 16)
  #define DCMIPP_PxFSCR_DTMODE_SHIFT	16
-@@ -177,6 +179,9 @@ static inline const struct dcmipp_inp_pix_map *dcmipp_inp_pix_map_by_code
+@@ -177,6 +179,9 @@ static inline const struct dcmipp_inp_pi
  	return NULL;
  }
  
@@ -55,7 +53,7 @@ index 9205936c2344..b88eb012bcc3 100644
  };
  
  static const struct v4l2_mbus_framefmt fmt_default = {
-@@ -199,19 +207,61 @@ static const struct v4l2_mbus_framefmt fmt_default = {
+@@ -199,19 +207,61 @@ static const struct v4l2_mbus_framefmt f
  	.xfer_func = DCMIPP_XFER_FUNC_DEFAULT,
  };
  
@@ -122,7 +120,7 @@ index 9205936c2344..b88eb012bcc3 100644
  }
  
  static int dcmipp_inp_enum_mbus_code(struct v4l2_subdev *sd,
-@@ -284,8 +334,8 @@ static int dcmipp_inp_set_fmt(struct v4l2_subdev *sd,
+@@ -284,8 +334,8 @@ static int dcmipp_inp_set_fmt(struct v4l
  			      struct v4l2_subdev_format *fmt)
  {
  	struct dcmipp_inp_device *inp = v4l2_get_subdevdata(sd);
@@ -132,7 +130,7 @@ index 9205936c2344..b88eb012bcc3 100644
  
  	mutex_lock(&inp->lock);
  
-@@ -294,13 +344,13 @@ static int dcmipp_inp_set_fmt(struct v4l2_subdev *sd,
+@@ -294,13 +344,13 @@ static int dcmipp_inp_set_fmt(struct v4l
  		return -EBUSY;
  	}
  
@@ -149,7 +147,7 @@ index 9205936c2344..b88eb012bcc3 100644
  		/* old */
  		mf->width, mf->height, mf->code,
  		mf->colorspace,	mf->quantization,
-@@ -312,34 +362,46 @@ static int dcmipp_inp_set_fmt(struct v4l2_subdev *sd,
+@@ -312,34 +362,46 @@ static int dcmipp_inp_set_fmt(struct v4l
  
  	*mf = fmt->format;
  
@@ -211,7 +209,7 @@ index 9205936c2344..b88eb012bcc3 100644
  	struct v4l2_mbus_framefmt *sink_fmt;
  	struct v4l2_mbus_framefmt *src_fmt;
  
-@@ -380,10 +442,8 @@ static int dcmipp_inp_configure_parallel(struct dcmipp_inp_device *inp,
+@@ -380,10 +442,8 @@ static int dcmipp_inp_configure_parallel
  	}
  
  	/* Set format */
@@ -222,7 +220,7 @@ index 9205936c2344..b88eb012bcc3 100644
  
  	vpix = dcmipp_inp_pix_map_by_code(sink_fmt->code, src_fmt->code);
  	if (!vpix) {
-@@ -423,156 +483,262 @@ static int dcmipp_inp_configure_parallel(struct dcmipp_inp_device *inp,
+@@ -423,156 +483,262 @@ static int dcmipp_inp_configure_parallel
  }
  
  static int dcmipp_inp_configure_csi_dt(struct dcmipp_inp_device *inp,
@@ -241,16 +239,17 @@ index 9205936c2344..b88eb012bcc3 100644
 -	sink_fmt = v4l2_subdev_state_get_format(state, 0);
 -	src_fmt = v4l2_subdev_state_get_format(state, 1 + pipe_id);
 -	v4l2_subdev_unlock_state(state);
-+	/* If we don't have the frame desc, use the MBUS_FMT */
-+	if (!fd) {
-+		/* Get format information */
-+		src_fmt = v4l2_subdev_state_get_format(state, pad);
- 
+-
 -	/* Only configure Pipe #2 input if is enabled */
 -	if (pipe_id == 2 && !media_pad_remote_pad_first(&inp->ved.pads[3])) {
 -		dev_dbg(inp->dev, "Skip disabled pipe %d\n", pipe_id);
 -		return 0;
 -	}
++	/* If we don't have the frame desc, use the MBUS_FMT */
++	if (!fd) {
++		/* Get format information */
++		src_fmt = v4l2_subdev_state_get_format(state, pad);
++
 +		vpix = dcmipp_inp_pix_map_by_code(0, src_fmt->code);
 +		if (!vpix) {
 +			dev_err(inp->dev, "Invalid src format configuration\n");
@@ -313,11 +312,7 @@ index 9205936c2344..b88eb012bcc3 100644
 +				    u32 pad,
 +				    struct v4l2_subdev *s_subdev,
 +				    u32 s_pad_index)
- 
--	for (i = 0; i < inp->ved.dcmipp->pipe_cfg->pipe_nb; i++) {
--		ret = dcmipp_inp_configure_csi_dt(inp, i);
--		if (ret)
--			return ret;
++
 +{
 +	struct v4l2_mbus_frame_desc_entry *source_entry = NULL;
 +	struct v4l2_mbus_frame_desc source_fd;
@@ -329,7 +324,11 @@ index 9205936c2344..b88eb012bcc3 100644
 +			       s_pad_index, &source_fd);
 +	if (ret)
 +		source_fd.num_entries = 0;
-+
+ 
+-	for (i = 0; i < inp->ved.dcmipp->pipe_cfg->pipe_nb; i++) {
+-		ret = dcmipp_inp_configure_csi_dt(inp, i);
+-		if (ret)
+-			return ret;
 +	for_each_active_route(&state->routing, route) {
 +		if (route->source_pad != pad)
 +			continue;
@@ -383,7 +382,19 @@ index 9205936c2344..b88eb012bcc3 100644
 +					       s_pad->index);
 +	if (ret)
 +		return ret;
-+
+ 
+-	if (enable) {
+-		/* Nothing to do if already enabled by someone */
+-		if (inp->usecnt)
+-			goto out;
+-
+-		if (inp->ved.bus_type == V4L2_MBUS_PARALLEL ||
+-		    inp->ved.bus_type == V4L2_MBUS_BT656)
+-			ret = dcmipp_inp_configure_parallel(inp, enable);
+-		else if (inp->ved.bus_type == V4L2_MBUS_CSI2_DPHY)
+-			ret = dcmipp_inp_configure_csi(inp);
+-		if (ret)
+-			goto error_s_stream;
 +	/*
 +	 * Check if the Aux pipe source pad is connected / enabled
 +	 * or not.  If enabled, it means that Aux pipe works alone
@@ -395,21 +406,6 @@ index 9205936c2344..b88eb012bcc3 100644
 +	else
 +		reg_set(inp, DCMIPP_P1FSCR, DCMIPP_P1FSCR_PIPEDIFF);
  
--	if (enable) {
--		/* Nothing to do if already enabled by someone */
--		if (inp->usecnt)
--			goto out;
-+	sink_streams = v4l2_subdev_state_xlate_streams(state, pad, 0,
-+						       &streams_mask);
- 
--		if (inp->ved.bus_type == V4L2_MBUS_PARALLEL ||
--		    inp->ved.bus_type == V4L2_MBUS_BT656)
--			ret = dcmipp_inp_configure_parallel(inp, enable);
--		else if (inp->ved.bus_type == V4L2_MBUS_CSI2_DPHY)
--			ret = dcmipp_inp_configure_csi(inp);
--		if (ret)
--			goto error_s_stream;
--
 -		/*
 -		 * Check if the Aux pipe source pad is connected / enabled
 -		 * or not.  If enabled, it means that Aux pipe works alone
@@ -420,13 +416,9 @@ index 9205936c2344..b88eb012bcc3 100644
 -			reg_clear(inp, DCMIPP_P1FSCR, DCMIPP_P1FSCR_PIPEDIFF);
 -		else
 -			reg_set(inp, DCMIPP_P1FSCR, DCMIPP_P1FSCR_PIPEDIFF);
--
--		ret = v4l2_subdev_call(s_subdev, video, s_stream, enable);
--		if (ret < 0) {
--			dev_err(inp->dev,
--				"failed to start source subdev streaming (%d)\n",
--				ret);
--			goto error_s_stream;
++	sink_streams = v4l2_subdev_state_xlate_streams(state, pad, 0,
++						       &streams_mask);
++
 +	/*
 +	 * Since the dcmipp-input allows 1 to N routing, it is necessary
 +	 * to keep track about the usage of each stream to avoid enabling
@@ -437,7 +429,13 @@ index 9205936c2344..b88eb012bcc3 100644
 +	for (i = 0; i < STM32_DCMIPP_STREAM_MAX; i++) {
 +		if (!(sink_streams & BIT(i)))
 +			continue;
-+
+ 
+-		ret = v4l2_subdev_call(s_subdev, video, s_stream, enable);
+-		if (ret < 0) {
+-			dev_err(inp->dev,
+-				"failed to start source subdev streaming (%d)\n",
+-				ret);
+-			goto error_s_stream;
 +		if (++inp->sink_streams_use_cnt[i] > 1) {
 +			sink_streams_apply &= ~BIT(i);
 +			continue;
@@ -445,13 +443,6 @@ index 9205936c2344..b88eb012bcc3 100644
 -	} else {
 -		if (inp->usecnt > 1)
 -			goto out;
--
--		ret = v4l2_subdev_call(s_subdev, video, s_stream, enable);
--		if (ret < 0) {
--			dev_err(inp->dev,
--				"failed to stop source subdev streaming (%d)\n",
--				ret);
--			goto error_s_stream;
 +	}
 +
 +	/* If nothing else to do, exit here */
@@ -470,13 +461,8 @@ index 9205936c2344..b88eb012bcc3 100644
 +				continue;
 +
 +			inp->sink_streams_use_cnt[i]--;
- 		}
- 
--		if (inp->ved.bus_type == V4L2_MBUS_PARALLEL ||
--		    inp->ved.bus_type == V4L2_MBUS_BT656) {
--			ret = dcmipp_inp_configure_parallel(inp, enable);
--			if (ret)
--				goto error_s_stream;
++		}
++
 +		return ret;
 +	}
 +
@@ -514,23 +500,30 @@ index 9205936c2344..b88eb012bcc3 100644
 +	for (i = 0; i < STM32_DCMIPP_STREAM_MAX; i++) {
 +		if (!(sink_streams & BIT(i)))
 +			continue;
-+
+ 
+-		ret = v4l2_subdev_call(s_subdev, video, s_stream, enable);
+-		if (ret < 0) {
+-			dev_err(inp->dev,
+-				"failed to stop source subdev streaming (%d)\n",
+-				ret);
+-			goto error_s_stream;
 +		if (--inp->sink_streams_use_cnt[i] > 0) {
 +			sink_streams_apply &= ~BIT(i);
 +			continue;
  		}
- 	}
- 
--out:
--	inp->usecnt += enable ? 1 : -1;
++	}
++
 +	/* If nothing else to do, exit here */
 +	if (!sink_streams_apply) {
 +		inp->usecnt -= 1;
 +		return 0;
 +	}
  
--error_s_stream:
--	mutex_unlock(&inp->lock);
+-		if (inp->ved.bus_type == V4L2_MBUS_PARALLEL ||
+-		    inp->ved.bus_type == V4L2_MBUS_BT656) {
+-			ret = dcmipp_inp_configure_parallel(inp, enable);
+-			if (ret)
+-				goto error_s_stream;
 +	ret = v4l2_subdev_disable_streams(s_subdev, s_pad->index, sink_streams_apply);
 +	if (ret) {
 +		dev_err(inp->dev,
@@ -541,18 +534,22 @@ index 9205936c2344..b88eb012bcc3 100644
 +				continue;
 +
 +			inp->sink_streams_use_cnt[i]++;
-+		}
+ 		}
 +
 +		return ret;
-+	}
-+
+ 	}
+ 
+-out:
+-	inp->usecnt += enable ? 1 : -1;
 +	if (inp->ved.bus_type == V4L2_MBUS_PARALLEL ||
 +	    inp->ved.bus_type == V4L2_MBUS_BT656) {
 +		ret = dcmipp_inp_configure_parallel(inp, state, false);
 +		if (ret)
 +			return ret;
 +	}
-+
+ 
+-error_s_stream:
+-	mutex_unlock(&inp->lock);
 +	inp->usecnt -= 1;
  
  	return ret;
@@ -577,6 +574,3 @@ index 9205936c2344..b88eb012bcc3 100644
  };
  
  static void dcmipp_inp_release(struct v4l2_subdev *sd)
--- 
-2.53.0
-

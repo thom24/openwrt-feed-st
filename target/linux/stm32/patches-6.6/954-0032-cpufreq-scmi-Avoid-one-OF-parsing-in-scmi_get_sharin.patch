@@ -23,11 +23,9 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  drivers/cpufreq/scmi-cpufreq.c | 11 ++++-------
  1 file changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-index 07671d31595b..1cf271fdfa69 100644
 --- a/drivers/cpufreq/scmi-cpufreq.c
 +++ b/drivers/cpufreq/scmi-cpufreq.c
-@@ -88,15 +88,12 @@ static int scmi_cpu_domain_id(struct device *cpu_dev)
+@@ -89,15 +89,12 @@ static int scmi_cpu_domain_id(struct dev
  }
  
  static int
@@ -46,7 +44,7 @@ index 07671d31595b..1cf271fdfa69 100644
  	for_each_possible_cpu(cpu) {
  		if (cpu == cpu_dev->id)
  			continue;
-@@ -169,7 +166,7 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+@@ -170,7 +167,7 @@ static int scmi_cpufreq_init(struct cpuf
  	}
  
  	/* Obtain CPUs that share SCMI performance controls */
@@ -55,6 +53,3 @@ index 07671d31595b..1cf271fdfa69 100644
  	if (ret) {
  		dev_warn(cpu_dev, "failed to get sharing cpumask\n");
  		goto out_free_cpumask;
--- 
-2.53.0
-

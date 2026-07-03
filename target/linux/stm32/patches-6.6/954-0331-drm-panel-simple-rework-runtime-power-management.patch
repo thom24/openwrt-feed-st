@@ -16,11 +16,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/panel/panel-simple.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
-index a708bd1566a3..bc20c684ef28 100644
 --- a/drivers/gpu/drm/panel/panel-simple.c
 +++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -4616,8 +4616,8 @@ static void panel_simple_platform_shutdown(struct platform_device *pdev)
+@@ -4617,8 +4617,8 @@ static void panel_simple_platform_shutdo
  
  static const struct dev_pm_ops panel_simple_pm_ops = {
  	SET_RUNTIME_PM_OPS(panel_simple_suspend, panel_simple_resume, NULL)
@@ -31,6 +29,3 @@ index a708bd1566a3..bc20c684ef28 100644
  };
  
  static struct platform_driver panel_simple_platform_driver = {
--- 
-2.53.0
-

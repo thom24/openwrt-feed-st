@@ -22,11 +22,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/tty/serial/stm32-usart.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 074fc8558f15..49c8d85ad152 100644
 --- a/drivers/tty/serial/stm32-usart.c
 +++ b/drivers/tty/serial/stm32-usart.c
-@@ -1134,9 +1134,9 @@ static irqreturn_t stm32_usart_interrupt(int irq, void *ptr)
+@@ -1134,9 +1134,9 @@ static irqreturn_t stm32_usart_interrupt
  			    ((sr & USART_SR_ERR_MASK) && stm32_usart_rx_dma_started(stm32_port))) {
  				spin_lock(&port->lock);
  				size = stm32_usart_receive_chars(port, false);
@@ -37,6 +35,3 @@ index 074fc8558f15..49c8d85ad152 100644
  				ret = IRQ_HANDLED;
  			}
  		}
--- 
-2.53.0
-

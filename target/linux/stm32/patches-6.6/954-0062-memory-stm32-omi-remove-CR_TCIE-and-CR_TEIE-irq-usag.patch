@@ -21,8 +21,6 @@ Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
  include/memory/stm32-omi.h |  4 +---
  2 files changed, 7 insertions(+), 25 deletions(-)
 
-diff --git a/drivers/memory/stm32-omi.c b/drivers/memory/stm32-omi.c
-index 7e498580568b..0006c314b8a0 100644
 --- a/drivers/memory/stm32-omi.c
 +++ b/drivers/memory/stm32-omi.c
 @@ -109,22 +109,16 @@ EXPORT_SYMBOL(stm32_omi_wait_nobusy);
@@ -41,19 +39,19 @@ index 7e498580568b..0006c314b8a0 100644
 -	reinit_completion(&omi->data_completion);
 -	cr = readl_relaxed(regs_base + OSPI_CR);
 -	writel_relaxed(cr | CR_TCIE | CR_TEIE, regs_base + OSPI_CR);
+-
+-	if (!wait_for_completion_timeout(&omi->data_completion,
+-				msecs_to_jiffies(STM32_COMP_TIMEOUT_MS)))
+-		err = -ETIMEDOUT;
 +	err = readl_relaxed_poll_timeout_atomic(regs_base + OSPI_SR,
 +						sr, (sr & (SR_TEF | SR_TCF)), 1,
 +						STM32_WAIT_CMD_TIMEOUT_US);
  
--	if (!wait_for_completion_timeout(&omi->data_completion,
--				msecs_to_jiffies(STM32_COMP_TIMEOUT_MS)))
--		err = -ETIMEDOUT;
--
 -	sr = readl_relaxed(regs_base + OSPI_SR);
  	if (sr & SR_TCF)
  		/* avoid false timeout */
  		err = 0;
-@@ -159,20 +153,11 @@ static irqreturn_t stm32_omi_irq(int irq, void *dev_id)
+@@ -159,20 +153,11 @@ static irqreturn_t stm32_omi_irq(int irq
  	cr = readl_relaxed(regs_base + OSPI_CR);
  	sr = readl_relaxed(regs_base + OSPI_SR);
  
@@ -75,7 +73,7 @@ index 7e498580568b..0006c314b8a0 100644
  	}
  
  	return IRQ_HANDLED;
-@@ -623,7 +608,6 @@ static int stm32_omi_probe(struct platform_device *pdev)
+@@ -623,7 +608,6 @@ static int stm32_omi_probe(struct platfo
  		dev_info(dev, "No memory-map region found\n");
  	}
  
@@ -83,8 +81,6 @@ index 7e498580568b..0006c314b8a0 100644
  	init_completion(&omi->match_completion);
  
  	vdev = platform_device_alloc(name, PLATFORM_DEVID_AUTO);
-diff --git a/include/memory/stm32-omi.h b/include/memory/stm32-omi.h
-index b4c1f181629a..922e64b54480 100644
 --- a/include/memory/stm32-omi.h
 +++ b/include/memory/stm32-omi.h
 @@ -41,8 +41,6 @@
@@ -112,6 +108,3 @@ index b4c1f181629a..922e64b54480 100644
  	struct completion match_completion;
  
  	struct dma_chan *dma_chtx;
--- 
-2.53.0
-

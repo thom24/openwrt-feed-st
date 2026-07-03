@@ -24,11 +24,9 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  drivers/pmdomain/arm/scmi_pm_domain.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/pmdomain/arm/scmi_pm_domain.c b/drivers/pmdomain/arm/scmi_pm_domain.c
-index 8133eb493959..2a213c218126 100644
 --- a/drivers/pmdomain/arm/scmi_pm_domain.c
 +++ b/drivers/pmdomain/arm/scmi_pm_domain.c
-@@ -103,6 +103,7 @@ static int scmi_pm_domain_probe(struct scmi_device *sdev)
+@@ -103,6 +103,7 @@ static int scmi_pm_domain_probe(struct s
  		scmi_pd->genpd.name = scmi_pd->name;
  		scmi_pd->genpd.power_off = scmi_pd_power_off;
  		scmi_pd->genpd.power_on = scmi_pd_power_on;
@@ -36,6 +34,3 @@ index 8133eb493959..2a213c218126 100644
  
  		pm_genpd_init(&scmi_pd->genpd, NULL,
  			      state == SCMI_POWER_STATE_GENERIC_OFF);
--- 
-2.53.0
-

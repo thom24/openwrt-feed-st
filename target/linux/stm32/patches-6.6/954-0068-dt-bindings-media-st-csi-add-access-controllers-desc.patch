@@ -20,8 +20,6 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  Documentation/devicetree/bindings/media/st,stm32-csi.yaml | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/st,stm32-csi.yaml b/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
-index 4bc2daba2284..e636f9ad8965 100644
 --- a/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
 +++ b/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
 @@ -35,6 +35,10 @@ properties:
@@ -35,6 +33,3 @@ index 4bc2daba2284..e636f9ad8965 100644
    ports:
      $ref: /schemas/graph.yaml#/properties/ports
  
--- 
-2.53.0
-

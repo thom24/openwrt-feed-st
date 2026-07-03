@@ -20,11 +20,9 @@ Reviewed-by: Patrice CHOTARD <patrice.chotard@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 11 +++++++++++
  1 file changed, 11 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index 6b50916c1f77..e24154a0c2c9 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -791,6 +791,7 @@ bluetooth {
+@@ -791,6 +791,7 @@
  };
  
  &usart2 {
@@ -32,7 +30,7 @@ index 6b50916c1f77..e24154a0c2c9 100644
  	pinctrl-names = "default", "idle", "sleep";
  	pinctrl-0 = <&usart2_pins_a>;
  	pinctrl-1 = <&usart2_idle_pins_a>;
-@@ -800,6 +801,16 @@ &usart2 {
+@@ -800,6 +801,16 @@
  	status = "okay";
  };
  
@@ -49,6 +47,3 @@ index 6b50916c1f77..e24154a0c2c9 100644
  &usart6 {
  	pinctrl-names = "default", "idle", "sleep";
  	pinctrl-0 = <&usart6_pins_a>;
--- 
-2.53.0
-

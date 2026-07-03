@@ -19,8 +19,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/clk/stm32/clk-stm32mp25.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/stm32/clk-stm32mp25.c b/drivers/clk/stm32/clk-stm32mp25.c
-index fce2e3f7561e..e3f48aa0f363 100644
 --- a/drivers/clk/stm32/clk-stm32mp25.c
 +++ b/drivers/clk/stm32/clk-stm32mp25.c
 @@ -130,8 +130,8 @@ enum {
@@ -33,6 +31,3 @@ index fce2e3f7561e..e3f48aa0f363 100644
  	MSI_KER,
  };
  
--- 
-2.53.0
-

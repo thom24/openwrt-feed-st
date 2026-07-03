@@ -31,8 +31,6 @@ Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  Documentation/devicetree/bindings/arm/cpus.yaml | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
-index 0d17cbad9778..ad7fee0245fa 100644
 --- a/Documentation/devicetree/bindings/arm/cpus.yaml
 +++ b/Documentation/devicetree/bindings/arm/cpus.yaml
 @@ -308,7 +308,9 @@ properties:
@@ -46,6 +44,3 @@ index 0d17cbad9778..ad7fee0245fa 100644
  
    qcom,saw:
      $ref: /schemas/types.yaml#/definitions/phandle
--- 
-2.53.0
-

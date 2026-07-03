@@ -18,11 +18,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp135f-dk.dts | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index 6d0ce2cba93c..e91764a9bbae 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -154,6 +154,8 @@ v3v3_ao: v3v3-ao {
+@@ -154,6 +154,8 @@
  	wifi_pwrseq: wifi-pwrseq {
  		compatible = "mmc-pwrseq-simple";
  		reset-gpios = <&mcp23017 11 GPIO_ACTIVE_LOW>;
@@ -31,7 +29,7 @@ index 6d0ce2cba93c..e91764a9bbae 100644
  	};
  };
  
-@@ -433,6 +435,7 @@ ltdc_out_rgb: endpoint {
+@@ -433,6 +435,7 @@
  };
  
  &rtc {
@@ -39,7 +37,7 @@ index 6d0ce2cba93c..e91764a9bbae 100644
  	st,lsco = <RTC_OUT2_RMP>;
  	pinctrl-0 = <&rtc_out2_rmp_pins_a>;
  	pinctrl-names = "default";
-@@ -660,6 +663,8 @@ &usart2 {
+@@ -660,6 +663,8 @@
  	bluetooth {
  		shutdown-gpios = <&mcp23017 13 GPIO_ACTIVE_HIGH>;
  		compatible = "brcm,bcm43438-bt";
@@ -48,6 +46,3 @@ index 6d0ce2cba93c..e91764a9bbae 100644
  		max-speed = <2000000>;
  		vbat-supply = <&v3v3_ao>;
  		vddio-supply = <&v3v3_ao>;
--- 
-2.53.0
-

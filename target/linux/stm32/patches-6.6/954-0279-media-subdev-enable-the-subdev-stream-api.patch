@@ -21,8 +21,6 @@ Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
  drivers/media/v4l2-core/v4l2-subdev.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index 8bf1448eba42..2f6afb116f63 100644
 --- a/drivers/media/v4l2-core/v4l2-subdev.c
 +++ b/drivers/media/v4l2-core/v4l2-subdev.c
 @@ -31,7 +31,7 @@
@@ -34,6 +32,3 @@ index 8bf1448eba42..2f6afb116f63 100644
  #endif
  
  /*
--- 
-2.53.0
-

@@ -24,11 +24,9 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  .../platform/st/stm32/stm32-dcmipp/dcmipp-isp.c | 17 +++++++++++++++++
  1 file changed, 17 insertions(+)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
-index 5388f2472f12..9bea4859582c 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
-@@ -281,6 +281,14 @@ static int dcmipp_isp_set_fmt(struct v4l2_subdev *sd,
+@@ -281,6 +281,14 @@ static int dcmipp_isp_set_fmt(struct v4l
  		else
  			opp_pad_fmt->code = MEDIA_BUS_FMT_RGB888_1X24;
  
@@ -43,7 +41,7 @@ index 5388f2472f12..9bea4859582c 100644
  		crop->top = 0;
  		crop->left = 0;
  		crop->width = fmt->format.width;
-@@ -305,6 +313,15 @@ static int dcmipp_isp_set_fmt(struct v4l2_subdev *sd,
+@@ -305,6 +313,15 @@ static int dcmipp_isp_set_fmt(struct v4l
  			fmt->format.code = MEDIA_BUS_FMT_YUV8_1X24;
  		else
  			fmt->format.code = MEDIA_BUS_FMT_RGB888_1X24;
@@ -59,6 +57,3 @@ index 5388f2472f12..9bea4859582c 100644
  		if (compose->width && compose->height) {
  			fmt->format.width = compose->width;
  			fmt->format.height = compose->height;
--- 
-2.53.0
-

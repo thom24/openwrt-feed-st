@@ -15,11 +15,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c | 8 +++++++-
  1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
-index 8502949554f5..c8ecdf1a2fb1 100644
 --- a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
 +++ b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
-@@ -1175,6 +1175,7 @@ __dw_mipi_dsi_probe(struct platform_device *pdev,
+@@ -1175,6 +1175,7 @@ __dw_mipi_dsi_probe(struct platform_devi
  	struct reset_control *apb_rst;
  	struct dw_mipi_dsi *dsi;
  	int ret;
@@ -27,7 +25,7 @@ index 8502949554f5..c8ecdf1a2fb1 100644
  
  	dsi = devm_kzalloc(dev, sizeof(*dsi), GFP_KERNEL);
  	if (!dsi)
-@@ -1209,7 +1210,12 @@ __dw_mipi_dsi_probe(struct platform_device *pdev,
+@@ -1209,7 +1210,12 @@ __dw_mipi_dsi_probe(struct platform_devi
  	 * Note that the reset was not defined in the initial device tree, so
  	 * we have to be prepared for it not being found.
  	 */
@@ -41,6 +39,3 @@ index 8502949554f5..c8ecdf1a2fb1 100644
  		apb_rst = devm_reset_control_get_optional_exclusive(dev, "apb");
  		if (IS_ERR(apb_rst)) {
  			ret = PTR_ERR(apb_rst);
--- 
-2.53.0
-

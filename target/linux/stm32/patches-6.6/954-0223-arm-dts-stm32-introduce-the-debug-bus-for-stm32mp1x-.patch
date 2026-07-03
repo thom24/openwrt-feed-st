@@ -26,8 +26,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp153.dtsi |  68 +++++++++++
  3 files changed, 360 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index 99934b8e6ff4..ac67910c07c2 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
 @@ -3,6 +3,7 @@
@@ -38,7 +36,7 @@ index 99934b8e6ff4..ac67910c07c2 100644
  #include <dt-bindings/interrupt-controller/arm-gic.h>
  #include <dt-bindings/clock/stm32mp13-clks.h>
  #include <dt-bindings/regulator/st,stm32mp13-regulator.h>
-@@ -1130,9 +1131,127 @@ hdp: pinctrl@5002a000 {
+@@ -1130,9 +1131,127 @@
  			compatible = "st,stm32mp-hdp";
  			reg = <0x5002a000 0x400>;
  			clocks = <&rcc HDP>;
@@ -166,8 +164,6 @@ index 99934b8e6ff4..ac67910c07c2 100644
  		mdma: dma-controller@58000000 {
  			compatible = "st,stm32h7-mdma";
  			reg = <0x58000000 0x1000>;
-diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
-index a3a78ced375b..25f6efa1437f 100644
 --- a/arch/arm/boot/dts/st/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
 @@ -3,6 +3,7 @@
@@ -178,7 +174,7 @@ index a3a78ced375b..25f6efa1437f 100644
  #include <dt-bindings/interrupt-controller/arm-gic.h>
  #include <dt-bindings/clock/stm32mp1-clks.h>
  #include <dt-bindings/gpio/gpio.h>
-@@ -509,9 +510,181 @@ hdp: pinctrl@5002a000 {
+@@ -509,9 +510,181 @@
  			compatible = "st,stm32mp-hdp";
  			reg = <0x5002a000 0x400>;
  			clocks = <&rcc HDP>;
@@ -360,11 +356,9 @@ index a3a78ced375b..25f6efa1437f 100644
  		pinctrl_z: pinctrl@54004000 {
  			bootph-all;
  			#address-cells = <1>;
-diff --git a/arch/arm/boot/dts/st/stm32mp153.dtsi b/arch/arm/boot/dts/st/stm32mp153.dtsi
-index e9ddf67cd3d8..cd63ed951fc6 100644
 --- a/arch/arm/boot/dts/st/stm32mp153.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp153.dtsi
-@@ -31,6 +31,74 @@ timer {
+@@ -31,6 +31,74 @@
  	};
  };
  
@@ -439,6 +433,3 @@ index e9ddf67cd3d8..cd63ed951fc6 100644
  &etzpc {
  	m_can1: can@4400e000 {
  		compatible = "bosch,m_can";
--- 
-2.53.0
-

@@ -19,11 +19,9 @@ Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp253.dtsi | 6 ++----
  2 files changed, 5 insertions(+), 9 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 30b8419be711..4e6f6e534165 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -23,10 +23,8 @@ cpu0: cpu@0 {
+@@ -23,10 +23,8 @@
  			device_type = "cpu";
  			reg = <0>;
  			enable-method = "psci";
@@ -36,7 +34,7 @@ index 30b8419be711..4e6f6e534165 100644
  			#cooling-cells = <2>;
  		};
  
-@@ -148,7 +146,7 @@ scmi_devpd: protocol@11 {
+@@ -148,7 +146,7 @@
  
  			scmi_perf: protocol@13 {
  				reg = <0x13>;
@@ -45,11 +43,9 @@ index 30b8419be711..4e6f6e534165 100644
  			};
  
  			scmi_clk: protocol@14 {
-diff --git a/arch/arm64/boot/dts/st/stm32mp253.dtsi b/arch/arm64/boot/dts/st/stm32mp253.dtsi
-index 3668c34fa454..a198bca8ca0c 100644
 --- a/arch/arm64/boot/dts/st/stm32mp253.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp253.dtsi
-@@ -12,10 +12,8 @@ cpu1: cpu@1 {
+@@ -12,10 +12,8 @@
  			device_type = "cpu";
  			reg = <1>;
  			enable-method = "psci";
@@ -62,6 +58,3 @@ index 3668c34fa454..a198bca8ca0c 100644
  		};
  	};
  
--- 
-2.53.0
-

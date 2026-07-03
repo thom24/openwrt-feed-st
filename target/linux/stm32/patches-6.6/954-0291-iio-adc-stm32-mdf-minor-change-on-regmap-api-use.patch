@@ -16,11 +16,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/iio/adc/stm32-mdf-adc.c | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/adc/stm32-mdf-adc.c b/drivers/iio/adc/stm32-mdf-adc.c
-index ac7430f700f2..0129dc9a1991 100644
 --- a/drivers/iio/adc/stm32-mdf-adc.c
 +++ b/drivers/iio/adc/stm32-mdf-adc.c
-@@ -1321,8 +1321,7 @@ static int stm32_mdf_adc_single_conv(struct iio_dev *indio_dev,
+@@ -1321,8 +1321,7 @@ static int stm32_mdf_adc_single_conv(str
  	if (ret < 0)
  		return ret;
  
@@ -30,7 +28,7 @@ index ac7430f700f2..0129dc9a1991 100644
  	if (ret < 0)
  		goto err_conv;
  
-@@ -1339,7 +1338,7 @@ static int stm32_mdf_adc_single_conv(struct iio_dev *indio_dev,
+@@ -1339,7 +1338,7 @@ static int stm32_mdf_adc_single_conv(str
  
  	timeout = wait_for_completion_interruptible_timeout(&adc->completion, STM32_MDF_TIMEOUT_MS);
  
@@ -39,6 +37,3 @@ index ac7430f700f2..0129dc9a1991 100644
  
  	if (timeout == 0) {
  		dev_err(&indio_dev->dev, "Timeout reached on channel [%d]", chan->channel);
--- 
-2.53.0
-
