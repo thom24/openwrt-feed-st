@@ -50,7 +50,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  		hsotg->lx_state = DWC2_L0;
  	}
  
-@@ -4707,6 +4709,63 @@ static int dwc2_hsotg_gadget_getframe(st
+@@ -4709,6 +4711,63 @@ static int dwc2_hsotg_gadget_getframe(st
  	return dwc2_hsotg_read_frameno(to_hsotg(gadget));
  }
  
@@ -114,7 +114,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  /**
   * dwc2_hsotg_set_selfpowered - set if device is self/bus powered
   * @gadget: The usb gadget state
-@@ -4851,6 +4910,7 @@ static void dwc2_gadget_set_speed(struct
+@@ -4853,6 +4912,7 @@ static void dwc2_gadget_set_speed(struct
  
  static const struct usb_gadget_ops dwc2_hsotg_gadget_ops = {
  	.get_frame	= dwc2_hsotg_gadget_getframe,
@@ -122,7 +122,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  	.set_selfpowered	= dwc2_hsotg_set_selfpowered,
  	.udc_start		= dwc2_hsotg_udc_start,
  	.udc_stop		= dwc2_hsotg_udc_stop,
-@@ -4858,6 +4918,7 @@ static const struct usb_gadget_ops dwc2_
+@@ -4860,6 +4920,7 @@ static const struct usb_gadget_ops dwc2_
  	.udc_set_speed		= dwc2_gadget_set_speed,
  	.vbus_session		= dwc2_hsotg_vbus_session,
  	.vbus_draw		= dwc2_hsotg_vbus_draw,
@@ -130,7 +130,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  };
  
  /**
-@@ -5087,6 +5148,7 @@ int dwc2_gadget_init(struct dwc2_hsotg *
+@@ -5089,6 +5150,7 @@ int dwc2_gadget_init(struct dwc2_hsotg *
  	hsotg->gadget.name = dev_name(dev);
  	hsotg->gadget.otg_caps = &hsotg->params.otg_caps;
  	hsotg->remote_wakeup_allowed = 0;
@@ -138,7 +138,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  
  	if (hsotg->params.lpm)
  		hsotg->gadget.lpm_capable = true;
-@@ -5813,7 +5875,8 @@ void dwc2_gadget_exit_clock_gating(struc
+@@ -5815,7 +5877,8 @@ void dwc2_gadget_exit_clock_gating(struc
  	if (rem_wakeup) {
  		/* Set Remote Wakeup Signaling */
  		dctl = dwc2_readl(hsotg, DCTL);

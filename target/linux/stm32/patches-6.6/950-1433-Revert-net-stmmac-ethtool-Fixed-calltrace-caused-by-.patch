@@ -19,14 +19,14 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
 
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-@@ -257,7 +257,6 @@ struct stmmac_priv {
+@@ -256,7 +256,6 @@ struct stmmac_priv {
  	u32 msg_enable;
  	int wolopts;
  	int wol_irq;
 -	bool wol_irq_disabled;
  	int clk_csr;
  	struct timer_list eee_ctrl_timer;
- 	int lpi_irq;
+ 	int eee_enabled;
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c
 @@ -867,16 +867,10 @@ static int stmmac_set_wol(struct net_dev
@@ -50,7 +50,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  	mutex_lock(&priv->lock);
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -3558,7 +3558,6 @@ static int stmmac_request_irq_multi_msi(
+@@ -3554,7 +3554,6 @@ static int stmmac_request_irq_multi_msi(
  	/* Request the Wake IRQ in case of another line
  	 * is used for WoL
  	 */

@@ -33,7 +33,7 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/404472
 
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -7930,16 +7930,8 @@ int stmmac_resume(struct device *dev)
+@@ -7909,16 +7909,8 @@ int stmmac_resume(struct device *dev)
  	}
  
  	rtnl_lock();
@@ -51,7 +51,7 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/404472
  	mutex_lock(&priv->lock);
  
  	stmmac_reset_queues_param(priv);
-@@ -7964,6 +7956,11 @@ int stmmac_resume(struct device *dev)
+@@ -7943,6 +7935,11 @@ int stmmac_resume(struct device *dev)
  	stmmac_enable_all_dma_irq(priv);
  
  	mutex_unlock(&priv->lock);

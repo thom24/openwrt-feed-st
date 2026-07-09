@@ -23,7 +23,7 @@ Tested-by: Christophe KERELLO <christophe.kerello@st.com>
 
 --- a/drivers/usb/dwc3/core.c
 +++ b/drivers/usb/dwc3/core.c
-@@ -2453,6 +2453,7 @@ MODULE_DEVICE_TABLE(acpi, dwc3_acpi_matc
+@@ -2470,6 +2470,7 @@ MODULE_DEVICE_TABLE(acpi, dwc3_acpi_matc
  static struct platform_driver dwc3_driver = {
  	.probe		= dwc3_probe,
  	.remove_new	= dwc3_remove,

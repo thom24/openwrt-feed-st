@@ -18,7 +18,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
 
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -20363,6 +20363,12 @@ L:	linux-spi@vger.kernel.org
+@@ -20371,6 +20371,12 @@ L:	linux-spi@vger.kernel.org
  S:	Maintained
  F:	drivers/spi/spi-stm32.c
  

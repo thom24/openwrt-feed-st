@@ -17,7 +17,7 @@ Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
 
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -20331,6 +20331,7 @@ F:	drivers/media/i2c/st-mipid02.c
+@@ -20339,6 +20339,7 @@ F:	drivers/media/i2c/st-mipid02.c
  ST STM32 FIREWALL
  M:	Gatien Chevallier <gatien.chevallier@foss.st.com>
  S:	Maintained

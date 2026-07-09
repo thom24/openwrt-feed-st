@@ -79,7 +79,7 @@ Domain-Review: Patrice CHOTARD <patrice.chotard@foss.st.com>
   * @nor:	pointer to 'struct spi_nor'.
 --- a/drivers/mtd/spi-nor/core.h
 +++ b/drivers/mtd/spi-nor/core.h
-@@ -424,6 +424,8 @@ struct spi_nor_flash_parameter {
+@@ -428,6 +428,8 @@ struct spi_nor_flash_parameter {
   * @late_init: used to initialize flash parameters that are not declared in the
   *             JESD216 SFDP standard, or where SFDP tables not defined at all.
   *             Will replace the default_init() hook.
@@ -88,8 +88,8 @@ Domain-Review: Patrice CHOTARD <patrice.chotard@foss.st.com>
   *
   * Those hooks can be used to tweak the SPI NOR configuration when the SFDP
   * table is broken or not available.
-@@ -435,6 +437,8 @@ struct spi_nor_fixups {
- 			 const struct sfdp_bfpt *bfpt);
+@@ -441,6 +443,8 @@ struct spi_nor_fixups {
+ 	void (*smpt_map_id)(const struct spi_nor *nor, u8 *map_id);
  	int (*post_sfdp)(struct spi_nor *nor);
  	int (*late_init)(struct spi_nor *nor);
 +	int (*read_id)(struct spi_nor *nor, u8 naddr, u8 ndummy, u8 *id,
@@ -97,7 +97,7 @@ Domain-Review: Patrice CHOTARD <patrice.chotard@foss.st.com>
  };
  
  /**
-@@ -668,6 +672,8 @@ void spi_nor_unlock_and_unprep(struct sp
+@@ -674,6 +678,8 @@ void spi_nor_unlock_and_unprep(struct sp
  int spi_nor_sr1_bit6_quad_enable(struct spi_nor *nor);
  int spi_nor_sr2_bit1_quad_enable(struct spi_nor *nor);
  int spi_nor_sr2_bit7_quad_enable(struct spi_nor *nor);

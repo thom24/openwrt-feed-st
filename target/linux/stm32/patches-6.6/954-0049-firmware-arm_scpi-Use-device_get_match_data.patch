@@ -24,7 +24,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
 
 --- a/drivers/firmware/arm_scpi.c
 +++ b/drivers/firmware/arm_scpi.c
-@@ -26,9 +26,12 @@
+@@ -27,9 +27,12 @@
  #include <linux/list.h>
  #include <linux/mailbox_client.h>
  #include <linux/module.h>
@@ -37,7 +37,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  #include <linux/pm_opp.h>
  #include <linux/scpi_protocol.h>
  #include <linux/slab.h>
-@@ -897,11 +900,6 @@ static int scpi_alloc_xfer_list(struct d
+@@ -898,11 +901,6 @@ static int scpi_alloc_xfer_list(struct d
  	return 0;
  }
  
@@ -49,7 +49,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  static const struct of_device_id shmem_of_match[] __maybe_unused = {
  	{ .compatible = "amlogic,meson-gxbb-scp-shmem", },
  	{ .compatible = "amlogic,meson-axg-scp-shmem", },
-@@ -922,8 +920,7 @@ static int scpi_probe(struct platform_de
+@@ -923,8 +921,7 @@ static int scpi_probe(struct platform_de
  	if (!scpi_drvinfo)
  		return -ENOMEM;
  
@@ -59,7 +59,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  
  	count = of_count_phandle_with_args(np, "mboxes", "#mbox-cells");
  	if (count < 0) {
-@@ -1041,7 +1038,7 @@ static int scpi_probe(struct platform_de
+@@ -1042,7 +1039,7 @@ static int scpi_probe(struct platform_de
  
  static const struct of_device_id scpi_of_match[] = {
  	{.compatible = "arm,scpi"},

@@ -63,7 +63,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  #if IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) || \
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -4719,6 +4719,7 @@ static int dwc2_hsotg_pullup(struct usb_
+@@ -4721,6 +4721,7 @@ static int dwc2_hsotg_pullup(struct usb_
  {
  	struct dwc2_hsotg *hsotg = to_hsotg(gadget);
  	unsigned long flags;
@@ -71,7 +71,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  
  	dev_dbg(hsotg->dev, "%s: is_on: %d op_state: %d\n", __func__, is_on,
  		hsotg->op_state);
-@@ -4729,6 +4730,12 @@ static int dwc2_hsotg_pullup(struct usb_
+@@ -4731,6 +4732,12 @@ static int dwc2_hsotg_pullup(struct usb_
  		return 0;
  	}
  

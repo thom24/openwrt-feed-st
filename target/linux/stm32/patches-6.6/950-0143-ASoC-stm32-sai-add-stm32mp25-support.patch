@@ -339,7 +339,7 @@ Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
  		if (ret)
  			return ret;
  
-@@ -1001,7 +1118,7 @@ static int stm32_sai_configure_clock(str
+@@ -1004,7 +1121,7 @@ static int stm32_sai_configure_clock(str
  	int ret;
  
  	if (!sai->sai_mclk) {
@@ -348,7 +348,7 @@ Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
  		if (ret)
  			return ret;
  	}
-@@ -1162,6 +1279,14 @@ static void stm32_sai_shutdown(struct sn
+@@ -1165,6 +1282,14 @@ static void stm32_sai_shutdown(struct sn
  
  	clk_disable_unprepare(sai->sai_ck);
  
@@ -363,7 +363,7 @@ Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
  	spin_lock_irqsave(&sai->irq_lock, flags);
  	sai->substream = NULL;
  	spin_unlock_irqrestore(&sai->irq_lock, flags);
-@@ -1552,6 +1677,13 @@ static int stm32_sai_sub_probe(struct pl
+@@ -1555,6 +1680,13 @@ static int stm32_sai_sub_probe(struct pl
  		return -EINVAL;
  	}
  

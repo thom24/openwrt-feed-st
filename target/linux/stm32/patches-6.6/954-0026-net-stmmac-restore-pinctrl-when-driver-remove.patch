@@ -19,7 +19,7 @@ Reviewed-by: Jerome BESNARD <jerome.besnard@st.com>
 
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -7766,6 +7766,9 @@ void stmmac_dvr_remove(struct device *de
+@@ -7745,6 +7745,9 @@ void stmmac_dvr_remove(struct device *de
  	mutex_destroy(&priv->lock);
  	bitmap_free(priv->af_xdp_zc_qps);
  

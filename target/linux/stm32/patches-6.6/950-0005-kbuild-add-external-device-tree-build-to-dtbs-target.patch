@@ -43,7 +43,7 @@ Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
 
 --- a/Makefile
 +++ b/Makefile
-@@ -1388,17 +1388,43 @@ ifneq ($(wildcard $(srctree)/arch/$(SRCA
+@@ -1397,17 +1397,43 @@ ifneq ($(wildcard $(srctree)/arch/$(SRCA
  dtstree := arch/$(SRCARCH)/boot/dts
  endif
  

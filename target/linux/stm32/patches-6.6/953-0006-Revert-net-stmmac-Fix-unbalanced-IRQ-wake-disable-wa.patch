@@ -11,7 +11,7 @@ This reverts commit b0a3c915529efeb7a01d9ee672372fa760357511.
 
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -3701,7 +3701,6 @@ static int stmmac_request_irq_single(str
+@@ -3679,7 +3679,6 @@ static int stmmac_request_irq_single(str
  	/* Request the Wake IRQ in case of another line
  	 * is used for WoL
  	 */

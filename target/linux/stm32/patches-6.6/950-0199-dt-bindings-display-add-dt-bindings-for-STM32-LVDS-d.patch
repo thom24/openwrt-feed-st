@@ -138,7 +138,7 @@ Signed-off-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
 +...
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -7070,6 +7070,7 @@ L:	dri-devel@lists.freedesktop.org
+@@ -7078,6 +7078,7 @@ L:	dri-devel@lists.freedesktop.org
  S:	Maintained
  T:	git git://anongit.freedesktop.org/drm/drm-misc
  F:	Documentation/devicetree/bindings/display/st,stm32-ltdc.yaml

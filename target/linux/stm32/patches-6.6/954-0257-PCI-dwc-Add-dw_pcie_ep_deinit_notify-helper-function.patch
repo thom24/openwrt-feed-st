@@ -36,7 +36,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  {
 --- a/drivers/pci/controller/dwc/pcie-designware.h
 +++ b/drivers/pci/controller/dwc/pcie-designware.h
-@@ -575,6 +575,7 @@ void dw_pcie_ep_linkup(struct dw_pcie_ep
+@@ -577,6 +577,7 @@ void dw_pcie_ep_linkup(struct dw_pcie_ep
  int dw_pcie_ep_init(struct dw_pcie_ep *ep);
  int dw_pcie_ep_init_complete(struct dw_pcie_ep *ep);
  void dw_pcie_ep_init_notify(struct dw_pcie_ep *ep);
@@ -44,7 +44,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  void dw_pcie_ep_exit(struct dw_pcie_ep *ep);
  int dw_pcie_ep_raise_legacy_irq(struct dw_pcie_ep *ep, u8 func_no);
  int dw_pcie_ep_raise_msi_irq(struct dw_pcie_ep *ep, u8 func_no,
-@@ -605,6 +606,10 @@ static inline void dw_pcie_ep_init_notif
+@@ -607,6 +608,10 @@ static inline void dw_pcie_ep_init_notif
  {
  }
  

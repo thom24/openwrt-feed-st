@@ -46,7 +46,7 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
   * @lock: for synchronizing
   * @mutex: for mode switching
   * @dev: pointer to our struct device
-@@ -1154,6 +1155,8 @@ struct dwc3 {
+@@ -1156,6 +1157,8 @@ struct dwc3 {
  	struct dwc3_request	ep0_usb_req;
  	struct completion	ep0_in_setup;
  

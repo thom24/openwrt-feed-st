@@ -39,7 +39,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  static inline int dwc2_hsotg_resume(struct dwc2_hsotg *dwc2)
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -5186,6 +5186,18 @@ int dwc2_hsotg_remove(struct dwc2_hsotg
+@@ -5188,6 +5188,18 @@ int dwc2_hsotg_remove(struct dwc2_hsotg
  	return 0;
  }
  

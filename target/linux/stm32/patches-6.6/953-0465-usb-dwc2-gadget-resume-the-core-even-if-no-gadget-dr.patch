@@ -19,7 +19,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
 
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -5326,19 +5326,19 @@ int dwc2_hsotg_resume(struct dwc2_hsotg
+@@ -5328,19 +5328,19 @@ int dwc2_hsotg_resume(struct dwc2_hsotg
  	if (!hsotg->gadget_off_for_suspend)
  		return 0;
  

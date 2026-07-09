@@ -187,7 +187,7 @@ Signed-off-by: Mark Brown <broonie@kernel.org>
  
  	/* Get the DMA channel caps, and adjust maxburst if possible */
  	ret = dma_get_slave_caps(dma_chan, &caps);
-@@ -1539,7 +1601,7 @@ static void stm32h7_spi_data_idleness(st
+@@ -1540,7 +1602,7 @@ static void stm32h7_spi_data_idleness(st
   */
  static int stm32h7_spi_number_of_data(struct stm32_spi *spi, u32 nb_words)
  {
@@ -196,7 +196,7 @@ Signed-off-by: Mark Brown <broonie@kernel.org>
  		writel_relaxed(FIELD_PREP(STM32H7_SPI_CR2_TSIZE, nb_words),
  			       spi->base + STM32H7_SPI_CR2);
  	} else {
-@@ -1797,7 +1859,37 @@ static const struct stm32_spi_cfg stm32h
+@@ -1798,7 +1860,37 @@ static const struct stm32_spi_cfg stm32h
  	.has_device_mode = true,
  };
  
@@ -234,7 +234,7 @@ Signed-off-by: Mark Brown <broonie@kernel.org>
  	{ .compatible = "st,stm32h7-spi", .data = (void *)&stm32h7_spi_cfg },
  	{ .compatible = "st,stm32f4-spi", .data = (void *)&stm32f4_spi_cfg },
  	{},
-@@ -1906,6 +1998,22 @@ static int stm32_spi_probe(struct platfo
+@@ -1907,6 +1999,22 @@ static int stm32_spi_probe(struct platfo
  	if (spi->cfg->has_fifo)
  		spi->fifo_size = spi->cfg->get_fifo_size(spi);
  

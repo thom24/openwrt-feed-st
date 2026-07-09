@@ -35,7 +35,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
 
 --- a/drivers/pci/endpoint/functions/pci-epf-mhi.c
 +++ b/drivers/pci/endpoint/functions/pci-epf-mhi.c
-@@ -506,6 +506,14 @@ static int pci_epf_mhi_core_init(struct
+@@ -510,6 +510,14 @@ static int pci_epf_mhi_core_init(struct
  	if (!epf_mhi->epc_features)
  		return -ENODATA;
  
@@ -50,7 +50,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  	return 0;
  }
  
-@@ -518,14 +526,6 @@ static int pci_epf_mhi_link_up(struct pc
+@@ -522,14 +530,6 @@ static int pci_epf_mhi_link_up(struct pc
  	struct device *dev = &epf->dev;
  	int ret;
  

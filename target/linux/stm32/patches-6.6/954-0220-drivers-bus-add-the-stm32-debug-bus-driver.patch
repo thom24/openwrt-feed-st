@@ -29,7 +29,7 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
 
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -20338,6 +20338,7 @@ F:	drivers/perf/stm32_ddr_pmu.c
+@@ -20346,6 +20346,7 @@ F:	drivers/perf/stm32_ddr_pmu.c
  ST STM32 FIREWALL
  M:	Gatien Chevallier <gatien.chevallier@foss.st.com>
  S:	Maintained

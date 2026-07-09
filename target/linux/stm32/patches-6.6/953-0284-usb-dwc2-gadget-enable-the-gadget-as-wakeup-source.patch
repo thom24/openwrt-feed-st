@@ -49,7 +49,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  	/* Exit clock gating when driver is stopped. */
  	if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
  	    hsotg->bus_suspended && !hsotg->params.no_clock_gating) {
-@@ -5040,6 +5044,17 @@ static void dwc2_hsotg_dump(struct dwc2_
+@@ -5042,6 +5046,17 @@ static void dwc2_hsotg_dump(struct dwc2_
  #endif
  }
  
@@ -67,7 +67,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  /**
   * dwc2_gadget_init - init function for gadget
   * @hsotg: Programming view of the DWC_otg controller
-@@ -5117,6 +5132,13 @@ int dwc2_gadget_init(struct dwc2_hsotg *
+@@ -5119,6 +5134,13 @@ int dwc2_gadget_init(struct dwc2_hsotg *
  		return -EINVAL;
  	}
  
@@ -81,7 +81,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  	/* setup endpoint information */
  
  	INIT_LIST_HEAD(&hsotg->gadget.ep_list);
-@@ -5128,6 +5150,7 @@ int dwc2_gadget_init(struct dwc2_hsotg *
+@@ -5130,6 +5152,7 @@ int dwc2_gadget_init(struct dwc2_hsotg *
  						     GFP_KERNEL);
  	if (!hsotg->ctrl_req) {
  		dev_err(dev, "failed to allocate ctrl req\n");
@@ -89,7 +89,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  		return -ENOMEM;
  	}
  
-@@ -5156,6 +5179,10 @@ int dwc2_hsotg_remove(struct dwc2_hsotg
+@@ -5158,6 +5181,10 @@ int dwc2_hsotg_remove(struct dwc2_hsotg
  	usb_del_gadget_udc(&hsotg->gadget);
  	dwc2_hsotg_ep_free_request(&hsotg->eps_out[0]->ep, hsotg->ctrl_req);
  
@@ -100,7 +100,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  	return 0;
  }
  
-@@ -5163,6 +5190,8 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg
+@@ -5165,6 +5192,8 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg
  {
  	unsigned long flags;
  
@@ -109,7 +109,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  	if (hsotg->lx_state != DWC2_L0) {
  		hsotg->gadget_off_for_suspend = false;
  		return 0;
-@@ -5449,6 +5478,8 @@ int dwc2_gadget_enter_hibernation(struct
+@@ -5451,6 +5480,8 @@ int dwc2_gadget_enter_hibernation(struct
  	hsotg->gr_backup.gpwrdn = dwc2_readl(hsotg, GPWRDN);
  	dev_dbg(hsotg->dev, "Hibernation completed\n");
  
@@ -118,7 +118,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  	return ret;
  }
  
-@@ -5558,6 +5589,7 @@ int dwc2_gadget_exit_hibernation(struct
+@@ -5560,6 +5591,7 @@ int dwc2_gadget_exit_hibernation(struct
  
  	hsotg->hibernated = 0;
  	hsotg->lx_state = DWC2_L0;
@@ -126,7 +126,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  	dev_dbg(hsotg->dev, "Hibernation recovery completes here\n");
  
  	return ret;
-@@ -5618,6 +5650,7 @@ int dwc2_gadget_enter_partial_power_down
+@@ -5620,6 +5652,7 @@ int dwc2_gadget_enter_partial_power_down
  	/* Set in_ppd flag to 1 as here core enters suspend. */
  	hsotg->in_ppd = 1;
  	hsotg->lx_state = DWC2_L2;
@@ -134,7 +134,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  
  	dev_dbg(hsotg->dev, "Entering device partial power down completed.\n");
  
-@@ -5686,6 +5719,7 @@ int dwc2_gadget_exit_partial_power_down(
+@@ -5688,6 +5721,7 @@ int dwc2_gadget_exit_partial_power_down(
  	/* Set in_ppd flag to 0 as here core exits from suspend. */
  	hsotg->in_ppd = 0;
  	hsotg->lx_state = DWC2_L0;
@@ -142,7 +142,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  
  	dev_dbg(hsotg->dev, "Exiting device partial Power Down completed.\n");
  	return ret;
-@@ -5720,6 +5754,7 @@ void dwc2_gadget_enter_clock_gating(stru
+@@ -5722,6 +5756,7 @@ void dwc2_gadget_enter_clock_gating(stru
  
  	hsotg->lx_state = DWC2_L2;
  	hsotg->bus_suspended = true;
@@ -150,7 +150,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  }
  
  /*
-@@ -5759,4 +5794,5 @@ void dwc2_gadget_exit_clock_gating(struc
+@@ -5761,4 +5796,5 @@ void dwc2_gadget_exit_clock_gating(struc
  	/* Change to L0 state */
  	hsotg->lx_state = DWC2_L0;
  	hsotg->bus_suspended = false;

@@ -28,7 +28,7 @@ Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -8619,6 +8619,14 @@ F:	kernel/futex/*
+@@ -8627,6 +8627,14 @@ F:	kernel/futex/*
  F:	tools/perf/bench/futex*
  F:	tools/testing/selftests/futex/
  

@@ -22,7 +22,7 @@ Domain-Review: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
 
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -20328,6 +20328,13 @@ T:	git git://linuxtv.org/media_tree.git
+@@ -20336,6 +20336,13 @@ T:	git git://linuxtv.org/media_tree.git
  F:	Documentation/devicetree/bindings/media/i2c/st,st-mipid02.yaml
  F:	drivers/media/i2c/st-mipid02.c
  

@@ -19,7 +19,7 @@ Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
 
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -13290,6 +13290,14 @@ W:	https://linuxtv.org
+@@ -13298,6 +13298,14 @@ W:	https://linuxtv.org
  T:	git git://linuxtv.org/media_tree.git
  F:	drivers/media/dvb-frontends/stv6111*
  

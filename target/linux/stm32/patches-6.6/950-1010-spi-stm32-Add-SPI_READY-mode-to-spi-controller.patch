@@ -88,7 +88,7 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  	if (clrb || setb)
  		writel_relaxed(
  			(readl_relaxed(spi->base + spi->cfg->regs->cpol.reg) &
-@@ -1635,6 +1648,13 @@ static int stm32_spi_transfer_one_setup(
+@@ -1636,6 +1649,13 @@ static int stm32_spi_transfer_one_setup(
  	spi->cur_bpw = transfer->bits_per_word;
  	spi->cfg->set_bpw(spi);
  
@@ -102,7 +102,7 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  	/* Update spi->cur_speed with real clock speed */
  	if (STM32_SPI_MASTER_MODE(spi)) {
  		mbr = stm32_spi_prepare_mbr(spi, transfer->speed_hz,
-@@ -2025,7 +2045,7 @@ static int stm32_spi_probe(struct platfo
+@@ -2026,7 +2046,7 @@ static int stm32_spi_probe(struct platfo
  	ctrl->auto_runtime_pm = true;
  	ctrl->bus_num = pdev->id;
  	ctrl->mode_bits = SPI_CPHA | SPI_CPOL | SPI_CS_HIGH | SPI_LSB_FIRST |
