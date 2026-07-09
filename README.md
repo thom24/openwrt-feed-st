@@ -16,8 +16,8 @@ And more boards are supported in the feed.
 You are using the `openwrt-24.10` branch of the feed, which is based on the
 OpenWrt branch `openwrt-24.10`.
 Actually the feed is based on OpenWrt
-[v24.10.6](https://github.com/openwrt/openwrt/tree/v24.10.6)
-([Release Note](https://openwrt.org/releases/24.10/notes-24.10.6)).
+[v24.10.7](https://github.com/openwrt/openwrt/tree/v24.10.7)
+([Release Note](https://openwrt.org/releases/24.10/notes-24.10.7)).
 
 ## Supported devices
 
@@ -129,6 +129,9 @@ f5e3ddbb228d ("dmaengine: stm32-dma: configure next sg only if there are more th
 7c14e33c9192 ("ASoC: stm32: sai: manage context in set_sysclk callback")
 be95b318b7de ("ext4: clear i_state_flags when alloc inode")
 5e3260959519 ("usb: dwc2: disable platform lowlevel hw resources during shutdown")
+26e73d79f8b3 ("spi: stm32: fix Overrun issue at < 8bpw")
+2973772b4c86 ("dmaengine: stm32-mdma: address -Wmaybe-uninitialized")
+d64abe20475b ("coresight: etm3x: Fix cpulocked warning on cpuhp")
 ```
 
 Some patches had to be modified to fix some conflicts.
@@ -262,12 +265,12 @@ And you need to install a set of packages as described in the
 ### Getting the code
 
 The feed is designed to work with the `openwrt-24.10` branch of OpenWRT (last
-tested commit is [v24.10.6](https://github.com/openwrt/openwrt/tree/v24.10.6)).
+tested commit is [v24.10.7](https://github.com/openwrt/openwrt/tree/v24.10.7)).
 
 ```bash
 $ git clone https://git.openwrt.org/openwrt/openwrt.git
 $ cd openwrt
-$ git checkout v24.10.6
+$ git checkout v24.10.7
 ```
 
 Next step is to add the [STMicroelectronics](https://www.st.com) feed in the
