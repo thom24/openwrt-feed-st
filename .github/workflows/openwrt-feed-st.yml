@@ -3,7 +3,7 @@ jobs:
   build-all:
     runs-on: self-hosted
     env:
-      OPENWRT_VERSION: 24.10.6
+      OPENWRT_VERSION: 24.10.7
       REF: "${{ github.ref_type == 'tag' && github.ref_name || 'latest' }}"
       B2: "${{ secrets.B2_KEY_ID != '' && 'store' }}"
       NPROC: 32
