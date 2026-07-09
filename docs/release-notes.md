@@ -1,5 +1,11 @@
 # Release notes
 
+##  openstlinux-6.6-openwrt-24.10.7-mpu-v26.02.18
+
+Changes in this release:
+
+- Based on OpenWrt v24.10.7.
+
 ##  openstlinux-6.6-openwrt-24.10.6-mpu-v26.02.18
 
 Changes in this release:
