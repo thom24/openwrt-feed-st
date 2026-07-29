@@ -16,8 +16,8 @@ And more boards are supported in the feed.
 You are using the `openwrt-24.10` branch of the feed, which is based on the
 OpenWrt branch `openwrt-24.10`.
 Actually the feed is based on OpenWrt
-[v24.10.7](https://github.com/openwrt/openwrt/tree/v24.10.7)
-([Release Note](https://openwrt.org/releases/24.10/notes-24.10.7)).
+[v24.10.8](https://github.com/openwrt/openwrt/tree/v24.10.8)
+([Release Note](https://openwrt.org/releases/24.10/notes-24.10.8)).
 
 ## Supported devices
 
@@ -132,6 +132,7 @@ be95b318b7de ("ext4: clear i_state_flags when alloc inode")
 26e73d79f8b3 ("spi: stm32: fix Overrun issue at < 8bpw")
 2973772b4c86 ("dmaengine: stm32-mdma: address -Wmaybe-uninitialized")
 d64abe20475b ("coresight: etm3x: Fix cpulocked warning on cpuhp")
+8e496f5217d4 ("usb: gadget: Fix f_ncm cleanup for net_device")
 ```
 
 Some patches had to be modified to fix some conflicts.
@@ -265,12 +266,12 @@ And you need to install a set of packages as described in the
 ### Getting the code
 
 The feed is designed to work with the `openwrt-24.10` branch of OpenWRT (last
-tested commit is [v24.10.7](https://github.com/openwrt/openwrt/tree/v24.10.7)).
+tested commit is [v24.10.8](https://github.com/openwrt/openwrt/tree/v24.10.8)).
 
 ```bash
 $ git clone https://git.openwrt.org/openwrt/openwrt.git
 $ cd openwrt
-$ git checkout v24.10.7
+$ git checkout v24.10.8
 ```
 
 Next step is to add the [STMicroelectronics](https://www.st.com) feed in the
