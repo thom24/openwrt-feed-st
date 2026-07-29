@@ -240,19 +240,19 @@ yourself from source, we provide a Starter Package which contains:
 * A ST repository that contains packages (non target-specific) from ST feed.
 
 The following table provides links to all these artifacts, compiled with the
-latest `openstlinux-6.6-openwrt-24.10.7-mpu-v26.02.18` release.
+latest `openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18` release.
 
 | Starter Package | stm32mp1 | stm32mp2 |
 |-----------------|----------|----------|
-| Factory images | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.7-mpu-v26.02.18/openwrt-stm32-stm32mp1-factory-images.tar.gz) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.7-mpu-v26.02.18/openwrt-stm32-stm32mp2-factory-images.tar.gz) |
-| Sysupgrade images | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.7-mpu-v26.02.18/openwrt-stm32-stm32mp1-sysupgrade-images.tar.gz) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.7-mpu-v26.02.18/openwrt-stm32-stm32mp2-sysupgrade-images.tar.gz) |
-| SDK | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.7-mpu-v26.02.18/openwrt-sdk-stm32-stm32mp1.Linux-x86_64.tar.zst) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.7-mpu-v26.02.18/openwrt-sdk-stm32-stm32mp2.Linux-x86_64.tar.zst) |
-| Image Buider | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.7-mpu-v26.02.18/openwrt-imagebuilder-stm32-stm32mp1.Linux-x86_64.tar.zst) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.7-mpu-v26.02.18/openwrt-imagebuilder-stm32-stm32mp2.Linux-x86_64.tar.zst) |
-| Build info | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.7-mpu-v26.02.18/config-stm32-stm32mp1.buildinfo) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.7-mpu-v26.02.18/config-stm32-stm32mp2.buildinfo) |
-| Feed info | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.7-mpu-v26.02.18/feeds-stm32-stm32mp1.buildinfo) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.7-mpu-v26.02.18/feeds-stm32-stm32mp2.buildinfo) |
-| SBOM | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.7-mpu-v26.02.18/openwrt-stm32-stm32mp1.bom.cdx.json) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.7-mpu-v26.02.18/openwrt-stm32-stm32mp2.bom.cdx.json) |
-| target repository | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.7-mpu-v26.02.18/openwrt-stm32-stm32mp1-target-repository.tar.gz) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.7-mpu-v26.02.18/openwrt-stm32-stm32mp2-target-repository.tar.gz) |
-| ST repository | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.7-mpu-v26.02.18/openwrt-stm32-stm32mp1-st-repository.tar.gz) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.7-mpu-v26.02.18/openwrt-stm32-stm32mp2-st-repository.tar.gz) |
+| Factory images | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-stm32-stm32mp1-factory-images.tar.gz) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-stm32-stm32mp2-factory-images.tar.gz) |
+| Sysupgrade images | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-stm32-stm32mp1-sysupgrade-images.tar.gz) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-stm32-stm32mp2-sysupgrade-images.tar.gz) |
+| SDK | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-sdk-stm32-stm32mp1.Linux-x86_64.tar.zst) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-sdk-stm32-stm32mp2.Linux-x86_64.tar.zst) |
+| Image Buider | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-imagebuilder-stm32-stm32mp1.Linux-x86_64.tar.zst) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-imagebuilder-stm32-stm32mp2.Linux-x86_64.tar.zst) |
+| Build info | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/config-stm32-stm32mp1.buildinfo) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/config-stm32-stm32mp2.buildinfo) |
+| Feed info | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/feeds-stm32-stm32mp1.buildinfo) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/feeds-stm32-stm32mp2.buildinfo) |
+| SBOM | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-stm32-stm32mp1.bom.cdx.json) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-stm32-stm32mp2.bom.cdx.json) |
+| target repository | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-stm32-stm32mp1-target-repository.tar.gz) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-stm32-stm32mp2-target-repository.tar.gz) |
+| ST repository | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-stm32-stm32mp1-st-repository.tar.gz) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-stm32-stm32mp2-st-repository.tar.gz) |
 
 ## Getting started
 
