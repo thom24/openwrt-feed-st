@@ -285,7 +285,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  	pcgctl &= ~PCGCTL_GATEHCLK;
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
-@@ -5815,6 +5815,8 @@ int dwc2_host_enter_partial_power_down(s
+@@ -5817,6 +5817,8 @@ int dwc2_host_enter_partial_power_down(s
  	hsotg->lx_state = DWC2_L2;
  	hsotg->bus_suspended = true;
  
@@ -294,7 +294,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  	dev_dbg(hsotg->dev, "Entering host partial power down completed.\n");
  
  	return ret;
-@@ -5841,6 +5843,15 @@ int dwc2_host_exit_partial_power_down(st
+@@ -5843,6 +5845,15 @@ int dwc2_host_exit_partial_power_down(st
  
  	dev_dbg(hsotg->dev, "Exiting host partial power down started.\n");
  
@@ -310,7 +310,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  	pcgcctl = dwc2_readl(hsotg, PCGCTL);
  	pcgcctl &= ~PCGCTL_STOPPCLK;
  	dwc2_writel(hsotg, pcgcctl, PCGCTL);
-@@ -5940,6 +5951,9 @@ void dwc2_host_enter_clock_gating(struct
+@@ -5942,6 +5953,9 @@ void dwc2_host_enter_clock_gating(struct
  
  	hsotg->bus_suspended = true;
  	hsotg->lx_state = DWC2_L2;
@@ -320,7 +320,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  }
  
  /**
-@@ -5957,6 +5971,15 @@ void dwc2_host_exit_clock_gating(struct
+@@ -5959,6 +5973,15 @@ void dwc2_host_exit_clock_gating(struct
  
  	dev_dbg(hsotg->dev, "Exiting host clock gating.\n");
  

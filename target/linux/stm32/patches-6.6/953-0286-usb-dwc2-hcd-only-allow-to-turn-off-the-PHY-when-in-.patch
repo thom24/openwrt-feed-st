@@ -18,7 +18,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
 
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
-@@ -5723,12 +5723,18 @@ int dwc2_host_exit_hibernation(struct dw
+@@ -5725,12 +5725,18 @@ int dwc2_host_exit_hibernation(struct dw
  
  bool dwc2_host_can_poweroff_phy(struct dwc2_hsotg *dwc2)
  {

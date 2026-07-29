@@ -118,7 +118,7 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  		queue_delayed_work(con->wq, &uwork->work, uwork->delay);
  	} else {
  		list_del(&uwork->node);
-@@ -1694,15 +1695,18 @@ void ucsi_unregister(struct ucsi *ucsi)
+@@ -1710,15 +1711,18 @@ void ucsi_unregister(struct ucsi *ucsi)
  		cancel_work_sync(&ucsi->connector[i].work);
  
  		if (ucsi->connector[i].wq) {

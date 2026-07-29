@@ -21,7 +21,7 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
 
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
-@@ -5729,17 +5729,13 @@ bool dwc2_host_can_poweroff_phy(struct d
+@@ -5731,17 +5731,13 @@ bool dwc2_host_can_poweroff_phy(struct d
  	if (dwc2_is_device_mode(dwc2) || dwc2->dr_mode == USB_DR_MODE_PERIPHERAL)
  		return false;
  

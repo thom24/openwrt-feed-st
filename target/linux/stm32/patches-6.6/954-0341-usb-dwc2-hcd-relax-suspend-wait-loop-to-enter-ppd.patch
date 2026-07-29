@@ -20,7 +20,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
 
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
-@@ -5772,7 +5772,7 @@ int dwc2_host_enter_partial_power_down(s
+@@ -5774,7 +5774,7 @@ int dwc2_host_enter_partial_power_down(s
  	udelay(5);
  
  	/* Wait for the HPRT0.PrtSusp register field to be set */
