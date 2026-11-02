@@ -1,0 +1,63 @@
+From bbce7d8950e39ec696eaeb026dbd7cf7a08aac5c Mon Sep 17 00:00:00 2001
+From: Valentin Caron <valentin.caron@foss.st.com>
+Date: Tue, 5 May 2026 11:10:09 +0200
+Subject: [PATCH] serial: stm32: avoid deadlock in stm32_usart_console_write()
+
+First, both stm32_usart_console_write() and stm32_usart_serial_en_wakeup()
+acquire uart_port->lock. Since stm32_usart_console_write() did not
+release the lock before calling pm_runtime_put() (which is equivalent to
+invoking stm32_usart_serial_en_wakeup()) this resulted in a deadlock.
+
+In addition this lock issue could happen:
+WARNING: HARDIRQ-safe -> HARDIRQ-unsafe lock order detected
+       CPU0                    CPU1
+       ----                    ----
+  lock(console_owner);
+                               local_irq_disable();
+                               lock(&irq_desc_lock_class);
+                               lock(tmp_mask_lock);
+  <Interrupt>
+    lock(&irq_desc_lock_class);
+As stm32_usart_console_write() will always be called with lock
+console_owner taken, and in addition could be called in an IRQ context.
+
+So solve that, we remove the pm_runtime routines from
+stm32_usart_console_write().
+
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: I0242e5377699a30cf68e20253e67f2a3255ec534
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/570584
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ drivers/tty/serial/stm32-usart.c | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index 6725bb5f6761..652aad6d2bb1 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -2276,8 +2276,6 @@ static void stm32_usart_console_write(struct console *co, const char *s,
+ 	else
+ 		uart_port_lock_irqsave(port, &flags);
+ 
+-	pm_runtime_get(port->dev);
+-
+ 	/* Save and disable interrupts, enable the transmitter */
+ 	old_cr1 = readl_relaxed(port->membase + ofs->cr1);
+ 	new_cr1 = old_cr1 & ~USART_CR1_IE_MASK;
+@@ -2289,9 +2287,6 @@ static void stm32_usart_console_write(struct console *co, const char *s,
+ 	/* Restore interrupt state */
+ 	writel_relaxed(old_cr1, port->membase + ofs->cr1);
+ 
+-	pm_runtime_mark_last_busy(port->dev);
+-	pm_runtime_put_autosuspend(port->dev);
+-
+ 	if (locked)
+ 		uart_port_unlock_irqrestore(port, flags);
+ }
+-- 
+2.53.0
+

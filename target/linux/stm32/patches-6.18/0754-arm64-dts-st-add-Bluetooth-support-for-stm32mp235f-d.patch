@@ -1,0 +1,60 @@
+From abb19fab1d5783f6e24bae47e4062cc591fe66f8 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Mon, 9 Mar 2026 17:26:02 +0100
+Subject: [PATCH] arm64: dts: st: add Bluetooth support for stm32mp235f-dk
+ board
+
+Add Bluetooth nodes for stm32mp235f-dk board.
+
+Change-Id: I52e8694ab05b2e465926711f2a00c87b7469f999
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/545098
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Tested-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index 7b79c357f825..8319e6eedb58 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -23,6 +23,7 @@ aliases {
+ 		ethernet0 = &ethernet1;
+ 		serial0 = &usart2;
+ 		serial1 = &usart6;
++		serial2 = &usart1;
+ 	};
+ 
+ 	chosen {
+@@ -409,6 +410,26 @@ &syscfg {
+ 	bootph-all;
+ };
+ 
++/* Bluetooth */
++&usart1 {
++	pinctrl-names = "default", "sleep", "idle";
++	pinctrl-0 = <&usart1_pins_a>;
++	pinctrl-1 = <&usart1_sleep_pins_a>;
++	pinctrl-2 = <&usart1_idle_pins_a>;
++	uart-has-rtscts;
++	status = "okay";
++
++	bluetooth {
++		shutdown-gpios = <&gpiog 4 GPIO_ACTIVE_HIGH>;
++		compatible = "brcm,bcm43438-bt";
++		clocks = <&rtc>;
++		clock-names = "lpo";
++		max-speed = <2000000>;
++		vbat-supply = <&scmi_v3v3>;
++		vddio-supply = <&scmi_v3v3>;
++	};
++};
++
+ &usart2 {
+ 	pinctrl-names = "default", "idle", "sleep";
+ 	pinctrl-0 = <&usart2_pins_a>;
+-- 
+2.53.0
+

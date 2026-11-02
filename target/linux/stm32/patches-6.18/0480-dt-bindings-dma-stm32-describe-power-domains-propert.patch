@@ -1,0 +1,67 @@
+From 0f52a2e335b13fc9080cf706a472d3779b65c62d Mon Sep 17 00:00:00 2001
+From: Valentin Caron <valentin.caron@foss.st.com>
+Date: Tue, 15 Sep 2026 14:19:35 +0200
+Subject: [PATCH] dt-bindings: dma: stm32: describe power-domains property
+
+Describe power-domains property in dt-bindings:
+ - st,stm32-mdma.yaml
+ - st,stm32-dmamux.yaml
+ - st,stm32-dma.yaml
+
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: I1305584147f9aaa06d71bd6a837daaf05560708e
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/612402
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ Documentation/devicetree/bindings/dma/stm32/st,stm32-dma.yaml  | 3 +++
+ .../devicetree/bindings/dma/stm32/st,stm32-dmamux.yaml         | 3 +++
+ Documentation/devicetree/bindings/dma/stm32/st,stm32-mdma.yaml | 3 +++
+ 3 files changed, 9 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma.yaml b/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma.yaml
+index 11a289f1d505..fa27a5b20e12 100644
+--- a/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma.yaml
++++ b/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma.yaml
+@@ -86,6 +86,9 @@ properties:
+     minItems: 1
+     maxItems: 2
+ 
++  power-domains:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+diff --git a/Documentation/devicetree/bindings/dma/stm32/st,stm32-dmamux.yaml b/Documentation/devicetree/bindings/dma/stm32/st,stm32-dmamux.yaml
+index b7bca1a83769..1b241b9cb50e 100644
+--- a/Documentation/devicetree/bindings/dma/stm32/st,stm32-dmamux.yaml
++++ b/Documentation/devicetree/bindings/dma/stm32/st,stm32-dmamux.yaml
+@@ -42,6 +42,9 @@ properties:
+     minItems: 1
+     maxItems: 2
+ 
++  power-domains:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+diff --git a/Documentation/devicetree/bindings/dma/stm32/st,stm32-mdma.yaml b/Documentation/devicetree/bindings/dma/stm32/st,stm32-mdma.yaml
+index 45fe91db11db..1143da57ba37 100644
+--- a/Documentation/devicetree/bindings/dma/stm32/st,stm32-mdma.yaml
++++ b/Documentation/devicetree/bindings/dma/stm32/st,stm32-mdma.yaml
+@@ -78,6 +78,9 @@ properties:
+     $ref: /schemas/types.yaml#/definitions/uint32-array
+     description: Array of u32 mask to list memory devices addressed via AHB bus.
+ 
++  power-domains:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+-- 
+2.53.0
+

@@ -1,0 +1,39 @@
+From f9d111b4dc5ba5cb192716b32d9016df98787157 Mon Sep 17 00:00:00 2001
+From: Erick Setubal Bacurau <erick.setubal@gmx.de>
+Date: Mon, 20 Oct 2025 14:11:45 +0200
+Subject: [PATCH] dt-bindings: fix redundant quotes on fsl,imx6q-vdoa.yaml
+
+[ Upstream commit 7b0f510376ac81131bd72d2c435cd09f1284d0e8 ]
+
+Fix a dt-schema error: `fsl,imx6q-vdoa.yaml:19:12: [error] string value is
+redundantly quoted with any quotes (quoted-strings)`
+
+Signed-off-by: Erick Setubal Bacurau <erick.setubal@gmx.de>
+Link: https://patch.msgid.link/20251020121145.190020-1-erick.setubal@gmx.de
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I5a44a0294e3dccbe3e3e506af3d7f9d90e18991f
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/546457
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ Documentation/devicetree/bindings/media/fsl,imx6q-vdoa.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/media/fsl,imx6q-vdoa.yaml b/Documentation/devicetree/bindings/media/fsl,imx6q-vdoa.yaml
+index 511ac0d67a7f..988a5b3a62bd 100644
+--- a/Documentation/devicetree/bindings/media/fsl,imx6q-vdoa.yaml
++++ b/Documentation/devicetree/bindings/media/fsl,imx6q-vdoa.yaml
+@@ -16,7 +16,7 @@ maintainers:
+ 
+ properties:
+   compatible:
+-    const: "fsl,imx6q-vdoa"
++    const: fsl,imx6q-vdoa
+ 
+   reg:
+     maxItems: 1
+-- 
+2.53.0
+

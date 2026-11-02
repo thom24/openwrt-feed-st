@@ -1,0 +1,89 @@
+From 5481eb19b5f3fba88513afbaf6533472cf495017 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Thu, 7 Sep 2023 14:10:07 +0200
+Subject: [PATCH] ARM: dts: stm32: set pclk limit on dcmi interface on
+ stm32mp157x-ev1
+
+Add the property pclk-max-frequency in the dcmi / ov5640 nodes
+in stm32mp157x-ev1 in order to ensure that sensor pixel clock
+does not exceed the capabilities of the dcmi.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: I44cc962b78eb9afc6d240d5387a4d35afac60479
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/537265
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts | 2 ++
+ arch/arm/boot/dts/st/stm32mp157d-ev1.dts         | 2 ++
+ arch/arm/boot/dts/st/stm32mp157f-ev1.dts         | 2 ++
+ 3 files changed, 6 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
+index 4835f86f654d..eb490d4160b5 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
+@@ -96,6 +96,7 @@ dcmi_0: endpoint {
+ 			hsync-active = <0>;
+ 			vsync-active = <0>;
+ 			pclk-sample = <1>;
++			pclk-max-frequency = <77000000>;
+ 		};
+ 	};
+ };
+@@ -199,6 +200,7 @@ ov5640_0: endpoint {
+ 				hsync-active = <0>;
+ 				vsync-active = <0>;
+ 				pclk-sample = <1>;
++				pclk-max-frequency = <77000000>;
+ 			};
+ 		};
+ 	};
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+index e419d4762b76..95b26eff8f51 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+@@ -96,6 +96,7 @@ dcmi_0: endpoint {
+ 			hsync-active = <0>;
+ 			vsync-active = <0>;
+ 			pclk-sample = <1>;
++			pclk-max-frequency = <77000000>;
+ 		};
+ 	};
+ };
+@@ -199,6 +200,7 @@ ov5640_0: endpoint {
+ 				hsync-active = <0>;
+ 				vsync-active = <0>;
+ 				pclk-sample = <1>;
++				pclk-max-frequency = <77000000>;
+ 			};
+ 		};
+ 	};
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+index 8ab1d0730bb5..4c0f592c2d57 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+@@ -96,6 +96,7 @@ dcmi_0: endpoint {
+ 			hsync-active = <0>;
+ 			vsync-active = <0>;
+ 			pclk-sample = <1>;
++			pclk-max-frequency = <77000000>;
+ 		};
+ 	};
+ };
+@@ -199,6 +200,7 @@ ov5640_0: endpoint {
+ 				hsync-active = <0>;
+ 				vsync-active = <0>;
+ 				pclk-sample = <1>;
++				pclk-max-frequency = <77000000>;
+ 			};
+ 		};
+ 	};
+-- 
+2.53.0
+

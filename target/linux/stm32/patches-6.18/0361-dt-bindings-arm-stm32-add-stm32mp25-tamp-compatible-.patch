@@ -1,0 +1,46 @@
+From 7c195d8bb87f675f214e9209ea915044d11a0f87 Mon Sep 17 00:00:00 2001
+From: Simeon Marijon <simeon.marijon@foss.st.com>
+Date: Fri, 25 Aug 2023 09:24:52 +0200
+Subject: [PATCH] dt-bindings: arm: stm32: add stm32mp25 tamp compatible for
+ syscon
+
+TAMP address space differs between STM32MP15/13 and STM32MP25.
+Add new compatible st,stm32mp25-tamp-nvram.
+
+Change-Id: Iee8276ac2b2dd87473714d928c5c087b8a207724
+Signed-off-by: Simeon Marijon <simeon.marijon@foss.st.com>
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+---
+ .../devicetree/bindings/arm/stm32/st,stm32-syscon.yaml   | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
+index d893e183fee8..b7c55cecedcc 100644
+--- a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
++++ b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
+@@ -26,7 +26,9 @@ properties:
+               - st,stm32mp25-syscfg
+           - const: syscon
+       - items:
+-          - const: st,stm32-tamp
++          - enum:
++              - st,stm32-tamp
++              - st,stm32mp25-tamp
+           - const: syscon
+           - const: simple-mfd
+ 
+@@ -77,7 +79,10 @@ allOf:
+   - if:
+       properties:
+         compatible:
+-          const: st,stm32-tamp
++          contains:
++            enum:
++              - st,stm32-tamp
++              - st,stm32mp25-tamp
+     then:
+       required:
+         - '#address-cells'
+-- 
+2.53.0
+

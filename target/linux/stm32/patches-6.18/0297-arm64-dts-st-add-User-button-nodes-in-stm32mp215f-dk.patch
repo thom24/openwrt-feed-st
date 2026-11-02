@@ -1,0 +1,54 @@
+From c0ea09589bbc6b65fc3eb704c5bcb7b23258cc6b Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Wed, 23 Sep 2026 16:54:54 +0200
+Subject: [PATCH] arm64: dts: st: add User button nodes in stm32mp215f-dk
+
+Add the gpio-keys node for the 'User1' and 'Users2' buttons on
+the stm32mp215f-dk board.
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: Ib78c882f2caf327d9156f621a46189e2b5af81d4
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/552667
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 397f64b95645..d5165cd0404a 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -6,6 +6,7 @@
+ 
+ /dts-v1/;
+ 
++#include <dt-bindings/gpio/gpio.h>
+ #include <dt-bindings/input/input.h>
+ #include "stm32mp215.dtsi"
+ #include "stm32mp21xf.dtsi"
+@@ -28,6 +29,20 @@ chosen {
+ 	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
++		button-user-1 {
++			label = "User-1";
++			linux,code = <BTN_1>;
++			gpios = <&gpioc 4 GPIO_ACTIVE_HIGH>;
++			status = "okay";
++		};
++
++		button-user-2 {
++			label = "User-2";
++			linux,code = <BTN_2>;
++			gpios = <&gpiof 7 GPIO_ACTIVE_HIGH>;
++			status = "disabled";
++		};
++
+ 		button-wake-up {
+ 			label = "wake-up";
+ 			linux,code = <KEY_WAKEUP>;
+-- 
+2.53.0
+

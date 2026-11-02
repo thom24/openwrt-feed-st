@@ -1,0 +1,91 @@
+From ed29032fd858f465dad650d5fa8ff69d5c0774b2 Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Wed, 27 May 2026 15:51:58 +0200
+Subject: [PATCH] clk: scmi: improve determine_rate for discrete clocks
+
+The determine_rate callback for SCMI clocks with discrete rate lists
+previously returned early without performing any rate selection, which
+left the clock framework unable to validate or round the requested rate
+before set_rate.
+
+Use the new round_rate_get op (backed by a binary search over the
+discrete rate list in the SCMI firmware) to find the nearest supported
+frequency. Clamp the requested rate to [min_rate, max_rate] first to
+avoid unnecessary protocol calls for out-of-range requests.
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: Ia30a9c12e4517b2308883d2079ee6b9fe61188e3
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/572105
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ drivers/clk/clk-scmi.c | 37 ++++++++++++++++++++++++-------------
+ 1 file changed, 24 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/clk/clk-scmi.c b/drivers/clk/clk-scmi.c
+index 6b286ea6f121..2b6b29cfceca 100644
+--- a/drivers/clk/clk-scmi.c
++++ b/drivers/clk/clk-scmi.c
+@@ -54,33 +54,44 @@ static unsigned long scmi_clk_recalc_rate(struct clk_hw *hw,
+ 	return rate;
+ }
+ 
++static int scmi_clk_determine_rate_get(struct clk_hw *hw,
++				       struct clk_rate_request *req)
++{
++	u64 round_rate = req->rate;
++	struct scmi_clk *clk = to_scmi_clk(hw);
++
++	if (scmi_proto_clk_ops->round_rate_get(clk->ph, clk->id, &round_rate))
++		return -EINVAL;
++
++	req->rate = round_rate;
++
++	return 0;
++}
++
+ static int scmi_clk_determine_rate(struct clk_hw *hw,
+ 				   struct clk_rate_request *req)
+ {
+-	u64 fmin, fmax, ftmp;
+ 	struct scmi_clk *clk = to_scmi_clk(hw);
++	unsigned long fmin, fmax;
++	u64 ftmp;
+ 
+-	/*
+-	 * We can't figure out what rate it will be, so just return the
+-	 * rate back to the caller. scmi_clk_recalc_rate() will be called
+-	 * after the rate is set and we'll know what rate the clock is
+-	 * running at then.
+-	 */
+-	if (clk->info->rate_discrete)
+-		return 0;
++	clk_hw_get_rate_range(hw, &fmin, &fmax);
+ 
+-	fmin = clk->info->range.min_rate;
+-	fmax = clk->info->range.max_rate;
+ 	if (req->rate <= fmin) {
+ 		req->rate = fmin;
+-
+ 		return 0;
+ 	} else if (req->rate >= fmax) {
+ 		req->rate = fmax;
+-
+ 		return 0;
+ 	}
+ 
++	/*
++	 * If the clock exposes discrete rates, use the SCMI Clock protocol
++	 * to find the closest supported rate.
++	 */
++	if (clk->info->rate_discrete)
++		return scmi_clk_determine_rate_get(hw, req);
++
+ 	ftmp = req->rate - fmin;
+ 	ftmp += clk->info->range.step_size - 1; /* to round up */
+ 	do_div(ftmp, clk->info->range.step_size);
+-- 
+2.53.0
+

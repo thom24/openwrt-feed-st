@@ -1,0 +1,37 @@
+From 21e1c8de1019b644914484a4060fc77db194c28b Mon Sep 17 00:00:00 2001
+From: Valentin Caron <valentin.caron@foss.st.com>
+Date: Wed, 16 Oct 2024 10:19:14 +0200
+Subject: [PATCH] serial: stm32: remove IRQF_NO_SUSPEND flag from irq
+
+As Sudeep said in his 2015's patch [1]:
+These drivers doesn't claim the serial device to be wakeup source. Even
+if it is, it needs to use enable_irq_wake or other related PM wakeup
+APIs to enable it.
+
+Now IRQF_NO_SUSPEND doesn't allow stm32-usart to wakeup system from
+suspend-to-idle. So remove this flag.
+
+[1] commit 616ea8d2d644 ("tty/serial: st-asc: drop the use of IRQF_NO_SUSPEND")
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: I41cc14937e6a244f38bf1a6d8b4278118f2aa62c
+---
+ drivers/tty/serial/stm32-usart.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index 20cd0882fad2..e053e3bfb73a 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -1269,8 +1269,7 @@ static int stm32_usart_startup(struct uart_port *port)
+ 	u32 val;
+ 	int ret;
+ 
+-	ret = request_irq(port->irq, stm32_usart_interrupt,
+-			  IRQF_NO_SUSPEND, name, port);
++	ret = request_irq(port->irq, stm32_usart_interrupt, 0, name, port);
+ 	if (ret)
+ 		return ret;
+ 
+-- 
+2.53.0
+

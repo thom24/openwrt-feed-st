@@ -1,0 +1,31 @@
+From d986f6695dda46c191e74cd2d41506b5e6613969 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Mon, 26 Jan 2026 15:00:36 +0100
+Subject: [PATCH] net: ethernet: stmmac: encapsulate power managements
+ functions
+
+This commit encapsulates all the power management functions.
+
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Change-Id: I94d6e73936e718bdf7b81c35bf439bc34380501b
+---
+ drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
+index c006b657a209..cf7269fad303 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
+@@ -718,7 +718,9 @@ static struct platform_driver stm32_dwmac_driver = {
+ 	.remove = stm32_dwmac_remove,
+ 	.driver = {
+ 		.name           = "stm32-dwmac",
++#ifdef CONFIG_PM_SLEEP
+ 		.pm		= &stmmac_simple_pm_ops,
++#endif /* CONFIG_PM_SLEEP */
+ 		.of_match_table = stm32_dwmac_match,
+ 	},
+ };
+-- 
+2.53.0
+

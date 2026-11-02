@@ -1,0 +1,87 @@
+From 7374348445687302fd00b7e40f3c2437a0110a8a Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Mon, 26 Jan 2026 17:52:09 +0100
+Subject: [PATCH] arm64: dts: st: add TAMP backup register in stm32mp211.dtsi
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+TAMP backup registers allow information sharing between different
+software components/execution levels.
+They are described individually as nvmem cells.
+
+Set soc@0 size-cell value to 2 to fix dma-ranges value on STM32MP21
+
+"dma-ranges" is currently used on MP21 to describe the AXI bus hardware
+translation for some AXI master peripherals: SDMMC[1-3], USBH, HPDMA.
+
+This property is used to obtain a DMA address shifted by an offset of
+-0x8000 0000. This shifted DMA address is then programmed in AXI
+master's registers (of SDMMC[1-3], USBH, HPDMA peripherals).
+
+As AXI translation is enabled on hardware side a shift of +0x8000 0000
+is added by hardware for those masters.
+This allow to access to the full 4GB DDR using AXI master 32bits address
+registers (which is not possible STM32MP25/23).
+
+Before this patch, if a buffer was allocated above the 4GB address space
+(e.g. between 0x1 0000 0000 and 0x1 8000 000), it wasn't visible to the
+DMA so the first mapping attempt fallback in SWIOTLB and the second
+mapping was then possible as the bounce buffer used by the SWIOTLB is
+allocated at the end of the 4GB (just before the 0x1 0000 0000) and so
+visible for the DMA.
+
+Change-Id: I1cf4003d469e85c211d1b819dc21532140d0fdc4
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/530315
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 30 ++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index aa0d72447e62..cb586b75107c 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -666,6 +666,36 @@ exti2: interrupt-controller@442d0000 {
+ 				<&intc GIC_SPI 204 IRQ_TYPE_LEVEL_HIGH>;
+ 		};
+ 
++		tamp: tamp@46010000 {
++			compatible = "st,stm32-tamp", "syscon", "simple-mfd";
++			#address-cells = <1>;
++			#size-cells = <2>;
++			reg = <0x46010000 0x0 0x400>;
++			ranges;
++
++			nvram: nvram@46010100 {
++				compatible = "st,stm32mp25-tamp-nvram";
++				reg = <0x46010100 0x0 0x200>;
++				nvmem-layout {
++					compatible = "fixed-layout";
++					#address-cells = <1>;
++					#size-cells = <1>;
++
++					boot_mode: tamp-bkp@180 {
++						reg = <0x180 0x4>;
++					};
++
++					rsc_tbl_addr: tamp-bkp@184 {
++						reg = <0x184 0x4>;
++					};
++
++					rsc_tbl_size: tamp-bkp@188 {
++						reg = <0x188 0x4>;
++					};
++				};
++			};
++		};
++
+ 		pinctrl_z: pinctrl@46200000 {
+ 			compatible = "st,stm32mp215-z-pinctrl";
+ 			ranges = <0 0x46200000 0x400>;
+-- 
+2.53.0
+

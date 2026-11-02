@@ -1,0 +1,43 @@
+From 69ba25b43cbb9630d69bf84ef84c91a868f62a44 Mon Sep 17 00:00:00 2001
+From: Amit Mittal <amit.mittal@st.com>
+Date: Thu, 5 Feb 2026 13:32:04 +0100
+Subject: [PATCH] dt-bindings: remoteproc: Add pm domain, property
+ keep-power-in-suspend
+
+Add the PM domains cluster and retention.
+
+Change-Id: If03e7b22b9d23ec5e3de036e9384ff44682f11dc
+Signed-off-by: Amit Mittal <amit.mittal@st.com>
+---
+ .../bindings/remoteproc/st,stm32-rproc.yaml       | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
+index a46bea44e2bb..6a1e6872d49b 100644
+--- a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
+@@ -169,6 +169,21 @@ properties:
+     maxItems: 1
+     description: Default name of the remote processor firmware.
+ 
++  power-domains:
++    items:
++      - description: CLUSTER power domain
++      - description: RETENTION power domain
++
++  power-domain-names:
++    items:
++      - const: default
++      - const: sleep
++
++  keep-power-in-suspend:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description:
++      SRAM only. Preserves power during a suspend/resume cycle.
++
+ required:
+   - compatible
+   - reg
+-- 
+2.53.0
+

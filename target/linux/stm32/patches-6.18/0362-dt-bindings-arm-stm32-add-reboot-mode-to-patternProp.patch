@@ -1,0 +1,32 @@
+From 15feae056d1e76f401e6f7e70de55049f36676a0 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Tue, 27 Jan 2026 15:11:20 +0100
+Subject: [PATCH] dt-bindings: arm: stm32: add reboot-mode to patternProperties
+ for syscon
+
+Extend st,stm32-syscon schema to allow reboot-mode child nodes.
+
+Change-Id: Ic6c8764e12d7964e923892c67f01e9889b0320cb
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+---
+ .../devicetree/bindings/arm/stm32/st,stm32-syscon.yaml        | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
+index b7c55cecedcc..ab1d780840e6 100644
+--- a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
++++ b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
+@@ -54,6 +54,10 @@ patternProperties:
+     type: object
+     $ref: /schemas/nvmem/st,stm32-tamp-nvram.yaml#
+ 
++  "^reboot-mode":
++    type: object
++    $ref: /schemas/power/reset/nvmem-reboot-mode.yaml#
++
+ required:
+   - compatible
+   - reg
+-- 
+2.53.0
+

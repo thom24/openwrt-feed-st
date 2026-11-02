@@ -1,0 +1,49 @@
+From f8ca72d02421952c4169bed17ede7b4829b0b636 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Tue, 18 Feb 2025 17:01:49 +0100
+Subject: [PATCH] usb: dwc2: drd: fix partial power down mode on USB role
+ switch
+
+The USB role updates needs the peripheral to be clocked and functional.
+It's been fixed already for the clock gating mode [1]. Fix it too for
+partial power down mode.
+
+[1] https://lore.kernel.org/r/20240906055025.25057-1-tomas.marek@elrest.cz
+
+Fixes: 0112b7ce68ea ("usb: dwc2: Update dwc2_handle_usb_suspend_intr function.")
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Iebc243a7e63b5c63c6c64cb2395d6182a1a6aa18
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/438171
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Pankaj DEV <pankaj.dev@st.com>
+---
+ drivers/usb/dwc2/drd.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
+index 1ad8fa3f862a..ede5fd8b5733 100644
+--- a/drivers/usb/dwc2/drd.c
++++ b/drivers/usb/dwc2/drd.c
+@@ -130,11 +130,14 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+ 	if ((IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) ||
+ 	     IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)) &&
+ 	     dwc2_is_device_mode(hsotg) &&
+-	     hsotg->lx_state == DWC2_L2 &&
+-	     hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
+-	     hsotg->bus_suspended &&
+-	     !hsotg->params.no_clock_gating)
+-		dwc2_gadget_exit_clock_gating(hsotg, 0);
++	     hsotg->lx_state == DWC2_L2) {
++		if (hsotg->in_ppd)
++			dwc2_gadget_exit_partial_power_down(hsotg, true);
++
++		if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
++		    !hsotg->params.no_clock_gating)
++			dwc2_gadget_exit_clock_gating(hsotg, 0);
++	}
+ 
+ 	if (role == USB_ROLE_HOST) {
+ 		already = dwc2_ovr_avalid(hsotg, true);
+-- 
+2.53.0
+

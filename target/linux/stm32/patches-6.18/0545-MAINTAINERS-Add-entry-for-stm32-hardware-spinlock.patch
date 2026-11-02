@@ -1,0 +1,33 @@
+From 866c6b03db445467717627801375281b69555647 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Thu, 5 Mar 2026 11:47:09 +0100
+Subject: [PATCH] MAINTAINERS: Add entry for stm32 hardware spinlock
+
+Add a specific entry for stm32 hardware spinlock.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I5a51084a10610c3a02b923a1c685a5475d58eebc
+---
+ MAINTAINERS | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index c0bb93f717fa..dc60ab54109f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -24329,6 +24329,12 @@ F:	drivers/bus/stm32_etzpc.c
+ F:	drivers/bus/stm32_firewall.c
+ F:	drivers/bus/stm32_rifsc.c
+ 
++ST STM32 HARDWARE SPINLOCK DRIVER
++M:	Antonio Borneo <antonio.borneo@foss.st.com>
++S:	Maintained
++F:	Documentation/devicetree/bindings/hwlock/st,stm32-hwspinlock.yaml
++F:	drivers/hwspinlock/stm32_hwspinlock.c
++
+ ST STM32 HDP PINCTRL DRIVER
+ M:	Clément Le Goffic <legoffic.clement@gmail.com>
+ S:	Maintained
+-- 
+2.53.0
+

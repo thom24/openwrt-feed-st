@@ -1,0 +1,42 @@
+From a48745cead251cc809f1c5f4b39d91c38af6e31a Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Date: Thu, 5 Feb 2026 13:21:42 +0100
+Subject: [PATCH] remoteproc: stm32: Add support of signed image for the
+ stm32mp2 platform
+
+This update adds the ability to load remote processor firmware
+using signed images through OP-TEE.
+The mode can be enabled by defining the 'st,stm32mp2-m33-tee' compatible
+in the device tree node of the remote processor.
+
+Change-Id: Ia3a4f62c9415666951afd5b38087e5e989bd31af
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+---
+ drivers/remoteproc/stm32_rproc.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
+index b4bedca49875..2d15c25e339e 100644
+--- a/drivers/remoteproc/stm32_rproc.c
++++ b/drivers/remoteproc/stm32_rproc.c
+@@ -979,6 +979,7 @@ static const struct of_device_id stm32_rproc_match[] = {
+ 	{.compatible = "st,stm32mp1-m4", .data = &stm32_rproc_stm32pm15},
+ 	{.compatible = "st,stm32mp1-m4-tee", .data = &stm32_rproc_stm32pm15},
+ 	{.compatible = "st,stm32mp2-m33", .data = &stm32_rproc_stm32pm25},
++	{.compatible = "st,stm32mp2-m33-tee", .data = &stm32_rproc_stm32pm25},
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, stm32_rproc_match);
+@@ -1143,7 +1144,8 @@ static int stm32_rproc_probe(struct platform_device *pdev)
+ 	if (ret < 0 && ret != -EINVAL)
+ 		return ret;
+ 
+-	if (of_device_is_compatible(np, "st,stm32mp1-m4-tee")) {
++	if (of_device_is_compatible(np, "st,stm32mp1-m4-tee") ||
++	    of_device_is_compatible(np, "st,stm32mp2-m33-tee")) {
+ 		trproc = tee_rproc_register(dev, desc->proc_id);
+ 		if (IS_ERR(trproc)) {
+ 			dev_err_probe(dev, PTR_ERR(trproc),
+-- 
+2.53.0
+

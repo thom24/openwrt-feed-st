@@ -1,0 +1,53 @@
+From bb40016dd6b9e59fa51cd4835f86644b79e6d456 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Thu, 6 Aug 2026 11:43:19 +0200
+Subject: [PATCH] iio: adc: stm32: do not expose channel 19 (VREF+) on
+ STM32MP25
+
+On STM32MP25, STM32MP23 and STM32MP21, channel 19 is connected to the
+internal VREF+ voltage reference. Exposing it as a regular ADC input is
+not meaningful: VREF+ is the ADC supply reference itself, so measuring
+it would not yield a useful voltage value.
+
+The proper way to determine the reference voltage is to use the internal
+VREFINT channel together with its factory-trimmed calibration value read
+from NVMEM, which is already supported by the driver.
+
+Limit max_channels to 19 on STMP32MP2x, so that channel 19 is
+rejected at probe time if referenced in the device tree, and is never
+added to the IIO channel list.
+
+Change-Id: I5ac6f1892e43c86831ca5be705a3828678bbef0a
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/597493
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/iio/adc/stm32-adc.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/iio/adc/stm32-adc.c b/drivers/iio/adc/stm32-adc.c
+index 83a61928d5ce..3f1a65cca199 100644
+--- a/drivers/iio/adc/stm32-adc.c
++++ b/drivers/iio/adc/stm32-adc.c
+@@ -375,9 +375,14 @@ static const struct stm32_adc_info stm32mp13_adc_info = {
+ 	.num_ovs = ARRAY_SIZE(stm32mp13_adc_oversampling_avail),
+ };
+ 
+-/* stm32mp25 can have up to 20 channels */
++/*
++ * stm32mp25 can have up to 20 channels.
++ * Keep channel 19 (VREF+) hidden on STM32MP25: it is the ADC reference
++ * supply itself, so exposing it as a regular input is not meaningful.
++ * Reference voltage must be derived from VREFINT calibration data.
++ */
+ static const struct stm32_adc_info stm32mp25_adc_info = {
+-	.max_channels = STM32_ADC_CH_MAX,
++	.max_channels = STM32_ADC_CH_MAX - 1,
+ 	.resolutions = stm32f4_adc_resolutions,
+ 	.oversampling = stm32h7_adc_oversampling_avail,
+ 	.num_res = ARRAY_SIZE(stm32f4_adc_resolutions),
+-- 
+2.53.0
+

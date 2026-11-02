@@ -1,0 +1,30 @@
+From e4629dff4ed3ccb68221e695ebc54440547dcceb Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 17 Mar 2026 16:22:42 +0100
+Subject: [PATCH] media: verisilicon: don't disable g_selection api ioctrl for
+ decoder
+
+g_selection is needed for decoding of jpeg with unaligned height.
+
+Change-Id: I30b5b68e762b798da06c8705254c8719c794d081
+Fixes: 56384ec84c15 ("media: verisilicon: Explicitly disable selection api ioctls for decoders")
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+---
+ drivers/media/platform/verisilicon/hantro_drv.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
+index b6766f9267b3..1018a712c2ab 100644
+--- a/drivers/media/platform/verisilicon/hantro_drv.c
++++ b/drivers/media/platform/verisilicon/hantro_drv.c
+@@ -989,7 +989,6 @@ static int hantro_add_func(struct hantro_dev *vpu, unsigned int funcid)
+ 		vpu->decoder = func;
+ 		v4l2_disable_ioctl(vfd, VIDIOC_TRY_ENCODER_CMD);
+ 		v4l2_disable_ioctl(vfd, VIDIOC_ENCODER_CMD);
+-		v4l2_disable_ioctl(vfd, VIDIOC_G_SELECTION);
+ 		v4l2_disable_ioctl(vfd, VIDIOC_S_SELECTION);
+ 	}
+ 
+-- 
+2.53.0
+

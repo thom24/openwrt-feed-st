@@ -1,0 +1,39 @@
+From 16e2179f5245105d8ae66094dcfdd628a2cd4a7b Mon Sep 17 00:00:00 2001
+From: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Date: Mon, 9 Mar 2026 17:25:17 +0100
+Subject: [PATCH] crypto: stm32/cryp - fix dma channel names
+
+Fix DMA channel names to be compliant with yaml bindings.
+Replace channel name "in" by "mem2cryp" and "out" by "cryp2mem".
+
+Signed-off-by: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Change-Id: I21db10935db15e60d8eaa41a47db6894e0df619a
+---
+ drivers/crypto/stm32/stm32-cryp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/crypto/stm32/stm32-cryp.c b/drivers/crypto/stm32/stm32-cryp.c
+index 5e82e8a1f71a..74164a8903f3 100644
+--- a/drivers/crypto/stm32/stm32-cryp.c
++++ b/drivers/crypto/stm32/stm32-cryp.c
+@@ -2235,7 +2235,7 @@ static int stm32_cryp_dma_init(struct stm32_cryp *cryp)
+ 	dma_conf.dst_maxburst = CRYP_DMA_BURST_REG;
+ 	dma_conf.device_fc = false;
+ 
+-	chan = dma_request_chan(cryp->dev, "in");
++	chan = dma_request_chan(cryp->dev, "mem2cryp");
+ 	if (IS_ERR(chan))
+ 		return PTR_ERR(chan);
+ 
+@@ -2256,7 +2256,7 @@ static int stm32_cryp_dma_init(struct stm32_cryp *cryp)
+ 	dma_conf.src_maxburst = CRYP_DMA_BURST_REG;
+ 	dma_conf.device_fc = false;
+ 
+-	chan = dma_request_chan(cryp->dev, "out");
++	chan = dma_request_chan(cryp->dev, "cryp2mem");
+ 	if (IS_ERR(chan)) {
+ 		dma_release_channel(cryp->dma_lch_in);
+ 		cryp->dma_lch_in = NULL;
+-- 
+2.53.0
+

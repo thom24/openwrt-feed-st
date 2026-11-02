@@ -1,0 +1,35 @@
+From 73ff2e6edc2f1bc6985dc7628f1848f0dd9e1ae9 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Tue, 12 May 2026 09:55:33 +0200
+Subject: [PATCH] ASoC: dt-bindings: stm32-sai: add power-domains property
+
+STM32 SAI may be in a power domain. Allow power domains on SAI subnodes.
+
+Change-Id: Ie798415eaede67ed260052b0f1f396277512535f
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/567646
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ Documentation/devicetree/bindings/sound/st,stm32-sai.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/sound/st,stm32-sai.yaml b/Documentation/devicetree/bindings/sound/st,stm32-sai.yaml
+index 551edf39e766..7b1e4cb0b7e3 100644
+--- a/Documentation/devicetree/bindings/sound/st,stm32-sai.yaml
++++ b/Documentation/devicetree/bindings/sound/st,stm32-sai.yaml
+@@ -129,6 +129,9 @@ patternProperties:
+         description: Configure the SAI device as master clock provider.
+         const: 0
+ 
++      power-domains:
++        maxItems: 1
++
+       port:
+         $ref: audio-graph-port.yaml#
+         unevaluatedProperties: false
+-- 
+2.53.0
+

@@ -1,0 +1,36 @@
+From cdf3dc8409baf67ef8f3e4c5705b08e35290f6ab Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Mon, 23 Feb 2026 11:41:58 +0100
+Subject: [PATCH] arm64: dts: st: add ipcc support for stm32mp235f-dk board
+
+Add IPCC node for stm32mp235f-dk board.
+
+Change-Id: Iaf8b97392914e006c82aa263d2f38ce90329018e
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/539865
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index 0c96572f703e..65e7a099f213 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -228,6 +228,10 @@ &i2c8 {
+ 	/delete-property/dma-names;
+ };
+ 
++&ipcc1 {
++	status = "okay";
++};
++
+ &optee {
+ 	bootph-all;
+ };
+-- 
+2.53.0
+

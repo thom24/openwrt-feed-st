@@ -1,0 +1,71 @@
+From 83c8e6aeb9e8dfc3e7a6351f72e8fcaec4a8a5e9 Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Mon, 16 Feb 2026 10:38:08 +0100
+Subject: [PATCH] arm64: dts: st: add SCMI voltage domain regulators for
+ STM32MP211
+
+Add SCMI-based regulator descriptions in the STM32MP211 SoC DTS,
+covering VDDIO1, VDDIO2, VDDIO3 and VDDA18ADC voltage domains.
+
+These regulators are exposed through the SCMI voltage protocol
+and will be referenced by board-level DTS files.
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: Ib9e7dbbf86246feef74a26033444bbe6a90a6224
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/535886
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 27 ++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 7eb991add1a0..bb7067f8299f 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -4,6 +4,7 @@
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+  */
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/regulator/st,stm32mp21-regulator.h>
+ 
+ / {
+ 	#address-cells = <2>;
+@@ -71,6 +72,32 @@ scmi_reset: protocol@16 {
+ 				reg = <0x16>;
+ 				#reset-cells = <1>;
+ 			};
++
++			scmi_voltd: protocol@17 {
++				reg = <0x17>;
++
++				scmi_regu: regulators {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					scmi_vddio1: regulator@0 {
++						reg = <VOLTD_SCMI_VDDIO1>;
++						regulator-name = "vddio1";
++					};
++					scmi_vddio2: regulator@1 {
++						reg = <VOLTD_SCMI_VDDIO2>;
++						regulator-name = "vddio2";
++					};
++					scmi_vddio3: regulator@2 {
++						reg = <VOLTD_SCMI_VDDIO3>;
++						regulator-name = "vddio3";
++					};
++					scmi_vdda18adc: regulator@3 {
++						reg = <VOLTD_SCMI_ADC>;
++						regulator-name = "vdda18adc";
++					};
++				};
++			};
+ 		};
+ 	};
+ 
+-- 
+2.53.0
+

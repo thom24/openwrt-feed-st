@@ -1,0 +1,240 @@
+From b175022ada460a887b1e8f23c9f5cf48461ac285 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Tue, 9 Jun 2026 15:21:09 +0200
+Subject: [PATCH] ARM: dts: stm32: silence spurious devlink error for SCMI
+ crypto on stm32mp15
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+rng1/cryp1/hash1 are children of the ETZPC firewall bus and get their
+clocks/resets from SCMI. The bus populates its children late, so
+fw_devlink tries a proxy link from the bus to the SCMI device and logs:
+
+  stm32-etzpc 5c007000.bus: Failed to create device link (0x180) with
+  supplier scmi_dev.2 for /soc/bus@5c007000/rng@54003000
+
+Mark the SCMI providers as post-init-providers so fw_devlink skips the
+link. The devices still probe normally.
+
+Change-Id: Iad76b00e1d18d1a41b17c68cc60315e873c8f0ba
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/576943
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp157a-dk1.dts | 2 ++
+ arch/arm/boot/dts/st/stm32mp157c-dk2.dts | 3 +++
+ arch/arm/boot/dts/st/stm32mp157c-ed1.dts | 3 +++
+ arch/arm/boot/dts/st/stm32mp157c-ev1.dts | 3 +++
+ arch/arm/boot/dts/st/stm32mp157d-dk1.dts | 2 ++
+ arch/arm/boot/dts/st/stm32mp157d-ed1.dts | 2 ++
+ arch/arm/boot/dts/st/stm32mp157f-dk2.dts | 3 +++
+ arch/arm/boot/dts/st/stm32mp157f-ed1.dts | 3 +++
+ 8 files changed, 21 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157a-dk1.dts b/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
+index 199a624c412d..524bd234e7ba 100644
+--- a/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
+@@ -90,6 +90,7 @@ &gpioz {
+ &hash1 {
+ 	clocks = <&scmi_clk CK_SCMI_HASH1>;
+ 	resets = <&scmi_reset RST_SCMI_HASH1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ };
+ 
+ &i2c4 {
+@@ -141,6 +142,7 @@ &rcc {
+ &rng1 {
+ 	clocks = <&scmi_clk CK_SCMI_RNG1>;
+ 	resets = <&scmi_reset RST_SCMI_RNG1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ };
+ 
+ &rtc {
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
+index 68eb6b3c612c..ae8b605ef438 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
+@@ -38,6 +38,7 @@ &cpu1 {
+ &cryp1 {
+ 	clocks = <&scmi_clk CK_SCMI_CRYP1>;
+ 	resets = <&scmi_reset RST_SCMI_CRYP1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ };
+ 
+ &dsi {
+@@ -95,6 +96,7 @@ &gpioz {
+ &hash1 {
+ 	clocks = <&scmi_clk CK_SCMI_HASH1>;
+ 	resets = <&scmi_reset RST_SCMI_HASH1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ };
+ 
+ &i2c4 {
+@@ -146,6 +148,7 @@ &rcc {
+ &rng1 {
+ 	clocks = <&scmi_clk CK_SCMI_RNG1>;
+ 	resets = <&scmi_reset RST_SCMI_RNG1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ };
+ 
+ &rtc {
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1.dts b/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
+index bebae0f9f131..4da559dc9b7e 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
+@@ -38,6 +38,7 @@ &cpu1 {
+ &cryp1 {
+ 	clocks = <&scmi_clk CK_SCMI_CRYP1>;
+ 	resets = <&scmi_reset RST_SCMI_CRYP1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ };
+ 
+ &dsi {
+@@ -95,6 +96,7 @@ &gpioz {
+ &hash1 {
+ 	clocks = <&scmi_clk CK_SCMI_HASH1>;
+ 	resets = <&scmi_reset RST_SCMI_HASH1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ };
+ 
+ &i2c4 {
+@@ -146,6 +148,7 @@ &rcc {
+ &rng1 {
+ 	clocks = <&scmi_clk CK_SCMI_RNG1>;
+ 	resets = <&scmi_reset RST_SCMI_RNG1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ };
+ 
+ &rtc {
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
+index 16ccf45643fa..053ff6a9cab1 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
+@@ -38,6 +38,7 @@ &cpu1 {
+ &cryp1 {
+ 	clocks = <&scmi_clk CK_SCMI_CRYP1>;
+ 	resets = <&scmi_reset RST_SCMI_CRYP1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ };
+ 
+ &dsi {
+@@ -95,6 +96,7 @@ &gpioz {
+ &hash1 {
+ 	clocks = <&scmi_clk CK_SCMI_HASH1>;
+ 	resets = <&scmi_reset RST_SCMI_HASH1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ };
+ 
+ &i2c4 {
+@@ -150,6 +152,7 @@ &rcc {
+ &rng1 {
+ 	clocks = <&scmi_clk CK_SCMI_RNG1>;
+ 	resets = <&scmi_reset RST_SCMI_RNG1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ };
+ 
+ &rtc {
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-dk1.dts b/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
+index 2f886fa3f327..039b27ce6fd6 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
+@@ -102,6 +102,7 @@ &gpioz {
+ &hash1 {
+ 	clocks = <&scmi_clk CK_SCMI_HASH1>;
+ 	resets = <&scmi_reset RST_SCMI_HASH1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ };
+ 
+ &i2c4 {
+@@ -153,6 +154,7 @@ &rcc {
+ &rng1 {
+ 	clocks = <&scmi_clk CK_SCMI_RNG1>;
+ 	resets = <&scmi_reset RST_SCMI_RNG1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ };
+ 
+ &rtc {
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
+index 612899b64d1a..236664a4e0d1 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
+@@ -290,6 +290,7 @@ &gpioz {
+ &hash1 {
+ 	clocks = <&scmi_clk CK_SCMI_HASH1>;
+ 	resets = <&scmi_reset RST_SCMI_HASH1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ 	status = "okay";
+ };
+ 
+@@ -532,6 +533,7 @@ &rcc {
+ &rng1 {
+ 	clocks = <&scmi_clk CK_SCMI_RNG1>;
+ 	resets = <&scmi_reset RST_SCMI_RNG1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ };
+ 
+ &rtc {
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
+index d329a0e1b639..4888e13a2e9b 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
+@@ -58,6 +58,7 @@ &cpu1 {
+ &cryp1 {
+ 	clocks = <&scmi_clk CK_SCMI_CRYP1>;
+ 	resets = <&scmi_reset RST_SCMI_CRYP1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ 	status = "okay";
+ };
+ 
+@@ -140,6 +141,7 @@ &gpioz {
+ &hash1 {
+ 	clocks = <&scmi_clk CK_SCMI_HASH1>;
+ 	resets = <&scmi_reset RST_SCMI_HASH1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ };
+ 
+ &hdp {
+@@ -223,6 +225,7 @@ &rcc {
+ &rng1 {
+ 	clocks = <&scmi_clk CK_SCMI_RNG1>;
+ 	resets = <&scmi_reset RST_SCMI_RNG1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ };
+ 
+ &rtc {
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
+index 654309983ead..afe30a397e91 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
+@@ -165,6 +165,7 @@ &crc1 {
+ &cryp1 {
+ 	clocks = <&scmi_clk CK_SCMI_CRYP1>;
+ 	resets = <&scmi_reset RST_SCMI_CRYP1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ 	status = "okay";
+ };
+ 
+@@ -296,6 +297,7 @@ &gpioz {
+ &hash1 {
+ 	clocks = <&scmi_clk CK_SCMI_HASH1>;
+ 	resets = <&scmi_reset RST_SCMI_HASH1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ 	status = "okay";
+ };
+ 
+@@ -538,6 +540,7 @@ &rcc {
+ &rng1 {
+ 	clocks = <&scmi_clk CK_SCMI_RNG1>;
+ 	resets = <&scmi_reset RST_SCMI_RNG1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ };
+ 
+ &rtc {
+-- 
+2.53.0
+

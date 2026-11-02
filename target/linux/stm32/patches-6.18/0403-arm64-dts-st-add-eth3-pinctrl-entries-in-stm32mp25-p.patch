@@ -1,0 +1,85 @@
+From 32ab900821d2cfc3649e1e866feb7271cce6b53b Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Mon, 2 Feb 2026 11:06:08 +0100
+Subject: [PATCH] arm64: dts: st: add eth3 pinctrl entries in
+ stm32mp25-pinctrl.dtsi
+
+Add pinctrl entries related to ETH3 in stm32mp25-pinctrl.dtsi
+eth2 is used in standalone ethernet
+eth1/3 are used with TTTech switch
+
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Change-Id: I1249794046cf725198454ed15b445dae076524db
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/535369
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
+index 449bd24aca7a..a11db3f5260f 100644
+--- a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
+@@ -197,6 +197,57 @@ pins {
+ 		};
+ 	};
+ 
++	eth3_rgmii_pins_a: eth3-rgmii-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('A', 6, AF14)>, /* ETH_RGMII_TXD0 */
++				 <STM32_PINMUX('A', 7, AF14)>, /* ETH_RGMII_TXD1 */
++				 <STM32_PINMUX('H', 6, AF14)>, /* ETH_RGMII_TXD2 */
++				 <STM32_PINMUX('H', 3, AF14)>, /* ETH_RGMII_TXD3 */
++				 <STM32_PINMUX('A', 3, AF14)>; /* ETH_RGMII_TX_CTL */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <3>;
++			st,io-sync = "data on both edges";
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('H', 2, AF14)>; /* ETH_RGMII_GTX_CLK */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <3>;
++			skew-delay-output-ps = <500>;
++		};
++		pins3 {
++			pinmux = <STM32_PINMUX('A', 9, AF14)>, /* ETH_RGMII_RXD0 */
++				 <STM32_PINMUX('A', 10, AF14)>, /* ETH_RGMII_RXD1 */
++				 <STM32_PINMUX('H', 7, AF14)>, /* ETH_RGMII_RXD2 */
++				 <STM32_PINMUX('H', 8, AF14)>, /* ETH_RGMII_RXD3 */
++				 <STM32_PINMUX('A', 2, AF14)>; /* ETH_RGMII_RX_CTL */
++			bias-disable;
++			st,io-sync = "data on both edges";
++		};
++		pins4 {
++			pinmux = <STM32_PINMUX('A', 5, AF14)>; /* ETH_RGMII_RX_CLK */
++			bias-disable;
++		};
++	};
++
++	eth3_rgmii_sleep_pins_a: eth3-rgmii-sleep-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('A', 6, ANALOG)>, /* ETH_RGMII_TXD0 */
++				 <STM32_PINMUX('A', 7, ANALOG)>, /* ETH_RGMII_TXD1 */
++				 <STM32_PINMUX('H', 6, ANALOG)>, /* ETH_RGMII_TXD2 */
++				 <STM32_PINMUX('H', 3, ANALOG)>, /* ETH_RGMII_TXD3 */
++				 <STM32_PINMUX('A', 3, ANALOG)>, /* ETH_RGMII_TX_CTL */
++				 <STM32_PINMUX('H', 2, ANALOG)>, /* ETH_RGMII_GTX_CLK */
++				 <STM32_PINMUX('A', 9, ANALOG)>, /* ETH_RGMII_RXD0 */
++				 <STM32_PINMUX('A', 10, ANALOG)>, /* ETH_RGMII_RXD1 */
++				 <STM32_PINMUX('H', 7, ANALOG)>, /* ETH_RGMII_RXD2 */
++				 <STM32_PINMUX('H', 8, ANALOG)>, /* ETH_RGMII_RXD3 */
++				 <STM32_PINMUX('A', 2, ANALOG)>, /* ETH_RGMII_RX_CTL */
++				 <STM32_PINMUX('A', 5, ANALOG)>; /* ETH_RGMII_RX_CLK */
++		};
++	};
++
+ 	i2c2_pins_a: i2c2-0 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('B', 5, AF9)>, /* I2C2_SCL */
+-- 
+2.53.0
+

@@ -1,0 +1,92 @@
+From fc8cd5dbbc03e1431cac01aa801599658fa88cdd Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Tue, 17 Oct 2023 13:05:03 +0200
+Subject: [PATCH] drm/stm: lvds: add power supplies vdd & vdda18
+
+This patch enables power supplies vdd & vdda18.
+
+Change-Id: Ib589c414ca7003a8de94edcd8aefc13dd8c26a05
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+---
+ drivers/gpu/drm/stm/lvds.c | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+
+diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
+index 9e0343fb85b9..617388236bfb 100644
+--- a/drivers/gpu/drm/stm/lvds.c
++++ b/drivers/gpu/drm/stm/lvds.c
+@@ -21,6 +21,7 @@
+ #include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
++#include <linux/regulator/consumer.h>
+ #include <linux/reset.h>
+ 
+ /* LVDS Host registers */
+@@ -272,6 +273,9 @@ struct stm_lvds {
+ 
+ 	u32 hw_version;
+ 	u32 link_type;
++
++	struct regulator *vdd_supply;
++	struct regulator *vdda18_supply;
+ };
+ 
+ #define bridge_to_stm_lvds(b) \
+@@ -979,9 +983,24 @@ static void lvds_atomic_enable(struct drm_bridge *bridge,
+ 	if (!conn_state)
+ 		return;
+ 
++	ret = regulator_enable(lvds->vdda18_supply);
++	if (ret) {
++		drm_err(bridge->dev, "Failed to enable regulator vdda18: %d\n", ret);
++		return;
++	}
++
++	ret = regulator_enable(lvds->vdd_supply);
++	if (ret) {
++		regulator_disable(lvds->vdda18_supply);
++		drm_err(bridge->dev, "Failed to enable regulator vdd: %d\n", ret);
++		return;
++	}
++
+ 	ret = pm_runtime_resume_and_get(lvds->dev);
+ 	if (ret < 0) {
+ 		drm_err(bridge->dev, "Failed to enable lvds, cannot resume pm\n");
++		regulator_disable(lvds->vdd_supply);
++		regulator_disable(lvds->vdda18_supply);
+ 		return;
+ 	}
+ 
+@@ -1013,6 +1032,9 @@ static void lvds_atomic_disable(struct drm_bridge *bridge,
+ 	lvds_clear(lvds, LVDS_CR, CR_LVDSEN);
+ 
+ 	pm_runtime_put(lvds->dev);
++
++	regulator_disable(lvds->vdd_supply);
++	regulator_disable(lvds->vdda18_supply);
+ }
+ 
+ static const struct drm_bridge_funcs lvds_bridge_funcs = {
+@@ -1068,6 +1090,18 @@ static int lvds_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
++	lvds->vdd_supply = devm_regulator_get(dev, "vdd");
++	if (IS_ERR(lvds->vdd_supply)) {
++		dev_err_probe(dev, ret, "Failed to request regulator\n");
++		return PTR_ERR(lvds->vdd_supply);
++	}
++
++	lvds->vdda18_supply = devm_regulator_get(dev, "vdda18");
++	if (IS_ERR(lvds->vdda18_supply)) {
++		dev_err_probe(dev, ret, "Failed to request regulator\n");
++		return  PTR_ERR(lvds->vdda18_supply);
++	}
++
+ 	reset_control_assert(rstc);
+ 	usleep_range(10, 20);
+ 	reset_control_deassert(rstc);
+-- 
+2.53.0
+

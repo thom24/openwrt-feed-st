@@ -1,0 +1,53 @@
+From 6a799c5b56895f9404769fef5dcb3034c7ec66d2 Mon Sep 17 00:00:00 2001
+From: Valentin Caron <valentin.caron@foss.st.com>
+Date: Tue, 18 Aug 2026 17:25:49 +0200
+Subject: [PATCH] serial: stm32: wake up runtime device before deep suspend
+
+If the device is already in a runtime suspended state when
+pm_runtime_force_suspend() is called:
+- stm32_usart_runtime_suspend() will not be called
+- stm32_usart_runtime_resume() will also not be called
+
+Not calling stm32_usart_runtime_resume() causes an issue when waking up
+from deep low-power mode, because the RXNEIE bit will not be set again
+after being cleared by the interrupt routine during the next deep
+low-power sequence.
+
+To avoid that, make sure the device is in a runtime active state before
+continuing the deep suspend routine.
+
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: Iba24ecf4c54b3c95c376449cb33fc54ab0838623
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/600874
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ drivers/tty/serial/stm32-usart.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index 6992cfc4fcde..14e784a4c5fb 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -2481,6 +2481,8 @@ static int __maybe_unused stm32_usart_serial_suspend(struct device *dev)
+ 
+ 
+ 	if (device_may_wakeup(dev) || device_wakeup_path(dev)) {
++		pm_runtime_get_sync(port->dev);
++
+ 		ret = pm_runtime_force_suspend(dev);
+ 		if (ret)
+ 			return ret;
+@@ -2526,6 +2528,8 @@ static int __maybe_unused stm32_usart_serial_resume(struct device *dev)
+ 		ret = pm_runtime_force_resume(dev);
+ 		if (ret)
+ 			return ret;
++
++		pm_runtime_put_sync_autosuspend(port->dev);
+ 	}
+ 
+ 	ret = uart_resume_port(&stm32_usart_driver, port);
+-- 
+2.53.0
+

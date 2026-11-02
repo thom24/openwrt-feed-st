@@ -1,0 +1,68 @@
+From 99115dd1cea15aa9e021638a3fe6f728bb1d41ac Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Fri, 15 Nov 2024 11:28:47 +0100
+Subject: [PATCH] ARM: dts: stm32: use vcc/iovcc panel supplies on
+ stm32mp157x-ev1 board
+
+Replace the legacy property "power-supply" in the shared DSI panel node
+with "vcc-supply" and "iovcc-supply".
+This node is compatible with panels based on the Raydium RM68200 and
+Himax HX8394 chips, both of which require specific power names
+expected by the links and drivers.
+
+Change-Id: Id9275957ec56fbc3dd0ef4dd72dcc4db033c2119
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/580782
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts | 3 ++-
+ arch/arm/boot/dts/st/stm32mp157d-ev1.dts         | 3 ++-
+ arch/arm/boot/dts/st/stm32mp157f-ev1.dts         | 3 ++-
+ 3 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
+index ce6183a00020..8fb8a29f7f29 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
+@@ -345,7 +345,8 @@ panel_dsi: panel@0 {
+ 		reg = <0>;
+ 		reset-gpios = <&gpiof 15 GPIO_ACTIVE_LOW>;
+ 		backlight = <&panel_backlight>;
+-		power-supply = <&v3v3>;
++		vcc-supply = <&v3v3>;
++		iovcc-supply = <&v3v3>;
+ 		status = "okay";
+ 
+ 		port {
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+index 475433f7b19a..eb49109adee7 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+@@ -345,7 +345,8 @@ panel_dsi: panel@0 {
+ 		reg = <0>;
+ 		reset-gpios = <&gpiof 15 GPIO_ACTIVE_LOW>;
+ 		backlight = <&panel_backlight>;
+-		power-supply = <&v3v3>;
++		vcc-supply = <&v3v3>;
++		iovcc-supply = <&v3v3>;
+ 		status = "okay";
+ 
+ 		port {
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+index a5486405eb94..2d6ae39105a5 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+@@ -345,7 +345,8 @@ panel_dsi: panel@0 {
+ 		reg = <0>;
+ 		reset-gpios = <&gpiof 15 GPIO_ACTIVE_LOW>;
+ 		backlight = <&panel_backlight>;
+-		power-supply = <&v3v3>;
++		vcc-supply = <&v3v3>;
++		iovcc-supply = <&v3v3>;
+ 		status = "okay";
+ 
+ 		port {
+-- 
+2.53.0
+

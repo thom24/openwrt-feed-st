@@ -1,0 +1,38 @@
+From 3cb2ee5beb998f810e0246e689e47aa17cb5dac2 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Wed, 18 Feb 2026 15:19:36 +0100
+Subject: [PATCH] arm64: dts: st: add RTC pin to provide LSCO on stm32mp25
+
+Declare pin for LSCO in stm32-pinctrl provider node to reserve this pin
+for RTC OUT2_RMP, in stm32mp25-pinctrl.dtsi.
+
+Change-Id: I21383b347f39c253846c6fbc4e96289bafe3c63d
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/538136
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
+index dad86f3190a8..e765722d8f9f 100644
+--- a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
+@@ -400,6 +400,12 @@ pins {
+ 		};
+ 	};
+ 
++	rtc_rsvd_pins_a: rtc-rsvd-0 {
++		pins {
++			pinmux = <STM32_PINMUX('I', 8, ANALOG)>; /* RTC_OUT2_RMP */
++		};
++	};
++
+ 	sdmmc1_b4_pins_a: sdmmc1-b4-0 {
+ 		pins1 {
+ 			pinmux = <STM32_PINMUX('E', 4, AF10)>, /* SDMMC1_D0 */
+-- 
+2.53.0
+

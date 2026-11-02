@@ -1,0 +1,39 @@
+From 53f1c41394c44e62a9fe4bb2027544acd02692d4 Mon Sep 17 00:00:00 2001
+From: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Date: Fri, 17 Apr 2026 17:09:57 +0200
+Subject: [PATCH] dt-bindings: optee driver can be an interrupt controller
+
+Adds an optional interrupt-controller property to the optee binding.
+
+Signed-off-by: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Change-Id: Ia8154382a62c42a44ded8eee3d1b02120b6acce4
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/558904
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ .../devicetree/bindings/arm/firmware/linaro,optee-tz.yaml  | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml b/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
+index 5d033570b57b..8839c63bec2c 100644
+--- a/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
++++ b/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
+@@ -31,6 +31,13 @@ properties:
+       software is expected to be either a per-cpu interrupt or an
+       edge-triggered peripheral interrupt.
+ 
++  interrupt-controller: true
++
++  "#interrupt-cells":
++    description: Specifies the number of cells needed to encode an
++      interrupt source.
++    const: 1
++
+   method:
+     enum: [smc, hvc]
+     description: |
+-- 
+2.53.0
+

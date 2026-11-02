@@ -1,0 +1,45 @@
+From 58bb2581fd306cb8f53dac7a7aaf21ca5759d004 Mon Sep 17 00:00:00 2001
+From: Valentin Caron <valentin.caron@foss.st.com>
+Date: Fri, 10 Jul 2026 15:54:39 +0200
+Subject: [PATCH] serial: stm32: fix wakeup irq disabled when entering into
+ low-power
+
+If we spams the UART Rx during a suspend sequence, it may happen that the
+platform goes into low-power mode without the RXNE enabled.
+
+This happens because the interrupt routine could be called after the
+suspend routine. The interrupt routine will disabled the RXNE interrupt to
+avoid an irq storm, but the suspend is not stopped.
+
+Change to pm_wakeup_hard_event() that will stop the suspend in this case.
+
+Fixes: 368473ee8492 ("serial: stm32: replace wake up interrupt by rx not empty interrupt")
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Suggested-by: Kunliang YAO <kunliang.yao@st.com>
+Change-Id: I8b4581b58a5b2340ecdb4ab59e737badb4c9249c
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/587501
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Tested-by: Christophe GUIBOUT <christophe.guibout@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/tty/serial/stm32-usart.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index dcd3d24bdfe4..6992cfc4fcde 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -1089,7 +1089,7 @@ static irqreturn_t stm32_usart_interrupt(int irq, void *ptr)
+ 		if (stm32_port->clk_am)
+ 			stm32_usart_disable_am(stm32_port);
+ 
+-		pm_wakeup_event(tport->tty->dev, 0);
++		pm_wakeup_hard_event(tport->tty->dev);
+ 
+ 		ret = IRQ_HANDLED;
+ 	}
+-- 
+2.53.0
+

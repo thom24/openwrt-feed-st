@@ -1,0 +1,111 @@
+From 669cf50909bb6f2ad241bf264625713d54c0a1b4 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Wed, 6 Nov 2024 10:42:22 +0100
+Subject: [PATCH] arm64: dts: st: add mdf support on stm32mp231
+
+Add STM32 MDF support to STM32MP231 SoC.
+
+Change-Id: I9eaef650a4d33a773384455e28c332aaf8d4a364
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/550638
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp231.dtsi | 80 ++++++++++++++++++++++++++
+ 1 file changed, 80 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+index eb13a18f3c71..adb3c1aa15c7 100644
+--- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+@@ -1438,6 +1438,86 @@ dcmi: dcmi@404a0000 {
+ 				status = "disabled";
+ 			};
+ 
++			mdf1: mdf@404d0000 {
++				compatible = "st,stm32mp23-mdf";
++				ranges = <0 0x404d0000 0x1000>;
++				reg = <0x404d0000 0x8>, <0x404d0ff0 0x10>;
++				#address-cells = <1>;
++				#size-cells = <1>;
++				clocks = <&rcc CK_KER_MDF1>;
++				clock-names = "ker_ck";
++				clock-ranges;
++				resets = <&rcc MDF1_R>;
++				reset-names = "mdf";
++				access-controllers = <&rifsc 54>;
++				power-domains = <&d1_pd>;
++				status = "disabled";
++
++				sitf0: sitf@80 {
++					compatible = "st,stm32mp25-sitf-mdf";
++					reg = <0x80 0x4>;
++					status = "disabled";
++				};
++
++				sitf1: sitf@100 {
++					compatible = "st,stm32mp25-sitf-mdf";
++					reg = <0x100 0x4>;
++					status = "disabled";
++				};
++
++				sitf2: sitf@180 {
++					compatible = "st,stm32mp25-sitf-mdf";
++					reg = <0x180 0x4>;
++					status = "disabled";
++				};
++
++				sitf3: sitf@200 {
++					compatible = "st,stm32mp25-sitf-mdf";
++					reg = <0x200 0x4>;
++					status = "disabled";
++				};
++
++				filter0: filter@84 {
++					compatible = "st,stm32mp25-mdf-dmic";
++					reg = <0x84 0x70>;
++					#io-channel-cells = <1>;
++					interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
++					dmas = <&hpdma 63 0x63 0x12>;
++					dma-names = "rx";
++					status = "disabled";
++				};
++
++				filter1: filter@104 {
++					compatible = "st,stm32mp25-mdf-dmic";
++					reg = <0x104 0x70>;
++					#io-channel-cells = <1>;
++					interrupts = <GIC_SPI 185 IRQ_TYPE_LEVEL_HIGH>;
++					dmas = <&hpdma 64 0x63 0x12>;
++					dma-names = "rx";
++					status = "disabled";
++				};
++
++				filter2: filter@184 {
++					compatible = "st,stm32mp25-mdf-dmic";
++					reg = <0x184 0x70>;
++					#io-channel-cells = <1>;
++					interrupts = <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>;
++					dmas = <&hpdma 65 0x63 0x12>;
++					dma-names = "rx";
++					status = "disabled";
++				};
++
++				filter3: filter@204 {
++					compatible = "st,stm32mp25-mdf-dmic";
++					reg = <0x204 0x70>;
++					#io-channel-cells = <1>;
++					interrupts = <GIC_SPI 187 IRQ_TYPE_LEVEL_HIGH>;
++					dmas = <&hpdma 66 0x63 0x12>;
++					dma-names = "rx";
++					status = "disabled";
++				};
++			};
++
+ 			hash: hash@42010000 {
+ 				compatible = "st,stm32mp13-hash";
+ 				reg = <0x42010000 0x400>;
+-- 
+2.53.0
+

@@ -1,0 +1,36 @@
+From 23ec9ac32244b4e3ed86f5be0dd0f0ee8afe5038 Mon Sep 17 00:00:00 2001
+From: Valentin Caron <valentin.caron@foss.st.com>
+Date: Tue, 15 Sep 2026 14:20:22 +0200
+Subject: [PATCH] dt-bindings: regulator: stm32-vrefbuf: describe power-domains
+
+Describe power-domains property in st,stm32-vrefbuf.yaml dt-bindings.
+
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: I628558dc586becb974d2f1d590c17f00cd688171
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/612403
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ .../devicetree/bindings/regulator/st,stm32-vrefbuf.yaml        | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/regulator/st,stm32-vrefbuf.yaml b/Documentation/devicetree/bindings/regulator/st,stm32-vrefbuf.yaml
+index 6ceaffb45dc9..e1a053e43365 100644
+--- a/Documentation/devicetree/bindings/regulator/st,stm32-vrefbuf.yaml
++++ b/Documentation/devicetree/bindings/regulator/st,stm32-vrefbuf.yaml
+@@ -34,6 +34,9 @@ properties:
+     minItems: 1
+     maxItems: 2
+ 
++  power-domains:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+-- 
+2.53.0
+

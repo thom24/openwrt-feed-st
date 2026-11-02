@@ -1,0 +1,58 @@
+From afd682ba6d66760a1c39eed34d16dcebeb76b88c Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Fri, 19 Dec 2025 15:30:39 +0100
+Subject: [PATCH] media: stm32: dcmipp: byteproc: only allow compose with
+ 8/16bit fmts
+
+Since the byteproc is working at byte level, it is not possible to
+perform decimation with formats other than 8 or 16 bit per pixel.
+Ensure any other format won't be able to set a compose.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Hans Verkuil <hverkuil+cisco@kernel.org>
+(cherry picked from commit 8a71f1f8d91fb10d306857c0f198a940c1d22e06)
+---
+ .../platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
+index f45a3027f8f3..f9e4a3a9ef3f 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
+@@ -131,6 +131,8 @@ static void dcmipp_byteproc_adjust_crop(struct v4l2_rect *r,
+ static void dcmipp_byteproc_adjust_compose(struct v4l2_rect *r,
+ 					   const struct v4l2_mbus_framefmt *fmt)
+ {
++	const struct dcmipp_byteproc_pix_map *vpix;
++
+ 	r->top = 0;
+ 	r->left = 0;
+ 
+@@ -142,6 +144,14 @@ static void dcmipp_byteproc_adjust_compose(struct v4l2_rect *r,
+ 		return;
+ 	}
+ 
++	/* Prevent compose on formats which are not 1 or 2 bytes per pixel */
++	vpix = dcmipp_byteproc_pix_map_by_code(fmt->code);
++	if (vpix->bpp != 1 && vpix->bpp != 2) {
++		r->width = fmt->width;
++		r->height = fmt->height;
++		return;
++	}
++
+ 	/* Adjust height - we can only perform 1/2 decimation */
+ 	if (r->height <= (fmt->height / 2))
+ 		r->height = fmt->height / 2;
+@@ -149,7 +159,7 @@ static void dcmipp_byteproc_adjust_compose(struct v4l2_rect *r,
+ 		r->height = fmt->height;
+ 
+ 	/* Adjust width /2 or /4 for 8bits formats and /2 for 16bits formats */
+-	if (fmt->code == MEDIA_BUS_FMT_Y8_1X8 && r->width <= (fmt->width / 4))
++	if (vpix->bpp == 1 && r->width <= (fmt->width / 4))
+ 		r->width = fmt->width / 4;
+ 	else if (r->width <= (fmt->width / 2))
+ 		r->width = fmt->width / 2;
+-- 
+2.53.0
+

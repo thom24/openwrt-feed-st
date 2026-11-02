@@ -1,0 +1,39 @@
+From 23519c4f62a4c3f41f458fa6ac673a2db4cb89b7 Mon Sep 17 00:00:00 2001
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+Date: Wed, 26 Aug 2015 19:21:00 +0200
+Subject: [PATCH] kbuild: Enable DT symbols when CONFIG_OF_OVERLAY is used
+
+This patch is taken from [1], topic/overlays branch.
+U-Boot overlay feature requires the base dtb to be built with symbols.
+So build the dtbs with symbols when overlay support (CONFIG_OF_OVERLAY) is
+enabled.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git
+
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Change-Id: If984f2e1388e9db069ce6382e107b98a04221bee
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+---
+ scripts/Makefile.dtbs | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/scripts/Makefile.dtbs b/scripts/Makefile.dtbs
+index 2d321b813600..a31b9ebcc800 100644
+--- a/scripts/Makefile.dtbs
++++ b/scripts/Makefile.dtbs
+@@ -111,8 +111,12 @@ endif
+ 
+ DTC_FLAGS += $(DTC_FLAGS_$(target-stem))
+ 
++ifeq ($(CONFIG_OF_OVERLAY),y)
++DTC_FLAGS += -@
++else
+ # Set -@ if the target is a base DTB that overlay is applied onto
+ DTC_FLAGS += $(if $(filter $(patsubst $(obj)/%,%,$@), $(base-dtb-y)), -@)
++endif
+ 
+ DTC_INCLUDE := $(srctree)/scripts/dtc/include-prefixes
+ 
+-- 
+2.53.0
+

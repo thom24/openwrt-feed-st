@@ -1,0 +1,32 @@
+From 6c97246b9da1f508d012b28b71594858eb64f06d Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Sun, 15 Feb 2026 18:39:54 +0100
+Subject: [PATCH] dt-bindings: dma: stm32-dma3: add compatible for STM32MP21
+
+Add a compatible string for the STM32 DMA3 controller found in the
+STM32MP21 SoC.
+
+Change-Id: I6880a07aee7539ab27bdbca864bdf57135fd70bc
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+---
+ .../devicetree/bindings/dma/stm32/st,stm32-dma3.yaml          | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma3.yaml b/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma3.yaml
+index 7c0056f9378a..a9b14d156573 100644
+--- a/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma3.yaml
++++ b/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma3.yaml
+@@ -30,7 +30,9 @@ allOf:
+ 
+ properties:
+   compatible:
+-    const: st,stm32mp25-dma3
++    enum:
++      - st,stm32mp21-dma3
++      - st,stm32mp25-dma3
+ 
+   reg:
+     maxItems: 1
+-- 
+2.53.0
+

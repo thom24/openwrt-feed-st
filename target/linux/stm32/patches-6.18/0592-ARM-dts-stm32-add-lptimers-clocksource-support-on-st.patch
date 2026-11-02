@@ -1,0 +1,86 @@
+From 3cf9059da32d1ddef574ee88320563627d1e308c Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Thu, 7 May 2026 09:19:18 +0200
+Subject: [PATCH] ARM: dts: stm32: add lptimers clocksource support on
+ stm32mp15
+
+Add support of clocksource support for LPTIM on stm32mp15x SoCs.
+
+Change-Id: I2f4d14a580c954a134305e9a28a0a2d7aa167483
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/564732
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp151.dtsi | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
+index ba1ab59f6c83..b128016eb52b 100644
+--- a/arch/arm/boot/dts/st/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
+@@ -1123,6 +1123,11 @@ counter {
+ 					compatible = "st,stm32-lptimer-counter";
+ 					status = "disabled";
+ 				};
++
++				timer {
++					compatible = "st,stm32-lptimer-timer";
++					status = "disabled";
++				};
+ 			};
+ 
+ 			i2s2: audio-controller@4000b000 {
+@@ -1985,6 +1990,11 @@ counter {
+ 					compatible = "st,stm32-lptimer-counter";
+ 					status = "disabled";
+ 				};
++
++				timer {
++					compatible = "st,stm32-lptimer-timer";
++					status = "disabled";
++				};
+ 			};
+ 
+ 			lptimer3: timer@50022000 {
+@@ -2010,6 +2020,11 @@ trigger@2 {
+ 					reg = <2>;
+ 					status = "disabled";
+ 				};
++
++				timer {
++					compatible = "st,stm32-lptimer-timer";
++					status = "disabled";
++				};
+ 			};
+ 
+ 			lptimer4: timer@50023000 {
+@@ -2027,6 +2042,11 @@ pwm {
+ 					#pwm-cells = <3>;
+ 					status = "disabled";
+ 				};
++
++				timer {
++					compatible = "st,stm32-lptimer-timer";
++					status = "disabled";
++				};
+ 			};
+ 
+ 			lptimer5: timer@50024000 {
+@@ -2044,6 +2064,11 @@ pwm {
+ 					#pwm-cells = <3>;
+ 					status = "disabled";
+ 				};
++
++				timer {
++					compatible = "st,stm32-lptimer-timer";
++					status = "disabled";
++				};
+ 			};
+ 
+ 			vrefbuf: vrefbuf@50025000 {
+-- 
+2.53.0
+

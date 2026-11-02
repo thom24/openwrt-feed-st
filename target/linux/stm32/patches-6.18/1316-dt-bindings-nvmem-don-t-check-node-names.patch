@@ -1,0 +1,42 @@
+From f20da85c2908c3adb5811d918b15670ccc165b88 Mon Sep 17 00:00:00 2001
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Date: Fri, 14 Nov 2025 11:06:34 +0000
+Subject: [PATCH] dt-bindings: nvmem: don't check node names
+
+Node names are already and properly checked by the core schema. No need
+to do it again.
+
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Srinivas Kandagatla <srini@kernel.org>
+Link: https://patch.msgid.link/20251114110636.143268-7-srini@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+(cherry picked from commit ee5c565163fddc570b52c8ee8b4683046e5295f0)
+Change-Id: I66fae5e62d59b1414b40b2ad0776cd5b43835546
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/603748
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+index 8f5365544e98..242468943390 100644
+--- a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
++++ b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+@@ -34,7 +34,7 @@ properties:
+     description: Phandle to a node describing non-secure OTP mirror area
+ 
+ patternProperties:
+-  "^.*@[0-9a-f]+$":
++  "@[0-9a-f]+$":
+     type: object
+     $ref: layouts/fixed-cell.yaml
+     unevaluatedProperties: false
+-- 
+2.53.0
+

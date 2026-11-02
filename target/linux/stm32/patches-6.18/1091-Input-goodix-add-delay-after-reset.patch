@@ -1,0 +1,35 @@
+From b4b713581873c2a0ebc2c0ca72983341b2edcc92 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Mon, 9 Sep 2024 16:16:49 +0200
+Subject: [PATCH] Input: goodix - add delay after reset
+
+Add a delay between probe startup and first i2c reading
+to ensure the touchscreen is in a stable hardware state
+(the reset & the pin interrupt set by pin control) .
+
+Change-Id: I1fec90121042d9a8075ff89c1df71f6c94515ac4
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/403184
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/input/touchscreen/goodix.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/input/touchscreen/goodix.c b/drivers/input/touchscreen/goodix.c
+index fcf0d19549ea..1b43e92e55d7 100644
+--- a/drivers/input/touchscreen/goodix.c
++++ b/drivers/input/touchscreen/goodix.c
+@@ -1386,6 +1386,9 @@ static int goodix_ts_probe(struct i2c_client *client)
+ 		error = goodix_reset(ts);
+ 		if (error)
+ 			return error;
++	} else {
++		/* Need to wait at least 50 ms */
++		msleep(50);
+ 	}
+ 
+ 	error = goodix_i2c_test(client);
+-- 
+2.53.0
+

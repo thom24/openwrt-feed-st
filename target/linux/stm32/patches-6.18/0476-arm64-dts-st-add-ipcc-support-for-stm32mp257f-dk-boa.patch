@@ -1,0 +1,38 @@
+From dba762d14b9ace5f1a4bb23cdff1dea38b0e13f4 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Fri, 17 Nov 2023 11:51:08 +0100
+Subject: [PATCH] arm64: dts: st: add ipcc support for stm32mp257f-dk board
+
+Enable the IPCC node for the Cortex-M33 management.
+
+Change-Id: Ie29f7235885460bcf9b92cd2b40a397e5651dba1
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/539862
+Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index 2abcad6c1977..d43e61e2ab0d 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -236,6 +236,10 @@ &i2c8 {
+ 	/delete-property/dma-names;
+ };
+ 
++&ipcc1 {
++	status = "okay";
++};
++
+ &optee {
+ 	bootph-all;
+ };
+-- 
+2.53.0
+

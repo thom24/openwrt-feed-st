@@ -1,0 +1,119 @@
+From ef41e2c25ae732ab811b43cba179d75c89795681 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Mon, 8 Dec 2025 08:29:14 +0100
+Subject: [PATCH] spi: stm32-qspi: Remove CR_TCIE and CR_TEIE irq usage
+
+Replace CR_TCIE and CR_TEIE irq usage by a read_poll_timeout_atomic() in
+stm32_qspi_wait_cmd(). It will reduce the time waiting for TCF or TEF flags
+to optimize throughput.
+						before		after
+average time spent in stm32_qspi_wait_cmd:	2615 ns		712 ns
+
+Change-Id: Ic7338fc0ee80d1a369295c1e5ff169527f3e758e
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Link: https://patch.msgid.link/20251208-upstream_qspi_ospi_updates-v2-7-62526c9467dc@foss.st.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+(cherry picked from commit c5f76d888810bca2d46297a7b942e10bc8cc69dd)
+---
+ drivers/spi/spi-stm32-qspi.c | 45 +++++++++++-------------------------
+ 1 file changed, 13 insertions(+), 32 deletions(-)
+
+diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
+index c7f2b435d5ee..d6f6f9d4e5be 100644
+--- a/drivers/spi/spi-stm32-qspi.c
++++ b/drivers/spi/spi-stm32-qspi.c
+@@ -31,8 +31,6 @@
+ #define CR_DFM			BIT(6)
+ #define CR_FSEL			BIT(7)
+ #define CR_FTHRES_SHIFT		8
+-#define CR_TEIE			BIT(16)
+-#define CR_TCIE			BIT(17)
+ #define CR_FTIE			BIT(18)
+ #define CR_SMIE			BIT(19)
+ #define CR_TOIE			BIT(20)
+@@ -86,11 +84,12 @@
+ #define STM32_QSPI_MAX_MMAP_SZ	SZ_256M
+ #define STM32_QSPI_MAX_NORCHIP	2
+ 
+-#define STM32_FIFO_TIMEOUT_US 30000
+-#define STM32_BUSY_TIMEOUT_US 100000
+-#define STM32_ABT_TIMEOUT_US 100000
+-#define STM32_COMP_TIMEOUT_MS 1000
+-#define STM32_AUTOSUSPEND_DELAY -1
++#define STM32_FIFO_TIMEOUT_US		30000
++#define STM32_BUSY_TIMEOUT_US		100000
++#define STM32_ABT_TIMEOUT_US		100000
++#define STM32_WAIT_CMD_TIMEOUT_US	5000
++#define STM32_COMP_TIMEOUT_MS		1000
++#define STM32_AUTOSUSPEND_DELAY		-1
+ 
+ struct stm32_qspi_flash {
+ 	u32 cs;
+@@ -107,7 +106,6 @@ struct stm32_qspi {
+ 	struct clk *clk;
+ 	u32 clk_rate;
+ 	struct stm32_qspi_flash flash[STM32_QSPI_MAX_NORCHIP];
+-	struct completion data_completion;
+ 	struct completion match_completion;
+ 	u32 fmode;
+ 
+@@ -139,15 +137,6 @@ static irqreturn_t stm32_qspi_irq(int irq, void *dev_id)
+ 		cr &= ~CR_SMIE;
+ 		writel_relaxed(cr, qspi->io_base + QSPI_CR);
+ 		complete(&qspi->match_completion);
+-
+-		return IRQ_HANDLED;
+-	}
+-
+-	if (sr & (SR_TEF | SR_TCF)) {
+-		/* disable irq */
+-		cr &= ~CR_TCIE & ~CR_TEIE;
+-		writel_relaxed(cr, qspi->io_base + QSPI_CR);
+-		complete(&qspi->data_completion);
+ 	}
+ 
+ 	return IRQ_HANDLED;
+@@ -330,25 +319,18 @@ static int stm32_qspi_wait_nobusy(struct stm32_qspi *qspi)
+ 
+ static int stm32_qspi_wait_cmd(struct stm32_qspi *qspi)
+ {
+-	u32 cr, sr;
++	u32 sr;
+ 	int err = 0;
+ 
+-	if ((readl_relaxed(qspi->io_base + QSPI_SR) & SR_TCF) ||
+-	    qspi->fmode == CCR_FMODE_APM)
++	if (qspi->fmode == CCR_FMODE_APM)
+ 		goto out;
+ 
+-	reinit_completion(&qspi->data_completion);
+-	cr = readl_relaxed(qspi->io_base + QSPI_CR);
+-	writel_relaxed(cr | CR_TCIE | CR_TEIE, qspi->io_base + QSPI_CR);
++	err = readl_relaxed_poll_timeout_atomic(qspi->io_base + QSPI_SR, sr,
++						(sr & (SR_TEF | SR_TCF)), 1,
++						STM32_WAIT_CMD_TIMEOUT_US);
+ 
+-	if (!wait_for_completion_timeout(&qspi->data_completion,
+-				msecs_to_jiffies(STM32_COMP_TIMEOUT_MS))) {
+-		err = -ETIMEDOUT;
+-	} else {
+-		sr = readl_relaxed(qspi->io_base + QSPI_SR);
+-		if (sr & SR_TEF)
+-			err = -EIO;
+-	}
++	if (sr & SR_TEF)
++		err = -EIO;
+ 
+ out:
+ 	/* clear flags */
+@@ -835,7 +817,6 @@ static int stm32_qspi_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
+-	init_completion(&qspi->data_completion);
+ 	init_completion(&qspi->match_completion);
+ 
+ 	qspi->clk = devm_clk_get(dev, NULL);
+-- 
+2.53.0
+

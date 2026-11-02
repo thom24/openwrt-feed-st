@@ -1,0 +1,56 @@
+From 73562b2c3f711552db7a5b687360d9e1e3a15f91 Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Date: Tue, 28 Feb 2023 11:22:22 +0100
+Subject: [PATCH] arm64: dts: st: enable management of the Cortex-M33 on
+ stm32mp257f-ev1
+
+Enable the IPCC and the remoteproc for the management of the Cortex-M33.
+
+Change-Id: Ia5d52f3a2580189370d24b640031a1259a5ac2ed
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/552520
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+index b8e844f19a3c..f4be8da76333 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+@@ -114,6 +114,10 @@ panel_lvds_backlight: backlight {
+ 	};
+ };
+ 
++&a35ss_syscfg {
++	status = "okay";
++};
++
+ &arm_wdt {
+ 	timeout-sec = <32>;
+ 	bootph-all;
+@@ -461,6 +465,17 @@ lvds_out0: endpoint {
+ 	};
+ };
+ 
++&m33_rproc {
++	mboxes = <&ipcc1 0x100>, <&ipcc1 0x101>, <&ipcc1 2>;
++	mbox-names = "vq0", "vq1", "shutdown";
++	memory-region = <&cm33_cube_fw>, <&cm33_cube_data>,
++			<&ipc_shmem_1>, <&vdev0vring0>,
++			<&vdev0vring1>, <&vdev0buffer>,
++			<&cm33_sram2>;
++	st,syscfg-nsvtor = <&a35ss_syscfg 0x20a8 0xffffff80>;
++	status = "okay";
++};
++
+ &m_can1 {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&m_can1_pins_a>;
+-- 
+2.53.0
+

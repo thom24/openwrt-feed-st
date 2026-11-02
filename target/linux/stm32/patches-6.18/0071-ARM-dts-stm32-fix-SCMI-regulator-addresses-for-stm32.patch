@@ -1,0 +1,65 @@
+From c06bc69506df23db5ed43a6a08017fffa77407cc Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Fri, 13 Feb 2026 14:31:32 +0100
+Subject: [PATCH] ARM: dts: stm32: fix SCMI regulator addresses for
+ stm32mp135f-dk board
+
+The SCMI regulators for STPMIC1 were using incorrect child node
+addresses in the ST SCMI voltage domain description. Align the
+regulator node unit-addresses with the actual SCMI voltage domain
+indices so that DT validation and SCMI regulator lookup are consistent.
+
+Update the following SCMI regulator nodes:
+- move vdd_adc to @a
+- move vdd_usb to @d
+- move vdd_sd to @e
+- move v1v8_periph to @f
+- move v3v3_sw to @13
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: I9c0e3d779020f42da7c77ce2d1bf6e0ae7bd14b1
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/536253
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dk.dts | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+index b7c0cee5bfc7..074945d381a5 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+@@ -439,23 +439,23 @@ &scmi_clk {
+ };
+ 
+ &scmi_regu {
+-	scmi_vdd_adc: regulator@10 {
++	scmi_vdd_adc: regulator@a {
+ 		reg = <VOLTD_SCMI_STPMIC1_LDO1>;
+ 		regulator-name = "vdd_adc";
+ 	};
+-	scmi_vdd_usb: regulator@13 {
++	scmi_vdd_usb: regulator@d {
+ 		reg = <VOLTD_SCMI_STPMIC1_LDO4>;
+ 		regulator-name = "vdd_usb";
+ 	};
+-	scmi_vdd_sd: regulator@14 {
++	scmi_vdd_sd: regulator@e {
+ 		reg = <VOLTD_SCMI_STPMIC1_LDO5>;
+ 		regulator-name = "vdd_sd";
+ 	};
+-	scmi_v1v8_periph: regulator@15 {
++	scmi_v1v8_periph: regulator@f {
+ 		reg = <VOLTD_SCMI_STPMIC1_LDO6>;
+ 		regulator-name = "v1v8_periph";
+ 	};
+-	scmi_v3v3_sw: regulator@19 {
++	scmi_v3v3_sw: regulator@13 {
+ 		reg = <VOLTD_SCMI_STPMIC1_PWR_SW2>;
+ 		regulator-name = "v3v3_sw";
+ 	};
+-- 
+2.53.0
+

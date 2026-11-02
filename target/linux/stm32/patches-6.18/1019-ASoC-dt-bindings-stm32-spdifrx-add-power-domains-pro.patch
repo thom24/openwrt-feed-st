@@ -1,0 +1,36 @@
+From 78ed3aa5daca171dfbf92045804d2b212070654d Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Tue, 12 May 2026 11:33:49 +0200
+Subject: [PATCH] ASoC: dt-bindings: stm32-spdifrx: add power-domains property
+
+STM32 SPDIFRX may be in a power domain. Allow power domains on SPDIFRX
+nodes.
+
+Change-Id: Ic289c95736b51579f6fb467ea84a8125b49702dc
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/567648
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ Documentation/devicetree/bindings/sound/st,stm32-spdifrx.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/sound/st,stm32-spdifrx.yaml b/Documentation/devicetree/bindings/sound/st,stm32-spdifrx.yaml
+index 56c5738ea4c5..087713fefba5 100644
+--- a/Documentation/devicetree/bindings/sound/st,stm32-spdifrx.yaml
++++ b/Documentation/devicetree/bindings/sound/st,stm32-spdifrx.yaml
+@@ -50,6 +50,9 @@ properties:
+   resets:
+     maxItems: 1
+ 
++  power-domains:
++    maxItems: 1
++
+   port:
+     $ref: audio-graph-port.yaml#
+     unevaluatedProperties: false
+-- 
+2.53.0
+

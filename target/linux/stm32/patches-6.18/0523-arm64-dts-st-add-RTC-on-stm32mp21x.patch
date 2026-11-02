@@ -1,0 +1,47 @@
+From 5e7893b79be2bf1a708abc11d635183abe8ce1ca Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Tue, 30 Apr 2024 17:38:28 +0200
+Subject: [PATCH] arm64: dts: st: add RTC on stm32mp21x
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Add compatible, clock, and interrupt properties of STM32 RTC on
+stm32mp21x SOCs.
+
+Change-Id: I55aece51893d2f9136d106c2a3f51fae80e7b358
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/377546
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/538139
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index c23e36ce64d9..01b039709ab3 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -819,6 +819,16 @@ exti2: interrupt-controller@442d0000 {
+ 				<&intc GIC_SPI 204 IRQ_TYPE_LEVEL_HIGH>;
+ 		};
+ 
++		rtc: rtc@46000000 {
++			compatible = "st,stm32mp25-rtc";
++			reg = <0x46000000 0x0 0x400>;
++			clocks = <&scmi_clk CK_SCMI_RTC>,
++				 <&scmi_clk CK_SCMI_RTCCK>;
++			clock-names = "pclk", "rtc_ck";
++			interrupts-extended = <&exti2 17 IRQ_TYPE_LEVEL_HIGH>;
++			status = "disabled";
++		};
++
+ 		tamp: tamp@46010000 {
+ 			compatible = "st,stm32-tamp", "syscon", "simple-mfd";
+ 			#address-cells = <1>;
+-- 
+2.53.0
+

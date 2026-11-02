@@ -1,0 +1,43 @@
+From a708df5ef1e7adeb77a21839eae345dcc4b8b730 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Wed, 11 Feb 2026 18:12:27 +0100
+Subject: [PATCH] arm64: dts: st: add rpmsg irq controller for stm32mp235f-dk
+ board
+
+Add rpmsg IRQ controller support for communication with the Cortex-M33
+Linux drivers can register generic interrupt to receive signals from the
+remote processor.
+
+Change-Id: I97287b01917ee1b1c2f89205c3b27488bdb1eeba
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/552534
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index e5784adffd5a..ac58a5062be5 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -345,6 +345,15 @@ &m33_rproc {
+ 	status = "okay";
+ };
+ 
++&mlahb {
++	intc_rpmsg: interrupt-controller@1 {
++		compatible = "rpmsg,intc";
++		reg = <1 0>;
++		#interrupt-cells = <1>;
++		interrupt-controller;
++	};
++};
++
+ &optee {
+ 	bootph-all;
+ };
+-- 
+2.53.0
+

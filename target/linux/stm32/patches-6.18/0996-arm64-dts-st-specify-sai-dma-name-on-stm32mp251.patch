@@ -1,0 +1,88 @@
+From 1f0a13f2ad4e7e329283c6bcb313a0e50e805a14 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Mon, 30 Mar 2026 09:59:24 +0200
+Subject: [PATCH] arm64: dts: st: specify sai dma-name on stm32mp251
+
+Specify dma name in SAI SoC nodes for STM32MP251.
+
+Change-Id: I84b0172984e72adc4d213b6ca5f82d3026253d66
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/551669
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index e21e9d6b6fa6..4c8c74199f10 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -1381,6 +1381,7 @@ sai1a: audio-controller@40290004 {
+ 					clocks = <&rcc CK_KER_SAI1>;
+ 					clock-names = "sai_ck";
+ 					dmas = <&hpdma 73 0x43 0x21>;
++					dma-names = "tx";
+ 					power-domains = <&d1_pd>;
+ 					status = "disabled";
+ 				};
+@@ -1392,6 +1393,7 @@ sai1b: audio-controller@40290024 {
+ 					clocks = <&rcc CK_KER_SAI1>;
+ 					clock-names = "sai_ck";
+ 					dmas = <&hpdma 74 0x43 0x12>;
++					dma-names = "rx";
+ 					power-domains = <&d1_pd>;
+ 					status = "disabled";
+ 				};
+@@ -1417,6 +1419,7 @@ sai2a: audio-controller@402a0004 {
+ 					clocks = <&rcc CK_KER_SAI2>;
+ 					clock-names = "sai_ck";
+ 					dmas = <&hpdma 75 0x43 0x21>;
++					dma-names = "tx";
+ 					power-domains = <&d1_pd>;
+ 					status = "disabled";
+ 				};
+@@ -1428,6 +1431,7 @@ sai2b: audio-controller@402a0024 {
+ 					clocks = <&rcc CK_KER_SAI2>;
+ 					clock-names = "sai_ck";
+ 					dmas = <&hpdma 76 0x43 0x12>;
++					dma-names = "rx";
+ 					power-domains = <&d1_pd>;
+ 					status = "disabled";
+ 				};
+@@ -1453,6 +1457,7 @@ sai3a: audio-controller@402b0004 {
+ 					clocks = <&rcc CK_KER_SAI3>;
+ 					clock-names = "sai_ck";
+ 					dmas = <&hpdma 77 0x43 0x21>;
++					dma-names = "tx";
+ 					power-domains = <&d1_pd>;
+ 					status = "disabled";
+ 				};
+@@ -1464,6 +1469,7 @@ sai3b: audio-controller@402b0024 {
+ 					clocks = <&rcc CK_KER_SAI3>;
+ 					clock-names = "sai_ck";
+ 					dmas = <&hpdma 78 0x43 0x12>;
++					dma-names = "rx";
+ 					power-domains = <&d1_pd>;
+ 					status = "disabled";
+ 				};
+@@ -1551,6 +1557,7 @@ sai4a: audio-controller@40340004 {
+ 					clocks = <&rcc CK_KER_SAI4>;
+ 					clock-names = "sai_ck";
+ 					dmas = <&hpdma 79 0x63 0x21>;
++					dma-names = "tx";
+ 					power-domains = <&d1_pd>;
+ 					status = "disabled";
+ 				};
+@@ -1562,6 +1569,7 @@ sai4b: audio-controller@40340024 {
+ 					clocks = <&rcc CK_KER_SAI4>;
+ 					clock-names = "sai_ck";
+ 					dmas = <&hpdma 80 0x43 0x12>;
++					dma-names = "rx";
+ 					power-domains = <&d1_pd>;
+ 					status = "disabled";
+ 				};
+-- 
+2.53.0
+

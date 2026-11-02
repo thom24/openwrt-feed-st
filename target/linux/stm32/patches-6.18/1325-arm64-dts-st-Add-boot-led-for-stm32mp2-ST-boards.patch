@@ -1,0 +1,108 @@
+From 00409541a48893bdc1f963e58bac26736c29d068 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Wed, 12 Nov 2025 16:48:16 +0100
+Subject: [PATCH] arm64: dts: st: Add boot-led for stm32mp2 ST boards
+
+Add options/u-boot/boot-led property to specify to U-Boot
+the LED which indicates a successful boot.
+
+Change-Id: I0e6d5dc7ad47319a07d3a1d86380f82ea15db814
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Link: https://lore.kernel.org/r/20251112-upstream_add_boot-led_for_stm32_boards-v1-13-50a3a9b339a8@foss.st.com
+Link: https://lore.kernel.org/r/20251112-upstream_add_boot-led_for_stm32_boards-v1-14-50a3a9b339a8@foss.st.com
+Link: https://lore.kernel.org/r/20251112-upstream_add_boot-led_for_stm32_boards-v1-15-50a3a9b339a8@foss.st.com
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+(cherry picked from commit 0dfff7c550f3aa29441d0a5e581161b9eaa58697)
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/583457
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts  | 9 ++++++++-
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts  | 9 ++++++++-
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 9 ++++++++-
+ 3 files changed, 24 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index 08a5f3a9eb6a..fd443f3c6751 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -85,7 +85,7 @@ button-wake-up {
+ 	gpio-leds {
+ 		compatible = "gpio-leds";
+ 
+-		led-blue {
++		led_blue: led-blue {
+ 			function = LED_FUNCTION_HEARTBEAT;
+ 			color = <LED_COLOR_ID_BLUE>;
+ 			gpios = <&gpioh 7 GPIO_ACTIVE_HIGH>;
+@@ -122,6 +122,13 @@ memory@80000000 {
+ 		reg = <0x0 0x80000000 0x0 0x80000000>;
+ 	};
+ 
++	options {
++		u-boot {
++			compatible = "u-boot,config";
++			boot-led = <&led_blue>;
++		};
++	};
++
+ 	panel_lvds: panel-lvds {
+ 		compatible = "edt,etml0700z9ndha", "panel-lvds";
+ 		enable-gpios = <&gpioi 4 GPIO_ACTIVE_HIGH>;
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index 3a5771ca87df..22da036f27ad 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -118,7 +118,7 @@ button-wake-up {
+ 	gpio-leds {
+ 		compatible = "gpio-leds";
+ 
+-		led-blue {
++		led_blue: led-blue {
+ 			function = LED_FUNCTION_HEARTBEAT;
+ 			color = <LED_COLOR_ID_BLUE>;
+ 			gpios = <&gpioh 7 GPIO_ACTIVE_HIGH>;
+@@ -155,6 +155,13 @@ memory@80000000 {
+ 		reg = <0x0 0x80000000 0x1 0x0>;
+ 	};
+ 
++	options {
++		u-boot {
++			compatible = "u-boot,config";
++			boot-led = <&led_blue>;
++		};
++	};
++
+ 	panel_lvds: panel-lvds {
+ 		compatible = "edt,etml0700z9ndha", "panel-lvds";
+ 		enable-gpios = <&gpioi 4 GPIO_ACTIVE_HIGH>;
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+index 22263ed38444..71f315401380 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+@@ -97,7 +97,7 @@ button-wake-up {
+ 	gpio-leds {
+ 		compatible = "gpio-leds";
+ 
+-		led-blue {
++		led_blue: led-blue {
+ 			function = LED_FUNCTION_HEARTBEAT;
+ 			color = <LED_COLOR_ID_BLUE>;
+ 			gpios = <&gpioj 7 GPIO_ACTIVE_HIGH>;
+@@ -133,6 +133,13 @@ memory@80000000 {
+ 		reg = <0x0 0x80000000 0x1 0x0>;
+ 	};
+ 
++	options {
++		u-boot {
++			compatible = "u-boot,config";
++			boot-led = <&led_blue>;
++		};
++	};
++
+ 	panel_lvds: panel-lvds {
+ 		compatible = "edt,etml0700z9ndha", "panel-lvds";
+ 		enable-gpios = <&gpiog 15 GPIO_ACTIVE_HIGH>;
+-- 
+2.53.0
+

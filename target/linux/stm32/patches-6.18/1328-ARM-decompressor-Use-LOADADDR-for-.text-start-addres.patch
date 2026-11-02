@@ -1,0 +1,58 @@
+From af2655103ac18d82a135f0000f265a47d5d3f757 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Tue, 5 May 2026 17:49:18 +0200
+Subject: [PATCH] ARM: decompressor: Use LOADADDR for .text start address
+
+If LOADADDR is defined, use it as start address of the .text
+segment of the decompressor code.
+
+This allows using addr2line on arch/arm/boot/compressed/vmlinux
+ELF file for the decompressor code.
+Also objdump will disassemble the above ELF file reporting the
+proper addresses.
+
+GDB is not really impacted, as the command 'symbol-file' allows
+to add an optional offset while loading the symbols.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I6a57499c0dc656b103ba6dbe05643a1d098ac147
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/564080
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm/boot/compressed/Makefile | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/compressed/Makefile b/arch/arm/boot/compressed/Makefile
+index a159120d1e42..b6e5148c4d0e 100644
+--- a/arch/arm/boot/compressed/Makefile
++++ b/arch/arm/boot/compressed/Makefile
+@@ -51,14 +51,20 @@ endif
+ 
+ #
+ # We now have a PIC decompressor implementation.  Decompressors running
+-# from RAM should not define ZTEXTADDR.  Decompressors running directly
+-# from ROM or Flash must define ZTEXTADDR (preferably via the config)
++# directly from ROM or Flash must define ZTEXTADDR (preferably via the config).
++# Decompressors running from RAM don't need to define ZTEXTADDR, thus value
++# zero is generally fine. But to help debugging the decompressor, if LOADADDR
++# is defined then use it to initialize ZTEXTADDR, so addr2line will work fine.
+ # FIXME: Previous assignment to ztextaddr-y is lost here. See SHARK
+ ifeq ($(CONFIG_ZBOOT_ROM),y)
+ ZTEXTADDR	:= $(CONFIG_ZBOOT_ROM_TEXT)
+ ZBSSADDR	:= $(CONFIG_ZBOOT_ROM_BSS)
+ else
+-ZTEXTADDR	:= 0
++  ifneq ($(LOADADDR),)
++    ZTEXTADDR	:= $(LOADADDR)
++  else
++    ZTEXTADDR	:= 0
++  endif
+ ZBSSADDR	:= ALIGN(8)
+ endif
+ 
+-- 
+2.53.0
+

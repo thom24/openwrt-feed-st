@@ -1,0 +1,76 @@
+From acf6419e5fe0c786e20628d29a8172746a310df9 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Thu, 26 Mar 2026 17:17:17 +0100
+Subject: [PATCH] ARM: dts: stm32: add dfsdm pins to stm32mp15
+
+Add STM32 DFSDM pins to stm32mp15
+
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Change-Id: I698da7f16a095936051c6672c33853d85ba1b944
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/551667
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ arch/arm/boot/dts/st/stm32mp15-pinctrl.dtsi | 45 +++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp15-pinctrl.dtsi b/arch/arm/boot/dts/st/stm32mp15-pinctrl.dtsi
+index 37d9f438640a..9d2d3a738fc1 100644
+--- a/arch/arm/boot/dts/st/stm32mp15-pinctrl.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp15-pinctrl.dtsi
+@@ -231,6 +231,51 @@ pins {
+ 		};
+ 	};
+ 
++	/omit-if-no-ref/
++	dfsdm_clkout_pins_a: dfsdm-clkout-pins-0 {
++		pins {
++			pinmux = <STM32_PINMUX('B', 13, AF3)>; /* DFSDM_CKOUT */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++	};
++
++	/omit-if-no-ref/
++	dfsdm_clkout_sleep_pins_a: dfsdm-clkout-sleep-pins-0 {
++		pins {
++			pinmux = <STM32_PINMUX('B', 13, ANALOG)>; /* DFSDM_CKOUT */
++		};
++	};
++
++	/omit-if-no-ref/
++	dfsdm_data1_pins_a: dfsdm-data1-pins-0 {
++		pins {
++			pinmux = <STM32_PINMUX('C', 3, AF3)>; /* DFSDM_DATA1 */
++		};
++	};
++
++	/omit-if-no-ref/
++	dfsdm_data1_sleep_pins_a: dfsdm-data1-sleep-pins-0 {
++		pins {
++			pinmux = <STM32_PINMUX('C', 3, ANALOG)>; /* DFSDM_DATA1 */
++		};
++	};
++
++	/omit-if-no-ref/
++	dfsdm_data3_pins_a: dfsdm-data3-pins-0 {
++		pins {
++			pinmux = <STM32_PINMUX('F', 13, AF6)>; /* DFSDM_DATA3 */
++		};
++	};
++
++	/omit-if-no-ref/
++	dfsdm_data3_sleep_pins_a: dfsdm-data3-sleep-pins-0 {
++		pins {
++			pinmux = <STM32_PINMUX('F', 13, ANALOG)>; /* DFSDM_DATA3 */
++		};
++	};
++
+ 	/omit-if-no-ref/
+ 	ethernet0_rgmii_pins_a: rgmii-0 {
+ 		pins1 {
+-- 
+2.53.0
+

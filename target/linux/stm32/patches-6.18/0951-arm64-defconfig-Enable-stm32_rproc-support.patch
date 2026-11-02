@@ -1,0 +1,43 @@
+From 7a1e4d7718c527b247fda2d8d0efa7cf9897b246 Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Date: Fri, 2 Feb 2024 11:49:53 +0100
+Subject: [PATCH] arm64: defconfig: Enable stm32_rproc support
+
+This patch adds in built-in the remoteproc driver used by STM32MP SOCs.
+
+Change-Id: Ie903111f4f36fed1a36948c9816e1c3ca39a9759
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/552537
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/configs/fragment-02-defconfig-addons.config | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm64/configs/fragment-02-defconfig-addons.config b/arch/arm64/configs/fragment-02-defconfig-addons.config
+index bc77e466b32c..5eb632315318 100644
+--- a/arch/arm64/configs/fragment-02-defconfig-addons.config
++++ b/arch/arm64/configs/fragment-02-defconfig-addons.config
+@@ -56,6 +56,7 @@ CONFIG_PWM_STM32_LP=m
+ CONFIG_REALTEK_PHY=y
+ CONFIG_REGULATOR_ARM_SCMI=y
+ CONFIG_REGULATOR_WM8994=m
++CONFIG_REMOTEPROC=y
+ CONFIG_RESET_GPIO=y
+ CONFIG_RPMSG_IRQ=m
+ CONFIG_RPMSG_TTY=m
+@@ -88,6 +89,7 @@ CONFIG_STM32_RPROC=m
+ CONFIG_STM32_TIMER_CNT=m
+ CONFIG_STM32_WATCHDOG=m
+ CONFIG_SYSCON_REBOOT_MODE=m
++CONFIG_TEE_REMOTEPROC=y
+ CONFIG_TOUCHSCREEN_ILI210X=m
+ CONFIG_UBIFS_FS=y
+ CONFIG_UCSI_STM32G0=m
+-- 
+2.53.0
+

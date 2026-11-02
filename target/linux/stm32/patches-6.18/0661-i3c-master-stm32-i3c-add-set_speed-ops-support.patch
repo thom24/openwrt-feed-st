@@ -1,0 +1,141 @@
+From 468ca0df282be76231847665266e7327c194e158 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Thu, 10 Sep 2026 17:17:59 +0200
+Subject: [PATCH] i3c: master: stm32-i3c: add set_speed ops support
+
+Implement the set_speed ops in order to be able to adjust TIMINGR0
+during the I3C resetDAA phase.
+During the cores slow open-drain phase, program I2C-compatible SCL
+low and high durations in TIMINGR0 so the first broadcast is visible
+to legacy I2C devices. Restore the normal timing programmed by bus
+initialization before normal operation resumes.
+
+Keep the I3C timing fields unchanged, preserve the normal TIMINGR0 value,
+validate the calculated fields, and balance runtime PM around the register
+update.
+
+Assisted-by: GitHub-Copilot:GPT-5.6-Luna
+Change-Id: Ia47e2b3a2f1de203146583376e6b7d0bffc3fe23
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/610966
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ drivers/i3c/master/stm32-i3c.c | 56 ++++++++++++++++++++++++++++++++++
+ include/linux/i3c/master.h     |  1 +
+ 2 files changed, 57 insertions(+)
+
+diff --git a/drivers/i3c/master/stm32-i3c.c b/drivers/i3c/master/stm32-i3c.c
+index 3c4ea421ad05..2895cf69c03c 100644
+--- a/drivers/i3c/master/stm32-i3c.c
++++ b/drivers/i3c/master/stm32-i3c.c
+@@ -336,6 +336,7 @@ struct stm32_i3c_ddata {
+ 		/* Prevent races between transfers */
+ 		spinlock_t lock;
+ 	} xferqueue;
++	u32 timingr0_normal;
+ };
+ 
+ static inline struct stm32_i3c_ddata *to_stm32_i3c_ddata(struct i3c_master_controller *m)
+@@ -448,6 +449,58 @@ static int stm32_i3c_master_write_txfifo(struct stm32_i3c_ddata *ddata)
+ 	return 0;
+ }
+ 
++static int stm32_i3c_master_set_speed(struct i3c_master_controller *m,
++				      enum i3c_open_drain_speed speed)
++{
++	struct stm32_i3c_ddata *ddata = to_stm32_i3c_ddata(m);
++	unsigned long i3cclk_rate;
++	u32 timingr0, sclhi3c, cfgr;
++	int ret;
++
++	ret = pm_runtime_resume_and_get(ddata->dev);
++	if (ret)
++		return ret;
++
++	switch (speed) {
++	case I3C_OPEN_DRAIN_SLOW_SPEED:
++		i3cclk_rate = clk_get_rate(ddata->clk);
++		if (!i3cclk_rate) {
++			ret = -EINVAL;
++			goto out;
++		}
++		sclhi3c = DIV_ROUND_UP_ULL((u64)I3C_BUS_THIGH_INIT_OD_MIN_NS * i3cclk_rate,
++					   NSEC_PER_SEC) - 1;
++		if (sclhi3c > FIELD_MAX(I3C_TIMINGR0_SCLH_I3C)) {
++			ret = -EINVAL;
++			goto out;
++		}
++
++		timingr0 = ddata->timingr0_normal & ~I3C_TIMINGR0_SCLH_I3C;
++		timingr0 |= FIELD_PREP(I3C_TIMINGR0_SCLH_I3C, sclhi3c);
++		break;
++	case I3C_OPEN_DRAIN_NORMAL_SPEED:
++		timingr0 = ddata->timingr0_normal;
++		break;
++	default:
++		ret = -EINVAL;
++		goto out;
++	}
++
++	/* TIMINGR0 is read-only when the I3C peripheral is enabled hence ensure I3C peripheral is
++	 * disabled when writing into it
++	 */
++	cfgr = readl_relaxed(ddata->base + STM32_I3C_CFGR);
++	writel_relaxed(cfgr & ~I3C_CFGR_EN, ddata->base + STM32_I3C_CFGR);
++
++	writel_relaxed(timingr0, ddata->base + STM32_I3C_TIMINGR0);
++
++	writel_relaxed(cfgr, ddata->base + STM32_I3C_CFGR);
++
++out:
++	pm_runtime_put_autosuspend(ddata->dev);
++	return ret;
++}
++
+ static int stm32_i3c_master_read_rxfifo(struct stm32_i3c_ddata *ddata, unsigned int max_len)
+ {
+ 	struct stm32_i3c_cmd *cmd = stm32_i3c_master_next_data_cmd(ddata, true);
+@@ -1042,6 +1095,7 @@ static int stm32_i3c_pure_timing_cfg(struct i3c_master_controller *m, unsigned l
+ 	writel_relaxed(timingr0, ddata->base + STM32_I3C_TIMINGR0);
+ 	writel_relaxed(timingr1, ddata->base + STM32_I3C_TIMINGR1);
+ 	writel_relaxed(0, ddata->base + STM32_I3C_TIMINGR2);
++	ddata->timingr0_normal = timingr0;
+ 
+ 	dev_dbg(ddata->dev, "%s: timingr0=%#x timingr1=%#x\n", __func__, timingr0, timingr1);
+ 
+@@ -1163,6 +1217,7 @@ static int stm32_i3c_mixed_timing_cfg(struct i3c_master_controller *m, unsigned
+ 	writel_relaxed(timingr0, ddata->base + STM32_I3C_TIMINGR0);
+ 	writel_relaxed(timingr1, ddata->base + STM32_I3C_TIMINGR1);
+ 	writel_relaxed(0, ddata->base + STM32_I3C_TIMINGR2);
++	ddata->timingr0_normal = timingr0;
+ 
+ 	dev_dbg(ddata->dev, "%s: timingr0=%#x timingr1=%#x\n", __func__, timingr0, timingr1);
+ 
+@@ -2114,6 +2169,7 @@ static const struct i3c_master_controller_ops stm32_i3c_master_ops = {
+ 	.recycle_ibi_slot = stm32_i3c_master_recycle_ibi_slot,	/* Required if .request_ibi */
+ 	.enable_hotjoin = stm32_i3c_master_enable_hotjoin,
+ 	.disable_hotjoin = stm32_i3c_master_disable_hotjoin,
++	.set_speed = stm32_i3c_master_set_speed,
+ };
+ 
+ static int stm32_i3c_probe(struct platform_device *pdev)
+diff --git a/include/linux/i3c/master.h b/include/linux/i3c/master.h
+index c52a82dd79a6..f256216599fc 100644
+--- a/include/linux/i3c/master.h
++++ b/include/linux/i3c/master.h
+@@ -259,6 +259,7 @@ struct i3c_device {
+ #define I3C_BUS_THIGH_MIXED_MAX_NS	41
+ #define I3C_BUS_TIDLE_MIN_NS		200000
+ #define I3C_BUS_TLOW_OD_MIN_NS		200
++#define I3C_BUS_THIGH_INIT_OD_MIN_NS	200
+ 
+ /**
+  * enum i3c_bus_mode - I3C bus mode
+-- 
+2.53.0
+

@@ -1,0 +1,49 @@
+From 4b29fc0a4f53695b27a4586092e461ba24cc1de7 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Thu, 22 Jan 2026 14:09:46 +0100
+Subject: [PATCH] xhci: pci: Add reset resume quirk for ASMEDIA xhci controller
+
+The XHCI controller sets the SRE (Save/Restore Error) status bit upon
+resume due to the CRS (Controller Restore command) during PM resume,
+causing a re-init.
+
+The xHCI specification leaves it implementation-defined whether the
+internal state is saved in the scratchpad buffer or internal memory,
+controlled by the SPR register, which is set to 0 for ASMEDIA 1142.
+
+Since the current XHCI implementation assumes SPR support and CRS relies
+on the scratchpad for state saving/restoration, the saved state cannot be
+guaranteed (hence the SRE).
+
+Set the XHCI_RESET_ON_RESUME quirk to force controller reinitialization on
+resume without attempting state restoration, suppressing the harmless but
+disruptive "xHC Error, Reinit" message.
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: Ic7f7f20f9d1d44ac1e0ee119745869208392d2bb
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/528101
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/usb/host/xhci-pci.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index f67a4d956204..aae16cdd2df4 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -474,7 +474,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 		xhci->quirks |= XHCI_ASMEDIA_MODIFY_FLOWCONTROL;
+ 
+ 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+-	    pdev->device == PCI_DEVICE_ID_ASMEDIA_3042_XHCI)
++	    (pdev->device == PCI_DEVICE_ID_ASMEDIA_1142_XHCI ||
++	     pdev->device == PCI_DEVICE_ID_ASMEDIA_3042_XHCI))
+ 		xhci->quirks |= XHCI_RESET_ON_RESUME;
+ 
+ 	if (pdev->vendor == PCI_VENDOR_ID_TI && pdev->device == 0x8241)
+-- 
+2.53.0
+

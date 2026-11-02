@@ -1,0 +1,38 @@
+From 3e77894c1a626a4fd00f824852314915acc809eb Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Tue, 17 Feb 2026 12:51:10 +0100
+Subject: [PATCH] ARM: dts: stm32: add dcmipp pclk-max-frequency prop in
+ stm32mp135f-dk
+
+Add the pclk-max-frequency property in the dcmipp node to indicate
+the maximum achievable pixel clock on the DCMIPP parallel interface.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: I30fb951cafb821639532e532d0427569e9c18fd7
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/537391
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dk.dts | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+index acfcf20be1dd..2d489579f8c8 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+@@ -224,6 +224,7 @@ dcmipp_0: endpoint {
+ 			hsync-active = <0>;
+ 			vsync-active = <0>;
+ 			pclk-sample = <0>;
++			pclk-max-frequency = <120000000>;
+ 		};
+ 	};
+ };
+-- 
+2.53.0
+

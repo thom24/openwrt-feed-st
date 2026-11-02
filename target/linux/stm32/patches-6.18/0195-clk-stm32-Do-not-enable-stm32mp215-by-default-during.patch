@@ -1,0 +1,41 @@
+From 288f8919412d62f1405f005218dde6dceff8ede4 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Fri, 23 Jan 2026 15:26:44 +0100
+Subject: [PATCH] clk: stm32: Do not enable stm32mp215 by default during
+ compile testing
+
+Do the same as for the other STM32 clock drivers: restrict the default to
+ARCH_STM32 so that selecting the parent during compile testing does not
+select COMMON_CLK_STM32MP215.
+Also drop the ARM dependency, since COMMON_CLK_STM32MP215 is meant to be
+used only on ARM64 platforms.
+
+Change-Id: If166e4ed2600d111e9c7413573307b6c60bd8508
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/612954
+Reviewed-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ drivers/clk/stm32/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/clk/stm32/Kconfig b/drivers/clk/stm32/Kconfig
+index 9fd023687895..b697c28d6f88 100644
+--- a/drivers/clk/stm32/Kconfig
++++ b/drivers/clk/stm32/Kconfig
+@@ -27,8 +27,8 @@ config COMMON_CLK_STM32MP157
+ 
+ config COMMON_CLK_STM32MP215
+ 	bool "Clock driver for stm32mp21x clocks"
+-	depends on ARM || ARM64 || COMPILE_TEST
+-	default y
++	depends on ARM64 || COMPILE_TEST
++	default ARCH_STM32
+ 	help
+ 	  Support for stm32mp21x SoC family clocks
+ 
+-- 
+2.53.0
+

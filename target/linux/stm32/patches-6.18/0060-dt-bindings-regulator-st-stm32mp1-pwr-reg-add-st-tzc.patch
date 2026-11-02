@@ -1,0 +1,50 @@
+From 1f6b9c6f088cc36b53738b68769d6e7e88a4e6fb Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Mon, 20 Apr 2026 16:02:30 +0200
+Subject: [PATCH] dt-bindings: regulator: st,stm32mp1-pwr-reg: add st,tzcr
+ property
+
+Document the optional st,tzcr property used to describe RCC_TZCR
+configuration through a reference to RCC, a register offset, and a
+value to program.
+
+This enables RCC TrustZone configuration from devicetree and adds
+support for secure PWR regulators on stm32mp151.
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: I433e6ae0749e07e5a5fe2e314759827c0c31ef14
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/559264
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ .../bindings/regulator/st,stm32mp1-pwr-reg.yaml      | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/regulator/st,stm32mp1-pwr-reg.yaml b/Documentation/devicetree/bindings/regulator/st,stm32mp1-pwr-reg.yaml
+index 3cb2dad18781..9e80d37f11bb 100644
+--- a/Documentation/devicetree/bindings/regulator/st,stm32mp1-pwr-reg.yaml
++++ b/Documentation/devicetree/bindings/regulator/st,stm32mp1-pwr-reg.yaml
+@@ -27,6 +27,18 @@ properties:
+   vdd_3v3_usbfs-supply:
+     description: Input supply phandle(s) for vdd_3v3_usbfs input
+ 
++  st,tzcr:
++    description: Use to configure the RCC TrustZone Control Register "RCC_TZCR"
++      within RCC. This property is used to enable RCC TrustZone protection
++      through "TZEN" and optionally protect the registers involved in the
++      generation of the "mcuss_ck" clock through "MCKPROT".
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    items:
++      - items:
++          - description: phandle to rcc
++          - description: register offset within rcc for "RCC_TZCR" "0x0"
++          - description: register bitmask for "TZEN" and "MCKPROT" bits
++
+ patternProperties:
+   "^(reg11|reg18|usb33)$":
+     type: object
+-- 
+2.53.0
+

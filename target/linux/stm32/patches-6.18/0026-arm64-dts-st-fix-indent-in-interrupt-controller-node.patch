@@ -1,0 +1,37 @@
+From ef8389727a726a79ca6a8f61232ebe643c5899b6 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 17 Feb 2026 16:09:39 +0100
+Subject: [PATCH] arm64: dts: st: fix indent in interrupt-controller node in
+ stm32mp211.dtsi
+
+Correct indentation of interrupt-controller properties in
+stm32mp211.dtsi.
+
+Change-Id: I247fd0f559d5bdef6b8cf1fa4d2052c1ba030dbf
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/537548
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index bf888d60cd4f..d89f5d365ac8 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -121,8 +121,8 @@ intc: interrupt-controller@4ac10000 {
+ 			      <0x4ac20000 0x0 0x20000>,
+ 			      <0x4ac40000 0x0 0x20000>,
+ 			      <0x4ac60000 0x0 0x20000>;
+-			      #interrupt-cells = <3>;
+-			      interrupt-controller;
++			#interrupt-cells = <3>;
++			interrupt-controller;
+ 		};
+ 	};
+ };
+-- 
+2.53.0
+

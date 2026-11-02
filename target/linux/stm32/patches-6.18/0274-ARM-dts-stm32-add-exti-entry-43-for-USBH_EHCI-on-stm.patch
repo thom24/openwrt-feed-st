@@ -1,0 +1,32 @@
+From 9132910b05c3c3ea4f111c68683356a070599857 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Mon, 17 Oct 2022 16:10:53 +0200
+Subject: [PATCH] ARM: dts: stm32: add exti entry 43 for USBH_EHCI on
+ stm32mp151
+
+Add exti entry 43 used for USBH_EHCI wake up.
+This event is mapped to GIC 75.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Change-Id: I1e81dabba6da65bc55725c08b79c35f4e90a39b3
+---
+ arch/arm/boot/dts/st/stm32mp151.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
+index c9896ef73e35..e7f6e307c63c 100644
+--- a/arch/arm/boot/dts/st/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
+@@ -257,7 +257,7 @@ exti: interrupt-controller@5000d000 {
+ 				<0>,						/* EXTI_40 */
+ 				<0>,
+ 				<0>,
+-				<0>,
++				<&intc GIC_SPI 75  IRQ_TYPE_LEVEL_HIGH>,
+ 				<0>,
+ 				<0>,
+ 				<&intc GIC_SPI 151 IRQ_TYPE_LEVEL_HIGH>,
+-- 
+2.53.0
+

@@ -1,0 +1,34 @@
+From e9691bd2cd0f98542465f741e395a36cbf990f14 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Fri, 17 Jul 2026 13:32:51 +0200
+Subject: [PATCH] arm64: dts: st: add msi-map to pcie_ep node on stm32mp25
+
+Support MSI doorbell feature,
+msi-map is used to create MSI doorbell for a device function.
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I9d3d53feb2a5aff747b776d5a9ed3165b7b7368a
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/589082
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index c13328f297a3..81d4138f3e3e 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -2299,6 +2299,7 @@ pcie_ep: pcie-ep@48400000 {
+ 				reg-names = "dbi", "dbi2", "atu", "addr_space";
+ 				clocks = <&scmi_clk CK_SCMI_ICN_PCIE>;
+ 				resets = <&rcc PCIE_R>;
++				msi-map = <0x0 &v2m0 0x0 0x1>;
+ 				phys = <&combophy PHY_TYPE_PCIE>;
+ 				access-controllers = <&rifsc 68>;
+ 				power-domains = <&d1_pd>;
+-- 
+2.53.0
+

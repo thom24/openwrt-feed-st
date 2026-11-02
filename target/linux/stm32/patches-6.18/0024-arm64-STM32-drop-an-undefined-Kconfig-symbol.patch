@@ -1,0 +1,33 @@
+From 91829da5c176681eadfc9c9a2245765a921a47df Mon Sep 17 00:00:00 2001
+From: Randy Dunlap <rdunlap@infradead.org>
+Date: Tue, 30 Dec 2025 10:14:29 -0800
+Subject: [PATCH] arm64: STM32: drop an undefined Kconfig symbol
+
+Drop ARM_SMC_MBOX since it is not defined or used anywhere else
+in the kernel source tree.
+
+Change-Id: I5b3537df87a674f69fac31e8d10e65200b9abf3f
+Fixes: 9e4e24414cc6 ("arm64: introduce STM32 family on Armv8 architecture")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Link: https://lore.kernel.org/r/20251230181429.3429404-1-rdunlap@infradead.org
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/Kconfig.platforms | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+index 13173795c43d..74662deed6e4 100644
+--- a/arch/arm64/Kconfig.platforms
++++ b/arch/arm64/Kconfig.platforms
+@@ -363,7 +363,6 @@ config ARCH_STM32
+ 	bool "STMicroelectronics STM32 SoC Family"
+ 	select GPIOLIB
+ 	select PINCTRL
+-	select ARM_SMC_MBOX
+ 	select ARM_SCMI_PROTOCOL
+ 	select REGULATOR
+ 	select REGULATOR_ARM_SCMI
+-- 
+2.53.0
+

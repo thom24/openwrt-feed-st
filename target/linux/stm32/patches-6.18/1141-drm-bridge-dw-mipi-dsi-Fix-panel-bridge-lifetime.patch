@@ -1,0 +1,92 @@
+From f395a6b1d3bcc7bd7a0163dadeadd88b872cc008 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Thu, 1 Oct 2026 16:05:59 +0200
+Subject: [PATCH] drm/bridge: dw-mipi-dsi: Fix panel bridge lifetime
+
+When the downstream device is a panel, devm_drm_of_get_bridge()
+registers a devres action to release the panel bridge on the DSI host.
+The host detach callback also removes the panel bridge explicitly,
+causing it to be removed twice when the DSI host is unbound.
+
+Use drm_of_find_panel_or_bridge() and drm_panel_bridge_add() so the
+detach callback remains responsible for removing the panel bridge.
+
+
+Assisted-by: GitHub-Copilot:GPT-5.6-Luna
+Change-Id: I2bcbb17caef6d3b2a921e5ad7d51067ca092e5c1
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/619702
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c  | 14 +++++++++++---
+ drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c | 14 +++++++++++---
+ 2 files changed, 22 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
+index 4f5d4e069c29..0f401d63da58 100644
+--- a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
++++ b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
+@@ -319,6 +319,7 @@ static int dw_mipi_dsi_host_attach(struct mipi_dsi_host *host,
+ {
+ 	struct dw_mipi_dsi *dsi = host_to_dsi(host);
+ 	const struct dw_mipi_dsi_plat_data *pdata = dsi->plat_data;
++	struct drm_panel *panel;
+ 	struct drm_bridge *bridge;
+ 	int ret;
+ 
+@@ -333,9 +334,16 @@ static int dw_mipi_dsi_host_attach(struct mipi_dsi_host *host,
+ 	dsi->format = device->format;
+ 	dsi->mode_flags = device->mode_flags;
+ 
+-	bridge = devm_drm_of_get_bridge(dsi->dev, dsi->dev->of_node, 1, 0);
+-	if (IS_ERR(bridge))
+-		return PTR_ERR(bridge);
++	ret = drm_of_find_panel_or_bridge(dsi->dev->of_node, 1, 0,
++					  &panel, &bridge);
++	if (ret)
++		return ret;
++
++	if (panel) {
++		bridge = drm_panel_bridge_add(panel);
++		if (IS_ERR(bridge))
++			return PTR_ERR(bridge);
++	}
+ 
+ 	bridge->pre_enable_prev_first = true;
+ 	dsi->panel_bridge = bridge;
+diff --git a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c
+index 5926a3a05d79..12e6954a9de3 100644
+--- a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c
++++ b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c
+@@ -514,6 +514,7 @@ static int dw_mipi_dsi2_host_attach(struct mipi_dsi_host *host,
+ {
+ 	struct dw_mipi_dsi2 *dsi2 = host_to_dsi2(host);
+ 	const struct dw_mipi_dsi2_plat_data *pdata = dsi2->plat_data;
++	struct drm_panel *panel;
+ 	struct drm_bridge *bridge;
+ 	int ret;
+ 
+@@ -528,9 +529,16 @@ static int dw_mipi_dsi2_host_attach(struct mipi_dsi_host *host,
+ 	dsi2->format = device->format;
+ 	dsi2->mode_flags = device->mode_flags;
+ 
+-	bridge = devm_drm_of_get_bridge(dsi2->dev, dsi2->dev->of_node, 1, 0);
+-	if (IS_ERR(bridge))
+-		return PTR_ERR(bridge);
++	ret = drm_of_find_panel_or_bridge(dsi2->dev->of_node, 1, 0,
++					  &panel, &bridge);
++	if (ret)
++		return ret;
++
++	if (panel) {
++		bridge = drm_panel_bridge_add(panel);
++		if (IS_ERR(bridge))
++			return PTR_ERR(bridge);
++	}
+ 
+ 	bridge->pre_enable_prev_first = true;
+ 	dsi2->panel_bridge = bridge;
+-- 
+2.53.0
+

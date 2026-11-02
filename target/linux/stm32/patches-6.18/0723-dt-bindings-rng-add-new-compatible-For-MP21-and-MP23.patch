@@ -1,0 +1,50 @@
+From 159e9f30e98d2dc405a480f454345629fe42ddd2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Tue, 17 Mar 2026 17:15:49 +0100
+Subject: [PATCH] dt-bindings: rng: add new compatible For MP21 and MP23
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Add RNG compatibles for STM32MP21x and STM32MP23x platforms.
+
+STM32MP23 needs a specific compatible due to configuration
+differences compared to STM32MP25.
+
+STM32MP21 embeds a new RNG version with a few register changes
+compared to STM32MP23/25.
+
+Also add the power domain description.
+
+Change-Id: Id1dc5ea80447930b5822b6ba4318374773c8ce89
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+---
+ Documentation/devicetree/bindings/rng/st,stm32-rng.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml b/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml
+index 7db65f49773b..15c97c574064 100644
+--- a/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml
++++ b/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml
+@@ -18,6 +18,8 @@ properties:
+     enum:
+       - st,stm32-rng
+       - st,stm32mp13-rng
++      - st,stm32mp21-rng
++      - st,stm32mp23-rng
+       - st,stm32mp25-rng
+ 
+   reg:
+@@ -48,6 +50,9 @@ properties:
+     minItems: 1
+     maxItems: 2
+ 
++  power-domains:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+-- 
+2.53.0
+

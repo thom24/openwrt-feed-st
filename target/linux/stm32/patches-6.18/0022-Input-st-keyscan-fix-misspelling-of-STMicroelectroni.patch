@@ -1,0 +1,31 @@
+From c96a4567daae07094691ab546a69506a4b728199 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Fri, 25 Jul 2025 11:25:19 +0200
+Subject: [PATCH] Input: st-keyscan - fix misspelling of "STMicroelectronics"
+
+"STMicroelectronics" company name is misspelled. Fix it.
+
+Change-Id: I420a6c1e950b92cf6812880956463320e01b0280
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/569545
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/input/keyboard/st-keyscan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/input/keyboard/st-keyscan.c b/drivers/input/keyboard/st-keyscan.c
+index e53ef4c670e4..ea0690f54cac 100644
+--- a/drivers/input/keyboard/st-keyscan.c
++++ b/drivers/input/keyboard/st-keyscan.c
+@@ -2,7 +2,7 @@
+ /*
+  * STMicroelectronics Key Scanning driver
+  *
+- * Copyright (c) 2014 STMicroelectonics Ltd.
++ * Copyright (c) 2014 STMicroelectronics Ltd.
+  * Author: Stuart Menefy <stuart.menefy@st.com>
+  *
+  * Based on sh_keysc.c, copyright 2008 Magnus Damm
+-- 
+2.53.0
+

@@ -1,0 +1,159 @@
+From 489aade461f05b5b0e4e1931f417fcbde98a2b03 Mon Sep 17 00:00:00 2001
+From: Alexandre Torgue <alexandre.torgue@st.com>
+Date: Wed, 16 Oct 2019 16:35:08 +0200
+Subject: [PATCH] cpufreq: add stm32 cpufreq driver
+
+This commit adds cpufreq driver support for STM32 MPU platform.
+This driver takes resources from DT and OTP bits and map (register)
+a common "cpufreq-dt" driver.
+
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+Reviewed-by: Gabriel FERNANDEZ <gabriel.fernandez@st.com>
+Change-Id: I2fd520e3f76c8eb719f1fa06099c67625d52249a
+---
+ drivers/cpufreq/Kconfig.arm     | 10 ++++
+ drivers/cpufreq/Makefile        |  1 +
+ drivers/cpufreq/stm32-cpufreq.c | 98 +++++++++++++++++++++++++++++++++
+ 3 files changed, 109 insertions(+)
+ create mode 100644 drivers/cpufreq/stm32-cpufreq.c
+
+diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+index 9be0503df55a..5d249dc9334a 100644
+--- a/drivers/cpufreq/Kconfig.arm
++++ b/drivers/cpufreq/Kconfig.arm
+@@ -228,6 +228,16 @@ config ARM_STI_CPUFREQ
+ 	  this config option if you wish to add CPUFreq support for STi based
+ 	  SoCs.
+ 
++config ARM_STM32_CPUFREQ
++	tristate "STM32 CPUFreq support"
++	depends on MACH_STM32MP157
++	default y
++	help
++	  This enables the CPUFreq driver for STM32 MPUs based on the
++	  cpufreq-dt framework. The driver reads chip information from NVMEM
++	  to select the appropriate OPP (Operating Performance Points) table
++	  for the CPU.
++
+ config ARM_TEGRA20_CPUFREQ
+ 	tristate "Tegra20/30 CPUFreq support"
+ 	depends on ARCH_TEGRA || COMPILE_TEST
+diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
+index 681d687b5a18..ca3fe072ae9d 100644
+--- a/drivers/cpufreq/Makefile
++++ b/drivers/cpufreq/Makefile
+@@ -82,6 +82,7 @@ obj-$(CONFIG_ARM_SCMI_CPUFREQ)		+= scmi-cpufreq.o
+ obj-$(CONFIG_ARM_SCPI_CPUFREQ)		+= scpi-cpufreq.o
+ obj-$(CONFIG_ARM_SPEAR_CPUFREQ)		+= spear-cpufreq.o
+ obj-$(CONFIG_ARM_STI_CPUFREQ)		+= sti-cpufreq.o
++obj-$(CONFIG_ARM_STM32_CPUFREQ)		+= stm32-cpufreq.o
+ obj-$(CONFIG_ARM_ALLWINNER_SUN50I_CPUFREQ_NVMEM) += sun50i-cpufreq-nvmem.o
+ obj-$(CONFIG_ARM_TEGRA20_CPUFREQ)	+= tegra20-cpufreq.o
+ obj-$(CONFIG_ARM_TEGRA124_CPUFREQ)	+= tegra124-cpufreq.o
+diff --git a/drivers/cpufreq/stm32-cpufreq.c b/drivers/cpufreq/stm32-cpufreq.c
+new file mode 100644
+index 000000000000..aca99a7abfde
+--- /dev/null
++++ b/drivers/cpufreq/stm32-cpufreq.c
+@@ -0,0 +1,98 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) STMicroelectronics 2019 - All Rights Reserved
++ * Authors: Alexandre Torgue <alexandre.torgue@st.com> for STMicroelectronics.
++ */
++
++#include <linux/cpu.h>
++#include <linux/cpufreq.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/nvmem-consumer.h>
++#include <linux/of_platform.h>
++#include <linux/platform_device.h>
++#include <linux/pm_opp.h>
++
++struct stm32_cpufreq_priv {
++	int token;
++	struct platform_device *cpufreq_dt_pdev;
++};
++
++static int stm32_cpufreq_probe(struct platform_device *pdev)
++{
++	struct stm32_cpufreq_priv *priv;
++	struct device_node *opp_node;
++	struct device *cpu_dev;
++	u8 part_number;
++	u32 supported_hw;
++	int ret;
++
++	cpu_dev = get_cpu_device(0);
++	if (!cpu_dev) {
++		dev_err(&pdev->dev, "failed to get cpu0 device\n");
++		return -ENODEV;
++	}
++	opp_node = dev_pm_opp_of_get_opp_desc_node(cpu_dev);
++	if (!opp_node) {
++		dev_err(&pdev->dev, "OPP-v2 not supported\n");
++		return -ENODEV;
++	}
++
++	/* Get chip info */
++	ret = nvmem_cell_read_u8(cpu_dev, "speed_grade", &part_number);
++	if (ret) {
++		dev_err_probe(&pdev->dev, ret, "Failed to get chip info: %d\n", ret);
++		return ret;
++	}
++
++	supported_hw = BIT((part_number & 0x80) >> 7);
++
++	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	priv->token = dev_pm_opp_set_supported_hw(cpu_dev, &supported_hw, 1);
++	if (priv->token < 0) {
++		ret = priv->token;
++		dev_err_probe(&pdev->dev, ret, "Failed to set supported opp: %d\n", ret);
++		return ret;
++	}
++
++	of_node_put(opp_node);
++	priv->cpufreq_dt_pdev = platform_device_register_simple("cpufreq-dt",
++								-1, NULL, 0);
++
++	platform_set_drvdata(pdev, priv);
++
++	return 0;
++}
++
++static void stm32_cpufreq_remove(struct platform_device *pdev)
++{
++	struct stm32_cpufreq_priv *priv	= platform_get_drvdata(pdev);
++
++	platform_device_unregister(priv->cpufreq_dt_pdev);
++	dev_pm_opp_put_supported_hw(priv->token);
++}
++
++static int stm32_cpufreq_init(void)
++{
++	platform_device_register_simple("stm32-cpufreq", -1, NULL, 0);
++
++	return 0;
++}
++module_init(stm32_cpufreq_init);
++
++static struct platform_driver stm32_cpufreq_platdrv = {
++	.driver = {
++		.name	= "stm32-cpufreq",
++	},
++	.probe		= stm32_cpufreq_probe,
++	.remove		= stm32_cpufreq_remove,
++};
++module_platform_driver(stm32_cpufreq_platdrv);
++
++MODULE_DESCRIPTION("STM32 CPU freq driver");
++MODULE_AUTHOR("Alexandre Torgue <alexandre.torgue@st.com>");
++MODULE_LICENSE("GPL");
+-- 
+2.53.0
+

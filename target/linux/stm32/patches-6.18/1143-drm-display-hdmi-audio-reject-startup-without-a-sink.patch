@@ -1,0 +1,38 @@
+From 7aaf246fa5e7a1882aefc1440b63b9d62d293898 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Thu, 17 Sep 2026 11:00:03 +0200
+Subject: [PATCH] drm/display: hdmi-audio: reject startup without a sink
+
+The HDMI audio get_eld callback currently returns the connector ELD even
+when the connector is disconnected. Reject that case with -ENODEV so the
+HDMI codec does not open an audio stream without a sink, while preserving
+support for a connected sink that exposes an empty ELD.
+
+Change-Id: I0870daeb9733658246a61cdc14796cee42093b24
+Assisted-by: GitHub-Copilot:GPT:5.6-Sol
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/613146
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Yannick FERTRE <yannick.fertre@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/gpu/drm/display/drm_hdmi_audio_helper.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/gpu/drm/display/drm_hdmi_audio_helper.c b/drivers/gpu/drm/display/drm_hdmi_audio_helper.c
+index 7d78b02c1446..dc8387442336 100644
+--- a/drivers/gpu/drm/display/drm_hdmi_audio_helper.c
++++ b/drivers/gpu/drm/display/drm_hdmi_audio_helper.c
+@@ -85,6 +85,9 @@ static int drm_connector_hdmi_audio_get_eld(struct device *dev, void *data,
+ {
+ 	struct drm_connector *connector = data;
+ 
++	if (READ_ONCE(connector->status) != connector_status_connected)
++		return -ENODEV;
++
+ 	mutex_lock(&connector->eld_mutex);
+ 	memcpy(buf, connector->eld, min(sizeof(connector->eld), len));
+ 	mutex_unlock(&connector->eld_mutex);
+-- 
+2.53.0
+

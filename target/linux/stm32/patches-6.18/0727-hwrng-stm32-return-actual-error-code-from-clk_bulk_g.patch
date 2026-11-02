@@ -1,0 +1,39 @@
+From a51df7c9475fbb699f55cfe2dcac08f6e172a9c4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Fri, 10 Jul 2026 17:32:02 +0200
+Subject: [PATCH] hwrng: stm32 - return actual error code from clk_bulk_get_all
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Return the error code from devm_clk_bulk_get_all() instead of masking
+it with -EINVAL. This is critical for supporting EPROBE_DEFER when
+clock dependencies are not yet available, allowing the probe to be
+retried rather than failing permanently.
+
+Change-Id: I21324e4cecfe9e0b6c99d8adaef6953abbbaec49
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/587565
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ drivers/char/hw_random/stm32-rng.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
+index b1e8531cb40a..0006cd8617ca 100644
+--- a/drivers/char/hw_random/stm32-rng.c
++++ b/drivers/char/hw_random/stm32-rng.c
+@@ -610,7 +610,7 @@ static int stm32_rng_probe(struct platform_device *ofdev)
+ 
+ 	ret = devm_clk_bulk_get_all(dev, &priv->clk_bulk);
+ 	if (ret != priv->data->nb_clock)
+-		return dev_err_probe(dev, -EINVAL, "Failed to get clocks: %d\n", ret);
++		return dev_err_probe(dev, ret, "Failed to get clocks: %d\n", ret);
+ 
+ 	if (priv->data->nb_clock == 2) {
+ 		const char *id = priv->clk_bulk[1].id;
+-- 
+2.53.0
+

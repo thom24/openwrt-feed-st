@@ -1,0 +1,103 @@
+From 047e7eb36bcab9f2cc3c1e04909f268835c5740d Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Fri, 20 Mar 2026 18:59:44 +0100
+Subject: [PATCH] hwspinlock: stm32: fix void conversion across address spaces
+
+Sparse complains for:
+- passing the __iomem pointer as void pointer for private data of
+  the hwlock;
+- converting back the private data as an __iomem pointer.
+
+Move the __iomem pointer in the driver's data and then pass the
+driver's data a private data for all the hwlocks.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I3548b3b78df91b48af0472e1dbf4f5231a0f9c69
+---
+ drivers/hwspinlock/stm32_hwspinlock.c | 28 ++++++++++++++++++---------
+ 1 file changed, 19 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/hwspinlock/stm32_hwspinlock.c b/drivers/hwspinlock/stm32_hwspinlock.c
+index 2620d722ee1d..5a612bc3e34e 100644
+--- a/drivers/hwspinlock/stm32_hwspinlock.c
++++ b/drivers/hwspinlock/stm32_hwspinlock.c
+@@ -18,15 +18,22 @@
+ #define STM32_MUTEX_LOCK_BIT	BIT(31)
+ #define STM32_MUTEX_NUM_LOCKS	32
+ 
++#define STM32_MUTEX_REG_RX_OFFSET(id)	(4 * (id))
++
+ struct stm32_hwspinlock {
++	void __iomem *base;
+ 	struct clk *clk;
+ };
+ 
+ static int stm32_hwspinlock_trylock(struct hwspinlock *lock)
+ {
+-	void __iomem *lock_addr = hwspin_lock_get_priv(lock);
++	struct stm32_hwspinlock *hw = hwspin_lock_get_priv(lock);
++	int id = hwlock_to_id(lock);
++	void __iomem *lock_addr;
+ 	u32 status;
+ 
++	lock_addr = hw->base + STM32_MUTEX_REG_RX_OFFSET(id);
++
+ 	writel(STM32_MUTEX_LOCK_BIT | STM32_MUTEX_COREID, lock_addr);
+ 	status = readl(lock_addr);
+ 
+@@ -35,7 +42,11 @@ static int stm32_hwspinlock_trylock(struct hwspinlock *lock)
+ 
+ static void stm32_hwspinlock_unlock(struct hwspinlock *lock)
+ {
+-	void __iomem *lock_addr = hwspin_lock_get_priv(lock);
++	struct stm32_hwspinlock *hw = hwspin_lock_get_priv(lock);
++	int id = hwlock_to_id(lock);
++	void __iomem *lock_addr;
++
++	lock_addr = hw->base + STM32_MUTEX_REG_RX_OFFSET(id);
+ 
+ 	writel(STM32_MUTEX_COREID, lock_addr);
+ }
+@@ -47,7 +58,7 @@ static void stm32_hwspinlock_relax(struct hwspinlock *lock)
+ 
+ static void *stm32_hwspinlock_init_priv(int local_id, void *init_data)
+ {
+-	return init_data + local_id * sizeof(u32);
++	return init_data;
+ }
+ 
+ static const struct hwspinlock_ops stm32_hwspinlock_ops = {
+@@ -75,17 +86,16 @@ static int stm32_hwspinlock_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct stm32_hwspinlock *hw;
+-	void __iomem *io_base;
+ 	int ret;
+ 
+-	io_base = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(io_base))
+-		return PTR_ERR(io_base);
+-
+ 	hw = devm_kzalloc(dev, sizeof(*hw), GFP_KERNEL);
+ 	if (!hw)
+ 		return -ENOMEM;
+ 
++	hw->base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(hw->base))
++		return PTR_ERR(hw->base);
++
+ 	hw->clk = devm_clk_get(dev, "hsem");
+ 	if (IS_ERR(hw->clk))
+ 		return PTR_ERR(hw->clk);
+@@ -110,7 +120,7 @@ static int stm32_hwspinlock_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	ret = devm_hwspin_lock_register_errno(dev, &stm32_hwspinlock_ops,
+-					      0, STM32_MUTEX_NUM_LOCKS, io_base);
++					      0, STM32_MUTEX_NUM_LOCKS, hw);
+ 
+ 	if (ret)
+ 		dev_err(dev, "Failed to register hwspinlock\n");
+-- 
+2.53.0
+

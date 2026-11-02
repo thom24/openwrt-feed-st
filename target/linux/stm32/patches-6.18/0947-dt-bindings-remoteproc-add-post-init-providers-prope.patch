@@ -1,0 +1,52 @@
+From 86ac6ae5a351f3ab57c75f48e34968a833756a95 Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Date: Fri, 24 Jul 2026 09:55:13 +0200
+Subject: [PATCH] dt-bindings: remoteproc: add post-init-providers property
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The device can references power domain as provider.
+
+When the node is declared under a ahb bus parent, this one is bound before.
+In such case, the fw_devlink “dangling consumer pickup” mechanism
+re-attributes rproc fwnode links to the ahb bus fwnode.
+
+Later when the rproc node is probed, a link is created between it
+and the power domain, but the link to ahb is not purged, causing this
+warning:
+
+genpd_provider power-domain-retention: sync_state() pending due to ahb@2
+
+The post-init-providers property avoid enforcing the sync_state dependency
+for this link. The link is created later during rproc probing.
+
+Change-Id: Ib4fcbe763a5136de3a038a76a147d1347375773f
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/591636
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ .../devicetree/bindings/remoteproc/st,stm32-rproc.yaml          | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
+index aa63899c1406..456f97902c03 100644
+--- a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
+@@ -179,6 +179,8 @@ properties:
+       - const: default
+       - const: sleep
+ 
++  post-init-providers: true
++
+   keep-power-in-suspend:
+     $ref: /schemas/types.yaml#/definitions/flag
+     description:
+-- 
+2.53.0
+

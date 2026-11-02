@@ -1,0 +1,75 @@
+From 1b72efec77db5f7c40dbcf2b1001214cfc727313 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Thu, 25 Jun 2026 17:57:59 +0200
+Subject: [PATCH] arm64: dts: st: Add blue, green and orange LED for
+ stm32mp215f-dk board
+
+Add blue, green and orange LED support on stm32mp215f-dk board.
+Add options/u-boot/boot-led property to specify to U-Boot
+the LED which indicates a successful boot.
+
+Change-Id: I0a8b22b9d463028397a569e556379c881ae37b00
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/583458
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 30 +++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 048dc6f8d5b6..123d44d9959b 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -8,6 +8,7 @@
+ 
+ #include <dt-bindings/gpio/gpio.h>
+ #include <dt-bindings/input/input.h>
++#include <dt-bindings/leds/common.h>
+ #include <dt-bindings/media/video-interfaces.h>
+ #include "stm32mp215.dtsi"
+ #include "stm32mp21xf.dtsi"
+@@ -74,11 +75,40 @@ button-wake-up {
+ 		};
+ 	};
+ 
++	gpio-leds {
++		compatible = "gpio-leds";
++
++		led_blue: led-blue {
++			function = LED_FUNCTION_HEARTBEAT;
++			color = <LED_COLOR_ID_BLUE>;
++			gpios = <&gpioz 3 GPIO_ACTIVE_HIGH>;
++			linux,default-trigger = "heartbeat";
++			default-state = "off";
++		};
++
++		led-green {
++			color = <LED_COLOR_ID_GREEN>;
++			gpios = <&gpiof 10 GPIO_ACTIVE_HIGH>;
++		};
++
++		led-orange {
++			color = <LED_COLOR_ID_ORANGE>;
++			gpios = <&gpioh 12 GPIO_ACTIVE_HIGH>;
++		};
++	};
++
+ 	memory@80000000 {
+ 		device_type = "memory";
+ 		reg = <0x0 0x80000000 0x0 0x80000000>;
+ 	};
+ 
++	options {
++		u-boot {
++			compatible = "u-boot,config";
++			boot-led = <&led_blue>;
++		};
++	};
++
+ 	panel_backlight: panel-backlight {
+ 		compatible = "gpio-backlight";
+ 		gpios = <&gpiof 9 GPIO_ACTIVE_HIGH>;
+-- 
+2.53.0
+

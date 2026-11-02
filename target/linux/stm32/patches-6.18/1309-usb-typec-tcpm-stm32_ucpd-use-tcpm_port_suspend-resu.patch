@@ -1,0 +1,53 @@
+From 8e5868702be79214d52194880205bf8c44c1ced6 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Wed, 23 Sep 2026 14:16:36 +0200
+Subject: [PATCH] usb: typec: tcpm: stm32_ucpd: use tcpm_port_suspend/resume()
+ helpers
+
+Call tcpm_suspend() and tcpm_resume() to stop the state machine,
+preventing callbacks that might access ucpd registers leading to
+SERC errors
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: Ic04d7d117342b2a66e8d7c997a73834a0a88ee52
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/616281
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/usb/typec/tcpm/stm32_ucpd.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/drivers/usb/typec/tcpm/stm32_ucpd.c b/drivers/usb/typec/tcpm/stm32_ucpd.c
+index 05c3baa238f3..556161ccbfce 100644
+--- a/drivers/usb/typec/tcpm/stm32_ucpd.c
++++ b/drivers/usb/typec/tcpm/stm32_ucpd.c
+@@ -759,6 +759,13 @@ static int stm32_ucpd_suspend(struct device *dev)
+ 		return 0;
+ 
+ 	disable_irq(ucpd->ucpd_irq);
++
++	/*
++	 * Make sure that the state machine is halted
++	 * to avoid CC read access during toggling.
++	 */
++	tcpm_port_suspend(ucpd->tcpm_port);
++
+ 	/* backup vconn_on flag */
+ 	ucpd->vconn_restore = ucpd->vconn_on;
+ 	stm32_ucpd_set_vconn(&ucpd->tcpc_dev, false);
+@@ -792,6 +799,10 @@ static int stm32_ucpd_resume(struct device *dev)
+ 	__stm32_ucpd_set_cc(ucpd, ucpd->cc);
+ 	stm32_ucpd_set_vconn(&ucpd->tcpc_dev, ucpd->vconn_restore);
+ 	tcpp_set_vbus(ucpd->tcpp_dev, ucpd->vbus_on, ucpd->charge_on);
++
++	/* tcpm must be running to handle cc_change */
++	tcpm_port_resume(ucpd->tcpm_port);
++
+ 	enable_irq(ucpd->ucpd_irq);
+ 
+ 	return 0;
+-- 
+2.53.0
+

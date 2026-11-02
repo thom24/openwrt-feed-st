@@ -1,0 +1,45 @@
+From 560fca375063f4e8841dd19c9ca5dd852207d953 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 10 Mar 2026 17:32:05 +0100
+Subject: [PATCH] arm64: dts: st: add USART6 on stm32mp235f-dk board
+
+Add node and alias for USART6 on stm32mp235f-dk board.
+
+Change-Id: I954978084c291bc279223f826fe525f0b026a6cd
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/545345
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index a3ca78299fd4..c99a106bf766 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -22,6 +22,7 @@ / {
+ 	aliases {
+ 		ethernet0 = &ethernet1;
+ 		serial0 = &usart2;
++		serial1 = &usart6;
+ 	};
+ 
+ 	chosen {
+@@ -416,3 +417,12 @@ pins2 {
+ 		bootph-all;
+ 	};
+ };
++
++&usart6 {
++	pinctrl-names = "default", "idle", "sleep";
++	pinctrl-0 = <&usart6_pins_a>;
++	pinctrl-1 = <&usart6_idle_pins_a>;
++	pinctrl-2 = <&usart6_sleep_pins_a>;
++	uart-has-rtscts;
++	status = "disabled";
++};
+-- 
+2.53.0
+

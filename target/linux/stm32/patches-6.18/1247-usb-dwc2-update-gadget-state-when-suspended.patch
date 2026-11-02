@@ -1,0 +1,107 @@
+From 498bc0608eda3d33531f9799448a4e5c08e103b8 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Mon, 20 Jan 2025 14:42:25 +0100
+Subject: [PATCH] usb: dwc2: update gadget state when suspended
+
+Update the gadget state when the host suspends or resumes the bus. It
+allow the correct suspended/configured (or state configured before the
+suspend happens) to be reported in sysfs.
+In case the gadget has been suspended by the host, and it gets
+disconnected, also take care to reset the suspended_from to not attached
+state.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I60a518ae3f23d790766a91c5c9b019844da8d9cd
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/430483
+Reviewed-by: Pankaj DEV <pankaj.dev@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/usb/dwc2/core.h      |  2 ++
+ drivers/usb/dwc2/core_intr.c | 10 ++++++++++
+ drivers/usb/dwc2/gadget.c    |  1 +
+ 3 files changed, 13 insertions(+)
+
+diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+index b033a6aa04a3..e02e230319f0 100644
+--- a/drivers/usb/dwc2/core.h
++++ b/drivers/usb/dwc2/core.h
+@@ -881,6 +881,7 @@ struct dwc2_hregs_backup {
+  * @hibernated:		True if core is hibernated
+  * @in_ppd:		True if core is partial power down mode.
+  * @bus_suspended:	True if bus is suspended
++ * @suspended_from:	The device state before the host has suspended the bus.
+  * @reset_phy_on_wake:	Quirk saying that we should assert PHY reset on a
+  *			remote wakeup.
+  * @phy_off_for_suspend: Status of whether we turned the PHY off at suspend.
+@@ -1080,6 +1081,7 @@ struct dwc2_hsotg {
+ 	unsigned int hibernated:1;
+ 	unsigned int in_ppd:1;
+ 	bool bus_suspended;
++	enum usb_device_state suspended_from;
+ 	unsigned int reset_phy_on_wake:1;
+ 	unsigned int need_phy_for_wake:1;
+ 	unsigned int phy_off_for_suspend:1;
+diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
+index ea7ce48693ce..ef9bd4fd8cff 100644
+--- a/drivers/usb/dwc2/core_intr.c
++++ b/drivers/usb/dwc2/core_intr.c
+@@ -394,6 +394,7 @@ void dwc2_wakeup_from_lpm_l1(struct dwc2_hsotg *hsotg, bool remotewakeup)
+ 		}
+ 
+ 		/* Inform gadget to exit from L1 */
++		usb_gadget_set_state(&hsotg->gadget, hsotg->suspended_from);
+ 		call_gadget(hsotg, resume);
+ 		/* Change to L0 state */
+ 		hsotg->lx_state = DWC2_L0;
+@@ -453,6 +454,7 @@ static void dwc2_handle_wakeup_detected_intr(struct dwc2_hsotg *hsotg)
+ 
+ 		/* Change to L0 state, also when no_clock_gating == true */
+ 		hsotg->lx_state = DWC2_L0;
++		usb_gadget_set_state(&hsotg->gadget, hsotg->suspended_from);
+ 		call_gadget(hsotg, resume);
+ 	} else {
+ 		if (hsotg->lx_state == DWC2_L2) {
+@@ -593,6 +595,9 @@ static void dwc2_handle_usb_suspend_intr(struct dwc2_hsotg *hsotg)
+ 			 */
+ 			hsotg->lx_state = DWC2_L2;
+ 
++			hsotg->suspended_from = hsotg->gadget.state;
++			usb_gadget_set_state(&hsotg->gadget, USB_STATE_SUSPENDED);
++
+ 			/* Call gadget suspend callback */
+ 			call_gadget(hsotg, suspend);
+ 		}
+@@ -669,6 +674,9 @@ static void dwc2_handle_lpm_intr(struct dwc2_hsotg *hsotg)
+ 			dev_dbg(hsotg->dev,
+ 				"Core is in L1 sleep glpmcfg=%08x\n", glpmcfg);
+ 
++			hsotg->suspended_from = hsotg->gadget.state;
++			usb_gadget_set_state(&hsotg->gadget, USB_STATE_SUSPENDED);
++
+ 			/* Inform gadget that we are in L1 state */
+ 			call_gadget(hsotg, suspend);
+ 		}
+@@ -825,6 +833,8 @@ static int dwc2_handle_gpwrdn_intr(struct dwc2_hsotg *hsotg)
+ 				if (ret)
+ 					dev_err(hsotg->dev,
+ 						"exit hibernation failed.\n");
++
++				usb_gadget_set_state(&hsotg->gadget, hsotg->suspended_from);
+ 				call_gadget(hsotg, resume);
+ 			} else {
+ 				ret = dwc2_exit_hibernation(hsotg, 1, 0, 1);
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index fe9925ebb9a7..60d6f3e4297f 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -3400,6 +3400,7 @@ void dwc2_hsotg_disconnect(struct dwc2_hsotg *hsotg)
+ 	hsotg->lx_state = DWC2_L3;
+ 
+ 	usb_gadget_set_state(&hsotg->gadget, USB_STATE_NOTATTACHED);
++	hsotg->suspended_from = USB_STATE_NOTATTACHED;
+ }
+ 
+ /**
+-- 
+2.53.0
+

@@ -1,0 +1,74 @@
+From 1864c5e17ea21df9d97ac466be49d50827b90125 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 17 Nov 2021 12:17:07 +0100
+Subject: [PATCH] usb: dwc2: move gadget resume out of
+ dwc2_gadget_exit_clock_gating
+
+This is a precursor patch to allow calling dwc2_gadget_exit_clock_gating()
+from the platform suspend routine.
+Calling gadget resume from there isn't suitable, so move it out of
+dwc2_gadget_exit_clock_gating().
+
+Call the gadget resume regardless of the L2 state (the suspend irq
+always call the gadget suspend). Its balances these calls, even when*
+no_clock_gating == true.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Iec6e9d82e7d6dd80e79cf11270d3665f94488678
+---
+ drivers/usb/dwc2/core_intr.c | 8 ++++----
+ drivers/usb/dwc2/gadget.c    | 3 ---
+ 2 files changed, 4 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
+index 7d3e641806f8..3cf39cd19c4d 100644
+--- a/drivers/usb/dwc2/core_intr.c
++++ b/drivers/usb/dwc2/core_intr.c
+@@ -440,7 +440,6 @@ static void dwc2_handle_wakeup_detected_intr(struct dwc2_hsotg *hsotg)
+ 				if (ret)
+ 					dev_err(hsotg->dev,
+ 						"exit partial_power_down failed\n");
+-				call_gadget(hsotg, resume);
+ 			}
+ 
+ 			/* Exit gadget mode clock gating. */
+@@ -448,10 +447,11 @@ static void dwc2_handle_wakeup_detected_intr(struct dwc2_hsotg *hsotg)
+ 			    DWC2_POWER_DOWN_PARAM_NONE && hsotg->bus_suspended &&
+ 			    !hsotg->params.no_clock_gating)
+ 				dwc2_gadget_exit_clock_gating(hsotg, 0);
+-		} else {
+-			/* Change to L0 state */
+-			hsotg->lx_state = DWC2_L0;
+ 		}
++
++		/* Change to L0 state, also when no_clock_gating == true */
++		hsotg->lx_state = DWC2_L0;
++		call_gadget(hsotg, resume);
+ 	} else {
+ 		if (hsotg->lx_state == DWC2_L2) {
+ 			if (hsotg->in_ppd) {
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index a6c2b8de3908..61d24cbf8f08 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -4607,9 +4607,7 @@ static int dwc2_hsotg_udc_stop(struct usb_gadget *gadget)
+ 	/* Exit clock gating when driver is stopped. */
+ 	if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
+ 	    hsotg->bus_suspended && !hsotg->params.no_clock_gating) {
+-		spin_lock_irqsave(&hsotg->lock, flags);
+ 		dwc2_gadget_exit_clock_gating(hsotg, 0);
+-		spin_unlock_irqrestore(&hsotg->lock, flags);
+ 	}
+ 
+ 	/* all endpoints should be shutdown */
+@@ -5733,7 +5731,6 @@ void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
+ 	}
+ 
+ 	/* Change to L0 state */
+-	call_gadget(hsotg, resume);
+ 	hsotg->lx_state = DWC2_L0;
+ 	hsotg->bus_suspended = false;
+ }
+-- 
+2.53.0
+

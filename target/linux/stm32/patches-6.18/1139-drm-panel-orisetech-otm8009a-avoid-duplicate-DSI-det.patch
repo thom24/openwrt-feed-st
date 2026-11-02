@@ -1,0 +1,36 @@
+From 9f5c8d03c6d33d7d7c9333f31086e6020dccd1e1 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Wed, 30 Sep 2026 14:04:08 +0200
+Subject: [PATCH] drm/panel: orisetech-otm8009a: avoid duplicate DSI detach
+
+Check whether the DSI device is attached before detaching it
+during removal.
+This avoids calling mipi_dsi_detach() more than once.
+
+Assisted-by: GitHub-Copilot:GPT-5.6-Luna
+Change-Id: Ie1db8de449ed619c70b7e8364d88ae93fc8252c0
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/619699
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/gpu/drm/panel/panel-orisetech-otm8009a.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/panel/panel-orisetech-otm8009a.c b/drivers/gpu/drm/panel/panel-orisetech-otm8009a.c
+index fc68224535ef..a9ba122599f6 100644
+--- a/drivers/gpu/drm/panel/panel-orisetech-otm8009a.c
++++ b/drivers/gpu/drm/panel/panel-orisetech-otm8009a.c
+@@ -492,7 +492,8 @@ static void otm8009a_remove(struct mipi_dsi_device *dsi)
+ {
+ 	struct otm8009a *ctx = mipi_dsi_get_drvdata(dsi);
+ 
+-	mipi_dsi_detach(dsi);
++	if (dsi->attached)
++		mipi_dsi_detach(dsi);
+ 	drm_panel_remove(&ctx->panel);
+ }
+ 
+-- 
+2.53.0
+

@@ -1,0 +1,58 @@
+From aa70d6fd3831ce4f10db873398412be76262a696 Mon Sep 17 00:00:00 2001
+From: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Date: Tue, 23 Dec 2025 16:25:45 +0100
+Subject: [PATCH] arm64: dts: st: Use hyphen in node names
+
+DTS coding style prefers hyphens instead of underscores in the node
+names.  Change should be safe, because node names are not considered an
+ABI.
+
+Change-Id: I60260402c64865f86e124c335ab8cf2a31681534
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Link: https://lore.kernel.org/r/20251223152544.155637-3-krzysztof.kozlowski@oss.qualcomm.com
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp231.dtsi | 4 ++--
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+index 88e214d395ab..a6658d836122 100644
+--- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+@@ -761,11 +761,11 @@ bsec: efuse@44000000 {
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+ 
+-			part_number_otp@24 {
++			part-number-otp@24 {
+ 				reg = <0x24 0x4>;
+ 			};
+ 
+-			package_otp@1e8 {
++			package-otp@1e8 {
+ 				reg = <0x1e8 0x1>;
+ 				bits = <0 3>;
+ 			};
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index a8e6e0f77b83..ec5db00b9d72 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -1739,11 +1739,11 @@ bsec: efuse@44000000 {
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+ 
+-			part_number_otp@24 {
++			part-number-otp@24 {
+ 				reg = <0x24 0x4>;
+ 			};
+ 
+-			package_otp@1e8 {
++			package-otp@1e8 {
+ 				reg = <0x1e8 0x1>;
+ 				bits = <0 3>;
+ 			};
+-- 
+2.53.0
+

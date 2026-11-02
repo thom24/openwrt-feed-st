@@ -1,0 +1,49 @@
+From e794c07956a77513548d1b185dee2f468c401e4f Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Wed, 18 Feb 2026 15:52:49 +0100
+Subject: [PATCH] arm64: dts: st: enable RTC support with LSCO for WiFi/BT on
+ stm32mp215f-dk
+
+Enables the support of RTC on stm32mp215f-dk board and declare RTC as LSCO
+clock provider for Wifi/BT on M2 connector on this board.
+WiFi/BT module LPO_32 pin is wired to RTC OUT1 pin.
+Add rtc_lsco_pins_a to the pinctrl property of the RTC node because RTC
+pinctrl has strict mode enabled. WiFi and Bluetooth drivers cannot both
+request it, as their probe order is not guaranteed to ensure LSCO is
+available during each probe.
+
+Change-Id: Ida9a1c7f0b8a3d6cf904ba9555f2c2acd3b222fe
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/538141
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 1b15fa98cb41..e1611129374a 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -227,6 +227,18 @@ &rifsc {
+ 	bootph-all;
+ };
+ 
++&rtc {
++	#clock-cells = <0>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&rtc_rsvd_pins_a &rtc_lsco_pins_a>;
++	status = "okay";
++
++	rtc_lsco_pins_a: rtc-lsco-0 {
++		pins = "out1";
++		function = "lsco";
++	};
++};
++
+ &scmi {
+ 	bootph-all;
+ };
+-- 
+2.53.0
+

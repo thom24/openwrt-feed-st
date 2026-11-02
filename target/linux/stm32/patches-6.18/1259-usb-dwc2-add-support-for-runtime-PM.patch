@@ -1,0 +1,821 @@
+From 9b5f83bebb8f5fd9cd4dd38391fafc1ccbdea129 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Thu, 18 Jun 2026 09:32:58 +0200
+Subject: [PATCH] usb: dwc2: add support for runtime PM
+
+In order to properly manage pm-domains and low power modes on stm32,
+allow the pm runtime in the dwc2 driver.
+
+Only power saving mode entry is delegated to PM runtime suspend routine.
+This way, power saving mode is entered, only after all children have
+suspended themselves, e.g. gadget, host and debugfs drivers.
+
+All the resume activities, remains in each child driver part, done by the
+resume IRQ mostly (PM runtime resume sync may sleep).
+
+A specific case is added in drd.c, when a cable gets detached, the none
+role gets selected. In such case, the controller can also be put into
+low power, and runtime suspended state.
+When calling dwc2_hsotg_core_disconnect(), the controller has already
+been resumed. So remove un-necessary exit of low power there.
+At initialization time, in the gadget init, add a runtime_get call.
+
+Debug file system (regdump) requires a dedicated runtime PM management.
+Before reading the registers, the core has to exit power saving mode.
+Debugfs regset32 optionally manages runtime PM get_sync/put calls when
+the device struct is provided.
+So add runtime suspend and resume routines to dwc2 debugfs driver.
+A specific device is allocated, to manage the debugfs read (resume),
+requests separately, not to disturb the bus suspended state, as
+commented in dwc2_runtime_suspend() routine. The real power saving
+entry is managed from the platform dwc2_runtime_suspend() routine,
+to ensure all parts are actually suspended (gadget, host, debugfs).
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I21851f9a71a09d7aa08b1b9ebb89255bb3b570ca
+---
+ drivers/usb/dwc2/core.h      |   7 ++
+ drivers/usb/dwc2/core_intr.c |  14 +++-
+ drivers/usb/dwc2/debugfs.c   | 147 ++++++++++++++++++++++++++++++++++-
+ drivers/usb/dwc2/drd.c       |  18 +++++
+ drivers/usb/dwc2/gadget.c    | 101 +++++++++++++++++-------
+ drivers/usb/dwc2/hcd.c       |  40 +++++++---
+ drivers/usb/dwc2/platform.c  |  87 +++++++++++++++++++++
+ 7 files changed, 375 insertions(+), 39 deletions(-)
+
+diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+index eed84b439fd2..1ba15fea68d7 100644
+--- a/drivers/usb/dwc2/core.h
++++ b/drivers/usb/dwc2/core.h
+@@ -859,6 +859,8 @@ struct dwc2_hregs_backup {
+  * These are common for both host and peripheral modes:
+  *
+  * @dev:                The struct device pointer
++ * @ddev:		Device struct used to manage debugfs access with power
++ *			saving modes (runtime PM).
+  * @regs:		Pointer to controller regs
+  * @hw_params:          Parameters that were autodetected from the
+  *                      hardware registers
+@@ -881,6 +883,9 @@ struct dwc2_hregs_backup {
+  * @hibernated:		True if core is hibernated
+  * @in_ppd:		True if core is partial power down mode.
+  * @bus_suspended:	True if bus is suspended
++ * @rpm_suspended:	Flag to balance runtime PM calls, in PM routines that
++ *			may re-enter during low power resume or remote wakeup
++ *			requests.
+  * @suspended_from:	The device state before the host has suspended the bus.
+  * @reset_phy_on_wake:	Quirk saying that we should assert PHY reset on a
+  *			remote wakeup.
+@@ -1065,6 +1070,7 @@ struct dwc2_hregs_backup {
+  */
+ struct dwc2_hsotg {
+ 	struct device *dev;
++	struct device *ddev;
+ 	void __iomem *regs;
+ 	/** Params detected from hardware */
+ 	struct dwc2_hw_params hw_params;
+@@ -1081,6 +1087,7 @@ struct dwc2_hsotg {
+ 	unsigned int hibernated:1;
+ 	unsigned int in_ppd:1;
+ 	bool bus_suspended;
++	bool rpm_suspended;
+ 	enum usb_device_state suspended_from;
+ 	unsigned int reset_phy_on_wake:1;
+ 	unsigned int need_phy_for_wake:1;
+diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
+index 3a15c2ee7968..2347388a647f 100644
+--- a/drivers/usb/dwc2/core_intr.c
++++ b/drivers/usb/dwc2/core_intr.c
+@@ -572,10 +572,22 @@ static void dwc2_handle_usb_suspend_intr(struct dwc2_hsotg *hsotg)
+ 			if (hsotg->wq_gadget)
+ 				queue_delayed_work(hsotg->wq_gadget, &hsotg->dw_enumtimeout,
+ 						   msecs_to_jiffies(2000));
++
++			if (hsotg->rpm_suspended) {
++				dev_dbg(hsotg->dev, "enumeration raced with dwc2_port_suspend()\n");
++				hsotg->rpm_suspended = false;
++				pm_runtime_get(hsotg->dev);
++			}
++
+ 			return;
+ 		}
+ 		if (dsts & DSTS_SUSPSTS) {
+-			dwc2_gadget_enter_lp(hsotg);
++			if (!hsotg->rpm_suspended) {
++				hsotg->rpm_suspended = true;
++				pm_runtime_put(hsotg->dev);
++			} else {
++				pm_request_idle(hsotg->dev);
++			}
+ 
+ 			/*
+ 			 * Change to L2 (suspend) state before releasing
+diff --git a/drivers/usb/dwc2/debugfs.c b/drivers/usb/dwc2/debugfs.c
+index 3116ac72747f..61dad3c47121 100644
+--- a/drivers/usb/dwc2/debugfs.c
++++ b/drivers/usb/dwc2/debugfs.c
+@@ -126,7 +126,11 @@ static const struct file_operations testmode_fops = {
+ static int state_show(struct seq_file *seq, void *v)
+ {
+ 	struct dwc2_hsotg *hsotg = seq->private;
+-	int idx;
++	int idx, ret;
++
++	ret = pm_runtime_resume_and_get(hsotg->ddev);
++	if (ret)
++		return ret;
+ 
+ 	seq_printf(seq, "DCFG=0x%08x, DCTL=0x%08x, DSTS=0x%08x\n",
+ 		   dwc2_readl(hsotg, DCFG),
+@@ -168,6 +172,8 @@ static int state_show(struct seq_file *seq, void *v)
+ 		seq_puts(seq, "\n");
+ 	}
+ 
++	pm_runtime_put(hsotg->ddev);
++
+ 	return 0;
+ }
+ DEFINE_SHOW_ATTRIBUTE(state);
+@@ -185,7 +191,11 @@ static int fifo_show(struct seq_file *seq, void *v)
+ 	struct dwc2_hsotg *hsotg = seq->private;
+ 	int fifo_count = dwc2_hsotg_tx_fifo_count(hsotg);
+ 	u32 val;
+-	int idx;
++	int idx, ret;
++
++	ret = pm_runtime_resume_and_get(hsotg->ddev);
++	if (ret)
++		return ret;
+ 
+ 	seq_puts(seq, "Non-periodic FIFOs:\n");
+ 	seq_printf(seq, "RXFIFO: Size %d\n", dwc2_readl(hsotg, GRXFSIZ));
+@@ -205,6 +215,8 @@ static int fifo_show(struct seq_file *seq, void *v)
+ 			   val & FIFOSIZE_STARTADDR_MASK);
+ 	}
+ 
++	pm_runtime_put(hsotg->ddev);
++
+ 	return 0;
+ }
+ DEFINE_SHOW_ATTRIBUTE(fifo);
+@@ -230,6 +242,11 @@ static int ep_show(struct seq_file *seq, void *v)
+ 	int index = ep->index;
+ 	int show_limit = 15;
+ 	unsigned long flags;
++	int ret;
++
++	ret = pm_runtime_resume_and_get(hsotg->ddev);
++	if (ret)
++		return ret;
+ 
+ 	seq_printf(seq, "Endpoint index %d, named %s,  dir %s:\n",
+ 		   ep->index, ep->ep.name, decode_direction(ep->dir_in));
+@@ -252,6 +269,8 @@ static int ep_show(struct seq_file *seq, void *v)
+ 		   dwc2_readl(hsotg, DIEPTSIZ(index)),
+ 		   dwc2_readl(hsotg, DOEPTSIZ(index)));
+ 
++	pm_runtime_put(hsotg->ddev);
++
+ 	seq_puts(seq, "\n");
+ 	seq_printf(seq, "mps %d\n", ep->ep.maxpacket);
+ 	seq_printf(seq, "total_data=%ld\n", ep->total_data);
+@@ -772,11 +791,129 @@ static int dr_mode_show(struct seq_file *seq, void *v)
+ }
+ DEFINE_SHOW_ATTRIBUTE(dr_mode);
+ 
++static int dwc2_debugfs_runtime_checks(struct dwc2_hsotg *hsotg)
++{
++	/* RPM suspend has been requested to put the core into low power */
++	if (hsotg->rpm_suspended)
++		return -EBUSY;
++
++	/* Connected device isn't suspended (resumed by bus?) */
++	if (dwc2_is_device_mode(hsotg)) {
++		if (dwc2_is_device_connected(hsotg) && !(dwc2_readl(hsotg, DSTS) & DSTS_SUSPSTS))
++			return -EBUSY;
++	}
++
++	return 0;
++}
++
++static int dwc2_debugfs_runtime_suspend(struct device *dev)
++{
++	struct dwc2_hsotg *hsotg = dev_get_drvdata(dev);
++	unsigned long flags;
++
++	dev_dbg(hsotg->dev, "%s lx_state %d\n", __func__, hsotg->lx_state);
++
++	spin_lock_irqsave(&hsotg->lock, flags);
++	if (!dwc2_debugfs_runtime_checks(hsotg)) {
++		/* Balance the pm_runtime_get() call from the Resume ISR */
++		pm_runtime_put(hsotg->dev);
++		hsotg->rpm_suspended = true;
++
++		/*
++		 * gadget has been resumed from suspended state, due to resume ISR
++		 * put it back to suspend state, as there won't be a suspend IRQ here.
++		 */
++		if (hsotg->suspended_from == USB_STATE_CONFIGURED) {
++			usb_gadget_set_state(&hsotg->gadget, USB_STATE_SUSPENDED);
++			call_gadget(hsotg, suspend);
++		}
++	}
++	spin_unlock_irqrestore(&hsotg->lock, flags);
++
++	return 0;
++}
++
++static int dwc2_debugfs_runtime_resume(struct device *dev)
++{
++	struct dwc2_hsotg *hsotg = dev_get_drvdata(dev);
++	unsigned long flags;
++	int ret = 0;
++
++	spin_lock_irqsave(&hsotg->lock, flags);
++	dev_dbg(hsotg->dev, "%s lx_state %d\n", __func__, hsotg->lx_state);
++
++	/* Exiting power saving mode will raise a resume IRQ */
++	if (hsotg->in_ppd) {
++		ret = dwc2_exit_partial_power_down(hsotg, 0, true);
++		if (ret)
++			dev_err(hsotg->dev, "exit power_down failed %d\n", ret);
++	}
++
++	if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
++	    hsotg->bus_suspended && !hsotg->params.no_clock_gating) {
++		if (dwc2_is_device_mode(hsotg)) {
++			dwc2_gadget_exit_clock_gating(hsotg, 0);
++		} else {
++			spin_unlock_irqrestore(&hsotg->lock, flags);
++			dwc2_host_exit_clock_gating(hsotg, 0);
++			spin_lock_irqsave(&hsotg->lock, flags);
++		}
++	}
++
++	spin_unlock_irqrestore(&hsotg->lock, flags);
++
++	return ret;
++}
++
++static const struct dev_pm_ops dwc2_debugfs_pm_ops = {
++	RUNTIME_PM_OPS(dwc2_debugfs_runtime_suspend, dwc2_debugfs_runtime_resume, NULL)
++};
++
++static void dwc2_debugfs_ddev_release(struct device *dev)
++{
++	struct dwc2_hsotg *hsotg = container_of(&dev, struct dwc2_hsotg, ddev);
++
++	kfree(hsotg->ddev);
++	hsotg->ddev = NULL;
++}
++
++static const struct device_type dwc2_debugfs_type = {
++	.name =		"dwc2_debugfs",
++	.pm =		&dwc2_debugfs_pm_ops,
++};
++
+ int dwc2_debugfs_init(struct dwc2_hsotg *hsotg)
+ {
+ 	int			ret;
+ 	struct dentry		*root;
+ 
++	hsotg->ddev = kzalloc(sizeof(*hsotg->ddev), GFP_KERNEL);
++	if (!hsotg->ddev)
++		return -ENOMEM;
++
++	hsotg->ddev->parent = hsotg->dev;
++	hsotg->ddev->type = &dwc2_debugfs_type;
++	hsotg->ddev->release = dwc2_debugfs_ddev_release;
++	ret = dev_set_name(hsotg->ddev, "%s-debugfs", dev_name(hsotg->dev));
++	if (ret)
++		return dev_err_probe(hsotg->dev, ret, "failed to set debugfs dev name\n");
++
++	/*
++	 * separate device to manage power saving modes (by using PM runtime) independently of the
++	 * bus active/suspended sates.
++	 */
++	ret = device_register(hsotg->ddev);
++	if (ret) {
++		/* Free resources in dwc2_debugfs_release */
++		put_device(hsotg->ddev);
++		return dev_err_probe(hsotg->dev, ret, "failed to register debugfs dev\n");
++	}
++
++	dev_set_drvdata(hsotg->ddev, hsotg);
++	ret = devm_pm_runtime_enable(hsotg->ddev);
++	if (ret)
++		return dev_err_probe(hsotg->ddev, ret, "Failed to enable pm runtime\n");
++
+ 	root = debugfs_create_dir(dev_name(hsotg->dev), usb_debug_root);
+ 	hsotg->debug_root = root;
+ 
+@@ -797,12 +934,15 @@ int dwc2_debugfs_init(struct dwc2_hsotg *hsotg)
+ 	hsotg->regset->regs = dwc2_regs;
+ 	hsotg->regset->nregs = ARRAY_SIZE(dwc2_regs);
+ 	hsotg->regset->base = hsotg->regs;
++	hsotg->regset->dev = hsotg->ddev; /* Manage runtime PM for regdump */
+ 
+ 	debugfs_create_regset32("regdump", 0444, root, hsotg->regset);
+ 
+ 	return 0;
+ err:
+ 	debugfs_remove_recursive(hsotg->debug_root);
++	device_unregister(hsotg->ddev);
++
+ 	return ret;
+ }
+ 
+@@ -810,4 +950,7 @@ void dwc2_debugfs_exit(struct dwc2_hsotg *hsotg)
+ {
+ 	debugfs_remove_recursive(hsotg->debug_root);
+ 	hsotg->debug_root = NULL;
++	/* dwc2_debugfs_init() result may be ignored, so check if ddev has been registered */
++	if (hsotg->ddev)
++		device_unregister(hsotg->ddev);
+ }
+diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
+index 16ba6bc7fb64..73f34a2ae45b 100644
+--- a/drivers/usb/dwc2/drd.c
++++ b/drivers/usb/dwc2/drd.c
+@@ -210,6 +210,9 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+ 		goto skip;
+ 	}
+ 
++	/* prevent runtime suspend while changing role */
++	pm_runtime_get(hsotg->dev);
++
+ 	if ((IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) ||
+ 	     IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)) &&
+ 	     dwc2_is_device_mode(hsotg) &&
+@@ -265,6 +268,8 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+ 			dwc2_hsotg_core_disconnect(hsotg);
+ 	}
+ 
++	pm_runtime_put(hsotg->dev);
++
+ skip:
+ 	if (!hsotg->ll_hw_enabled && hsotg->clk)
+ 		clk_disable_unprepare(hsotg->clk);
+@@ -273,6 +278,19 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+ 		role == USB_ROLE_NONE ? "No" :
+ 		role == USB_ROLE_HOST ? "A" : "B");
+ 
++	if (role == USB_ROLE_NONE && !hsotg->rpm_suspended) {
++		/* Enforce dwc2_conn_id_status_change has completed */
++		if (hsotg->wq_otg)
++			flush_workqueue(hsotg->wq_otg);
++		/*
++		 * With none role, the controller can be put in low power mode,
++		 * in case of a new event, e.g. usb-role-switch, role_sw_set
++		 * will be called, to resume.
++		 */
++		hsotg->rpm_suspended = true;
++		pm_runtime_put_sync(hsotg->dev);
++	}
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 86badd051b6b..cb99b81f950f 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -3254,6 +3254,23 @@ static void dwc2_hsotg_epint(struct dwc2_hsotg *hsotg, unsigned int idx,
+ 	}
+ }
+ 
++static void dwc2_gadget_exit_lp(struct dwc2_hsotg *hsotg)
++{
++	if (hsotg->lx_state != DWC2_L2)
++		return;
++
++	switch (hsotg->params.power_down) {
++	case DWC2_POWER_DOWN_PARAM_PARTIAL:
++		if (dwc2_exit_partial_power_down(hsotg, 0, true))
++			dev_err(hsotg->dev, "exit partial_power_down failed\n");
++		return;
++
++	case DWC2_POWER_DOWN_PARAM_NONE:
++		if (!hsotg->params.no_clock_gating)
++			dwc2_gadget_exit_clock_gating(hsotg, 0);
++	}
++}
++
+ static void dwc2_gadget_enum_timeout(struct work_struct *work)
+ {
+ 	struct dwc2_hsotg *hsotg = container_of(work, struct dwc2_hsotg, dw_enumtimeout.work);
+@@ -3262,9 +3279,12 @@ static void dwc2_gadget_enum_timeout(struct work_struct *work)
+ 	dev_dbg(hsotg->dev, "%s enumeration timeout\n",  __func__);
+ 
+ 	spin_lock_irqsave(&hsotg->lock, flags);
+-	dwc2_gadget_enter_lp(hsotg);
+ 	hsotg->suspended_from = hsotg->gadget.state;
+ 	usb_gadget_set_state(&hsotg->gadget, USB_STATE_SUSPENDED);
++	if (!hsotg->rpm_suspended) {
++		pm_runtime_put(hsotg->dev);
++		hsotg->rpm_suspended = true;
++	}
+ 	spin_unlock_irqrestore(&hsotg->lock, flags);
+ }
+ 
+@@ -3696,21 +3716,6 @@ void dwc2_hsotg_core_init_disconnected(struct dwc2_hsotg *hsotg,
+ 
+ void dwc2_hsotg_core_disconnect(struct dwc2_hsotg *hsotg)
+ {
+-	/*
+-	 * If controller is in partial power down state or in clock gating mode, it must
+-	 * exit from that state before being disconnected, and detached.
+-	 */
+-	if (hsotg->lx_state == DWC2_L2) {
+-		/* No need to check the return value as registers are not being restored. */
+-		if (hsotg->in_ppd)
+-			dwc2_exit_partial_power_down(hsotg, 0, false);
+-
+-		if (hsotg->params.power_down ==
+-		    DWC2_POWER_DOWN_PARAM_NONE && hsotg->bus_suspended &&
+-		    !hsotg->params.no_clock_gating)
+-			dwc2_gadget_exit_clock_gating(hsotg, 0);
+-	}
+-
+ 	/* set the soft-disconnect bit */
+ 	dwc2_set_bit(hsotg, DCTL, DCTL_SFTDISCON);
+ }
+@@ -4442,6 +4447,9 @@ static int dwc2_hsotg_ep_disable_lock(struct usb_ep *ep)
+ 	unsigned long flags;
+ 	int ret;
+ 
++	/* Need to exit power saving to disable endpoints. */
++	dwc2_gadget_exit_lp(hsotg);
++
+ 	spin_lock_irqsave(&hsotg->lock, flags);
+ 	ret = dwc2_hsotg_ep_disable(ep);
+ 	spin_unlock_irqrestore(&hsotg->lock, flags);
+@@ -4710,6 +4718,9 @@ static int dwc2_hsotg_udc_start(struct usb_gadget *gadget,
+ 			goto err;
+ 	}
+ 
++	/* Exit low power mode, before starting */
++	dwc2_gadget_exit_lp(hsotg);
++
+ 	if (!IS_ERR_OR_NULL(hsotg->uphy))
+ 		otg_set_peripheral(hsotg->uphy->otg, &hsotg->gadget);
+ 
+@@ -4752,10 +4763,7 @@ static int dwc2_hsotg_udc_stop(struct usb_gadget *gadget)
+ 	device_set_wakeup_capable(&gadget->dev, false);
+ 
+ 	/* Exit clock gating when driver is stopped. */
+-	if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
+-	    hsotg->bus_suspended && !hsotg->params.no_clock_gating) {
+-		dwc2_gadget_exit_clock_gating(hsotg, 0);
+-	}
++	dwc2_gadget_exit_lp(hsotg);
+ 
+ 	/* all endpoints should be shutdown */
+ 	for (ep = 1; ep < hsotg->num_of_eps; ep++) {
+@@ -4777,6 +4785,11 @@ static int dwc2_hsotg_udc_stop(struct usb_gadget *gadget)
+ 	if (!IS_ERR_OR_NULL(hsotg->uphy))
+ 		otg_set_peripheral(hsotg->uphy->otg, NULL);
+ 
++	if (!hsotg->rpm_suspended) {
++		hsotg->rpm_suspended = true;
++		pm_runtime_put_sync(hsotg->dev);
++	}
++
+ 	if (hsotg->dr_mode == USB_DR_MODE_PERIPHERAL)
+ 		dwc2_lowlevel_hw_disable(hsotg);
+ 
+@@ -4830,6 +4843,12 @@ static int dwc2_hsotg_wakeup(struct usb_gadget *gadget)
+ 		return -EINVAL;
+ 	}
+ 
++	if (!pm_runtime_suspended(hsotg->dev)) {
++		spin_unlock_irqrestore(&hsotg->lock, flags);
++		dev_err(hsotg->dev, "PM runtime disabled, or not suspended\n");
++		return -EAGAIN;
++	}
++
+ 	if (hsotg->in_ppd && hsotg->lx_state == DWC2_L2) {
+ 		dwc2_gadget_exit_partial_power_down(hsotg, 1, true);
+ 	} else if (hsotg->params.power_down ==
+@@ -4890,6 +4909,11 @@ static int dwc2_hsotg_pullup(struct usb_gadget *gadget, int is_on)
+ 		return 0;
+ 	}
+ 
++	/* Need to exit low power, before (dis-)connecting */
++	spin_lock_irqsave(&hsotg->lock, flags);
++	dwc2_gadget_exit_lp(hsotg);
++	spin_unlock_irqrestore(&hsotg->lock, flags);
++
+ 	if (hsotg->params.stm32_has_batt_chg_det && is_on) {
+ 		ret = stm32mp2_usb2phy_batt_chg_det(hsotg);
+ 		if (ret)
+@@ -4927,12 +4951,7 @@ static int dwc2_hsotg_vbus_session(struct usb_gadget *gadget, int is_active)
+ 	 * If controller is in partial power down state, it must exit from
+ 	 * that state before being initialized / de-initialized
+ 	 */
+-	if (hsotg->lx_state == DWC2_L2 && hsotg->in_ppd)
+-		/*
+-		 * No need to check the return value as
+-		 * registers are not being restored.
+-		 */
+-		dwc2_exit_partial_power_down(hsotg, 0, false);
++	dwc2_gadget_exit_lp(hsotg);
+ 
+ 	if (is_active) {
+ 		hsotg->op_state = OTG_STATE_B_PERIPHERAL;
+@@ -5198,6 +5217,8 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
+ 	int epnum;
+ 	int ret;
+ 
++	pm_runtime_get(hsotg->dev);
++
+ 	/* Dump fifo information */
+ 	dev_dbg(dev, "NonPeriodic TXFIFO size: %d\n",
+ 		hsotg->params.g_np_tx_fifo_size);
+@@ -5336,7 +5357,7 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
+ 	unsigned long flags;
+ 
+ 	if ((hsotg->remote_wakeup_allowed || device_may_wakeup(&hsotg->gadget.dev)) &&
+-	    (hsotg->bus_suspended || hsotg->in_ppd || hsotg->hibernated)) {
++	    (hsotg->lx_state == DWC2_L2)) {
+ 		/*
+ 		 * The bus has been suspended by the HOST, and the remote
+ 		 * wakeup has been enabled. So don't suspend gadget or it
+@@ -5397,6 +5418,8 @@ int dwc2_hsotg_resume(struct dwc2_hsotg *hsotg)
+ 			 hsotg->driver->driver.name);
+ 
+ 		spin_lock_irqsave(&hsotg->lock, flags);
++		/* Exit clock gating when driver is stopped. */
++		dwc2_gadget_exit_lp(hsotg);
+ 		dwc2_hsotg_core_init_disconnected(hsotg, false);
+ 		if (hsotg->enabled) {
+ 			/* Enable ACG feature in device mode,if supported */
+@@ -5891,6 +5914,16 @@ int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+ 
+ 	dev_dbg(hsotg->dev, "Exiting device partial Power Down started.\n");
+ 
++	if (hsotg->rpm_suspended) {
++		/*
++		 * Rely on rpm_suspended flag, to resume once, as gadget/host
++		 * exit_partial_power_down routines may get called several times,
++		 * with rem_wakeup.
++		 */
++		pm_runtime_get(hsotg->dev);
++		hsotg->rpm_suspended = false;
++	}
++
+ 	pcgcctl = dwc2_readl(hsotg, PCGCTL);
+ 	pcgcctl &= ~PCGCTL_STOPPCLK;
+ 	dwc2_writel(hsotg, pcgcctl, PCGCTL);
+@@ -5983,6 +6016,15 @@ void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
+ 
+ 	dev_dbg(hsotg->dev, "Exiting device clock gating.\n");
+ 
++	if (hsotg->rpm_suspended) {
++		/*
++		 * Rely on rpm_suspended flag, to resume once, as gadget/host exit_clock_gating
++		 * routines may get called several times, with rem_wakeup.
++		 */
++		pm_runtime_get(hsotg->dev);
++		hsotg->rpm_suspended = false;
++	}
++
+ 	/* Clear the Gate hclk. */
+ 	pcgctl = dwc2_readl(hsotg, PCGCTL);
+ 	pcgctl &= ~PCGCTL_GATEHCLK;
+@@ -6017,12 +6059,15 @@ void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
+  */
+ int dwc2_gadget_enter_lp(struct dwc2_hsotg *hsotg)
+ {
++	unsigned long flags;
+ 	int ret;
+ 
++	spin_lock_irqsave(&hsotg->lock, flags);
+ 	switch (hsotg->params.power_down) {
+ 	case DWC2_POWER_DOWN_PARAM_HIBERNATION:
+ 		ret = dwc2_gadget_enter_hibernation(hsotg);
+ 		if (ret) {
++			spin_unlock_irqrestore(&hsotg->lock, flags);
+ 			dev_err(hsotg->dev, "enter hibernation failed %d\n", ret);
+ 			return ret;
+ 		}
+@@ -6031,6 +6076,7 @@ int dwc2_gadget_enter_lp(struct dwc2_hsotg *hsotg)
+ 	case DWC2_POWER_DOWN_PARAM_PARTIAL:
+ 		ret = dwc2_gadget_enter_partial_power_down(hsotg);
+ 		if (ret) {
++			spin_unlock_irqrestore(&hsotg->lock, flags);
+ 			dev_err(hsotg->dev, "enter partial_power_down failed %d\n", ret);
+ 			return ret;
+ 		}
+@@ -6044,6 +6090,7 @@ int dwc2_gadget_enter_lp(struct dwc2_hsotg *hsotg)
+ 		if (!hsotg->params.no_clock_gating)
+ 			dwc2_gadget_enter_clock_gating(hsotg);
+ 	}
++	spin_unlock_irqrestore(&hsotg->lock, flags);
+ 
+ 	/* Core hasn't been put into one of the power saving modes: simply return */
+ 	if (!(hsotg->bus_suspended || hsotg->in_ppd || hsotg->hibernated))
+diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+index f427f2330732..27c2aafc2a26 100644
+--- a/drivers/usb/dwc2/hcd.c
++++ b/drivers/usb/dwc2/hcd.c
+@@ -3316,9 +3316,10 @@ int dwc2_port_suspend(struct dwc2_hsotg *hsotg, u16 windex)
+ 		hsotg->op_state = OTG_STATE_A_SUSPEND;
+ 	}
+ 
+-	spin_unlock_irqrestore(&hsotg->lock, flags);
+-	dwc2_host_enter_lp(hsotg);
+-	spin_lock_irqsave(&hsotg->lock, flags);
++	if (!hsotg->rpm_suspended) {
++		hsotg->rpm_suspended = true;
++		ret = pm_runtime_put(hsotg->dev);
++	}
+ 
+ 	/* For HNP the bus must be suspended for at least 200ms */
+ 	if (dwc2_host_is_b_hnp_enabled(hsotg)) {
+@@ -4355,13 +4356,16 @@ static int _dwc2_hcd_suspend(struct usb_hcd *hcd)
+ 	if (!(dwc2_read_hprt0(hsotg) & HPRT0_CONNSTS))
+ 		goto skip_power_saving;
+ 
+-	spin_unlock_irqrestore(&hsotg->lock, flags);
+-	dwc2_host_enter_lp(hsotg);
+-	spin_lock_irqsave(&hsotg->lock, flags);
++	if (!hsotg->rpm_suspended) {
++		hsotg->rpm_suspended = true;
++		spin_unlock_irqrestore(&hsotg->lock, flags);
++		pm_runtime_put_sync(hsotg->dev);
++		spin_lock_irqsave(&hsotg->lock, flags);
+ 
+-	/* After entering suspend, hardware is not accessible */
+-	if (hsotg->lx_state == DWC2_L2)
+-		clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
++		/* After entering suspend, hardware is not accessible */
++		if (hsotg->lx_state == DWC2_L2)
++			clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
++	}
+ 
+ skip_power_saving:
+ 	hsotg->lx_state = DWC2_L2;
+@@ -5819,6 +5823,15 @@ int dwc2_host_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+ 
+ 	dev_dbg(hsotg->dev, "Exiting host partial power down started.\n");
+ 
++	/*
++	 * Rely on rpm_suspended, to resume once, as gadget/host partial_power_down
++	 * routines may get called several times, with rem_wakeup.
++	 */
++	if (hsotg->rpm_suspended) {
++		pm_runtime_get(hsotg->dev);
++		hsotg->rpm_suspended = false;
++	}
++
+ 	pcgcctl = dwc2_readl(hsotg, PCGCTL);
+ 	pcgcctl &= ~PCGCTL_STOPPCLK;
+ 	dwc2_writel(hsotg, pcgcctl, PCGCTL);
+@@ -5935,6 +5948,15 @@ void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg, int flags)
+ 
+ 	dev_dbg(hsotg->dev, "Exiting host clock gating.\n");
+ 
++	if (hsotg->rpm_suspended) {
++		/*
++		 * Rely on rpm_suspended, to resume once, as gadget/host exit_clock_gating
++		 * routines may get called several times, with rem_wakeup.
++		 */
++		pm_runtime_get(hsotg->dev);
++		hsotg->rpm_suspended = false;
++	}
++
+ 	/* Clear the Gate hclk. */
+ 	pcgctl = dwc2_readl(hsotg, PCGCTL);
+ 	pcgctl &= ~PCGCTL_GATEHCLK;
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index 8b8481ba4a27..da5b428f4c84 100644
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -775,6 +775,20 @@ static int dwc2_driver_probe(struct platform_device *dev)
+ 	if (retval)
+ 		return retval;
+ 
++	retval = pm_runtime_set_active(&dev->dev);
++	if (retval)
++		return dev_err_probe(&dev->dev, retval, "Failed to activate pm runtime\n");
++
++	retval = devm_pm_runtime_enable(&dev->dev);
++	if (retval)
++		return dev_err_probe(&dev->dev, retval, "Failed to enable pm runtime\n");
++
++	/*
++	 * Disable runtime PM until the device is fully initialized.
++	 * This prevents the device from being suspended prematurely.
++	 */
++	pm_runtime_forbid(&dev->dev);
++
+ 	spin_lock_init(&hsotg->lock);
+ 
+ 	hsotg->vbus_supply = devm_regulator_get_optional(hsotg->dev, "vbus");
+@@ -928,6 +942,9 @@ static int dwc2_driver_probe(struct platform_device *dev)
+ 	platform_set_drvdata(dev, hsotg);
+ 	hsotg->hibernated = 0;
+ 
++	/* Now that the hcd is fully initialized, allow runtime PM */
++	pm_runtime_allow(&dev->dev);
++
+ 	dwc2_debugfs_init(hsotg);
+ 
+ 	/* Gadget code manages lowlevel hw on its own */
+@@ -1006,6 +1023,8 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+ 
+ 	dwc2_drd_suspend(dwc2);
+ 
++	pm_runtime_force_suspend(dwc2->dev);
++
+ 	dwc2->phy_off_for_suspend =
+ 		dwc2_gadget_can_poweroff_phy(dwc2) || dwc2_host_can_poweroff_phy(dwc2);
+ 
+@@ -1035,6 +1054,17 @@ static int __maybe_unused dwc2_resume(struct device *dev)
+ 
+ 	dwc2->phy_off_for_suspend = false;
+ 
++	pm_runtime_force_resume(dev);
++	if (!dwc2->rpm_suspended) {
++		/*
++		 * Inform the PM runtime that the device is active, due to
++		 * Resume or Remote Wakeup interrupt.
++		 */
++		pm_runtime_disable(dev);
++		pm_runtime_set_active(dev);
++		pm_runtime_enable(dev);
++	}
++
+ 	if (!dwc2->role_sw) {
+ 		/* Need to restore FORCEDEVMODE/FORCEHOSTMODE */
+ 		dwc2_force_dr_mode(dwc2);
+@@ -1064,8 +1094,65 @@ static int __maybe_unused dwc2_resume(struct device *dev)
+ 	return ret;
+ }
+ 
++/*
++ * Only power saving mode entry is delegated to PM runtime suspend routine.
++ * This way, power saving mode is entered, only after all children have
++ * supended themselves.
++ *
++ * All the resume activities, remains in each child driver part, e.g.:
++ * - gadget resume or remote wakeup IRQ, calls directly the dwc2_gadget_exit_xxx
++ * - hcd port or bus resume routines, calls directly the dwc2_host_exit_xxx
++ * - debugfs runtime resume routine, calls directly...
++ *
++ * Moving resume activities into a runtime resume routine would have a side effect
++ * in gadget mode. A resume IRQ would be triggered, upon system-wide suspend entry:
++ * the (unused) root hub resumes to reconfigure the port without wakeup capability
++ * (as there's no device plugged), without a real need to update dwc2 configuration.
++ * But, this would abort a sequence with a suspended gadget capable of doing remote
++ * wakeup, e.g. bring it out of low power.
++ */
++static int dwc2_runtime_suspend(struct device *dev)
++{
++	struct dwc2_hsotg *hsotg = dev_get_drvdata(dev);
++	int ret;
++
++	dev_dbg(hsotg->dev, "%s lx_state %d\n", __func__, hsotg->lx_state);
++
++	if (dwc2_is_device_mode(hsotg))
++		ret = dwc2_gadget_enter_lp(hsotg);
++	else
++		ret = dwc2_host_enter_lp(hsotg);
++
++	if (ret)
++		return ret;
++
++	/* If the core hasn't been put into power saving modes, keep PM domain active */
++	if (!(hsotg->bus_suspended || hsotg->in_ppd || hsotg->hibernated))
++		return -EBUSY;
++
++	return 0;
++}
++
++static int dwc2_runtime_idle(struct device *dev)
++{
++	struct dwc2_hsotg *hsotg = dev_get_drvdata(dev);
++
++	/* RPM suspend not requested by the driver */
++	if (!hsotg->rpm_suspended)
++		return -EBUSY;
++
++	/* Connected device isn't suspended */
++	if (dwc2_is_device_mode(hsotg)) {
++		if (dwc2_is_device_connected(hsotg) && !(dwc2_readl(hsotg, DSTS) & DSTS_SUSPSTS))
++			return -EBUSY;
++	}
++
++	return 0;
++}
++
+ static const struct dev_pm_ops dwc2_dev_pm_ops = {
+ 	SET_SYSTEM_SLEEP_PM_OPS(dwc2_suspend, dwc2_resume)
++	RUNTIME_PM_OPS(dwc2_runtime_suspend, NULL, dwc2_runtime_idle)
+ };
+ 
+ static struct platform_driver dwc2_platform_driver = {
+-- 
+2.53.0
+

@@ -1,0 +1,38 @@
+From 44bd9f0811cc6862f6d4a45695290e1a4fe0f8ff Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Mon, 1 Jun 2026 09:48:00 +0200
+Subject: [PATCH] ARM: dts: stm32: remove recovery property in emtrion
+ emSBC-Argon
+
+Remove unsupported "recovery" property from m4_rproc node in
+stm32mp157c-emstamp-argon.dtsi device tree.
+
+Fixes:
+m4@10000000 (st,stm32mp1-m4): 'recovery' do not match
+any of the regexes: '^pinctrl-[0-9]+$'
+
+Change-Id: I39e849fdd62bf2481a2d402869be44fabace5242
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/571992
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ arch/arm/boot/dts/st/stm32mp157c-emstamp-argon.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-emstamp-argon.dtsi b/arch/arm/boot/dts/st/stm32mp157c-emstamp-argon.dtsi
+index a3c61ce91aa9..f44143ea9c18 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-emstamp-argon.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp157c-emstamp-argon.dtsi
+@@ -368,7 +368,6 @@ &m4_rproc {
+ 	interrupt-parent = <&exti>;
+ 	interrupts = <68 1>;
+ 	interrupt-names = "wdg";
+-	recovery;
+ 	status = "okay";
+ };
+ 
+-- 
+2.53.0
+

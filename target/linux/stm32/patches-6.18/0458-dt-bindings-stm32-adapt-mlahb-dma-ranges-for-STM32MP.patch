@@ -1,0 +1,41 @@
+From b71dafb0460efce0c562b0c32f8d40b5edcbe189 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Wed, 27 May 2026 15:25:29 +0200
+Subject: [PATCH] dt-bindings: stm32: adapt mlahb dma-ranges for STM32MP2
+
+Fix dtbs check error:
+'ahb@1 (st,mlahb): dma-ranges: [[0, 0, 0, 4294967292]] is too short'
+
+The schema was forcing 3 dma-ranges entries, while STM32MP2 uses a single
+translation window on ahb@1 and ahb@2.
+
+Fix it by relaxing the dma-ranges cardinality to 1..3 entries:
+- accept the single-region STM32MP2 layout used in stm32mp251.dtsi
+- keep support for the historical 3-region layout (see stm32mp151.dtsi)
+
+Change-Id: I00ee517007d7e6e284ecbdab03068ceffd57f84a
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/572035
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml b/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml
+index 4970b9167d1c..9d7984cf0224 100644
+--- a/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml
++++ b/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml
+@@ -36,6 +36,7 @@ properties:
+       - param 1: device base address (Cortex-M processor address)
+       - param 2: physical base address (local CPU address)
+       - param 3: size of the memory region.
++    minItems: 1
+     maxItems: 3
+ 
+   '#address-cells':
+-- 
+2.53.0
+

@@ -1,0 +1,47 @@
+From a81451d8bbae09ddba377c22a9d3a22d32075d98 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Fri, 17 Jul 2026 15:52:54 +0200
+Subject: [PATCH] dt-bindings: crypto: stm32-cryp: add post-init-providers
+ property
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The STM32MP15 SCMI device trees set post-init-providers on the CRYP
+node to defer clock/reset provider initialization until after the
+device has been configured. This property is currently rejected by
+the schema since additionalProperties is false and the property was
+not declared, e.g.:
+
+  cryp@54001000 (st,stm32mp1-cryp): 'post-init-providers' does not
+  match any of the regexes: '^pinctrl-[0-9]+$'
+
+Declare post-init-providers so dtbs_check no longer flags it.
+
+Change-Id: Ie6294aba5c9be2cdb6d0ad98ab1d6295ba2a10c7
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/589194
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml
+index 27354658d054..57faedeef3c4 100644
+--- a/Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml
++++ b/Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml
+@@ -46,6 +46,8 @@ properties:
+   power-domains:
+     maxItems: 1
+ 
++  post-init-providers: true
++
+   access-controllers:
+     minItems: 1
+     maxItems: 2
+-- 
+2.53.0
+

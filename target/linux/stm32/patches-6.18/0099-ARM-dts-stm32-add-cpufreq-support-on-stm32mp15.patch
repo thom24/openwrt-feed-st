@@ -1,0 +1,240 @@
+From 7c5928f5b926e8a1cb9115c92f4f184fe74c9ab3 Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Tue, 17 Mar 2026 17:10:06 +0100
+Subject: [PATCH] ARM: dts: stm32: add cpufreq support on stm32mp15
+
+This commit adds cpufreq support on stm32mp15 SOC. STM32 cpufreq uses
+operating points V2 bindings (no legacy). Nvmem cells have to be used to
+know the chip version and then which OPPs are available. Note that STM32
+cpufreq driver is mainly based on "cpufreq-dt" driver.
+The 800Mhz opp is allowed until temperature reaches 95 degrees.
+
+Change-Id: Idf4c1c58f8c22a235aaa53e1e664e7f52814ab74
+Signed-off-by: Pascal Paillet <p.paillet@st.com>
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/551275
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp151.dtsi      | 30 +++++++++++++++++++++--
+ arch/arm/boot/dts/st/stm32mp153.dtsi      |  4 ++-
+ arch/arm/boot/dts/st/stm32mp157c-ed1.dts  |  8 ++++++
+ arch/arm/boot/dts/st/stm32mp157d-dk1.dts  |  1 +
+ arch/arm/boot/dts/st/stm32mp157d-ed1.dts  |  3 +++
+ arch/arm/boot/dts/st/stm32mp157f-ed1.dts  |  2 ++
+ arch/arm/boot/dts/st/stm32mp15xd.dtsi     | 28 +++++++++++++++++++++
+ arch/arm/boot/dts/st/stm32mp15xf.dtsi     |  2 ++
+ arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi |  8 ++++++
+ 9 files changed, 83 insertions(+), 3 deletions(-)
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xd.dtsi
+
+diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
+index dd8319a0a3cf..ead2c0f0e69b 100644
+--- a/arch/arm/boot/dts/st/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
+@@ -17,9 +17,34 @@ cpus {
+ 
+ 		cpu0: cpu@0 {
+ 			compatible = "arm,cortex-a7";
+-			clock-frequency = <650000000>;
+ 			device_type = "cpu";
+ 			reg = <0>;
++			clocks = <&rcc CK_MPU>;
++			clock-names = "cpu";
++			operating-points-v2 = <&cpu0_opp_table>;
++			nvmem-cells = <&cpu_speed_grade>;
++			nvmem-cell-names = "speed_grade";
++			#cooling-cells = <2>;
++		};
++	};
++
++	cpu0_opp_table: opp-table-cpu0 {
++		bootph-pre-ram;
++		compatible = "operating-points-v2";
++		opp-shared;
++
++		opp-650000000 {
++			bootph-pre-ram;
++			opp-hz = /bits/ 64 <650000000>;
++			opp-microvolt = <1200000>;
++			opp-supported-hw = <0x3>;
++		};
++
++		opp-800000000 {
++			bootph-pre-ram;
++			opp-hz = /bits/ 64 <800000000>;
++			opp-microvolt = <1350000>;
++			opp-supported-hw = <0x2>;
+ 		};
+ 	};
+ 
+@@ -405,7 +430,8 @@ bsec: efuse@5c005000 {
+ 			reg = <0x5c005000 0x400>;
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+-			part_number_otp: part-number-otp@4 {
++
++			cpu_speed_grade: cpu-speed-grade@4 {
+ 				reg = <0x4 0x1>;
+ 			};
+ 			vrefint: vrefin-cal@52 {
+diff --git a/arch/arm/boot/dts/st/stm32mp153.dtsi b/arch/arm/boot/dts/st/stm32mp153.dtsi
+index 92794b942ab2..483b8ac90e98 100644
+--- a/arch/arm/boot/dts/st/stm32mp153.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp153.dtsi
+@@ -10,9 +10,11 @@ / {
+ 	cpus {
+ 		cpu1: cpu@1 {
+ 			compatible = "arm,cortex-a7";
+-			clock-frequency = <650000000>;
+ 			device_type = "cpu";
+ 			reg = <1>;
++			clocks = <&rcc CK_MPU>;
++			clock-names = "cpu";
++			operating-points-v2 = <&cpu0_opp_table>;
+ 		};
+ 	};
+ 
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1.dts b/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
+index 51812d85139f..e05a7835969d 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
+@@ -156,6 +156,14 @@ &clk_lsi {
+ 	bootph-all;
+ };
+ 
++&cpu0 {
++	cpu-supply = <&vddcore>;
++};
++
++&cpu1 {
++	cpu-supply = <&vddcore>;
++};
++
+ &crc1 {
+ 	status = "okay";
+ };
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-dk1.dts b/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
+index 0e28fc4b7996..f4b540997f63 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
+@@ -7,6 +7,7 @@
+ /dts-v1/;
+ 
+ #include "stm32mp157.dtsi"
++#include "stm32mp15xd.dtsi"
+ #include "stm32mp15-pinctrl.dtsi"
+ #include "stm32mp15xxac-pinctrl.dtsi"
+ #include "stm32mp15xx-dkx.dtsi"
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
+index 3e9e1df74cea..34a5dc1e1af2 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
+@@ -6,6 +6,7 @@
+ /dts-v1/;
+ 
+ #include "stm32mp157.dtsi"
++#include "stm32mp15xd.dtsi"
+ #include "stm32mp15-pinctrl.dtsi"
+ #include "stm32mp15xxaa-pinctrl.dtsi"
+ #include "stm32mp15-scmi.dtsi"
+@@ -143,10 +144,12 @@ &bsec {
+ 
+ &cpu0 {
+ 	clocks = <&scmi_clk CK_SCMI_MPU>;
++	cpu-supply = <&vddcore>;
+ };
+ 
+ &cpu1 {
+ 	clocks = <&scmi_clk CK_SCMI_MPU>;
++	cpu-supply = <&vddcore>;
+ };
+ 
+ &crc1 {
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
+index c65978a7f150..8a44c0123cc9 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
+@@ -144,10 +144,12 @@ &bsec {
+ 
+ &cpu0 {
+ 	clocks = <&scmi_clk CK_SCMI_MPU>;
++	cpu-supply = <&vddcore>;
+ };
+ 
+ &cpu1 {
+ 	clocks = <&scmi_clk CK_SCMI_MPU>;
++	cpu-supply = <&vddcore>;
+ };
+ 
+ &crc1 {
+diff --git a/arch/arm/boot/dts/st/stm32mp15xd.dtsi b/arch/arm/boot/dts/st/stm32mp15xd.dtsi
+new file mode 100644
+index 000000000000..8ab122884e39
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xd.dtsi
+@@ -0,0 +1,28 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
++/*
++ * Copyright (C) STMicroelectronics 2026 - All Rights Reserved
++ * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
++ */
++
++&cpu_thermal {
++	trips {
++		cpu-crit {
++			temperature = <100000>;
++			hysteresis = <1000>;
++			type = "critical";
++		};
++
++		cpu_alert: cpu-alert {
++			temperature = <90000>;
++			hysteresis = <10000>;
++			type = "passive";
++		};
++	};
++
++	cooling-maps {
++		map0 {
++			trip = <&cpu_alert>;
++			cooling-device = <&cpu0 1 1>;
++		};
++	};
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xf.dtsi b/arch/arm/boot/dts/st/stm32mp15xf.dtsi
+index ffa55d64bea3..24b2a0e7f272 100644
+--- a/arch/arm/boot/dts/st/stm32mp15xf.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp15xf.dtsi
+@@ -4,6 +4,8 @@
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+  */
+ 
++#include "stm32mp15xd.dtsi"
++
+ &etzpc {
+ 	cryp1: cryp@54001000 {
+ 		compatible = "st,stm32mp1-cryp";
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
+index bb960279a2a7..5c1c365e28fd 100644
+--- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
+@@ -160,6 +160,14 @@ &clk_lsi {
+ 	bootph-all;
+ };
+ 
++&cpu0 {
++	cpu-supply = <&vddcore>;
++};
++
++&cpu1 {
++	cpu-supply = <&vddcore>;
++};
++
+ &crc1 {
+ 	status = "okay";
+ };
+-- 
+2.53.0
+

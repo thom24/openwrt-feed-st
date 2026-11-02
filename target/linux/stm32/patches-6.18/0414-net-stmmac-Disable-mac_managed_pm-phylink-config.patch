@@ -1,0 +1,44 @@
+From aef4060e8c96042595065da16efa1ac0139abc35 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Fri, 29 May 2026 13:17:12 +0200
+Subject: [PATCH] net: stmmac: Disable mac_managed_pm phylink config
+
+Due to regression in suspend/resume for stm32mp13 DK
+(sometime no IP address after resume)
+Put in false mac_managed_pm to indicate that MAC driver
+do not manages PHY PM.
+
+Fixes: f151c147b3af ("net: stmmac: Enable mac_managed_pm phylink config")
+
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Change-Id: I700aac71f85335a722b5a6a77fdbc9359a8f31ff
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/312665
+Reviewed-by: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/396338
+Domain-Review: Christophe ROULLIER <christophe.roullier@foss.st.com>
+Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+Tested-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/572631
+---
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index cf8d0c21388f..a8b3f91be9ce 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -1203,7 +1203,7 @@ static int stmmac_phy_setup(struct stmmac_priv *priv)
+ 
+ 	config->dev = &priv->dev->dev;
+ 	config->type = PHYLINK_NETDEV;
+-	config->mac_managed_pm = true;
++	config->mac_managed_pm = false;
+ 
+ 	/* Stmmac always requires an RX clock for hardware initialization */
+ 	config->mac_requires_rxc = true;
+-- 
+2.53.0
+

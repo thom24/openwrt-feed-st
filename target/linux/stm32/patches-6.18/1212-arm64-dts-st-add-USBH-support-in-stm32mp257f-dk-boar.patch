@@ -1,0 +1,52 @@
+From 1afdc54cfeb447fd704862dea3cd768d24a35f2b Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Fri, 17 Nov 2023 11:18:06 +0100
+Subject: [PATCH] arm64: dts: st: add USBH support in stm32mp257f-dk board
+
+Add USBH support in stm32mp257f-dk board. There's an on-board High-Speed
+USB Hub. So add it as a child of the USBH EHCI (High Speed controller) DT
+node. The OHCI can be disabled, as no low or full speed traffic is
+expected.
+
+Change-Id: Ic679fd409a7f73a6743058771ba02144704b3a68
+Signed-off-by: Olivier BIDEAU <olivier.bideau@st.com>
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Signed-off-by: Ram Dayal <ram.dayal@st.com>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/559890
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index 8fd351006975..7d3dbfa5b204 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -966,3 +966,22 @@ &usb2_phy2 {
+ 	vdd33-supply = <&scmi_vdd3v3_usb>;
+ 	status = "okay";
+ };
++
++&usbh {
++	status = "okay";
++
++	usbh_ehci: usb@482f0000 {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		/* onboard HUB */
++		hub@1 {
++			compatible = "usb424,2422";
++			reg = <1>;
++			vdd-supply = <&scmi_v3v3>;
++		};
++	};
++
++	usbh_ohci: usb@482e0000 {
++		status = "disabled";
++	};
++};
+-- 
+2.53.0
+

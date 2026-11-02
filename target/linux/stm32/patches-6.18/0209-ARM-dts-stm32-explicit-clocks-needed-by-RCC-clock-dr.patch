@@ -1,0 +1,47 @@
+From f0340e156343c2ea46ef441576c5700192bc53ae Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Date: Thu, 26 Jan 2023 17:20:33 +0100
+Subject: [PATCH] ARM: dts: stm32: explicit clocks needed by RCC clock driver
+ into stm32mp151.dtsi
+
+Define in the RCC clock provider node which root clocks the driver
+depends on. These are root oscillators, which may be present or
+not, upon FDT content.
+
+For "st,stm32mp1-rcc-secure", these clocks are provided by
+secure world with SCMI server. For "st,stm32mp1-rcc" these clock should
+provided by fixed clock.
+
+This "clocks" property is optional but is required for bootloaders
+drivers (U-Boot) to manage booth compatible "st,stm32mp1-rcc-secure"
+and "st,stm32mp1-rcc" with the same driver.
+
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Change-Id: I3a721ee818246f35adc7091a92e84c46091771d0
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/536252
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
+Tested-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp151.dtsi | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
+index 011f81c633e0..c9896ef73e35 100644
+--- a/arch/arm/boot/dts/st/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
+@@ -173,6 +173,10 @@ rcc: rcc@50000000 {
+ 			reg = <0x50000000 0x1000>;
+ 			#clock-cells = <1>;
+ 			#reset-cells = <1>;
++
++			clock-names = "hse", "hsi", "csi", "lse", "lsi";
++			clocks = <&clk_hse>, <&clk_hsi>, <&clk_csi>,
++				 <&clk_lse>, <&clk_lsi>;
+ 		};
+ 
+ 		pwr_regulators: pwr@50001000 {
+-- 
+2.53.0
+

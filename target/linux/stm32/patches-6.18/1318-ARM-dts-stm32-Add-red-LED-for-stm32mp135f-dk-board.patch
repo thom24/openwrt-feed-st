@@ -1,0 +1,41 @@
+From b779bcea49390aa11e43e174466105dcfe234114 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Thu, 13 Nov 2025 16:14:02 +0100
+Subject: [PATCH] ARM: dts: stm32: Add red LED for stm32mp135f-dk board
+
+Add LED red node for stm32mp135f-dk.
+This LED is used as status LED in U-Boot.
+
+Change-Id: Ied8ce96fa7a44cbcafed668ead588a057ab1490d
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Link: https://lore.kernel.org/r/20251113-upstream_update_led_nodes-v2-11-45090db9e2e5@foss.st.com
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+(cherry picked from commit 31f0d9a486a8c7361692fd5e9d77e187720a5ece)
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/583452
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dk.dts | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+index 10c5f7615184..27a2af89f672 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+@@ -98,6 +98,12 @@ led-blue {
+ 			linux,default-trigger = "heartbeat";
+ 			default-state = "off";
+ 		};
++
++		led-red {
++			function = LED_FUNCTION_STATUS;
++			color = <LED_COLOR_ID_RED>;
++			gpios = <&gpioa 13 GPIO_ACTIVE_LOW>;
++		};
+ 	};
+ 
+ 	panel_backlight: panel-backlight {
+-- 
+2.53.0
+

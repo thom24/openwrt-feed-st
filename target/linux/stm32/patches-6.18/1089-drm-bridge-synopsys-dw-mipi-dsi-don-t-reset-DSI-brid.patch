@@ -1,0 +1,81 @@
+From a960b331be97f9948f7b3a8ec7701591524109ac Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Tue, 17 Mar 2026 10:57:41 +0100
+Subject: [PATCH] drm/bridge: synopsys: dw-mipi-dsi: don't reset DSI bridge
+
+To obtain a continuous display after the probe, do not reset the DSI bridge
+if it is powered on (default-on property not define by bindings).
+
+Change-Id: I6f4859177abaaab477ff2cfccfb51cb41dd0a2b0
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+---
+ drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c | 40 +++++++++++--------
+ 1 file changed, 24 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
+index ef4c8f6e4ef6..cf3aa1f3cb0f 100644
+--- a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
++++ b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
+@@ -1194,6 +1194,7 @@ __dw_mipi_dsi_probe(struct platform_device *pdev,
+ 	struct reset_control *apb_rst;
+ 	struct dw_mipi_dsi *dsi;
+ 	int ret;
++	u32 pwr;
+ 
+ 	dsi = devm_drm_bridge_alloc(dev, struct dw_mipi_dsi, bridge,
+ 				    &dw_mipi_dsi_bridge_funcs);
+@@ -1229,28 +1230,35 @@ __dw_mipi_dsi_probe(struct platform_device *pdev,
+ 	 * Note that the reset was not defined in the initial device tree, so
+ 	 * we have to be prepared for it not being found.
+ 	 */
+-	apb_rst = devm_reset_control_get_optional_exclusive(dev, "apb");
+-	if (IS_ERR(apb_rst)) {
+-		ret = PTR_ERR(apb_rst);
+-
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(dev, "Unable to get reset control: %d\n", ret);
++	pwr = dsi_read(dsi, DSI_PWR_UP);
++	/*
++	 * To obtain a continuous display after the probe,
++	 * do not reset the DSI bridge if it is powered on.
++	 */
++	if (pwr != POWERUP) {
++		apb_rst = devm_reset_control_get_optional_exclusive(dev, "apb");
++		if (IS_ERR(apb_rst)) {
++			ret = PTR_ERR(apb_rst);
+ 
+-		return ERR_PTR(ret);
+-	}
++			if (ret != -EPROBE_DEFER)
++				dev_err(dev, "Unable to get reset control: %d\n", ret);
+ 
+-	if (apb_rst) {
+-		ret = clk_prepare_enable(dsi->pclk);
+-		if (ret) {
+-			dev_err(dev, "%s: Failed to enable pclk\n", __func__);
+ 			return ERR_PTR(ret);
+ 		}
+ 
+-		reset_control_assert(apb_rst);
+-		usleep_range(10, 20);
+-		reset_control_deassert(apb_rst);
++		if (apb_rst) {
++			ret = clk_prepare_enable(dsi->pclk);
++			if (ret) {
++				dev_err(dev, "%s: Failed to enable pclk\n", __func__);
++				return ERR_PTR(ret);
++			}
+ 
+-		clk_disable_unprepare(dsi->pclk);
++			reset_control_assert(apb_rst);
++			usleep_range(10, 20);
++			reset_control_deassert(apb_rst);
++
++			clk_disable_unprepare(dsi->pclk);
++		}
+ 	}
+ 
+ 	dw_mipi_dsi_debugfs_init(dsi);
+-- 
+2.53.0
+

@@ -1,0 +1,63 @@
+From c55d47193d4d65f536493233672eb6df4e823798 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 13 May 2026 17:21:50 +0200
+Subject: [PATCH] arm64: dts: st: add USB3 DWC3-DRD ctrl node for stm32mp23
+
+USB3 DWC3 Dual-Role Controller, supporting both Host mode in
+Low/Full/High-Speed and Device mode in Full/High-Speed.
+Remote-wakeup capable device connected to USB3DR can act as a
+source to wakeup system from low-power state on mp23 platform
+Enable exti-intr connected to utmi_suspend_n and utmi_l1_suspend_n
+output of USB3DR as wakeup-source
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I18840cd5fd2ebb19e72e3363aab3604a55371161
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/568988
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp231.dtsi | 27 ++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+index ebe0d7c20628..feb1642b1d1e 100644
+--- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+@@ -2057,6 +2057,33 @@ usbh_ehci: usb@482f0000 {
+ 					wakeup-source;
+ 				};
+ 			};
++
++			usb3dr: usb@48300000 {
++				compatible = "st,stm32mp25-dwc3";
++				ranges = <0x48300000 0x48300000 0x100000>;
++				access-controllers = <&rifsc 66>;
++				interrupts-extended = <&exti1 44 IRQ_TYPE_EDGE_RISING>;
++				power-domains = <&d1_pd>;
++				wakeup-source;
++				#address-cells = <1>;
++				#size-cells = <1>;
++				st,syscfg = <&syscfg 0x4800>;
++				status = "disabled";
++
++				dwc3: usb@48300000 {
++					compatible = "snps,dwc3";
++					reg = <0x48300000 0x100000>;
++					interrupts = <GIC_SPI 228 IRQ_TYPE_LEVEL_HIGH>;
++					clock-names = "ref", "bus_early", "suspend";
++					clocks = <&rcc CK_KER_USB2PHY2>, <&rcc CK_BUS_USB3DR>,
++						 <&rcc CK_KER_USB2PHY2>;
++					resets = <&rcc USB3DR_R>;
++					phys = <&usb2_phy2>;
++					phy-names = "usb2-phy";
++					maximum-speed = "high-speed";
++					wakeup-source;
++				};
++			};
+ 		};
+ 
+ 		risaf1: risaf@420a0000 {
+-- 
+2.53.0
+

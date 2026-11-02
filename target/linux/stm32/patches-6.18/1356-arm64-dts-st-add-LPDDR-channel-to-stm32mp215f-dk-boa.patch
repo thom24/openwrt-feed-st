@@ -1,0 +1,39 @@
+From 467143f4d2f0269d39221001394744d207cad60d Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Mon, 25 May 2026 14:19:02 +0200
+Subject: [PATCH] arm64: dts: st: add LPDDR channel to stm32mp215f-dk board
+
+Add 16bits LPDDR4 channel to the stm32mp215f-dk board.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: If1c772421cbdd43b3ccab2fa3965a6c78964b05b
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/571229
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 123d44d9959b..2a01beae809b 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -97,6 +97,13 @@ led-orange {
+ 		};
+ 	};
+ 
++	lpddr_channel: sdram-channel-0 {
++		compatible = "jedec,lpddr4-channel";
++		io-width = <16>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++	};
++
+ 	memory@80000000 {
+ 		device_type = "memory";
+ 		reg = <0x0 0x80000000 0x0 0x80000000>;
+-- 
+2.53.0
+

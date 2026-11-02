@@ -1,0 +1,47 @@
+From 07404bdc679559a3bb008bafcd6515902d49abd2 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Mon, 5 Jun 2023 23:17:57 +0200
+Subject: [PATCH] arm64: dts: st: add dcmi node on stm32mp25x
+
+Add the node for the DCMI controller in stm32mp251.dtsi
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: I935470e289bf141949e93cd0cd19fd691d83ad4b
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/538954
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index 002e16f59245..5003f968e098 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -1583,6 +1583,20 @@ uart8: serial@40380000 {
+ 				status = "disabled";
+ 			};
+ 
++			dcmi: dcmi@404a0000 {
++				compatible = "st,stm32-dcmi";
++				reg = <0x404a0000 0x400>;
++				interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
++				resets = <&rcc CCI_R>;
++				clocks = <&rcc CK_BUS_CCI>;
++				clock-names = "mclk";
++				dmas = <&hpdma 137 0x60 0x00003012>;
++				dma-names = "tx";
++				access-controllers = <&rifsc 88>;
++				power-domains = <&d1_pd>;
++				status = "disabled";
++			};
++
+ 			hash: hash@42010000 {
+ 				compatible = "st,stm32mp13-hash";
+ 				reg = <0x42010000 0x400>;
+-- 
+2.53.0
+

@@ -1,0 +1,37 @@
+From 46ae89b055889d310a281343491e5069af0b7a0a Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 28 Apr 2026 11:08:28 +0200
+Subject: [PATCH] dmaengine: stm32-dma3: silently abort registration if no
+ channel
+
+When all channels are reserved, abort the registration silently by using
+dev_dbg() instead of dev_err_probe().
+
+Change-Id: Ib680f2197b0cad4dca1c7cc736b7ad74209f00c9
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/564443
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ drivers/dma/stm32/stm32-dma3.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
+index bb58c629525c..0f3acf494007 100644
+--- a/drivers/dma/stm32/stm32-dma3.c
++++ b/drivers/dma/stm32/stm32-dma3.c
+@@ -2250,8 +2250,9 @@ static int stm32_dma3_probe(struct platform_device *pdev)
+ 	chan_reserved = stm32_dma3_check_rif(ddata);
+ 
+ 	if (chan_reserved == GENMASK(ddata->dma_channels - 1, 0)) {
++		/* There is no channel available, abort registration silently */
+ 		ret = -ENODEV;
+-		dev_err_probe(&pdev->dev, ret, "No channel available, abort registration\n");
++		dev_dbg(&pdev->dev, "No channel available, abort registration\n");
+ 		goto err_clk_disable;
+ 	}
+ 
+-- 
+2.53.0
+

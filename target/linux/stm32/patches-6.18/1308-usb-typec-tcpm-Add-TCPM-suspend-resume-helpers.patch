@@ -1,0 +1,74 @@
+From 2490806a4496bfbf21edd34fabccf3f2cdc6e7b8 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Wed, 23 Sep 2026 14:11:08 +0200
+Subject: [PATCH] usb: typec: tcpm: Add TCPM suspend/resume helpers
+
+After a TCPM client is suspended while no device is attached, the TCPM
+state machine may continue to access the client's registers through the
+toggling callbacks.
+
+Prevent access to the suspended hardware by adding TCPM suspend and
+resume helpers.
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Assisted-by: M365-Copilot:GPT-5-CHAT
+Change-Id: I96a01426a38aad67ff096b2bc153cd4626e65dd1
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/616280
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 23 +++++++++++++++++++++++
+ include/linux/usb/tcpm.h      |  2 ++
+ 2 files changed, 25 insertions(+)
+
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index e1ca6e7bbe55..6bf9c98d5356 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -7987,6 +7987,29 @@ void tcpm_unregister_port(struct tcpm_port *port)
+ }
+ EXPORT_SYMBOL_GPL(tcpm_unregister_port);
+ 
++void tcpm_port_suspend(struct tcpm_port *port)
++{
++	if (port->attached)
++		return;
++
++	/*
++	 * stop toggling to avoid get_cc accesses
++	 * when the CC read access is suspended.
++	 */
++	kthread_cancel_work_sync(&port->state_machine);
++	hrtimer_cancel(&port->state_machine_timer);
++}
++EXPORT_SYMBOL_GPL(tcpm_port_suspend);
++
++void tcpm_port_resume(struct tcpm_port *port)
++{
++	if (port->attached)
++		return;
++
++	kthread_queue_work(port->wq, &port->state_machine);
++}
++EXPORT_SYMBOL_GPL(tcpm_port_resume);
++
+ MODULE_AUTHOR("Guenter Roeck <groeck@chromium.org>");
+ MODULE_DESCRIPTION("USB Type-C Port Manager");
+ MODULE_LICENSE("GPL");
+diff --git a/include/linux/usb/tcpm.h b/include/linux/usb/tcpm.h
+index b22e659f81ba..20520c980913 100644
+--- a/include/linux/usb/tcpm.h
++++ b/include/linux/usb/tcpm.h
+@@ -191,5 +191,7 @@ void tcpm_tcpc_reset(struct tcpm_port *port);
+ void tcpm_port_clean(struct tcpm_port *port);
+ bool tcpm_port_is_toggling(struct tcpm_port *port);
+ void tcpm_port_error_recovery(struct tcpm_port *port);
++void tcpm_port_suspend(struct tcpm_port *port);
++void tcpm_port_resume(struct tcpm_port *port);
+ 
+ #endif /* __LINUX_USB_TCPM_H */
+-- 
+2.53.0
+

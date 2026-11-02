@@ -1,0 +1,78 @@
+From 8f07588d562cb4cf9af2405cbbe1cd3bc7ebb717 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Wed, 18 Mar 2026 10:31:25 +0100
+Subject: [PATCH] dt-bindings: hwlock: stm32: add support for procid
+
+The STM32 Hardware Spinlock allows multiple consumers to share a
+single hwlock for synchronization with the same remote processor.
+Each consumer has to provide a unique ProcID when accessing the
+shared hwlock. The ProcID is used by the hardware of the physical
+hwlock to discriminate among the consumers.
+
+Change the value of "#hwlock-cells" to two to accommodate both the
+index of the hwlock and the ProcID used by the consumer for that
+hwlock. This change does not break the backward compatibility of
+any existing DT, since this binding has never been applied to any
+upstreamed DT.
+
+Provide the description and an example of the use of the two cells.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: Ia570ca28e0f143efc212b5c90d743348c4cc380c
+---
+ .../bindings/hwlock/st,stm32-hwspinlock.yaml  | 26 +++++++++++++++++--
+ 1 file changed, 24 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/hwlock/st,stm32-hwspinlock.yaml b/Documentation/devicetree/bindings/hwlock/st,stm32-hwspinlock.yaml
+index 829d1fdf4c67..164cc23484e4 100644
+--- a/Documentation/devicetree/bindings/hwlock/st,stm32-hwspinlock.yaml
++++ b/Documentation/devicetree/bindings/hwlock/st,stm32-hwspinlock.yaml
+@@ -8,10 +8,16 @@ title: STMicroelectronics STM32 Hardware Spinlock
+ 
+ maintainers:
+   - Fabien Dessenne <fabien.dessenne@foss.st.com>
++  - Antonio Borneo <antonio.borneo@foss.st.com>
+ 
+ properties:
+   "#hwlock-cells":
+-    const: 1
++    const: 2
++    description:
++      Multiple consumers of the STM32 Hardware Spinlock can share the same
++      hwlock; each consumer has to use a unique ProcID for that hwlock.
++      The first cell is the index of the hwlock in the device.
++      The second cell is the ProcID of the consumer for such hwlock.
+ 
+   compatible:
+     const: st,stm32-hwspinlock
+@@ -40,10 +46,26 @@ examples:
+     #include <dt-bindings/clock/stm32mp1-clks.h>
+     hwspinlock@4c000000 {
+         compatible = "st,stm32-hwspinlock";
+-        #hwlock-cells = <1>;
++        #hwlock-cells = <2>;
+         reg = <0x4c000000 0x400>;
+         clocks = <&rcc HSEM>;
+         clock-names = "hsem";
+     };
+ 
++    pinctrl@50002000 {
++        compatible = "st,stm32mp157-pinctrl";
++        #address-cells = <1>;
++        #size-cells = <1>;
++        ranges = <0 0x50002000 0xa400>;
++        hwlocks = <&hsem 0 0>;
++    };
++
++    pinctrl@54004000 {
++        compatible = "st,stm32mp157-z-pinctrl";
++        #address-cells = <1>;
++        #size-cells = <1>;
++        ranges = <0 0x54004000 0x400>;
++        hwlocks = <&hsem 0 1>;
++    };
++
+ ...
+-- 
+2.53.0
+

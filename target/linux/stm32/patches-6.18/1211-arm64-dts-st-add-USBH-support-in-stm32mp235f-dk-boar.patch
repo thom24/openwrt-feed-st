@@ -1,0 +1,49 @@
+From 5d9f4d4c6267cc37a2de062a8acc31c4c87dfcfa Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Thu, 16 Apr 2026 15:55:24 +0200
+Subject: [PATCH] arm64: dts: st: add USBH support in stm32mp235f-dk board
+
+Add USBH support in stm32mp235f-dk board. There's an on-board High-Speed
+USB Hub. So add it as a child of the USBH EHCI (High Speed controller) DT
+node. The OHCI can be disabled, as no low or full speed traffic is
+expected.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I9f0f9da47b70e08d88a921ce348c2262fdd87101
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/559889
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index f917abba11dd..67137f6f546f 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -810,3 +810,22 @@ &usb2_phy2 {
+ 	vdd33-supply = <&scmi_vdd3v3_usb>;
+ 	status = "okay";
+ };
++
++&usbh {
++	status = "okay";
++
++	usbh_ehci: usb@482f0000 {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		/* onboard HUB */
++		hub@1 {
++			compatible = "usb424,2422";
++			reg = <1>;
++			vdd-supply = <&scmi_v3v3>;
++		};
++	};
++
++	usbh_ohci: usb@482e0000 {
++		status = "disabled";
++	};
++};
+-- 
+2.53.0
+

@@ -1,0 +1,50 @@
+From c7286fb87de169803d1cd2223f3cbf424e0599bd Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Tue, 30 Jun 2026 14:31:22 +0200
+Subject: [PATCH] dt-bindings: mfd: stm32-lptimer: drop address and size cells
+ requirement
+
+The "#address-cells" and "#size-cells" properties are only meaningful
+when the LPTIM instantiates an addressable child node. Among the LPTIM
+sub-nodes, only the "trigger@N" node carries a "reg" property; the
+"pwm", "counter" and "timer" children are not addressable.
+
+Requiring these two properties unconditionally forces every LPTIM node
+to declare them even when no addressable child is present, which is not
+necessary and triggers following dtbs_check failures:
+(st,stm32-lptimer): '#address-cells' is a required property
+from schema $id: http://devicetree.org/schemas/mfd/st,stm32-lptimer.yaml
+
+Drop "#address-cells" and "#size-cells" from the required list. They stay
+described as properties, and a child node carrying a "reg" without the
+parent declaring the cells is already caught at build time by dtc, so no
+valid configuration is left unchecked.
+
+Fixes: b88091f5d84a ("dt-bindings: mfd: Convert stm32 low power timers bindings to json-schema")
+Change-Id: I766cbefe6ee3a26f1193e0d8faf3da023ab0ccab
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/568588
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml b/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml
+index 4eabafb8079d..946e840e189d 100644
+--- a/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml
++++ b/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml
+@@ -133,8 +133,6 @@ patternProperties:
+       - reg
+ 
+ required:
+-  - "#address-cells"
+-  - "#size-cells"
+   - compatible
+   - reg
+   - clocks
+-- 
+2.53.0
+

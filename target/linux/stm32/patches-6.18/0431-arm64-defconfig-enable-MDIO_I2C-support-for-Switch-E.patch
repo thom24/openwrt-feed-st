@@ -1,0 +1,40 @@
+From d5105e36de58b94a5b6fce95f6ea543e7ca99e86 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Thu, 2 Jul 2026 11:25:21 +0200
+Subject: [PATCH] arm64: defconfig: enable MDIO_I2C support for Switch Ethernet
+
+With last TTTech delivery, need to have MDIO_I2C config
+Need to active CONFIG_SFP to enable MDIO_I2C
+
+Change-Id: I180ef121e0b475c8da602d95125f219ee8e54325
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/584029
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/configs/fragment-02-defconfig-addons.config | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm64/configs/fragment-02-defconfig-addons.config b/arch/arm64/configs/fragment-02-defconfig-addons.config
+index eb5cef4cf3db..df5a9db22dc4 100644
+--- a/arch/arm64/configs/fragment-02-defconfig-addons.config
++++ b/arch/arm64/configs/fragment-02-defconfig-addons.config
+@@ -23,6 +23,7 @@ CONFIG_IGC=m
+ CONFIG_IIO_RESCALE=m
+ CONFIG_IIO_STM32_LPTIMER_TRIGGER=m
+ CONFIG_JFFS2_FS=y
++CONFIG_MDIO_I2C=m
+ CONFIG_MEDIA_TEST_SUPPORT=y
+ CONFIG_MEMORY=y
+ CONFIG_MFD_WM8994=m
+@@ -61,6 +62,7 @@ CONFIG_SAMPLES=y
+ CONFIG_SAMPLE_RPMSG_CLIENT=m
+ CONFIG_SD_ADC_MODULATOR=m
+ CONFIG_SENSORS_MR75203=m
++CONFIG_SFP=m
+ CONFIG_SMSC_PHY=y
+ CONFIG_SND_SOC_STM32_I2S=m
+ CONFIG_SND_SOC_STM32_SAI=m
+-- 
+2.53.0
+

@@ -1,0 +1,43 @@
+From d95dfc6cefd8f2a9fceead152bd67127a8671860 Mon Sep 17 00:00:00 2001
+From: Patrice GUILEMOND <patrice.guilemond-ext@st.com>
+Date: Fri, 31 May 2024 15:29:34 +0200
+Subject: [PATCH] arm64: dts: st: add disabled i3c1 node on stm32mp215f-dk
+
+I3C1 is available via the GPIO expansion connector on the stm32mp215f-dk
+board.
+Add i3c1 node and keep it disabled.
+
+Signed-off-by: Patrice GUILEMOND <patrice.guilemond-ext@st.com>
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Change-Id: I4445d5fd63d879f5e071be73a702894c6eeea3d1
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/545089
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 9cc4f51339a0..5121f3092b24 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -201,6 +201,14 @@ &i2c2 {
+ 	status = "okay";
+ };
+ 
++&i3c1 {
++	pinctrl-names = "default", "init", "sleep";
++	pinctrl-0 = <&i3c1_pins_a>;
++	pinctrl-1 = <&i3c1_init_pins_a>;
++	pinctrl-2 = <&i3c1_sleep_pins_a>;
++	status = "disabled";
++};
++
+ &ipcc1 {
+ 	status = "okay";
+ };
+-- 
+2.53.0
+

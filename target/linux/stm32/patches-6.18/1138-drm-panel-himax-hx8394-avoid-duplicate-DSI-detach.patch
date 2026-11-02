@@ -1,0 +1,41 @@
+From a80a39250cf6183f2ef39dbbe2b0095cfaa8da2c Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Wed, 30 Sep 2026 14:03:58 +0200
+Subject: [PATCH] drm/panel: himax-hx8394: avoid duplicate DSI detach
+
+Check whether the DSI device is attached before detaching it
+during removal.
+This avoids calling mipi_dsi_detach() more than once.
+
+Assisted-by: GitHub-Copilot:GPT-5.6-Luna
+Change-Id: Ifa269c332e9e594e170b7a414d2657db624cb3a6
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/619698
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/gpu/drm/panel/panel-himax-hx8394.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/panel/panel-himax-hx8394.c b/drivers/gpu/drm/panel/panel-himax-hx8394.c
+index 07009024777c..4d7a8f246204 100644
+--- a/drivers/gpu/drm/panel/panel-himax-hx8394.c
++++ b/drivers/gpu/drm/panel/panel-himax-hx8394.c
+@@ -931,9 +931,11 @@ static void hx8394_remove(struct mipi_dsi_device *dsi)
+ 	struct hx8394 *ctx = mipi_dsi_get_drvdata(dsi);
+ 	int ret;
+ 
+-	ret = mipi_dsi_detach(dsi);
+-	if (ret < 0)
+-		dev_err(&dsi->dev, "Failed to detach from DSI host: %d\n", ret);
++	if (dsi->attached) {
++		ret = mipi_dsi_detach(dsi);
++		if (ret < 0)
++			dev_err(&dsi->dev, "Failed to detach from DSI host: %d\n", ret);
++	}
+ 
+ 	drm_panel_remove(&ctx->panel);
+ }
+-- 
+2.53.0
+

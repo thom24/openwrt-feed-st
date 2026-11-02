@@ -1,0 +1,42 @@
+From 1036d598e7042aaafb61bae99354e334c209b3e5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Mon, 16 Mar 2026 15:13:10 +0100
+Subject: [PATCH] arm64: defconfig: enable UIO support for shared memory
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Enable the UIO core and the generic platform IRQ UIO driver in the
+arm64 defconfig.
+
+These drivers are required to allow userspace access to a shared memory
+region through a UIO device in M33TDCID flavor.
+
+Change-Id: Id850e28fd4ab4e30b53b0727903ace6fd289c647
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/547446
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/572028
+---
+ arch/arm64/configs/fragment-02-defconfig-addons.config | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm64/configs/fragment-02-defconfig-addons.config b/arch/arm64/configs/fragment-02-defconfig-addons.config
+index bd9ba2279aba..9d01ee2ee0b1 100644
+--- a/arch/arm64/configs/fragment-02-defconfig-addons.config
++++ b/arch/arm64/configs/fragment-02-defconfig-addons.config
+@@ -105,6 +105,8 @@ CONFIG_TYPEC_ADC=m
+ CONFIG_TYPEC_UCPD_STM32=m
+ CONFIG_UBIFS_FS=y
+ CONFIG_UCSI_STM32G0=m
++CONFIG_UIO=m
++CONFIG_UIO_PDRV_GENIRQ=m
+ CONFIG_USB_CONFIGFS_F_UVC=y
+ CONFIG_USB_DWC2=m
+ CONFIG_USB_HIDDEV=y
+-- 
+2.53.0
+

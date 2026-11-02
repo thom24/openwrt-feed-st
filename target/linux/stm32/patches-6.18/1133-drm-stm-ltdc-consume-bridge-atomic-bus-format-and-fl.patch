@@ -1,0 +1,53 @@
+From 791ac6498bfc1e1f531425cbd1a72b069dbe015c Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Wed, 12 Aug 2026 08:30:19 +0200
+Subject: [PATCH] drm/stm: ltdc: consume bridge atomic bus format and flags
+
+Read bus format and bus flags from the atomic bridge state during
+CRTC enable, instead of relying on connector display_info fallback.
+This allows LTDC output configuration to follow bridge bus-format
+negotiation results.
+
+Change-Id: I480193d84a8f843ffcb60a4ae6fd807747cb946f
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/598602
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/gpu/drm/stm/ltdc.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+index 6712754153fb..5e44be06031a 100644
+--- a/drivers/gpu/drm/stm/ltdc.c
++++ b/drivers/gpu/drm/stm/ltdc.c
+@@ -1069,6 +1069,7 @@ static void ltdc_crtc_atomic_enable(struct drm_crtc *crtc,
+ 	struct drm_encoder *encoder = NULL, *en_iter;
+ 	struct drm_bridge *bridge = NULL, *br_iter;
+ 	struct drm_display_mode *mode = &crtc->state->adjusted_mode;
++	struct drm_bridge_state *bridge_state;
+ 	u32 hsync, vsync, accum_hbp, accum_vbp, accum_act_w, accum_act_h;
+ 	u32 total_width, total_height;
+ 	u32 bus_formats = MEDIA_BUS_FMT_RGB888_1X24;
+@@ -1101,12 +1102,12 @@ static void ltdc_crtc_atomic_enable(struct drm_crtc *crtc,
+ 		drm_connector_list_iter_end(&iter);
+ 	}
+ 
+-	if (bridge && bridge->timings) {
+-		bus_flags = bridge->timings->input_bus_flags;
+-	} else if (connector) {
+-		bus_flags = connector->display_info.bus_flags;
+-		if (connector->display_info.num_bus_formats)
+-			bus_formats = connector->display_info.bus_formats[0];
++	if (bridge) {
++		bridge_state = drm_atomic_get_new_bridge_state(state, bridge);
++		if (bridge_state) {
++			bus_formats = bridge_state->input_bus_cfg.format;
++			bus_flags = bridge_state->input_bus_cfg.flags;
++		}
+ 	}
+ 
+ 	if (encoder->encoder_type == DRM_MODE_ENCODER_LVDS) {
+-- 
+2.53.0
+

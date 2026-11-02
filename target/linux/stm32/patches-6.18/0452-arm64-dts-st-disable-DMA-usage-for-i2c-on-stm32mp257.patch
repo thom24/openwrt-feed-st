@@ -1,0 +1,48 @@
+From 3f20c972e4fa73253f393238e1deecd3adcdff3b Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Mon, 16 Feb 2026 12:48:29 +0100
+Subject: [PATCH] arm64: dts: st: disable DMA usage for i2c on stm32mp257f-ev1
+
+Keep DMA resources available by avoiding usage of DMA for i2c transfers
+on stm32mp257f-ev1 board.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: I0269bcdba0197ee1e410ff98186f5d22ef7bea6b
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/536954
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+index 74edc5f42aeb..fe0790879a2f 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+@@ -341,6 +341,9 @@ &i2c2 {
+ 	i2c-scl-falling-time-ns = <13>;
+ 	clock-frequency = <400000>;
+ 	status = "okay";
++	/* spare dmas for other usage */
++	/delete-property/dmas;
++	/delete-property/dma-names;
+ 
+ 	imx335: camera@1a {
+ 		compatible = "sony,imx335";
+@@ -379,6 +382,9 @@ &i2c8 {
+ 	i2c-scl-falling-time-ns = <7>;
+ 	clock-frequency = <400000>;
+ 	status = "disabled";
++	/* spare dmas for other usage */
++	/delete-property/dmas;
++	/delete-property/dma-names;
+ };
+ 
+ /* use LPTIMER with tick broadcast for suspend mode */
+-- 
+2.53.0
+

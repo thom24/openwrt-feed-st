@@ -1,0 +1,40 @@
+From d116d5cfb46701ee33e7eafa8a9b662dff8546eb Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Tue, 1 Sep 2026 16:08:54 +0200
+Subject: [PATCH] ASoC: hdmi-codec: fix maybe-uninitialized warning in
+ chmap_ctl_get
+
+Initialize 'map' to NULL to silence the gcc -Wmaybe-uninitialized
+warning in hdmi_codec_chmap_ctl_get(). The compiler cannot prove
+statically that 'map' is always assigned before use inside the loop,
+even though the else branch that reads it is only reachable when
+chmap_idx != HDMI_CODEC_CHMAP_IDX_UNKNOWN.
+
+Fixes: cd6111b26280 ("ASoC: hdmi-codec: add channel mapping control")
+Change-Id: I6756a720b3ea96877782fa95b5ee85067f8d2055
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/605878
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ sound/soc/codecs/hdmi-codec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sound/soc/codecs/hdmi-codec.c b/sound/soc/codecs/hdmi-codec.c
+index e715c751547f..8aacf5eff08c 100644
+--- a/sound/soc/codecs/hdmi-codec.c
++++ b/sound/soc/codecs/hdmi-codec.c
+@@ -382,7 +382,7 @@ static int hdmi_codec_get_ch_alloc_table_idx(struct hdmi_codec_priv *hcp,
+ static int hdmi_codec_chmap_ctl_get(struct snd_kcontrol *kcontrol,
+ 			      struct snd_ctl_elem_value *ucontrol)
+ {
+-	unsigned const char *map;
++	unsigned const char *map = NULL;
+ 	unsigned int i;
+ 	struct snd_pcm_chmap *info = snd_kcontrol_chip(kcontrol);
+ 	struct hdmi_codec_priv *hcp = info->private_data;
+-- 
+2.53.0
+

@@ -1,0 +1,45 @@
+From 2d4632e9863f3021f625e5fe7e276232126f42f8 Mon Sep 17 00:00:00 2001
+From: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Date: Wed, 17 Jun 2026 16:22:12 +0200
+Subject: [PATCH] ARM: configs: remove modules for crypto IP not present on
+ stm32 platforms
+
+Drop modules that are for crypto peripherals not usable on stm32
+platforms.
+
+Signed-off-by: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Change-Id: Ie56834f09b09d1122e9a425052a40709d6f9a899
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/579883
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm/configs/stm32mp_defconfig | 11 -----------
+ 1 file changed, 11 deletions(-)
+
+diff --git a/arch/arm/configs/stm32mp_defconfig b/arch/arm/configs/stm32mp_defconfig
+index 47a4257b5563..0545fa3c0fa3 100644
+--- a/arch/arm/configs/stm32mp_defconfig
++++ b/arch/arm/configs/stm32mp_defconfig
+@@ -1162,17 +1162,6 @@ CONFIG_CRYPTO_GHASH_ARM_CE=m
+ CONFIG_CRYPTO_AES_ARM=m
+ CONFIG_CRYPTO_AES_ARM_BS=m
+ CONFIG_CRYPTO_AES_ARM_CE=m
+-CONFIG_CRYPTO_DEV_SUN4I_SS=m
+-CONFIG_CRYPTO_DEV_FSL_CAAM=m
+-CONFIG_CRYPTO_DEV_EXYNOS_RNG=m
+-CONFIG_CRYPTO_DEV_S5P=m
+-CONFIG_CRYPTO_DEV_ATMEL_AES=m
+-CONFIG_CRYPTO_DEV_ATMEL_TDES=m
+-CONFIG_CRYPTO_DEV_ATMEL_SHA=m
+-CONFIG_CRYPTO_DEV_MARVELL_CESA=m
+-CONFIG_CRYPTO_DEV_QCE=m
+-CONFIG_CRYPTO_DEV_QCOM_RNG=m
+-CONFIG_CRYPTO_DEV_ROCKCHIP=m
+ CONFIG_CRYPTO_DEV_STM32_HASH=m
+ CONFIG_CRYPTO_DEV_STM32_CRYP=m
+ CONFIG_CMA_SIZE_MBYTES=64
+-- 
+2.53.0
+

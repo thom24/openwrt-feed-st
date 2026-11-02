@@ -1,0 +1,55 @@
+From 59261f74f32a75543ca143998115ca0e0a1f211f Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Thu, 19 Mar 2026 17:30:11 +0100
+Subject: [PATCH] arm64: dts: st: add i2s2 pinmux for stm32mp25-pinctrl.dtsi
+
+Add i2s2 pinmux for stm32mp25-pinctrl.dtsi.
+HDMI transceiver ADV7535 is connected to I2S2 on MP25 DK.
+
+Signed-off-by: Olivier BIDEAU <olivier.bideau@st.com>
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Change-Id: I87bf11fe4bc124cfc7c6f17f23fbd1f00e0ea1d7
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/551672
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi | 21 +++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
+index ad51a2730671..52b26f50d705 100644
+--- a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
+@@ -317,6 +317,27 @@ pins {
+ 		};
+ 	};
+ 
++	/omit-if-no-ref/
++	i2s2_pins_b: i2s2-1 {
++		pins {
++			pinmux = <STM32_PINMUX('B', 2, AF2)>, /* I2S2_SDO */
++				<STM32_PINMUX('B', 3, AF2)>, /* I2S2_WS */
++				<STM32_PINMUX('B', 0, AF2)>; /* I2S2_CK */
++			slew-rate = <1>;
++			drive-push-pull;
++			bias-disable;
++		};
++	};
++
++	/omit-if-no-ref/
++	i2s2_sleep_pins_b: i2s2-sleep-1 {
++		pins {
++			pinmux = <STM32_PINMUX('B', 2, ANALOG)>, /* I2S2_SDO */
++				<STM32_PINMUX('B', 3, ANALOG)>, /* I2S2_WS */
++				<STM32_PINMUX('B', 0, ANALOG)>; /* I2S2_CK */
++		};
++	};
++
+ 	/omit-if-no-ref/
+ 	mdf_cck0_pins_a: mdf-cck0-0 {
+ 		pins1 {
+-- 
+2.53.0
+

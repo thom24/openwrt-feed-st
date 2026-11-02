@@ -1,0 +1,38 @@
+From 12bedfa87f3489fe4b3b415599c8196c7aa7e62a Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Wed, 3 Dec 2025 10:47:45 +0100
+Subject: [PATCH] kbuild: include DTS path to allow including dts file in
+ external dts
+
+This allows to include a dts file in an external device tree without
+specifying its path, e.g.:
+	include <stm32mp257f-ev1.dts>
+instead of:
+	include "../../stm32mp257f-ev1.dts>
+
+Change-Id: I3f5ca0071f601c9d65860b9daea1b1b5343dd762
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/529763
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+---
+ scripts/Makefile.dtbs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/Makefile.dtbs b/scripts/Makefile.dtbs
+index a31b9ebcc800..05a45c53cae5 100644
+--- a/scripts/Makefile.dtbs
++++ b/scripts/Makefile.dtbs
+@@ -120,7 +120,7 @@ endif
+ 
+ DTC_INCLUDE := $(srctree)/scripts/dtc/include-prefixes
+ 
+-dtc_cpp_flags = -Wp,-MMD,$(depfile).pre.tmp -nostdinc -I $(DTC_INCLUDE) -undef -D__DTS__
++dtc_cpp_flags = -Wp,-MMD,$(depfile).pre.tmp -nostdinc -I $(DTC_INCLUDE) $(DTS_INCLUDE) -undef -D__DTS__
+ 
+ dtc-tmp = $(subst $(comma),_,$(dot-target).dts.tmp)
+ 
+-- 
+2.53.0
+

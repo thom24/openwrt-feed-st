@@ -1,0 +1,37 @@
+From 1eb9ceec149990be25017a4ccb75343ad41ee279 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Tue, 14 Apr 2026 15:41:41 +0200
+Subject: [PATCH] ARM: dts: stm32: add ethernet_mac_address on stm32mp15
+
+Describe MAC address cells available in bsec data register.
+It is useful to read the OTP value with NVMEM if the MAC address
+is not provided in the device tree by the BootLoader.
+
+Change-Id: I022dad943f60be3716448a70532b5109f358000b
+Signed-off-by: Christophe Roullier <christophe.roullier@st.com>
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/557487
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp151.dtsi | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
+index 46ce6ac5fc89..41850a76c228 100644
+--- a/arch/arm/boot/dts/st/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
+@@ -783,6 +783,9 @@ ts_cal1: calib@5c {
+ 			ts_cal2: calib@5e {
+ 				reg = <0x5e 0x2>;
+ 			};
++			ethernet_mac_address: mac@e4 {
++				reg = <0xe4 0x6>;
++			};
+ 		};
+ 
+ 		etzpc: bus@5c007000 {
+-- 
+2.53.0
+

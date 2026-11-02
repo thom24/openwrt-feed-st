@@ -1,0 +1,126 @@
+From e9c3ce7a623328e015a5919198368ba090dd3586 Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Wed, 27 May 2026 15:34:32 +0200
+Subject: [PATCH] firmware: arm_scmi: add round_rate_get op for discrete clock
+ rates
+
+Add a new round_rate_get op to the scmi_clk_proto_ops interface that
+performs a binary search over the discrete rate list and returns the
+closest supported rate.
+
+Signed-off-by: Etienne Carriere <etienne.carriere@foss.st.com>
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: Iba96c87864ed6d01afc51dbae7956a02ad03bb1b
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/572104
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ drivers/firmware/arm_scmi/clock.c | 62 +++++++++++++++++++++++++++++++
+ include/linux/scmi_protocol.h     |  2 +
+ 2 files changed, 64 insertions(+)
+
+diff --git a/drivers/firmware/arm_scmi/clock.c b/drivers/firmware/arm_scmi/clock.c
+index afa7981efe82..efc45ab69495 100644
+--- a/drivers/firmware/arm_scmi/clock.c
++++ b/drivers/firmware/arm_scmi/clock.c
+@@ -626,6 +626,67 @@ static int scmi_clock_rate_set(const struct scmi_protocol_handle *ph,
+ 	return ret;
+ }
+ 
++static int scmi_clock_round_rate_get(const struct scmi_protocol_handle *ph,
++				     u32 clk_id, u64 *round_rate)
++{
++	u64 rate, rate_low, rate_high, rate_tmp;
++	size_t index_low, index_high, index_tmp;
++	struct clock_info *ci = ph->get_priv(ph);
++	struct scmi_clock_info *clk;
++
++	clk = scmi_clock_domain_lookup(ci, clk_id);
++	if (IS_ERR(clk))
++		return PTR_ERR(clk);
++
++	/* This function is expected to be called on discrete rates list */
++	if (!clk->rate_discrete || clk->list.num_rates == 0)
++		return -EINVAL;
++
++	index_low = 0;
++	rate = *round_rate;
++	rate_low = clk->list.rates[0];
++	index_high = clk->list.num_rates - 1;
++	rate_high = clk->list.rates[index_high];
++
++	if (clk->list.num_rates == 1) {
++		*round_rate = rate_low;
++		return 0;
++	}
++
++	while (true) {
++		if (index_low == index_high) {
++			*round_rate = rate_low;
++			return 0;
++		}
++
++		if (index_high == index_low + 1) {
++			if (rate - rate_low > rate_high - rate)
++				*round_rate = rate_high;
++			else
++				*round_rate = rate_low;
++
++			return 0;
++		}
++
++		index_tmp = (index_low + index_high) / 2;
++
++		rate_tmp = clk->list.rates[index_tmp];
++
++		if (rate_tmp == rate) {
++			*round_rate = rate;
++			return 0;
++		}
++
++		if (rate_tmp < rate) {
++			index_low = index_tmp;
++			rate_low = rate_tmp;
++		} else {
++			index_high = index_tmp;
++			rate_high = rate_tmp;
++		}
++	}
++}
++
+ static int
+ scmi_clock_config_set(const struct scmi_protocol_handle *ph, u32 clk_id,
+ 		      enum clk_state state,
+@@ -945,6 +1006,7 @@ static const struct scmi_clk_proto_ops clk_proto_ops = {
+ 	.config_oem_set = scmi_clock_config_oem_set,
+ 	.parent_set = scmi_clock_set_parent,
+ 	.parent_get = scmi_clock_get_parent,
++	.round_rate_get = scmi_clock_round_rate_get,
+ };
+ 
+ static bool scmi_clk_notify_supported(const struct scmi_protocol_handle *ph,
+diff --git a/include/linux/scmi_protocol.h b/include/linux/scmi_protocol.h
+index d94dbd276489..c295f4073f19 100644
+--- a/include/linux/scmi_protocol.h
++++ b/include/linux/scmi_protocol.h
+@@ -98,6 +98,7 @@ enum scmi_clock_oem_config {
+  * @config_oem_set: set the value of an OEM specific clock config
+  * @parent_get: get the parent id of a clk
+  * @parent_set: set the parent of a clock
++ * @round_rate_get: Get the nearest rate a clock can support.
+  */
+ struct scmi_clk_proto_ops {
+ 	int (*count_get)(const struct scmi_protocol_handle *ph);
+@@ -122,6 +123,7 @@ struct scmi_clk_proto_ops {
+ 			      u32 oem_val, bool atomic);
+ 	int (*parent_get)(const struct scmi_protocol_handle *ph, u32 clk_id, u32 *parent_id);
+ 	int (*parent_set)(const struct scmi_protocol_handle *ph, u32 clk_id, u32 parent_id);
++	int (*round_rate_get)(const struct scmi_protocol_handle *ph, u32 clk_id, u64 *rate);
+ };
+ 
+ struct scmi_perf_domain_info {
+-- 
+2.53.0
+

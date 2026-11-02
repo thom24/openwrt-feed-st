@@ -1,0 +1,57 @@
+From 214f9177e4a77e2abde78b6d11a867430e3b6771 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Fri, 17 Nov 2023 11:41:54 +0100
+Subject: [PATCH] arm64: dts: st: add m33_rproc node in stm32mp257-dk board
+
+Add m33_rproc node in stm32mp257-dk board.
+
+Signed-off-by: Olivier BIDEAU <olivier.bideau@st.com>
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Change-Id: Idcfedf0186444653b31bfb94debb30698eea7537
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/552511
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index 76dcf3c056e8..1e7f9e3debc6 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -90,6 +90,10 @@ wifi_pwrseq: wifi-pwrseq {
+ 	};
+ };
+ 
++&a35ss_syscfg {
++	status = "okay";
++};
++
+ &arm_wdt {
+ 	timeout-sec = <32>;
+ 	bootph-all;
+@@ -338,6 +342,17 @@ &ipcc1 {
+ 	status = "okay";
+ };
+ 
++&m33_rproc {
++	mboxes = <&ipcc1 0x100>, <&ipcc1 0x101>, <&ipcc1 2>;
++	mbox-names = "vq0", "vq1", "shutdown";
++	memory-region = <&cm33_cube_fw>, <&cm33_cube_data>,
++			<&ipc_shmem_1>, <&vdev0vring0>,
++			<&vdev0vring1>, <&vdev0buffer>,
++			<&cm33_sram2>;
++	st,syscfg-nsvtor = <&a35ss_syscfg 0x20a8 0xffffff80>;
++	status = "okay";
++};
++
+ &optee {
+ 	bootph-all;
+ };
+-- 
+2.53.0
+
