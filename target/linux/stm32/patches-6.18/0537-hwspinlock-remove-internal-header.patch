@@ -14,7 +14,7 @@ Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
  delete mode 100644 drivers/hwspinlock/hwspinlock_internal.h
 
 diff --git a/drivers/hwspinlock/hwspinlock_core.c b/drivers/hwspinlock/hwspinlock_core.c
-index e0227d027cf2..838bb2ab5eba 100644
+index 2529174a81f9..4840ef46145b 100644
 --- a/drivers/hwspinlock/hwspinlock_core.c
 +++ b/drivers/hwspinlock/hwspinlock_core.c
 @@ -10,6 +10,7 @@

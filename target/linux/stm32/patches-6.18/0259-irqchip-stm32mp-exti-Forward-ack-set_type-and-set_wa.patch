@@ -18,7 +18,7 @@ Change-Id: I576a6811518a2ebaeb0fb1c6bc123a6b1067cd5c
  1 file changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/irqchip/irq-stm32mp-exti.c b/drivers/irqchip/irq-stm32mp-exti.c
-index 1ca977dfaa15..056e773b523c 100644
+index 0443b1c988d1..a018847f4b71 100644
 --- a/drivers/irqchip/irq-stm32mp-exti.c
 +++ b/drivers/irqchip/irq-stm32mp-exti.c
 @@ -394,7 +394,12 @@ static int stm32mp_exti_set_type(struct irq_data *d, unsigned int type)

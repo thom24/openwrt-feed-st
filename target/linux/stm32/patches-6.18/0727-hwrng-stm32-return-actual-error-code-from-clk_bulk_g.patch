@@ -22,7 +22,7 @@ Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
-index b1e8531cb40a..0006cd8617ca 100644
+index c38d8c91f18e..623c3a77318f 100644
 --- a/drivers/char/hw_random/stm32-rng.c
 +++ b/drivers/char/hw_random/stm32-rng.c
 @@ -610,7 +610,7 @@ static int stm32_rng_probe(struct platform_device *ofdev)

@@ -15,7 +15,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  1 file changed, 3 deletions(-)
 
 diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c
-index 81d4039e1c08..3fc4a262f596 100644
+index 741e3864f509..2076efe2531c 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c
 @@ -755,9 +755,6 @@ static int stmmac_set_wol(struct net_device *dev, struct ethtool_wolinfo *wol)

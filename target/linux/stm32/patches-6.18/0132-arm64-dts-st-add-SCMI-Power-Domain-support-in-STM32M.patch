@@ -39,7 +39,7 @@ index 408566e9cca6..18736a9978b7 100644
  				reg = <0x14>;
  				#clock-cells = <1>;
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 95c22ad25b46..257c37e1bebd 100644
+index 870ce0dc6cbb..94402e36a7e7 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -115,6 +115,11 @@ scmi: scmi {

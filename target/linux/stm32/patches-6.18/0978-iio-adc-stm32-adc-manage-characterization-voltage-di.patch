@@ -12,11 +12,11 @@ in vref computation formula.
 Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
 Change-Id: I3187308e84ff6defcb269407c9a98a59fd391b57
 ---
- drivers/iio/adc/stm32-adc.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/iio/adc/stm32-adc.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/iio/adc/stm32-adc.c b/drivers/iio/adc/stm32-adc.c
-index 2d7f88459c7c..d9c34b08174e 100644
+index dae35ab929b6..e1869adf16f8 100644
 --- a/drivers/iio/adc/stm32-adc.c
 +++ b/drivers/iio/adc/stm32-adc.c
 @@ -44,7 +44,6 @@
@@ -43,16 +43,24 @@ index 2d7f88459c7c..d9c34b08174e 100644
  };
  
  /**
-@@ -1611,7 +1612,7 @@ static int stm32_adc_read_raw(struct iio_dev *indio_dev,
+@@ -1609,6 +1610,7 @@ static int stm32_adc_read_raw(struct iio_dev *indio_dev,
+ 			ret = stm32_adc_single_conv(indio_dev, chan, val);
+ 		else
  			ret = -EINVAL;
- 
- 		if (mask == IIO_CHAN_INFO_PROCESSED)
++
+ 		iio_device_release_direct(indio_dev);
+ 		if (ret < 0)
+ 			return ret;
+@@ -1616,7 +1618,7 @@ static int stm32_adc_read_raw(struct iio_dev *indio_dev,
+ 		if (mask == IIO_CHAN_INFO_PROCESSED) {
+ 			if (*val == 0)
+ 				return -EINVAL;
 -			*val = STM32_ADC_VREFINT_VOLTAGE * adc->vrefint.vrefint_cal / *val;
 +			*val = adc->cfg->vref_charac * adc->vrefint.vrefint_cal / *val;
+ 		}
  
- 		iio_device_release_direct(indio_dev);
  		return ret;
-@@ -2711,6 +2712,7 @@ static const struct stm32_adc_cfg stm32f4_adc_cfg = {
+@@ -2720,6 +2722,7 @@ static const struct stm32_adc_cfg stm32f4_adc_cfg = {
  	.stop_conv = stm32f4_adc_stop_conv,
  	.smp_cycles = stm32f4_adc_smp_cycles,
  	.irq_clear = stm32f4_adc_irq_clear,
@@ -60,7 +68,7 @@ index 2d7f88459c7c..d9c34b08174e 100644
  };
  
  static const unsigned int stm32_adc_min_ts_h7[] = { 0, 0, 0, 4300, 9000 };
-@@ -2732,6 +2734,7 @@ static const struct stm32_adc_cfg stm32h7_adc_cfg = {
+@@ -2741,6 +2744,7 @@ static const struct stm32_adc_cfg stm32h7_adc_cfg = {
  	.irq_clear = stm32h7_adc_irq_clear,
  	.ts_int_ch = stm32_adc_min_ts_h7,
  	.set_ovs = stm32h7_adc_set_ovs,
@@ -68,7 +76,7 @@ index 2d7f88459c7c..d9c34b08174e 100644
  };
  
  static const unsigned int stm32_adc_min_ts_mp1[] = { 100, 100, 100, 4300, 9800 };
-@@ -2754,6 +2757,7 @@ static const struct stm32_adc_cfg stm32mp1_adc_cfg = {
+@@ -2763,6 +2767,7 @@ static const struct stm32_adc_cfg stm32mp1_adc_cfg = {
  	.irq_clear = stm32h7_adc_irq_clear,
  	.ts_int_ch = stm32_adc_min_ts_mp1,
  	.set_ovs = stm32h7_adc_set_ovs,
@@ -76,7 +84,7 @@ index 2d7f88459c7c..d9c34b08174e 100644
  };
  
  static const unsigned int stm32_adc_min_ts_mp13[] = { 100, 0, 0, 4300, 9800 };
-@@ -2772,6 +2776,7 @@ static const struct stm32_adc_cfg stm32mp13_adc_cfg = {
+@@ -2781,6 +2786,7 @@ static const struct stm32_adc_cfg stm32mp13_adc_cfg = {
  	.irq_clear = stm32h7_adc_irq_clear,
  	.ts_int_ch = stm32_adc_min_ts_mp13,
  	.set_ovs = stm32mp13_adc_set_ovs,

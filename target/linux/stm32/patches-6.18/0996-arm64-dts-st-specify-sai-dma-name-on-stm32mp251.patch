@@ -16,7 +16,7 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  1 file changed, 8 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index e21e9d6b6fa6..4c8c74199f10 100644
+index 30919c1ce32b..44aba181e670 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -1381,6 +1381,7 @@ sai1a: audio-controller@40290004 {

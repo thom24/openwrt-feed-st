@@ -27,7 +27,7 @@ Change-Id: I4c98ea3519a59e4a7af1cd1ac1b05bec59349401
  create mode 100644 drivers/remoteproc/rproc_srm_core.h
 
 diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
-index 921cef67840e..e33b450862d6 100644
+index f3c7cd28e33e..4d9bf24712d4 100644
 --- a/drivers/remoteproc/Kconfig
 +++ b/drivers/remoteproc/Kconfig
 @@ -25,6 +25,7 @@ config REMOTEPROC_CDEV

@@ -25,10 +25,10 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/573987
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-index 15ceb5e87a66..24ef124ecb79 100644
+index c8cea668da44..673e31225a3f 100644
 --- a/drivers/net/phy/phy_device.c
 +++ b/drivers/net/phy/phy_device.c
-@@ -390,7 +390,7 @@ static __maybe_unused int mdio_bus_phy_resume(struct device *dev)
+@@ -401,7 +401,7 @@ static __maybe_unused int mdio_bus_phy_resume(struct device *dev)
  	 * MAC managed PM, but we are not.
  	 */
  	WARN_ON(phydev->state != PHY_HALTED && phydev->state != PHY_READY &&

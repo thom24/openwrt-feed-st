@@ -20,10 +20,10 @@ Change-Id: If48d476f014c7b4f2bb02156046a44b97c0d1f96
  1 file changed, 9 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index 00f2f80fe72d..13ccf68e8a38 100644
+index 04cc115d628b..e6a24ecc21d9 100644
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
-@@ -5757,17 +5757,19 @@ int dwc2_host_exit_hibernation(struct dwc2_hsotg *hsotg, int rem_wakeup,
+@@ -5756,17 +5756,19 @@ int dwc2_host_exit_hibernation(struct dwc2_hsotg *hsotg, int rem_wakeup,
  
  bool dwc2_host_can_poweroff_phy(struct dwc2_hsotg *dwc2)
  {

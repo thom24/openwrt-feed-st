@@ -15,7 +15,7 @@ Change-Id: Ie4d5bf1f679ca83fc69a9b92a039c8d5638d9b35
  2 files changed, 13 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/hwspinlock/hwspinlock_core.c b/drivers/hwspinlock/hwspinlock_core.c
-index e78ec4b5cfa3..0ad5240631a9 100644
+index 0224a27919db..7f33d4714d38 100644
 --- a/drivers/hwspinlock/hwspinlock_core.c
 +++ b/drivers/hwspinlock/hwspinlock_core.c
 @@ -366,17 +366,24 @@ EXPORT_SYMBOL_GPL(hwspin_lock_bust);

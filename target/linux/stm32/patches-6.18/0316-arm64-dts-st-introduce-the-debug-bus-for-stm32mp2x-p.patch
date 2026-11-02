@@ -387,7 +387,7 @@ index d0ded134b985..d2244611c253 100644
  	interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
  };
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 1f7f6098bcbe..8b50248bd82b 100644
+index 2c63a5c25d08..938e38a2c689 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -3,6 +3,7 @@

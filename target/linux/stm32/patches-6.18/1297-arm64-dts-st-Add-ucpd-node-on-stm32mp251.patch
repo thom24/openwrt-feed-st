@@ -18,7 +18,7 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  1 file changed, 51 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index ca34a9b9bae3..46fa9a27ba6b 100644
+index 7f08a140e0dc..954999c6ffa5 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -2194,6 +2194,27 @@ dcmipp: dcmipp@48030000 {

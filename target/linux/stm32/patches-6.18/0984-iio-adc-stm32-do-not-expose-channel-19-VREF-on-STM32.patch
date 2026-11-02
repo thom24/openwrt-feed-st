@@ -28,7 +28,7 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  1 file changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/iio/adc/stm32-adc.c b/drivers/iio/adc/stm32-adc.c
-index 83a61928d5ce..3f1a65cca199 100644
+index e50cc344054d..a0356f72a126 100644
 --- a/drivers/iio/adc/stm32-adc.c
 +++ b/drivers/iio/adc/stm32-adc.c
 @@ -375,9 +375,14 @@ static const struct stm32_adc_info stm32mp13_adc_info = {

@@ -27,7 +27,7 @@ Reviewed-by: Patrice CHOTARD <patrice.chotard@foss.st.com>
  2 files changed, 26 insertions(+)
 
 diff --git a/drivers/mtd/chips/cfi_cmdset_0002.c b/drivers/mtd/chips/cfi_cmdset_0002.c
-index 7c91429a670b..2b59236cfd12 100644
+index 0650b9de6962..54940dafc9ae 100644
 --- a/drivers/mtd/chips/cfi_cmdset_0002.c
 +++ b/drivers/mtd/chips/cfi_cmdset_0002.c
 @@ -122,6 +122,10 @@ static int cfi_use_status_reg(struct cfi_private *cfi)

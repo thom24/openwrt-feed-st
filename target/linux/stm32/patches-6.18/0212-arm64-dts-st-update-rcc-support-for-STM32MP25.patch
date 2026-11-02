@@ -19,7 +19,7 @@ Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  2 files changed, 6 insertions(+), 15 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 07d51590deac..9bf50a711738 100644
+index e5675c07a1f2..8eb883b60408 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -80,23 +80,11 @@ arm_wdt: watchdog {

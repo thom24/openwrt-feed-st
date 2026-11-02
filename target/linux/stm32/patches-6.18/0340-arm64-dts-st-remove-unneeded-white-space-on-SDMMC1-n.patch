@@ -21,7 +21,7 @@ Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 74bcb1975fbd..cf8bf26ea850 100644
+index 0f76c6d30f92..6a0b2a9e6fb3 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -1736,7 +1736,7 @@ sdmmc1: mmc@48220000 {

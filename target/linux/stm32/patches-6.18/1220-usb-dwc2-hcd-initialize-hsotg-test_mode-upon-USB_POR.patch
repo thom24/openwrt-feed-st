@@ -19,7 +19,7 @@ Reviewed-by: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index 596aea8203c8..dab6d9f83128 100644
+index 9b348a40fd14..d87a76fa04f7 100644
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
 @@ -3719,6 +3719,7 @@ static int dwc2_hcd_hub_control(struct dwc2_hsotg *hsotg, u16 typereq,

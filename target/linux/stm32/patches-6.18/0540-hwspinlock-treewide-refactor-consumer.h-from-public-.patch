@@ -43,10 +43,10 @@ index a737c702a7d1..001bcab86690 100644
  
  	int hwspinlock_example(void)
 diff --git a/MAINTAINERS b/MAINTAINERS
-index c151d653d46e..c0bb93f717fa 100644
+index d9c1d7473c82..6c2e138681ca 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -10947,7 +10947,6 @@ F:	Documentation/devicetree/bindings/hwlock/
+@@ -10973,7 +10973,6 @@ F:	Documentation/devicetree/bindings/hwlock/
  F:	Documentation/locking/hwspinlock.rst
  F:	drivers/hwspinlock/
  F:	include/linux/hwspinlock/
@@ -55,10 +55,10 @@ index c151d653d46e..c0bb93f717fa 100644
  HARDWARE TRACING FACILITIES
  M:	Alexander Shishkin <alexander.shishkin@linux.intel.com>
 diff --git a/drivers/base/regmap/regmap.c b/drivers/base/regmap/regmap.c
-index a64821850723..4be02b968897 100644
+index d7865909eca7..17831f902d85 100644
 --- a/drivers/base/regmap/regmap.c
 +++ b/drivers/base/regmap/regmap.c
-@@ -16,7 +16,7 @@
+@@ -17,7 +17,7 @@
  #include <linux/sched.h>
  #include <linux/delay.h>
  #include <linux/log2.h>
@@ -68,7 +68,7 @@ index a64821850723..4be02b968897 100644
  
  #define CREATE_TRACE_POINTS
 diff --git a/drivers/hwspinlock/hwspinlock_core.c b/drivers/hwspinlock/hwspinlock_core.c
-index 6c8a03deb00c..e78ec4b5cfa3 100644
+index de4726cd152a..0224a27919db 100644
 --- a/drivers/hwspinlock/hwspinlock_core.c
 +++ b/drivers/hwspinlock/hwspinlock_core.c
 @@ -12,7 +12,7 @@
@@ -94,7 +94,7 @@ index 2535c2c3e60b..1ba759a15724 100644
  #include <linux/module.h>
  #include <linux/mutex.h>
 diff --git a/drivers/irqchip/irq-stm32mp-exti.c b/drivers/irqchip/irq-stm32mp-exti.c
-index 583b44673422..0337d65a858d 100644
+index a8a6b34c81b9..a7c13a68ea82 100644
 --- a/drivers/irqchip/irq-stm32mp-exti.c
 +++ b/drivers/irqchip/irq-stm32mp-exti.c
 @@ -7,7 +7,7 @@
@@ -172,7 +172,7 @@ index 39177aa5793a..7cebc3f14773 100644
  #include <linux/module.h>
  #include <linux/of.h>
 diff --git a/drivers/spi/spi-sprd-adi.c b/drivers/spi/spi-sprd-adi.c
-index f25b34a91756..58768e4d58ac 100644
+index 72f2f30e657e..ccbfdb5b7d44 100644
 --- a/drivers/spi/spi-sprd-adi.c
 +++ b/drivers/spi/spi-sprd-adi.c
 @@ -5,7 +5,7 @@

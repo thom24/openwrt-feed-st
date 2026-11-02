@@ -87,10 +87,10 @@ index 000000000000..e3bd855419ad
 +          st,mem-map = <0x0 0x80000000 0x1 0x00000000>;
 +        };
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 554e881b05be..0a940027f99e 100644
+index d4fa41fb387f..cceace59e63d 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -24669,6 +24669,11 @@ F:	Documentation/arch/arm/stm32/stm32-dma-mdma-chaining.rst
+@@ -24698,6 +24698,11 @@ F:	Documentation/arch/arm/stm32/stm32-dma-mdma-chaining.rst
  F:	Documentation/devicetree/bindings/dma/stm32/
  F:	drivers/dma/stm32/
  

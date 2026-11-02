@@ -23,7 +23,7 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/sound/soc/codecs/hdmi-codec.c b/sound/soc/codecs/hdmi-codec.c
-index e715c751547f..8aacf5eff08c 100644
+index 9559c5eb5abf..b9451e989c3b 100644
 --- a/sound/soc/codecs/hdmi-codec.c
 +++ b/sound/soc/codecs/hdmi-codec.c
 @@ -382,7 +382,7 @@ static int hdmi_codec_get_ch_alloc_table_idx(struct hdmi_codec_priv *hcp,

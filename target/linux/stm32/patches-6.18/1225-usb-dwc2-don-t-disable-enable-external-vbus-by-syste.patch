@@ -30,7 +30,7 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  1 file changed, 7 deletions(-)
 
 diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index 88742856235a..aafc90a807fc 100644
+index 5ccf8f170531..d9c7b62f78e1 100644
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
 @@ -4389,10 +4389,6 @@ static int _dwc2_hcd_suspend(struct usb_hcd *hcd)

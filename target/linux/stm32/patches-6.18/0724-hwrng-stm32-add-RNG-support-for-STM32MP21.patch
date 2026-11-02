@@ -29,11 +29,11 @@ Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
 Signed-off-by: Nicolas Le Bayon <nicolas.le.bayon@st.com>
 Signed-off-by: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
 ---
- drivers/char/hw_random/stm32-rng.c | 79 +++++++++++++++++++++++-------
- 1 file changed, 62 insertions(+), 17 deletions(-)
+ drivers/char/hw_random/stm32-rng.c | 84 ++++++++++++++++++++++++------
+ 1 file changed, 67 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
-index 9a8c00586ab0..287487531de2 100644
+index f5bfe54c01dc..083dcb10aa23 100644
 --- a/drivers/char/hw_random/stm32-rng.c
 +++ b/drivers/char/hw_random/stm32-rng.c
 @@ -21,16 +21,15 @@
@@ -124,7 +124,7 @@ index 9a8c00586ab0..287487531de2 100644
  		       (clock_div << RNG_CR_CLKDIV_SHIFT);
  		if (priv->ced)
  			reg &= ~RNG_CR_CED;
-@@ -356,18 +360,28 @@ static int stm32_rng_init(struct hwrng *rng)
+@@ -356,18 +360,33 @@ static int stm32_rng_init(struct hwrng *rng)
  	err = readl_relaxed_poll_timeout_atomic(priv->base + RNG_SR, reg,
  						reg & RNG_SR_DRDY,
  						10, 100000);
@@ -153,10 +153,15 @@ index 9a8c00586ab0..287487531de2 100644
 +	priv->init_done = false;
 +}
 +
- static void stm32_rng_remove(struct platform_device *ofdev)
++static void stm32_rng_remove(struct platform_device *ofdev)
++{
++	pm_runtime_disable(&ofdev->dev);
++}
++
+ static int __maybe_unused stm32_rng_runtime_suspend(struct device *dev)
  {
- 	pm_runtime_disable(&ofdev->dev);
-@@ -392,6 +406,10 @@ static int __maybe_unused stm32_rng_suspend(struct device *dev)
+ 	struct stm32_rng_private *priv = dev_get_drvdata(dev);
+@@ -387,6 +406,10 @@ static int __maybe_unused stm32_rng_suspend(struct device *dev)
  	struct stm32_rng_private *priv = dev_get_drvdata(dev);
  	int err;
  
@@ -167,7 +172,7 @@ index 9a8c00586ab0..287487531de2 100644
  	err = clk_bulk_prepare_enable(priv->data->nb_clock, priv->clk_bulk);
  	if (err)
  		return err;
-@@ -437,6 +455,10 @@ static int __maybe_unused stm32_rng_resume(struct device *dev)
+@@ -432,6 +455,10 @@ static int __maybe_unused stm32_rng_resume(struct device *dev)
  	int err;
  	u32 reg;
  
@@ -178,7 +183,7 @@ index 9a8c00586ab0..287487531de2 100644
  	err = clk_bulk_prepare_enable(priv->data->nb_clock, priv->clk_bulk);
  	if (err)
  		return err;
-@@ -491,15 +513,27 @@ static const struct stm32_rng_data stm32mp25_rng_data = {
+@@ -486,15 +513,27 @@ static const struct stm32_rng_data stm32mp25_rng_data = {
  	.has_cond_reset = true,
  	.max_clock_rate = 48000000,
  	.nb_clock = 2,
@@ -206,7 +211,7 @@ index 9a8c00586ab0..287487531de2 100644
  	.cr = 0x00F00D00,
  	.nscr = 0x2B5BB,
  	.htcr = 0x969D,
-@@ -516,6 +550,10 @@ static const struct of_device_id stm32_rng_match[] = {
+@@ -511,6 +550,10 @@ static const struct of_device_id stm32_rng_match[] = {
  		.compatible = "st,stm32mp25-rng",
  		.data = &stm32mp25_rng_data,
  	},
@@ -217,7 +222,7 @@ index 9a8c00586ab0..287487531de2 100644
  	{
  		.compatible = "st,stm32mp13-rng",
  		.data = &stm32mp13_rng_data,
-@@ -563,6 +601,7 @@ static int stm32_rng_probe(struct platform_device *ofdev)
+@@ -558,6 +601,7 @@ static int stm32_rng_probe(struct platform_device *ofdev)
  
  	priv->rng.name = dev_driver_string(dev);
  	priv->rng.init = stm32_rng_init;
@@ -225,9 +230,9 @@ index 9a8c00586ab0..287487531de2 100644
  	priv->rng.read = stm32_rng_read;
  	priv->rng.quality = 900;
  
-@@ -592,7 +631,13 @@ static int stm32_rng_probe(struct platform_device *ofdev)
- 	pm_runtime_use_autosuspend(dev);
- 	pm_runtime_enable(dev);
+@@ -589,7 +633,13 @@ static int stm32_rng_probe(struct platform_device *ofdev)
+ 	if (ret)
+ 		return ret;
  
 -	return devm_hwrng_register(dev, &priv->rng);
 +	ret = devm_hwrng_register(dev, &priv->rng);

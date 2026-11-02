@@ -55,7 +55,7 @@ index e8cfa882af1e..0cb4de590ce2 100644
  		hantro_g2_hevc_dec.o \
  		hantro_g2_vp9_dec.o \
 diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
-index cd29a644d7d8..dd59cbb65203 100644
+index 025e99a81096..d7acd3a4f8ca 100644
 --- a/drivers/media/platform/verisilicon/hantro.h
 +++ b/drivers/media/platform/verisilicon/hantro.h
 @@ -41,6 +41,7 @@ struct hantro_postproc_ops;
@@ -66,7 +66,7 @@ index cd29a644d7d8..dd59cbb65203 100644
  #define HANTRO_DECODERS		0xffff0000
  
  /**
-@@ -115,6 +116,7 @@ struct hantro_variant {
+@@ -117,6 +118,7 @@ struct hantro_variant {
   * @HANTRO_MODE_HEVC_DEC: HEVC decoder.
   * @HANTRO_MODE_VP9_DEC: VP9 decoder.
   * @HANTRO_MODE_AV1_DEC: AV1 decoder
@@ -74,7 +74,7 @@ index cd29a644d7d8..dd59cbb65203 100644
   * @HANTRO_MODE_VP8_ENC: VP8 encoder.
   * @HANTRO_MODE_H264_ENC: H264 encoder.
   */
-@@ -127,6 +129,7 @@ enum hantro_codec_mode {
+@@ -129,6 +131,7 @@ enum hantro_codec_mode {
  	HANTRO_MODE_HEVC_DEC,
  	HANTRO_MODE_VP9_DEC,
  	HANTRO_MODE_AV1_DEC,
@@ -82,7 +82,7 @@ index cd29a644d7d8..dd59cbb65203 100644
  	HANTRO_MODE_VP8_ENC,
  	HANTRO_MODE_H264_ENC,
  };
-@@ -250,6 +253,7 @@ struct hantro_dev {
+@@ -252,6 +255,7 @@ struct hantro_dev {
   * @hevc_dec:		HEVC-decoding context.
   * @vp9_dec:		VP9-decoding context.
   * @av1_dec:		AV1-decoding context.
@@ -90,7 +90,7 @@ index cd29a644d7d8..dd59cbb65203 100644
   */
  struct hantro_ctx {
  	struct hantro_dev *dev;
-@@ -282,6 +286,7 @@ struct hantro_ctx {
+@@ -284,6 +288,7 @@ struct hantro_ctx {
  		struct hantro_hevc_dec_hw_ctx hevc_dec;
  		struct hantro_vp9_dec_hw_ctx vp9_dec;
  		struct hantro_av1_dec_hw_ctx av1_dec;
@@ -852,10 +852,10 @@ index 0b49d0b82caa..8e91fc85d7e2 100644
 +int hantro_jpeg_prepare_vlc_hw_table(struct v4l2_jpeg_header *header,
 +				     u8 *vlc_hw_table);
 diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
-index 7f3bfb661d1c..46631ad356f9 100644
+index 3448ed82fb60..9e4de0c7ec7c 100644
 --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
 +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
-@@ -663,8 +663,14 @@ static int vidioc_g_selection(struct file *file, void *priv,
+@@ -667,8 +667,14 @@ static int vidioc_g_selection(struct file *file, void *priv,
  {
  	struct hantro_ctx *ctx = file_to_ctx(file);
  
@@ -872,7 +872,7 @@ index 7f3bfb661d1c..46631ad356f9 100644
  		return -EINVAL;
  
  	switch (sel->target) {
-@@ -681,6 +687,15 @@ static int vidioc_g_selection(struct file *file, void *priv,
+@@ -685,6 +691,15 @@ static int vidioc_g_selection(struct file *file, void *priv,
  		sel->r.width = ctx->dst_fmt.width;
  		sel->r.height = ctx->dst_fmt.height;
  		break;

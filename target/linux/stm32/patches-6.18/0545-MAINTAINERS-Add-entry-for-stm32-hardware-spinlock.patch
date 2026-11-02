@@ -12,10 +12,10 @@ Change-Id: I5a51084a10610c3a02b923a1c685a5475d58eebc
  1 file changed, 6 insertions(+)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index c0bb93f717fa..dc60ab54109f 100644
+index 6c2e138681ca..da54cc68d9e0 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -24329,6 +24329,12 @@ F:	drivers/bus/stm32_etzpc.c
+@@ -24358,6 +24358,12 @@ F:	drivers/bus/stm32_etzpc.c
  F:	drivers/bus/stm32_firewall.c
  F:	drivers/bus/stm32_rifsc.c
  

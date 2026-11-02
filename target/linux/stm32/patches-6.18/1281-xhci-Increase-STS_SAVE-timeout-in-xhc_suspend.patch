@@ -20,10 +20,10 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index a8dee373a485..003b399c304e 100644
+index 14eeb16f668b..6587ef4c1f1d 100644
 --- a/drivers/usb/host/xhci.c
 +++ b/drivers/usb/host/xhci.c
-@@ -1027,7 +1027,7 @@ int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup)
+@@ -1041,7 +1041,7 @@ int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup)
  	writel(command, &xhci->op_regs->command);
  	xhci->broken_suspend = 0;
  	if (xhci_handshake(&xhci->op_regs->status,

@@ -27,7 +27,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index ed911014c53f..2a0daf92cb69 100644
+index faf275e5aa50..3894d27e1e4a 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
 @@ -3435,8 +3435,6 @@ void dwc2_hsotg_core_init_disconnected(struct dwc2_hsotg *hsotg,

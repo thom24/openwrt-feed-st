@@ -14,7 +14,7 @@ Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
  1 file changed, 9 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/hwspinlock/hwspinlock_core.c b/drivers/hwspinlock/hwspinlock_core.c
-index 838bb2ab5eba..adf6fefb382f 100644
+index 4840ef46145b..59e43a54ddac 100644
 --- a/drivers/hwspinlock/hwspinlock_core.c
 +++ b/drivers/hwspinlock/hwspinlock_core.c
 @@ -3,26 +3,26 @@

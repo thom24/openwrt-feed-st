@@ -22,10 +22,10 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/573988
  1 file changed, 5 insertions(+)
 
 diff --git a/drivers/net/phy/realtek/realtek_main.c b/drivers/net/phy/realtek/realtek_main.c
-index 7c3d277efaf0..30caf9b086a7 100644
+index c461ccc03871..f87534932c29 100644
 --- a/drivers/net/phy/realtek/realtek_main.c
 +++ b/drivers/net/phy/realtek/realtek_main.c
-@@ -674,6 +674,11 @@ static int rtl8211f_config_init(struct phy_device *phydev)
+@@ -1315,6 +1315,11 @@ static int rtl8211f_config_init(struct phy_device *phydev)
  	struct device *dev = &phydev->mdio.dev;
  	int ret;
  

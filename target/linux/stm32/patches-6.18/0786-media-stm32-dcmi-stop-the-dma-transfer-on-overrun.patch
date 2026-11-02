@@ -14,7 +14,7 @@ Change-Id: I914d429a2ac98ae01b66561028f04c1b4a52a7ea
  1 file changed, 12 insertions(+)
 
 diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
-index 0874974bbad4..20f5b9ab6a1c 100644
+index 7969fa72c44f..7004e7fbc425 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmi.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
 @@ -402,9 +402,21 @@ static irqreturn_t dcmi_irq_thread(int irq, void *arg)

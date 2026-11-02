@@ -12,10 +12,10 @@ Change-Id: I82747ee8d877a310ca2fdc0cd34f11cfa98e24ff
  1 file changed, 8 insertions(+)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index dc60ab54109f..2dad2688737b 100644
+index da54cc68d9e0..e50b1e16f1ac 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -24374,6 +24374,14 @@ S:	Maintained
+@@ -24403,6 +24403,14 @@ S:	Maintained
  F:	Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
  F:	drivers/soc/st/stm32_syscon.c
  

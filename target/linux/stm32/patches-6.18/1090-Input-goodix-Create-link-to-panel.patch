@@ -25,7 +25,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  1 file changed, 26 insertions(+)
 
 diff --git a/drivers/input/touchscreen/goodix.c b/drivers/input/touchscreen/goodix.c
-index f8798d11ec03..fcf0d19549ea 100644
+index 17fcfe45988c..c4bc4e601243 100644
 --- a/drivers/input/touchscreen/goodix.c
 +++ b/drivers/input/touchscreen/goodix.c
 @@ -16,6 +16,7 @@
@@ -36,7 +36,7 @@ index f8798d11ec03..fcf0d19549ea 100644
  #include <linux/irq.h>
  #include <linux/interrupt.h>
  #include <linux/platform_data/x86/soc.h>
-@@ -1309,10 +1310,35 @@ static int goodix_ts_probe(struct i2c_client *client)
+@@ -1310,10 +1311,35 @@ static int goodix_ts_probe(struct i2c_client *client)
  {
  	struct goodix_ts_data *ts;
  	const char *cfg_name;

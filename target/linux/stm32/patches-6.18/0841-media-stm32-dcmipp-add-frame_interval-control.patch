@@ -36,7 +36,7 @@ index df8ed7350c29..940bf048bb1f 100644
  	.disable_streams	= dcmipp_byteproc_disable_streams,
  };
 diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
-index fb82beee05a3..a5284aeb05c7 100644
+index ca267c0b83d5..c4a964cd18c6 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
 @@ -64,6 +64,7 @@
@@ -109,7 +109,7 @@ index fb82beee05a3..a5284aeb05c7 100644
  static int dcmipp_capture_start_streaming(struct vb2_queue *vq,
  					  unsigned int count)
  {
-@@ -611,6 +653,17 @@ static int dcmipp_capture_start_streaming(struct vb2_queue *vq,
+@@ -613,6 +655,17 @@ static int dcmipp_capture_start_streaming(struct vb2_queue *vq,
  		goto err_pm_put;
  	}
  
@@ -127,7 +127,7 @@ index fb82beee05a3..a5284aeb05c7 100644
  	ret = v4l2_subdev_enable_streams(vcap->s_subdev,
  					 vcap->s_subdev_pad_nb, BIT_ULL(0));
  	if (ret)
-@@ -1032,11 +1085,15 @@ static irqreturn_t dcmipp_capture_irq_thread(int irq, void *arg)
+@@ -1034,11 +1087,15 @@ static irqreturn_t dcmipp_capture_irq_thread(int irq, void *arg)
  		 * most of the cases, since a FRAMEEND has already come,
  		 * pointer next is NULL since active is reset during the
  		 * FRAMEEND handling. However, in case of framerate adjustment,

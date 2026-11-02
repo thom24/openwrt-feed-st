@@ -27,7 +27,7 @@ Change-Id: I921ae7097b029ff68d5f90a2042f2725c89f816d
  1 file changed, 220 insertions(+), 30 deletions(-)
 
 diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
-index 97683daf179d..e5663fbe6422 100644
+index 0950d66567ab..eeb0199864dd 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmi.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
 @@ -15,6 +15,7 @@
@@ -430,7 +430,7 @@ index 97683daf179d..e5663fbe6422 100644
  
  	q = &dcmi->queue;
  
-@@ -2023,8 +2204,13 @@ static int dcmi_probe(struct platform_device *pdev)
+@@ -2024,8 +2205,13 @@ static int dcmi_probe(struct platform_device *pdev)
  	v4l2_device_unregister(&dcmi->v4l2_dev);
  err_media_device_cleanup:
  	media_device_cleanup(&dcmi->mdev);
@@ -444,7 +444,7 @@ index 97683daf179d..e5663fbe6422 100644
  
  	return ret;
  }
-@@ -2042,6 +2228,10 @@ static void dcmi_remove(struct platform_device *pdev)
+@@ -2043,6 +2229,10 @@ static void dcmi_remove(struct platform_device *pdev)
  	media_device_cleanup(&dcmi->mdev);
  
  	dma_release_channel(dcmi->dma_chan);

@@ -19,7 +19,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  1 file changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 4c8c74199f10..4c47172c86e1 100644
+index 44aba181e670..122e7f647004 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -2129,8 +2129,22 @@ ltdc: display-controller@48010000 {

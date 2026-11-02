@@ -39,10 +39,10 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  2 files changed, 14 insertions(+)
 
 diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 1ed528e34bab..6196f840b739 100644
+index ec577a20567b..2037472ec638 100644
 --- a/drivers/cpufreq/cpufreq.c
 +++ b/drivers/cpufreq/cpufreq.c
-@@ -2788,6 +2788,13 @@ int cpufreq_boost_set_sw(struct cpufreq_policy *policy, int state)
+@@ -2793,6 +2793,13 @@ int cpufreq_boost_set_sw(struct cpufreq_policy *policy, int state)
  		return ret;
  	}
  

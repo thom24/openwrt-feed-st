@@ -23,7 +23,7 @@ Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-index 59df53336450..7b65374943f0 100644
+index 9a5e5caa4682..c0362f337b89 100644
 --- a/drivers/media/v4l2-core/v4l2-common.c
 +++ b/drivers/media/v4l2-core/v4l2-common.c
 @@ -197,7 +197,7 @@ EXPORT_SYMBOL_GPL(__v4l2_find_nearest_size_conditional);

@@ -20,7 +20,7 @@ Acked-by: Andy Shevchenko <andriy.shevchenko@intel.com>
  delete mode 100644 drivers/hwspinlock/u8500_hsem.c
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 2dccf814a055..dd76a6a96d24 100644
+index f9e76205a037..8e54cdac11c4 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
 @@ -3057,7 +3057,6 @@ F:	drivers/clocksource/clksrc-dbx500-prcmu.c

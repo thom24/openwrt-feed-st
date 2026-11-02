@@ -41,7 +41,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  3 files changed, 26 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/mmc/host/mmci.c b/drivers/mmc/host/mmci.c
-index 9bbdedc1ae84..338af1d7f7be 100644
+index 834a80b47e9e..75950aee48e7 100644
 --- a/drivers/mmc/host/mmci.c
 +++ b/drivers/mmc/host/mmci.c
 @@ -375,7 +375,9 @@ static int mmci_card_busy(struct mmc_host *mmc)

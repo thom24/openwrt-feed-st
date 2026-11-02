@@ -251,7 +251,7 @@ index 9a2b2f50df76..90e868535ac2 100644
 +	};
 +};
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index ec5db00b9d72..f43336a433f1 100644
+index 3ec6b7dc085e..523ac5876651 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -68,7 +68,7 @@ optee: optee {

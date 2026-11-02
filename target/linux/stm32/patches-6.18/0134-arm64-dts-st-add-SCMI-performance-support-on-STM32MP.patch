@@ -92,7 +92,7 @@ index 8d0abd7a7925..76762bf7bdad 100644
  	};
  
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 257c37e1bebd..8d14ce943b6a 100644
+index 94402e36a7e7..34ac0bd2acaf 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -22,8 +22,8 @@ cpu0: cpu@0 {

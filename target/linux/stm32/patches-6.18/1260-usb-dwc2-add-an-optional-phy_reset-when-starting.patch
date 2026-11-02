@@ -58,7 +58,7 @@ index 73f34a2ae45b..d2e049abb221 100644
  
  	if (role == USB_ROLE_HOST) {
 diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index cb99b81f950f..74a4aaa3425d 100644
+index aaae0cc26d47..37af85308901 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
 @@ -4721,6 +4721,17 @@ static int dwc2_hsotg_udc_start(struct usb_gadget *gadget,

@@ -23,7 +23,7 @@ Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
  1 file changed, 115 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 4b65347574f9..ef5890c2d870 100644
+index e28c67a3cd00..ee1ca27fbb0c 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -1785,6 +1785,121 @@ filter7: filter@404 {

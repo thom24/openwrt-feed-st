@@ -20,10 +20,10 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/sound/soc/codecs/hdmi-codec.c b/sound/soc/codecs/hdmi-codec.c
-index 666f053d3a52..e715c751547f 100644
+index 87fc6fbd5561..9559c5eb5abf 100644
 --- a/sound/soc/codecs/hdmi-codec.c
 +++ b/sound/soc/codecs/hdmi-codec.c
-@@ -980,6 +980,7 @@ static void plugged_cb(struct device *dev, bool plugged)
+@@ -984,6 +984,7 @@ static void plugged_cb(struct device *dev, bool plugged)
  	} else {
  		hdmi_codec_jack_report(hcp, 0);
  		memset(hcp->eld, 0, sizeof(hcp->eld));

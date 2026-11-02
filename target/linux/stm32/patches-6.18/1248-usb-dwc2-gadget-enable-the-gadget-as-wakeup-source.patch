@@ -39,7 +39,7 @@ Change-Id: Ied80fefb44ea4bd866da9f05b9361c19550966f8
  2 files changed, 27 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 60d6f3e4297f..3402832b86d6 100644
+index e8db3f916de9..aa69476ebcc2 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
 @@ -4702,6 +4702,8 @@ static int dwc2_hsotg_udc_start(struct usb_gadget *gadget,
@@ -60,7 +60,7 @@ index 60d6f3e4297f..3402832b86d6 100644
  	/* Exit clock gating when driver is stopped. */
  	if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
  	    hsotg->bus_suspended && !hsotg->params.no_clock_gating) {
-@@ -5238,7 +5242,13 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
+@@ -5246,7 +5250,13 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
  {
  	unsigned long flags;
  
@@ -75,7 +75,7 @@ index 60d6f3e4297f..3402832b86d6 100644
  		hsotg->gadget_off_for_suspend = false;
  		return 0;
  	}
-@@ -5246,6 +5256,19 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
+@@ -5254,6 +5264,19 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
  	if (hsotg->driver) {
  		int ep;
  

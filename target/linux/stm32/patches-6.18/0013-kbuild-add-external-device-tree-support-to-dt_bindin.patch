@@ -30,10 +30,10 @@ Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
  1 file changed, 20 insertions(+), 1 deletion(-)
 
 diff --git a/Makefile b/Makefile
-index ac263928f0f3..8364330ba9a2 100644
+index ee2116a29a35..683b5d2b896a 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -1574,7 +1574,26 @@ dt_binding_check: dt_binding_schemas scripts_dtc
+@@ -1602,7 +1602,26 @@ dt_binding_check: dt_binding_schemas scripts_dtc
  	$(Q)$(MAKE) $(build)=Documentation/devicetree/bindings $@
  
  dt_binding_schemas:

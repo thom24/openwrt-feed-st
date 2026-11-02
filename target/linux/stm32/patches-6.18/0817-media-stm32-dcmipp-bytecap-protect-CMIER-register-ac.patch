@@ -15,10 +15,10 @@ Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
  1 file changed, 4 insertions(+)
 
 diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
-index 1b7edf0d2938..0b1d1fbda5d6 100644
+index 9c76dbe89eb7..5b7e58d06465 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
-@@ -436,7 +436,9 @@ static int dcmipp_bytecap_start_streaming(struct vb2_queue *vq,
+@@ -438,7 +438,9 @@ static int dcmipp_bytecap_start_streaming(struct vb2_queue *vq,
  	dcmipp_start_capture(vcap, vcap->next);
  
  	/* Enable interruptions */
@@ -28,7 +28,7 @@ index 1b7edf0d2938..0b1d1fbda5d6 100644
  
  	vcap->state = DCMIPP_RUNNING;
  
-@@ -492,7 +494,9 @@ static void dcmipp_bytecap_stop_streaming(struct vb2_queue *vq)
+@@ -494,7 +496,9 @@ static void dcmipp_bytecap_stop_streaming(struct vb2_queue *vq)
  	media_pipeline_stop(vcap->vdev.entity.pads);
  
  	/* Disable interruptions */

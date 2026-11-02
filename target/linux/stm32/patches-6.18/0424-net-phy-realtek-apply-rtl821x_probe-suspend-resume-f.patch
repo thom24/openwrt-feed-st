@@ -19,10 +19,10 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/phy/realtek/realtek_main.c b/drivers/net/phy/realtek/realtek_main.c
-index 30caf9b086a7..5ed50baebfda 100644
+index f87534932c29..d7e0d99a00b4 100644
 --- a/drivers/net/phy/realtek/realtek_main.c
 +++ b/drivers/net/phy/realtek/realtek_main.c
-@@ -1805,11 +1805,12 @@ static struct phy_driver realtek_drvs[] = {
+@@ -3879,11 +3879,12 @@ static struct phy_driver realtek_drvs[] = {
  	}, {
  		PHY_ID_MATCH_EXACT(0x001cc915),
  		.name		= "RTL8211E Gigabit Ethernet",

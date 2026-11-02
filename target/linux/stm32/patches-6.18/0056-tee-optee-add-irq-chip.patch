@@ -32,7 +32,7 @@ Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
  3 files changed, 172 insertions(+)
 
 diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
-index df8bb4e13379..b728d4ce9191 100644
+index 0092adac9451..ed2f9bd7b959 100644
 --- a/drivers/tee/optee/optee_private.h
 +++ b/drivers/tee/optee/optee_private.h
 @@ -42,6 +42,9 @@
@@ -46,10 +46,10 @@ index df8bb4e13379..b728d4ce9191 100644
  				unsigned long, unsigned long, unsigned long,
  				unsigned long, unsigned long,
 @@ -138,6 +141,7 @@ struct optee_pcpu {
-  * @notif_pcpu_wq	workqueue for per cpu asynchronous notification or NULL
-  * @notif_pcpu_work	work for per cpu asynchronous notification
-  * @notif_cpuhp_state   CPU hotplug state assigned for pcpu interrupt management
-+ * @domain		interrupt domain registered by OP-TEE driver
+  * @notif_pcpu_wq:	workqueue for per cpu asynchronous notification or NULL
+  * @notif_pcpu_work:	work for per cpu asynchronous notification
+  * @notif_cpuhp_state:	CPU hotplug state assigned for pcpu interrupt management
++ * @domain:		interrupt domain registered by OP-TEE driver
   */
  struct optee_smc {
  	optee_invoke_fn *invoke_fn;
@@ -61,15 +61,15 @@ index df8bb4e13379..b728d4ce9191 100644
  };
  
  /**
-@@ -237,6 +242,7 @@ struct optee_ops {
-  * @rpc_param_count:	If > 0 number of RPC parameters to make room for
-  * @scan_bus_done	flag if device registation was already done.
-  * @scan_bus_work	workq to scan optee bus and register optee drivers
-+ * @itr_notif		True if OP-TEE offers interrupt notification
+@@ -245,6 +250,7 @@ struct optee_ops {
+  * @rpmb_scan_bus_work:		workq to for an RPMB device and to scan optee
+  *				bus and register RPMB dependent optee drivers
+  * @revision:			OP-TEE OS revision
++ * @itr_notif:		True if OP-TEE offers interrupt notification
   */
  struct optee {
  	struct tee_device *supp_teedev;
-@@ -262,6 +268,7 @@ struct optee {
+@@ -270,6 +276,7 @@ struct optee {
  	bool in_kernel_rpmb_routing;
  	struct work_struct scan_bus_work;
  	struct work_struct rpmb_scan_bus_work;
@@ -105,7 +105,7 @@ index 82e84967619c..bb23135caef4 100644
  #define OPTEE_SMC_FUNCID_CALL_WITH_RPC_ARG	18
  
 diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
-index 2da802bc1165..6493b9528b06 100644
+index 9503c58d026c..62a5d45d4979 100644
 --- a/drivers/tee/optee/smc_abi.c
 +++ b/drivers/tee/optee/smc_abi.c
 @@ -1075,6 +1075,128 @@ static int optee_smc_reclaim_protmem(struct optee *optee,
@@ -271,7 +271,7 @@ index 2da802bc1165..6493b9528b06 100644
  	teedev = tee_device_alloc(&optee_clnt_desc, NULL, pool, optee);
  	if (IS_ERR(teedev)) {
  		rc = PTR_ERR(teedev);
-@@ -1932,6 +2067,20 @@ static int optee_probe(struct platform_device *pdev)
+@@ -1924,6 +2059,20 @@ static int optee_probe(struct platform_device *pdev)
  			irq_dispose_mapping(irq);
  			goto err_notif_uninit;
  		}
