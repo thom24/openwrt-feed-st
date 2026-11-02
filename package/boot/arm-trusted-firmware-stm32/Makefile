@@ -7,13 +7,13 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_VERSION:=2.10-stm32mp-r3
+PKG_VERSION:=2.14-stm32mp-r1
 PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/STMicroelectronics/arm-trusted-firmware.git
 PKG_SOURCE_VERSION:=v$(PKG_VERSION)
-PKG_MIRROR_HASH:=fbc046ab179666cd1a66226b0bc2fe38380f1190080fae8c8a13ca9ea0003583
+PKG_MIRROR_HASH:=b19426e112b2e72dc6578f9c8f6ad3b7e3c4a1e183cd9bf01a84bea3d394757a
 
 PKG_MAINTAINER:=Thomas Richard <thomas.richard@bootlin.com>
 
