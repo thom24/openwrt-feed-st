@@ -7,13 +7,13 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_VERSION:=4.0.0-stm32mp-r3
+PKG_VERSION:=4.8.0-stm32mp-r1
 PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/STMicroelectronics/optee_os.git
 PKG_SOURCE_VERSION:=$(PKG_VERSION)
-PKG_MIRROR_HASH:=a61fb96b6c96120a9bd47fede614cbed57ca1029eef948f734e9e687f4a94138
+PKG_MIRROR_HASH:=d1b99a0bc56165beea89a7f5874aa38f2bfdd961c888df81857a0e1a4ef73df8
 PKG_MAINTAINER:=Thomas Richard <thomas.richard@bootlin.com>
 
 OPTEE_USE_INTREE_DTC:=1
