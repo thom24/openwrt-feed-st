@@ -1,0 +1,138 @@
+From 09fa385485c5fe20f559c5daa3534f938a5c9289 Mon Sep 17 00:00:00 2001
+From: Christophe Kerello <christophe.kerello@foss.st.com>
+Date: Thu, 6 Aug 2026 13:32:44 +0200
+Subject: [PATCH] clk: stm32mp1: pre-register RCC syscon regmap in clock driver
+
+The RCC node carries the "syscon" compatible, so that a few consumers
+can reach registers exposed by neither the clock nor the reset API.
+
+Without a pre-registered regmap, the syscon core builds one on first
+lookup via of_syscon_register(). This path attempts to use clocks[0]
+as a gating clock for register access. However, for the RCC clock
+provider, clocks[0] is the HSE oscillator (not a bus clock), causing
+register reads to toggle the oscillator - a fatal operation on
+PREEMPT_RT where the regmap lock is held in an atomic section while
+clk_enable() attempts to sleep.
+
+Register the regmap directly from the clock driver before any consumer
+lookup, with no clock gating attached. The RCC registers are always
+accessible via the bus clock (which stays on while the CPU runs). The
+regmap exposure is also restricted to RCC_TZCR and RCC_MP_GCR registers
+only, matching the actual accessible window rather than exposing the
+entire space.
+
+Change-Id: I0728cccfe7a5db6e3fa1119ee119bb2af585a584
+Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+Assisted-by: GitHub-Copilot:Claude-Opus-5
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/598335
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Tested-by: Christophe KERELLO <christophe.kerello@st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/clk/stm32/Kconfig        |  1 +
+ drivers/clk/stm32/clk-stm32mp1.c | 50 ++++++++++++++++++++++++++++++++
+ 2 files changed, 51 insertions(+)
+
+diff --git a/drivers/clk/stm32/Kconfig b/drivers/clk/stm32/Kconfig
+index b697c28d6f88..4ba1513bdae5 100644
+--- a/drivers/clk/stm32/Kconfig
++++ b/drivers/clk/stm32/Kconfig
+@@ -22,6 +22,7 @@ config COMMON_CLK_STM32MP157
+ 	bool "Clock driver for stm32mp15x clocks"
+ 	depends on ARM || COMPILE_TEST
+ 	default ARCH_STM32
++	select MFD_SYSCON
+ 	help
+ 	  Support for stm32mp15x SoC family clocks.
+ 
+diff --git a/drivers/clk/stm32/clk-stm32mp1.c b/drivers/clk/stm32/clk-stm32mp1.c
+index fee4449f117c..a9595dbd5c21 100644
+--- a/drivers/clk/stm32/clk-stm32mp1.c
++++ b/drivers/clk/stm32/clk-stm32mp1.c
+@@ -10,10 +10,12 @@
+ #include <linux/delay.h>
+ #include <linux/err.h>
+ #include <linux/io.h>
++#include <linux/mfd/syscon.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <linux/platform_device.h>
++#include <linux/regmap.h>
+ #include <linux/reset-controller.h>
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
+@@ -108,6 +110,8 @@ static DEFINE_SPINLOCK(rlock);
+ #define RCC_TIMG2PRER		0x82C
+ #define RCC_RTCDIVR		0x44
+ #define RCC_DBGCFGR		0x80C
++#define RCC_TZCR		0x00
++#define RCC_MP_GCR		0x10C
+ 
+ #define RCC_CLR	0x4
+ 
+@@ -2412,6 +2416,51 @@ static int stm32_rcc_init(struct device *dev, void __iomem *base,
+ 
+ static void stm32_clk_summary_debugfs_create(struct device *dev, void __iomem *base);
+ 
++static bool stm32mp1_rcc_syscon_readable_reg(struct device *dev, unsigned int reg)
++{
++	return reg == RCC_TZCR || reg == RCC_MP_GCR;
++}
++
++static bool stm32mp1_rcc_syscon_writeable_reg(struct device *dev, unsigned int reg)
++{
++	return reg == RCC_MP_GCR;
++}
++
++static const struct regmap_config stm32mp1_rcc_syscon_regmap_cfg = {
++	.reg_bits = 32,
++	.val_bits = 32,
++	.reg_stride = 4,
++	.max_register = 0xFFC,
++	.use_raw_spinlock = true,
++	.readable_reg = stm32mp1_rcc_syscon_readable_reg,
++	.writeable_reg = stm32mp1_rcc_syscon_writeable_reg,
++};
++
++static void stm32mp1_rcc_register_syscon(struct device *dev, void __iomem *base)
++{
++	struct device_node *np = dev_of_node(dev);
++	struct regmap *regmap;
++	int ret;
++
++	if (!of_device_is_compatible(np, "syscon"))
++		return;
++
++	regmap = devm_regmap_init_mmio(dev, base, &stm32mp1_rcc_syscon_regmap_cfg);
++	if (IS_ERR(regmap)) {
++		ret = PTR_ERR(regmap);
++		goto warn;
++	}
++
++	ret = devm_of_syscon_register_regmap(dev, np, regmap);
++	if (ret)
++		goto warn;
++
++	return;
++
++warn:
++	dev_warn(dev, "failed to register RCC syscon regmap: %d\n", ret);
++}
++
+ static int stm32mp1_rcc_init(struct device *dev)
+ {
+ 	void __iomem *base;
+@@ -2433,6 +2482,7 @@ static int stm32mp1_rcc_init(struct device *dev)
+ 
+ 		of_node_put(dev_of_node(dev));
+ 	} else {
++		stm32mp1_rcc_register_syscon(dev, base);
+ 		stm32_clk_summary_debugfs_create(dev, base);
+ 	}
+ 
+-- 
+2.53.0
+

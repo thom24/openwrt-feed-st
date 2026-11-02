@@ -1,0 +1,59 @@
+From e51bd857a42c355e0e1994b016da5112eff7ef9c Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Thu, 12 Mar 2026 09:38:44 +0100
+Subject: [PATCH] ARM: dts: stm32: add SCMI clocks in rcc node for
+ stm32mp131.dtsi
+
+These clocks will used as parent clocks (instead use clock name) and
+are referenced by their rcc's node position in clk-stm32mp13.c
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: I54f5211e6012545c9a6238b1d8fffe22aec02161
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/546002
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/559040
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp131.dtsi | 24 +++++++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
+index 750e2fd73a3e..4d926d87b5a9 100644
+--- a/arch/arm/boot/dts/st/stm32mp131.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
+@@ -806,7 +806,29 @@ rcc: rcc@50000000 {
+ 				 <&scmi_clk CK_SCMI_HSI>,
+ 				 <&scmi_clk CK_SCMI_CSI>,
+ 				 <&scmi_clk CK_SCMI_LSE>,
+-				 <&scmi_clk CK_SCMI_LSI>;
++				 <&scmi_clk CK_SCMI_LSI>,
++				 <&scmi_clk CK_SCMI_HSE_DIV2>,
++				 <&scmi_clk CK_SCMI_PLL2_Q>,
++				 <&scmi_clk CK_SCMI_PLL2_R>,
++				 <&scmi_clk CK_SCMI_PLL3_P>,
++				 <&scmi_clk CK_SCMI_PLL3_Q>,
++				 <&scmi_clk CK_SCMI_PLL3_R>,
++				 <&scmi_clk CK_SCMI_PLL4_P>,
++				 <&scmi_clk CK_SCMI_PLL4_Q>,
++				 <&scmi_clk CK_SCMI_PLL4_R>,
++				 <&scmi_clk CK_SCMI_MPU>,
++				 <&scmi_clk CK_SCMI_AXI>,
++				 <&scmi_clk CK_SCMI_MLAHB>,
++				 <&scmi_clk CK_SCMI_CKPER>,
++				 <&scmi_clk CK_SCMI_PCLK1>,
++				 <&scmi_clk CK_SCMI_PCLK2>,
++				 <&scmi_clk CK_SCMI_PCLK3>,
++				 <&scmi_clk CK_SCMI_PCLK4>,
++				 <&scmi_clk CK_SCMI_PCLK5>,
++				 <&scmi_clk CK_SCMI_PCLK6>,
++				 <&scmi_clk CK_SCMI_CKTIMG1>,
++				 <&scmi_clk CK_SCMI_CKTIMG2>,
++				 <&scmi_clk CK_SCMI_CKTIMG3>;
+ 		};
+ 
+ 		pwr_regulators: pwr@50001000 {
+-- 
+2.53.0
+

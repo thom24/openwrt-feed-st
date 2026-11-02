@@ -1,0 +1,46 @@
+From e10775b381249edc3f05bee1e882bc6f774b9a26 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Fri, 18 Oct 2019 14:42:09 +0200
+Subject: [PATCH] ARM: dts: stm32: add supply on touchscreen to stm32mp157x-dk2
+
+Add vcc & io-vcc supply to touchscreen node to stm32mp157x-dk2 device-tree.
+
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Change-Id: Ie46bebff1b63acf3038cd66252561fd879ea7181
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/580539
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp157c-dk2-no-scmi.dts | 2 ++
+ arch/arm/boot/dts/st/stm32mp157f-dk2.dts         | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2-no-scmi.dts
+index 05fa2d962f25..251cd246da29 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-dk2-no-scmi.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-dk2-no-scmi.dts
+@@ -78,6 +78,8 @@ touchscreen@38 {
+ 		interrupt-parent = <&gpiof>;
+ 		touchscreen-size-x = <480>;
+ 		touchscreen-size-y = <800>;
++		vcc-supply = <&v3v3>;
++		iovcc-supply = <&v3v3>;
+ 	};
+ };
+ 
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
+index 670771e26e87..2826481d15f1 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
+@@ -158,6 +158,8 @@ touchscreen@38 {
+ 		interrupt-parent = <&gpiof>;
+ 		touchscreen-size-x = <480>;
+ 		touchscreen-size-y = <800>;
++		vcc-supply = <&v3v3>;
++		iovcc-supply = <&v3v3>;
+ 	};
+ };
+ 
+-- 
+2.53.0
+

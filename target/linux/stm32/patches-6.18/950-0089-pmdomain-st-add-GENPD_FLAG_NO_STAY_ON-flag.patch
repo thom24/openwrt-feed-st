@@ -1,0 +1,37 @@
+From fc312a27bb3f351e5a839e2ceaffbf2946ef63ed Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Mon, 15 Jun 2026 15:13:16 +0200
+Subject: [PATCH] pmdomain: st: add GENPD_FLAG_NO_STAY_ON flag
+
+Set GENPD_FLAG_NO_STAY_ON so the generic PM domain core may power off an
+unused STM32MP domain without waiting for sync_state.
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: I6c507f66baf5af5bb536d9ba594669b5232814a9
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/578960
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Thomas BOURGOIN <thomas.bourgoin@foss.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Tested-by: Thomas BOURGOIN <thomas.bourgoin@foss.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ drivers/pmdomain/st/stm32mp-pm-domain.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/pmdomain/st/stm32mp-pm-domain.c b/drivers/pmdomain/st/stm32mp-pm-domain.c
+index 820f5bf874de..f82c8a41d99f 100644
+--- a/drivers/pmdomain/st/stm32mp-pm-domain.c
++++ b/drivers/pmdomain/st/stm32mp-pm-domain.c
+@@ -50,7 +50,7 @@ static int stm32mp_pm_domain_probe(struct platform_device *pdev)
+ 	 * Domain based only on PM clk framework, no GENPD_FLAG_ACTIVE_WAKEUP
+ 	 * support, the wake-up is handled by power domain of interrupt driver
+ 	 */
+-	pd->flags = GENPD_FLAG_PM_CLK | GENPD_FLAG_IRQ_SAFE;
++	pd->flags = GENPD_FLAG_PM_CLK | GENPD_FLAG_IRQ_SAFE | GENPD_FLAG_NO_STAY_ON;
+ 
+ 	ret = pm_genpd_init(pd, NULL, false);
+ 	if (ret)
+-- 
+2.53.0
+

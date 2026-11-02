@@ -1,0 +1,47 @@
+From 13c78b6ea884db7c3b4cca7d181460755cadcc94 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Fri, 17 Jul 2026 15:52:39 +0200
+Subject: [PATCH] dt-bindings: crypto: stm32-hash: add post-init-providers
+ property
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The STM32MP15 SCMI device trees set post-init-providers on the HASH
+node to defer clock/reset provider initialization until after the
+device has been configured. This property is currently rejected by
+the schema since additionalProperties is false and the property was
+not declared, e.g.:
+
+  hash@54002000 (st,stm32f756-hash): 'post-init-providers' does not
+  match any of the regexes: '^pinctrl-[0-9]+$'
+
+Declare post-init-providers so dtbs_check no longer flags it.
+
+Change-Id: I7aa57b038d89ba92a576f4f8cd241a9c1b447199
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/589193
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
+index 822318414095..e86bc0bc9238 100644
+--- a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
++++ b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
+@@ -51,6 +51,8 @@ properties:
+   power-domains:
+     maxItems: 1
+ 
++  post-init-providers: true
++
+   access-controllers:
+     minItems: 1
+     maxItems: 2
+-- 
+2.53.0
+

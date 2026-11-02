@@ -1,0 +1,49 @@
+From 2ff95b6d4173e59afc47d1d9cddc3e496aecae47 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Thu, 19 Mar 2026 17:51:55 +0100
+Subject: [PATCH] arm64: dts: st: add LPUART1 support on stm32mp23
+
+The LPUART is an UART with limited power consumption and limited feature
+set: no auto baud rate detection, no receiver timeout interrupt, smaller
+Tx/Rx FIFO.
+Add LPUART1 support on stm32mp23.
+
+Change-Id: I87fc0f96522211eca9c4e3410e096a25cab2fc9f
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/549175
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp231.dtsi | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+index 89ed3baa04ef..e6c9b5b8181c 100644
+--- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+@@ -1340,6 +1340,21 @@ spi8: spi@46020000 {
+ 				status = "disabled";
+ 			};
+ 
++			lpuart1: serial@46030000 {
++				compatible = "st,stm32h7-uart";
++				reg = <0x46030000 0x400>;
++				interrupts-extended = <&exti2 26 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&rcc CK_KER_LPUART1>,
++					 <&rcc CK_LPUART1_AM>;
++				dmas = <&hpdma 166 0x20 0x10012>,
++				       <&hpdma 167 0x20 0x3021>;
++				dma-names = "rx", "tx";
++				access-controllers = <&rifsc 40>;
++				power-domains = <&d1_pd>;
++				wakeup-source;
++				status = "disabled";
++			};
++
+ 			i2c8: i2c@46040000 {
+ 				compatible = "st,stm32mp25-i2c";
+ 				reg = <0x46040000 0x400>;
+-- 
+2.53.0
+

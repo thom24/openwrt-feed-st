@@ -1,0 +1,123 @@
+From 8c2cd7b0860aa1f2104b0b1af72eab857f105b5b Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Thu, 28 May 2026 17:06:14 +0200
+Subject: [PATCH] irqchip: stm32mp-exti: Set IRQ domain bus token to
+ DOMAIN_BUS_WIRED
+
+After [1], the driver's code for ops->select() is called in place
+of ops->match() when param count is zero. But the driver's code
+for ops->select() is written for param count not zero.
+
+After [2], the driver's code for ops->select() is skipped and the
+ops->match() is now called, even when param count is not zero. But
+the driver's code for ops->match() is written for param count zero.
+
+To parse the param values, the driver has to use ops->select(),
+since such values are not passed to ops->match().
+
+Set IRQ domain bus token to DOMAIN_BUS_WIRED to let the framework
+call the driver's ops->select().
+
+Make the driver's ops->select() able to handle param count zero in
+place of ops->match(), now never called.
+
+Drop driver's ops->match().
+
+[1] commit de1ff306dcf4 ("genirq/irqdomain: Remove the param count
+    restriction from select()")
+[2] commit 5aa3c0cf5bba ("genirq/irqdomain: Don't call ops->select
+    for DOMAIN_BUS_ANY tokens")
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: Iec22a34949ab4d8fb0776d8fd3ca0e2c67de7ba7
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/572426
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/irqchip/irq-stm32mp-exti.c | 33 +++++++++---------------------
+ 1 file changed, 10 insertions(+), 23 deletions(-)
+
+diff --git a/drivers/irqchip/irq-stm32mp-exti.c b/drivers/irqchip/irq-stm32mp-exti.c
+index ff72f89cf5ef..583b44673422 100644
+--- a/drivers/irqchip/irq-stm32mp-exti.c
++++ b/drivers/irqchip/irq-stm32mp-exti.c
+@@ -545,26 +545,6 @@ static bool stm32mp_exti_test_gpio_mux_available(struct stm32mp_exti_host_data *
+ 	return false;
+ }
+ 
+-static int stm32mp_exti_domain_match(struct irq_domain *dm,
+-				     struct device_node *node,
+-				     enum irq_domain_bus_token bus_token)
+-{
+-	struct stm32mp_exti_host_data *host_data = dm->host_data;
+-
+-	if (!node ||
+-	    (bus_token != DOMAIN_BUS_ANY && dm->bus_token != bus_token))
+-		return 0;
+-
+-	if (!host_data->dt_has_irqs_desc)
+-		return (to_of_node(dm->fwnode) == node);
+-
+-	if (node != host_data->dev->of_node)
+-		return 0;
+-
+-	return (to_of_node(dm->parent->fwnode) ==
+-		of_irq_find_parent(host_data->dev->of_node));
+-}
+-
+ static int stm32mp_exti_domain_select(struct irq_domain *dm,
+ 				      struct irq_fwspec *fwspec,
+ 				      enum irq_domain_bus_token bus_token)
+@@ -576,8 +556,7 @@ static int stm32mp_exti_domain_select(struct irq_domain *dm,
+ 	u32 gpio_bank;
+ 	int ret;
+ 
+-	if (!fwnode ||
+-	    (bus_token != DOMAIN_BUS_ANY && dm->bus_token != bus_token))
++	if (!fwnode || dm->bus_token != bus_token)
+ 		return 0;
+ 
+ 	if (!host_data->dt_has_irqs_desc)
+@@ -586,6 +565,13 @@ static int stm32mp_exti_domain_select(struct irq_domain *dm,
+ 	if (fwnode != of_node_to_fwnode(host_data->dev->of_node))
+ 		return 0;
+ 
++	if (!fwspec->param_count)
++		return (to_of_node(dm->parent->fwnode) ==
++			of_irq_find_parent(host_data->dev->of_node));
++
++	if (fwspec->param_count != 2)
++		return 0;
++
+ 	gpio_bank = FIELD_GET(STM32MP_GPIO_BANK_MASK, fwspec->param[1]);
+ 
+ 	if (hwirq < STM32MP_GPIO_IRQ_LINES && !host_data->has_syscon &&
+@@ -778,7 +764,6 @@ static struct stm32mp_exti_chip_data *stm32mp_exti_chip_init(struct stm32mp_exti
+ }
+ 
+ static const struct irq_domain_ops stm32mp_exti_domain_ops = {
+-	.match	= stm32mp_exti_domain_match,
+ 	.select = stm32mp_exti_domain_select,
+ 	.alloc	= stm32mp_exti_domain_alloc,
+ 	.free	= stm32mp_exti_domain_free,
+@@ -897,6 +882,7 @@ static int stm32mp_exti_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
++	irq_domain_update_bus_token(domain, DOMAIN_BUS_WIRED);
+ 	irq_domain_set_pm_device(domain, dev);
+ 
+ 	host_data->dt_has_irqs_desc = of_property_present(np, "interrupts-extended");
+@@ -938,6 +924,7 @@ static int stm32mp_exti_probe(struct platform_device *pdev)
+ 		if (ret)
+ 			return ret;
+ 
++		irq_domain_update_bus_token(domain, DOMAIN_BUS_WIRED);
+ 		irq_domain_set_pm_device(domain, dev);
+ 	}
+ 
+-- 
+2.53.0
+

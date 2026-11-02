@@ -1,0 +1,31 @@
+From 85d2b7e03f680fc7b3c0d3f441ad79216855af14 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Wed, 23 Sep 2026 13:53:25 +0200
+Subject: [PATCH] ARM: dts: stm32: enable IWDG2 on stm32mp157f-dk2
+
+iwdg2 is enabled in stm32mp15xx-dkx.dtsi, which is included by
+stm32mp157f-dk2.dts.
+Remove the unwanted status property from stm32mp157f-dk2-scmi.dtsi
+so that iwdg2 gets enabled.
+
+Change-Id: I926e4aef6f0dccc6a0c07e4c65405ff18cde0005
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi
+index 5d29c2154b46..1991d642e089 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi
+@@ -70,7 +70,6 @@ hdmi-transmitter@39 {
+ 
+ &iwdg2 {
+ 	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
+-	status = "disabled";
+ };
+ 
+ &m4_rproc {
+-- 
+2.53.0
+

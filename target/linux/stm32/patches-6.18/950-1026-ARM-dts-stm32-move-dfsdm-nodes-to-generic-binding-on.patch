@@ -1,0 +1,325 @@
+From 4e114ed05ab84225cdaaff8d786d8121a4d1035c Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Mon, 27 Apr 2026 15:02:17 +0200
+Subject: [PATCH] ARM: dts: stm32: move dfsdm nodes to generic binding on
+ stm32mp157x-ev1
+
+Replace the legacy channel binding by the generic channel binding in
+DFSDM nodes stm32mp157x-ev1 device trees.
+
+Change-Id: Ia7adbc3d2d104304fe23e4bbdfa1e5d5a6ce5285
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/561694
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ .../boot/dts/st/stm32mp157c-ev1-no-scmi.dts   | 56 +++++++++++++------
+ arch/arm/boot/dts/st/stm32mp157d-ev1.dts      | 56 +++++++++++++------
+ arch/arm/boot/dts/st/stm32mp157f-ev1.dts      | 56 +++++++++++++------
+ 3 files changed, 114 insertions(+), 54 deletions(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
+index 0c1c4736da0d..f0d70b1b0424 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
+@@ -213,13 +213,18 @@ &dfsdm {
+ 
+ 	dfsdm0: filter@0 {
+ 		compatible = "st,stm32-dfsdm-dmic";
+-		st,adc-channels = <3>;
+-		st,adc-channel-names = "dmic_u1";
+-		st,adc-channel-types = "SPI_R";
+-		st,adc-channel-clk-src = "CLKOUT";
+ 		st,filter-order = <3>;
++		#address-cells = <1>;
++		#size-cells = <0>;
+ 		status = "okay";
+ 
++		channel@3 {
++			reg = <3>;
++			label = "dmic_u1";
++			st,adc-channel-type = "SPI_R";
++			st,adc-channel-clk-src = "CLKOUT";
++		};
++
+ 		asoc_pdm0: dfsdm-dai {
+ 			compatible = "st,stm32h7-dfsdm-dai";
+ 			#sound-dai-cells = <0>;
+@@ -236,14 +241,19 @@ dfsdm_endpoint0: endpoint {
+ 
+ 	dfsdm1: filter@1 {
+ 		compatible = "st,stm32-dfsdm-dmic";
+-		st,adc-channels = <0>;
+-		st,adc-channel-names = "dmic_u2";
+-		st,adc-channel-types = "SPI_F";
+-		st,adc-channel-clk-src = "CLKOUT";
+ 		st,filter-order = <3>;
+-		st,adc-alt-channel = <1>;
++		#address-cells = <1>;
++		#size-cells = <0>;
+ 		status = "okay";
+ 
++		channel@0 {
++			reg = <0>;
++			label = "dmic_u2";
++			st,adc-channel-type = "SPI_F";
++			st,adc-channel-clk-src = "CLKOUT";
++			st,adc-alt-channel;
++		};
++
+ 		asoc_pdm1: dfsdm-dai {
+ 			compatible = "st,stm32h7-dfsdm-dai";
+ 			#sound-dai-cells = <0>;
+@@ -260,14 +270,19 @@ dfsdm_endpoint1: endpoint {
+ 
+ 	dfsdm2: filter@2 {
+ 		compatible = "st,stm32-dfsdm-dmic";
+-		st,adc-channels = <2>;
+-		st,adc-channel-names = "dmic_u3";
+-		st,adc-channel-types = "SPI_F";
+-		st,adc-channel-clk-src = "CLKOUT";
+-		st,adc-alt-channel = <1>;
+ 		st,filter-order = <3>;
++		#address-cells = <1>;
++		#size-cells = <0>;
+ 		status = "okay";
+ 
++		channel@2 {
++			reg = <2>;
++			label = "dmic_u3";
++			st,adc-channel-type = "SPI_F";
++			st,adc-channel-clk-src = "CLKOUT";
++			st,adc-alt-channel;
++		};
++
+ 		asoc_pdm2: dfsdm-dai {
+ 			compatible = "st,stm32h7-dfsdm-dai";
+ 			#sound-dai-cells = <0>;
+@@ -284,13 +299,18 @@ dfsdm_endpoint2: endpoint {
+ 
+ 	dfsdm3: filter@3 {
+ 		compatible = "st,stm32-dfsdm-dmic";
+-		st,adc-channels = <1>;
+-		st,adc-channel-names = "dmic_u4";
+-		st,adc-channel-types = "SPI_R";
+-		st,adc-channel-clk-src = "CLKOUT";
+ 		st,filter-order = <3>;
++		#address-cells = <1>;
++		#size-cells = <0>;
+ 		status = "okay";
+ 
++		channel@1 {
++			reg = <1>;
++			label = "dmic_u4";
++			st,adc-channel-type = "SPI_R";
++			st,adc-channel-clk-src = "CLKOUT";
++		};
++
+ 		asoc_pdm3: dfsdm-dai {
+ 			compatible = "st,stm32h7-dfsdm-dai";
+ 			#sound-dai-cells = <0>;
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+index f917e0ae7b96..a09f0edb2c93 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+@@ -213,13 +213,18 @@ &dfsdm {
+ 
+ 	dfsdm0: filter@0 {
+ 		compatible = "st,stm32-dfsdm-dmic";
+-		st,adc-channels = <3>;
+-		st,adc-channel-names = "dmic_u1";
+-		st,adc-channel-types = "SPI_R";
+-		st,adc-channel-clk-src = "CLKOUT";
+ 		st,filter-order = <3>;
++		#address-cells = <1>;
++		#size-cells = <0>;
+ 		status = "okay";
+ 
++		channel@3 {
++			reg = <3>;
++			label = "dmic_u1";
++			st,adc-channel-type = "SPI_R";
++			st,adc-channel-clk-src = "CLKOUT";
++		};
++
+ 		asoc_pdm0: dfsdm-dai {
+ 			compatible = "st,stm32h7-dfsdm-dai";
+ 			#sound-dai-cells = <0>;
+@@ -236,14 +241,19 @@ dfsdm_endpoint0: endpoint {
+ 
+ 	dfsdm1: filter@1 {
+ 		compatible = "st,stm32-dfsdm-dmic";
+-		st,adc-channels = <0>;
+-		st,adc-channel-names = "dmic_u2";
+-		st,adc-channel-types = "SPI_F";
+-		st,adc-channel-clk-src = "CLKOUT";
+ 		st,filter-order = <3>;
+-		st,adc-alt-channel = <1>;
++		#address-cells = <1>;
++		#size-cells = <0>;
+ 		status = "okay";
+ 
++		channel@0 {
++			reg = <0>;
++			label = "dmic_u2";
++			st,adc-channel-type = "SPI_F";
++			st,adc-channel-clk-src = "CLKOUT";
++			st,adc-alt-channel;
++		};
++
+ 		asoc_pdm1: dfsdm-dai {
+ 			compatible = "st,stm32h7-dfsdm-dai";
+ 			#sound-dai-cells = <0>;
+@@ -260,14 +270,19 @@ dfsdm_endpoint1: endpoint {
+ 
+ 	dfsdm2: filter@2 {
+ 		compatible = "st,stm32-dfsdm-dmic";
+-		st,adc-channels = <2>;
+-		st,adc-channel-names = "dmic_u3";
+-		st,adc-channel-types = "SPI_F";
+-		st,adc-channel-clk-src = "CLKOUT";
+-		st,adc-alt-channel = <1>;
+ 		st,filter-order = <3>;
++		#address-cells = <1>;
++		#size-cells = <0>;
+ 		status = "okay";
+ 
++		channel@2 {
++			reg = <2>;
++			label = "dmic_u3";
++			st,adc-channel-type = "SPI_F";
++			st,adc-channel-clk-src = "CLKOUT";
++			st,adc-alt-channel;
++		};
++
+ 		asoc_pdm2: dfsdm-dai {
+ 			compatible = "st,stm32h7-dfsdm-dai";
+ 			#sound-dai-cells = <0>;
+@@ -284,13 +299,18 @@ dfsdm_endpoint2: endpoint {
+ 
+ 	dfsdm3: filter@3 {
+ 		compatible = "st,stm32-dfsdm-dmic";
+-		st,adc-channels = <1>;
+-		st,adc-channel-names = "dmic_u4";
+-		st,adc-channel-types = "SPI_R";
+-		st,adc-channel-clk-src = "CLKOUT";
+ 		st,filter-order = <3>;
++		#address-cells = <1>;
++		#size-cells = <0>;
+ 		status = "okay";
+ 
++		channel@1 {
++			reg = <1>;
++			label = "dmic_u4";
++			st,adc-channel-type = "SPI_R";
++			st,adc-channel-clk-src = "CLKOUT";
++		};
++
+ 		asoc_pdm3: dfsdm-dai {
+ 			compatible = "st,stm32h7-dfsdm-dai";
+ 			#sound-dai-cells = <0>;
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+index 7ca87ac913c2..67eeba0cc25c 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+@@ -213,13 +213,18 @@ &dfsdm {
+ 
+ 	dfsdm0: filter@0 {
+ 		compatible = "st,stm32-dfsdm-dmic";
+-		st,adc-channels = <3>;
+-		st,adc-channel-names = "dmic_u1";
+-		st,adc-channel-types = "SPI_R";
+-		st,adc-channel-clk-src = "CLKOUT";
+ 		st,filter-order = <3>;
++		#address-cells = <1>;
++		#size-cells = <0>;
+ 		status = "okay";
+ 
++		channel@3 {
++			reg = <3>;
++			label = "dmic_u1";
++			st,adc-channel-type = "SPI_R";
++			st,adc-channel-clk-src = "CLKOUT";
++		};
++
+ 		asoc_pdm0: dfsdm-dai {
+ 			compatible = "st,stm32h7-dfsdm-dai";
+ 			#sound-dai-cells = <0>;
+@@ -236,14 +241,19 @@ dfsdm_endpoint0: endpoint {
+ 
+ 	dfsdm1: filter@1 {
+ 		compatible = "st,stm32-dfsdm-dmic";
+-		st,adc-channels = <0>;
+-		st,adc-channel-names = "dmic_u2";
+-		st,adc-channel-types = "SPI_F";
+-		st,adc-channel-clk-src = "CLKOUT";
+ 		st,filter-order = <3>;
+-		st,adc-alt-channel = <1>;
++		#address-cells = <1>;
++		#size-cells = <0>;
+ 		status = "okay";
+ 
++		channel@0 {
++			reg = <0>;
++			label = "dmic_u2";
++			st,adc-channel-type = "SPI_F";
++			st,adc-channel-clk-src = "CLKOUT";
++			st,adc-alt-channel;
++		};
++
+ 		asoc_pdm1: dfsdm-dai {
+ 			compatible = "st,stm32h7-dfsdm-dai";
+ 			#sound-dai-cells = <0>;
+@@ -260,14 +270,19 @@ dfsdm_endpoint1: endpoint {
+ 
+ 	dfsdm2: filter@2 {
+ 		compatible = "st,stm32-dfsdm-dmic";
+-		st,adc-channels = <2>;
+-		st,adc-channel-names = "dmic_u3";
+-		st,adc-channel-types = "SPI_F";
+-		st,adc-channel-clk-src = "CLKOUT";
+-		st,adc-alt-channel = <1>;
+ 		st,filter-order = <3>;
++		#address-cells = <1>;
++		#size-cells = <0>;
+ 		status = "okay";
+ 
++		channel@2 {
++			reg = <2>;
++			label = "dmic_u3";
++			st,adc-channel-type = "SPI_F";
++			st,adc-channel-clk-src = "CLKOUT";
++			st,adc-alt-channel;
++		};
++
+ 		asoc_pdm2: dfsdm-dai {
+ 			compatible = "st,stm32h7-dfsdm-dai";
+ 			#sound-dai-cells = <0>;
+@@ -284,13 +299,18 @@ dfsdm_endpoint2: endpoint {
+ 
+ 	dfsdm3: filter@3 {
+ 		compatible = "st,stm32-dfsdm-dmic";
+-		st,adc-channels = <1>;
+-		st,adc-channel-names = "dmic_u4";
+-		st,adc-channel-types = "SPI_R";
+-		st,adc-channel-clk-src = "CLKOUT";
+ 		st,filter-order = <3>;
++		#address-cells = <1>;
++		#size-cells = <0>;
+ 		status = "okay";
+ 
++		channel@1 {
++			reg = <1>;
++			label = "dmic_u4";
++			st,adc-channel-type = "SPI_R";
++			st,adc-channel-clk-src = "CLKOUT";
++		};
++
+ 		asoc_pdm3: dfsdm-dai {
+ 			compatible = "st,stm32h7-dfsdm-dai";
+ 			#sound-dai-cells = <0>;
+-- 
+2.53.0
+

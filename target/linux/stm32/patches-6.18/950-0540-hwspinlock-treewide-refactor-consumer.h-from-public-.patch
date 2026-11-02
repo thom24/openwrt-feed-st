@@ -1,0 +1,234 @@
+From 439ea8b8ebefbfb73857489f47b87bfa6fddfd03 Mon Sep 17 00:00:00 2001
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Date: Tue, 10 Mar 2026 08:55:30 +0100
+Subject: [PATCH] hwspinlock/treewide: refactor consumer.h from public header
+
+Factor out the entries only needed for consumers from the generic public
+header. This allows for a clean separation between providers and
+consumers. Also remove contact field in favor of MAINTAINERS entries.
+Fix the users, too.
+
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Acked-by: Mark Brown <broonie@kernel.org>
+Acked-by: Jonathan Cameron <jonathan.cameron@huawei.com> # for IIO
+Acked-by: Lee Jones <lee@kernel.org> # for MFD
+---
+ Documentation/locking/hwspinlock.rst              |  2 +-
+ MAINTAINERS                                       |  1 -
+ drivers/base/regmap/regmap.c                      |  2 +-
+ drivers/hwspinlock/hwspinlock_core.c              |  2 +-
+ drivers/iio/adc/sc27xx_adc.c                      |  2 +-
+ drivers/irqchip/irq-stm32mp-exti.c                |  2 +-
+ drivers/mfd/syscon.c                              |  2 +-
+ drivers/nvmem/sc27xx-efuse.c                      |  2 +-
+ drivers/nvmem/sprd-efuse.c                        |  2 +-
+ drivers/pinctrl/stm32/pinctrl-stm32.c             |  2 +-
+ drivers/soc/qcom/smem.c                           |  2 +-
+ drivers/spi/spi-sprd-adi.c                        |  2 +-
+ .../linux/{hwspinlock.h => hwspinlock/consumer.h} | 15 ++++++---------
+ 13 files changed, 17 insertions(+), 21 deletions(-)
+ rename include/linux/{hwspinlock.h => hwspinlock/consumer.h} (98%)
+
+diff --git a/Documentation/locking/hwspinlock.rst b/Documentation/locking/hwspinlock.rst
+index a737c702a7d1..001bcab86690 100644
+--- a/Documentation/locking/hwspinlock.rst
++++ b/Documentation/locking/hwspinlock.rst
+@@ -306,7 +306,7 @@ Typical usage
+ 
+ ::
+ 
+-	#include <linux/hwspinlock.h>
++	#include <linux/hwspinlock/consumer.h>
+ 	#include <linux/err.h>
+ 
+ 	int hwspinlock_example(void)
+diff --git a/MAINTAINERS b/MAINTAINERS
+index c151d653d46e..c0bb93f717fa 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10947,7 +10947,6 @@ F:	Documentation/devicetree/bindings/hwlock/
+ F:	Documentation/locking/hwspinlock.rst
+ F:	drivers/hwspinlock/
+ F:	include/linux/hwspinlock/
+-F:	include/linux/hwspinlock.h
+ 
+ HARDWARE TRACING FACILITIES
+ M:	Alexander Shishkin <alexander.shishkin@linux.intel.com>
+diff --git a/drivers/base/regmap/regmap.c b/drivers/base/regmap/regmap.c
+index a64821850723..4be02b968897 100644
+--- a/drivers/base/regmap/regmap.c
++++ b/drivers/base/regmap/regmap.c
+@@ -16,7 +16,7 @@
+ #include <linux/sched.h>
+ #include <linux/delay.h>
+ #include <linux/log2.h>
+-#include <linux/hwspinlock.h>
++#include <linux/hwspinlock/consumer.h>
+ #include <linux/unaligned.h>
+ 
+ #define CREATE_TRACE_POINTS
+diff --git a/drivers/hwspinlock/hwspinlock_core.c b/drivers/hwspinlock/hwspinlock_core.c
+index 6c8a03deb00c..e78ec4b5cfa3 100644
+--- a/drivers/hwspinlock/hwspinlock_core.c
++++ b/drivers/hwspinlock/hwspinlock_core.c
+@@ -12,7 +12,7 @@
+ #include <linux/delay.h>
+ #include <linux/device.h>
+ #include <linux/err.h>
+-#include <linux/hwspinlock.h>
++#include <linux/hwspinlock/consumer.h>
+ #include <linux/hwspinlock/provider.h>
+ #include <linux/jiffies.h>
+ #include <linux/kernel.h>
+diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_adc.c
+index 2535c2c3e60b..1ba759a15724 100644
+--- a/drivers/iio/adc/sc27xx_adc.c
++++ b/drivers/iio/adc/sc27xx_adc.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (C) 2018 Spreadtrum Communications Inc.
+ 
+-#include <linux/hwspinlock.h>
++#include <linux/hwspinlock/consumer.h>
+ #include <linux/iio/iio.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+diff --git a/drivers/irqchip/irq-stm32mp-exti.c b/drivers/irqchip/irq-stm32mp-exti.c
+index 583b44673422..0337d65a858d 100644
+--- a/drivers/irqchip/irq-stm32mp-exti.c
++++ b/drivers/irqchip/irq-stm32mp-exti.c
+@@ -7,7 +7,7 @@
+ 
+ #include <linux/bitfield.h>
+ #include <linux/bitops.h>
+-#include <linux/hwspinlock.h>
++#include <linux/hwspinlock/consumer.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/irq.h>
+diff --git a/drivers/mfd/syscon.c b/drivers/mfd/syscon.c
+index 0ad20c7da53c..63cf0479fa7c 100644
+--- a/drivers/mfd/syscon.c
++++ b/drivers/mfd/syscon.c
+@@ -12,7 +12,7 @@
+ #include <linux/clk.h>
+ #include <linux/device.h>
+ #include <linux/err.h>
+-#include <linux/hwspinlock.h>
++#include <linux/hwspinlock/consumer.h>
+ #include <linux/list.h>
+ #include <linux/mutex.h>
+ #include <linux/of.h>
+diff --git a/drivers/nvmem/sc27xx-efuse.c b/drivers/nvmem/sc27xx-efuse.c
+index 4e2ffefac96c..309090cd4ff0 100644
+--- a/drivers/nvmem/sc27xx-efuse.c
++++ b/drivers/nvmem/sc27xx-efuse.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (C) 2018 Spreadtrum Communications Inc.
+ 
+-#include <linux/hwspinlock.h>
++#include <linux/hwspinlock/consumer.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+diff --git a/drivers/nvmem/sprd-efuse.c b/drivers/nvmem/sprd-efuse.c
+index 1a7e4e5d8b86..92e3092719ba 100644
+--- a/drivers/nvmem/sprd-efuse.c
++++ b/drivers/nvmem/sprd-efuse.c
+@@ -3,7 +3,7 @@
+ 
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+-#include <linux/hwspinlock.h>
++#include <linux/hwspinlock/consumer.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
+ #include <linux/nvmem-provider.h>
+diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
+index 2de2cedd418c..d9b2c0c5913b 100644
+--- a/drivers/pinctrl/stm32/pinctrl-stm32.c
++++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
+@@ -10,7 +10,7 @@
+ #include <linux/clk.h>
+ #include <linux/export.h>
+ #include <linux/gpio/driver.h>
+-#include <linux/hwspinlock.h>
++#include <linux/hwspinlock/consumer.h>
+ #include <linux/io.h>
+ #include <linux/irq.h>
+ #include <linux/mfd/syscon.h>
+diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
+index 39177aa5793a..7cebc3f14773 100644
+--- a/drivers/soc/qcom/smem.c
++++ b/drivers/soc/qcom/smem.c
+@@ -4,7 +4,7 @@
+  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+  */
+ 
+-#include <linux/hwspinlock.h>
++#include <linux/hwspinlock/consumer.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+diff --git a/drivers/spi/spi-sprd-adi.c b/drivers/spi/spi-sprd-adi.c
+index f25b34a91756..58768e4d58ac 100644
+--- a/drivers/spi/spi-sprd-adi.c
++++ b/drivers/spi/spi-sprd-adi.c
+@@ -5,7 +5,7 @@
+  */
+ 
+ #include <linux/delay.h>
+-#include <linux/hwspinlock.h>
++#include <linux/hwspinlock/consumer.h>
+ #include <linux/init.h>
+ #include <linux/io.h>
+ #include <linux/kernel.h>
+diff --git a/include/linux/hwspinlock.h b/include/linux/hwspinlock/consumer.h
+similarity index 98%
+rename from include/linux/hwspinlock.h
+rename to include/linux/hwspinlock/consumer.h
+index 4fe1c8831cd1..f476222ec924 100644
+--- a/include/linux/hwspinlock.h
++++ b/include/linux/hwspinlock/consumer.h
+@@ -1,17 +1,16 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ /*
+- * Hardware spinlock public header
++ * Hardware spinlock public header for consumers
+  *
+  * Copyright (C) 2010 Texas Instruments Incorporated - http://www.ti.com
+- *
+- * Contact: Ohad Ben-Cohen <ohad@wizery.com>
++ * Copyright (C) 2026 Sang Engineering
++ * Copyright (C) 2026 Renesas Solutions Corp.
+  */
+ 
+-#ifndef __LINUX_HWSPINLOCK_H
+-#define __LINUX_HWSPINLOCK_H
++#ifndef __LINUX_HWSPINLOCK_CONSUMER_H
++#define __LINUX_HWSPINLOCK_CONSUMER_H
+ 
+ #include <linux/err.h>
+-#include <linux/sched.h>
+ 
+ /* hwspinlock mode argument */
+ #define HWLOCK_IRQSTATE		0x01 /* Disable interrupts, save state */
+@@ -22,8 +21,6 @@
+ struct device;
+ struct device_node;
+ struct hwspinlock;
+-struct hwspinlock_device;
+-struct hwspinlock_ops;
+ 
+ #ifdef CONFIG_HWSPINLOCK
+ 
+@@ -403,4 +400,4 @@ static inline void hwspin_unlock(struct hwspinlock *hwlock)
+ 	__hwspin_unlock(hwlock, 0, NULL);
+ }
+ 
+-#endif /* __LINUX_HWSPINLOCK_H */
++#endif /* __LINUX_HWSPINLOCK_CONSUMER_H */
+-- 
+2.53.0
+

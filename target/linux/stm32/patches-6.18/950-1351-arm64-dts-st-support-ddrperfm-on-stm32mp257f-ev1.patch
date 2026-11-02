@@ -1,0 +1,45 @@
+From 5689eba7afe33265e88878359f1a2db88a7c5fb3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Tue, 9 Sep 2025 12:12:27 +0200
+Subject: [PATCH] arm64: dts: st: support ddrperfm on stm32mp257f-ev1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Configure DDRPERFM node on stm32mp257f-ev1 board.
+Disable the node as DDRPERFM will produce an error message if it's clock
+(shared with the DDRCTRL on STM32MP25x) is secured by common bootloaders.
+
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Signed-off-by: Clément Le Goffic <legoffic.clement@gmail.com>
+Change-Id: I386a06f3db8fc1f5a98ca0a26d3baf2cb9053ebd
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/571224
+Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+index 82f04c76ca2d..3101c33e041f 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+@@ -324,6 +324,11 @@ &dbg_bus {
+ 	status = "okay";
+ };
+ 
++&ddrperfm {
++	memory-channel = <&ddr_channel>;
++	status = "disabled";
++};
++
+ &dcmipp {
+ 	status = "okay";
+ 	port {
+-- 
+2.53.0
+

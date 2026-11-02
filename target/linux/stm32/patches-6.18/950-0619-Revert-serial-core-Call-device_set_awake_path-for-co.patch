@@ -1,0 +1,48 @@
+From 0a1b4c022fdead0f87e7ea99010dd1e571929821 Mon Sep 17 00:00:00 2001
+From: Valentin Caron <valentin.caron@foss.st.com>
+Date: Wed, 27 May 2026 11:37:10 +0200
+Subject: [PATCH] Revert "serial: core: Call device_set_awake_path() for
+ console port"
+
+This reverts commit a47cf07f60dcb02d01daa19ecf2d5775d6cd12db.
+
+The original patch force the USART's power-domain to be active when
+console_suspend is disabled. This is kind of a regression regarding STM32
+ecosystem, as if we disable console_suspend, the platform didn't go in the
+expected low-power mode. Moreover STM32s are not impacted by the issue
+described by the original patch due to the use of proprietary power
+domains.
+
+This "regression" exist only on boards that are still using
+stm32_pm_domain (drivers/soc/st/stm32_pm_domain.c) power domains
+(STM32MP15x and STM32MP13x) and will probably disappears after the next
+kernel rebase as stm32_pm_domain power domains are already deprecated.
+
+Please do not upstream this patch.
+
+Change-Id: I2f952ecbc61ed25716f082ccdad72c35f1897787
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/571974
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/tty/serial/serial_core.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index ca72454b3eb0..4ab621c6184f 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -2341,7 +2341,6 @@ int uart_suspend_port(struct uart_driver *drv, struct uart_port *uport)
+ 			guard(uart_port_lock_irq)(uport);
+ 			uport->ops->stop_rx(uport);
+ 		}
+-		device_set_awake_path(uport->dev);
+ 		return 0;
+ 	}
+ 
+-- 
+2.53.0
+

@@ -1,0 +1,49 @@
+From f14e30ce3c4323b1d74d473b8ace3339adb30391 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Mon, 11 May 2026 14:49:54 +0200
+Subject: [PATCH] ARM: decompressor: Disable SCTLR.UWXN and SCTLR.WXN on armv7
+ MMU enable
+
+The bits 19 and 20 of the register SCTLR were reported as reserved
+RAZ/SBZP in the ARM DDI 0406 Architecture Reference Manual ARMv7-A
+and ARMv7-R till version B of the manual.
+
+From version C, for devices with Virtualization Extension the two
+bits get new functionality:
+- SCTLR.WXN, bit[19], if set forces regions with write permission
+  as XN (execute never);
+- SCTLR.UWXN, bit[20], if set forces regions with write permission
+  as XN for PL1 accesses.
+
+The kernel decompressor will crash for fetch abort if an element
+in the boot chain has set one of these two bits.
+
+Clear the bits SCTLR.UWXN and SCTLR.WXN before enabling the MMU on
+armv7.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: Ibd78619764b6b425e88cee891b9a1f1fdb4a6005
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/566555
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm/boot/compressed/head.S | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/boot/compressed/head.S b/arch/arm/boot/compressed/head.S
+index 9f406e9c0ea6..e4adfaf0411b 100644
+--- a/arch/arm/boot/compressed/head.S
++++ b/arch/arm/boot/compressed/head.S
+@@ -886,6 +886,7 @@ __armv7_mmu_cache_on:
+ 						@ (needed for ARM1176)
+ #ifdef CONFIG_MMU
+  ARM_BE8(	orr	r0, r0, #1 << 25 )	@ big-endian page tables
++		bic	r0, r0, #3 << 19	@ clear SCTLR.UWXN and SCTLR.WXN
+ 		mrcne   p15, 0, r6, c2, c0, 2   @ read ttb control reg
+ 		orrne	r0, r0, #1		@ MMU enabled
+ 		movne	r1, #0xfffffffd		@ domain 0 = client
+-- 
+2.53.0
+

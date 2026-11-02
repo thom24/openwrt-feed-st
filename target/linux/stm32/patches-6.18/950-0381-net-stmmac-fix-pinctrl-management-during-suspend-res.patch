@@ -1,0 +1,50 @@
+From 0c584c87018a2d7779c3771a76777ef6c4ec760b Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Mon, 26 Jan 2026 14:48:44 +0100
+Subject: [PATCH] net: stmmac: fix pinctrl management during suspend/resume
+
+In the deepest low power modes the pinctrl are lost and never are
+restored if the interface is down.
+This commit makes sure that pinctrl modes are set in all the cases.
+
+Link: https://lore.kernel.org/all/20260313105718.359614-2-christophe.roullier@foss.st.com/
+Signed-off-by: Arturo Buzarra <arturo.buzarra@digi.com>
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Change-Id: I6f9f5eb8aa31f7321812f4ec38c9f6134e744b97
+---
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 2b4a065aedd3..c3b9fbb1ccca 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -7763,8 +7763,11 @@ int stmmac_suspend(struct device *dev)
+ 	struct stmmac_priv *priv = netdev_priv(ndev);
+ 	u32 chan;
+ 
+-	if (!ndev || !netif_running(ndev))
++	if (!ndev || !netif_running(ndev)) {
++		/* Select sleep pin state */
++		pinctrl_pm_select_sleep_state(dev);
+ 		goto suspend_bsp;
++	}
+ 
+ 	mutex_lock(&priv->lock);
+ 
+@@ -7869,8 +7872,11 @@ int stmmac_resume(struct device *dev)
+ 			return ret;
+ 	}
+ 
+-	if (!netif_running(ndev))
++	if (!netif_running(ndev)) {
++		/* Select default pin state */
++		pinctrl_pm_select_default_state(priv->device);
+ 		return 0;
++	}
+ 
+ 	/* Power Down bit, into the PM register, is cleared
+ 	 * automatically as soon as a magic packet or a Wake-up frame
+-- 
+2.53.0
+

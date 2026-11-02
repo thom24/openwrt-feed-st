@@ -1,0 +1,42 @@
+From 1211fdd1b250d983c1c32f575200892ac3228d9a Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Wed, 8 Jul 2026 16:31:49 +0200
+Subject: [PATCH] arm64: dts: st: Add MSI for AER and PME interrupts
+
+Add MSI interrupts to be used with portdrv platform irq hook.
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I092f33e8b1d8298e7e244cdfb0219dbdbf6fc640
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/586919
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index 11e3e24b094b..c13328f297a3 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -2317,6 +2317,10 @@ pcie_rc: pcie@48400000 {
+ 						<0 0 0 2 &intc 0 0 GIC_SPI 265 IRQ_TYPE_LEVEL_HIGH>,
+ 						<0 0 0 3 &intc 0 0 GIC_SPI 266 IRQ_TYPE_LEVEL_HIGH>,
+ 						<0 0 0 4 &intc 0 0 GIC_SPI 267 IRQ_TYPE_LEVEL_HIGH>;
++				msi-map = <0x0 &v2m0 0x0 0x10000>;
++				interrupts = <GIC_SPI 232 IRQ_TYPE_LEVEL_HIGH>,
++					     <GIC_SPI 238 IRQ_TYPE_LEVEL_HIGH>;
++				interrupt-names = "aer", "pme";
+ 				#address-cells = <3>;
+ 				#size-cells = <2>;
+ 				ranges = <0x02000000 0x0 0x10010000 0x10010000 0x0 0x7ff0000>,
+@@ -2324,7 +2328,6 @@ pcie_rc: pcie@48400000 {
+ 				dma-ranges = <0x42000000 0x0 0x80000000 0x80000000 0x0 0x80000000>;
+ 				clocks = <&scmi_clk CK_SCMI_ICN_PCIE>;
+ 				resets = <&rcc PCIE_R>;
+-				msi-parent = <&v2m0>;
+ 				access-controllers = <&rifsc 68>;
+ 				power-domains = <&d1_pd>;
+ 				status = "disabled";
+-- 
+2.53.0
+

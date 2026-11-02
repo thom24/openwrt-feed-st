@@ -1,0 +1,618 @@
+From cff2eea055d34df96673b45d618cb7b91371f36d Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Tue, 26 May 2026 11:26:47 +0200
+Subject: [PATCH] arm64: dts: st: Add boot phase tags for STMicroelectronics
+ mp2 boards
+
+The bootph-all flag was introduced in dt-schema
+(dtschema/schemas/bootph.yaml) to define node usage across
+different boot phases.
+
+To ensure SD boot, timer, gpio, syscfg, clock and uart nodes need to be
+present in all boot stages, so add missing bootph-all phase flag
+to these nodes to support SD boot.
+
+Change-Id: Ifa18d23a8662e8273aeb37fab3955be14bc06344
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi     |   4 +-
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts  |  30 ++++++
+ arch/arm64/boot/dts/st/stm32mp231.dtsi     |   4 +-
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts  |  96 +++++++++++++++++++
+ arch/arm64/boot/dts/st/stm32mp251.dtsi     |   4 +-
+ arch/arm64/boot/dts/st/stm32mp255.dtsi     |   2 +-
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts  | 104 ++++++++++++++++++++
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 106 +++++++++++++++++++++
+ 8 files changed, 343 insertions(+), 7 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index d89f5d365ac8..9f2b2725526d 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -47,7 +47,7 @@ ck_flexgen_51: clock-200000000 {
+ 	};
+ 
+ 	firmware {
+-		optee {
++		optee: optee {
+ 			compatible = "linaro,optee-tz";
+ 			method = "smc";
+ 		};
+@@ -70,7 +70,7 @@ scmi_reset: protocol@16 {
+ 		};
+ 	};
+ 
+-	psci {
++	psci: psci {
+ 		compatible = "arm,psci-1.0";
+ 		method = "smc";
+ 	};
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 7bdaeaa5ab0f..aaa84a8699d8 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -41,9 +41,39 @@ fw@80000000 {
+ 
+ &arm_wdt {
+ 	timeout-sec = <32>;
++	bootph-all;
+ 	status = "okay";
+ };
+ 
++&optee {
++	bootph-all;
++};
++
++&psci {
++	bootph-all;
++};
++
++&rifsc {
++	bootph-all;
++};
++
++&scmi {
++	bootph-all;
++};
++
++&scmi_clk {
++	bootph-all;
++};
++
++&scmi_reset {
++	bootph-all;
++};
++
++&syscfg {
++	bootph-all;
++};
++
+ &usart2 {
++	bootph-all;
+ 	status = "okay";
+ };
+diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+index a6658d836122..47a47398ed77 100644
+--- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+@@ -59,7 +59,7 @@ optee: optee {
+ 			interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
+ 		};
+ 
+-		scmi {
++		scmi: scmi {
+ 			compatible = "linaro,scmi-optee";
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+@@ -111,7 +111,7 @@ scmi_vdda18adc: regulator@7 {
+ 		};
+ 	};
+ 
+-	psci {
++	psci: psci {
+ 		compatible = "arm,psci-1.0";
+ 		method = "smc";
+ 
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index 9a2b2f50df76..90e868535ac2 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -75,9 +75,14 @@ fw@80000000 {
+ 
+ &arm_wdt {
+ 	timeout-sec = <32>;
++	bootph-all;
+ 	status = "okay";
+ };
+ 
++&bsec {
++	bootph-all;
++};
++
+ &ethernet1 {
+ 	pinctrl-0 = <&eth1_rgmii_pins_b>;
+ 	pinctrl-1 = <&eth1_rgmii_sleep_pins_b>;
+@@ -100,6 +105,78 @@ phy1_eth1: ethernet-phy@1 {
+ 	};
+ };
+ 
++&gpioa {
++	bootph-all;
++};
++
++&gpiob {
++	bootph-all;
++};
++
++&gpioc {
++	bootph-all;
++};
++
++&gpiod {
++	bootph-all;
++};
++
++&gpioe {
++	bootph-all;
++};
++
++&gpiof {
++	bootph-all;
++};
++
++&gpiog {
++	bootph-all;
++};
++
++&gpioh {
++	bootph-all;
++};
++
++&gpioi {
++	bootph-all;
++};
++
++&gpioz {
++	bootph-all;
++};
++
++&optee {
++	bootph-all;
++};
++
++&pinctrl {
++	bootph-all;
++};
++
++&pinctrl_z {
++	bootph-all;
++};
++
++&psci {
++	bootph-all;
++};
++
++&rcc {
++	bootph-all;
++};
++
++&rifsc {
++	bootph-all;
++};
++
++&scmi {
++	bootph-all;
++};
++
++&scmi_clk {
++	bootph-all;
++};
++
+ &scmi_regu {
+ 	scmi_vddio1: regulator@0 {
+ 		regulator-min-microvolt = <1800000>;
+@@ -111,6 +188,10 @@ scmi_vdd_sdcard: regulator@23 {
+ 	};
+ };
+ 
++&scmi_reset {
++	bootph-all;
++};
++
+ &sdmmc1 {
+ 	pinctrl-names = "default", "opendrain", "sleep";
+ 	pinctrl-0 = <&sdmmc1_b4_pins_a>;
+@@ -125,12 +206,27 @@ &sdmmc1 {
+ 	status = "okay";
+ };
+ 
++&syscfg {
++	bootph-all;
++};
++
+ &usart2 {
+ 	pinctrl-names = "default", "idle", "sleep";
+ 	pinctrl-0 = <&usart2_pins_a>;
+ 	pinctrl-1 = <&usart2_idle_pins_a>;
+ 	pinctrl-2 = <&usart2_sleep_pins_a>;
++	bootph-all;
+ 	/delete-property/dmas;
+ 	/delete-property/dma-names;
+ 	status = "okay";
+ };
++
++&usart2_pins_a {
++	bootph-all;
++	pins1 {
++		bootph-all;
++	};
++	pins2 {
++		bootph-all;
++	};
++};
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index ec5db00b9d72..f43336a433f1 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -68,7 +68,7 @@ optee: optee {
+ 			interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
+ 		};
+ 
+-		scmi {
++		scmi: scmi {
+ 			compatible = "linaro,scmi-optee";
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+@@ -139,7 +139,7 @@ v2m0: v2m@48090000 {
+ 		};
+ 	};
+ 
+-	psci {
++	psci: psci {
+ 		compatible = "arm,psci-1.0";
+ 		method = "smc";
+ 
+diff --git a/arch/arm64/boot/dts/st/stm32mp255.dtsi b/arch/arm64/boot/dts/st/stm32mp255.dtsi
+index 7a598f53a2a0..3ba4e6166586 100644
+--- a/arch/arm64/boot/dts/st/stm32mp255.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp255.dtsi
+@@ -40,4 +40,4 @@ venc: venc@480e0000 {
+ 		clocks = <&rcc CK_BUS_VENC>;
+ 		access-controllers = <&rifsc 90>;
+ 	};
+-};
+\ No newline at end of file
++};
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index 4a489a8d9aca..5e95831e1ab0 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -75,9 +75,14 @@ fw@80000000 {
+ 
+ &arm_wdt {
+ 	timeout-sec = <32>;
++	bootph-all;
+ 	status = "okay";
+ };
+ 
++&bsec {
++	bootph-all;
++};
++
+ &ethernet1 {
+ 	pinctrl-0 = <&eth1_rgmii_pins_b>;
+ 	pinctrl-1 = <&eth1_rgmii_sleep_pins_b>;
+@@ -100,6 +105,86 @@ phy1_eth1: ethernet-phy@1 {
+ 	};
+ };
+ 
++&gpioa {
++	bootph-all;
++};
++
++&gpiob {
++	bootph-all;
++};
++
++&gpioc {
++	bootph-all;
++};
++
++&gpiod {
++	bootph-all;
++};
++
++&gpioe {
++	bootph-all;
++};
++
++&gpiof {
++	bootph-all;
++};
++
++&gpiog {
++	bootph-all;
++};
++
++&gpioh {
++	bootph-all;
++};
++
++&gpioi {
++	bootph-all;
++};
++
++&gpioj {
++	bootph-all;
++};
++
++&gpiok {
++	bootph-all;
++};
++
++&gpioz {
++	bootph-all;
++};
++
++&optee {
++	bootph-all;
++};
++
++&pinctrl {
++	bootph-all;
++};
++
++&pinctrl_z {
++	bootph-all;
++};
++
++&psci {
++	bootph-all;
++};
++
++&rcc {
++	bootph-all;
++};
++
++&rifsc {
++	bootph-all;
++};
++
++&scmi {
++	bootph-all;
++};
++
++&scmi_clk {
++	bootph-all;
++};
++
+ &scmi_regu {
+ 	scmi_vddio1: regulator@0 {
+ 		regulator-min-microvolt = <1800000>;
+@@ -111,6 +196,10 @@ scmi_vdd_sdcard: regulator@23 {
+ 	};
+ };
+ 
++&scmi_reset {
++	bootph-all;
++};
++
+ &sdmmc1 {
+ 	pinctrl-names = "default", "opendrain", "sleep";
+ 	pinctrl-0 = <&sdmmc1_b4_pins_a>;
+@@ -125,12 +214,27 @@ &sdmmc1 {
+ 	status = "okay";
+ };
+ 
++&syscfg {
++	bootph-all;
++};
++
+ &usart2 {
+ 	pinctrl-names = "default", "idle", "sleep";
+ 	pinctrl-0 = <&usart2_pins_a>;
+ 	pinctrl-1 = <&usart2_idle_pins_a>;
+ 	pinctrl-2 = <&usart2_sleep_pins_a>;
++	bootph-all;
+ 	/delete-property/dmas;
+ 	/delete-property/dma-names;
+ 	status = "okay";
+ };
++
++&usart2_pins_a {
++	bootph-all;
++	pins1 {
++		bootph-all;
++	};
++	pins2 {
++		bootph-all;
++	};
++};
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+index 67b6dc2c73dd..950399ea8389 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+@@ -127,9 +127,14 @@ mm_ospi1: mm-ospi@60000000 {
+ 
+ &arm_wdt {
+ 	timeout-sec = <32>;
++	bootph-all;
+ 	status = "okay";
+ };
+ 
++&bsec {
++	bootph-all;
++};
++
+ &combophy {
+ 	clocks = <&rcc CK_BUS_USB3PCIEPHY>, <&rcc CK_KER_USB3PCIEPHY>, <&pad_clk>;
+ 	clock-names = "apb", "ker", "pad";
+@@ -216,6 +221,54 @@ phy0_eth2: ethernet-phy@1 {
+ 	};
+ };
+ 
++&gpioa {
++	bootph-all;
++};
++
++&gpiob {
++	bootph-all;
++};
++
++&gpioc {
++	bootph-all;
++};
++
++&gpiod {
++	bootph-all;
++};
++
++&gpioe {
++	bootph-all;
++};
++
++&gpiof {
++	bootph-all;
++};
++
++&gpiog {
++	bootph-all;
++};
++
++&gpioh {
++	bootph-all;
++};
++
++&gpioi {
++	bootph-all;
++};
++
++&gpioj {
++	bootph-all;
++};
++
++&gpiok {
++	bootph-all;
++};
++
++&gpioz {
++	bootph-all;
++};
++
+ &i2c2 {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&i2c2_pins_a>;
+@@ -273,6 +326,7 @@ timer {
+ };
+ 
+ &ltdc {
++	bootph-all;
+ 	status = "okay";
+ 	port {
+ 		ltdc_ep0_out: endpoint {
+@@ -282,6 +336,7 @@ ltdc_ep0_out: endpoint {
+ };
+ 
+ &lvds {
++	bootph-all;
+ 	status = "okay";
+ 	ports {
+ 		#address-cells = <1>;
+@@ -331,6 +386,10 @@ flash0: flash@0 {
+ 	};
+ };
+ 
++&optee {
++	bootph-all;
++};
++
+ &pcie_ep {
+ 	pinctrl-names = "default", "init";
+ 	pinctrl-0 = <&pcie_pins_a>;
+@@ -352,10 +411,38 @@ pcie@0,0 {
+ 	};
+ };
+ 
++&pinctrl {
++	bootph-all;
++};
++
++&pinctrl_z {
++	bootph-all;
++};
++
++&psci {
++	bootph-all;
++};
++
++&rcc {
++	bootph-all;
++};
++
++&rifsc {
++	bootph-all;
++};
++
+ &rtc {
+ 	status = "okay";
+ };
+ 
++&scmi {
++	bootph-all;
++};
++
++&scmi_clk {
++	bootph-all;
++};
++
+ &scmi_regu {
+ 	scmi_vddio1: regulator@0 {
+ 		regulator-min-microvolt = <1800000>;
+@@ -387,6 +474,10 @@ scmi_vdd_sdcard: regulator@23 {
+ 	};
+ };
+ 
++&scmi_reset {
++	bootph-all;
++};
++
+ &sdmmc1 {
+ 	pinctrl-names = "default", "opendrain", "sleep";
+ 	pinctrl-0 = <&sdmmc1_b4_pins_a>;
+@@ -415,6 +506,10 @@ &spi8 {
+ 	status = "disabled";
+ };
+ 
++&syscfg {
++	bootph-all;
++};
++
+ &timers3 {
+ 	status = "disabled";
+ 	counter {
+@@ -478,11 +573,22 @@ &usart2 {
+ 	pinctrl-0 = <&usart2_pins_a>;
+ 	pinctrl-1 = <&usart2_idle_pins_a>;
+ 	pinctrl-2 = <&usart2_sleep_pins_a>;
++	bootph-all;
+ 	/delete-property/dmas;
+ 	/delete-property/dma-names;
+ 	status = "okay";
+ };
+ 
++&usart2_pins_a {
++	bootph-all;
++	pins1 {
++		bootph-all;
++	};
++	pins2 {
++		bootph-all;
++	};
++};
++
+ &usart6 {
+ 	pinctrl-names = "default", "idle", "sleep";
+ 	pinctrl-0 = <&usart6_pins_a>;
+-- 
+2.53.0
+

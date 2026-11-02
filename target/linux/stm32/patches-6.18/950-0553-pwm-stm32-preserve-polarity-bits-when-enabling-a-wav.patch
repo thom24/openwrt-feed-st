@@ -1,0 +1,62 @@
+From 411fb487b15ecbf74a98acd6e20ac938257e7d8c Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Mon, 18 May 2026 16:38:05 +0200
+Subject: [PATCH] pwm: stm32: preserve polarity bits when enabling a waveform
+
+stm32_pwm_write_waveform() first programs the PWM polarity in TIM_CCER,
+then enables the channel if it was previously disabled.
+
+The enable path currently rewrites TIM_CCER from a stale cached value and
+only merges the CCxE/CCxNE enable bits. As a result, the polarity bits
+that were just configured can be lost when the channel is enabled.
+
+This is visible on inverted PWM configurations where the hardware keeps
+outputting the non-inverted duty cycle after enable.
+
+Fix this by only updating the enable bits in TIM_CCER when enabling the
+channel, so the polarity bits already programmed in the register are
+preserved.
+
+Fixes: deaba9cff809 ("pwm: stm32: Implementation of the waveform callbacks")
+Change-Id: I367771387b772220b83b09d2c2630ecc0364d2bb
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/564833
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/pwm/pwm-stm32.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/pwm/pwm-stm32.c b/drivers/pwm/pwm-stm32.c
+index 1a8a5554150c..64b14080c745 100644
+--- a/drivers/pwm/pwm-stm32.c
++++ b/drivers/pwm/pwm-stm32.c
+@@ -390,14 +390,19 @@ static int stm32_pwm_write_waveform(struct pwm_chip *chip,
+ 			if (ret)
+ 				return ret;
+ 
+-			ccer = (ccer & ~mask) | (wfhw->ccer & mask);
+-			regmap_write(priv->regmap, TIM_CCER, ccer);
++			ret = regmap_update_bits(priv->regmap, TIM_CCER, mask, wfhw->ccer);
++			if (ret)
++				goto out;
+ 
+ 			/* Make sure that registers are updated */
+-			regmap_set_bits(priv->regmap, TIM_EGR, TIM_EGR_UG);
++			ret = regmap_set_bits(priv->regmap, TIM_EGR, TIM_EGR_UG);
++			if (ret)
++				goto out;
+ 
+ 			/* Enable controller */
+-			regmap_set_bits(priv->regmap, TIM_CR1, TIM_CR1_CEN);
++			ret = regmap_set_bits(priv->regmap, TIM_CR1, TIM_CR1_CEN);
++			if (ret)
++				goto out;
+ 		}
+ 
+ 	} else {
+-- 
+2.53.0
+

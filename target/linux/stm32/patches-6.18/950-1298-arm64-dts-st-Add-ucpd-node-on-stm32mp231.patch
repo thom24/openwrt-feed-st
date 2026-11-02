@@ -1,0 +1,95 @@
+From 79d6327362d213532e94a7cd8ac02c68d8a2aae3 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Wed, 8 Jul 2026 17:09:42 +0200
+Subject: [PATCH] arm64: dts: st: Add ucpd node on stm32mp231
+
+Describe UCPD bindings and nvmem cells to access trim values.
+This provides the PD and CC USB-C cable signaling functions.
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: If50c59a129ae8018bafcecbc8a20ef7ab25779ae
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/586894
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp231.dtsi | 51 ++++++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+index feb1642b1d1e..10b653c5d141 100644
+--- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+@@ -1919,6 +1919,27 @@ dcmipp: dcmipp@48030000 {
+ 				status = "disabled";
+ 			};
+ 
++			ucpd: typec@480a0000 {
++				compatible = "st,stm32mp25-ucpd";
++				reg = <0x480a0000 0x400>;
++				interrupts = <GIC_SPI 229 IRQ_TYPE_LEVEL_HIGH>;
++				interrupt-names = "ucpd";
++				clocks = <&rcc CK_BUS_USBTC>, <&rcc CK_KER_USBTC>;
++				clock-names = "apb", "ker";
++				resets = <&rcc USBTC_R>;
++				reset-names = "ucpd";
++				nvmem-cells = <&ucpd_trim_rd_cc1 &ucpd_trim_rd_cc2
++					       &ucpd_trim_3a_cc1 &ucpd_trim_3a_cc2
++					       &ucpd_trim_1a5_cc1 &ucpd_trim_1a5_cc2>;
++				nvmem-cell-names = "trim_rd_cc1", "trim_rd_cc2",
++						   "trim_3a_cc1", "trim_3a_cc2",
++						   "trim_1a5_cc1", "trim_1a5_cc2";
++				ucpd-supply = <&scmi_vdd33ucpd>;
++				access-controllers = <&rifsc 69>;
++				power-domains = <&d1_pd>;
++				status = "disabled";
++			};
++
+ 			sdmmc1: mmc@48220000 {
+ 				compatible = "st,stm32mp25-sdmmc2", "arm,pl18x", "arm,primecell";
+ 				reg = <0x48220000 0x400>, <0x44230400 0x8>;
+@@ -2157,10 +2178,40 @@ vrefint: vrefin-cal@1b8 {
+ 				reg = <0x1b8 0x2>;
+ 			};
+ 
++			ucpd_trim_3a_cc1: trim-3a-cc1@1bd,1 {
++				reg = <0x1bd 0x1>;
++				bits = <1 4>;
++			};
++
++			ucpd_trim_3a_cc2: trim-3a-cc2@1bf,1 {
++				reg = <0x1bf 0x1>;
++				bits = <1 4>;
++			};
++
+ 			package-otp@1e8 {
+ 				reg = <0x1e8 0x1>;
+ 				bits = <0 3>;
+ 			};
++
++			ucpd_trim_rd_cc1: trim-rd-cc1@1e8,4 {
++				reg = <0x1e8 0x1>;
++				bits = <4 4>;
++			};
++
++			ucpd_trim_1a5_cc1: trim-1a5-cc1@1e9,0 {
++				reg = <0x1e9 0x1>;
++				bits = <0 4>;
++			};
++
++			ucpd_trim_rd_cc2: trim-rd-cc2@1e9,4 {
++				reg = <0x1e9 0x1>;
++				bits = <4 4>;
++			};
++
++			ucpd_trim_1a5_cc2: trim-1a5-cc2@1ea,0 {
++				reg = <0x1ea 0x1>;
++				bits = <0 4>;
++			};
+ 		};
+ 
+ 		dts: thermal-sensor@44070000 {
+-- 
+2.53.0
+

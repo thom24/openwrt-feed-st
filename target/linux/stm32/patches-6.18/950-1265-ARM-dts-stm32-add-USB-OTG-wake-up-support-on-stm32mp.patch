@@ -1,0 +1,42 @@
+From dd9738123f1857280fb04e989e177b92a5c41936 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@st.com>
+Date: Tue, 29 Sep 2020 13:24:27 +0200
+Subject: [PATCH] ARM: dts: stm32: add USB OTG wake up support on stm32mp151
+
+Add USB OTG wake up support on stm32mp151:
+-use exti 44 line to wakeup from CStop
+-mark the controller as a wakeup source
+
+Change-Id: I6ca5ac8ef6f677f4534ada05baf1c28505b92b0e
+Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/572752
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp151.dtsi | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
+index 6712517b4d48..a692317f2086 100644
+--- a/arch/arm/boot/dts/st/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
+@@ -1934,13 +1934,14 @@ usbotg_hs: usb-otg@49000000 {
+ 				clock-names = "otg", "utmi";
+ 				resets = <&rcc USBO_R>;
+ 				reset-names = "dwc2";
+-				interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts-extended = <&exti 44 IRQ_TYPE_LEVEL_HIGH>;
+ 				g-rx-fifo-size = <512>;
+ 				g-np-tx-fifo-size = <32>;
+ 				g-tx-fifo-size = <256 16 16 16 16 16 16 16>;
+ 				dr_mode = "otg";
+ 				otg-rev = <0x200>;
+ 				usb33d-supply = <&usb33>;
++				wakeup-source;
+ 				access-controllers = <&etzpc 85>;
+ 				status = "disabled";
+ 			};
+-- 
+2.53.0
+

@@ -1,0 +1,40 @@
+From a6a3c5275c36ec215049ef1fa41ba8fbe81402da Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Tue, 26 May 2026 15:41:55 +0200
+Subject: [PATCH] dt-bindings: mailbox: add power-domains property to
+ stm32-ipcc
+
+Allow power-domains on stm32-ipcc mailbox nodes.
+
+This fixes dtbs_check error:
+mailbox@4c001000 (st,stm32mp1-ipcc): 'power-domains' does not match any
+of the regexes: '^pinctrl-[0-9]+$'
+
+Change-Id: I121f0b15cccc4490092f8856f5bc1b7477c3d004
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/571637
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ Documentation/devicetree/bindings/mailbox/st,stm32-ipcc.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/mailbox/st,stm32-ipcc.yaml b/Documentation/devicetree/bindings/mailbox/st,stm32-ipcc.yaml
+index 134fd223a02b..453911c20365 100644
+--- a/Documentation/devicetree/bindings/mailbox/st,stm32-ipcc.yaml
++++ b/Documentation/devicetree/bindings/mailbox/st,stm32-ipcc.yaml
+@@ -26,6 +26,9 @@ properties:
+   clocks:
+     maxItems: 1
+ 
++  power-domains:
++    maxItems: 1
++
+   interrupts:
+     items:
+       - description: rx channel occupied
+-- 
+2.53.0
+

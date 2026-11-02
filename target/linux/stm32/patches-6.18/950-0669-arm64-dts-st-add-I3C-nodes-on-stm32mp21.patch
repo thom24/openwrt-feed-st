@@ -1,0 +1,78 @@
+From e2dbfd8460a44012a95da529e7a7505d1923b975 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Thu, 30 May 2024 15:38:25 +0200
+Subject: [PATCH] arm64: dts: st: add I3C nodes on stm32mp21
+
+STM32MP21 series embeds 3 instances of I3C controllers.
+
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Change-Id: Id8bdfd895037f6041cb24666539955970ce67b0f
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/545087
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 39 ++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index c5876c9291ae..c51d1e17b681 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -747,6 +747,32 @@ i2c2: i2c@40180000 {
+ 				status = "disabled";
+ 			};
+ 
++			i3c1: i3c@40190000 {
++				#address-cells = <3>;
++				#size-cells = <0>;
++				compatible = "st,stm32mp25-i3c";
++				reg = <0x40190000 0x0 0x400>;
++				interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&rcc CK_KER_I3C1>;
++				resets = <&rcc I3C1_R>;
++				access-controllers = <&rifsc 114>;
++				power-domains = <&d1_pd>;
++				status = "disabled";
++			};
++
++			i3c2: i3c@401a0000 {
++				#address-cells = <3>;
++				#size-cells = <0>;
++				compatible = "st,stm32mp25-i3c";
++				reg = <0x401a0000 0x0 0x400>;
++				interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&rcc CK_KER_I3C2>;
++				resets = <&rcc I3C2_R>;
++				access-controllers = <&rifsc 115>;
++				power-domains = <&d1_pd>;
++				status = "disabled";
++			};
++
+ 			timers10: timer@401c0000 {
+ 				compatible = "st,stm32mp21-timers";
+ 				reg = <0x401c0000 0x0 0x400>;
+@@ -1234,6 +1260,19 @@ trigger@4 {
+ 				};
+ 			};
+ 
++			i3c3: i3c@46080000 {
++				#address-cells = <3>;
++				#size-cells = <0>;
++				compatible = "st,stm32mp25-i3c";
++				reg = <0x46080000 0x0 0x400>;
++				interrupts = <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&rcc CK_KER_I3C3>;
++				resets = <&rcc I3C3_R>;
++				access-controllers = <&rifsc 116>;
++				power-domains = <&d1_pd>;
++				status = "disabled";
++			};
++
+ 			sdmmc1: mmc@48220000 {
+ 				compatible = "st,stm32mp25-sdmmc2", "arm,pl18x", "arm,primecell";
+ 				reg = <0x48220000 0x0 0x400>, <0x44230400 0x0 0x8>;
+-- 
+2.53.0
+

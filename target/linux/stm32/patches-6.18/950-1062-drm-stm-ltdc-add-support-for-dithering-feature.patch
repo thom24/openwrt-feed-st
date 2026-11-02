@@ -1,0 +1,57 @@
+From b659ed9f1d7550999b520a5c5bb4d02e3865de72 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Thu, 21 Apr 2022 09:13:07 +0200
+Subject: [PATCH] drm/stm: ltdc: add support for dithering feature
+
+The dithering is based on a LFSR (polynomial generating random)
+and adds pseudo-random noise on the lsb of each of the displayed
+component, and makes that the average of the local pixels represents
+the information content of the full 8-component value.
+
+Change-Id: I56cb69a93958e3ad2391ebe0ad2d3c2924cc9baf
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/249127
+Reviewed-by: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ drivers/gpu/drm/stm/ltdc.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+index 4edf6e9c53df..01a65ecd417b 100644
+--- a/drivers/gpu/drm/stm/ltdc.c
++++ b/drivers/gpu/drm/stm/ltdc.c
+@@ -951,8 +951,11 @@ static void ltdc_crtc_atomic_enable(struct drm_crtc *crtc,
+ 	if (bus_flags & DRM_BUS_FLAG_PIXDATA_DRIVE_NEGEDGE)
+ 		val |= GCR_PCPOL;
+ 
++	if (connector && connector->state->dithering == DRM_MODE_DITHERING_ON)
++		val |= GCR_DEN;
++
+ 	regmap_update_bits(ldev->regmap, LTDC_GCR,
+-			   GCR_HSPOL | GCR_VSPOL | GCR_DEPOL | GCR_PCPOL, val);
++			   GCR_HSPOL | GCR_VSPOL | GCR_DEPOL | GCR_PCPOL | GCR_DEN, val);
+ 
+ 	/* Set Synchronization size */
+ 	val = (hsync << 16) | vsync;
+@@ -1979,6 +1982,16 @@ static int ltdc_crtc_init(struct drm_device *ddev, struct drm_crtc *crtc)
+ 	struct drm_plane *primary, *overlay;
+ 	unsigned int i;
+ 	int ret;
++	struct drm_connector *connector = NULL;
++	struct drm_connector_list_iter iter;
++
++	/* Add the dithering property to all connectors */
++	drm_connector_list_iter_begin(ddev, &iter);
++	drm_for_each_connector_iter(connector, &iter)
++		drm_connector_attach_dithering_property(connector,
++							BIT(DRM_MODE_DITHERING_OFF) |
++							BIT(DRM_MODE_DITHERING_ON));
++	drm_connector_list_iter_end(&iter);
+ 
+ 	primary = ltdc_plane_create(ddev, DRM_PLANE_TYPE_PRIMARY, 0);
+ 	if (!primary) {
+-- 
+2.53.0
+

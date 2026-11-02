@@ -1,0 +1,37 @@
+From 8d58acaa5af67808c66395ce271cf6ca6344294a Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Mon, 17 Nov 2025 13:47:11 +0100
+Subject: [PATCH] pinctrl: stm32: fix warning for uninitialized variable
+
+GCC incorrectly reports that the variable 'domain' could be used
+uninitialized.
+
+To prevent the compile warning, initialize it to NULL.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I717fe449bbe1eb256bec19dc8dc145b7378c7916
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/509723
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/544944
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ drivers/pinctrl/stm32/pinctrl-stm32.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
+index 38360af2c624..381f4189984c 100644
+--- a/drivers/pinctrl/stm32/pinctrl-stm32.c
++++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
+@@ -1860,6 +1860,7 @@ static struct irq_domain *stm32_pctrl_get_irq_domain(struct stm32_pinctrl *pctl)
+ 		 * Each entry has 3 values: <&phandle 0 0>
+ 		 */
+ 		i = DIV_ROUND_UP(i, 3 * STM32_GPIO_IRQ_LINE * sizeof(u32));
++		domain = NULL;
+ 
+ 		while (i--) {
+ 			ret = of_irq_parse_one(np, i * STM32_GPIO_IRQ_LINE, &out_irq);
+-- 
+2.53.0
+

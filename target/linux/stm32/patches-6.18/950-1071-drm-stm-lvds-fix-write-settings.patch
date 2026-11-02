@@ -1,0 +1,33 @@
+From 68dbf6a0d8d0e6664b64f9cd1b49d0eccf61ba1b Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Mon, 28 Jul 2025 10:47:00 +0200
+Subject: [PATCH] drm/stm: lvds: fix write settings
+
+Don't use lvds_set to write settings to lvds which don't clear
+some fields of register LVDS_CR.
+
+Change-Id: I33c6597d6faf347c7471506210a48f3419f05ab1
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/479209
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/gpu/drm/stm/lvds.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
+index 8383f48a4bef..bf241e19468c 100644
+--- a/drivers/gpu/drm/stm/lvds.c
++++ b/drivers/gpu/drm/stm/lvds.c
+@@ -868,7 +868,7 @@ static void lvds_config_mode(struct stm_lvds *lvds)
+ 	}
+ 
+ 	/* Write config to registers */
+-	lvds_set(lvds, LVDS_CR, lvds_cr);
++	lvds_write(lvds, LVDS_CR, lvds_cr);
+ 	lvds_write(lvds, LVDS_CDL1CR, lvds_cdl1cr);
+ 	lvds_write(lvds, LVDS_CDL2CR, lvds_cdl2cr);
+ }
+-- 
+2.53.0
+

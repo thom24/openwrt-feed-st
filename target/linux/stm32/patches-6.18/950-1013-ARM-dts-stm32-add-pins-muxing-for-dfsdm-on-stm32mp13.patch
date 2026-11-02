@@ -1,0 +1,77 @@
+From ff928b8b21d3199ef6dc77ebc85190546b8030bd Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Fri, 4 Nov 2022 17:37:15 +0100
+Subject: [PATCH] ARM: dts: stm32: add pins muxing for dfsdm on stm32mp13
+
+These pins are used for DFSDM on STM32MP13x Disco boards expansion
+connector.
+
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Change-Id: Ice1981272d7012cd6251d09e2b88357a57320979
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/551668
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi | 45 +++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
+index c3e42849cfbb..289348d182ba 100644
+--- a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
+@@ -64,6 +64,51 @@ pins1 {
+ 		};
+ 	};
+ 
++	/omit-if-no-ref/
++	dfsdm_clkout_pins_a: dfsdm-clkout-pins-0 {
++		pins {
++			pinmux = <STM32_PINMUX('C', 3, AF3)>; /* DFSDM_CKOUT */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++	};
++
++	/omit-if-no-ref/
++	dfsdm_clkout_sleep_pins_a: dfsdm-clkout-sleep-pins-0 {
++		pins {
++			pinmux = <STM32_PINMUX('C', 3, ANALOG)>; /* DFSDM_CKOUT */
++		};
++	};
++
++	/omit-if-no-ref/
++	dfsdm_datin1_pins_a: dfsdm-datin1-pins-0 {
++		pins {
++			pinmux = <STM32_PINMUX('B', 1, AF6)>; /* DFSDM_DATIN1 */
++		};
++	};
++
++	/omit-if-no-ref/
++	dfsdm_datin1_sleep_pins_a: dfsdm-datin1-sleep-pins-0 {
++		pins {
++			pinmux = <STM32_PINMUX('B', 1, ANALOG)>; /* DFSDM_DATIN1 */
++		};
++	};
++
++	/omit-if-no-ref/
++	dfsdm_datin3_pins_a: dfsdm-datin3-pins-0 {
++		pins {
++			pinmux = <STM32_PINMUX('F', 13, AF6)>; /* DFSDM_DATIN3 */
++		};
++	};
++
++	/omit-if-no-ref/
++	dfsdm_datin3_sleep_pins_a: dfsdm-datin3-sleep-pins-0 {
++		pins {
++			pinmux = <STM32_PINMUX('F', 13, ANALOG)>; /* DFSDM_DATIN3 */
++		};
++	};
++
+ 	/omit-if-no-ref/
+ 	eth1_rgmii_pins_a: eth1-rgmii-0 {
+ 		pins1 {
+-- 
+2.53.0
+

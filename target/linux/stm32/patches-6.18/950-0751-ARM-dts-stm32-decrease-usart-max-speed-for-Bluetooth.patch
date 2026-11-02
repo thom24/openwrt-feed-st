@@ -1,0 +1,71 @@
+From abdd1a09b99653741486263ee6a3cd9b87913967 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Tue, 10 Mar 2026 11:08:43 +0100
+Subject: [PATCH] ARM: dts: stm32: decrease usart max speed for Bluetooth for
+ MPx platform
+
+To avoid :
+Bluetooth: hci0: command 0xfc4c tx timeout
+Bluetooth: hci0: BCM: Patch command fc4c failed (-110)
+Bluetooth: hci0: BCM: Patch failed (-110)
+...
+Bluetooth: hci0: command 0xfc4c tx timeout
+Bluetooth: hci0: BCM: failed to write update baudrate (-110)
+
+Need to decrease max-speed to 2Mbps.
+
+Change-Id: Ib774da53eff501bb3b9e3a5307ce519e9ec7fc3c
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/454463
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/545101
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dk.dts          | 2 +-
+ arch/arm/boot/dts/st/stm32mp157c-dk2-no-scmi.dts | 2 +-
+ arch/arm/boot/dts/st/stm32mp157f-dk2.dts         | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+index 9ab233772b55..acfcf20be1dd 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+@@ -764,7 +764,7 @@ bluetooth {
+ 		compatible = "brcm,bcm43438-bt";
+ 		clocks = <&rtc>;
+ 		clock-names = "lpo";
+-		max-speed = <3000000>;
++		max-speed = <2000000>;
+ 		vbat-supply = <&v3v3_ao>;
+ 		vddio-supply = <&v3v3_ao>;
+ 	};
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2-no-scmi.dts
+index bbffed6e6277..05fa2d962f25 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-dk2-no-scmi.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-dk2-no-scmi.dts
+@@ -144,7 +144,7 @@ bluetooth {
+ 		compatible = "brcm,bcm43438-bt";
+ 		clocks = <&rtc>;
+ 		clock-names = "lpo";
+-		max-speed = <3000000>;
++		max-speed = <2000000>;
+ 		vbat-supply = <&v3v3>;
+ 		vddio-supply = <&v3v3>;
+ 	};
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
+index 4888e13a2e9b..670771e26e87 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
+@@ -290,7 +290,7 @@ bluetooth {
+ 		compatible = "brcm,bcm43438-bt";
+ 		clocks = <&rtc>;
+ 		clock-names = "lpo";
+-		max-speed = <3000000>;
++		max-speed = <2000000>;
+ 		vbat-supply = <&v3v3>;
+ 		vddio-supply = <&v3v3>;
+ 	};
+-- 
+2.53.0
+

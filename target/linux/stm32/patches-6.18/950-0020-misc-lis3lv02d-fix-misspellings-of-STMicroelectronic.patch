@@ -1,0 +1,46 @@
+From 6da4941c84e7ada9dc2c64538601e5bbaaf4dc97 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Fri, 25 Jul 2025 11:05:07 +0200
+Subject: [PATCH] misc: lis3lv02d: fix misspellings of "STMicroelectronics"
+
+Fullfill the previous commit 6e6fe5a99048 ("misc: Fix spelling mistake
+"STMicroeletronics" -> "STMicroelectronics").
+"STMicroelectronics" company name is also misspelled in the Kconfig and
+Makefile headers. Fix these misspellings.
+
+Change-Id: I074b5a8f246109bc3223712c9b6af7730f5781d1
+Link: https://lore.kernel.org/lkml/20250724105422.140186-1-colin.i.king@gmail.com/
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/569543
+---
+ drivers/misc/lis3lv02d/Kconfig  | 2 +-
+ drivers/misc/lis3lv02d/Makefile | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/misc/lis3lv02d/Kconfig b/drivers/misc/lis3lv02d/Kconfig
+index 9d546a42a563..835e5e50bde4 100644
+--- a/drivers/misc/lis3lv02d/Kconfig
++++ b/drivers/misc/lis3lv02d/Kconfig
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ #
+-# STMicroelectonics LIS3LV02D and similar accelerometers
++# STMicroelectronics LIS3LV02D and similar accelerometers
+ #
+ 
+ config SENSORS_LIS3_SPI
+diff --git a/drivers/misc/lis3lv02d/Makefile b/drivers/misc/lis3lv02d/Makefile
+index 137e7020c127..bcf208439c64 100644
+--- a/drivers/misc/lis3lv02d/Makefile
++++ b/drivers/misc/lis3lv02d/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ #
+-# STMicroelectonics LIS3LV02D and similar accelerometers
++# STMicroelectronics LIS3LV02D and similar accelerometers
+ #
+ 
+ obj-$(CONFIG_SENSORS_LIS3LV02D) += lis3lv02d.o
+-- 
+2.53.0
+

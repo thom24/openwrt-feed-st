@@ -1,0 +1,122 @@
+From 7c3c165992d2160de8b75155f042c412c753d592 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Fri, 12 Dec 2025 15:12:12 +0100
+Subject: [PATCH] media: stm32: dcmipp: move common structures in
+ dcmipp-common.h
+
+Move the structure dcmipp_pipeline_config into dcmipp-common.h
+so that all subdeves can have access to the information of
+capabilities.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+---
+ .../st/stm32/stm32-dcmipp/dcmipp-common.h     | 37 +++++++++++++++++++
+ .../st/stm32/stm32-dcmipp/dcmipp-core.c       | 37 -------------------
+ 2 files changed, 37 insertions(+), 37 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
+index 3c3996472e03..9e7b2434200a 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
+@@ -83,6 +83,43 @@ struct dcmipp_device {
+ 	struct v4l2_async_notifier	notifier;
+ };
+ 
++#define DCMIPP_ENT_LINK(src, srcpad, sink, sinkpad, link_flags) {	\
++	.src_ent = src,						\
++	.src_pad = srcpad,					\
++	.sink_ent = sink,					\
++	.sink_pad = sinkpad,					\
++	.flags = link_flags,					\
++}
++
++/* Structure which describes individual configuration for each entity */
++struct dcmipp_ent_config {
++	const char *name;
++	struct dcmipp_ent_device *(*init)
++		(const char *entity_name,
++		 struct dcmipp_device *dcmipp);
++	void (*release)(struct dcmipp_ent_device *ved);
++};
++
++/* Structure which describes links between entities */
++struct dcmipp_ent_link {
++	unsigned int src_ent;
++	u16 src_pad;
++	unsigned int sink_ent;
++	u16 sink_pad;
++	u32 flags;
++};
++
++/* Structure which describes the whole topology */
++struct dcmipp_pipeline_config {
++	const struct dcmipp_ent_config *ents;
++	size_t num_ents;
++	const struct dcmipp_ent_link *links;
++	size_t num_links;
++	u32 hw_revision;
++	bool has_csi2;
++	bool needs_mclk;
++};
++
+ /**
+  * struct dcmipp_ent_device - core struct that represents a node in the topology
+  *
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
+index b06a4931ae95..3a0a4df410d8 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
+@@ -25,14 +25,6 @@
+ 
+ #define DCMIPP_MDEV_MODEL_NAME "DCMIPP MDEV"
+ 
+-#define DCMIPP_ENT_LINK(src, srcpad, sink, sinkpad, link_flags) {	\
+-	.src_ent = src,						\
+-	.src_pad = srcpad,					\
+-	.sink_ent = sink,					\
+-	.sink_pad = sinkpad,					\
+-	.flags = link_flags,					\
+-}
+-
+ #define DCMIPP_CMSR2	0x3f8
+ 
+ static inline struct dcmipp_device *
+@@ -41,35 +33,6 @@ notifier_to_dcmipp(struct v4l2_async_notifier *n)
+ 	return container_of(n, struct dcmipp_device, notifier);
+ }
+ 
+-/* Structure which describes individual configuration for each entity */
+-struct dcmipp_ent_config {
+-	const char *name;
+-	struct dcmipp_ent_device *(*init)
+-		(const char *entity_name,
+-		 struct dcmipp_device *dcmipp);
+-	void (*release)(struct dcmipp_ent_device *ved);
+-};
+-
+-/* Structure which describes links between entities */
+-struct dcmipp_ent_link {
+-	unsigned int src_ent;
+-	u16 src_pad;
+-	unsigned int sink_ent;
+-	u16 sink_pad;
+-	u32 flags;
+-};
+-
+-/* Structure which describes the whole topology */
+-struct dcmipp_pipeline_config {
+-	const struct dcmipp_ent_config *ents;
+-	size_t num_ents;
+-	const struct dcmipp_ent_link *links;
+-	size_t num_links;
+-	u32 hw_revision;
+-	bool has_csi2;
+-	bool needs_mclk;
+-};
+-
+ /* --------------------------------------------------------------------------
+  * Topology Configuration
+  */
+-- 
+2.53.0
+

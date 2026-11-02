@@ -1,0 +1,56 @@
+From adbcfece83ae3abd9fea34d338d74f7f131093fc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Thu, 6 Feb 2025 17:34:48 +0100
+Subject: [PATCH] ARM: dts: stm32: add sram pool to spi5 for DMA-MDMA chaining
+ on MP13 DK
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The sram pool is used as a buffer area during a spi transfer using
+DMA-MDMA chaining.
+The pool size depends on the SPI framework that creates sg up to
+4096 bytes.
+
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: I8949a6cc5b740810c46aea2ca3ee287fdd3ae65b
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/537881
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dk.dts | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+index eecdd1d347ba..070534e32a38 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+@@ -608,9 +608,21 @@ &spi5 {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&spi5_pins_a>;
+ 	pinctrl-1 = <&spi5_sleep_pins_a>;
++	dmas = <&dmamux1 85 0x400 0x01>,
++	       <&dmamux1 86 0x400 0x01>,
++	       <&mdma 0 0x3 0x1200000a 0 0>;
++	dma-names = "rx", "tx", "rxm2m";
++	sram = <&spi5_dma_pool>;
+ 	status = "disabled";
+ };
+ 
++&sram2 {
++	spi5_dma_pool: dma-sram@1000 {
++		reg = <0x1000 0x1000>;
++		pool;
++	};
++};
++
+ &syscfg {
+ 	bootph-all;
+ };
+-- 
+2.53.0
+

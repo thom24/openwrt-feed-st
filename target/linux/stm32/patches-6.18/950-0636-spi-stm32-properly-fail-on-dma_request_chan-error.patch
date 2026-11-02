@@ -1,0 +1,60 @@
+From 31cc8cc8f731dec2df8751aa525fd229869b16ae Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Thu, 18 Dec 2025 11:48:27 +0100
+Subject: [PATCH] spi: stm32: properly fail on dma_request_chan error
+
+Correct handling of the dma_request_chan call in order to avoid
+misleading warn message if no DMA is provided within the device-tree
+and moreover fail if dma_request_chan has returned a valid error.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Link: https://patch.msgid.link/20251218-stm32-spi-enhancements-v2-1-3b69901ca9fe@foss.st.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+(cherry picked from commit c266d19b7d4e5ed993ed9fca25ab9d11789c41ee)
+---
+ drivers/spi/spi-stm32.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
+index 7a6ee93be9bd..2749778cba5c 100644
+--- a/drivers/spi/spi-stm32.c
++++ b/drivers/spi/spi-stm32.c
+@@ -2410,11 +2410,13 @@ static int stm32_spi_probe(struct platform_device *pdev)
+ 	spi->dma_tx = dma_request_chan(spi->dev, "tx");
+ 	if (IS_ERR(spi->dma_tx)) {
+ 		ret = PTR_ERR(spi->dma_tx);
+-		spi->dma_tx = NULL;
+-		if (ret == -EPROBE_DEFER)
++		if (ret == -ENODEV) {
++			dev_info(&pdev->dev, "tx dma disabled\n");
++			spi->dma_tx = NULL;
++		} else {
++			dev_err_probe(&pdev->dev, ret, "failed to request tx dma channel\n");
+ 			goto err_clk_disable;
+-
+-		dev_warn(&pdev->dev, "failed to request tx dma channel\n");
++		}
+ 	} else {
+ 		ctrl->dma_tx = spi->dma_tx;
+ 	}
+@@ -2422,11 +2424,13 @@ static int stm32_spi_probe(struct platform_device *pdev)
+ 	spi->dma_rx = dma_request_chan(spi->dev, "rx");
+ 	if (IS_ERR(spi->dma_rx)) {
+ 		ret = PTR_ERR(spi->dma_rx);
+-		spi->dma_rx = NULL;
+-		if (ret == -EPROBE_DEFER)
++		if (ret == -ENODEV) {
++			dev_info(&pdev->dev, "rx dma disabled\n");
++			spi->dma_rx = NULL;
++		} else {
++			dev_err_probe(&pdev->dev, ret, "failed to request rx dma channel\n");
+ 			goto err_dma_release;
+-
+-		dev_warn(&pdev->dev, "failed to request rx dma channel\n");
++		}
+ 	} else {
+ 		ctrl->dma_rx = spi->dma_rx;
+ 	}
+-- 
+2.53.0
+

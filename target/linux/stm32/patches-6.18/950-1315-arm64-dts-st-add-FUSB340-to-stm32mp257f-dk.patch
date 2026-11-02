@@ -1,0 +1,86 @@
+From 6bf04df8d5408eb49ac8ab9f7b1b35f28cecee35 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Mon, 10 Aug 2026 14:49:54 +0200
+Subject: [PATCH] arm64: dts: st: add FUSB340 to stm32mp257f-dk
+
+Add support for the ON Semiconductor FUSB340 SuperSpeed switch into
+the STM32MP257F-DK board. The switch uses GPIOH2 (active-low) enable
+and GPIOH3 (active-high) select, and the UCPD Type-C connector now
+exposes the SuperSpeed port.
+
+Assisted-by: GitHub-Copilot:GPT-5.4-mini
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ib309ac2e6ab07ce9e8063cdbf193febc5a0e55cd
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/598899
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 36 +++++++++++++++++++----
+ 1 file changed, 31 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index da0ffcfeedcf..7407b5901a54 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -191,6 +191,19 @@ sound {
+ 		status = "okay";
+ 	};
+ 
++	usb-switch {
++		compatible = "onnn,fusb340", "gpio-sbu-mux";
++		enable-gpios = <&gpioh 2 GPIO_ACTIVE_LOW>;
++		select-gpios = <&gpioh 3 GPIO_ACTIVE_HIGH>;
++		orientation-switch;
++
++		port {
++			fusb340_con_ss: endpoint {
++				remote-endpoint = <&typec_ss>;
++			};
++		};
++	};
++
+ 	wifi_pwrseq: wifi-pwrseq {
+ 		compatible = "mmc-pwrseq-simple";
+ 		reset-gpios = <&gpiog 8 GPIO_ACTIVE_LOW>;
+@@ -932,9 +945,23 @@ connector {
+ 		typec-power-opmode = "1.5A";
+ 		pd-disable;
+ 		self-powered;
+-		port {
+-			typec_ep: endpoint {
+-				remote-endpoint = <&dwc3_ep>;
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++				typec_hs: endpoint {
++					remote-endpoint = <&dwc3_ep>;
++				};
++			};
++
++			port@1 {
++				reg = <1>;
++				typec_ss: endpoint {
++					remote-endpoint = <&fusb340_con_ss>;
++				};
+ 			};
+ 		};
+ 	};
+@@ -1006,11 +1033,10 @@ &usb3dr {
+ 	dwc3: usb@48300000 {
+ 		phys = <&usb2_phy2>, <&combophy PHY_TYPE_USB3>;
+ 		phy-names = "usb2-phy", "usb3-phy";
+-		maximum-speed = "high-speed";
+ 		usb-role-switch;
+ 		port {
+ 			dwc3_ep: endpoint {
+-				remote-endpoint = <&typec_ep>;
++				remote-endpoint = <&typec_hs>;
+ 			};
+ 		};
+ 	};
+-- 
+2.53.0
+

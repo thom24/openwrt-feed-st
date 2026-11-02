@@ -1,0 +1,33 @@
+From 54c9aea16e4f990ceb5fcba589e330066d774228 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Wed, 28 Jan 2026 09:27:16 +0100
+Subject: [PATCH] dt-bindings: arm: stm32: allow #size-cells value to 2 for
+ syscon
+
+Allow syscon #size-cells to be set to 2.
+This is needed to fix dma-ranges value on STM32MP21.
+
+Change-Id: I0e1b3f007a51dcf34e5c49a64ce030b81c1d1edc
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+---
+ .../devicetree/bindings/arm/stm32/st,stm32-syscon.yaml        | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
+index ab1d780840e6..99aca81816b4 100644
+--- a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
++++ b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
+@@ -45,7 +45,9 @@ properties:
+     const: 1
+ 
+   '#size-cells':
+-    const: 1
++    enum:
++      - 1
++      - 2
+ 
+   ranges: true
+ 
+-- 
+2.53.0
+

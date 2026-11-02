@@ -1,0 +1,312 @@
+From ee3f981eb31fbd177e455dbd13a9547b7574933c Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Tue, 26 May 2026 11:26:42 +0200
+Subject: [PATCH] ARM: dts: stm32: Add boot phase tags for STMicroelectronics
+ f7 boards
+
+The bootph-all flag was introduced in dt-schema
+(dtschema/schemas/bootph.yaml) to define node usage across
+different boot phases.
+
+To ensure SD boot, timer, gpio, syscfg, clock and uart nodes need to be
+present in all boot stages, so add missing bootph-all phase flag
+to these nodes to support SD boot.
+
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32746g-eval.dts  | 10 ++++
+ arch/arm/boot/dts/st/stm32f746-disco.dts | 74 +++++++++++++++++++++++
+ arch/arm/boot/dts/st/stm32f746.dtsi      |  2 +-
+ arch/arm/boot/dts/st/stm32f769-disco.dts | 76 ++++++++++++++++++++++--
+ 4 files changed, 157 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32746g-eval.dts b/arch/arm/boot/dts/st/stm32746g-eval.dts
+index e9ac37b6eca0..26c5796a81fb 100644
+--- a/arch/arm/boot/dts/st/stm32746g-eval.dts
++++ b/arch/arm/boot/dts/st/stm32746g-eval.dts
+@@ -213,6 +213,16 @@ &usart1 {
+ 	status = "okay";
+ };
+ 
++&usart1_pins_a {
++	bootph-all;
++	pins1 {
++		bootph-all;
++	};
++	pins2 {
++		bootph-all;
++	};
++};
++
+ &usbotg_hs {
+ 	dr_mode = "otg";
+ 	phys = <&usbotg_hs_phy>;
+diff --git a/arch/arm/boot/dts/st/stm32f746-disco.dts b/arch/arm/boot/dts/st/stm32f746-disco.dts
+index b57dbdce2f40..8a6f41a85111 100644
+--- a/arch/arm/boot/dts/st/stm32f746-disco.dts
++++ b/arch/arm/boot/dts/st/stm32f746-disco.dts
+@@ -140,6 +140,51 @@ panel_in_rgb: endpoint {
+ 
+ &clk_hse {
+ 	clock-frequency = <25000000>;
++	bootph-all;
++};
++
++&gpioa {
++	bootph-all;
++};
++
++&gpiob {
++	bootph-all;
++};
++
++&gpioc {
++	bootph-all;
++};
++
++&gpiod {
++	bootph-all;
++};
++
++&gpioe {
++	bootph-all;
++};
++
++&gpiof {
++	bootph-all;
++};
++
++&gpiog {
++	bootph-all;
++};
++
++&gpioh {
++	bootph-all;
++};
++
++&gpioi {
++	bootph-all;
++};
++
++&gpioj {
++	bootph-all;
++};
++
++&gpiok {
++	bootph-all;
+ };
+ 
+ &i2c1 {
+@@ -169,6 +214,7 @@ touchscreen@38 {
+ &ltdc {
+ 	pinctrl-0 = <&ltdc_pins_a>;
+ 	pinctrl-names = "default";
++	bootph-all;
+ 	status = "okay";
+ 
+ 	port {
+@@ -178,6 +224,22 @@ ltdc_out_rgb: endpoint {
+ 	};
+ };
+ 
++&pinctrl {
++	bootph-all;
++};
++
++&pwrcfg {
++	bootph-all;
++};
++
++&rcc {
++	bootph-all;
++};
++
++&soc {
++	bootph-all;
++};
++
+ &sdio1 {
+ 	status = "okay";
+ 	vmmc-supply = <&vcc_3v3>;
+@@ -193,6 +255,7 @@ &timers5 {
+ 	/* Override timer5 to act as clockevent */
+ 	compatible = "st,stm32-timer";
+ 	interrupts = <50>;
++	bootph-all;
+ 	status = "okay";
+ 	/delete-property/#address-cells;
+ 	/delete-property/#size-cells;
+@@ -204,9 +267,20 @@ &timers5 {
+ &usart1 {
+ 	pinctrl-0 = <&usart1_pins_b>;
+ 	pinctrl-names = "default";
++	bootph-all;
+ 	status = "okay";
+ };
+ 
++&usart1_pins_b {
++	bootph-all;
++	pins1 {
++		bootph-all;
++	};
++	pins2 {
++		bootph-all;
++	};
++};
++
+ &usbotg_fs {
+ 	dr_mode = "host";
+ 	pinctrl-0 = <&usbotg_fs_pins_a>;
+diff --git a/arch/arm/boot/dts/st/stm32f746.dtsi b/arch/arm/boot/dts/st/stm32f746.dtsi
+index 208f8c6dfc9d..1fede5bdc347 100644
+--- a/arch/arm/boot/dts/st/stm32f746.dtsi
++++ b/arch/arm/boot/dts/st/stm32f746.dtsi
+@@ -75,7 +75,7 @@ clk_i2s_ckin: clk-i2s-ckin {
+ 		};
+ 	};
+ 
+-	soc {
++	soc: soc {
+ 		timers2: timers@40000000 {
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+diff --git a/arch/arm/boot/dts/st/stm32f769-disco.dts b/arch/arm/boot/dts/st/stm32f769-disco.dts
+index 535cfdc4681c..b3a9e31f1da6 100644
+--- a/arch/arm/boot/dts/st/stm32f769-disco.dts
++++ b/arch/arm/boot/dts/st/stm32f769-disco.dts
+@@ -116,10 +116,6 @@ vcc_3v3: vcc-3v3 {
+ 	};
+ };
+ 
+-&rcc {
+-	compatible = "st,stm32f769-rcc", "st,stm32f746-rcc", "st,stm32-rcc";
+-};
+-
+ &cec {
+ 	pinctrl-0 = <&cec_pins_a>;
+ 	pinctrl-names = "default";
+@@ -128,11 +124,13 @@ &cec {
+ 
+ &clk_hse {
+ 	clock-frequency = <25000000>;
++	bootph-all;
+ };
+ 
+ &dsi {
+ 	#address-cells = <1>;
+ 	#size-cells = <0>;
++	bootph-all;
+ 	status = "okay";
+ 
+ 	ports {
+@@ -169,6 +167,50 @@ dsi_panel_in: endpoint {
+ 	};
+ };
+ 
++&gpioa {
++	bootph-all;
++};
++
++&gpiob {
++	bootph-all;
++};
++
++&gpioc {
++	bootph-all;
++};
++
++&gpiod {
++	bootph-all;
++};
++
++&gpioe {
++	bootph-all;
++};
++
++&gpiof {
++	bootph-all;
++};
++
++&gpiog {
++	bootph-all;
++};
++
++&gpioh {
++	bootph-all;
++};
++
++&gpioi {
++	bootph-all;
++};
++
++&gpioj {
++	bootph-all;
++};
++
++&gpiok {
++	bootph-all;
++};
++
+ &i2c1 {
+ 	pinctrl-0 = <&i2c1_pins_b>;
+ 	pinctrl-names = "default";
+@@ -178,6 +220,7 @@ &i2c1 {
+ };
+ 
+ &ltdc {
++	bootph-all;
+ 	status = "okay";
+ 
+ 	port {
+@@ -187,6 +230,19 @@ ltdc_out_dsi: endpoint {
+ 	};
+ };
+ 
++&pinctrl {
++	bootph-all;
++};
++
++&pwrcfg {
++	bootph-all;
++};
++
++&rcc {
++	compatible = "st,stm32f769-rcc", "st,stm32f746-rcc", "st,stm32-rcc";
++	bootph-all;
++};
++
+ &rtc {
+ 	status = "okay";
+ };
+@@ -207,6 +263,7 @@ &timers5 {
+ 	/* Override timer5 to act as clockevent */
+ 	compatible = "st,stm32-timer";
+ 	interrupts = <50>;
++	bootph-all;
+ 	status = "okay";
+ 	/delete-property/#address-cells;
+ 	/delete-property/#size-cells;
+@@ -218,9 +275,20 @@ &timers5 {
+ &usart1 {
+ 	pinctrl-0 = <&usart1_pins_a>;
+ 	pinctrl-names = "default";
++	bootph-all;
+ 	status = "okay";
+ };
+ 
++&usart1_pins_a	{
++	bootph-all;
++	pins1 {
++		bootph-all;
++	};
++	pins2 {
++		bootph-all;
++	};
++};
++
+ &usbotg_hs {
+ 	dr_mode = "otg";
+ 	phys = <&usbotg_hs_phy>;
+-- 
+2.53.0
+

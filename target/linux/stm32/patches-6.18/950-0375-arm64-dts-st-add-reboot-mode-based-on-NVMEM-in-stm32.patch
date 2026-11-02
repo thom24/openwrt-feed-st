@@ -1,0 +1,52 @@
+From b208608d6760d2beecdb32c55b63225e34fab51a Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Tue, 27 Jan 2026 17:28:35 +0100
+Subject: [PATCH] arm64: dts: st: add reboot mode based on NVMEM in
+ stm32mp231.dtsi
+
+We use nvmem-cells to pass reboot mode to bootloader.
+Normal, fastboot, recovery, serialx and usb boot modes are declared.
+Boot mode value is stored in TAMP backup registers
+(register 30 offset 0x78).
+
+systemd command is need to set the boot mode.
+e.g.
+$ systemctl reboot ums_mmc0
+
+Change-Id: I34b704bb6bee85dd9ce58bf940748b97c1a6a31b
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/530327
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp231.dtsi | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+index e3405ad9fcdc..e0152c3a6dd8 100644
+--- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+@@ -1326,6 +1326,20 @@ rsc_tbl_size: tamp-bkp@188 {
+ 					};
+ 				};
+ 			};
++
++			reboot_mode: reboot-mode {
++				compatible = "nvmem-reboot-mode";
++				nvmem-cells = <&boot_mode>;
++				nvmem-cell-names = "reboot-mode";
++				mode-normal = <0x00>;
++				mode-fastboot = <0x01>;
++				mode-recovery = <0x02>;
++				mode-stm32cubeprogrammer = <0x03>;
++				mode-ums_mmc0 = <0x10>;
++				mode-ums_mmc1 = <0x11>;
++				mode-ums_mmc2 = <0x12>;
++				mode-romcode_serial = <0xff>;
++			};
+ 		};
+ 
+ 		pinctrl_z: pinctrl@46200000 {
+-- 
+2.53.0
+

@@ -1,0 +1,40 @@
+From 34a24a55199236ef13b8aa86ae0d3cff72dd74d7 Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Fri, 6 Feb 2026 10:05:42 +0100
+Subject: [PATCH] firmware: arm_scmi: increase SCMI_MAX_NUM_RATES to support
+ more clock rates
+
+Increase SCMI_MAX_NUM_RATES to support platforms where
+the SCMI clock protocol exposes a large number of clock
+rates.
+Raising SCMI_MAX_NUM_RATES avoids this warning and allows the driver
+to properly use round_rate() over the full set of rates provided by
+the SCMI firmware.
+
+Change-Id: Id7a2ad872d01a385b9ffb7e6bc7f8e9a3f711b3a
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/533972
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ include/linux/scmi_protocol.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/linux/scmi_protocol.h b/include/linux/scmi_protocol.h
+index aafaac1496b0..d94dbd276489 100644
+--- a/include/linux/scmi_protocol.h
++++ b/include/linux/scmi_protocol.h
+@@ -15,7 +15,7 @@
+ 
+ #define SCMI_MAX_STR_SIZE		64
+ #define SCMI_SHORT_NAME_MAX_SIZE	16
+-#define SCMI_MAX_NUM_RATES		16
++#define SCMI_MAX_NUM_RATES		256
+ 
+ /**
+  * struct scmi_revision_info - version information structure
+-- 
+2.53.0
+

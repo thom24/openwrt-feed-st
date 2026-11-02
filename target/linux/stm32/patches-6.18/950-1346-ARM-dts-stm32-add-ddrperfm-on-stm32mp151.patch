@@ -1,0 +1,45 @@
+From 643d3c121f03430b5c2f927b9f366e5324f79d1b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Tue, 9 Sep 2025 12:12:24 +0200
+Subject: [PATCH] ARM: dts: stm32: add ddrperfm on stm32mp151
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The DDRPERFM is the DDR Performance Monitor embedded in STM32MP151 SoC.
+
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Signed-off-by: Clément Le Goffic <legoffic.clement@gmail.com>
+Change-Id: I84d5fad950d870b5b240711861147036574205db
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/571219
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp151.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
+index a692317f2086..d12e31a6a2c1 100644
+--- a/arch/arm/boot/dts/st/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
+@@ -755,6 +755,13 @@ usbphyc_port1: usb-phy@1 {
+ 			};
+ 		};
+ 
++		ddrperfm: perf@5a007000 {
++			compatible = "st,stm32mp151-ddr-pmu", "st,stm32mp131-ddr-pmu";
++			reg = <0x5a007000 0x400>;
++			clocks = <&rcc DDRPERFM>;
++			resets = <&rcc DDRPERFM_R>;
++		};
++
+ 		iwdg1: watchdog@5c003000 {
+ 			compatible = "st,stm32mp1-iwdg";
+ 			reg = <0x5c003000 0x400>;
+-- 
+2.53.0
+

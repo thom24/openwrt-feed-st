@@ -1,0 +1,68 @@
+From adb68701c3098daf7003b17d3d752a8cbfa74b0b Mon Sep 17 00:00:00 2001
+From: Christophe Kerello <christophe.kerello@foss.st.com>
+Date: Thu, 16 Nov 2023 16:45:41 +0100
+Subject: [PATCH] arm64: dts: st: add WiFi support on stm32mp257f-dk board
+
+Add WiFi support on stm32mp257f-dk board.
+
+Change-Id: I017b02f848e6affcac568bcbb17604271354e86a
+Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/537432
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Christophe KERELLO <christophe.kerello@st.com>
+Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 28 +++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index 25a62641b7e9..79fd48bc34b3 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -70,6 +70,11 @@ memory@80000000 {
+ 		device_type = "memory";
+ 		reg = <0x0 0x80000000 0x1 0x0>;
+ 	};
++
++	wifi_pwrseq: wifi-pwrseq {
++		compatible = "mmc-pwrseq-simple";
++		reset-gpios = <&gpiog 8 GPIO_ACTIVE_LOW>;
++	};
+ };
+ 
+ &arm_wdt {
+@@ -315,6 +320,29 @@ &sdmmc2 {
+ 	status = "okay";
+ };
+ 
++/* Wifi */
++&sdmmc3 {
++	pinctrl-names = "default", "opendrain", "sleep";
++	pinctrl-0 = <&sdmmc3_b4_pins_a>;
++	pinctrl-1 = <&sdmmc3_b4_od_pins_a>;
++	pinctrl-2 = <&sdmmc3_b4_sleep_pins_a>;
++	non-removable;
++	st,neg-edge;
++	bus-width = <4>;
++	vmmc-supply = <&scmi_v3v3>;
++	mmc-pwrseq = <&wifi_pwrseq>;
++	cap-power-off-card;
++	cap-sdio-irq;
++	#address-cells = <1>;
++	#size-cells = <0>;
++	status = "okay";
++
++	brcmf: wifi@1 {
++		reg = <1>;
++		compatible = "brcm,bcm4329-fmac";
++	};
++};
++
+ &syscfg {
+ 	bootph-all;
+ };
+-- 
+2.53.0
+

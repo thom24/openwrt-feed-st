@@ -1,0 +1,44 @@
+From 49193c05dce7e5fc22c4baefa63c0b73e2b0cb67 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Wed, 3 Jun 2026 11:11:39 +0200
+Subject: [PATCH] clk: stm32mp21: keep reset table in order
+
+The table is sorted by the numeric value of the macro *_R.
+
+Move OTG_R in the correct position.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: Ia2fcfa577a62166203f1433136817c2789252760
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/574123
+Reviewed-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ drivers/clk/stm32/clk-stm32mp21.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/clk/stm32/clk-stm32mp21.c b/drivers/clk/stm32/clk-stm32mp21.c
+index 5c19310474da..a21d7c0658ab 100644
+--- a/drivers/clk/stm32/clk-stm32mp21.c
++++ b/drivers/clk/stm32/clk-stm32mp21.c
+@@ -1656,7 +1656,6 @@ static const struct stm32_reset_cfg *stm32mp21_reset_cfg[] = {
+ 	RESET_MP21(ADC2_R,		RCC_ADC2CFGR,		0,	0),
+ 	RESET_MP21(ETH1_R,		RCC_ETH1CFGR,		0,	0),
+ 	RESET_MP21(ETH2_R,		RCC_ETH2CFGR,		0,	0),
+-	RESET_MP21(OTG_R,		RCC_OTGCFGR,		0,	0),
+ 	RESET_MP21(USBH_R,		RCC_USBHCFGR,		0,	0),
+ 	RESET_MP21(USB2PHY1_R,		RCC_USB2PHY1CFGR,	0,	0),
+ 	RESET_MP21(USB2PHY2_R,		RCC_USB2PHY2CFGR,	0,	0),
+@@ -1687,6 +1686,7 @@ static const struct stm32_reset_cfg *stm32mp21_reset_cfg[] = {
+ 	RESET_MP21(HASH2_R,		RCC_HASH2CFGR,		0,	0),
+ 	RESET_MP21(CRYP1_R,		RCC_CRYP1CFGR,		0,	0),
+ 	RESET_MP21(CRYP2_R,		RCC_CRYP2CFGR,		0,	0),
++	RESET_MP21(OTG_R,		RCC_OTGCFGR,		0,	0),
+ };
+ 
+ static u16 stm32mp21_cpt_gate[GATE_NB];
+-- 
+2.53.0
+

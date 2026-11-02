@@ -1,0 +1,100 @@
+From f1a40b919344eb97523a8c41ba53fee4b4803637 Mon Sep 17 00:00:00 2001
+From: Simeon Marijon <simeon.marijon@foss.st.com>
+Date: Fri, 30 Jan 2026 16:01:37 +0100
+Subject: [PATCH] dt-bindings: nvmem: add binding for STM32MPX TAMP backup
+ registers
+
+Adds the binding documentation for TAMP backup registers.
+The backup registers is a part of the TAMP device of STM32 MPU.
+
+Change-Id: If83d216e12adb2d171a7ba3ce91f4898e467a54d
+Signed-off-by: Simeon Marijon <simeon.marijon@foss.st.com>
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+---
+ .../bindings/nvmem/st,stm32-tamp-nvram.yaml   | 56 +++++++++++++++++++
+ MAINTAINERS                                   |  6 ++
+ 2 files changed, 62 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/nvmem/st,stm32-tamp-nvram.yaml
+
+diff --git a/Documentation/devicetree/bindings/nvmem/st,stm32-tamp-nvram.yaml b/Documentation/devicetree/bindings/nvmem/st,stm32-tamp-nvram.yaml
+new file mode 100644
+index 000000000000..4af40a706d01
+--- /dev/null
++++ b/Documentation/devicetree/bindings/nvmem/st,stm32-tamp-nvram.yaml
+@@ -0,0 +1,56 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/nvmem/st,stm32-tamp-nvram.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: STMicroelectronics STM32 backup registers as NVMEM
++
++description: |
++  This represents STM32 backup registers area presented as nvmem cells.
++  This contains various information (e.g. boot mode passed to bootloaders).
++
++maintainers:
++  - Siméon Marijon <simeon.marijon@foss.st.com>
++
++allOf:
++  - $ref: nvmem.yaml#
++
++properties:
++  compatible:
++    enum:
++      - st,stm32mp15-tamp-nvram
++      - st,stm32mp25-tamp-nvram
++
++  reg:
++    description:
++      TAMP Registers bank location and size.
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    nvram: nvram@5c00a100 {
++      reg = <0x5c00a100 0x80>;
++      compatible = "st,stm32mp15-tamp-nvram";
++
++      nvmem-layout {
++        compatible = "fixed-layout";
++        #address-cells = <1>;
++        #size-cells = <1>;
++
++        /* Data cells */
++        wakeup_sec: tamp-bkp@0 {
++            reg = <0x0 0x4>;
++        };
++        boot_mode: tamp-bkp@50 {
++            /*see boot mode selection feature*/
++            reg = <0x50 0x4>;
++        };
++      };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index c8bb457eb1af..87e1a2665d6c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -24675,6 +24675,12 @@ M:	Gatien Chevallier <gatien.chevallier@foss.st.com>
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/soc/st/*rif*
+ 
++STM32 TAMP DRIVERS
++M:	Siméon Marijon <simeon.marijon@foss.st.com>
++L:	linux-stm32@st-md-mailman.stormreply.com (moderated for non-subscribers)
++S:	Maintained
++F:	Documentation/devicetree/bindings/nvmem/st,stm32-tamp-nvram.yaml
++
+ STM32 TIMER/LPTIMER DRIVERS
+ M:	Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+ S:	Maintained
+-- 
+2.53.0
+

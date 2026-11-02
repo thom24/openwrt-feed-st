@@ -1,0 +1,107 @@
+From 8e064f6dc67a0ef7a90839d166fe3884d5b8e159 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Fri, 23 Jan 2026 11:38:58 +0100
+Subject: [PATCH] dt-bindings: document access-controllers property for
+ coresight peripherals
+
+Document the access-controllers for coresight peripherals in case some
+access checks need to be performed to use them.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml   | 3 +++
+ .../devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml  | 3 +++
+ Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml   | 3 +++
+ Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml   | 3 +++
+ Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml   | 3 +++
+ Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml  | 3 +++
+ 6 files changed, 18 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml
+index 2a91670ccb8c..949444aba1f8 100644
+--- a/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml
++++ b/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml
+@@ -128,6 +128,9 @@ properties:
+   "#address-cells":
+     const: 1
+ 
++  access-controllers:
++    maxItems: 1
++
+ patternProperties:
+   '^trig-conns@([0-9]+)$':
+     type: object
+diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml
+index b74db15e5f8a..b0693cd46d27 100644
+--- a/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml
++++ b/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml
+@@ -78,6 +78,9 @@ properties:
+         description: Output connection to CoreSight Trace bus
+         $ref: /schemas/graph.yaml#/properties/port
+ 
++  access-controllers:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml
+index 71f2e1ed27e5..10ebbbeadf93 100644
+--- a/Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml
++++ b/Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml
+@@ -118,6 +118,9 @@ properties:
+         description: Output connection from the ETM to CoreSight Trace bus.
+         $ref: /schemas/graph.yaml#/properties/port
+ 
++  access-controllers:
++    maxItems: 1
++
+ required:
+   - compatible
+   - clocks
+diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml
+index 378380c3f5aa..f243e76f597f 100644
+--- a/Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml
++++ b/Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml
+@@ -73,6 +73,9 @@ properties:
+         description: Output connection to the CoreSight Trace bus.
+         $ref: /schemas/graph.yaml#/properties/port
+ 
++  access-controllers:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
+index 96dd5b5f771a..9dc096698c65 100644
+--- a/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
++++ b/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
+@@ -128,6 +128,9 @@ properties:
+       - const: tracedata
+       - const: metadata
+ 
++  access-controllers:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml
+index a207f6899e67..29bbc3961fdf 100644
+--- a/Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml
++++ b/Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml
+@@ -70,6 +70,9 @@ properties:
+         description: Input connection from the CoreSight Trace bus.
+         $ref: /schemas/graph.yaml#/properties/port
+ 
++  access-controllers:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+-- 
+2.53.0
+

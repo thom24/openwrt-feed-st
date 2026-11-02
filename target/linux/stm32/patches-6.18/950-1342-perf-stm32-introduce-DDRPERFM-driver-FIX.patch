@@ -1,0 +1,41 @@
+From b888d75b8ca825c04b2168844d5d21da965d6896 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Mon, 25 May 2026 16:01:13 +0200
+Subject: [PATCH] perf: stm32: introduce DDRPERFM driver (FIX)
+
+The access controller firewall can deny access to the ddrperfm
+device, due to secure boot configuration.
+
+Don't log an error during probe, as this is the correct behavior
+for secured devices.
+Dump a debug message to make it easy to track it.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I0130eb1b67f554cb070bea009f5c7c72012e1262
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/571215
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ drivers/perf/stm32_ddr_pmu.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/perf/stm32_ddr_pmu.c b/drivers/perf/stm32_ddr_pmu.c
+index 38328663d2c5..b3867fc2c1bc 100644
+--- a/drivers/perf/stm32_ddr_pmu.c
++++ b/drivers/perf/stm32_ddr_pmu.c
+@@ -735,6 +735,10 @@ static int stm32_ddr_pmu_device_probe(struct platform_device *pdev)
+ 		if (ret)
+ 			return dev_err_probe(pmu->dev, ret, "Failed to get firewall\n");
+ 		ret = stm32_firewall_grant_access_by_id(&firewall, firewall.firewall_id);
++		if (ret == -EACCES) {
++			dev_dbg(pmu->dev, "Access denied by firewall\n");
++			return -ENODEV;
++		}
+ 		if (ret)
+ 			return dev_err_probe(pmu->dev, ret, "Failed to grant access\n");
+ 	}
+-- 
+2.53.0
+

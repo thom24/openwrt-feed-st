@@ -1,0 +1,38 @@
+From aaeef7a0d391cdd109ea78001e7c9c277b1b2dae Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Date: Mon, 22 Jun 2026 16:31:01 +0200
+Subject: [PATCH] arm64: dts: st: fix timer used for ticks on stm32mp23
+
+Remove always-on on generic ARM timer as the clock source provided by
+STGEN is deactivated in low power mode, Stop1 by example.
+
+This correction for STM32MP25 family is done with commit 9ec406ac4b7d
+("arm64: dts: st: fix timer used for ticks") but after the creation of
+the file stm32mp231.dtsi file based on stm32mp251.dtsi.
+
+Fixes: e9b03ef21386 ("arm64: dts: st: introduce stm32mp23 SoCs family")
+Change-Id: I0ef2a7ac525ef18fa683368382d93e98cc36ee25
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/581080
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp231.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+index fd8ccf45e164..408566e9cca6 100644
+--- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+@@ -181,7 +181,7 @@ timer {
+ 			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
+ 			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
+ 			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
+-		always-on;
++		arm,no-tick-in-suspend;
+ 	};
+ 
+ 	soc@0 {
+-- 
+2.53.0
+

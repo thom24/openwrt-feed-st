@@ -1,0 +1,34 @@
+From 1d93b62a8d0898c3e9f5676febadaea2261081eb Mon Sep 17 00:00:00 2001
+From: Gwenael Treuveur <gwenael.treuveur@foss.st.com>
+Date: Tue, 31 Mar 2026 09:01:34 +0200
+Subject: [PATCH] dt-bindings: st,stm32-syscon: add stm32mp25 pwr compatible
+
+Add stm32mp25 pwr compatible.
+
+Change-Id: I534cc6cd8250b61912024be4f164900d8dc56741
+Signed-off-by: Gwenael Treuveur <gwenael.treuveur@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/384571
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/552105
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Tested-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
+index 974cf67a06ac..31f52906c2f8 100644
+--- a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
++++ b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
+@@ -24,6 +24,7 @@ properties:
+               - st,stm32mp157-syscfg
+               - st,stm32mp21-syscfg
+               - st,stm32mp23-syscfg
++              - st,stm32mp25-pwr
+               - st,stm32mp25-syscfg
+           - const: syscon
+       - items:
+-- 
+2.53.0
+

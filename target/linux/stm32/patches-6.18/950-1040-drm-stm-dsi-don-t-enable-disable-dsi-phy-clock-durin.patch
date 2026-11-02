@@ -1,0 +1,109 @@
+From 403af65922ae6ec256c77384c9384835eea1d7a9 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Wed, 3 Jan 2024 16:01:54 +0100
+Subject: [PATCH] drm/stm: dsi: don't enable/disable dsi-phy clock during probe
+
+To obtain a continuous display after the probe, the txbyte clock
+must remain activated.
+
+Change-Id: Icbef610cc132ff69bbc0f024156572b876089263
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+---
+ drivers/gpu/drm/stm/dw_mipi_dsi-stm.c | 32 +++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+
+diff --git a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
+index 7b509b5d36ac..d64cd7fb337d 100644
+--- a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
++++ b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
+@@ -146,6 +146,7 @@ struct dw_mipi_dsi_stm {
+ 	struct regulator *vdda18_supply;
+ 	unsigned int lane_mbps;
+ 	u32 format;
++	bool probe_done;
+ };
+ 
+ static inline void dsi_write(struct dw_mipi_dsi_stm *dsi, u32 reg, u32 val)
+@@ -488,6 +489,9 @@ static void dw_mipi_dsi_clk_disable(struct clk_hw *clk)
+ 
+ 	DRM_DEBUG_DRIVER("\n");
+ 
++	if (!dsi->probe_done)
++		return;
++
+ 	/* Disable the DSI PLL */
+ 	dsi_clear(dsi, DSI_WRPCR, WRPCR_PLLEN);
+ 
+@@ -503,6 +507,9 @@ static int dw_mipi_dsi_clk_enable(struct clk_hw *clk)
+ 
+ 	DRM_DEBUG_DRIVER("\n");
+ 
++	if (!dsi->probe_done)
++		return 0;
++
+ 	/* Enable the regulator */
+ 	dsi_set(dsi, DSI_WRPCR, WRPCR_REGEN | WRPCR_BGREN);
+ 	ret = readl_poll_timeout_atomic(dsi->base + DSI_WISR, val, val & WISR_RRS,
+@@ -636,6 +643,9 @@ static void dw_mipi_dsi_phy_141_clk_disable(struct clk_hw *clk)
+ 
+ 	DRM_DEBUG_DRIVER("\n");
+ 
++	if (!dsi->probe_done)
++		return;
++
+ 	/* Disable the DSI PLL */
+ 	dsi_clear(dsi, DSI_WRPCR2, WRPCR2_PLLEN);
+ }
+@@ -648,6 +658,9 @@ static int dw_mipi_dsi_phy_141_clk_enable(struct clk_hw *clk)
+ 
+ 	DRM_DEBUG_DRIVER("\n");
+ 
++	if (!dsi->probe_done)
++		return 0;
++
+ 	ret = readl_poll_timeout_atomic(dsi->base + DSI_PSR, val, val & PSR_PSSC,
+ 					SLEEP_US, TIMEOUT_US);
+ 	if (ret)
+@@ -1280,6 +1293,7 @@ static int dw_mipi_dsi_stm_probe(struct platform_device *pdev)
+ 	struct dw_mipi_dsi_stm *dsi;
+ 	const struct dw_mipi_dsi_plat_data *pdata = of_device_get_match_data(dev);
+ 	int ret;
++	u32 pwr;
+ 
+ 	dsi = devm_kzalloc(dev, sizeof(*dsi), GFP_KERNEL);
+ 	if (!dsi)
+@@ -1388,6 +1402,21 @@ static int dw_mipi_dsi_stm_probe(struct platform_device *pdev)
+ 		goto err;
+ 	}
+ 
++	dsi->probe_done = true;
++
++	/*
++	 * To obtain a continuous display after the probe,
++	 * the txbyte clock must remain enabled if the DSI bridge is powered on.
++	 */
++	pwr = dsi_read(dsi, DSI_PWR_UP);
++	if (pwr == POWERUP) {
++		ret = clk_prepare_enable(dsi->txbyte_clk.clk);
++		if (ret) {
++			DRM_ERROR("Failed to enable DSI pixel clock: %d\n", ret);
++			goto err;
++		}
++	}
++
+ err:
+ 	clk_disable_unprepare(dsi->pclk);
+ 
+@@ -1398,6 +1427,9 @@ static void dw_mipi_dsi_stm_remove(struct platform_device *pdev)
+ {
+ 	struct dw_mipi_dsi_stm *dsi = platform_get_drvdata(pdev);
+ 
++	if (clk_hw_is_enabled(&dsi->txbyte_clk))
++		clk_disable_unprepare(dsi->txbyte_clk.clk);
++
+ 	dw_mipi_dsi_remove(dsi->dsi);
+ 	dw_mipi_dsi_clk_unregister(dsi);
+ }
+-- 
+2.53.0
+

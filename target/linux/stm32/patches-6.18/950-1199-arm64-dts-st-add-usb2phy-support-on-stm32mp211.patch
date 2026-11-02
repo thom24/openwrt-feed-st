@@ -1,0 +1,73 @@
+From 41e69324f77eeda4deb3aeb752b75c0ab7fa8961 Mon Sep 17 00:00:00 2001
+From: Rahul Kumar <rahul.kumar05@st.com>
+Date: Mon, 13 May 2024 15:48:10 +0530
+Subject: [PATCH] arm64: dts: st: add usb2phy support on stm32mp211
+
+Add USB2PHY support on stm32mp211:
+- usb2phy1 is dedicated to the usb 2.0 host controller
+- usb2phy2 is dedicated to the usb 2.0 otg controller
+
+The USB2PHY is a clock provider. It provides clocks (e.g. 48MHz) to
+the controllers, through RCC:
+_______________      ____________________      ______________________
+| USB2PHY PLL | ---> | RCC clock gating | ---> | EHCI/OHCI , or OTG |
+---------------      --------------------      ----------------------
+Add the necessary #clock-cells, so the clock can be requested in the
+controller nodes. Distinguish OHCI and PLL clocks on stm32mp211, by
+using one cell clock bindings. The OHCI clock must be enabled
+specifically during resume from low power.
+
+The OTG controller can be wakeup through USB2PHY2. Add the relevant
+wakeup interrupt to the PHY. Mark the PHY and the controller as
+"wakeup-source".
+
+Change-Id: I2609a49080a72b9ef4f09aae9e29f9d4448c28b2
+Signed-off-by: Rahul Kumar <rahul.kumar05@st.com>
+Co-developed-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/559878
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index e0540d699b59..8b8675e6bef1 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -206,6 +206,30 @@ timer {
+ 		arm,no-tick-in-suspend;
+ 	};
+ 
++	usb2_phy1: usb2-phy1 {
++		compatible      = "st,stm32mp21-usb2phy";
++		#phy-cells      = <0>;
++		#clock-cells    = <1>;
++		st,syscfg       = <&syscfg 0x2400>;
++		clocks          = <&rcc CK_KER_USB2PHY1>;
++		clock-names     = "core";
++		resets          = <&rcc USB2PHY1_R>;
++		status          = "disabled";
++	};
++
++	usb2_phy2: usb2-phy2 {
++		compatible      = "st,stm32mp21-usb2phy";
++		#phy-cells      = <0>;
++		#clock-cells    = <1>;
++		st,syscfg       = <&syscfg 0x2800>;
++		clocks          = <&rcc CK_KER_USB2PHY2EN>;
++		clock-names     = "core";
++		resets          = <&rcc USB2PHY2_R>;
++		interrupts-extended = <&exti1 44 IRQ_TYPE_EDGE_RISING>;
++		wakeup-source;
++		status          = "disabled";
++	};
++
+ 	soc@0 {
+ 		compatible = "simple-bus";
+ 		ranges = <0x0 0x0 0x0 0x0 0x80000000>;
+-- 
+2.53.0
+

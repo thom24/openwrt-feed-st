@@ -1,0 +1,66 @@
+From 0a9a41de198263cc56db63179c1ed98ed09c1139 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Thu, 11 Sep 2025 10:43:28 +0200
+Subject: [PATCH] dt-bindings: rtc: stm32: add #clock-cells property
+
+The rtc driver with compatible 'st,stm32mp*-rtc' registers itself
+as a clock provider as it can generate a 32 kHz clock on the
+output pin configured as LSCO.
+
+Add the property #clock-cells to allow clients to use the clock.
+
+Change-Id: I45eeffd6cce48c8ef2a08378c8b860114a78ed54
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+---
+ .../devicetree/bindings/rtc/st,stm32-rtc.yaml        | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
+index aae06e570c22..f532398b2b97 100644
+--- a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
++++ b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
+@@ -53,6 +53,9 @@ properties:
+       override default rtc_ck parent clock phandle of the new parent clock of rtc_ck
+     maxItems: 1
+ 
++  "#clock-cells":
++    const: 0
++
+ patternProperties:
+   "^rtc-[a-z]+-[0-9]+$":
+     type: object
+@@ -89,6 +92,7 @@ allOf:
+           maxItems: 1
+ 
+         clock-names: false
++        "#clock-cells": false
+ 
+       patternProperties:
+         "^rtc-[a-z]+-[0-9]+$": false
+@@ -108,6 +112,8 @@ allOf:
+           minItems: 2
+           maxItems: 2
+ 
++        "#clock-cells": false
++
+       patternProperties:
+         "^rtc-[a-z]+-[0-9]+$": false
+ 
+@@ -166,7 +172,13 @@ examples:
+       reg = <0x5c004000 0x400>;
+       clocks = <&rcc RTCAPB>, <&rcc RTC>;
+       clock-names = "pclk", "rtc_ck";
++      #clock-cells = <0>;
+       interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
++
++      rtc-lsco-0 {
++        pins = "out2_rmp";
++        function = "lsco";
++      };
+     };
+ 
+ ...
+-- 
+2.53.0
+

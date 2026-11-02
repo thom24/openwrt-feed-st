@@ -1,0 +1,45 @@
+From f034f93ce904f7db61815f8e4a064588ffed018e Mon Sep 17 00:00:00 2001
+From: Christophe Kerello <christophe.kerello@foss.st.com>
+Date: Mon, 25 May 2026 18:43:05 +0200
+Subject: [PATCH] drm/stm: dsi: fix unbalanced clocks and regulators on suspend
+
+Since commit b0e83c2c857f ("drm/stm: dsi: add pm runtime ops"), the system
+suspend callback may be invoked after runtime PM has already suspended the
+device. In that case, clocks and regulators can be disabled twice, leading
+to an unbalanced power state.
+
+Fix this by using pm_runtime_force_suspend() and pm_runtime_force_resume()
+to properly coordinate system sleep with runtime PM.
+
+Change-Id: I8fc31ff7372cc7f78a6a8c4c1dc00c544635691d
+Fixes: b0e83c2c857f ("drm/stm: dsi: add pm runtime ops")
+Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/571332
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+Domain-Review: Yannick FERTRE <yannick.fertre@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Christophe KERELLO <christophe.kerello@st.com>
+Reviewed-by: Yannick FERTRE <yannick.fertre@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/gpu/drm/stm/dw_mipi_dsi-stm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
+index 675d0b803651..1f99eefe0610 100644
+--- a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
++++ b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
+@@ -1513,8 +1513,8 @@ static int dw_mipi_dsi_stm_resume(struct device *dev)
+ }
+ 
+ static const struct dev_pm_ops dw_mipi_dsi_stm_pm_ops = {
+-	SYSTEM_SLEEP_PM_OPS(dw_mipi_dsi_stm_suspend,
+-			    dw_mipi_dsi_stm_resume)
++	SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
++			    pm_runtime_force_resume)
+ 	RUNTIME_PM_OPS(dw_mipi_dsi_stm_suspend,
+ 		       dw_mipi_dsi_stm_resume, NULL)
+ };
+-- 
+2.53.0
+

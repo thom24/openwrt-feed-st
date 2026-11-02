@@ -1,0 +1,42 @@
+From 8e1184948719fb98783ad0fff1eb865db165922f Mon Sep 17 00:00:00 2001
+From: Chen Ni <nichen@iscas.ac.cn>
+Date: Wed, 17 Dec 2025 10:37:21 +0800
+Subject: [PATCH] spi: stm32-qspi: Remove unneeded semicolon
+
+Remove unnecessary semicolons reported by Coccinelle/coccicheck and the
+semantic patch at scripts/coccinelle/misc/semicolon.cocci.
+
+Change-Id: I0e5ff241e4aca0c0e8382312979a9f7590f5e1e3
+Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
+Link: https://patch.msgid.link/20251217023721.1684244-1-nichen@iscas.ac.cn
+Signed-off-by: Mark Brown <broonie@kernel.org>
+(cherry picked from commit 7f7b350e4a65446f5d52ea8ae99e12eac8a972db)
+---
+ drivers/spi/spi-stm32-qspi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
+index 2a0ee96786fa..d1df66875809 100644
+--- a/drivers/spi/spi-stm32-qspi.c
++++ b/drivers/spi/spi-stm32-qspi.c
+@@ -153,7 +153,7 @@ static void stm32_qspi_read_fifo(void *val, void __iomem *addr, u8 len)
+ 		break;
+ 	case sizeof(u8):
+ 		*((u8 *)val) = readb_relaxed(addr);
+-	};
++	}
+ }
+ 
+ static void stm32_qspi_write_fifo(void *val, void __iomem *addr, u8 len)
+@@ -167,7 +167,7 @@ static void stm32_qspi_write_fifo(void *val, void __iomem *addr, u8 len)
+ 		break;
+ 	case sizeof(u8):
+ 		writeb_relaxed(*((u8 *)val), addr);
+-	};
++	}
+ }
+ 
+ static int stm32_qspi_tx_poll(struct stm32_qspi *qspi,
+-- 
+2.53.0
+

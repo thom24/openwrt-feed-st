@@ -1,0 +1,43 @@
+From 263323b82aa0bf62385d77f67a2cf8f9ca16b924 Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Wed, 1 Apr 2026 16:42:41 +0200
+Subject: [PATCH] arm64: dts: st: set node status for User button in
+ stm32mp235f-dk
+
+Add the node status for the 'User1' and 'User2' button on the
+stm32mp235f-dk board.
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: Ie960783fb0a420359c9441227cc261d1a22a66f8
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/553205
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index 90e868535ac2..9820b4644663 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -34,12 +34,14 @@ button-user-1 {
+ 			label = "User-1";
+ 			linux,code = <BTN_1>;
+ 			gpios = <&gpioc 5 GPIO_ACTIVE_HIGH>;
++			status = "okay";
+ 		};
+ 
+ 		button-user-2 {
+ 			label = "User-2";
+ 			linux,code = <BTN_2>;
+ 			gpios = <&gpioc 11 GPIO_ACTIVE_HIGH>;
++			status = "disabled";
+ 		};
+ 	};
+ 
+-- 
+2.53.0
+

@@ -1,0 +1,67 @@
+From 0d3bb7fba37c7d0dcca7aa5e9c3563cd34abdf2b Mon Sep 17 00:00:00 2001
+From: Simeon Marijon <simeon.marijon@foss.st.com>
+Date: Tue, 20 Jun 2023 14:36:53 +0200
+Subject: [PATCH] ARM: dts: stm32: add TAMP backup register in stm32mp131.dtsi
+
+TAMP backup registers allow information sharing between different
+software components/execution levels.
+They are described individually as nvmem cells.
+
+Change-Id: Iea49ac0fcb69acc82a70a1cdfeb4717bcec6da5e
+Signed-off-by: Simeon Marijon <simeon.marijon@foss.st.com>
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/530313
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp131.dtsi | 34 ++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
+index d8be152ef0e2..5b00bb7f51a2 100644
+--- a/arch/arm/boot/dts/st/stm32mp131.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
+@@ -1939,5 +1939,39 @@ usbphyc_port1: usb-phy@1 {
+ 				};
+ 			};
+ 		};
++
++		tamp: tamp@5c00a000 {
++			compatible = "st,stm32-tamp", "syscon", "simple-mfd";
++			#address-cells = <1>;
++			#size-cells = <1>;
++			reg = <0x5c00a000 0x400>;
++			ranges;
++
++			nvram: nvram@5c00a100 {
++				compatible = "st,stm32mp15-tamp-nvram";
++				reg = <0x5c00a100 0x80>;
++
++				nvmem-layout {
++					compatible = "fixed-layout";
++					#address-cells = <1>;
++					#size-cells = <1>;
++
++					saes_secret_key: tamp-bkp@0 {
++						/* see saes secret key feature */
++						reg = <0x0 0x20>;
++					};
++
++					boot_mode: tamp-bkp@78 {
++						/* see boot mode selection feature */
++						reg = <0x78 0x4>;
++					};
++
++					boot_counter: tamp-bkp@7c {
++						/* see boot counter feature */
++						reg = <0x7c 0x4>;
++					};
++				};
++			};
++		};
+ 	};
+ };
+-- 
+2.53.0
+

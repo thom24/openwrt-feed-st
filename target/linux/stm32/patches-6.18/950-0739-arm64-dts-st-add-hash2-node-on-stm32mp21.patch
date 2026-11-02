@@ -1,0 +1,51 @@
+From 47d36d72dd6a5eaff3cd5d3dd1ef2caaa2e29b83 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Tue, 31 Mar 2026 10:59:41 +0200
+Subject: [PATCH] arm64: dts: st: add hash2 node on stm32mp21
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Add support hash2 node for STM32MP21
+
+Signed-off-by: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+Change-Id: I8b22f5778dd63562a7196d9a5eaa2fa960271b4e
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/433141
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/551365
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 8fe0723e54cc..6c959c4b2158 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -1102,6 +1102,19 @@ ospi1: spi@40430000 {
+ 				status = "disabled";
+ 			};
+ 
++			hash2: hash@42010000 {
++				compatible = "st,stm32mp13-hash";
++				reg = <0x42010000 0x0 0x400>;
++				interrupts = <GIC_SPI 178 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&rcc CK_BUS_HASH2>;
++				resets = <&rcc HASH2_R>;
++				dmas = <&hpdma 142 0x40 0x23021>;
++				dma-names = "in";
++				access-controllers = <&rifsc 97>;
++				power-domains = <&d1_pd>;
++				status = "disabled";
++			};
++
+ 			rng2: rng@42020000 {
+ 				compatible = "st,stm32mp21-rng";
+ 				reg = <0x42020000 0x0 0x400>;
+-- 
+2.53.0
+

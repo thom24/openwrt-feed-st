@@ -1,0 +1,39 @@
+From 43a774f98cad348a0b3e5b3a1d8fea4087c1dc8c Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Mon, 20 Apr 2026 22:56:38 +0200
+Subject: [PATCH] dt-bindings: display: update dt-bindings for STM32 LVDS
+ device
+
+Add power supplies properties.
+
+Change-Id: I3f7d9a32a3fc944c8370b0ff49db4ff61b05de19
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/559634
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ .../devicetree/bindings/display/st,stm32mp25-lvds.yaml    | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/display/st,stm32mp25-lvds.yaml b/Documentation/devicetree/bindings/display/st,stm32mp25-lvds.yaml
+index 84720dc91f87..1e7872be9ab2 100644
+--- a/Documentation/devicetree/bindings/display/st,stm32mp25-lvds.yaml
++++ b/Documentation/devicetree/bindings/display/st,stm32mp25-lvds.yaml
+@@ -89,6 +89,14 @@ properties:
+       - port@0
+       - port@1
+ 
++  vdd-supply:
++    description:
++      Phandle of the regulator that provides the supply voltage vdd.
++
++  vdda18-supply:
++    description:
++      Phandle of the regulator that provides the supply voltage vdda18.
++
+ required:
+   - compatible
+   - "#clock-cells"
+-- 
+2.53.0
+

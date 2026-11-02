@@ -1,0 +1,73 @@
+From 8c9107a0448993db9de5c5b2766341e2989c8ea5 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Thu, 6 Aug 2026 13:23:39 +0200
+Subject: [PATCH] iio: adc: stm32: add vrefint channel description ext_info
+
+Add a dedicated ext_info table for the internal vrefint channel and expose
+a new per-channel description attribute.
+
+The new description string clarifies that the reported processed value is
+derived from VREFINT calibration and corresponds to VREF+ estimation.
+
+Change-Id: Iea31ba0a0ccc12dc7b5f64e06eb2fd0a88fe19b5
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/597494
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/iio/adc/stm32-adc.c | 30 +++++++++++++++++++++++++++++-
+ 1 file changed, 29 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/iio/adc/stm32-adc.c b/drivers/iio/adc/stm32-adc.c
+index 3f1a65cca199..7c91d9557ad9 100644
+--- a/drivers/iio/adc/stm32-adc.c
++++ b/drivers/iio/adc/stm32-adc.c
+@@ -2442,6 +2442,31 @@ static const struct iio_chan_spec_ext_info stm32_adc_ext_info[] = {
+ 	{ }
+ };
+ 
++static ssize_t stm32_adc_read_description(struct iio_dev *indio_dev,
++					  uintptr_t private,
++					  const struct iio_chan_spec *chan,
++					  char *buf)
++{
++	return sysfs_emit(buf, "%s\n", (const char *)private);
++}
++
++static const struct iio_chan_spec_ext_info stm32_adc_vrefint_ext_info[] = {
++	IIO_ENUM("trigger_polarity", IIO_SHARED_BY_ALL, &stm32_adc_trig_pol),
++	{
++		.name = "trigger_polarity_available",
++		.shared = IIO_SHARED_BY_ALL,
++		.read = iio_enum_available_read,
++		.private = (uintptr_t)&stm32_adc_trig_pol,
++	},
++	{
++		.name = "description",
++		.shared = IIO_SEPARATE,
++		.read = stm32_adc_read_description,
++		.private = (uintptr_t)"VREF+ voltage (mV) from VREFINT and calibration data",
++	},
++	{ }
++};
++
+ static void stm32_adc_debugfs_init(struct iio_dev *indio_dev)
+ {
+ 	struct stm32_adc *adc = iio_priv(indio_dev);
+@@ -2541,7 +2566,10 @@ static void stm32_adc_chan_init_one(struct iio_dev *indio_dev,
+ 	chan->scan_type.sign = 'u';
+ 	chan->scan_type.realbits = adc->cfg->adc_info->resolutions[adc->res];
+ 	chan->scan_type.storagebits = 16;
+-	chan->ext_info = stm32_adc_ext_info;
++	if (chan->channel == adc->int_ch[STM32_ADC_INT_CH_VREFINT])
++		chan->ext_info = stm32_adc_vrefint_ext_info;
++	else
++		chan->ext_info = stm32_adc_ext_info;
+ 
+ 	/* pre-build selected channels mask */
+ 	adc->pcsel |= BIT(chan->channel);
+-- 
+2.53.0
+

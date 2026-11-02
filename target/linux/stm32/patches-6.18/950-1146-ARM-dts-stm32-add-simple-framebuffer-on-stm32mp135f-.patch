@@ -1,0 +1,41 @@
+From 6572f08bdea692a0551ffead2d2883df09eab5c2 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Wed, 3 Nov 2021 16:35:51 +0100
+Subject: [PATCH] ARM: dts: stm32: add simple-framebuffer on stm32mp135f-dk
+
+Add node to support the simple-frambuffer. By default, the node must be
+disabled.
+
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Change-Id: I37bc4c7494a3fc2cdfc5a2b7257b34f38aa5ffa1
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/570673
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dk.dts | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+index 0f5576593573..1cc5d9761a21 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+@@ -29,6 +29,16 @@ aliases {
+ 
+ 	chosen {
+ 		stdout-path = "serial0:115200n8";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges;
++
++		framebuffer {
++			compatible = "simple-framebuffer";
++			clocks = <&rcc LTDC_PX>, <&rcc TIM1_K>;
++			lcd-supply =  <&scmi_v3v3_sw>;
++			status = "disabled";
++		};
+ 	};
+ 
+ 	clocks {
+-- 
+2.53.0
+

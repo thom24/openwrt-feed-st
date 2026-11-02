@@ -1,0 +1,49 @@
+From 635db23a4bec7ea4108ad2f0f6a879a99249e6c1 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Tue, 16 Nov 2021 17:47:09 +0100
+Subject: [PATCH] Input: goodix - remove debug error during i2c transfer
+
+Due to common reset between panel, some error could be happen
+when the reset line is updated by the panel driver.
+
+DO_NOT_UPSTREAM
+
+Change-Id: I8cb3aecda7a4c7876424b139d71689c3a6f49bd6
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/228423
+Reviewed-by: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/297691
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/364932
+---
+ drivers/input/touchscreen/goodix.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/input/touchscreen/goodix.c b/drivers/input/touchscreen/goodix.c
+index d67eac13c8ea..5c3f9a613928 100644
+--- a/drivers/input/touchscreen/goodix.c
++++ b/drivers/input/touchscreen/goodix.c
+@@ -191,7 +191,7 @@ int goodix_i2c_read(struct i2c_client *client, u16 reg, u8 *buf, int len)
+ 		ret = (ret == ARRAY_SIZE(msgs) ? 0 : -EIO);
+ 
+ 	if (ret)
+-		dev_err(&client->dev, "Error reading %d bytes from 0x%04x: %d\n",
++		dev_dbg(&client->dev, "Error reading %d bytes from 0x%04x: %d\n",
+ 			len, reg, ret);
+ 	return ret;
+ }
+@@ -230,7 +230,7 @@ int goodix_i2c_write(struct i2c_client *client, u16 reg, const u8 *buf, int len)
+ 	kfree(addr_buf);
+ 
+ 	if (ret)
+-		dev_err(&client->dev, "Error writing %d bytes to 0x%04x: %d\n",
++		dev_dbg(&client->dev, "Error writing %d bytes to 0x%04x: %d\n",
+ 			len, reg, ret);
+ 	return ret;
+ }
+-- 
+2.53.0
+

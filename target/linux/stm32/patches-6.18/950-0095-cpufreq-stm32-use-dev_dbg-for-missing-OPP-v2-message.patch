@@ -1,0 +1,39 @@
+From 7c94f333585df083a01bfe2eb1d1aea6bd7203c2 Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Wed, 17 Jun 2026 09:06:27 +0200
+Subject: [PATCH] cpufreq: stm32: use dev_dbg() for missing OPP-v2 message
+
+Missing OPP-v2 support is not necessarily an error. The driver already
+returns -ENODEV when no OPP node is found, which can be part of the
+expected probe flow.
+
+Replace dev_err() with dev_dbg() to avoid reporting this normal case as
+an error while keeping the message available for debugging.
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: Idbe1b043a909deda8fbd4e0247a4bd7aa8242356
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/579506
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ drivers/cpufreq/stm32-cpufreq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/cpufreq/stm32-cpufreq.c b/drivers/cpufreq/stm32-cpufreq.c
+index aca99a7abfde..702148ed1f17 100644
+--- a/drivers/cpufreq/stm32-cpufreq.c
++++ b/drivers/cpufreq/stm32-cpufreq.c
+@@ -35,7 +35,7 @@ static int stm32_cpufreq_probe(struct platform_device *pdev)
+ 	}
+ 	opp_node = dev_pm_opp_of_get_opp_desc_node(cpu_dev);
+ 	if (!opp_node) {
+-		dev_err(&pdev->dev, "OPP-v2 not supported\n");
++		dev_dbg(&pdev->dev, "OPP-v2 not supported\n");
+ 		return -ENODEV;
+ 	}
+ 
+-- 
+2.53.0
+

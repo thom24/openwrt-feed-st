@@ -1,0 +1,69 @@
+From 17fb293c2af063a672481e920c83502386aac3ef Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Fri, 25 Sep 2026 11:13:06 +0200
+Subject: [PATCH] driver core: Clean up old glue directory after device_move
+
+A successful device_move() can leave an empty class glue directory
+under the old parent. Remove it after the device has moved to prevent
+a later device addition from reusing a glue directory whose sysfs
+node was removed with its former parent.
+
+On stm32mp1, stopping the NCM gadget and unbinding/rebinding DWC2
+can make the next configfs start fail with -ENOENT while reparenting
+usb0. The UDC core then reports no available UDC, even though DWC2
+registered. Cleaning up the old glue directory prevents reusing the
+sysfs node removed with the old gadget parent.
+
+Error log seen when the issue happens:
+dwc2 49000000.usb-otg: EPs: 9, dedicated fifos, 952 entries in SPRAM
+dwc2 49000000.usb-otg: DWC OTG Controller
+dwc2 49000000.usb-otg: new USB bus registered, assigned bus number 2
+dwc2 49000000.usb-otg: irq 59, io mem 0x49000000
+kobject: kobject_add_internal failed for usb0 (error: -2 parent: net)
+udc 49000000.usb-otg: failed to start g1: -2
+configfs-gadget.g1 gadget.0: probe with driver configfs-gadget.g1 failed
+  with error -2
+UDC core: g1: couldn't find an available UDC or it's busy
+
+Fixes: ec35c1969650 ("usb: gadget: f_ncm: Fix net_device lifecycle with device_move")
+Assisted-by: GitHub-Copilot:GPT-6-Luna
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I35baefc20b8d9d71cf29ad5762d30392e6851ce4
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/617675
+Tested-by: Jerome BESNARD <jerome.besnard@st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+---
+ drivers/base/core.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index 01e14f787916..3aa2f9e2e0e6 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -4604,6 +4604,7 @@ int device_move(struct device *dev, struct device *new_parent,
+ 	int error;
+ 	struct device *old_parent;
+ 	struct kobject *new_parent_kobj;
++	struct kobject *old_glue_dir;
+ 
+ 	dev = get_device(dev);
+ 	if (!dev)
+@@ -4620,6 +4621,7 @@ int device_move(struct device *dev, struct device *new_parent,
+ 
+ 	pr_debug("device: '%s': %s: moving to '%s'\n", dev_name(dev),
+ 		 __func__, new_parent ? dev_name(new_parent) : "<NULL>");
++	old_glue_dir = get_glue_dir(dev);
+ 	error = kobject_move(&dev->kobj, new_parent_kobj);
+ 	if (error) {
+ 		cleanup_glue_dir(dev, new_parent_kobj);
+@@ -4656,6 +4658,7 @@ int device_move(struct device *dev, struct device *new_parent,
+ 			goto out;
+ 		}
+ 	}
++	cleanup_glue_dir(dev, old_glue_dir);
+ 	switch (dpm_order) {
+ 	case DPM_ORDER_NONE:
+ 		break;
+-- 
+2.53.0
+

@@ -1,0 +1,49 @@
+From 3a81b22604c9227e8fd03ab438ab918a7a88e22a Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Wed, 11 Mar 2026 15:13:53 +0100
+Subject: [PATCH] drm/stm: ltdc: check crtc atomic state
+
+Check the crtc state to update the mode_changed field.
+
+Change-Id: Ia630dbd27c2fed03f170ac711140a6398da391bc
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+---
+ drivers/gpu/drm/stm/ltdc.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+index d12dc395d621..4edf6e9c53df 100644
+--- a/drivers/gpu/drm/stm/ltdc.c
++++ b/drivers/gpu/drm/stm/ltdc.c
+@@ -1108,6 +1108,20 @@ static void ltdc_crtc_atomic_flush(struct drm_crtc *crtc,
+ 	}
+ }
+ 
++static int ltdc_crtc_atomic_check(struct drm_crtc *crtc,
++				  struct drm_atomic_state *state)
++{
++	struct drm_crtc_state *crtc_state = drm_atomic_get_new_crtc_state(state, crtc);
++
++	drm_dbg_atomic(crtc->dev, "\n");
++
++	/* force a full mode set if active state changed */
++	if (crtc_state->active_changed)
++		crtc_state->mode_changed = true;
++
++	return 0;
++}
++
+ static bool ltdc_crtc_get_scanout_position(struct drm_crtc *crtc,
+ 					   bool in_vblank_irq,
+ 					   int *vpos, int *hpos,
+@@ -1165,6 +1179,7 @@ static const struct drm_crtc_helper_funcs ltdc_crtc_helper_funcs = {
+ 	.atomic_flush = ltdc_crtc_atomic_flush,
+ 	.atomic_enable = ltdc_crtc_atomic_enable,
+ 	.atomic_disable = ltdc_crtc_atomic_disable,
++	.atomic_check = ltdc_crtc_atomic_check,
+ 	.get_scanout_position = ltdc_crtc_get_scanout_position,
+ };
+ 
+-- 
+2.53.0
+

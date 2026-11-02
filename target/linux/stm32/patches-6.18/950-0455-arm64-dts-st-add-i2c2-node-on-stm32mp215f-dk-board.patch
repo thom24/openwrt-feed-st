@@ -1,0 +1,73 @@
+From 44da96651d5e61bc8b773be1ceaeeb0a8bd7d0d7 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Mon, 16 Feb 2026 13:09:55 +0100
+Subject: [PATCH] arm64: dts: st: add i2c2 node on stm32mp215f-dk board
+
+I2C2 is available on the stm32mp215f-dk board hence add pinctrl
+description for this i2c2 instance and enable the node.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: I6e2215efbaf3c56e957a98012d7abfbb78155e90
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/536957
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi | 17 +++++++++++++++++
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts     |  9 +++++++++
+ 2 files changed, 26 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi
+index 05226343525f..ab739e6ba3d6 100644
+--- a/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi
+@@ -225,6 +225,23 @@ pins {
+ 		};
+ 	};
+ 
++	i2c2_pins_a: i2c2-0 {
++		pins {
++			pinmux = <STM32_PINMUX('B', 5, AF9)>, /* I2C2_SCL */
++				 <STM32_PINMUX('D', 15, AF6)>; /* I2C2_SDA */
++			bias-disable;
++			drive-open-drain;
++			slew-rate = <0>;
++		};
++	};
++
++	i2c2_sleep_pins_a: i2c2-sleep-0 {
++		pins {
++			pinmux = <STM32_PINMUX('B', 5, ANALOG)>, /* I2C2_SCL */
++				 <STM32_PINMUX('D', 15, ANALOG)>; /* I2C2_SDA */
++		};
++	};
++
+ 	usart2_pins_a: usart2-0 {
+ 		pins1 {
+ 			pinmux = <STM32_PINMUX('A', 4, AF6)>; /* USART2_TX */
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 35cb137ac8a5..d31165254e27 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -175,6 +175,15 @@ &gpioz {
+ 	bootph-all;
+ };
+ 
++&i2c2 {
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&i2c2_pins_a>;
++	pinctrl-1 = <&i2c2_sleep_pins_a>;
++	i2c-scl-rising-time-ns = <34>;
++	i2c-scl-falling-time-ns = <2>;
++	status = "okay";
++};
++
+ &optee {
+ 	bootph-all;
+ };
+-- 
+2.53.0
+

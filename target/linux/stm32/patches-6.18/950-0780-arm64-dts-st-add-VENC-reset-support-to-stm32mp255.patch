@@ -1,0 +1,36 @@
+From 1899aeb6dc0bbdf908caaedb1e4c54f885d64944 Mon Sep 17 00:00:00 2001
+From: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Date: Tue, 17 Jan 2023 11:04:49 +0100
+Subject: [PATCH] arm64: dts: st: add VENC reset support to stm32mp255
+
+Add VENC reset support to STM32MP255.
+
+Change-Id: Ie616ed831b51999df084cb8282876168f3e2184a
+Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/533910
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Tested-by: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Hugues FRUCHET <hugues.fruchet@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp255.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp255.dtsi b/arch/arm64/boot/dts/st/stm32mp255.dtsi
+index e706787c6457..f76ddd9d6738 100644
+--- a/arch/arm64/boot/dts/st/stm32mp255.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp255.dtsi
+@@ -37,6 +37,7 @@ vdec: vdec@480d0000 {
+ 	venc: venc@480e0000 {
+ 		compatible = "st,stm32mp25-venc";
+ 		reg = <0x480e0000 0x800>;
++		resets = <&rcc VENC_R>;
+ 		interrupts = <GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH>;
+ 		clocks = <&rcc CK_BUS_VENC>;
+ 		access-controllers = <&rifsc 90>;
+-- 
+2.53.0
+

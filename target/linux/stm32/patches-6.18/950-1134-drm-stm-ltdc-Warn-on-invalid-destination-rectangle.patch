@@ -1,0 +1,37 @@
+From c26e34230646157a9cbd1325031031d3e1869035 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Thu, 1 Oct 2026 10:01:45 +0200
+Subject: [PATCH] drm/stm: ltdc: Warn on invalid destination rectangle
+
+Warn about invalid destination rectangles without
+aborting the plane update.
+
+Change-Id: I33c7b9c1708de3fb80571951436a444b558f7bb2
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/619701
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/gpu/drm/stm/ltdc.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+index 5e44be06031a..be8102a1c317 100644
+--- a/drivers/gpu/drm/stm/ltdc.c
++++ b/drivers/gpu/drm/stm/ltdc.c
+@@ -1738,10 +1738,8 @@ static void ltdc_plane_update(struct drm_plane *plane, struct drm_atomic_state *
+ 
+ 	mode = &newstate->crtc->state->adjusted_mode;
+ 	if (dst.x1 < 0 || dst.y1 < 0 || dst.x2 <= dst.x1 || dst.y2 <= dst.y1 ||
+-	    dst.x2 > mode->hdisplay || dst.y2 > mode->vdisplay) {
+-		drm_err(plane->dev, "Invalid dst rectangle\n");
+-		return;
+-	}
++	    dst.x2 > mode->hdisplay || dst.y2 > mode->vdisplay)
++		drm_warn(plane->dev, "Invalid dst rectangle\n");
+ 
+ 	if (plane_rotation & DRM_MODE_ROTATE_90) {
+ 		/* stop display streaming to allows rotation */
+-- 
+2.53.0
+

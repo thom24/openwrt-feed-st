@@ -1,0 +1,54 @@
+From cad592467481511548328f358597a5a8d1294b25 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Mon, 27 Apr 2026 14:35:10 +0200
+Subject: [PATCH] dt-bindings: interrupt-controller: stm32-exti: add
+ 'power-domains' property
+
+The STM32 EXTI may be in a power domain, which is the case for the
+STM32MP2xx based boards.
+Allow a single 'power-domains' entry for STM32 EXTI.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I61a73481c3f13374bbddb18cddd18b509035408d
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/561560
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ .../bindings/interrupt-controller/st,stm32-exti.yaml         | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml b/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml
+index b4bc1d4132ef..a17c3c19fb24 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml
+@@ -47,6 +47,9 @@ properties:
+     description:
+       Interrupts references to primary interrupt controller
+ 
++  power-domains:
++    maxItems: 1
++
+   wakeup-parent: true
+ 
+ required:
+@@ -68,6 +71,7 @@ allOf:
+         interrupts:
+           minItems: 1
+           maxItems: 32
++        power-domains: false
+       required:
+         - interrupts
+   - if:
+@@ -81,6 +85,7 @@ allOf:
+         interrupts:
+           minItems: 1
+           maxItems: 96
++        power-domains: false
+       required:
+         - interrupts
+ 
+-- 
+2.53.0
+

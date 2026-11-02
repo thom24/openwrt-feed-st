@@ -1,0 +1,35 @@
+From 26c7b3ae7f965177f95cfc5c399ab052d37d88e1 Mon Sep 17 00:00:00 2001
+From: Ram Dayal <ram.dayal@st.com>
+Date: Thu, 23 Jan 2025 11:09:19 +0100
+Subject: [PATCH] arm64: configs: add CONFIG_TYPEC_ADC in fragment-02
+
+This will enable ADC based Type-C driver to monitor
+current on usb typec port.
+
+Change-Id: Ia8f8fa8a0eaf38b2288a14f955a49408e22a278f
+Signed-off-by: Ram Dayal <ram.dayal@st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/572756
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+Tested-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ arch/arm64/configs/fragment-02-defconfig-addons.config | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/configs/fragment-02-defconfig-addons.config b/arch/arm64/configs/fragment-02-defconfig-addons.config
+index 7b36fd513432..59f6eb021a2c 100644
+--- a/arch/arm64/configs/fragment-02-defconfig-addons.config
++++ b/arch/arm64/configs/fragment-02-defconfig-addons.config
+@@ -101,6 +101,7 @@ CONFIG_STM32_WATCHDOG=m
+ CONFIG_SYSCON_REBOOT_MODE=m
+ CONFIG_TEE_REMOTEPROC=y
+ CONFIG_TOUCHSCREEN_ILI210X=m
++CONFIG_TYPEC_ADC=m
+ CONFIG_UBIFS_FS=y
+ CONFIG_UCSI_STM32G0=m
+ CONFIG_USB_CONFIGFS_F_UVC=y
+-- 
+2.53.0
+

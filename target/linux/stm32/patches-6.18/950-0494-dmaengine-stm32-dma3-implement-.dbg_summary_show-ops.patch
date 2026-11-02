@@ -1,0 +1,67 @@
+From 3933bffaf073761973c3cbad1e5e6fc1f38840ff Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 24 Feb 2026 13:22:51 +0100
+Subject: [PATCH] dmaengine: stm32-dma3: implement .dbg_summary_show ops
+
+Use .dbg_summary_show ops to overload the default information shown by
+dmaengine. In addition to the number of channels per controller and the
+users of the channels, AXI address remapping offset is shown if the feature
+is enabled, and, if the user has a dma_range_map, it means the memory
+buffer allocation done by the user should have taken into account the
+dma-ranges property, so the DMA memory ranges awareness is shown too.
+
+Change-Id: I15ed81a3cd8d3cd14dca69137f77bedcc5fc10e8
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+---
+ drivers/dma/stm32/stm32-dma3.c | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
+diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
+index 4815e9ce4fa5..d4b200b8131a 100644
+--- a/drivers/dma/stm32/stm32-dma3.c
++++ b/drivers/dma/stm32/stm32-dma3.c
+@@ -355,6 +355,31 @@ static struct device *ddata2dev(struct stm32_dma3_ddata *ddata)
+ 	return ddata->dma_dev.dev;
+ }
+ 
++#ifdef CONFIG_DEBUG_FS
++#include <linux/debugfs.h>
++static void stm32_dma3_dbg_summary_show(struct seq_file *s, struct dma_device *dma_dev)
++{
++	struct stm32_dma3_ddata *ddata = dev_get_drvdata(dma_dev->dev);
++	struct dma_chan *c;
++
++	if (ddata->axi_addr_offset)
++		seq_printf(s, "dma%d (%s): AXI port address remapping is enabled, offset=%pap\n",
++			   dma_dev->dev_id, dev_name(dma_dev->dev), &ddata->axi_addr_offset);
++
++	list_for_each_entry(c, &dma_dev->channels, device_node) {
++		if (!c->client_count)
++			continue;
++
++		seq_printf(s, " %-13s| %s", dma_chan_name(c), c->dbg_client_name ?: "in-use");
++
++		if (c->slave && c->slave->dma_range_map)
++			seq_puts(s, " (is aware of DMA memory ranges)");
++
++		seq_puts(s, "\n");
++	}
++}
++#endif
++
+ static void stm32_dma3_chan_dump_reg(struct stm32_dma3_chan *chan)
+ {
+ 	struct stm32_dma3_ddata *ddata = to_stm32_dma3_ddata(chan);
+@@ -2160,6 +2185,9 @@ static int stm32_dma3_probe(struct platform_device *pdev)
+ 	dma_dev->device_synchronize = stm32_dma3_synchronize;
+ 	dma_dev->device_tx_status = stm32_dma3_tx_status;
+ 	dma_dev->device_issue_pending = stm32_dma3_issue_pending;
++#ifdef CONFIG_DEBUG_FS
++	dma_dev->dbg_summary_show = stm32_dma3_dbg_summary_show;
++#endif
+ 
+ 	/* if dma_channels is not modified, get it from hwcfgr1 */
+ 	if (of_property_read_u32(np, "dma-channels", &ddata->dma_channels)) {
+-- 
+2.53.0
+

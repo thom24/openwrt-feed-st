@@ -1,0 +1,114 @@
+From 5ac123eebe8c554ddb1b934c496847b7d53eee54 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Thu, 13 Nov 2025 16:14:05 +0100
+Subject: [PATCH] arm64: dts: st: Add missing LED descriptions for stm32mp2 ST
+ boards
+
+Add green and orange LED support on stm32mp235f-dk and stm32mp257f-dk
+board.
+Add blue, green and orange LED support on stm32mp257f-ev1 board.
+
+Change-Id: If4d856480dcb4cffee4e1e7eed78a9f95c5e7848
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Link: https://lore.kernel.org/r/20251113-upstream_update_led_nodes-v2-14-45090db9e2e5@foss.st.com
+Link: https://lore.kernel.org/r/20251113-upstream_update_led_nodes-v2-15-45090db9e2e5@foss.st.com
+Link: https://lore.kernel.org/r/20251113-upstream_update_led_nodes-v2-16-45090db9e2e5@foss.st.com
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+(cherry picked from commit 86e73410c8bc512d7153a589cb9e13ca7c91c4b0)
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/583456
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts  | 10 ++++++++++
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts  | 10 ++++++++++
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 23 ++++++++++++++++++++++
+ 3 files changed, 43 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index 7c03e269e6df..08a5f3a9eb6a 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -92,6 +92,16 @@ led-blue {
+ 			linux,default-trigger = "heartbeat";
+ 			default-state = "off";
+ 		};
++
++		led-green {
++			color = <LED_COLOR_ID_GREEN>;
++			gpios = <&gpioh 5 GPIO_ACTIVE_HIGH>;
++		};
++
++		led-orange {
++			color = <LED_COLOR_ID_ORANGE>;
++			gpios = <&gpioh 6 GPIO_ACTIVE_HIGH>;
++		};
+ 	};
+ 
+ 	hdmi: connector {
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index 7407b5901a54..3a5771ca87df 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -125,6 +125,16 @@ led-blue {
+ 			linux,default-trigger = "heartbeat";
+ 			default-state = "off";
+ 		};
++
++		led-green {
++			color = <LED_COLOR_ID_GREEN>;
++			gpios = <&gpioh 5 GPIO_ACTIVE_HIGH>;
++		};
++
++		led-orange {
++			color = <LED_COLOR_ID_ORANGE>;
++			gpios = <&gpioh 6 GPIO_ACTIVE_HIGH>;
++		};
+ 	};
+ 
+ 	hdmi: connector {
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+index 8005063a3965..22263ed38444 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+@@ -8,6 +8,7 @@
+ 
+ #include <dt-bindings/gpio/gpio.h>
+ #include <dt-bindings/input/input.h>
++#include <dt-bindings/leds/common.h>
+ #include <dt-bindings/media/video-interfaces.h>
+ #include <dt-bindings/regulator/st,stm32mp25-regulator.h>
+ #include "stm32mp257.dtsi"
+@@ -93,6 +94,28 @@ button-wake-up {
+ 		};
+ 	};
+ 
++	gpio-leds {
++		compatible = "gpio-leds";
++
++		led-blue {
++			function = LED_FUNCTION_HEARTBEAT;
++			color = <LED_COLOR_ID_BLUE>;
++			gpios = <&gpioj 7 GPIO_ACTIVE_HIGH>;
++			linux,default-trigger = "heartbeat";
++			default-state = "off";
++		};
++
++		led-green {
++			color = <LED_COLOR_ID_GREEN>;
++			gpios = <&gpiod 8 GPIO_ACTIVE_HIGH>;
++		};
++
++		led-orange {
++			color = <LED_COLOR_ID_ORANGE>;
++			gpios = <&gpioj 6 GPIO_ACTIVE_HIGH>;
++		};
++	};
++
+ 	hdmi: connector {
+ 		compatible = "hdmi-connector";
+ 		label = "hdmi";
+-- 
+2.53.0
+

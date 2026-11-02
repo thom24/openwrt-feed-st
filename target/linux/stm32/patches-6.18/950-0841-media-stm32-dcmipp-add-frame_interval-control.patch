@@ -1,0 +1,274 @@
+From 1f0cfc1ffefee92986a475365f850675406939e2 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Thu, 26 Mar 2026 18:47:34 +0100
+Subject: [PATCH] media: stm32: dcmipp: add frame_interval control
+
+The byteproc and pixelproc allow to perform framerate control
+by streaming all frames or only a subset of them with a drop
+ratio of either 2 / 4 or 8.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: I4baba0aa23f00cc4dcde8ee163fd84d3e5789515
+---
+ .../st/stm32/stm32-dcmipp/dcmipp-byteproc.c   |  3 +
+ .../st/stm32/stm32-dcmipp/dcmipp-capture.c    | 65 +++++++++++++++-
+ .../st/stm32/stm32-dcmipp/dcmipp-common.c     | 78 +++++++++++++++++++
+ .../st/stm32/stm32-dcmipp/dcmipp-common.h     |  7 ++
+ .../st/stm32/stm32-dcmipp/dcmipp-pixelproc.c  |  3 +
+ 5 files changed, 152 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
+index df8ed7350c29..940bf048bb1f 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
+@@ -547,10 +547,13 @@ static int dcmipp_byteproc_disable_streams(struct v4l2_subdev *sd,
+ static const struct v4l2_subdev_pad_ops dcmipp_byteproc_pad_ops = {
+ 	.enum_mbus_code		= dcmipp_byteproc_enum_mbus_code,
+ 	.enum_frame_size	= dcmipp_byteproc_enum_frame_size,
++	.enum_frame_interval	= dcmipp_enum_frame_interval,
+ 	.get_fmt		= v4l2_subdev_get_fmt,
+ 	.set_fmt		= dcmipp_byteproc_set_fmt,
+ 	.get_selection		= dcmipp_byteproc_get_selection,
+ 	.set_selection		= dcmipp_byteproc_set_selection,
++	.get_frame_interval	= v4l2_subdev_get_frame_interval,
++	.set_frame_interval	= dcmipp_set_frame_interval,
+ 	.enable_streams		= dcmipp_byteproc_enable_streams,
+ 	.disable_streams	= dcmipp_byteproc_disable_streams,
+ };
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
+index fb82beee05a3..a5284aeb05c7 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
+@@ -64,6 +64,7 @@
+ #define DCMIPP_PxFSCR(id)	(0x404 + ((id) * 0x400))
+ #define DCMIPP_PxFSCR_PIPEN	BIT(31)
+ #define DCMIPP_PxFCTCR(id)	(0x500 + ((id) * 0x400))
++#define DCMIPP_PxFCTCR_FRATE_MASK	GENMASK(1, 0)
+ #define DCMIPP_PxFCTCR_CPTREQ	BIT(3)
+ #define DCMIPP_P0DCCNTR		0x5b0
+ #define DCMIPP_P0DCLMTR		0x5b4
+@@ -236,6 +237,9 @@ struct dcmipp_capture_device {
+ 		u32 underrun;
+ 		u32 nactive;
+ 	} count;
++
++	u32 vsync_frame_refresh_cnt;
++	u32 frame_skip_ratio;
+ };
+ 
+ static const struct dcmipp_capture_pix_map *
+@@ -558,6 +562,9 @@ static void dcmipp_start_capture(struct dcmipp_capture_device *vcap,
+ 			reg_write(vcap, DCMIPP_P1PPM2AR1, buf->addrs[2]);
+ 	}
+ 
++	/* It takes 1 VSYNCs to actually start */
++	vcap->vsync_frame_refresh_cnt = 1;
++
+ 	/* Capture request */
+ 	reg_set(vcap, DCMIPP_PxFCTCR(vcap->pipe_id), DCMIPP_PxFCTCR_CPTREQ);
+ }
+@@ -573,6 +580,41 @@ static void dcmipp_capture_all_buffers_done(struct dcmipp_capture_device *vcap,
+ 	}
+ }
+ 
++static int dcmipp_capture_get_frame_skip_rate(struct v4l2_subdev *source,
++					      u32 *frame_skip_rate)
++{
++	struct v4l2_subdev_frame_interval sink_fi = { .pad = 0, };
++	struct v4l2_subdev_frame_interval source_fi = { .pad = 1, };
++	u32 ratio = 1;
++	int ret;
++
++	/*
++	 * Retrieve the frame rate adjustment info from postproc subdev
++	 * if frame_interval are not available, rate will be 1
++	 */
++	ret = v4l2_subdev_call_state_active(source, pad, get_frame_interval,
++					    &sink_fi);
++	if (ret < 0)
++		goto end;
++
++	ret = v4l2_subdev_call_state_active(source, pad, get_frame_interval,
++					    &source_fi);
++	if (ret < 0)
++		goto end;
++
++	if (!sink_fi.interval.numerator || !sink_fi.interval.denominator ||
++	    !source_fi.interval.numerator || !source_fi.interval.denominator)
++		goto end;
++
++	ratio = (sink_fi.interval.denominator * source_fi.interval.numerator) /
++		(sink_fi.interval.numerator * source_fi.interval.denominator);
++
++end:
++	*frame_skip_rate = ratio;
++
++	return 0;
++}
++
+ static int dcmipp_capture_start_streaming(struct vb2_queue *vq,
+ 					  unsigned int count)
+ {
+@@ -611,6 +653,17 @@ static int dcmipp_capture_start_streaming(struct vb2_queue *vq,
+ 		goto err_pm_put;
+ 	}
+ 
++	/* Configure frame control */
++	ret = dcmipp_capture_get_frame_skip_rate(vcap->s_subdev,
++						 &vcap->frame_skip_ratio);
++	if (ret < 0)
++		return ret;
++
++	reg_clear(vcap, DCMIPP_PxFCTCR(vcap->pipe_id),
++		  DCMIPP_PxFCTCR_FRATE_MASK);
++	reg_set(vcap, DCMIPP_PxFCTCR(vcap->pipe_id),
++		__ffs(vcap->frame_skip_ratio));
++
+ 	ret = v4l2_subdev_enable_streams(vcap->s_subdev,
+ 					 vcap->s_subdev_pad_nb, BIT_ULL(0));
+ 	if (ret)
+@@ -1032,11 +1085,15 @@ static irqreturn_t dcmipp_capture_irq_thread(int irq, void *arg)
+ 		 * most of the cases, since a FRAMEEND has already come,
+ 		 * pointer next is NULL since active is reset during the
+ 		 * FRAMEEND handling. However, in case of framerate adjustment,
+-		 * there are more VSYNC than FRAMEEND. Thus we recycle the
+-		 * active (but not used) buffer and put it back into next.
++		 * there are more VSYNC than FRAMEEND. To tackle with those
++		 * cases, the driver needs to count vsync in order to apply
++		 * updates only when really necessary.
+ 		 */
+-		swap(vcap->active, vcap->next);
+-		dcmipp_capture_set_next_frame_or_stop(vcap);
++		if (--vcap->vsync_frame_refresh_cnt == 0) {
++			vcap->vsync_frame_refresh_cnt = vcap->frame_skip_ratio;
++			swap(vcap->active, vcap->next);
++			dcmipp_capture_set_next_frame_or_stop(vcap);
++		}
+ 	}
+ 
+ out:
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.c
+index 562933e08d62..eae2df4d4a6d 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.c
+@@ -109,3 +109,81 @@ dcmipp_ent_sd_unregister(struct dcmipp_ent_device *ved, struct v4l2_subdev *sd)
+ 	media_entity_cleanup(ved->ent);
+ 	v4l2_device_unregister_subdev(sd);
+ }
++
++static const unsigned int dcmipp_frates[] = {1, 2, 4, 8};
++
++int dcmipp_enum_frame_interval(struct v4l2_subdev *sd,
++			       struct v4l2_subdev_state *sd_state,
++			       struct v4l2_subdev_frame_interval_enum *fie)
++{
++	struct v4l2_fract *sink_interval =
++		v4l2_subdev_state_get_interval(sd_state, 0);
++	unsigned int ratio;
++
++	if (fie->pad > 1 ||
++	    fie->index >= (fie->pad == 1 ? ARRAY_SIZE(dcmipp_frates) : 1) ||
++	    fie->width > DCMIPP_FRAME_MAX_WIDTH ||
++	    fie->height > DCMIPP_FRAME_MAX_HEIGHT)
++		return -EINVAL;
++
++	if (!fie->pad) {
++		fie->interval = *sink_interval;
++		return 0;
++	}
++
++	ratio = dcmipp_frates[fie->index];
++
++	fie->interval.numerator = sink_interval->numerator * ratio;
++	fie->interval.denominator = sink_interval->denominator;
++
++	return 0;
++}
++
++int dcmipp_set_frame_interval(struct v4l2_subdev *sd,
++			      struct v4l2_subdev_state *sd_state,
++			      struct v4l2_subdev_frame_interval *fi)
++{
++	struct v4l2_fract *interval;
++
++	if (v4l2_subdev_is_streaming(sd))
++		return -EBUSY;
++
++	if (fi->interval.numerator == 0 || fi->interval.denominator == 0)
++		fi->interval = *v4l2_subdev_state_get_interval(sd_state, 0);
++
++	interval = v4l2_subdev_state_get_interval(sd_state, fi->pad);
++
++	if (!fi->pad) {
++		/*
++		 * Setting sink frame interval resets frame skipping.
++		 * Sink frame interval is propagated to src.
++		 */
++		*v4l2_subdev_state_get_interval(sd_state, 1) = fi->interval;
++	} else {
++		struct v4l2_fract *sink_interval =
++			v4l2_subdev_state_get_interval(sd_state, 0);
++		unsigned int ratio;
++
++		/* Normalize ratio */
++		ratio = (sink_interval->denominator * fi->interval.numerator) /
++			(sink_interval->numerator * fi->interval.denominator);
++
++		/* Hardware can skip 1 frame over 2, 4 or 8 */
++		if (ratio >= 8)
++			ratio = 8;
++		else if (ratio >= 4)
++			ratio = 4;
++		else if (ratio >= 2)
++			ratio = 2;
++		else
++			ratio = 1;
++
++		/* Adjust src frame interval to what hardware can really do */
++		fi->interval.numerator = sink_interval->numerator * ratio;
++		fi->interval.denominator = sink_interval->denominator;
++	}
++
++	*interval = fi->interval;
++
++	return 0;
++}
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
+index d4895256269a..b123d4ee90a4 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
+@@ -285,6 +285,13 @@ static inline void __reg_clear(struct device *dev, void __iomem *base, u32 reg,
+ 
+ bool dcmipp_is_input_csi(struct dcmipp_device *dcmipp);
+ 
++int dcmipp_enum_frame_interval(struct v4l2_subdev *sd,
++			       struct v4l2_subdev_state *sd_state,
++			       struct v4l2_subdev_frame_interval_enum *fie);
++int dcmipp_set_frame_interval(struct v4l2_subdev *sd,
++			      struct v4l2_subdev_state *sd_state,
++			      struct v4l2_subdev_frame_interval *fi);
++
+ /* DCMIPP subdev init / release entry points */
+ struct dcmipp_ent_device *dcmipp_inp_ent_init(const char *entity_name,
+ 					      struct dcmipp_device *dcmipp);
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
+index 35c8af232fd0..39bb6b0a84ba 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
+@@ -824,10 +824,13 @@ static int dcmipp_pixelproc_disable_streams(struct v4l2_subdev *sd,
+ static const struct v4l2_subdev_pad_ops dcmipp_pixelproc_pad_ops = {
+ 	.enum_mbus_code		= dcmipp_pixelproc_enum_mbus_code,
+ 	.enum_frame_size	= dcmipp_pixelproc_enum_frame_size,
++	.enum_frame_interval	= dcmipp_enum_frame_interval,
+ 	.get_fmt		= v4l2_subdev_get_fmt,
+ 	.set_fmt		= dcmipp_pixelproc_set_fmt,
+ 	.get_selection		= dcmipp_pixelpipe_get_selection,
+ 	.set_selection		= dcmipp_pixelproc_set_selection,
++	.get_frame_interval	= v4l2_subdev_get_frame_interval,
++	.set_frame_interval	= dcmipp_set_frame_interval,
+ 	.enable_streams		= dcmipp_pixelproc_enable_streams,
+ 	.disable_streams	= dcmipp_pixelproc_disable_streams,
+ };
+-- 
+2.53.0
+

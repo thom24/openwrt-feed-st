@@ -1,0 +1,75 @@
+From b558e7e65a73a5d62bf14841cd5819827876f305 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Tue, 28 Jul 2026 17:37:33 +0200
+Subject: [PATCH] ARM: dts: stm32: set system-clock-direction-out in sai rx on
+ stm32mp157
+
+'commit 5725bce709db ("ASoC: simple-card-utils: Unify clock direction
+by clk_direction")' changed sysclk direction management: the CPU DAI
+only receives SND_SOC_CLOCK_OUT when system-clock-direction-out is set
+in its endpoint node, otherwise it defaults to SND_SOC_CLOCK_IN.
+
+On stm32mp157x-ev1 boards, playback (SAI2A/aif1) and record
+(SAI2B/aif2) use two independent SAI sub-blocks, each connected to a
+separate wm8994 port. Unlike topologies where the record sub-block is
+synchronized to playback via 'st,sync' and is therefore forced to
+slave mode, SAI2B here operates as its own master and must configure
+its own SAI kernel clock divider (MCKDIV). This requires the master
+clock rate (sai->mclk_rate) to be set by stm32_sai_set_sysclk(),
+which only triggers when called with SND_SOC_CLOCK_OUT.
+
+Without system-clock-direction-out on the record endpoint, SAI2B
+never records its mclk_rate, causing stm32_sai_configure_clock() to
+compute an incorrect MCKDIV and failing with 'Divider N out of range'
+when record is started standalone.
+
+Add system-clock-direction-out to the record (aif2) endpoints on
+stm32mp157x-ev1 device trees.
+
+Change-Id: Iabe0cbae443970e2827f1a6925ce837508d142d3
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts | 1 +
+ arch/arm/boot/dts/st/stm32mp157d-ev1.dts         | 1 +
+ arch/arm/boot/dts/st/stm32mp157f-ev1.dts         | 1 +
+ 3 files changed, 3 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
+index d699e9b18d08..de65fa46bb48 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
+@@ -632,6 +632,7 @@ sai2b_endpoint: endpoint {
+ 				remote-endpoint = <&wm8994_rx_endpoint>;
+ 				dai-format = "i2s";
+ 				mclk-fs = <256>;
++				system-clock-direction-out;
+ 			};
+ 		};
+ 	};
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+index 56aec6fa0787..b932a265c1c7 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+@@ -633,6 +633,7 @@ sai2b_endpoint: endpoint {
+ 				remote-endpoint = <&wm8994_rx_endpoint>;
+ 				dai-format = "i2s";
+ 				mclk-fs = <256>;
++				system-clock-direction-out;
+ 			};
+ 		};
+ 	};
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+index f53fcff8c113..f7ab1a5e90e1 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+@@ -633,6 +633,7 @@ sai2b_endpoint: endpoint {
+ 				remote-endpoint = <&wm8994_rx_endpoint>;
+ 				dai-format = "i2s";
+ 				mclk-fs = <256>;
++				system-clock-direction-out;
+ 			};
+ 		};
+ 	};
+-- 
+2.53.0
+

@@ -1,0 +1,42 @@
+From 89687557dcf380981c539ff958cd9323e9f3264d Mon Sep 17 00:00:00 2001
+From: Chen Ni <nichen@iscas.ac.cn>
+Date: Tue, 16 Dec 2025 12:32:10 +0800
+Subject: [PATCH] spi: stm32-ospi: Remove unneeded semicolon
+
+Remove unnecessary semicolons reported by Coccinelle/coccicheck and the
+semantic patch at scripts/coccinelle/misc/semicolon.cocci.
+
+Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Link: https://patch.msgid.link/20251216043210.1521722-1-nichen@iscas.ac.cn
+Signed-off-by: Mark Brown <broonie@kernel.org>
+(cherry picked from commit d8ce99b0d384830b0eb6b907f5a428309c70af82)
+---
+ drivers/spi/spi-stm32-ospi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
+index 7541ada95da5..06252df24474 100644
+--- a/drivers/spi/spi-stm32-ospi.c
++++ b/drivers/spi/spi-stm32-ospi.c
+@@ -150,7 +150,7 @@ static void stm32_ospi_read_fifo(void *val, void __iomem *addr, u8 len)
+ 		break;
+ 	case sizeof(u8):
+ 		*((u8 *)val) = readb_relaxed(addr);
+-	};
++	}
+ }
+ 
+ static void stm32_ospi_write_fifo(void *val, void __iomem *addr, u8 len)
+@@ -164,7 +164,7 @@ static void stm32_ospi_write_fifo(void *val, void __iomem *addr, u8 len)
+ 		break;
+ 	case sizeof(u8):
+ 		writeb_relaxed(*((u8 *)val), addr);
+-	};
++	}
+ }
+ 
+ static int stm32_ospi_abort(struct stm32_ospi *ospi)
+-- 
+2.53.0
+

@@ -1,0 +1,77 @@
+From 6150649aa599ac6f3fdeec447473824c8aee83c1 Mon Sep 17 00:00:00 2001
+From: Pankaj Dev <pankaj.dev@st.com>
+Date: Mon, 6 Dec 2021 23:12:46 +0530
+Subject: [PATCH] arm64: dts: st: add usbh support on stm32mp251
+
+Add support for USBH (USB Host) to stm32mp251.
+USBH is a USB Host controller supporting the standard registers used for
+full- and low-speed (OHCI controller) and high-speed (EHCI controller).
+
+Add the USB2PHY clock as 1st entry in both controllers, as the PHY clock
+needs to be initialized first, before enabling (gating) them.
+The reverse is also required when going to suspend.
+
+USBH can wakeup stm32mp251 from LP stop modes, by using EXTI wakeup
+source. So add the relevant power-domains, wakeup-source and interrupts.
+
+Change-Id: I4c573fcd036c6415b7db753539bad0053449501c
+Signed-off-by: Pankaj Dev <pankaj.dev@st.com>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/559888
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 36 ++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index 3310c0770538..398ad44a0d5d 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -2312,6 +2312,42 @@ stmmac_axi_config_1: stmmac-axi-config {
+ 				};
+ 			};
+ 
++			usbh: usb@482e0000 {
++				compatible = "st,stm32mp25-usbh";
++				st,syscfg = <&syscfg 0x2420>;
++				#address-cells = <1>;
++				#size-cells = <1>;
++				ranges = <0x482e0000 0x482e0000 0x20000>;
++				access-controllers = <&rifsc 63>;
++				power-domains = <&d1_pd>;
++				wakeup-source;
++				interrupts-extended = <&exti1 43 IRQ_TYPE_EDGE_RISING>;
++				status = "disabled";
++
++				usbh_ohci: usb@482e0000 {
++					compatible = "generic-ohci";
++					reg = <0x482e0000 0x1000>;
++					clocks = <&usb2_phy1 1>, <&rcc CK_BUS_USB2OHCI>;
++					resets = <&rcc USBH_R>;
++					interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
++					phys = <&usb2_phy1>;
++					phy-names = "usb";
++					wakeup-source;
++				};
++
++				usbh_ehci: usb@482f0000 {
++					compatible = "generic-ehci";
++					reg = <0x482f0000 0x1000>;
++					clocks = <&usb2_phy1 0>, <&rcc CK_BUS_USB2EHCI>;
++					resets = <&rcc USBH_R>;
++					interrupts = <GIC_SPI 139 IRQ_TYPE_LEVEL_HIGH>;
++					companion = <&usbh_ohci>;
++					phys = <&usb2_phy1>;
++					phy-names = "usb";
++					wakeup-source;
++				};
++			};
++
+ 			pcie_ep: pcie-ep@48400000 {
+ 				compatible = "st,stm32mp25-pcie-ep";
+ 				reg = <0x48400000 0x100000>,
+-- 
+2.53.0
+

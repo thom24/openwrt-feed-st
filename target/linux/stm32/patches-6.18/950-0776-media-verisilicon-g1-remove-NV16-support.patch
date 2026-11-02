@@ -1,0 +1,53 @@
+From adf5f24551bc1f6b7b589ae6967b0158151a2714 Mon Sep 17 00:00:00 2001
+From: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Date: Tue, 8 Sep 2026 11:54:13 +0200
+Subject: [PATCH] media: verisilicon: g1: remove NV16 support
+
+Decoding to NV16 pixel format has been introduced when adding
+JPEG decoding support in order to support MJPEG camera sending
+YUV422 encoded JPEG stream.
+Unfortunately this cause some regressions with other compressed
+formats such as H264 or VP8 which wrongly exposes NV16 while only
+NV12 is supported.
+NV16 pixel format support is so skipped for now and YUV422 MJPEG
+stream support will be revisited later-on.
+
+Change-Id: I760d13d4527146aeb02b323014ebea9f5258276d
+Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/608907
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ .../media/platform/verisilicon/stm32mp25_vpu_hw.c    | 12 ------------
+ 1 file changed, 12 deletions(-)
+
+diff --git a/drivers/media/platform/verisilicon/stm32mp25_vpu_hw.c b/drivers/media/platform/verisilicon/stm32mp25_vpu_hw.c
+index a44d57c3d905..67ba07e72aa7 100644
+--- a/drivers/media/platform/verisilicon/stm32mp25_vpu_hw.c
++++ b/drivers/media/platform/verisilicon/stm32mp25_vpu_hw.c
+@@ -29,18 +29,6 @@ static const struct hantro_fmt stm32mp25_vdec_fmts[] = {
+ 			.step_height = MB_DIM,
+ 		},
+ 	},
+-	{
+-		.fourcc = V4L2_PIX_FMT_NV16,
+-		.codec_mode = HANTRO_MODE_NONE,
+-		.frmsize = {
+-			.min_width = FMT_MIN_WIDTH,
+-			.max_width = FMT_4K_WIDTH,
+-			.step_width = MB_DIM,
+-			.min_height = FMT_MIN_HEIGHT,
+-			.max_height = FMT_4K_HEIGHT,
+-			.step_height = MB_DIM,
+-		},
+-	},
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_VP8_FRAME,
+ 		.codec_mode = HANTRO_MODE_VP8_DEC,
+-- 
+2.53.0
+

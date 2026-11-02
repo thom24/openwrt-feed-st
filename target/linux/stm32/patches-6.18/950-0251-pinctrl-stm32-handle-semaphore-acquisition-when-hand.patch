@@ -1,0 +1,106 @@
+From 2d9cc116cc97dc14cd5ffe04bc9818b04266ef0e Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Fri, 19 Sep 2025 11:56:30 +0200
+Subject: [PATCH] pinctrl: stm32: handle semaphore acquisition when handling
+ pinctrl/pinmux
+
+To avoid a silent fail when applying a pinctrl, if the pins that are
+being configured are in semaphore mode, take the semaphore. Note that
+there is no way to release the semaphore yet.
+
+Change-Id: Ifa53e9959f3f0fa2f9a6285a89b65b2650fb52a0
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+---
+ drivers/pinctrl/stm32/pinctrl-stm32.c | 35 +++++++++++++++++++++------
+ 1 file changed, 27 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
+index 216efe299289..38360af2c624 100644
+--- a/drivers/pinctrl/stm32/pinctrl-stm32.c
++++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
+@@ -370,11 +370,9 @@ static int stm32_gpio_request(struct gpio_chip *chip, unsigned offset)
+ 		return -EINVAL;
+ 	}
+ 
+-	if (bank->rif_control) {
+-		if (!stm32_gpio_rif_acquire_semaphore(bank, offset)) {
+-			dev_err(pctl->dev, "pin %d not available.\n", pin);
+-			return -EINVAL;
+-		}
++	if (bank->rif_control && !stm32_gpio_rif_acquire_semaphore(bank, offset)) {
++		dev_err(pctl->dev, "pin %d not available.\n", offset);
++		return -EACCES;
+ 	}
+ 
+ 	return pinctrl_gpio_request(chip, offset);
+@@ -1143,7 +1141,9 @@ static int stm32_pmx_gpio_set_direction(struct pinctrl_dev *pctldev,
+ static int stm32_pmx_request(struct pinctrl_dev *pctldev, unsigned int gpio)
+ {
+ 	struct stm32_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
++	unsigned int offset = stm32_gpio_pin(gpio);
+ 	struct pinctrl_gpio_range *range;
++	struct stm32_gpio_bank *bank;
+ 
+ 	range = pinctrl_find_gpio_range_from_pin_nolock(pctldev, gpio);
+ 	if (!range) {
+@@ -1151,11 +1151,20 @@ static int stm32_pmx_request(struct pinctrl_dev *pctldev, unsigned int gpio)
+ 		return -EINVAL;
+ 	}
+ 
+-	if (!gpiochip_line_is_valid(range->gc, stm32_gpio_pin(gpio))) {
++	if (!gpiochip_line_is_valid(range->gc, offset)) {
+ 		dev_warn(pctl->dev, "Can't access gpio %d\n", gpio);
+ 		return -EACCES;
+ 	}
+ 
++	bank = gpiochip_get_data(range->gc);
++	if (!bank)
++		return -ENODEV;
++
++	if (bank->rif_control && !stm32_gpio_rif_acquire_semaphore(bank, offset)) {
++		dev_err(pctl->dev, "pin %d not available.\n", offset);
++		return -EACCES;
++	}
++
+ 	return 0;
+ }
+ 
+@@ -1497,6 +1506,11 @@ static int stm32_pconf_parse_conf(struct pinctrl_dev *pctldev,
+ 		return -EACCES;
+ 	}
+ 
++	if (bank->rif_control && !stm32_gpio_rif_acquire_semaphore(bank, offset)) {
++		dev_err(pctl->dev, "pin %d not available.\n", offset);
++		return -EACCES;
++	}
++
+ 	switch (param) {
+ 	case PIN_CONFIG_DRIVE_PUSH_PULL:
+ 		ret = stm32_pconf_set_driving(bank, offset, 0);
+@@ -2195,16 +2209,21 @@ static int __maybe_unused stm32_pinctrl_restore_gpio_regs(
+ 	if (!range)
+ 		return 0;
+ 
++	bank = gpiochip_get_data(range->gc);
++
+ 	if (!gpiochip_line_is_valid(range->gc, offset))
+ 		return 0;
+ 
++	if (bank->rif_control && !stm32_gpio_rif_acquire_semaphore(bank, offset)) {
++		dev_err(pctl->dev, "pin %d not available.\n", offset);
++		return -EACCES;
++	}
++
+ 	pin_is_irq = gpiochip_line_is_irq(range->gc, offset);
+ 
+ 	if (!desc || (!pin_is_irq && !desc->gpio_owner))
+ 		return 0;
+ 
+-	bank = gpiochip_get_data(range->gc);
+-
+ 	mode = bank->pin_backup[offset].mode;
+ 	ret = stm32_pmx_set_mode(bank, offset, mode, bank->pin_backup[offset].alt);
+ 	if (ret)
+-- 
+2.53.0
+

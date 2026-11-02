@@ -1,0 +1,62 @@
+From 46be5e26ce58525d790da74535b0fb4290839ea1 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Mon, 1 Jun 2026 15:36:24 +0200
+Subject: [PATCH] ARM: dts: stm32: load mac address from NVMEM for STM32MP15
+ EV1 boards
+
+It is useful to read the OTP value with NVMEM if the MAC address
+is not provided in the device tree by the BootLoader
+
+Change-Id: I8b0bb15d759007ee82c918d903f88d26e16a92bc
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/573282
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts | 2 ++
+ arch/arm/boot/dts/st/stm32mp157d-ev1.dts         | 2 ++
+ arch/arm/boot/dts/st/stm32mp157f-ev1.dts         | 2 ++
+ 3 files changed, 6 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
+index 2f228ac9efd0..be24ce524dd7 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
+@@ -136,6 +136,8 @@ &ethernet0 {
+ 	phy-mode = "rgmii-id";
+ 	max-speed = <1000>;
+ 	phy-handle = <&phy0>;
++	nvmem-cells = <&ethernet_mac_address>;
++	nvmem-cell-names = "mac-address";
+ 
+ 	mdio {
+ 		#address-cells = <1>;
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+index a63eb063b635..f5a7a4666f6e 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+@@ -136,6 +136,8 @@ &ethernet0 {
+ 	phy-mode = "rgmii-id";
+ 	max-speed = <1000>;
+ 	phy-handle = <&phy0>;
++	nvmem-cells = <&ethernet_mac_address>;
++	nvmem-cell-names = "mac-address";
+ 
+ 	mdio {
+ 		#address-cells = <1>;
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+index ecbcb9729cc6..744e848bb557 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+@@ -136,6 +136,8 @@ &ethernet0 {
+ 	phy-mode = "rgmii-id";
+ 	max-speed = <1000>;
+ 	phy-handle = <&phy0>;
++	nvmem-cells = <&ethernet_mac_address>;
++	nvmem-cell-names = "mac-address";
+ 
+ 	mdio {
+ 		#address-cells = <1>;
+-- 
+2.53.0
+

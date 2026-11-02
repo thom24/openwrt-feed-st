@@ -1,0 +1,39 @@
+From 4244d99f1c0c8ebfdaf9a4b26db9325ea4819524 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 22 Apr 2026 17:21:19 +0200
+Subject: [PATCH] ARM: dts: stm32: fix vdda supply for onboard hub on
+ stm32mp135f-dk
+
+stm32mp135f-dk uses Microchip USB2514 HUB. Since vdda supply has been
+added, the regulator framework wrongly associates the 'vdda' supply
+dedicated to ADC, so the wrong regulator is referenced.
+Only the 3v3 regulator is used to supply both the digital and the analog
+part of the HUB.
+
+Fixes: 673655f7944f ("usb: misc: onboard_dev: add vdda support for Microchip USB2514")
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I68c4b20ee165a0ddf01105f2a764276a6517e657
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/560372
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dk.dts | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+index 590cd146b500..10c5f7615184 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+@@ -793,6 +793,7 @@ hub@1 {
+ 		compatible = "usb424,2514";
+ 		reg = <1>;
+ 		vdd-supply = <&scmi_v3v3_sw>;
++		vdda-supply = <&scmi_v3v3_sw>;
+ 	};
+ };
+ 
+-- 
+2.53.0
+

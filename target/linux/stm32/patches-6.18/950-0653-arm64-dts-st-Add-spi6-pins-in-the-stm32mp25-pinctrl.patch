@@ -1,0 +1,58 @@
+From 2f86ec3f40b5ef631e5dab89a88c9b32b1d4ce90 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Wed, 22 May 2024 21:44:41 +0200
+Subject: [PATCH] arm64: dts: st: Add spi6 pins in the stm32mp25-pinctrl
+
+Add spi6 pins in stm32mp25-pinctrl.dts for use onto the
+stm32mp257f-dk board.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: I239c321b104d8071708fa6336695eb6aad8031ae
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/537882
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
+index aebdec5f6735..208f55532a2e 100644
+--- a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
+@@ -699,6 +699,30 @@ pins1 {
+ 		};
+ 	};
+ 
++	/omit-if-no-ref/
++	spi6_pins_a: spi6-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('F', 7, AF3)>, /* SPI6_SCK */
++				 <STM32_PINMUX('C', 7, AF3)>; /* SPI6_MOSI */
++			drive-push-pull;
++			bias-disable;
++			slew-rate = <1>;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('C', 4, AF3)>; /* SPI6_MISO */
++			bias-disable;
++		};
++	};
++
++	/omit-if-no-ref/
++	spi6_sleep_pins_a: spi6-sleep-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('F', 7, ANALOG)>, /* SPI6_SCK */
++				 <STM32_PINMUX('C', 7, ANALOG)>, /* SPI6_MOSI */
++				 <STM32_PINMUX('C', 4, ANALOG)>; /* SPI6_MISO */
++		};
++	};
++
+ 	/omit-if-no-ref/
+ 	tim10_counter_pins_a: tim10-counter-0 {
+ 		pins {
+-- 
+2.53.0
+

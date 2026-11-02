@@ -1,0 +1,88 @@
+From 0288944ed5d3d6add09f6c1e5ec829c5f89ca5fa Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Wed, 29 Jul 2026 11:34:23 +0200
+Subject: [PATCH] PCI: endpoint: prevent using swiotlb buffer for large DMA
+ tests
+
+pci-epf-test allocates dma transfer buffers with kzalloc() and maps them
+with dma_map_single(). On systems where DMA mappings are bounced through
+SWIOTLB, large buffers allocated from normal memory may fail with error:
+swiotlb buffer is full (sz: 262145 bytes, ...)
+
+Since single SWIOTLB mapping is limited to IO_TLB_SEGSIZE *
+IO_TLB_SIZE bytes (256 KiB with the default configuration), allocate DMA
+test buffers from the DMA zone when the requested transfer size exceeds
+the maximum SWIOTLB mapping size.
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I105eeef65237b137a26b915ac658984cf0c103ca
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/592776
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/pci/endpoint/functions/pci-epf-test.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
+index 9bc6d283eae2..7053abf944d0 100644
+--- a/drivers/pci/endpoint/functions/pci-epf-test.c
++++ b/drivers/pci/endpoint/functions/pci-epf-test.c
+@@ -10,6 +10,7 @@
+ #include <linux/delay.h>
+ #include <linux/dmaengine.h>
+ #include <linux/io.h>
++#include <linux/swiotlb.h>
+ #include <linux/module.h>
+ #include <linux/msi.h>
+ #include <linux/slab.h>
+@@ -74,6 +75,7 @@ struct pci_epf_test {
+ 	struct completion	transfer_complete;
+ 	bool			dma_supported;
+ 	bool			dma_private;
++	u32                     max_swiotlb_mapping;
+ 	const struct pci_epc_features *epc_features;
+ 	struct pci_epf_bar	db_bar;
+ };
+@@ -454,11 +456,12 @@ static void pci_epf_test_read(struct pci_epf_test *epf_test,
+ 	ssize_t map_size = 0;
+ 	u32 flags = le32_to_cpu(reg->flags);
+ 	u32 checksum = le32_to_cpu(reg->checksum);
++	bool use_dma_region;
+ 	u32 status = 0;
+ 
+ 	orig_size = src_size = le32_to_cpu(reg->size);
+-
+-	src_buf = kzalloc(src_size, GFP_KERNEL);
++	use_dma_region = (flags & FLAG_USE_DMA) && src_size > epf_test->max_swiotlb_mapping;
++	src_buf = kzalloc(src_size, use_dma_region ? GFP_KERNEL | GFP_DMA : GFP_KERNEL);
+ 	if (!src_buf) {
+ 		ret = -ENOMEM;
+ 		goto set_status;
+@@ -550,11 +553,12 @@ static void pci_epf_test_write(struct pci_epf_test *epf_test,
+ 	size_t orig_size, dst_size;
+ 	ssize_t map_size = 0;
+ 	u32 flags = le32_to_cpu(reg->flags);
++	bool use_dma_region;
+ 	u32 status = 0;
+ 
+ 	orig_size = dst_size = le32_to_cpu(reg->size);
+-
+-	dst_buf = kzalloc(dst_size, GFP_KERNEL);
++	use_dma_region = (flags & FLAG_USE_DMA) && orig_size > epf_test->max_swiotlb_mapping;
++	dst_buf = kzalloc(dst_size, use_dma_region ? GFP_KERNEL | GFP_DMA : GFP_KERNEL);
+ 	if (!dst_buf) {
+ 		ret = -ENOMEM;
+ 		goto set_status;
+@@ -950,6 +954,7 @@ static int pci_epf_test_epc_init(struct pci_epf *epf)
+ 	int ret;
+ 
+ 	epf_test->dma_supported = true;
++	epf_test->max_swiotlb_mapping = IO_TLB_SEGSIZE * IO_TLB_SIZE;
+ 
+ 	ret = pci_epf_test_init_dma_chan(epf_test);
+ 	if (ret)
+-- 
+2.53.0
+

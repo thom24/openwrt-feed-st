@@ -1,0 +1,408 @@
+From 7eeae4da8a52e37372058de77ff12e9a28f230d1 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Tue, 26 May 2026 11:26:43 +0200
+Subject: [PATCH] ARM: dts: stm32: Add boot phase tags for STMicroelectronics
+ h7 boards
+
+The bootph-all flag was introduced in dt-schema
+(dtschema/schemas/bootph.yaml) to define node usage across
+different boot phases.
+
+To ensure SD boot, timer, gpio, syscfg, clock and uart nodes need to be
+present in all boot stages, so add missing bootph-all phase flag
+to these nodes to support SD boot.
+
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32h743i-disco.dts  | 69 ++++++++++++++++++++++
+ arch/arm/boot/dts/st/stm32h743i-eval.dts   | 69 ++++++++++++++++++++++
+ arch/arm/boot/dts/st/stm32h747i-disco.dts  | 69 ++++++++++++++++++++++
+ arch/arm/boot/dts/st/stm32h750i-art-pi.dts | 69 ++++++++++++++++++++++
+ 4 files changed, 276 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32h743i-disco.dts b/arch/arm/boot/dts/st/stm32h743i-disco.dts
+index 8451a54a9a08..368035d96158 100644
+--- a/arch/arm/boot/dts/st/stm32h743i-disco.dts
++++ b/arch/arm/boot/dts/st/stm32h743i-disco.dts
+@@ -73,6 +73,59 @@ v3v3: regulator-v3v3 {
+ 
+ &clk_hse {
+ 	clock-frequency = <25000000>;
++	bootph-all;
++};
++
++&clk_lse {
++	bootph-all;
++};
++
++&clk_i2s {
++	bootph-all;
++};
++
++&gpioa {
++	bootph-all;
++};
++
++&gpiob {
++	bootph-all;
++};
++
++&gpioc {
++	bootph-all;
++};
++
++&gpiod {
++	bootph-all;
++};
++
++&gpioe {
++	bootph-all;
++};
++
++&gpiof {
++	bootph-all;
++};
++
++&gpiog {
++	bootph-all;
++};
++
++&gpioh {
++	bootph-all;
++};
++
++&gpioi {
++	bootph-all;
++};
++
++&gpioj {
++	bootph-all;
++};
++
++&gpiok {
++	bootph-all;
+ };
+ 
+ &mac {
+@@ -92,6 +145,18 @@ phy0: ethernet-phy@0 {
+ 	};
+ };
+ 
++&pinctrl {
++	bootph-all;
++};
++
++&pwrcfg {
++	bootph-all;
++};
++
++&rcc {
++	bootph-all;
++};
++
+ &sdmmc1 {
+ 	pinctrl-names = "default", "opendrain", "sleep";
+ 	pinctrl-0 = <&sdmmc1_b4_pins_a>;
+@@ -104,6 +169,10 @@ &sdmmc1 {
+ 	status = "okay";
+ };
+ 
++&timer5 {
++	bootph-all;
++};
++
+ &usart2 {
+ 	pinctrl-0 = <&usart2_pins_a>;
+ 	pinctrl-names = "default";
+diff --git a/arch/arm/boot/dts/st/stm32h743i-eval.dts b/arch/arm/boot/dts/st/stm32h743i-eval.dts
+index 4b0ced27b80e..ec525411431a 100644
+--- a/arch/arm/boot/dts/st/stm32h743i-eval.dts
++++ b/arch/arm/boot/dts/st/stm32h743i-eval.dts
+@@ -99,6 +99,59 @@ adc1: adc@0 {
+ 
+ &clk_hse {
+ 	clock-frequency = <25000000>;
++	bootph-all;
++};
++
++&clk_lse {
++	bootph-all;
++};
++
++&clk_i2s {
++	bootph-all;
++};
++
++&gpioa {
++	bootph-all;
++};
++
++&gpiob {
++	bootph-all;
++};
++
++&gpioc {
++	bootph-all;
++};
++
++&gpiod {
++	bootph-all;
++};
++
++&gpioe {
++	bootph-all;
++};
++
++&gpiof {
++	bootph-all;
++};
++
++&gpiog {
++	bootph-all;
++};
++
++&gpioh {
++	bootph-all;
++};
++
++&gpioi {
++	bootph-all;
++};
++
++&gpioj {
++	bootph-all;
++};
++
++&gpiok {
++	bootph-all;
+ };
+ 
+ &i2c1 {
+@@ -130,6 +183,18 @@ phy0: ethernet-phy@0 {
+ 	};
+ };
+ 
++&pinctrl {
++	bootph-all;
++};
++
++&pwrcfg {
++	bootph-all;
++};
++
++&rcc {
++	bootph-all;
++};
++
+ &sdmmc1 {
+ 	pinctrl-names = "default", "opendrain", "sleep";
+ 	pinctrl-0 = <&sdmmc1_b4_pins_a &sdmmc1_dir_pins_a>;
+@@ -144,6 +209,10 @@ &sdmmc1 {
+ 	status = "okay";
+ };
+ 
++&timer5 {
++		bootph-all;
++};
++
+ &usart1 {
+ 	pinctrl-0 = <&usart1_pins_a>;
+ 	pinctrl-names = "default";
+diff --git a/arch/arm/boot/dts/st/stm32h747i-disco.dts b/arch/arm/boot/dts/st/stm32h747i-disco.dts
+index 99f0255dae8e..a481326ad9e6 100644
+--- a/arch/arm/boot/dts/st/stm32h747i-disco.dts
++++ b/arch/arm/boot/dts/st/stm32h747i-disco.dts
+@@ -91,6 +91,59 @@ button-5 {
+ 
+ &clk_hse {
+ 	clock-frequency = <25000000>;
++	bootph-all;
++};
++
++&clk_lse {
++	bootph-all;
++};
++
++&clk_i2s {
++	bootph-all;
++};
++
++&gpioa {
++	bootph-all;
++};
++
++&gpiob {
++	bootph-all;
++};
++
++&gpioc {
++	bootph-all;
++};
++
++&gpiod {
++	bootph-all;
++};
++
++&gpioe {
++	bootph-all;
++};
++
++&gpiof {
++	bootph-all;
++};
++
++&gpiog {
++	bootph-all;
++};
++
++&gpioh {
++	bootph-all;
++};
++
++&gpioi {
++	bootph-all;
++};
++
++&gpioj {
++	bootph-all;
++};
++
++&gpiok {
++	bootph-all;
+ };
+ 
+ &mac {
+@@ -110,6 +163,18 @@ phy0: ethernet-phy@0 {
+ 	};
+ };
+ 
++&pinctrl {
++	bootph-all;
++};
++
++&pwrcfg {
++	bootph-all;
++};
++
++&rcc {
++	bootph-all;
++};
++
+ &sdmmc1 {
+ 	pinctrl-names = "default", "opendrain", "sleep";
+ 	pinctrl-0 = <&sdmmc1_b4_pins_a>;
+@@ -123,6 +188,10 @@ &sdmmc1 {
+ 	status = "okay";
+ };
+ 
++&timer5 {
++		bootph-all;
++};
++
+ &usart1 {
+ 	pinctrl-0 = <&usart1_pins_b>;
+ 	pinctrl-names = "default";
+diff --git a/arch/arm/boot/dts/st/stm32h750i-art-pi.dts b/arch/arm/boot/dts/st/stm32h750i-art-pi.dts
+index 56c53e262da7..8dddc70c37a1 100644
+--- a/arch/arm/boot/dts/st/stm32h750i-art-pi.dts
++++ b/arch/arm/boot/dts/st/stm32h750i-art-pi.dts
+@@ -114,6 +114,15 @@ wlan_pwr: regulator-wlan {
+ 
+ &clk_hse {
+ 	clock-frequency = <25000000>;
++	bootph-all;
++};
++
++&clk_lse {
++	bootph-all;
++};
++
++&clk_i2s {
++	bootph-all;
+ };
+ 
+ &dma1 {
+@@ -124,6 +133,50 @@ &dma2 {
+ 	status = "okay";
+ };
+ 
++&gpioa {
++	bootph-all;
++};
++
++&gpiob {
++	bootph-all;
++};
++
++&gpioc {
++	bootph-all;
++};
++
++&gpiod {
++	bootph-all;
++};
++
++&gpioe {
++	bootph-all;
++};
++
++&gpiof {
++	bootph-all;
++};
++
++&gpiog {
++	bootph-all;
++};
++
++&gpioh {
++	bootph-all;
++};
++
++&gpioi {
++	bootph-all;
++};
++
++&gpioj {
++	bootph-all;
++};
++
++&gpiok {
++	bootph-all;
++};
++
+ &mac {
+ 	status = "disabled";
+ 	pinctrl-0 = <&ethernet_rmii>;
+@@ -141,6 +194,18 @@ phy0: ethernet-phy@0 {
+ 	};
+ };
+ 
++&pinctrl {
++	bootph-all;
++};
++
++&pwrcfg {
++	bootph-all;
++};
++
++&rcc {
++	bootph-all;
++};
++
+ &sdmmc1 {
+ 	pinctrl-names = "default", "opendrain", "sleep";
+ 	pinctrl-0 = <&sdmmc1_b4_pins_a>;
+@@ -196,6 +261,10 @@ partition@0 {
+ 	};
+ };
+ 
++&timer5 {
++		bootph-all;
++};
++
+ &usart2 {
+ 	pinctrl-0 = <&usart2_pins_a>;
+ 	pinctrl-names = "default";
+-- 
+2.53.0
+

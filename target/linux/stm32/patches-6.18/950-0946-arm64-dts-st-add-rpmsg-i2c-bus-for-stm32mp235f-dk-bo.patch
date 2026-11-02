@@ -1,0 +1,42 @@
+From 02f872c384c95de15581db9ca173740aafb9ee25 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Fri, 21 Jun 2024 05:33:49 -0400
+Subject: [PATCH] arm64: dts: st: add rpmsg i2c bus for stm32mp235f-dk board
+
+Add rpmsg i2c bus support for communication with the Cortex-M33.
+Linux drivers can register to this bus to simulate an I2C link over
+rpmsg.
+
+Change-Id: Ib69119f9d56cceff58e3ca7bba106523cfe8bcf7
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/553660
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index ac58a5062be5..40f60bc4989e 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -352,6 +352,15 @@ intc_rpmsg: interrupt-controller@1 {
+ 		#interrupt-cells = <1>;
+ 		interrupt-controller;
+ 	};
++
++	i2c_rpmsg: i2c@2 {
++		compatible = "rpmsg,i2c-controller";
++		reg = <2 0>;
++		rpmsg,dev-id = "rpmsg_i2c";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		status = "okay";
++	};
+ };
+ 
+ &optee {
+-- 
+2.53.0
+

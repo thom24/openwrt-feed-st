@@ -1,0 +1,39 @@
+From 930750b133691cdfaee6dd601e5fda1154904e3b Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Mon, 25 May 2026 11:57:00 +0200
+Subject: [PATCH] arm64: dts: st: add LPDDR channel to stm32mp235f-dk board
+
+Add 16bits LPDDR4 channel to the stm32mp235f-dk board.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I27ae7296f21c7c69ed456c64f21c1efd8717271b
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/571230
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index fd443f3c6751..d91f61c69f8c 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -117,6 +117,13 @@ hdmi_connector_in: endpoint {
+ 		};
+ 	};
+ 
++	lpddr_channel: sdram-channel-0 {
++		compatible = "jedec,lpddr4-channel";
++		io-width = <16>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++	};
++
+ 	memory@80000000 {
+ 		device_type = "memory";
+ 		reg = <0x0 0x80000000 0x0 0x80000000>;
+-- 
+2.53.0
+

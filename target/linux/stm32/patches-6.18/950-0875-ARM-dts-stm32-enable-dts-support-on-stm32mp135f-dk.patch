@@ -1,0 +1,36 @@
+From 541cb0607a73b854bd610238e942cc19331d5756 Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Fri, 27 Mar 2026 11:51:44 +0100
+Subject: [PATCH] ARM: dts: stm32: enable dts support on stm32mp135f-dk
+
+This patch enables support of thermal monitoring on stm32mp13.
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: I43a5a2648cf6bfe978b6659b231672febc3c4d24
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/551278
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dk.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+index 2d489579f8c8..1a7c2e5ff2a1 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+@@ -229,6 +229,10 @@ dcmipp_0: endpoint {
+ 	};
+ };
+ 
++&dts {
++	status = "okay";
++};
++
+ &ethernet1 {
+ 	status = "okay";
+ 	pinctrl-0 = <&eth1_rmii_pins_a>;
+-- 
+2.53.0
+

@@ -1,0 +1,38 @@
+From 22ca6bfe796a40f8466ee307b153e1f6ea731cb4 Mon Sep 17 00:00:00 2001
+From: Christophe Kerello <christophe.kerello@foss.st.com>
+Date: Mon, 4 Nov 2024 09:22:40 +0100
+Subject: [PATCH] arm64: dts: st: decrease SD card slew rate on stm32mp257f-dk
+ board
+
+Decrease SD card slew rate on stm32mp257f-dk board.
+
+Change-Id: I323c52fb763b8d4b6350861307a7ca6fd5243435
+Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/537429
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Christophe KERELLO <christophe.kerello@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index d4ca6324e660..35a50fba3d37 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -281,8 +281,8 @@ &scmi_reset {
+ 
+ &sdmmc1 {
+ 	pinctrl-names = "default", "opendrain", "sleep";
+-	pinctrl-0 = <&sdmmc1_b4_pins_a>;
+-	pinctrl-1 = <&sdmmc1_b4_od_pins_a>;
++	pinctrl-0 = <&sdmmc1_b4_pins_b>;
++	pinctrl-1 = <&sdmmc1_b4_od_pins_b>;
+ 	pinctrl-2 = <&sdmmc1_b4_sleep_pins_a>;
+ 	cd-gpios = <&gpiod 3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+ 	disable-wp;
+-- 
+2.53.0
+

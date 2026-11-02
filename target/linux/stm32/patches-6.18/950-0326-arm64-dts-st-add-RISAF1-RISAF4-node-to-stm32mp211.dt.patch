@@ -1,0 +1,48 @@
+From 8e1e947e11f709a0e7cbe02be5e8c7381926fb0c Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Wed, 11 Feb 2026 15:04:19 +0100
+Subject: [PATCH] arm64: dts: st: add RISAF1 & RISAF4 node to stm32mp211.dtsi
+
+Add RISAF 1 & 4 node to this device tree SoC file.
+
+Change-Id: Ice88c8efdd17bdb61e454035c55817dc708f4d26
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/390727
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/530878
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Domain-Review: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 86066ce1dd3f..38f5cf9c0952 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -223,6 +223,20 @@ iwdg2: watchdog@44020000 {
+ 			};
+ 		};
+ 
++		risaf1: risaf@420a0000 {
++			compatible = "st,stm32mp25-risaf";
++			reg = <0x420a0000 0x0 0x1000>;
++			clocks = <&rcc CK_BUS_BKPSRAM>;
++			st,mem-map = <0x0 0x42000000 0x0 0x2000>;
++		};
++
++		risaf4: risaf@420d0000 {
++			compatible = "st,stm32mp25-risaf-enc";
++			reg = <0x420d0000 0x0 0x1000>;
++			clocks = <&rcc CK_BUS_RISAF4>;
++			st,mem-map = <0x0 0x80000000 0x1 0x00000000>;
++		};
++
+ 		rcc: clock-controller@44200000 {
+ 			compatible = "st,stm32mp21-rcc";
+ 			reg = <0x44200000 0x0 0x10000>;
+-- 
+2.53.0
+

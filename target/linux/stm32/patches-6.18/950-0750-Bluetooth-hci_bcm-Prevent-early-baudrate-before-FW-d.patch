@@ -1,0 +1,32 @@
+From c736a43b6570524a973c8f33eacb15796d7b9f8c Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Mon, 20 Jul 2026 13:18:05 +0200
+Subject: [PATCH] Bluetooth: hci_bcm: Prevent early baudrate before FW download
+
+To avoid update UART Baud rate to much earlier (before firmware download)
+need to set no_early_set_baudrate to true.
+
+Change-Id: Ie81e518f73138ae341dde0bb8b4ad6c224734ada
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/590171
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/bluetooth/hci_bcm.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/bluetooth/hci_bcm.c b/drivers/bluetooth/hci_bcm.c
+index fff845ed44e3..46d42ab9797d 100644
+--- a/drivers/bluetooth/hci_bcm.c
++++ b/drivers/bluetooth/hci_bcm.c
+@@ -1574,6 +1574,7 @@ static struct bcm_device_data bcm4354_device_data = {
+ 
+ static struct bcm_device_data bcm43438_device_data = {
+ 	.drive_rts_on_open = true,
++	.no_early_set_baudrate = true,
+ };
+ 
+ static struct bcm_device_data cyw4373a0_device_data = {
+-- 
+2.53.0
+

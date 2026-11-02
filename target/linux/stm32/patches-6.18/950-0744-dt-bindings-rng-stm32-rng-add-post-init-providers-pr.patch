@@ -1,0 +1,46 @@
+From 6d5522771539c1d6bcce536aa740c3d9592eaa77 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Fri, 17 Jul 2026 15:53:01 +0200
+Subject: [PATCH] dt-bindings: rng: stm32-rng: add post-init-providers property
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The STM32MP15 SCMI device trees set post-init-providers on the RNG
+node to defer clock/reset provider initialization until after the
+device has been configured. This property is currently rejected by
+the schema since additionalProperties is false and the property was
+not declared, e.g.:
+
+  rng@54003000 (st,stm32-rng): 'post-init-providers' does not
+  match any of the regexes: '^pinctrl-[0-9]+$'
+
+Declare post-init-providers so dtbs_check no longer flags it.
+
+Change-Id: Ib0b5711e5eccccc89a83cb450051aeb033042838
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/589195
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ Documentation/devicetree/bindings/rng/st,stm32-rng.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml b/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml
+index 15c97c574064..62b35440ab1b 100644
+--- a/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml
++++ b/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml
+@@ -53,6 +53,8 @@ properties:
+   power-domains:
+     maxItems: 1
+ 
++  post-init-providers: true
++
+ required:
+   - compatible
+   - reg
+-- 
+2.53.0
+

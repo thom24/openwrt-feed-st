@@ -1,0 +1,31 @@
+From 1aaf558194228f915c280221549c4baa6b223346 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Mon, 16 Feb 2026 18:04:42 +0100
+Subject: [PATCH] media: dt-bindings: add pclk-max-frequency description
+
+Add description of the pclk-max-frequency which allows indicating
+the maximum pixel clock that can be handled by a receiver.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: Icb855b88a924e2850c49436567917f9382d182e4
+---
+ .../devicetree/bindings/media/video-interfaces.yaml          | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/media/video-interfaces.yaml b/Documentation/devicetree/bindings/media/video-interfaces.yaml
+index 038e85b45bef..56c1d34aa717 100644
+--- a/Documentation/devicetree/bindings/media/video-interfaces.yaml
++++ b/Documentation/devicetree/bindings/media/video-interfaces.yaml
+@@ -238,4 +238,9 @@ properties:
+       Whether the clock signal is used as clock (0) or strobe (1). Used with
+       CCP2, for instance.
+ 
++  pclk-max-frequency:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Maximum acceptable pixel clock frequency.
++
+ additionalProperties: true
+-- 
+2.53.0
+

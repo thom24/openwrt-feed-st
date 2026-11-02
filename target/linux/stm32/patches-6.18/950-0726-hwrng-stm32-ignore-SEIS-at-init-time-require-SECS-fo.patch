@@ -1,0 +1,40 @@
+From 99229eaad1c98a218f7fb3e44032353956bdf7e1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Mon, 15 Jun 2026 18:06:49 +0200
+Subject: [PATCH] hwrng: stm32 - ignore SEIS at init time; require SECS for RNG
+ error status
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+According to the reference manual, SEIS without SECS is meaningless.
+The RNG driver must not check SEIS during initialization.
+Update RNG_SR_ERROR_MASK accordingly.
+
+Change-Id: Id3ae3634d3591c80ffcce9eba4525dc49c4978fe
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/579085
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ drivers/char/hw_random/stm32-rng.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
+index 1c7925c5230c..b1e8531cb40a 100644
+--- a/drivers/char/hw_random/stm32-rng.c
++++ b/drivers/char/hw_random/stm32-rng.c
+@@ -37,7 +37,7 @@
+ #define RNG_SR_SECS		BIT(2)
+ #define RNG_SR_CEIS		BIT(5)
+ #define RNG_SR_SEIS		BIT(6)
+-#define RNG_SR_ERROR_MASK	(RNG_SR_CECS | RNG_SR_SECS | RNG_SR_CEIS | RNG_SR_SEIS)
++#define RNG_SR_ERROR_MASK	(RNG_SR_CECS | RNG_SR_SECS | RNG_SR_CEIS)
+ 
+ #define RNG_DR			0x08
+ 
+-- 
+2.53.0
+

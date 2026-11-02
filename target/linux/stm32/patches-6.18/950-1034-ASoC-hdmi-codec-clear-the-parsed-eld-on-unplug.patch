@@ -1,0 +1,36 @@
+From 05a91b78f170fa10c94c9755de30c424ff97a7e8 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Thu, 30 Jul 2026 17:08:29 +0200
+Subject: [PATCH] ASoC: hdmi-codec: clear the parsed eld on unplug
+
+plugged_cb() clears the raw ELD buffer on disconnection but leaves the
+parsed ELD (hcp->eld_parsed) untouched, so the per-PCM ELD proc entry
+keeps showing the previous sink's data after the HDMI device is unplugged.
+Reset hcp->eld_parsed as well.
+
+Change-Id: Iecdae0430e101cff0c4aa86d66a0c34041dd2ee2
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/593349
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ sound/soc/codecs/hdmi-codec.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/sound/soc/codecs/hdmi-codec.c b/sound/soc/codecs/hdmi-codec.c
+index 666f053d3a52..e715c751547f 100644
+--- a/sound/soc/codecs/hdmi-codec.c
++++ b/sound/soc/codecs/hdmi-codec.c
+@@ -980,6 +980,7 @@ static void plugged_cb(struct device *dev, bool plugged)
+ 	} else {
+ 		hdmi_codec_jack_report(hcp, 0);
+ 		memset(hcp->eld, 0, sizeof(hcp->eld));
++		memset(&hcp->eld_parsed, 0, sizeof(hcp->eld_parsed));
+ 	}
+ }
+ 
+-- 
+2.53.0
+

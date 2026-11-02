@@ -1,0 +1,89 @@
+From 3e2f30e2b20c2e2a7416f0e97388026f8b582e1c Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Thu, 2 Oct 2025 14:55:27 +0200
+Subject: [PATCH] irqchip: stm32mp-exti: Simplify suspend/resume functions
+
+Use the parameter chip_data to recover the fields wake_active and
+mask_cache, instead of passing them as additional parameters.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+---
+ drivers/irqchip/irq-stm32mp-exti.c | 24 +++++++++---------------
+ 1 file changed, 9 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/irqchip/irq-stm32mp-exti.c b/drivers/irqchip/irq-stm32mp-exti.c
+index 9e091434a501..30c413384a1e 100644
+--- a/drivers/irqchip/irq-stm32mp-exti.c
++++ b/drivers/irqchip/irq-stm32mp-exti.c
+@@ -279,7 +279,7 @@ static int stm32mp_exti_convert_type(struct irq_data *d, unsigned int type, u32
+ 	return 0;
+ }
+ 
+-static void stm32mp_chip_suspend(struct stm32mp_exti_chip_data *chip_data, u32 wake_active)
++static void stm32mp_chip_suspend(struct stm32mp_exti_chip_data *chip_data)
+ {
+ 	const struct stm32mp_exti_bank *bank = chip_data->reg_bank;
+ 	void __iomem *base = chip_data->host_data->base;
+@@ -288,14 +288,14 @@ static void stm32mp_chip_suspend(struct stm32mp_exti_chip_data *chip_data, u32 w
+ 	chip_data->rtsr_cache = readl_relaxed(base + bank->rtsr_ofst);
+ 	chip_data->ftsr_cache = readl_relaxed(base + bank->ftsr_ofst);
+ 
+-	writel_relaxed(wake_active, base + bank->imr_ofst);
++	writel_relaxed(chip_data->wake_active, base + bank->imr_ofst);
+ 
+ 	/* wakeup for IRQ power domain for S2IDLE */
+-	if (wake_active)
++	if (chip_data->wake_active)
+ 		device_set_wakeup_path(chip_data->host_data->dev);
+ }
+ 
+-static void stm32mp_chip_resume(struct stm32mp_exti_chip_data *chip_data, u32 mask_cache)
++static void stm32mp_chip_resume(struct stm32mp_exti_chip_data *chip_data)
+ {
+ 	const struct stm32mp_exti_bank *bank = chip_data->reg_bank;
+ 	void __iomem *base = chip_data->host_data->base;
+@@ -304,7 +304,7 @@ static void stm32mp_chip_resume(struct stm32mp_exti_chip_data *chip_data, u32 ma
+ 	writel_relaxed(chip_data->rtsr_cache, base + bank->rtsr_ofst);
+ 	writel_relaxed(chip_data->ftsr_cache, base + bank->ftsr_ofst);
+ 
+-	writel_relaxed(mask_cache, base + bank->imr_ofst);
++	writel_relaxed(chip_data->mask_cache, base + bank->imr_ofst);
+ }
+ 
+ /* directly set the target bit without reading first. */
+@@ -444,13 +444,10 @@ static int stm32mp_exti_set_wake(struct irq_data *d, unsigned int on)
+ static int stm32mp_exti_suspend(struct device *dev)
+ {
+ 	struct stm32mp_exti_host_data *host_data = dev_get_drvdata(dev);
+-	struct stm32mp_exti_chip_data *chip_data;
+ 	int i;
+ 
+-	for (i = 0; i < host_data->drv_data->bank_nr; i++) {
+-		chip_data = &host_data->chips_data[i];
+-		stm32mp_chip_suspend(chip_data, chip_data->wake_active);
+-	}
++	for (i = 0; i < host_data->drv_data->bank_nr; i++)
++		stm32mp_chip_suspend(&host_data->chips_data[i]);
+ 
+ 	return 0;
+ }
+@@ -478,14 +475,11 @@ static void stm32mp_exti_resume_gpio_mux(struct stm32mp_exti_host_data *host_dat
+ static int stm32mp_exti_resume(struct device *dev)
+ {
+ 	struct stm32mp_exti_host_data *host_data = dev_get_drvdata(dev);
+-	struct stm32mp_exti_chip_data *chip_data;
+ 	int i;
+ 
+ 	stm32mp_exti_resume_gpio_mux(host_data);
+-	for (i = 0; i < host_data->drv_data->bank_nr; i++) {
+-		chip_data = &host_data->chips_data[i];
+-		stm32mp_chip_resume(chip_data, chip_data->mask_cache);
+-	}
++	for (i = 0; i < host_data->drv_data->bank_nr; i++)
++		stm32mp_chip_resume(&host_data->chips_data[i]);
+ 
+ 	return 0;
+ }
+-- 
+2.53.0
+

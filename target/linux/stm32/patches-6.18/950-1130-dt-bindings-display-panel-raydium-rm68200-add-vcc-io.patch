@@ -1,0 +1,63 @@
+From 0eed13b4e781c9ac2f9937d1c55750805fa7864a Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Mon, 22 Jun 2026 14:58:44 +0200
+Subject: [PATCH] dt-bindings: display: panel: raydium,rm68200: add vcc/iovcc
+ supplies
+
+Update the RM68200 panel binding to describe and require two regulator
+supplies:
+- vcc-supply
+- iovcc-supply
+
+Also update the example accordingly.
+
+Change-Id: I76c7c451807aab40de9747083c4d901a04c7818b
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/581017
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ .../bindings/display/panel/raydium,rm68200.yaml     | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/display/panel/raydium,rm68200.yaml b/Documentation/devicetree/bindings/display/panel/raydium,rm68200.yaml
+index 46fe1014ebc4..8fb20df0bfb4 100644
+--- a/Documentation/devicetree/bindings/display/panel/raydium,rm68200.yaml
++++ b/Documentation/devicetree/bindings/display/panel/raydium,rm68200.yaml
+@@ -28,7 +28,12 @@ properties:
+   backlight: true
+   enable-gpios: true
+   port: true
+-  power-supply: true
++
++  vcc-supply:
++    description: Panel power supply
++
++  iovcc-supply:
++    description: I/O voltage supply
+ 
+   reset-gpios:
+     maxItems: 1
+@@ -37,7 +42,8 @@ additionalProperties: false
+ 
+ required:
+   - compatible
+-  - power-supply
++  - vcc-supply
++  - iovcc-supply
+   - reg
+ 
+ examples:
+@@ -49,7 +55,8 @@ examples:
+         compatible = "raydium,rm68200";
+         reg = <0>;
+         reset-gpios = <&gpiof 15 0>;
+-        power-supply = <&v1v8>;
++        vcc-supply = <&v1v8>;
++        iovcc-supply = <&v1v8>;
+         backlight = <&pwm_backlight>;
+       };
+     };
+-- 
+2.53.0
+

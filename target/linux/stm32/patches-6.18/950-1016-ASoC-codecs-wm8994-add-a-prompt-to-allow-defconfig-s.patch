@@ -1,0 +1,47 @@
+From 1fbb786e6e92af9d903046c65bb73dea19a10387 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Tue, 28 Apr 2026 11:36:09 +0200
+Subject: [PATCH] ASoC: codecs: wm8994: add a prompt to allow defconfig
+ selection
+
+SND_SOC_WM8994 is currently declared as a tristate without any prompt.
+That makes it a non-visible Kconfig symbol, so it cannot be selected
+directly from a defconfig fragment even when its dependency
+MFD_WM8994 is enabled.
+
+On STM32 platforms, the codec is requested from the addon config
+fragment, but the value is dropped during Kconfig resolution because
+the symbol is hidden. Adding a prompt makes the option user-visible
+and allows the requested defconfig value to be preserved.
+
+This change does not alter runtime behavior or dependencies. It only
+makes the wm8994 codec selectable through standard configuration flows
+such as defconfig fragments and menuconfig.
+
+Change-Id: Iaf5cddb0d0af22730a8c564c19e8645ed17ef545
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/562137
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ sound/soc/codecs/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
+index 91ac99bc3edb..ccc92ff78168 100644
+--- a/sound/soc/codecs/Kconfig
++++ b/sound/soc/codecs/Kconfig
+@@ -2570,7 +2570,7 @@ config SND_SOC_WM8993
+ 	depends on I2C
+ 
+ config SND_SOC_WM8994
+-	tristate
++	tristate "Wolfson Microelectronics WM8994 codec"
+ 	depends on MFD_WM8994
+ 
+ config SND_SOC_WM8995
+-- 
+2.53.0
+

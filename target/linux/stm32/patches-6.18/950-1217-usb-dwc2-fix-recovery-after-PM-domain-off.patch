@@ -1,0 +1,169 @@
+From 67b77803135d3697c36d00ed95c62eb7ce5c8ae6 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 27 May 2026 10:20:11 +0200
+Subject: [PATCH] usb: dwc2: fix recovery after PM domain off
+
+The commit ba6e518d136b ("usb: dwc2: Implement recovery after PM domain
+off") introduces a regression on stm32mp1x, which freeze the platform
+when going to low power.
+
+When the controller has been put into clock gating, reading some of
+the registers to backup them from the suspend() routine in platform.c
+lead to platform hang.
+On stm32, the issue is systematic in host mode:
+- _dwc2_hcd_suspend() calls dwc2_host_enter_clock_gating() every time.
+- dwc2_suspend() calls dwc2_host_backup_critical_registers() that freezes.
+This may happen in device mode too, if the host has suspended the bus.
+Then clock gating has been entered, before calling dwc2_suspend().
+
+The normal suspend / resume flow, will call:
+- in device mode: dwc2_hsotg_suspend() / dwc2_hsotg_resume().
+  Resuming will call dwc2_hsotg_core_init_disconnected() and
+  dwc2_hsotg_core_connect() that re-initialize to a working state.
+  But this is only done if a gadget driver has been bound.
+  When no gadget has been bound, the hw remains un-initialized
+
+- in host mode: _dwc2_hcd_suspend() / _dwc2_hcd_resume().
+  When the controller is configured with dr_mode = "otg", the
+  controller may be in device mode, so _dwc2_hcd_resume() skip
+  the hw re-initialization too.
+
+So rather than backing-up registers that can lead to freeze when in
+clock gating mode upon suspend (to restore then later):
+- keep the canary detection logic (GUSBCFG TOUCAL)
+- move it after the host/device mode has been restored, e.g.
+  after dwc2_force_dr_mode() or drd resume code
+- re-initialize the core as done during probe, when calling
+  dwc2_hcd_init()
+- re-enable the global interrupts.
+
+Fixes: ba6e518d136b ("usb: dwc2: Implement recovery after PM domain off")
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ia6df19bf85769d29d5a3493044516e3fdcc3f497
+---
+ drivers/usb/dwc2/core.c     |  1 -
+ drivers/usb/dwc2/core.h     |  2 --
+ drivers/usb/dwc2/platform.c | 54 +++++++++++--------------------------
+ 3 files changed, 16 insertions(+), 41 deletions(-)
+
+diff --git a/drivers/usb/dwc2/core.c b/drivers/usb/dwc2/core.c
+index f375c5185bfe..368da20ae14d 100644
+--- a/drivers/usb/dwc2/core.c
++++ b/drivers/usb/dwc2/core.c
+@@ -43,7 +43,6 @@ int dwc2_backup_global_registers(struct dwc2_hsotg *hsotg)
+ 	/* Backup global regs */
+ 	gr = &hsotg->gr_backup;
+ 
+-	gr->gintsts = dwc2_readl(hsotg, GINTSTS);
+ 	gr->gotgctl = dwc2_readl(hsotg, GOTGCTL);
+ 	gr->gintmsk = dwc2_readl(hsotg, GINTMSK);
+ 	gr->gahbcfg = dwc2_readl(hsotg, GAHBCFG);
+diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+index 34127b890b2a..265791fbe87f 100644
+--- a/drivers/usb/dwc2/core.h
++++ b/drivers/usb/dwc2/core.h
+@@ -667,7 +667,6 @@ struct dwc2_hw_params {
+ /**
+  * struct dwc2_gregs_backup - Holds global registers state before
+  * entering partial power down
+- * @gintsts:		Backup of GINTSTS register
+  * @gotgctl:		Backup of GOTGCTL register
+  * @gintmsk:		Backup of GINTMSK register
+  * @gahbcfg:		Backup of GAHBCFG register
+@@ -684,7 +683,6 @@ struct dwc2_hw_params {
+  * @valid:		True if registers values backuped.
+  */
+ struct dwc2_gregs_backup {
+-	u32 gintsts;
+ 	u32 gotgctl;
+ 	u32 gintmsk;
+ 	u32 gahbcfg;
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index ef0d73077034..643d67ce28ea 100644
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -692,14 +692,6 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+ 		regulator_disable(dwc2->usb33d);
+ 	}
+ 
+-	if (is_device_mode)
+-		ret = dwc2_gadget_backup_critical_registers(dwc2);
+-	else
+-		ret = dwc2_host_backup_critical_registers(dwc2);
+-
+-	if (ret)
+-		return ret;
+-
+ 	if (dwc2->ll_hw_enabled &&
+ 	    (is_device_mode || dwc2_host_can_poweroff_phy(dwc2))) {
+ 		ret = __dwc2_lowlevel_hw_disable(dwc2);
+@@ -709,24 +701,6 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+ 	return ret;
+ }
+ 
+-static int dwc2_restore_critical_registers(struct dwc2_hsotg *hsotg)
+-{
+-	struct dwc2_gregs_backup *gr;
+-
+-	gr = &hsotg->gr_backup;
+-
+-	if (!gr->valid) {
+-		dev_err(hsotg->dev, "No valid register backup, failed to restore\n");
+-		return -EINVAL;
+-	}
+-
+-	if (gr->gintsts & GINTSTS_CURMODE_HOST)
+-		return dwc2_host_restore_critical_registers(hsotg);
+-
+-	return dwc2_gadget_restore_critical_registers(hsotg, DWC2_RESTORE_DCTL |
+-						      DWC2_RESTORE_DCFG);
+-}
+-
+ static int __maybe_unused dwc2_resume(struct device *dev)
+ {
+ 	struct dwc2_hsotg *dwc2 = dev_get_drvdata(dev);
+@@ -742,18 +716,6 @@ static int __maybe_unused dwc2_resume(struct device *dev)
+ 	}
+ 	dwc2->phy_off_for_suspend = false;
+ 
+-	/*
+-	 * During suspend it's possible that the power domain for the
+-	 * DWC2 controller is disabled and all register values get lost.
+-	 * In case the GUSBCFG register is not initialized, it's clear the
+-	 * registers must be restored.
+-	 */
+-	if (!(dwc2_readl(dwc2, GUSBCFG) & GUSBCFG_TOUTCAL_MASK)) {
+-		ret = dwc2_restore_critical_registers(dwc2);
+-		if (ret)
+-			return ret;
+-	}
+-
+ 	if (dwc2->params.activate_stm_id_vb_detection) {
+ 		unsigned long flags;
+ 		u32 ggpio, gotgctl;
+@@ -786,6 +748,22 @@ static int __maybe_unused dwc2_resume(struct device *dev)
+ 		dwc2_drd_resume(dwc2);
+ 	}
+ 
++	/*
++	 * During suspend it's possible that the power domain for the
++	 * DWC2 controller is disabled and all register values get lost.
++	 * In case the GUSBCFG register is not initialized, it's clear the
++	 * registers must be restored. So invoke here the necessary init
++	 * as done by dwc2_hcd_init() during probe.
++	 */
++	if (!(dwc2_readl(dwc2, GUSBCFG) & GUSBCFG_TOUTCAL_MASK)) {
++		if (dwc2->dr_mode != USB_DR_MODE_PERIPHERAL) {
++			ret = dwc2_core_init(dwc2, true);
++			if (ret)
++				return ret;
++			dwc2_enable_global_interrupts(dwc2);
++		}
++	}
++
+ 	if (dwc2_is_device_mode(dwc2))
+ 		ret = dwc2_hsotg_resume(dwc2);
+ 
+-- 
+2.53.0
+

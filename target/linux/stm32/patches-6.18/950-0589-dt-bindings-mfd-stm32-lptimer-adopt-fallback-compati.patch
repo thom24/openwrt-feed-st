@@ -1,0 +1,79 @@
+From 0223eb1a46ff12827bdfc3b8b2b96935cdb7695a Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Fri, 24 May 2024 10:37:18 +0200
+Subject: [PATCH] dt-bindings: mfd: stm32-lptimer: adopt fallback compatibles
+ on stm32mp2
+
+Align with upstream recommendation to adopt fallback/backward compatible
+strings on stm32mp25 [1]. Apply the same on stm32mp21.
+
+[1] https://lore.kernel.org/linux-arm-kernel/20250224180150.3689638-1-fabrice.gasnier@foss.st.com/
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I4edc9d897075d6a6fd5932bd449c0fb22f9f4b10
+---
+ .../bindings/mfd/st,stm32-lptimer.yaml        | 20 ++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml b/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml
+index 946e840e189d..517d88d6f56d 100644
+--- a/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml
++++ b/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml
+@@ -23,7 +23,9 @@ properties:
+   compatible:
+     oneOf:
+       - items:
+-          - const: st,stm32mp25-lptimer
++          - enum:
++              - st,stm32mp21-lptimer
++              - st,stm32mp25-lptimer
+           - const: st,stm32-lptimer
+       - items:
+           - const: st,stm32-lptimer
+@@ -64,7 +66,9 @@ properties:
+       compatible:
+         oneOf:
+           - items:
+-              - const: st,stm32mp25-pwm-lp
++              - enum:
++                  - st,stm32mp21-pwm-lp
++                  - st,stm32mp25-pwm-lp
+               - const: st,stm32-pwm-lp
+           - items:
+               - const: st,stm32-pwm-lp
+@@ -84,7 +88,9 @@ properties:
+       compatible:
+         oneOf:
+           - items:
+-              - const: st,stm32mp25-lptimer-counter
++              - enum:
++                  - st,stm32mp21-lptimer-counter
++                  - st,stm32mp25-lptimer-counter
+               - const: st,stm32-lptimer-counter
+           - items:
+               - const: st,stm32-lptimer-counter
+@@ -100,7 +106,9 @@ properties:
+       compatible:
+         oneOf:
+           - items:
+-              - const: st,stm32mp25-lptimer-timer
++              - enum:
++                  - st,stm32mp21-lptimer-timer
++                  - st,stm32mp25-lptimer-timer
+               - const: st,stm32-lptimer-timer
+           - items:
+               - const: st,stm32-lptimer-timer
+@@ -117,7 +125,9 @@ patternProperties:
+       compatible:
+         oneOf:
+           - items:
+-              - const: st,stm32mp25-lptimer-trigger
++              - enum:
++                  - st,stm32mp21-lptimer-trigger
++                  - st,stm32mp25-lptimer-trigger
+               - const: st,stm32-lptimer-trigger
+           - items:
+               - const: st,stm32-lptimer-trigger
+-- 
+2.53.0
+

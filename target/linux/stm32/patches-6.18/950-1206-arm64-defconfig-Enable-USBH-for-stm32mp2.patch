@@ -1,0 +1,32 @@
+From 3d24e2b03c6025000fc64b9ff96b1dc5bcef9831 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Tue, 14 Apr 2026 16:32:02 +0200
+Subject: [PATCH] arm64: defconfig: Enable USBH for stm32mp2
+
+Enable USB2 host driver as module for stm32mp2 SoCs.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I03692330f96742d3258c0a8c982acd92aed90dc0
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/559885
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/configs/fragment-02-defconfig-addons.config | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/configs/fragment-02-defconfig-addons.config b/arch/arm64/configs/fragment-02-defconfig-addons.config
+index a6d01fa4e177..7b36fd513432 100644
+--- a/arch/arm64/configs/fragment-02-defconfig-addons.config
++++ b/arch/arm64/configs/fragment-02-defconfig-addons.config
+@@ -107,6 +107,7 @@ CONFIG_USB_CONFIGFS_F_UVC=y
+ CONFIG_USB_DWC2=m
+ CONFIG_USB_HIDDEV=y
+ CONFIG_USB_ONBOARD_DEV=y
++CONFIG_USB_STM32_USBH=m
+ CONFIG_V4L_TEST_DRIVERS=y
+ CONFIG_VIDEO_IMX335=m
+ CONFIG_VIDEO_STM32_CSI=m
+-- 
+2.53.0
+

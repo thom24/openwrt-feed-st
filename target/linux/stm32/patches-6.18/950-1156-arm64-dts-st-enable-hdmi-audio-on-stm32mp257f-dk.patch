@@ -1,0 +1,70 @@
+From be1bf214a388b5406364558fcef43fbdbb363ddb Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Thu, 16 Apr 2026 09:11:21 +0200
+Subject: [PATCH] arm64: dts: st: enable hdmi audio on stm32mp257f-dk
+
+Add HDMI support to audio soundcard.
+
+Change-Id: Ieede93e86a98bcff19f1f36317fb5343391f65cb
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/561857
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 24 ++++++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index f1c5a9160634..ea822501020b 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -187,7 +187,7 @@ panel_lvds_backlight: panel-lvds-backlight {
+ 	sound {
+ 		compatible = "audio-graph-card";
+ 		label = "STM32MP25-DK";
+-		dais = <&mdf1_port0 &mdf1_port1>;
++		dais = <&i2s2_port &mdf1_port0 &mdf1_port1>;
+ 		status = "okay";
+ 	};
+ 
+@@ -500,6 +500,13 @@ adv7535_out: endpoint {
+ 					remote-endpoint = <&hdmi_connector_in>;
+ 				};
+ 			};
++
++			port@2 {
++				reg = <2>;
++				adv7535_tx_endpoint: endpoint {
++					remote-endpoint = <&i2s2_endpoint>;
++				};
++			};
+ 		};
+ 	};
+ 
+@@ -526,6 +533,21 @@ &i2c8 {
+ 	/delete-property/dma-names;
+ };
+ 
++&i2s2 {
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&i2s2_pins_b>;
++	pinctrl-1 = <&i2s2_sleep_pins_b>;
++	status = "okay";
++
++	i2s2_port: port {
++		i2s2_endpoint: endpoint {
++			remote-endpoint = <&adv7535_tx_endpoint>;
++			dai-format = "i2s";
++			mclk-fs = <256>;
++		};
++	};
++};
++
+ &i3c4 {
+ 	pinctrl-names = "default", "init", "sleep";
+ 	pinctrl-0 = <&i3c4_pins_b>;
+-- 
+2.53.0
+

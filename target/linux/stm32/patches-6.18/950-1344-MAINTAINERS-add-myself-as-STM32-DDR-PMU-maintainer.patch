@@ -1,0 +1,45 @@
+From e11e3a88c97705828e675778f752762a492c7afd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Tue, 9 Sep 2025 12:12:22 +0200
+Subject: [PATCH] MAINTAINERS: add myself as STM32 DDR PMU maintainer
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Add Clément Le Goffic as STM32 DDR PMU maintainer.
+
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Signed-off-by: Clément Le Goffic <legoffic.clement@gmail.com>
+Change-Id: I8cbea0158c34a0dcea73b6aabae67a8db792d2b5
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/571217
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Tested-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ MAINTAINERS | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 2dad2688737b..a9955ec0f7fc 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -24321,6 +24321,13 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/power/supply/st,stc3117.yaml
+ F:	drivers/power/supply/stc3117_fuel_gauge.c
+ 
++ST STM32 DDR PMU
++M:	Clément Le Goffic <legoffic.clement@gmail.com>
++S:	Maintained
++F:	Documentation/admin-guide/perf/stm32-ddr-pmu.rst
++F:	Documentation/devicetree/bindings/perf/st,stm32-ddr-pmu.yaml
++F:	drivers/perf/stm32_ddr-pmu.c
++
+ ST STM32 FIREWALL
+ M:	Gatien Chevallier <gatien.chevallier@foss.st.com>
+ S:	Maintained
+-- 
+2.53.0
+

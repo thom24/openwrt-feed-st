@@ -1,0 +1,98 @@
+From 4f2f9bcf38f644881ebd490070c925080f023c89 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Tue, 13 Feb 2024 11:18:57 +0100
+Subject: [PATCH] media: stm32: dcmipp: make dcmipp_state & cmsr2 read common
+
+In preparation of the introduction of the pixel pipes capture devices,
+move struct dcmipp_state into common header and perform
+interrupt status register CMSR2 into the core interrupt handler and
+share the value with each subdevs.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+---
+ .../platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c   | 11 ++++-------
+ .../platform/st/stm32/stm32-dcmipp/dcmipp-common.h    |  7 +++++++
+ .../platform/st/stm32/stm32-dcmipp/dcmipp-core.c      |  7 +++++++
+ 3 files changed, 18 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
+index f4b962867dc2..1b7edf0d2938 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
+@@ -110,12 +110,6 @@ struct dcmipp_buf {
+ 	struct list_head	list;
+ };
+ 
+-enum dcmipp_state {
+-	DCMIPP_STOPPED = 0,
+-	DCMIPP_WAIT_FOR_BUFFER,
+-	DCMIPP_RUNNING,
+-};
+-
+ struct dcmipp_bytecap_device {
+ 	struct dcmipp_ent_device ved;
+ 	struct video_device vdev;
+@@ -797,9 +791,12 @@ static irqreturn_t dcmipp_bytecap_irq_callback(int irq, void *arg)
+ {
+ 	struct dcmipp_bytecap_device *vcap =
+ 			container_of(arg, struct dcmipp_bytecap_device, ved);
++	struct dcmipp_ent_device *ved = arg;
+ 
+ 	/* Store interrupt status register */
+-	vcap->cmsr2 = reg_read(vcap, DCMIPP_CMSR2) & DCMIPP_CMIER_P0ALL;
++	vcap->cmsr2 = ved->cmsr2 & DCMIPP_CMIER_P0ALL;
++	if (!vcap->cmsr2)
++		return IRQ_HANDLED;
+ 	vcap->count.it++;
+ 
+ 	/* Clear interrupt */
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
+index e5c0eda8b18a..3c3996472e03 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
+@@ -119,6 +119,13 @@ struct dcmipp_ent_device {
+ 	irq_handler_t handler;
+ 	irqreturn_t handler_ret;
+ 	irq_handler_t thread_fn;
++	u32 cmsr2;
++};
++
++enum dcmipp_state {
++	DCMIPP_STOPPED = 0,
++	DCMIPP_WAIT_FOR_BUFFER,
++	DCMIPP_RUNNING,
+ };
+ 
+ /**
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
+index dd784cfcaac8..b06a4931ae95 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
+@@ -33,6 +33,8 @@
+ 	.flags = link_flags,					\
+ }
+ 
++#define DCMIPP_CMSR2	0x3f8
++
+ static inline struct dcmipp_device *
+ notifier_to_dcmipp(struct v4l2_async_notifier *n)
+ {
+@@ -251,10 +253,15 @@ static irqreturn_t dcmipp_irq_callback(int irq, void *arg)
+ 	struct dcmipp_ent_device *ved;
+ 	irqreturn_t ret = IRQ_HANDLED;
+ 	unsigned int i;
++	u32 cmsr2;
++
++	/* Centralized read of CMSR2 */
++	cmsr2 = reg_read(dcmipp, DCMIPP_CMSR2);
+ 
+ 	/* Call irq handler of each entities of pipeline */
+ 	for (i = 0; i < dcmipp->pipe_cfg->num_ents; i++) {
+ 		ved = dcmipp->entity[i];
++		ved->cmsr2 = cmsr2;
+ 		if (ved->handler)
+ 			ved->handler_ret = ved->handler(irq, ved);
+ 		else if (ved->thread_fn)
+-- 
+2.53.0
+

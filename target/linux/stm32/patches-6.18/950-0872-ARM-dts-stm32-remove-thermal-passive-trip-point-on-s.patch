@@ -1,0 +1,46 @@
+From 4bdf8462fd9585bfb78641a8967a4f6a86447212 Mon Sep 17 00:00:00 2001
+From: Pascal Paillet <p.paillet@st.com>
+Date: Mon, 8 Nov 2021 11:46:18 +0100
+Subject: [PATCH] ARM: dts: stm32: remove thermal passive trip point on
+ stm32mp151
+
+Remove thermal passive trip point because it is useless and adjust
+thermal thresholds.
+
+Signed-off-by: Pascal Paillet <p.paillet@st.com>
+Change-Id: I18a3b34c7cfc589b3e4f6aa2a03a4e0c0b65b157
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/551276
+Reviewed-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
+Tested-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp151.dtsi | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
+index 7910951e24d9..373bac6fd0e4 100644
+--- a/arch/arm/boot/dts/st/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
+@@ -124,15 +124,9 @@ cpu_thermal: cpu-thermal {
+ 			thermal-sensors = <&dts>;
+ 
+ 			trips {
+-				cpu_alert1: cpu-alert1 {
+-					temperature = <85000>;
+-					hysteresis = <0>;
+-					type = "passive";
+-				};
+-
+ 				cpu-crit {
+ 					temperature = <120000>;
+-					hysteresis = <0>;
++					hysteresis = <1000>;
+ 					type = "critical";
+ 				};
+ 			};
+-- 
+2.53.0
+

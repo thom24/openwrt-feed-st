@@ -1,0 +1,35 @@
+From c1e4ea5cdad0fd2ed4071bfa9691eb63ff81b1e1 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Mon, 20 Apr 2026 15:31:10 +0200
+Subject: [PATCH] dt-bindings: net: snps,dwmac: add snps,ext-systime property
+
+Used to allow ptp external system time
+
+Change-Id: I5eb8d850c6cab01faa893ee98e5cb3ef80f9e1dd
+Signed-off-by: Gwenael Treuveur <gwenael.treuveur@st.com>
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/559355
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ Documentation/devicetree/bindings/net/snps,dwmac.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+index 658c004e6a5c..31a34b9bf93d 100644
+--- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
++++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+@@ -539,6 +539,11 @@ properties:
+       Enables the TSO feature otherwise it will be managed by MAC HW capability
+       register.
+ 
++  snps,ext-systime:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description:
++      Enable PTP External System Time bus.
++
+   mdio:
+     $ref: mdio.yaml#
+     unevaluatedProperties: false
+-- 
+2.53.0
+

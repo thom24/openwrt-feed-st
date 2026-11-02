@@ -1,0 +1,35 @@
+From bf2475b24511c8eada4b00c427d466fd9316c0d9 Mon Sep 17 00:00:00 2001
+From: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Date: Wed, 16 Sep 2026 14:26:23 +0200
+Subject: [PATCH] dt-bindings: crypto: mark st,stm32-crc.yaml as deprecated
+
+stm32_crc.c drivers has been dropped in kernel v6.17. Mark the bindings
+associated to this driver as deprecated.
+
+Signed-off-by: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Change-Id: Ic445fadb33e1bc0675ebf79e6c59ccb5062e6fb3
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/612835
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ Documentation/devicetree/bindings/crypto/st,stm32-crc.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-crc.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-crc.yaml
+index 50b2c2e0c3cd..b50f2e65a6f4 100644
+--- a/Documentation/devicetree/bindings/crypto/st,stm32-crc.yaml
++++ b/Documentation/devicetree/bindings/crypto/st,stm32-crc.yaml
+@@ -9,6 +9,8 @@ title: STMicroelectronics STM32 CRC
+ maintainers:
+   - Lionel Debieve <lionel.debieve@foss.st.com>
+ 
++deprecated: true
++
+ properties:
+   compatible:
+     const: st,stm32f7-crc
+-- 
+2.53.0
+

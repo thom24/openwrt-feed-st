@@ -1,0 +1,117 @@
+From 7c6d3a9fc2217e78467385f66dd9d16bcb64b3df Mon Sep 17 00:00:00 2001
+From: Cheick TRAORE <cheick.traore-ext@st.com>
+Date: Mon, 27 May 2024 14:54:13 +0200
+Subject: [PATCH] arm64: dts: st: add ADC nodes on stm32mp211
+
+Add analog-to-digital converter support on STM32MP21 SoC. It has ADC1
+and ADC2. Define internal voltage channels in the SOC dtsi file,
+exception made of vbat/4 channel (to avoid undesired load on it, in
+case no conversion is needed on this channel). Choice is let to board
+implementation (via DT) to define it.
+
+Change-Id: I6bc1d5fd91b658e8e1c3bdde8f21f6c8f7f7c299
+Signed-off-by: Cheick TRAORE <cheick.traore-ext@st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/564541
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 80 ++++++++++++++++++++++++++
+ 1 file changed, 80 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 1a887d14a841..328781535129 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -1227,6 +1227,86 @@ filter3: filter@204 {
+ 				};
+ 			};
+ 
++			adc_1: adc@404e0000 {
++				compatible = "st,stm32mp21-adc-core";
++				reg = <0x404e0000 0x0 0x400>;
++				interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&rcc CK_KER_ADC1>;
++				clock-names = "adc";
++				interrupt-controller;
++				#interrupt-cells = <1>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				access-controllers = <&rifsc 58>;
++				power-domains = <&d1_pd>;
++				status = "disabled";
++
++				adc1: adc@0 {
++					compatible = "st,stm32mp21-adc";
++					#io-channel-cells = <1>;
++					#address-cells = <1>;
++					#size-cells = <0>;
++					reg = <0x0>;
++					interrupt-parent = <&adc_1>;
++					interrupts = <0>;
++					dmas = <&hpdma 58 0x40 0x12>;
++					dma-names = "rx";
++					st,adc-trigger-sel = <0>;
++					nvmem-cells = <&vrefint>;
++					nvmem-cell-names = "vrefint";
++					status = "disabled";
++
++					channel@14 {
++						reg = <14>;
++						label = "vrefint";
++					};
++				};
++			};
++
++			adc_2: adc@404f0000 {
++				compatible = "st,stm32mp21-adc-core";
++				reg = <0x404f0000 0x0 0x400>;
++				interrupts = <GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&rcc CK_KER_ADC2>;
++				clock-names = "adc";
++				interrupt-controller;
++				#interrupt-cells = <1>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				access-controllers = <&rifsc 59>;
++				power-domains = <&d1_pd>;
++				status = "disabled";
++
++				adc2: adc@0 {
++					compatible = "st,stm32mp21-adc";
++					#io-channel-cells = <1>;
++					#address-cells = <1>;
++					#size-cells = <0>;
++					reg = <0x0>;
++					interrupt-parent = <&adc_2>;
++					interrupts = <0>;
++					dmas = <&hpdma 59 0x40 0x12>;
++					dma-names = "rx";
++					st,adc-trigger-sel = <1>;
++					nvmem-cells = <&vrefint>;
++					nvmem-cell-names = "vrefint";
++					status = "disabled";
++
++					channel@14 {
++						reg = <14>;
++						label = "vrefint";
++					};
++					channel@15 {
++						reg = <15>;
++						label = "vddcore";
++					};
++					channel@17 {
++						reg = <17>;
++						label = "vddcpu";
++					};
++				};
++			};
++
+ 			hash2: hash@42010000 {
+ 				compatible = "st,stm32mp13-hash";
+ 				reg = <0x42010000 0x0 0x400>;
+-- 
+2.53.0
+

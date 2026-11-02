@@ -1,0 +1,38 @@
+From 835434fb2b2b2c59bebef2d5a8fc3f4188e6a0cb Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Fri, 23 Jan 2026 17:54:55 +0100
+Subject: [PATCH] clk: stm32mp25: update register with reference manual
+
+Rename RCC_STM500CFGR into RCC_STMCFGR.
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: I799b98d39b743065277dc9e98a63475302d8d35d
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/374602
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+
+# Conflicts:
+#	drivers/clk/stm32/clk-stm32mp25.c
+#	drivers/clk/stm32/stm32mp25_rcc.h
+---
+ drivers/clk/stm32/stm32mp25_rcc.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/clk/stm32/stm32mp25_rcc.h b/drivers/clk/stm32/stm32mp25_rcc.h
+index 687bc6a78627..421c74dadf8c 100644
+--- a/drivers/clk/stm32/stm32mp25_rcc.h
++++ b/drivers/clk/stm32/stm32mp25_rcc.h
+@@ -319,7 +319,7 @@
+ #define RCC_OSPI2CFGR				0x518
+ #define RCC_FMCCFGR				0x51C
+ #define RCC_DBGCFGR				0x520
+-#define RCC_STM500CFGR				0x524
++#define RCC_STMCFGR				0x524
+ #define RCC_ETRCFGR				0x528
+ #define RCC_GPIOACFGR				0x52C
+ #define RCC_GPIOBCFGR				0x530
+-- 
+2.53.0
+

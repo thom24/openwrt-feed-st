@@ -1,0 +1,119 @@
+From 66bce2fb3b0e05ba57723d4b92cdeebc9b446791 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Thu, 28 May 2026 15:57:09 +0200
+Subject: [PATCH] pinctrl: stm32: Set IRQ domain bus token to DOMAIN_BUS_WIRED
+
+After [1], the driver's code for ops->select() is called in place
+of ops->match() when param count is zero. But the driver's code
+for ops->select() is written for param count not zero.
+
+After [2], the driver's code for ops->select() is skipped and the
+ops->match() is now called, even when param count is not zero. But
+the driver's code for ops->match() is written for param count zero.
+
+To parse the param values, the driver has to use ops->select(),
+since such values are not passed to ops->match().
+
+Set IRQ domain bus token to DOMAIN_BUS_WIRED to let the framework
+call the driver's ops->select().
+
+Make the driver's ops->select() able to handle param count zero in
+place of ops->match(), now never called.
+
+Drop driver's ops->match().
+
+[1] commit de1ff306dcf4 ("genirq/irqdomain: Remove the param count
+    restriction from select()")
+[2] commit 5aa3c0cf5bba ("genirq/irqdomain: Don't call ops->select
+    for DOMAIN_BUS_ANY tokens")
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I234706ea02aea55fb2299f7c398f2ccea7045000
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/572425
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/pinctrl/stm32/pinctrl-stm32.c | 30 ++++++++++-----------------
+ 1 file changed, 11 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
+index 381f4189984c..2de2cedd418c 100644
+--- a/drivers/pinctrl/stm32/pinctrl-stm32.c
++++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
+@@ -627,8 +627,7 @@ static int stm32_gpio_domain_select(struct irq_domain *dm,
+ 	struct irq_fwspec parent_fwspec;
+ 	struct stm32_gpio_bank *bank;
+ 
+-	if (!fwnode ||
+-	    (bus_token != DOMAIN_BUS_ANY && dm->bus_token != bus_token))
++	if (!fwnode || dm->bus_token != bus_token)
+ 		return 0;
+ 
+ 	bank = stm32_pctrl_fwnode_to_bank(pctl, fwnode);
+@@ -638,6 +637,12 @@ static int stm32_gpio_domain_select(struct irq_domain *dm,
+ 	if (!pctl->has_irq_extended)
+ 		return 1;
+ 
++	if (!fwspec->param_count)
++		return 1;
++
++	if (fwspec->param_count != 2)
++		return 0;
++
+ 	if (!dm->parent->ops->select)
+ 		return 0;
+ 
+@@ -650,22 +655,6 @@ static int stm32_gpio_domain_select(struct irq_domain *dm,
+ 	return dm->parent->ops->select(dm->parent, &parent_fwspec, bus_token);
+ }
+ 
+-static int stm32_gpio_domain_match(struct irq_domain *dm,
+-				   struct device_node *node,
+-				   enum irq_domain_bus_token bus_token)
+-{
+-	struct stm32_pinctrl *pctl = dm->host_data;
+-
+-	if (!node ||
+-	    (bus_token != DOMAIN_BUS_ANY && dm->bus_token != bus_token))
+-		return 0;
+-
+-	if (stm32_pctrl_fwnode_to_bank(pctl, of_node_to_fwnode(node)))
+-		return 1;
+-
+-	return 0;
+-}
+-
+ static int stm32_gpio_domain_translate(struct irq_domain *d,
+ 				       struct irq_fwspec *fwspec,
+ 				       unsigned long *hwirq,
+@@ -782,7 +771,6 @@ static void stm32_gpio_domain_free(struct irq_domain *d, unsigned int virq,
+ 
+ static const struct irq_domain_ops stm32_gpio_domain_ops = {
+ 	.select		= stm32_gpio_domain_select,
+-	.match		= stm32_gpio_domain_match,
+ 	.translate	= stm32_gpio_domain_translate,
+ 	.alloc		= stm32_gpio_domain_alloc,
+ 	.free		= stm32_gpio_domain_free,
+@@ -1897,6 +1885,8 @@ static struct irq_domain *stm32_pctrl_get_irq_domain(struct stm32_pinctrl *pctl)
+ 				irq_domain_free_fwnode(fwnode);
+ 				return ERR_PTR(ret);
+ 			}
++
++			irq_domain_update_bus_token(domain, DOMAIN_BUS_WIRED);
+ 		}
+ 
+ 		pctl->has_irq_extended = true;
+@@ -1930,6 +1920,8 @@ static struct irq_domain *stm32_pctrl_get_irq_domain(struct stm32_pinctrl *pctl)
+ 		return ERR_PTR(ret);
+ 	}
+ 
++	irq_domain_update_bus_token(domain, DOMAIN_BUS_WIRED);
++
+ 	return domain;
+ }
+ 
+-- 
+2.53.0
+

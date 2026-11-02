@@ -1,0 +1,38 @@
+From d9b02122ebfe6ec8fb3e0ec6c5b1d270d6980b2e Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Date: Tue, 28 Feb 2023 11:22:22 +0100
+Subject: [PATCH] arm64: dts: st: add ipcc support for stm32mp257f-ev1 board
+
+Add IPCC node for STM32MP257F-EV1 board.
+
+Change-Id: I87c3e1c17f07e69631f92956f6a477b83ebeb825
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/539863
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+index fe0790879a2f..2209df7a4eeb 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+@@ -387,6 +387,10 @@ &i2c8 {
+ 	/delete-property/dma-names;
+ };
+ 
++&ipcc1 {
++	status = "okay";
++};
++
+ /* use LPTIMER with tick broadcast for suspend mode */
+ &lptimer3 {
+ 	status = "okay";
+-- 
+2.53.0
+

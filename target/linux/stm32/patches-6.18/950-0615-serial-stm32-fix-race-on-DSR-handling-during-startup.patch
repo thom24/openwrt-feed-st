@@ -1,0 +1,46 @@
+From 96f596f157490dad499a9af0c18b8e487533596b Mon Sep 17 00:00:00 2001
+From: Valentin Caron <valentin.caron@foss.st.com>
+Date: Fri, 22 May 2026 10:51:31 +0200
+Subject: [PATCH] serial: stm32: fix race on DSR handling during startup
+
+When implementing handle_dsr(), the function may call pm_runtime_get().
+If the DSR signal is already asserted when the port is starting up, the
+runtime resume callback may be invoked at random points in the startup
+sequence (set_termios()).
+
+In some cases, this can happen before the port is fully initialized,
+leading to GPIO modem-control handling being called in an inconsistent
+state, e.g. mctrl_gpio_disable_irq_wake() invoked without the corresponding
+mctrl_gpio_enable_irq_wake() having been called.
+
+Since set_termios() cannot be called from an IRQ context, we can safely
+replace pm_runtime_get()/pm_runtime_put() with their synchronous
+counterparts to ensure the sequence completes properly and avoid this race.
+
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: I93050e43ee07aa038392cb412eed55d238f8dcc9
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/570583
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ drivers/tty/serial/stm32-usart.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index 9843fa1b2d23..6725bb5f6761 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -1442,7 +1442,7 @@ static void stm32_usart_set_termios(struct uart_port *port,
+ 	unsigned long flags;
+ 	int brr_fit = 0, ret;
+ 
+-	pm_runtime_get(port->dev);
++	pm_runtime_get_sync(port->dev);
+ 
+ 	if (!stm32_port->hw_flow_control)
+ 		cflag &= ~CRTSCTS;
+-- 
+2.53.0
+

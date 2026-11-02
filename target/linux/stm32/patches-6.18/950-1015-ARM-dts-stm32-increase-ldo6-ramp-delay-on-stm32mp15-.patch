@@ -1,0 +1,71 @@
+From 69af8641328dcebced17cb668add45b69b4969ae Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Mon, 13 Apr 2026 08:53:43 +0200
+Subject: [PATCH] ARM: dts: stm32: increase ldo6 ramp delay on stm32mp15 eval
+ boards
+
+At initialization Wolfson wm8894 suspend/resume callbacks
+are executed. On resume LDO6 regulator is re-enabled.
+wm8994 Power On Reset must be in ready state to allow
+accesses on control interface. Measurements on wm8994
+show that POR is not in ready state before 170ms after
+LDO6 activation. The LDO6 ramp-up delay is set to 300ms
+to let enough time for wm8994 POR.
+
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Change-Id: I66bd776b1d3d3542eaa59c6b662489d18b09529f
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/556953
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
+Tested-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts | 5 +++++
+ arch/arm/boot/dts/st/stm32mp157d-ev1.dts         | 5 +++++
+ arch/arm/boot/dts/st/stm32mp157f-ev1.dts         | 5 +++++
+ 3 files changed, 15 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
+index 30d3b19f6d3c..0c1c4736da0d 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
+@@ -805,3 +805,8 @@ &usbphyc_port1 {
+ 	st,tune-hs-rx-offset = <2>;
+ 	st,no-lsfs-sc;
+ };
++
++/* Ramp-up delay 300ms to let enough time for wm8994 POR */
++&v1v8 {
++	regulator-enable-ramp-delay = <300000>;
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+index fd0fc9ac48c5..f917e0ae7b96 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+@@ -806,3 +806,8 @@ &usbphyc_port1 {
+ 	st,tune-hs-rx-offset = <2>;
+ 	st,no-lsfs-sc;
+ };
++
++/* Ramp-up delay 300ms to let enough time for wm8994 POR */
++&v1v8 {
++	regulator-enable-ramp-delay = <300000>;
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+index 0c460482445f..7ca87ac913c2 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+@@ -806,3 +806,8 @@ &usbphyc_port1 {
+ 	st,tune-hs-rx-offset = <2>;
+ 	st,no-lsfs-sc;
+ };
++
++/* Ramp-up delay 300ms to let enough time for wm8994 POR */
++&v1v8 {
++	regulator-enable-ramp-delay = <300000>;
++};
+-- 
+2.53.0
+

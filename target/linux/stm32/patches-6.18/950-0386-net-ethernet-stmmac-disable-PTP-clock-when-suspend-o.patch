@@ -1,0 +1,50 @@
+From 8feeb24a307240275995ff0eeafaed8c0853a08a Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Mon, 26 Jan 2026 15:37:54 +0100
+Subject: [PATCH] net: ethernet: stmmac: disable PTP clock when suspend on
+ STM32MPx
+
+ETH main clock has dependency with eth-ck, ptp_ref (from RCC gating)
+In order to optimize consumption in suspend, need to disable ptp_ref
+in suspend and re-enable it on resume. No impact for WoL, to manage
+well Magic Packet must need only mac-clk-rx.
+
+Change-Id: I087b5453cbd2ab70a70a95db4e6f93b2194f9888
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
+index fbc8db0e0ca2..e17cd12cd68d 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
+@@ -680,6 +680,12 @@ static void stm32_dwmac_remove(struct platform_device *pdev)
+ 
+ static int stm32mp1_suspend(struct stm32_dwmac *dwmac)
+ {
++	struct net_device *ndev = dev_get_drvdata(dwmac->dev);
++	struct stmmac_priv *priv = netdev_priv(ndev);
++
++	if (netif_running(ndev))
++		clk_disable_unprepare(priv->plat->clk_ptp_ref);
++
+ 	/* Keep the PHY up if we use Wake-on-Lan. */
+ 	if (!device_may_wakeup(dwmac->dev))
+ 		phy_power_on(dwmac, false);
+@@ -689,7 +695,12 @@ static int stm32mp1_suspend(struct stm32_dwmac *dwmac)
+ 
+ static void stm32mp1_resume(struct stm32_dwmac *dwmac)
+ {
++	struct net_device *ndev = dev_get_drvdata(dwmac->dev);
++	struct stmmac_priv *priv = netdev_priv(ndev);
++
+ 	clk_disable_unprepare(dwmac->clk_ethstp);
++	if (netif_running(ndev))
++		clk_prepare_enable(priv->plat->clk_ptp_ref);
+ 
+ 	/* The PHY was up for Wake-on-Lan. */
+ 	if (!device_may_wakeup(dwmac->dev))
+-- 
+2.53.0
+

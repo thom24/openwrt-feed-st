@@ -1,0 +1,35 @@
+From a704cdceaf360731469ca536d787c294f8ebd008 Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Mon, 30 Mar 2026 11:51:53 +0200
+Subject: [PATCH] arm64: dts: st: add optee interrupt properties in stm32mp231
+ SoC file
+
+Add optee node interrupt properties for this SoC family.
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: I1f7591b086d39f5297de3adbdeb02086de64e59c
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/552075
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp231.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+index 47a47398ed77..0b509f8bf8b4 100644
+--- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+@@ -57,6 +57,8 @@ optee: optee {
+ 			method = "smc";
+ 			interrupt-parent = <&intc>;
+ 			interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
++			interrupt-controller;
++			#interrupt-cells = <1>;
+ 		};
+ 
+ 		scmi: scmi {
+-- 
+2.53.0
+

@@ -1,0 +1,33 @@
+From f3e77d49cd4ea0a135a7f6d5be5343c5c8c1b4f2 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Fri, 25 Jul 2025 11:07:11 +0200
+Subject: [PATCH] USB: serial: ftdi_sio: fix misspelling of
+ "STMicroelectronics"
+
+"STMicroelectronics" company name is misspelled. Fix it.
+
+Change-Id: I03fffc56d15170f1ea9501d374a882fe43b6dff1
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/569544
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/usb/serial/ftdi_sio_ids.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_sio_ids.h
+index 6c76cfebfd0e..c0ce6e052b85 100644
+--- a/drivers/usb/serial/ftdi_sio_ids.h
++++ b/drivers/usb/serial/ftdi_sio_ids.h
+@@ -1368,7 +1368,7 @@
+ #define WHT_PID			0x0004 /* Wireless Handheld Terminal */
+ 
+ /*
+- * STMicroelectonics
++ * STMicroelectronics
+  */
+ #define ST_VID			0x0483
+ #define ST_STMCLT_2232_PID	0x3746
+-- 
+2.53.0
+

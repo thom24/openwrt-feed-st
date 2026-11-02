@@ -1,0 +1,39 @@
+From bb4cda84eb14d5a02a150958a8dbbfefd9f4e43d Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Tue, 16 Jun 2026 10:14:38 +0200
+Subject: [PATCH] cpufreq: scmi: Handle unsupported limits notifier
+
+As PERFORMANCE_NOTIFY_LIMITS is optionnal, treats unsupported SCMI limits
+notifications as normal.
+
+When notifier registration returns -EOPNOTSUPP continue and keep warnings
+for real errors.
+
+Assisted-by: GitHub-Copilot:GPT-5.3-Codex
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: Iea6832b80d0eaf1a0f00a60185247ab2892663ed
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/579161
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/cpufreq/scmi-cpufreq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
+index c450cf9c881d..325a3c33ba99 100644
+--- a/drivers/cpufreq/scmi-cpufreq.c
++++ b/drivers/cpufreq/scmi-cpufreq.c
+@@ -317,7 +317,7 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+ 							SCMI_EVENT_PERFORMANCE_LIMITS_CHANGED,
+ 							&priv->domain_id,
+ 							&priv->limit_notify_nb);
+-	if (ret)
++	if (ret && ret != -EOPNOTSUPP)
+ 		dev_warn(&sdev->dev,
+ 			 "failed to register for limits change notifier for domain %d\n",
+ 			 priv->domain_id);
+-- 
+2.53.0
+

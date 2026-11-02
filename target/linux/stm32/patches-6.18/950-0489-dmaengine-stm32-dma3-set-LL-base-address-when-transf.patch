@@ -1,0 +1,55 @@
+From 039eb2d5f8abd37c0e3daa587400838b88892ade Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Sun, 15 Feb 2026 18:21:55 +0100
+Subject: [PATCH] dmaengine: stm32-dma3: set LL base address when transfer
+ starts
+
+Linked-list (LL) is allocated in stm32_dma3_chan_desc_alloc(). The LL is
+then used when starting the transfer in stm32_dma3_chan_start(). Nothing
+prevents a user from preparing another transfer before starting the
+previous one. If, for the same channel, another kind of transfer is
+prepared (using dmaengine_prep_xxx API), the LL base address may change.
+This address could be overwritten in the CxLBAR register if the channel is
+disabled, or the CxLBAR might not be updated if the channel is enabled,
+leading to a mismatch between the transfer being started and the LL pointed
+to by CxLBAR register.
+To avoid this, write the LL base address in CxLBAR when starting the
+transfer instead of when the linked-list is allocated.
+
+Change-Id: I7c722f463dc8971429e5bc5465cb96b9eca92a56
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/521392
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ drivers/dma/stm32/stm32-dma3.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
+index 28e2a499235d..662e942106d3 100644
+--- a/drivers/dma/stm32/stm32-dma3.c
++++ b/drivers/dma/stm32/stm32-dma3.c
+@@ -580,10 +580,6 @@ static struct stm32_dma3_swdesc *stm32_dma3_chan_desc_alloc(struct stm32_dma3_ch
+ 		return NULL;
+ 	}
+ 
+-	/* Set LL base address */
+-	writel_relaxed(swdesc->lli[0].hwdesc_addr & CLBAR_LBA,
+-		       ddata->base + STM32_DMA3_CLBAR(chan->id));
+-
+ 	/* Set LL allocated port */
+ 	swdesc->ccr = FIELD_PREP(CCR_LAP, ddata->lap);
+ 
+@@ -940,6 +936,10 @@ static void stm32_dma3_chan_start(struct stm32_dma3_chan *chan)
+ 	writel_relaxed(hwdesc->cdar, ddata->base + STM32_DMA3_CDAR(id));
+ 	writel_relaxed(hwdesc->cllr, ddata->base + STM32_DMA3_CLLR(id));
+ 
++	/* Set LL base address */
++	writel_relaxed(chan->swdesc->lli[0].hwdesc_addr & CLBAR_LBA,
++		       ddata->base + STM32_DMA3_CLBAR(chan->id));
++
+ 	/* Clear any pending interrupts */
+ 	csr = readl_relaxed(ddata->base + STM32_DMA3_CSR(id));
+ 	if (csr & CSR_ALL_F)
+-- 
+2.53.0
+

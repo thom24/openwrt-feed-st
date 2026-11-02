@@ -1,0 +1,61 @@
+From 8fecf4e0a1f373c3fb8b711a4b8716cbe2feb112 Mon Sep 17 00:00:00 2001
+From: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Date: Tue, 23 Dec 2025 16:25:46 +0100
+Subject: [PATCH] arm64: dts: st: Minor whitespace cleanup
+
+The DTS code coding style expects exactly one space around '=' and
+before '{' characters.
+
+Change-Id: Ia7865c8ff26a25e7f63553a2b33f40f943b56802
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Link: https://lore.kernel.org/r/20251223152544.155637-4-krzysztof.kozlowski@oss.qualcomm.com
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts  | 2 +-
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts  | 2 +-
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index c3e688068223..9a2b2f50df76 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -93,7 +93,7 @@ mdio {
+ 		phy1_eth1: ethernet-phy@1 {
+ 			compatible = "ethernet-phy-id001c.c916";
+ 			reg = <1>;
+-			reset-gpios =  <&gpioa 2 GPIO_ACTIVE_LOW>;
++			reset-gpios = <&gpioa 2 GPIO_ACTIVE_LOW>;
+ 			reset-assert-us = <10000>;
+ 			reset-deassert-us = <80000>;
+ 		};
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index e718d888ce21..4a489a8d9aca 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -93,7 +93,7 @@ mdio {
+ 		phy1_eth1: ethernet-phy@1 {
+ 			compatible = "ethernet-phy-id001c.c916";
+ 			reg = <1>;
+-			reset-gpios =  <&gpioa 2 GPIO_ACTIVE_LOW>;
++			reset-gpios = <&gpioa 2 GPIO_ACTIVE_LOW>;
+ 			reset-assert-us = <10000>;
+ 			reset-deassert-us = <80000>;
+ 		};
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+index bb6d6393d2e4..0c5fc7a7be8d 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+@@ -186,7 +186,7 @@ mdio {
+ 		phy1_eth1: ethernet-phy@4 {
+ 			compatible = "ethernet-phy-id001c.c916";
+ 			reg = <4>;
+-			reset-gpios =  <&gpioj 9 GPIO_ACTIVE_LOW>;
++			reset-gpios = <&gpioj 9 GPIO_ACTIVE_LOW>;
+ 			reset-assert-us = <10000>;
+ 			reset-deassert-us = <80000>;
+ 		};
+-- 
+2.53.0
+

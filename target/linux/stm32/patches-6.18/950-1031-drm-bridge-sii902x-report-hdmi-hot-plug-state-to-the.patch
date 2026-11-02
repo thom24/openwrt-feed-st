@@ -1,0 +1,123 @@
+From 4a3dc71a881935e8d605c3cf233e0d8cb543721a Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Wed, 29 Jul 2026 18:04:59 +0200
+Subject: [PATCH] drm/bridge: sii902x: report hdmi hot-plug state to the audio
+ codec
+
+The sii902x bridge already exposes an HDMI audio codec, but it currently
+does not notify that codec when an HDMI/DP sink is connected or
+disconnected.
+As a result the ASoC hdmi-codec jack (and thus userspace) cannot
+track the actual hot-plug detect (HPD) state of the output.
+
+Implement the hdmi_codec_ops::hook_plugged_cb callback so the codec is
+notified of the current HPD state on every hot-plug interrupt.
+
+Change-Id: I1243a13a55d6f57034ae60d41f5431ccf85a93b5
+Assisted-by: GitHub-Copilot:Claude:4.8-opus
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/593232
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/gpu/drm/bridge/sii902x.c | 53 ++++++++++++++++++++++++++++++--
+ 1 file changed, 50 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/sii902x.c b/drivers/gpu/drm/bridge/sii902x.c
+index 1f0aba28ad1e..1c719c6f271c 100644
+--- a/drivers/gpu/drm/bridge/sii902x.c
++++ b/drivers/gpu/drm/bridge/sii902x.c
+@@ -189,7 +189,10 @@ struct sii902x {
+ 	struct sii902x_audio {
+ 		struct platform_device *pdev;
+ 		struct clk *mclk;
++		struct mutex lock;	/* Protects the audio hot-plug state */
+ 		u32 i2s_fifo_sequence[4];
++		hdmi_codec_plugged_cb plugged_cb;
++		struct device *codec_dev;
+ 	} audio;
+ };
+ 
+@@ -833,12 +836,49 @@ static int sii902x_audio_get_dai_id(struct snd_soc_component *component,
+ 	return -EINVAL;
+ }
+ 
++/* Notify the HDMI codec of the current hot-plug detect state */
++static void sii902x_audio_report_plugged(struct sii902x *sii902x,
++					 enum drm_connector_status status)
++{
++	bool plugged = status == connector_status_connected;
++
++	mutex_lock(&sii902x->audio.lock);
++
++	if (sii902x->audio.plugged_cb && sii902x->audio.codec_dev)
++		sii902x->audio.plugged_cb(sii902x->audio.codec_dev, plugged);
++
++	mutex_unlock(&sii902x->audio.lock);
++}
++
++static int sii902x_audio_hook_plugged_cb(struct device *dev, void *data,
++					 hdmi_codec_plugged_cb fn,
++					 struct device *codec_dev)
++{
++	struct sii902x *sii902x = dev_get_drvdata(dev);
++	bool plugged;
++
++	mutex_lock(&sii902x->audio.lock);
++
++	sii902x->audio.plugged_cb = fn;
++	sii902x->audio.codec_dev = codec_dev;
++	plugged = sii902x_detect(sii902x) == connector_status_connected;
++
++	/* Report the current status right after the callback is registered. */
++	if (fn)
++		fn(codec_dev, plugged);
++
++	mutex_unlock(&sii902x->audio.lock);
++
++	return 0;
++}
++
+ static const struct hdmi_codec_ops sii902x_audio_codec_ops = {
+ 	.hw_params = sii902x_audio_hw_params,
+ 	.audio_shutdown = sii902x_audio_shutdown,
+ 	.mute_stream = sii902x_audio_mute,
+ 	.get_eld = sii902x_audio_get_eld,
+ 	.get_dai_id = sii902x_audio_get_dai_id,
++	.hook_plugged_cb = sii902x_audio_hook_plugged_cb,
+ };
+ 
+ static int sii902x_audio_codec_init(struct sii902x *sii902x,
+@@ -940,10 +980,16 @@ static irqreturn_t sii902x_interrupt(int irq, void *data)
+ 	mutex_unlock(&sii902x->mutex);
+ 
+ 	if ((status & SII902X_HOTPLUG_EVENT) && sii902x->bridge.dev) {
++		enum drm_connector_status hpd_status =
++			(status & SII902X_PLUGGED_STATUS)
++				? connector_status_connected
++				: connector_status_disconnected;
++
+ 		drm_helper_hpd_irq_event(sii902x->bridge.dev);
+-		drm_bridge_hpd_notify(&sii902x->bridge, (status & SII902X_PLUGGED_STATUS)
+-								? connector_status_connected
+-								: connector_status_disconnected);
++		drm_bridge_hpd_notify(&sii902x->bridge, hpd_status);
++
++		/* Keep the HDMI audio jack state in sync with the HPD state. */
++		sii902x_audio_report_plugged(sii902x, hpd_status);
+ 	}
+ 
+ 	return IRQ_HANDLED;
+@@ -1212,6 +1258,7 @@ static int sii902x_probe(struct i2c_client *client)
+ 	}
+ 
+ 	mutex_init(&sii902x->mutex);
++	mutex_init(&sii902x->audio.lock);
+ 
+ 	ret = devm_regulator_bulk_get_enable(dev, ARRAY_SIZE(supplies), supplies);
+ 	if (ret < 0)
+-- 
+2.53.0
+

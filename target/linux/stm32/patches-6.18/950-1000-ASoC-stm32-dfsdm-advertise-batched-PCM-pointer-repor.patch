@@ -1,0 +1,45 @@
+From e254dd1ad5368f98fe24301d71d2db9bee1e1c14 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 23 Jun 2026 16:32:09 +0200
+Subject: [PATCH] ASoC: stm32: dfsdm: advertise batched PCM pointer reporting
+
+The STM32 DFSDM PCM interface does not guarantee continuously advancing
+hardware pointer updates visible to ALSA userspace. In practice, the
+reported position may advance in batches rather than at burst granularity.
+
+Advertise SNDRV_PCM_INFO_BATCH so userspace is informed that the hardware
+pointer may only be updated periodically, for example once per period,
+instead of continuously.
+
+This better matches the actual pointer reporting behavior exposed by the
+DMA-backed capture path.
+
+Change-Id: I54312152c0b26ab199e399e3128e85d157f28254
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/582121
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ sound/soc/stm/stm32_adfsdm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sound/soc/stm/stm32_adfsdm.c b/sound/soc/stm/stm32_adfsdm.c
+index c914d1c46850..e036c5923753 100644
+--- a/sound/soc/stm/stm32_adfsdm.c
++++ b/sound/soc/stm/stm32_adfsdm.c
+@@ -44,7 +44,7 @@ struct stm32_adfsdm_priv {
+ 
+ static const struct snd_pcm_hardware stm32_adfsdm_pcm_hw = {
+ 	.info = SNDRV_PCM_INFO_INTERLEAVED | SNDRV_PCM_INFO_BLOCK_TRANSFER |
+-		SNDRV_PCM_INFO_MMAP | SNDRV_PCM_INFO_PAUSE,
++		SNDRV_PCM_INFO_MMAP | SNDRV_PCM_INFO_PAUSE | SNDRV_PCM_INFO_BATCH,
+ 	.formats = SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FMTBIT_S32_LE,
+ 
+ 	.channels_min = 1,
+-- 
+2.53.0
+

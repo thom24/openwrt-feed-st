@@ -1,0 +1,57 @@
+From f9eec29d8caee1c67f19513401ff50a755b3743e Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Wed, 13 Oct 2021 16:25:10 +0200
+Subject: [PATCH] ARM: dts: stm32: add a sleep pinctrl of spi1 in
+ stm32mp157x-ev1
+
+Add the pinctrl sleep state on the spi1 instance for boards
+stm32mp157d-ev1 and stm32mp157f-ev1.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: Ic0911e44460ea6cf5fc5dde448d15eb214d1d34a
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/537876
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp157d-ev1.dts | 3 ++-
+ arch/arm/boot/dts/st/stm32mp157f-ev1.dts | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+index ca53bd35f063..e419d4762b76 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+@@ -342,8 +342,9 @@ &sdmmc3 {
+ };
+ 
+ &spi1 {
+-	pinctrl-names = "default";
++	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&spi1_pins_a>;
++	pinctrl-1 = <&spi1_sleep_pins_a>;
+ 	status = "disabled";
+ };
+ 
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+index 6e9e35087a01..8ab1d0730bb5 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+@@ -342,8 +342,9 @@ &sdmmc3 {
+ };
+ 
+ &spi1 {
+-	pinctrl-names = "default";
++	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&spi1_pins_a>;
++	pinctrl-1 = <&spi1_sleep_pins_a>;
+ 	status = "disabled";
+ };
+ 
+-- 
+2.53.0
+

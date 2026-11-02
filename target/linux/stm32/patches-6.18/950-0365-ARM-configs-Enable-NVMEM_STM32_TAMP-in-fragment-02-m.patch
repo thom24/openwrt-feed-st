@@ -1,0 +1,29 @@
+From 5f73ccd08b737226dbaccd6e873aa3d4c841dae3 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Fri, 23 Jan 2026 15:20:37 +0100
+Subject: [PATCH] ARM: configs: Enable NVMEM_STM32_TAMP in
+ fragment-02-multiv7_addons.config
+
+Enable CONFIG_NVMEM_STM32_TAMP in fragment-02-multiv7_addons.config.
+
+Change-Id: Idfcc03b587d6a7521f8b0f251a0f24cc1f569ff5
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+---
+ arch/arm/configs/fragment-02-multiv7_addons.config | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/configs/fragment-02-multiv7_addons.config b/arch/arm/configs/fragment-02-multiv7_addons.config
+index 76e328a0728c..4cb3c151f89f 100644
+--- a/arch/arm/configs/fragment-02-multiv7_addons.config
++++ b/arch/arm/configs/fragment-02-multiv7_addons.config
+@@ -42,6 +42,7 @@ CONFIG_NEON=y
+ CONFIG_NR_CPUS=2
+ CONFIG_NVMEM_REBOOT_MODE=y
+ CONFIG_NVMEM_STM32_ROMEM=y
++CONFIG_NVMEM_STM32_TAMP=y
+ CONFIG_OF_OVERLAY=y
+ CONFIG_OVERLAY_FS=y
+ CONFIG_PAGE_BLOCK_MAX_ORDER=12
+-- 
+2.53.0
+

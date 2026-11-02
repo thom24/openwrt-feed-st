@@ -1,0 +1,59 @@
+From b0cb98eebc50acb2ca2a1504e43f49dc60be17fb Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Thu, 28 May 2026 11:08:07 +0200
+Subject: [PATCH] media: stm32: dcmipp: stop pipe before source in capture
+
+Ensure to stop the pipeline prior to stopping the source device
+to avoid having the pipeline stuck.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: I8ecace8a9f32005d00944543656730eaef91f7d4
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/572329
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ .../st/stm32/stm32-dcmipp/dcmipp-capture.c       | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
+index 2d3cfcbcb2e1..f4f26c71da1b 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
+@@ -749,14 +749,6 @@ static void dcmipp_capture_stop_streaming(struct vb2_queue *vq)
+ 	int ret;
+ 	u32 status;
+ 
+-	ret = v4l2_subdev_disable_streams(vcap->s_subdev,
+-					  vcap->s_subdev_pad_nb, BIT_ULL(0));
+-	if (ret)
+-		dev_warn(vcap->dev, "Failed to disable stream\n");
+-
+-	/* Stop the media pipeline */
+-	media_pipeline_stop(vcap->vdev.entity.pads);
+-
+ 	/* Disable interruptions */
+ 	spin_lock(&vcap->vdev.v4l2_dev->lock);
+ 	reg_clear(vcap, DCMIPP_CMIER, DCMIPP_CMIER_PxALL(vcap->pipe_id));
+@@ -780,6 +772,14 @@ static void dcmipp_capture_stop_streaming(struct vb2_queue *vq)
+ 	/* Clear any pending interrupts */
+ 	reg_write(vcap, DCMIPP_CMFCR, DCMIPP_CMIER_PxALL(vcap->pipe_id));
+ 
++	ret = v4l2_subdev_disable_streams(vcap->s_subdev,
++					  vcap->s_subdev_pad_nb, BIT_ULL(0));
++	if (ret)
++		dev_warn(vcap->dev, "Failed to disable stream\n");
++
++	/* Stop the media pipeline */
++	media_pipeline_stop(vcap->vdev.entity.pads);
++
+ 	spin_lock_irq(&vcap->irqlock);
+ 
+ 	/* Return all queued buffers to vb2 in ERROR state */
+-- 
+2.53.0
+

@@ -1,0 +1,44 @@
+From 212d7ab7042c567ce1b3de57a4d45b6bcb29c9bb Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Tue, 10 Mar 2026 16:58:51 +0100
+Subject: [PATCH] arm64: dts: st: add FDCAN1/FDCAN3 on stm32mp257f-ev1 board
+
+Add support of FDCAN1 and FDCAN3
+
+Change-Id: I21307af641f38cd9d14bd01c87517384e2013323
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/545561
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+index 98f0410680cf..b8e844f19a3c 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+@@ -461,6 +461,20 @@ lvds_out0: endpoint {
+ 	};
+ };
+ 
++&m_can1 {
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&m_can1_pins_a>;
++	pinctrl-1 = <&m_can1_sleep_pins_a>;
++	status = "okay";
++};
++
++&m_can3 {
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&m_can3_pins_a>;
++	pinctrl-1 = <&m_can3_sleep_pins_a>;
++	status = "okay";
++};
++
+ &ommanager {
+ 	memory-region = <&mm_ospi1>;
+ 	memory-region-names = "ospi1";
+-- 
+2.53.0
+

@@ -1,0 +1,50 @@
+From 5c022088deffe6757028d2e8f351c8473de78837 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Fri, 10 Jul 2026 10:57:17 +0200
+Subject: [PATCH] crypto: stm32/hash - fix DMA alignment boundary case for
+ secured context
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+For secured HASH contexts (mp2x and mp13), the first non-final DMA
+update must leave data for the next transfer so the hardware context can
+be saved safely.
+
+The current guard misses the boundary case where new_len == nbytes.
+This happens when the input size is congruent to 4 modulo the block size:
+after adding one word, the whole buffer may be consumed in the first
+transfer, leaving nothing for the follow-up update and breaking the
+save-context invariant.
+
+Use ">=" so one block is also dropped in this case.
+
+Fixes: 3525fe475245 ("crypto: stm32/hash - add full DMA support for stm32mpx")
+
+Change-Id: I94931f59e807d674ce71b5a627a30642af8e1a11
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/587311
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/crypto/stm32/stm32-hash.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/crypto/stm32/stm32-hash.c b/drivers/crypto/stm32/stm32-hash.c
+index 08b51ac7ab7e..68296c6587d8 100644
+--- a/drivers/crypto/stm32/stm32-hash.c
++++ b/drivers/crypto/stm32/stm32-hash.c
+@@ -1173,7 +1173,7 @@ static int stm32_hash_align_sgs(struct scatterlist *sg,
+ 		 */
+ 		if (init && secure_ctx) {
+ 			new_len += sizeof(u32);
+-			if (unlikely(new_len > nbytes))
++			if (unlikely(new_len >= nbytes))
+ 				new_len -= bs;
+ 		}
+ 	}
+-- 
+2.53.0
+
