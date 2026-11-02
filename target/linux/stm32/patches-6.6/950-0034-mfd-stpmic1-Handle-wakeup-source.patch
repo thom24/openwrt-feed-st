@@ -13,7 +13,7 @@ Change-Id: I2727b36cad9f0fa5142ba9ba3619872d1585d5ff
 
 --- a/drivers/mfd/stpmic1.c
 +++ b/drivers/mfd/stpmic1.c
-@@ -190,6 +190,9 @@ static int stpmic1_suspend(struct device
+@@ -206,6 +206,9 @@ static int stpmic1_suspend(struct device
  
  	disable_irq(pmic_dev->irq);
  
@@ -23,7 +23,7 @@ Change-Id: I2727b36cad9f0fa5142ba9ba3619872d1585d5ff
  	return 0;
  }
  
-@@ -203,6 +206,9 @@ static int stpmic1_resume(struct device
+@@ -219,6 +222,9 @@ static int stpmic1_resume(struct device
  	if (ret)
  		return ret;
  

@@ -14,7 +14,7 @@ Change-Id: I317786d3573a943c8ae22f9c5fe89bb3c054aa9b
 
 --- a/drivers/pinctrl/stm32/pinctrl-stm32.c
 +++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
-@@ -604,7 +604,7 @@ static int stm32_gpio_domain_activate(st
+@@ -605,7 +605,7 @@ static int stm32_gpio_domain_activate(st
  {
  	struct stm32_gpio_bank *bank = d->host_data;
  	struct stm32_pinctrl *pctl = dev_get_drvdata(bank->gpio_chip.parent);
@@ -23,7 +23,7 @@ Change-Id: I317786d3573a943c8ae22f9c5fe89bb3c054aa9b
  
  	if (pctl->hwlock) {
  		ret = hwspin_lock_timeout_in_atomic(pctl->hwlock,
-@@ -620,7 +620,7 @@ static int stm32_gpio_domain_activate(st
+@@ -621,7 +621,7 @@ static int stm32_gpio_domain_activate(st
  	if (pctl->hwlock)
  		hwspin_unlock_in_atomic(pctl->hwlock);
  

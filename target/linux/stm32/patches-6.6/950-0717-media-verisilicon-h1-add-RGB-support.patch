@@ -38,7 +38,7 @@ Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
  		hantro_g1.o \
 --- a/drivers/media/platform/verisilicon/hantro.h
 +++ b/drivers/media/platform/verisilicon/hantro.h
-@@ -500,4 +500,7 @@ int hantro_postproc_alloc(struct hantro_
+@@ -502,4 +502,7 @@ int hantro_postproc_alloc(struct hantro_
  int hanto_postproc_enum_framesizes(struct hantro_ctx *ctx,
  				   struct v4l2_frmsizeenum *fsize);
  

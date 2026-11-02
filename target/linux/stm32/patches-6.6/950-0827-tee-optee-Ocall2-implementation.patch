@@ -487,7 +487,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  	.shm_unregister = optee_shm_unregister,
 --- a/drivers/tee/tee_core.c
 +++ b/drivers/tee/tee_core.c
-@@ -1180,6 +1180,18 @@ int tee_client_invoke_func(struct tee_co
+@@ -1181,6 +1181,18 @@ int tee_client_invoke_func(struct tee_co
  }
  EXPORT_SYMBOL_GPL(tee_client_invoke_func);
  

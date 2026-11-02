@@ -70,7 +70,7 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  #include <linux/reset.h>
  
  #include <linux/usb/of.h>
-@@ -443,6 +445,7 @@ int dwc2_check_core_version(struct dwc2_
+@@ -446,6 +448,7 @@ int dwc2_check_core_version(struct dwc2_
   */
  static int dwc2_driver_probe(struct platform_device *dev)
  {
@@ -78,7 +78,7 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  	struct dwc2_hsotg *hsotg;
  	struct resource *res;
  	int retval;
-@@ -545,6 +548,30 @@ static int dwc2_driver_probe(struct plat
+@@ -548,6 +551,30 @@ static int dwc2_driver_probe(struct plat
  	if (retval)
  		goto error;
  

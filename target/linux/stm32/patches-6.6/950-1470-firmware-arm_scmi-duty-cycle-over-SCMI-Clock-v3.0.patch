@@ -50,7 +50,7 @@ Tested-by: Patrice GUILEMOND <patrice.guilemond-ext@st.com>
  CONFIG_SMSC_PHY=y
 --- a/drivers/firmware/arm_scmi/Kconfig
 +++ b/drivers/firmware/arm_scmi/Kconfig
-@@ -166,6 +166,12 @@ config ARM_SCMI_TRANSPORT_VIRTIO_ATOMIC_
+@@ -180,6 +180,12 @@ config ARM_SCMI_TRANSPORT_VIRTIO_ATOMIC_
  	  in atomic context too, at the price of using a number of busy-waiting
  	  primitives all over instead. If unsure say N.
  

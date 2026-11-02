@@ -24,7 +24,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
 
 --- a/drivers/pwm/pwm-stm32.c
 +++ b/drivers/pwm/pwm-stm32.c
-@@ -583,10 +583,9 @@ static void stm32_pwm_detect_complementa
+@@ -582,10 +582,9 @@ static void stm32_pwm_detect_complementa
  	priv->have_complementary_output = (ccer != 0);
  }
  
@@ -37,7 +37,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  
  	/*
  	 * If channels enable bits don't exist writing 1 will have no
-@@ -595,9 +594,7 @@ static unsigned int stm32_pwm_detect_cha
+@@ -594,9 +593,7 @@ static unsigned int stm32_pwm_detect_cha
  	regmap_read(priv->regmap, TIM_CCER, &ccer_backup);
  	regmap_set_bits(priv->regmap, TIM_CCER, TIM_CCER_CCXE);
  	regmap_read(priv->regmap, TIM_CCER, &ccer);

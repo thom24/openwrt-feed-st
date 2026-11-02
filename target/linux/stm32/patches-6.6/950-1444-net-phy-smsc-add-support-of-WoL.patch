@@ -147,8 +147,8 @@ Domain-Review: Eric FOURMONT <eric.fourmont-ext@st.com>
 +
  static int lan87xx_config_aneg(struct phy_device *phydev)
  {
- 	int rc;
-@@ -254,6 +315,20 @@ int lan87xx_read_status(struct phy_devic
+ 	u8 mdix_ctrl;
+@@ -274,6 +335,20 @@ int lan87xx_read_status(struct phy_devic
  			return rc;
  	}
  
@@ -169,7 +169,7 @@ Domain-Review: Eric FOURMONT <eric.fourmont-ext@st.com>
  	return err;
  }
  EXPORT_SYMBOL_GPL(lan87xx_read_status);
-@@ -376,16 +451,24 @@ int smsc_phy_probe(struct phy_device *ph
+@@ -423,16 +498,24 @@ int smsc_phy_probe(struct phy_device *ph
  	struct smsc_phy_priv *priv;
  	struct clk *refclk;
  
@@ -194,7 +194,7 @@ Domain-Review: Eric FOURMONT <eric.fourmont-ext@st.com>
  	phydev->priv = priv;
  
  	/* Make clk optional to keep DTB backward compatibility. */
-@@ -581,7 +664,7 @@ static struct phy_driver smsc_phy_driver
+@@ -629,7 +712,7 @@ static struct phy_driver smsc_phy_driver
  	.get_tunable	= smsc_phy_get_tunable,
  	.set_tunable	= smsc_phy_set_tunable,
  

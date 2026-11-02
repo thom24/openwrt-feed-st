@@ -14,7 +14,7 @@ Change-Id: I89103a5384c17dda40b3cf973795776f6c3927eb
 
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -229,6 +229,88 @@
+@@ -228,6 +228,88 @@
  			access-controllers = <&rifsc 156>;
  		};
  

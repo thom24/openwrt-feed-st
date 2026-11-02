@@ -22,7 +22,7 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
 
 --- a/drivers/mfd/stpmic1.c
 +++ b/drivers/mfd/stpmic1.c
-@@ -172,7 +172,7 @@ static int stpmic1_probe(struct i2c_clie
+@@ -188,7 +188,7 @@ static int stpmic1_probe(struct i2c_clie
  
  	ret = devm_register_sys_off_handler(ddata->dev,
  					    SYS_OFF_MODE_POWER_OFF,

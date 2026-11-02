@@ -168,7 +168,7 @@ Tested-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  }
  
  /**
-@@ -561,6 +569,14 @@ static int dwc2_driver_probe(struct plat
+@@ -564,6 +572,14 @@ static int dwc2_driver_probe(struct plat
  		usleep_range(5000, 7000);
  	}
  
@@ -183,7 +183,7 @@ Tested-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  	retval = dwc2_drd_init(hsotg);
  	if (retval) {
  		dev_err_probe(hsotg->dev, retval, "failed to initialize dual-role\n");
-@@ -696,6 +712,14 @@ static int __maybe_unused dwc2_suspend(s
+@@ -703,6 +719,14 @@ static int __maybe_unused dwc2_suspend(s
  		regulator_disable(dwc2->usb33d);
  	}
  
@@ -198,7 +198,7 @@ Tested-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  	if (dwc2->ll_hw_enabled &&
  	    (is_device_mode || dwc2_host_can_poweroff_phy(dwc2))) {
  		ret = __dwc2_lowlevel_hw_disable(dwc2);
-@@ -748,6 +772,14 @@ static int __maybe_unused dwc2_resume(st
+@@ -758,6 +782,14 @@ static int __maybe_unused dwc2_resume(st
  		spin_unlock_irqrestore(&dwc2->lock, flags);
  	}
  

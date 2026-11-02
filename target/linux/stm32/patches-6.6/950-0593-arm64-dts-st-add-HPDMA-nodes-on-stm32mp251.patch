@@ -23,7 +23,7 @@ Change-Id: Iab9788425648daf1a9f1be2f3f8edf132d846269
 
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -157,6 +157,75 @@
+@@ -156,6 +156,75 @@
  		interrupt-parent = <&intc>;
  		ranges = <0x0 0x0 0x0 0x80000000>;
  

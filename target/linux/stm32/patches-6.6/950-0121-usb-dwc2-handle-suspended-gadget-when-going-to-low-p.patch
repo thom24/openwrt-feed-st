@@ -20,10 +20,10 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
 
 --- a/drivers/usb/dwc2/platform.c
 +++ b/drivers/usb/dwc2/platform.c
-@@ -649,8 +649,19 @@ static int __maybe_unused dwc2_suspend(s
- 	bool is_device_mode = dwc2_is_device_mode(dwc2);
- 	int ret = 0;
+@@ -656,8 +656,19 @@ static int __maybe_unused dwc2_suspend(s
+ 		return 0;
  
+ 	is_device_mode = dwc2_is_device_mode(dwc2);
 -	if (is_device_mode)
 +	if (is_device_mode) {
 +		/*

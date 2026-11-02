@@ -14,7 +14,7 @@ Change-Id: Ib698d57d6530a3ddd1de43cd6bc85c1f3bfb0b12
 
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -641,6 +641,16 @@
+@@ -640,6 +640,16 @@
  			};
  		};
  

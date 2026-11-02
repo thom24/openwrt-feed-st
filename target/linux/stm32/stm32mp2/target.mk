@@ -5,9 +5,7 @@
 
 BOARDNAME:=STM32MP2 boards
 ARCH:=aarch64
-CPU_TYPE:=cortex-a35
-CPU_SUBTYPE=fp-armv8
-FEATURES+=fpu
+FEATURES+=fpu usbgadget pci pcie
 KERNEL_IMAGES:=Image.gz
 
 DEFAULT_PACKAGES += blockdev kmod-gpio-button-hotplug

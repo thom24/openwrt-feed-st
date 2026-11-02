@@ -25,7 +25,7 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 
 --- a/drivers/media/i2c/ds90ub913.c
 +++ b/drivers/media/i2c/ds90ub913.c
-@@ -426,8 +426,7 @@ static int ub913_set_fmt(struct v4l2_sub
+@@ -440,8 +440,7 @@ static int ub913_set_fmt(struct v4l2_sub
  	}
  
  	/* Set sink format */
@@ -37,7 +37,7 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
  
 --- a/drivers/media/i2c/ds90ub953.c
 +++ b/drivers/media/i2c/ds90ub953.c
-@@ -560,8 +560,7 @@ static int ub953_set_fmt(struct v4l2_sub
+@@ -565,8 +565,7 @@ static int ub953_set_fmt(struct v4l2_sub
  		return v4l2_subdev_get_fmt(sd, state, format);
  
  	/* Set sink format */
@@ -49,7 +49,7 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
  
 --- a/drivers/media/i2c/ds90ub960.c
 +++ b/drivers/media/i2c/ds90ub960.c
-@@ -2451,9 +2451,8 @@ static int ub960_configure_ports_for_str
+@@ -2461,9 +2461,8 @@ static int ub960_configure_ports_for_str
  		if (rx_data[nport].num_streams > 2)
  			return -EPIPE;
  
@@ -61,7 +61,7 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
  		if (!fmt)
  			return -EPIPE;
  
-@@ -2844,8 +2843,8 @@ static int ub960_get_frame_desc(struct v
+@@ -2854,8 +2853,8 @@ static int ub960_get_frame_desc(struct v
  			const struct ub960_format_info *ub960_fmt;
  			struct v4l2_mbus_framefmt *fmt;
  
@@ -72,7 +72,7 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
  
  			if (!fmt) {
  				ret = -EINVAL;
-@@ -2893,8 +2892,7 @@ static int ub960_set_fmt(struct v4l2_sub
+@@ -2903,8 +2902,7 @@ static int ub960_set_fmt(struct v4l2_sub
  	if (!ub960_find_format(format->format.code))
  		format->format.code = ub960_formats[0].code;
  
@@ -126,7 +126,7 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
  			return -EINVAL;
  		return 0;
  #else
-@@ -1552,8 +1552,8 @@ int v4l2_subdev_get_fmt(struct v4l2_subd
+@@ -1550,8 +1550,8 @@ int v4l2_subdev_get_fmt(struct v4l2_subd
  	struct v4l2_mbus_framefmt *fmt;
  
  	if (sd->flags & V4L2_SUBDEV_FL_STREAMS)
@@ -137,7 +137,7 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
  	else if (format->pad < sd->entity.num_pads && format->stream == 0)
  		fmt = v4l2_subdev_get_pad_format(sd, state, format->pad);
  	else
-@@ -1649,8 +1649,8 @@ int v4l2_subdev_set_routing_with_fmt(str
+@@ -1647,8 +1647,8 @@ int v4l2_subdev_set_routing_with_fmt(str
  EXPORT_SYMBOL_GPL(v4l2_subdev_set_routing_with_fmt);
  
  struct v4l2_mbus_framefmt *
@@ -148,7 +148,7 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
  {
  	struct v4l2_subdev_stream_configs *stream_configs;
  	unsigned int i;
-@@ -1667,11 +1667,11 @@ v4l2_subdev_state_get_stream_format(stru
+@@ -1665,11 +1665,11 @@ v4l2_subdev_state_get_stream_format(stru
  
  	return NULL;
  }
@@ -163,7 +163,7 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
  {
  	struct v4l2_subdev_stream_configs *stream_configs;
  	unsigned int i;
-@@ -1688,11 +1688,11 @@ v4l2_subdev_state_get_stream_crop(struct
+@@ -1686,11 +1686,11 @@ v4l2_subdev_state_get_stream_crop(struct
  
  	return NULL;
  }
@@ -178,7 +178,7 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
  {
  	struct v4l2_subdev_stream_configs *stream_configs;
  	unsigned int i;
-@@ -1709,7 +1709,7 @@ v4l2_subdev_state_get_stream_compose(str
+@@ -1707,7 +1707,7 @@ v4l2_subdev_state_get_stream_compose(str
  
  	return NULL;
  }
@@ -187,7 +187,7 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
  
  int v4l2_subdev_routing_find_opposite_end(const struct v4l2_subdev_krouting *routing,
  					  u32 pad, u32 stream, u32 *other_pad,
-@@ -1755,8 +1755,7 @@ v4l2_subdev_state_get_opposite_stream_fo
+@@ -1753,8 +1753,7 @@ v4l2_subdev_state_get_opposite_stream_fo
  	if (ret)
  		return NULL;
  
@@ -199,7 +199,7 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
  
 --- a/include/media/v4l2-subdev.h
 +++ b/include/media/v4l2-subdev.h
-@@ -1541,7 +1541,7 @@ int v4l2_subdev_set_routing_with_fmt(str
+@@ -1545,7 +1545,7 @@ int v4l2_subdev_set_routing_with_fmt(str
  				     const struct v4l2_mbus_framefmt *fmt);
  
  /**
@@ -208,7 +208,7 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
   * @state: subdevice state
   * @pad: pad id
   * @stream: stream id
-@@ -1552,11 +1552,11 @@ int v4l2_subdev_set_routing_with_fmt(str
+@@ -1556,11 +1556,11 @@ int v4l2_subdev_set_routing_with_fmt(str
   * If the state does not contain the given pad + stream, NULL is returned.
   */
  struct v4l2_mbus_framefmt *
@@ -223,7 +223,7 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
   * @state: subdevice state
   * @pad: pad id
   * @stream: stream id
-@@ -1567,12 +1567,11 @@ v4l2_subdev_state_get_stream_format(stru
+@@ -1571,12 +1571,11 @@ v4l2_subdev_state_get_stream_format(stru
   * If the state does not contain the given pad + stream, NULL is returned.
   */
  struct v4l2_rect *
@@ -239,7 +239,7 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
   * @state: subdevice state
   * @pad: pad id
   * @stream: stream id
-@@ -1583,8 +1582,8 @@ v4l2_subdev_state_get_stream_crop(struct
+@@ -1587,8 +1586,8 @@ v4l2_subdev_state_get_stream_crop(struct
   * If the state does not contain the given pad + stream, NULL is returned.
   */
  struct v4l2_rect *

@@ -24,7 +24,7 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
 
 --- a/drivers/iio/adc/stm32-adc-core.c
 +++ b/drivers/iio/adc/stm32-adc-core.c
-@@ -827,10 +827,6 @@ static int stm32_adc_probe_identificatio
+@@ -826,10 +826,6 @@ static int stm32_adc_probe_identificatio
  		 */
  		if (priv->nb_irqs > priv->nb_adc_max)
  			priv->nb_irqs = priv->nb_adc_max;

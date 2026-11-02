@@ -13,7 +13,7 @@ Change-Id: I670aa8e0d0fc272db1531c7a368c7d8151a3083b
 
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -388,6 +388,15 @@
+@@ -387,6 +387,15 @@
  			interrupt-parent = <&exti1>;
  			st,syscfg = <&exti1 0x60 0xff>;
  			pins-are-numbered;

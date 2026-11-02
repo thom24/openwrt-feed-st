@@ -40,7 +40,7 @@ Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
  	case V4L2_CTRL_TYPE_HEVC_SPS:
  		p_hevc_sps = p;
  
-@@ -1874,6 +1884,9 @@ static struct v4l2_ctrl *v4l2_ctrl_new(s
+@@ -1873,6 +1883,9 @@ static struct v4l2_ctrl *v4l2_ctrl_new(s
  	case V4L2_CTRL_TYPE_AREA:
  		elem_size = sizeof(struct v4l2_area);
  		break;

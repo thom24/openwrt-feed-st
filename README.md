@@ -13,55 +13,83 @@ But this feed integrates the [STMicroelectronics](https://www.st.com) BSP,
 whereas OpenWrt uses upstream components.
 And more boards are supported in the feed.
 
+You are using the `openwrt-24.10` branch of the feed, which is based on the
+OpenWrt branch `openwrt-24.10`.
+Actually the feed is based on OpenWrt
+[v24.10.8](https://github.com/openwrt/openwrt/tree/v24.10.8)
+([Release Note](https://openwrt.org/releases/24.10/notes-24.10.8)).
+
 ## Supported devices
 
-1. `STM32MP157F-DK2`: minimal support for the STM32MP157F-DK2
+1. `STM32MP157F-DK2`: minimal support for the [STM32MP157F Discovery Kit 2](https://www.st.com/en/evaluation-tools/stm32mp157f-dk2.html)
+   board.
 
-2. `STM32MP135F-DK`: minimal support for the STM32MP135F-DK
-
-3. `STM32MP257F-EV1`: minimal support for the STM32MP257F-EV1
-
-3. `STM32MP257F-DK`: minimal support for the STM32MP257F-DK
-
-5. `STM32MP157F-DK2-DEMO`: based on the `STM32MP157F-DK2` device including
+2. `STM32MP157F-DK2-DEMO`: based on the `STM32MP157F-DK2` device including
    additional packages like a web interface to configure the device.
 
-6. `STM32MP135F-DK-DEMO`: based on the `STM32MP135F-DK` device including
+3. `STM32MP135F-DK`: minimal support for the [STM32MP135F Discovery Kit](https://www.st.com/en/evaluation-tools/stm32mp135f-dk.html)
+   board.
+
+4. `STM32MP135F-DK-DEMO`: based on the `STM32MP135F-DK` device including
    additional packages like a web interface to configure the device.
 
-7. `STM32MP257F-EV1-DEMO`: based on the `STM32MP257F-EV1` device including
+5. `STM32MP257F-EV1`: minimal support for the [STM32MP257F Evaluation](https://www.st.com/en/evaluation-tools/stm32mp257f-ev1.html)
+   board.
+
+6. `STM32MP257F-EV1-DEMO`: based on the `STM32MP257F-EV1` device including
    additional packages like a web interface to configure the device.
 
-7. `STM32MP257F-DK-DEMO`: based on the `STM32MP257F-DK` device including
+7. `STM32MP257F-DK`: minimal support for the [STM32MP257F Discovery Kit](https://www.st.com/en/evaluation-tools/stm32mp257f-dk.html)
+   board.
+
+8. `STM32MP257F-DK-DEMO`: based on the `STM32MP257F-DK` device including
    additional packages like a web interface to configure the device.
 
+9. `STM32MP235F-DK`: minimal support for the [STM32MP235F Discovery Kit](https://www.st.com/en/microcontrollers-microprocessors/stm32mp235f.html)
+   board. Although this board does not physically exist, it enables users to
+   emulate the behavior of an `STM32MP235` system using the `STM32MP257F Discovery Kit`.
+   Since the STM32MP235 implements a subset of the STM32MP257 features, this
+   configuration allows developers to evaluate the STM32MP235 SoC.
 
-|Supported features|STM32MP157F-DK2|STM32MP135F-DK|STM32MP257F-EV1|STM32MP257F-DK|
-|------------------|---------------|--------------|---------------|--------------|
-|Sysupgrade|yes|yes|yes|yes|
-|Ethernet|yes|yes|yes|yes|
-|Watchdog|yes|yes|yes|yes|
-|RTC|yes|yes|yes|yes|
-|RNG (Optee)|yes|yes|yes|yes|
-|LED|yes|yes|yes|yes|
-|Button|no|yes (USER2)|yes (USER1/USER2)|yes (USER1/USER2)|
-|Wifi|yes|yes|x|yes|
-|USB Type-A|yes|yes|yes|yes|
+10. `STM32MP235F-DK-DEMO`: based on the `STM32MP235F-DK` device including
+    additional packages like a web interface to configure the device.
+
+11. `STM32MP215F-DK`: minimal support for the [STM32MP215F Discovery Kit](https://wiki.st.com/stm32mpu/wiki/STM32MP215x-DKx_-_hardware_description)
+    board.
+
+12. `STM32MP215F-DK-DEMO`: based on the `STM32MP215F-DK` device including
+    additional packages like a web interface to configure the device.
+
+
+|Supported features|STM32MP157F-DK2|STM32MP135F-DK|STM32MP257F-EV1|STM32MP257F-DK|STM32MP235F-DK|STM32MP215F-DK|
+|------------------|---------------|--------------|---------------|--------------|--------------|--------------|
+|Sysupgrade|yes|yes|yes|yes|yes|yes|
+|Ethernet|yes|yes|yes|yes|yes|yes|
+|Watchdog|yes|yes|yes|yes|yes|yes|
+|RTC|yes|yes|yes|yes|yes|yes|
+|Hardware RNG (Optee)|yes|yes|yes|yes|yes|yes|
+|LED|yes|yes|yes|yes|yes|yes|
+|Button|no|yes (USER2)|yes (USER1/USER2)|yes (USER1/USER2)|yes|yes (USER1/USER2)|
+|Wifi|yes|yes|x|yes|yes|x|
+|USB Type-A|yes|yes|yes|yes|yes|x|
+|Remote processors|no|no|yes (demo profile)|yes (demo profile)|yes (demo profile)|yes (demo profile)|
+|USB Type-C|no|no|yes dual-role (demo profile)|yes dual-role (demo profile)|yes dual-role (demo profile)|yes dual-role (demo profile)|
+|PCIe|x|x|yes root complex (demo profile)|x|x|x|
 
 ## BSP
 
-This feed is based on the `STPM32MP1/STM32MP2 BSP v6.0`.
+This feed is based on the `STPM32MP1/STM32MP2 BSP v6.2`.
 
 |Components|Version|
 |----------|-------|
-|TF-A|2.10-stm32mp-r1|
-|U-Boot|2023.10-stm32mp-r1|
-|OPTEE|4.0.0-stm32mp-r1|
-|Linux|OpenWRT kernel + v6.6-stm32mp-r1|
+|TF-A|2.10-stm32mp-r3|
+|U-Boot|2023.10-stm32mp-r3|
+|OPTEE|4.0.0-stm32mp-r3|
+|Linux|OpenWRT kernel + v6.6-stm32mp-r3|
 
 For the kernel, the patches from the v6.6-stm32mp branch until the tag
-v6.6-stm32mp-r1 were added.
-They are available in `target/linux/stm32/patches-6.1/`.  
+v6.6-stm32mp-r3 were added.
+They are available in `target/linux/stm32/patches-6.6/`.
 
 Some patches were removed as they were applied in Linux, or they are already
 applied by OpenWrt.
@@ -73,6 +101,38 @@ c5540f6a4d9a ("nvmem: stm32: add support for STM32MP25 BSEC to control OTP data"
 eb99d7c27da7 ("crypto: stm32/cryp - call finalize with bh disabled")
 31286612453a ("perf list: fix arguments order issue for events printing")
 fd68ca2e9089 ("i2c: stm32f7: Do not prepare/unprepare clock during runtime suspend/resume")
+1d8ffe3fcfac ("ARM: dts: stm32: fix IPCC EXTI declaration on stm32mp151")
+22772c87565e ("clocksource: stm32-lptimer: use wakeup capable instead of init wakeup")
+6ab3278ee867 ("pinctrl: devicetree: do not goto err when probing hogs in pinctrl_dt_to_map")
+10b245589fa0 ("drm: bridge: adv7511: fill i2s stream capabilities")
+a1ff3250129a ("pinctrl: stm32: check devm_kasprintf() returned value")
+67f10b41e33e ("drivers: core: fix device leak in __fw_devlink_relax_cycles()")
+94508b3dd9f6 ("usb: dwc2: gadget: remove of_node reference upon udc_stop")
+07963aca871a ("net: phy: realtek: disable PHY-mode EEE")
+89e1b6a95cdf4 ("i2c: stm32f7: Use devm_clk_get_enabled()")
+435fd1bcf552b ("i2c: stm32f7: use dev_err_probe upon calls of devm_request_irq")
+cf32cfcc2d74e ("i2c: stm32f7: perform most of irq job in threaded handler")
+2b1d2978b2b05 ("i2c: stm32f7: simplify status messages in case of errors")
+6016e8616824a ("spi: stm32: Check for cfg availability in stm32_spi_probe")
+2f38d4c001e8b ("mtd: rawnand: stm32_fmc2: avoid overlapping mappings on ECC buffer")
+865a7b9b16b14 ("pinctrl: stm32: Manage irq affinity settings")
+d9d7111f3cf5c ("i2c: stm32f7: unmap DMA mapped buffer")
+55273980dc97f ("i2c: stm32: fix the device used for the DMA map")
+9207b7bce2799 ("mtd: rawnand: stm32_fmc2: fix ECC overwrite")
+9d74fc2f5e3a ("spi: spi-mem: Allow specifying the byte order in DTR mode")
+ee48aa9e5979 ("rtc: rtc-optee: fix memory leak on removal")
+a17c92edd7bb ("Revert "drm: Call drm_atomic_helper_shutdown() at shutdown/remove time for misc drivers"")
+fbdc154a59a4 ("usb: dwc2: fix shutdown in peripheral mode when gadget isn't configured")
+f739a554280b ("pwm: stm32: ensure PWM polarity is set when enabling it")
+f5e3ddbb228d ("dmaengine: stm32-dma: configure next sg only if there are more than 2 sgs")
+8428debab53d ("irqchip: gic-v2m: Handle Multiple MSI base IRQ Alignment")
+7c14e33c9192 ("ASoC: stm32: sai: manage context in set_sysclk callback")
+be95b318b7de ("ext4: clear i_state_flags when alloc inode")
+5e3260959519 ("usb: dwc2: disable platform lowlevel hw resources during shutdown")
+26e73d79f8b3 ("spi: stm32: fix Overrun issue at < 8bpw")
+2973772b4c86 ("dmaengine: stm32-mdma: address -Wmaybe-uninitialized")
+d64abe20475b ("coresight: etm3x: Fix cpulocked warning on cpuhp")
+8e496f5217d4 ("usb: gadget: Fix f_ncm cleanup for net_device")
 ```
 
 Some patches had to be modified to fix some conflicts.
@@ -82,9 +142,37 @@ Some patches had to be modified to fix some conflicts.
 393cf701259c ("mtd: spi-nor: add Octal DTR support for Macronix flash")
 1e5eedcdaf1c ("firmware: arm_scmi: optee leverage Ocall2 thread provisioning")
 9d36363eee52 ("counter: stm32-timer-cnt: add pm runtime support")
+e983ec4d6702 ("pinctrl: stm32: add tristate option for stm32mp257")
+a04c279efc3c ("usb: dwc3: Add support in dwc3 to handle usb-role")
+b1f3318a0f09 ("ASoC: Update wm8994 codec config")
+27c33fae20e0 ("pwm: stm32: lptimer: add pm_runtime support")
+dd680178e937 ("counter: stm32-lptimer-cnt: add pm runtime support")
+0a222d6c04c9 ("Revert "media: stm32: dcmipp: avoid calling s_stream if state already correct"")
+7fdd5f74c211 ("Revert "media: v4l2-subdev: Document and enforce .s_stream() requirements"")
+00925911ce6d ("nvmem: stm32: add support for non-secure mirror")
+2a41a04bec3f ("arm64: dts: st: add st,stm32mp25-cortex-a7-gic in intc node in stm32mp251.dtsi")
+fdfbbb333977 ("counter: stm32-lptimer-cnt: fix error handling when enabling")
+d0b3f9979ae5 ("net: phy: realtek: update sequence to disable EEE for RTL8211F")
+5e8186da1fa40 ("i2c: stm32f7: add support for stm32mp25 soc")
+c32748b702c28 ("iio: adc: stm32: add support for stm32mp25")
+d247bababb186 ("net: stmmac: add possibility to use ptp external time")
+babfc9ba63a0f ("dmaengine: stm32: New directory for STM32 DMA controllers drivers")
+c2ab7c5deab4f ("Revert "net: phy: smsc: add WoL support to LAN8740/LAN8742 PHYs"")
+6068e745fc3b5 ("i2c: stm32f7: support i2c_*_dma_safe_msg_buf APIs")
+79f24c8b193bf ("usb: dwc2: gadget: enable the gadget as wakeup source")
+b9e45016861b ("serial: stm32: add tristate option")
+f1bc1b5d21c5 ("usb: dwc2: platform: Add irq wakeup support")
+f6e33af19395 ("usb: dwc2: handle suspended gadget when going to low power")
+7bf7d5b59c8d ("media: verisilicon: add VP8 encode support for Rockchip RK3399 VPU2")
+e9813d379cc9 ("usb: dwc2: fix suspend in peripheral mode when gadget isn't configured")
+ce2136afc5e5 ("Revert "Revert "net: phy: smsc: add WoL support to LAN8740/LAN8742 PHYs""")
+237a0e5e7b14 ("usb: dwc2: add support for runtime PM")
+c14e1e7edb97 ("usb: dwc2: only enable wake irq when the hw is enabled for wakeup")
+3989afe4ccfb ("media: verisilicon: fix decoding of jpeg with unaligned height")
 ```
+
 Following patches were not applied due to conflicts. They corresponds to the
-empty patches in `target/linux/stm32/patches-6.1/`. They could be applied in the
+empty patches in `target/linux/stm32/patches-6.6/`. They could be applied in the
 future if needed.
 ```
 426e1c78e4c1 ("drm/stm: ltdc: set transparency after plane disable")
@@ -109,7 +197,62 @@ dc9d876018c6 ("drm/stm: ltdc: Check the security of layer 2.")
 662800081ef7 ("drm/stm: ltdc: flush remaining vblank event")
 6e8b50d319c9 ("drm/stm: ltdc: Check the security of layer 3.")
 3682d604ecbd ("drm/stm: ltdc: reset ltdc on crtc enable")
+bba33e9f0619 ("drm/stm: ltdc: set clock parent before set rate")
+247114342fd4 ("drm/stm: ltdc: ckeck pm_runtime status")
+634d4d01d037 ("drm/stm: ltdc: add clock tolerance module parameter")
+cf2f1b885568 ("drm/stm: ltdc: set configuration register masks to 12 bits")
+a825a4c45283 ("drm/stm: ltdc: check the secure layer")
+e5332eedf04f ("drm/stm: Remove redundant drm_of_panel_bridge_remove call")
+9be78d291d01 ("drm/stm: ltdc: support of plane rotation")
+94097f58f175 ("drm/stm: ltdc: re-map lcd clock tree")
+3bada4c13ed1 ("drm/stm: ltdc: default-on property removed")
+bc54bccfaff4 ("drm/stm: ltdc: fix pm runtime during probe")
+714992840543 ("drm/stm: ltdc:  remove fixup callback from encoder to crtc helpers")
 ```
+
+## Starter Package
+
+If you want to use OpenWrt on STM32MPU platforms without building everything
+yourself from source, we provide a Starter Package which contains:
+
+* The prebuilt factory and sysupgrade images for all profiles. Refer to the [flash
+  and boot section](#Flashing-and-booting-the-system) to learn how to
+  use the pre-built images.
+
+* A Software Development Kit (SDK) that allows you to build and package
+  applications for the target.
+
+* An Image Builder that allows you to create custom images without the need
+  for compiling them from source. It downloads pre-compiled packages and
+  integrates them in a single flashable image.
+
+* A build info file that contains the configuration used to build the Starter
+  Package.
+
+* A feed info file that contains the feed configuration used to build the Starter
+  Package.
+
+* A Software Bill of Materials (SBOM).
+
+* A target repository (contains kmods and target-specific packages) that allows
+  to install additional packages on the device.
+
+* A ST repository that contains packages (non target-specific) from ST feed.
+
+The following table provides links to all these artifacts, compiled with the
+latest `openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18` release.
+
+| Starter Package | stm32mp1 | stm32mp2 |
+|-----------------|----------|----------|
+| Factory images | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-stm32-stm32mp1-factory-images.tar.gz) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-stm32-stm32mp2-factory-images.tar.gz) |
+| Sysupgrade images | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-stm32-stm32mp1-sysupgrade-images.tar.gz) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-stm32-stm32mp2-sysupgrade-images.tar.gz) |
+| SDK | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-sdk-stm32-stm32mp1.Linux-x86_64.tar.zst) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-sdk-stm32-stm32mp2.Linux-x86_64.tar.zst) |
+| Image Buider | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-imagebuilder-stm32-stm32mp1.Linux-x86_64.tar.zst) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-imagebuilder-stm32-stm32mp2.Linux-x86_64.tar.zst) |
+| Build info | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/config-stm32-stm32mp1.buildinfo) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/config-stm32-stm32mp2.buildinfo) |
+| Feed info | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/feeds-stm32-stm32mp1.buildinfo) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/feeds-stm32-stm32mp2.buildinfo) |
+| SBOM | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-stm32-stm32mp1.bom.cdx.json) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-stm32-stm32mp2.bom.cdx.json) |
+| target repository | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-stm32-stm32mp1-target-repository.tar.gz) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-stm32-stm32mp2-target-repository.tar.gz) |
+| ST repository | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-stm32-stm32mp1-st-repository.tar.gz) | [URL](https://bootlin.com/pub/openwrt-st/openstlinux-6.6-openwrt-24.10.8-mpu-v26.02.18/openwrt-stm32-stm32mp2-st-repository.tar.gz) |
 
 ## Getting started
 
@@ -122,13 +265,13 @@ And you need to install a set of packages as described in the
 
 ### Getting the code
 
-The feed is designed to work with the `master` branch of OpenWRT (last tested
-commit is [0b54029a6e](https://github.com/openwrt/openwrt/commit/0b54029a6e)).
+The feed is designed to work with the `openwrt-24.10` branch of OpenWRT (last
+tested commit is [v24.10.8](https://github.com/openwrt/openwrt/tree/v24.10.8)).
 
 ```bash
-$ git clone -b master https://git.openwrt.org/openwrt/openwrt.git
+$ git clone https://git.openwrt.org/openwrt/openwrt.git
 $ cd openwrt
-$ git checkout 0b54029a6e
+$ git checkout v24.10.8
 ```
 
 Next step is to add the [STMicroelectronics](https://www.st.com) feed in the
@@ -164,6 +307,7 @@ $ ./scripts/feeds install -f stm32
 Install all other packages
 
 ```bash
+$ ./scripts/feeds install -p st -a -f
 $ ./scripts/feeds install -a -f
 ```
 (Some overriding warnings can occur, if you used `-f` please ignore them).
@@ -204,13 +348,14 @@ Then:
 1. Insert the microSD card
    - STM32MP157: connector CN15
    - STM32MP135: connector CN3
-   - STM32MP257: connector CN1
+   - STM32MP257-EV1: connector CN1
+   - STM32MP257-DK and STM32MP235-DK: connector CN6
+   - STM32MP215-DK: connector CN7
 
 2. Plug a micro-USB cable or USB-C for `STM32MP257` and run your serial
    communication program on /dev/ttyACM0
    - STM32MP157: connector CN11
    - STM32MP135: connector CN10
-   - STM32MP257: connector CN21
 
 3. Configure the SW1 switch to boot on SD card
    - STM32MP157: BOOT0 and BOOT2 to ON
@@ -317,7 +462,27 @@ Useful link: [LED Configuration](https://openwrt.org/docs/guide-user/base-system
 
 Only mass storage are supported on the USB Type-A by default.
 
+### Hardware RNG
+
+By default OpenWrt uses urngd, a micro non-physical true random number generator based on timing jitter.
+To use Hardware RNG as entropy source,
+[rng-tools](https://github.com/openwrt/packages/tree/master/utils/rng-tools) package shall be used.
+
+```
+uci set system.@rngd[0].enabled="1"
+uci set system.@rngd[0].device="/dev/hwrng"
+uci commit system
+service urngd disable && service urngd stop
+service rngd restart
+```
+
 ## Going further
 
 * [Using the STM32 Cube Programmer](docs/stm32cubeprogrammer.md)
+* [Using the Remote Processors](docs/remoteproc.md)
+* [Using the USB Type-C](docs/usbc.md)
+* [Using the OpenWrt SDK](docs/sdk.md)
+* [Using the OpenWrt Image Builder](docs/imagebuilder.md)
+* [Using the package repositories](docs/repositories.md)
 * [Benchmarking](docs/benchmarking.md)
+* [Release notes](docs/release-notes.md)

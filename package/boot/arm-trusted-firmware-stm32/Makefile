@@ -7,13 +7,13 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_VERSION:=2.10-stm32mp-r1
+PKG_VERSION:=2.10-stm32mp-r3
 PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/STMicroelectronics/arm-trusted-firmware.git
 PKG_SOURCE_VERSION:=v$(PKG_VERSION)
-PKG_MIRROR_HASH:=7af0d84c464f7a51e4ef727962b50c1a8d42e70518ae3330b1b5d6b3399b0c3f
+PKG_MIRROR_HASH:=fbc046ab179666cd1a66226b0bc2fe38380f1190080fae8c8a13ca9ea0003583
 
 PKG_MAINTAINER:=Thomas Richard <thomas.richard@bootlin.com>
 
@@ -25,13 +25,13 @@ define Trusted-Firmware-A/Default
   BUILD_TARGET:=stm32
   BUILD_DEVICES:=$(1) $(1)-demo
   DEPENDS:=+u-boot-$(1) +optee-os-$(1)
+  DTB_FILE_NAME:=$(1).dtb
 endef
 
 define Trusted-Firmware-A/stm32mp1
   BUILD_SUBTARGET:=stm32mp1
   PLAT:=stm32mp1
   MAKE_ARGS += BL32_EXTRA2=$(STAGING_DIR_IMAGE)/$(BUILD_VARIANT)-tee-pageable_v2.bin \
-	       STM32MP_USB_PROGRAMMER=1 \
 	       STM32MP1_OPTEE_IN_SYSRAM=1 \
 	       ARM_ARCH_MAJOR=7
 endef
@@ -46,26 +46,34 @@ endef
 define Trusted-Firmware-A/stm32mp157f-dk2
   $(call Trusted-Firmware-A/stm32mp1)
   NAME:=STM32MP157F-DK2
-  DTB_FILE_NAME:=stm32mp157f-dk2.dtb
 endef
 
 define Trusted-Firmware-A/stm32mp135f-dk
   $(call Trusted-Firmware-A/stm32mp1)
   NAME:=STM32MP135F-DK
-  DTB_FILE_NAME=stm32mp135f-dk.dtb
 endef
 
 define Trusted-Firmware-A/stm32mp257f-ev1
   $(call Trusted-Firmware-A/stm32mp2)
   NAME:=STM32MP257F-EV1
-  DTB_FILE_NAME:=stm32mp257f-ev1.dtb
   MAKE_ARGS += STM32MP_DDR4_TYPE=1
 endef
 
 define Trusted-Firmware-A/stm32mp257f-dk
   $(call Trusted-Firmware-A/stm32mp2)
   NAME:=STM32MP257F-DK
-  DTB_FILE_NAME:=stm32mp257f-dk.dtb
+  MAKE_ARGS += STM32MP_LPDDR4_TYPE=1
+endef
+
+define Trusted-Firmware-A/stm32mp235f-dk
+  $(call Trusted-Firmware-A/stm32mp2)
+  NAME:=STM32MP235F-DK
+  MAKE_ARGS += STM32MP_LPDDR4_TYPE=1
+endef
+
+define Trusted-Firmware-A/stm32mp215f-dk
+  $(call Trusted-Firmware-A/stm32mp2)
+  NAME:=STM32MP215F-DK
   MAKE_ARGS += STM32MP_LPDDR4_TYPE=1
 endef
 
@@ -73,10 +81,11 @@ TFA_TARGETS := \
 	       stm32mp157f-dk2 \
 	       stm32mp135f-dk \
 	       stm32mp257f-ev1 \
-	       stm32mp257f-dk
+	       stm32mp257f-dk \
+	       stm32mp235f-dk \
+	       stm32mp215f-dk
 
 TFA_MAKE_FLAGS += \
-		$(if $(CONFIG_BINUTILS_VERSION_2_37)$(CONFIG_BINUTILS_VERSION_2_38),,LDFLAGS="-no-warn-rwx-segments") \
 		$(if $(CONFIG_aarch64), ARCH=aarch64 SPD=opteed, ARCH=aarch32 AARCH32_SP=optee) \
 		BL32=$(STAGING_DIR_IMAGE)/$(BUILD_VARIANT)-tee-header_v2.bin \
 		BL32_EXTRA1=$(STAGING_DIR_IMAGE)/$(BUILD_VARIANT)-tee-pager_v2.bin \
@@ -87,6 +96,16 @@ TFA_MAKE_FLAGS += \
 		TARGET_BOARD="" \
 		$(MAKE_ARGS) \
 		all fip
+
+override define Build/Compile/Trusted-Firmware-A
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+		CROSS_COMPILE=$(TARGET_CROSS) \
+		OPENSSL_DIR=$(STAGING_DIR_HOST) \
+		$(if $(DTC),DTC="$(DTC)") \
+		PLAT=$(PLAT) \
+		BUILD_STRING="OpenWrt $(PKG_VERSION_PREFIX)$(PKG_VERSION)-$(PKG_RELEASE) ($(VARIANT))" \
+		$(TFA_MAKE_FLAGS)
+endef
 
 define Package/trusted-firmware-a/install
 	$(INSTALL_DIR) $(STAGING_DIR_IMAGE)

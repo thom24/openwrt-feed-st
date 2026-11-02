@@ -207,12 +207,12 @@ Change-Id: Ie11676f5e1cfeddf6681707c13e858eec59a6d99
  		return -ENOMEM;
  	}
  
--	for (i = 0; i < priv->cfg->num_irqs; i++) {
-+	for (i = 0; i < priv->nb_irqs; i++) {
- 		irq_set_chained_handler(priv->irq[i], stm32_adc_irq_handler);
- 		irq_set_handler_data(priv->irq[i], priv);
- 	}
-@@ -538,7 +567,7 @@ static void stm32_adc_irq_remove(struct
+-	for (i = 0; i < priv->cfg->num_irqs; i++)
++	for (i = 0; i < priv->nb_irqs; i++)
+ 		irq_set_chained_handler_and_data(priv->irq[i],
+ 						 stm32_adc_irq_handler, priv);
+ 
+@@ -537,7 +566,7 @@ static void stm32_adc_irq_remove(struct
  		irq_dispose_mapping(irq_find_mapping(priv->domain, hwirq));
  	irq_domain_remove(priv->domain);
  
@@ -221,7 +221,7 @@ Change-Id: Ie11676f5e1cfeddf6681707c13e858eec59a6d99
  		irq_set_chained_handler(priv->irq[i], NULL);
  		irq_dispose_mapping(priv->irq[i]);
  	}
-@@ -789,6 +818,21 @@ static int stm32_adc_probe_identificatio
+@@ -788,6 +817,21 @@ static int stm32_adc_probe_identificatio
  		return -EINVAL;
  	}
  
@@ -243,7 +243,7 @@ Change-Id: Ie11676f5e1cfeddf6681707c13e858eec59a6d99
  	val = readl_relaxed(priv->common.base + STM32MP1_ADC_VERR);
  	dev_dbg(&pdev->dev, "ADC version: %lu.%lu\n",
  		FIELD_GET(STM32MP1_MAJREV_MASK, val),
-@@ -823,6 +867,7 @@ static int stm32_adc_probe(struct platfo
+@@ -822,6 +866,7 @@ static int stm32_adc_probe(struct platfo
  
  	priv->cfg = (const struct stm32_adc_priv_cfg *)of_id->data;
  	priv->nb_adc_max = priv->cfg->num_adcs;
@@ -251,7 +251,7 @@ Change-Id: Ie11676f5e1cfeddf6681707c13e858eec59a6d99
  	spin_lock_init(&priv->common.lock);
  
  	priv->common.base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-@@ -956,7 +1001,9 @@ static DEFINE_RUNTIME_DEV_PM_OPS(stm32_a
+@@ -955,7 +1000,9 @@ static DEFINE_RUNTIME_DEV_PM_OPS(stm32_a
  
  static const struct stm32_adc_priv_cfg stm32f4_adc_priv_cfg = {
  	.regs = &stm32f4_adc_common_regs,
@@ -262,7 +262,7 @@ Change-Id: Ie11676f5e1cfeddf6681707c13e858eec59a6d99
  	.max_clk_rate_hz = 36000000,
  	.num_irqs = 1,
  	.num_adcs = 3,
-@@ -988,6 +1035,16 @@ static const struct stm32_adc_priv_cfg s
+@@ -987,6 +1034,16 @@ static const struct stm32_adc_priv_cfg s
  	.num_irqs = 1,
  };
  
@@ -279,7 +279,7 @@ Change-Id: Ie11676f5e1cfeddf6681707c13e858eec59a6d99
  static const struct of_device_id stm32_adc_of_match[] = {
  	{
  		.compatible = "st,stm32f4-adc-core",
-@@ -1002,6 +1059,9 @@ static const struct of_device_id stm32_a
+@@ -1001,6 +1058,9 @@ static const struct of_device_id stm32_a
  		.compatible = "st,stm32mp13-adc-core",
  		.data = (void *)&stm32mp13_adc_priv_cfg
  	}, {

@@ -21,7 +21,7 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/398972
 
 --- a/drivers/base/dd.c
 +++ b/drivers/base/dd.c
-@@ -393,6 +393,7 @@ bool device_is_bound(struct device *dev)
+@@ -453,6 +453,7 @@ bool device_is_bound(struct device *dev)
  {
  	return dev->p && klist_node_attached(&dev->p->knode_driver);
  }

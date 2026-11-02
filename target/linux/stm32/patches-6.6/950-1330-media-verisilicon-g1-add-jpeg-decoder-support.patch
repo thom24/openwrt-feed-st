@@ -619,8 +619,8 @@ Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
  /**
   * struct hantro_av1_dec_ctrls
   * @sequence:		AV1 Sequence
-@@ -650,6 +654,10 @@ void hantro_vp9_dec_exit(struct hantro_c
- void hantro_g2_check_idle(struct hantro_dev *vpu);
+@@ -654,6 +658,10 @@ void hantro_g2_check_idle(struct hantro_
+ void hantro_g2_reset(struct hantro_ctx *ctx);
  irqreturn_t hantro_g2_irq(int irq, void *dev_id);
  
 +int hantro_g1_jpeg_dec_run(struct hantro_ctx *ctx);

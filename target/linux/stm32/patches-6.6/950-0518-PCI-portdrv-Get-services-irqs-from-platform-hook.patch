@@ -185,7 +185,7 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  legacy_irq:
 --- a/include/linux/msi.h
 +++ b/include/linux/msi.h
-@@ -407,6 +407,12 @@ bool arch_restore_msi_irqs(struct pci_de
+@@ -398,6 +398,12 @@ bool arch_restore_msi_irqs(struct pci_de
  
  #ifdef CONFIG_GENERIC_MSI_IRQ
  

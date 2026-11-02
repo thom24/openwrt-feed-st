@@ -14,7 +14,7 @@ Signed-off-by: Pankaj Dev <pankaj.dev@st.com>
 
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -150,6 +150,26 @@
+@@ -149,6 +149,26 @@
  		always-on;
  	};
  

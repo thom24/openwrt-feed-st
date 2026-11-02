@@ -31,7 +31,7 @@ Change-Id: I369827e80243c248e2a67ad4aa7d79a55a87b06d
  
  #define SYSCFG_IRQMUX_MASK GENMASK(3, 0)
  
-@@ -655,7 +658,8 @@ static int stm32_gpio_domain_alloc(struc
+@@ -656,7 +659,8 @@ static int stm32_gpio_domain_alloc(struc
  	parent_fwspec.fwnode = d->parent->fwnode;
  	parent_fwspec.param_count = 2;
  	parent_fwspec.param[0] = fwspec->param[0];

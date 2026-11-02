@@ -14,7 +14,7 @@ Change-Id: Ibdfc0df0f912eddce811d7e88b146a6560a92e3e
 
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -316,6 +316,70 @@
+@@ -315,6 +315,70 @@
  			reg = <0x44230000 0x10000>;
  		};
  

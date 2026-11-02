@@ -25,7 +25,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
 
 --- a/drivers/gpu/drm/bridge/adv7511/adv7511_audio.c
 +++ b/drivers/gpu/drm/bridge/adv7511/adv7511_audio.c
-@@ -232,6 +232,9 @@ static const struct hdmi_codec_ops adv75
+@@ -242,6 +242,9 @@ static const struct hdmi_codec_ops adv75
  
  static const struct hdmi_codec_pdata codec_data = {
  	.ops = &adv7511_codec_ops,
@@ -34,4 +34,4 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
 +			SNDRV_PCM_FMTBIT_IEC958_SUBFRAME_LE),
  	.max_i2s_channels = 2,
  	.i2s = 1,
- 	.spdif = 1,
+ 	.no_i2s_capture = 1,

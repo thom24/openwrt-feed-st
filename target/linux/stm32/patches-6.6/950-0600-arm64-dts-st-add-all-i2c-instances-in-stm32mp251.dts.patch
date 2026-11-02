@@ -13,7 +13,7 @@ Change-Id: Ib268ba0a85093bca501d48c1dba4ea095c3c73bf
 
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -246,6 +246,134 @@
+@@ -245,6 +245,134 @@
  				status = "disabled";
  			};
  

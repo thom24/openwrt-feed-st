@@ -10,21 +10,15 @@ Supports Gen1/Gen2, single lane, AER, MSI interrupts using the ARM GICv2m
 Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
 Change-Id: I7bd289b1885acb5732c01230d800a4c2dd0430df
 ---
- arch/arm64/boot/dts/st/stm32mp251.dtsi | 46 +++++++++++++++++++++++++-
- 1 file changed, 45 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 45 ++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -128,12 +128,21 @@
- 	intc: interrupt-controller@4ac00000 {
- 		compatible = "arm,cortex-a7-gic";
- 		#interrupt-cells = <3>;
--		#address-cells = <1>;
- 		interrupt-controller;
- 		reg = <0x0 0x4ac10000 0x0 0x1000>,
- 		      <0x0 0x4ac20000 0x0 0x2000>,
- 		      <0x0 0x4ac40000 0x0 0x2000>,
- 		      <0x0 0x4ac60000 0x0 0x2000>;
+@@ -133,6 +133,16 @@
+ 		      <0x0 0x4ac20000 0x0 0x20000>,
+ 		      <0x0 0x4ac40000 0x0 0x20000>,
+ 		      <0x0 0x4ac60000 0x0 0x20000>;
 +
 +		#address-cells = <2>;
 +		#size-cells = <2>;
@@ -38,7 +32,7 @@ Change-Id: I7bd289b1885acb5732c01230d800a4c2dd0430df
  	};
  
  	psci {
-@@ -524,6 +533,41 @@
+@@ -523,6 +533,41 @@
  					phy-names = "usb2-phy";
  				};
  			};

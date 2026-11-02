@@ -18,14 +18,14 @@ Domain-Review: Eric FOURMONT <eric.fourmont-ext@st.com>
 Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/365955
 ---
  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c     | 6 +++++-
- drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c | 4 ++++
+ drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c | 3 +++
  drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.h      | 2 ++
  include/linux/stmmac.h                                | 1 +
- 4 files changed, 12 insertions(+), 1 deletion(-)
+ 4 files changed, 11 insertions(+), 1 deletion(-)
 
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -883,12 +883,16 @@ EXPORT_SYMBOL_GPL(stmmac_init_tstamp_cou
+@@ -889,12 +889,16 @@ EXPORT_SYMBOL_GPL(stmmac_init_tstamp_cou
  static int stmmac_init_ptp(struct stmmac_priv *priv)
  {
  	bool xmac = priv->plat->has_gmac4 || priv->plat->has_xgmac;
@@ -45,17 +45,16 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/365955
  
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-@@ -436,6 +436,10 @@ stmmac_probe_config_dt(struct platform_d
+@@ -454,6 +454,9 @@ stmmac_probe_config_dt(struct platform_d
+ 	/* Get max speed of operation from device tree */
  	of_property_read_u32(np, "max-speed", &plat->max_speed);
  
- 	plat->bus_id = of_alias_get_id(np, "ethernet");
-+
 +	/* Get external system time state from device tree */
 +	plat->ext_systime = of_property_read_bool(np, "snps,ext-systime");
 +
- 	if (plat->bus_id < 0)
- 		plat->bus_id = 0;
- 
+ 	plat->bus_id = of_alias_get_id(np, "ethernet");
+ 	if (plat->bus_id < 0) {
+ 		if (bus_id < 0)
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.h
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.h
 @@ -58,6 +58,8 @@

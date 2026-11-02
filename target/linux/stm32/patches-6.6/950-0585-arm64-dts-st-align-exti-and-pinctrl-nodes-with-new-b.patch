@@ -15,7 +15,7 @@ Change-Id: Ia70b0afa00e82b524f18d2eb2e5637cbec98b651
 
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -230,7 +230,7 @@
+@@ -229,7 +229,7 @@
  		};
  
  		exti1: interrupt-controller@44220000 {
@@ -24,7 +24,7 @@ Change-Id: Ia70b0afa00e82b524f18d2eb2e5637cbec98b651
  			interrupt-controller;
  			#interrupt-cells = <2>;
  			#address-cells = <0>;
-@@ -317,7 +317,7 @@
+@@ -316,7 +316,7 @@
  		};
  
  		exti2: interrupt-controller@46230000 {
@@ -33,7 +33,7 @@ Change-Id: Ia70b0afa00e82b524f18d2eb2e5637cbec98b651
  			interrupt-controller;
  			#interrupt-cells = <2>;
  			#address-cells = <0>;
-@@ -386,7 +386,6 @@
+@@ -385,7 +385,6 @@
  			compatible = "st,stm32mp257-pinctrl";
  			ranges = <0 0x44240000 0xa0400>;
  			interrupt-parent = <&exti1>;
@@ -41,7 +41,7 @@ Change-Id: Ia70b0afa00e82b524f18d2eb2e5637cbec98b651
  			pins-are-numbered;
  			interrupts-extended =
  				<&exti1  0 0>, <&exti1  1 0>, <&exti1  2 0>, <&exti1  3 0>,
-@@ -526,7 +525,6 @@
+@@ -525,7 +524,6 @@
  			compatible = "st,stm32mp257-z-pinctrl";
  			ranges = <0 0x46200000 0x400>;
  			interrupt-parent = <&exti1>;

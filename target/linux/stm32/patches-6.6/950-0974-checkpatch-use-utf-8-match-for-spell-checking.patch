@@ -34,7 +34,7 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
 
 --- a/scripts/checkpatch.pl
 +++ b/scripts/checkpatch.pl
-@@ -3490,9 +3490,10 @@ sub process {
+@@ -3500,9 +3500,10 @@ sub process {
  # Check for various typo / spelling mistakes
  		if (defined($misspellings) &&
  		    ($in_commit_log || $line =~ /^(?:\+|Subject:)/i)) {
