@@ -13,11 +13,10 @@ But this feed integrates the [STMicroelectronics](https://www.st.com) BSP,
 whereas OpenWrt uses upstream components.
 And more boards are supported in the feed.
 
-You are using the `openwrt-24.10` branch of the feed, which is based on the
-OpenWrt branch `openwrt-24.10`.
+You are using the `master` branch of the feed, which is based on the OpenWrt
+branch `master`.
 Actually the feed is based on OpenWrt
-[v24.10.8](https://github.com/openwrt/openwrt/tree/v24.10.8)
-([Release Note](https://openwrt.org/releases/24.10/notes-24.10.8)).
+master [d6a91d867b](https://github.com/openwrt/openwrt/commit/d6a91d867bb24c4fc99200743d186b39fde246ac).
 
 ## Supported devices
 
@@ -78,137 +77,14 @@ Actually the feed is based on OpenWrt
 
 ## BSP
 
-This feed is based on the `STPM32MP1/STM32MP2 BSP v6.2`.
+This feed is based on the `STPM32MP1/STM32MP2 BSP v7`.
 
 |Components|Version|
 |----------|-------|
-|TF-A|2.10-stm32mp-r3|
-|U-Boot|2023.10-stm32mp-r3|
-|OPTEE|4.0.0-stm32mp-r3|
-|Linux|OpenWRT kernel + v6.6-stm32mp-r3|
-
-For the kernel, the patches from the v6.6-stm32mp branch until the tag
-v6.6-stm32mp-r3 were added.
-They are available in `target/linux/stm32/patches-6.6/`.
-
-Some patches were removed as they were applied in Linux, or they are already
-applied by OpenWrt.
-```
-2c9b2c9cac5e ("usb: dwc2: keep the usb stack informed of SetPortFeature failure while Host")
-6287f3f5f2e4 ("ASoC: stm32: spdifrx: fix dma channel release in stm32_spdifrx_remove")
-8a5e18189df4 ("media: i2c: imx335: Enable regulator supplies")
-c5540f6a4d9a ("nvmem: stm32: add support for STM32MP25 BSEC to control OTP data")
-eb99d7c27da7 ("crypto: stm32/cryp - call finalize with bh disabled")
-31286612453a ("perf list: fix arguments order issue for events printing")
-fd68ca2e9089 ("i2c: stm32f7: Do not prepare/unprepare clock during runtime suspend/resume")
-1d8ffe3fcfac ("ARM: dts: stm32: fix IPCC EXTI declaration on stm32mp151")
-22772c87565e ("clocksource: stm32-lptimer: use wakeup capable instead of init wakeup")
-6ab3278ee867 ("pinctrl: devicetree: do not goto err when probing hogs in pinctrl_dt_to_map")
-10b245589fa0 ("drm: bridge: adv7511: fill i2s stream capabilities")
-a1ff3250129a ("pinctrl: stm32: check devm_kasprintf() returned value")
-67f10b41e33e ("drivers: core: fix device leak in __fw_devlink_relax_cycles()")
-94508b3dd9f6 ("usb: dwc2: gadget: remove of_node reference upon udc_stop")
-07963aca871a ("net: phy: realtek: disable PHY-mode EEE")
-89e1b6a95cdf4 ("i2c: stm32f7: Use devm_clk_get_enabled()")
-435fd1bcf552b ("i2c: stm32f7: use dev_err_probe upon calls of devm_request_irq")
-cf32cfcc2d74e ("i2c: stm32f7: perform most of irq job in threaded handler")
-2b1d2978b2b05 ("i2c: stm32f7: simplify status messages in case of errors")
-6016e8616824a ("spi: stm32: Check for cfg availability in stm32_spi_probe")
-2f38d4c001e8b ("mtd: rawnand: stm32_fmc2: avoid overlapping mappings on ECC buffer")
-865a7b9b16b14 ("pinctrl: stm32: Manage irq affinity settings")
-d9d7111f3cf5c ("i2c: stm32f7: unmap DMA mapped buffer")
-55273980dc97f ("i2c: stm32: fix the device used for the DMA map")
-9207b7bce2799 ("mtd: rawnand: stm32_fmc2: fix ECC overwrite")
-9d74fc2f5e3a ("spi: spi-mem: Allow specifying the byte order in DTR mode")
-ee48aa9e5979 ("rtc: rtc-optee: fix memory leak on removal")
-a17c92edd7bb ("Revert "drm: Call drm_atomic_helper_shutdown() at shutdown/remove time for misc drivers"")
-fbdc154a59a4 ("usb: dwc2: fix shutdown in peripheral mode when gadget isn't configured")
-f739a554280b ("pwm: stm32: ensure PWM polarity is set when enabling it")
-f5e3ddbb228d ("dmaengine: stm32-dma: configure next sg only if there are more than 2 sgs")
-8428debab53d ("irqchip: gic-v2m: Handle Multiple MSI base IRQ Alignment")
-7c14e33c9192 ("ASoC: stm32: sai: manage context in set_sysclk callback")
-be95b318b7de ("ext4: clear i_state_flags when alloc inode")
-5e3260959519 ("usb: dwc2: disable platform lowlevel hw resources during shutdown")
-26e73d79f8b3 ("spi: stm32: fix Overrun issue at < 8bpw")
-2973772b4c86 ("dmaengine: stm32-mdma: address -Wmaybe-uninitialized")
-d64abe20475b ("coresight: etm3x: Fix cpulocked warning on cpuhp")
-8e496f5217d4 ("usb: gadget: Fix f_ncm cleanup for net_device")
-```
-
-Some patches had to be modified to fix some conflicts.
-```
-950158c37fbf ("usb: dwc2: hcd: fix power down exiting by system resume")
-19458fd268c4 ("media: i2c: imx335: add control of an optional powerdown gpio")
-393cf701259c ("mtd: spi-nor: add Octal DTR support for Macronix flash")
-1e5eedcdaf1c ("firmware: arm_scmi: optee leverage Ocall2 thread provisioning")
-9d36363eee52 ("counter: stm32-timer-cnt: add pm runtime support")
-e983ec4d6702 ("pinctrl: stm32: add tristate option for stm32mp257")
-a04c279efc3c ("usb: dwc3: Add support in dwc3 to handle usb-role")
-b1f3318a0f09 ("ASoC: Update wm8994 codec config")
-27c33fae20e0 ("pwm: stm32: lptimer: add pm_runtime support")
-dd680178e937 ("counter: stm32-lptimer-cnt: add pm runtime support")
-0a222d6c04c9 ("Revert "media: stm32: dcmipp: avoid calling s_stream if state already correct"")
-7fdd5f74c211 ("Revert "media: v4l2-subdev: Document and enforce .s_stream() requirements"")
-00925911ce6d ("nvmem: stm32: add support for non-secure mirror")
-2a41a04bec3f ("arm64: dts: st: add st,stm32mp25-cortex-a7-gic in intc node in stm32mp251.dtsi")
-fdfbbb333977 ("counter: stm32-lptimer-cnt: fix error handling when enabling")
-d0b3f9979ae5 ("net: phy: realtek: update sequence to disable EEE for RTL8211F")
-5e8186da1fa40 ("i2c: stm32f7: add support for stm32mp25 soc")
-c32748b702c28 ("iio: adc: stm32: add support for stm32mp25")
-d247bababb186 ("net: stmmac: add possibility to use ptp external time")
-babfc9ba63a0f ("dmaengine: stm32: New directory for STM32 DMA controllers drivers")
-c2ab7c5deab4f ("Revert "net: phy: smsc: add WoL support to LAN8740/LAN8742 PHYs"")
-6068e745fc3b5 ("i2c: stm32f7: support i2c_*_dma_safe_msg_buf APIs")
-79f24c8b193bf ("usb: dwc2: gadget: enable the gadget as wakeup source")
-b9e45016861b ("serial: stm32: add tristate option")
-f1bc1b5d21c5 ("usb: dwc2: platform: Add irq wakeup support")
-f6e33af19395 ("usb: dwc2: handle suspended gadget when going to low power")
-7bf7d5b59c8d ("media: verisilicon: add VP8 encode support for Rockchip RK3399 VPU2")
-e9813d379cc9 ("usb: dwc2: fix suspend in peripheral mode when gadget isn't configured")
-ce2136afc5e5 ("Revert "Revert "net: phy: smsc: add WoL support to LAN8740/LAN8742 PHYs""")
-237a0e5e7b14 ("usb: dwc2: add support for runtime PM")
-c14e1e7edb97 ("usb: dwc2: only enable wake irq when the hw is enabled for wakeup")
-3989afe4ccfb ("media: verisilicon: fix decoding of jpeg with unaligned height")
-```
-
-Following patches were not applied due to conflicts. They corresponds to the
-empty patches in `target/linux/stm32/patches-6.6/`. They could be applied in the
-future if needed.
-```
-426e1c78e4c1 ("drm/stm: ltdc: set transparency after plane disable")
-8d235ec212fa ("drm/stm: ltdc: support of rotation on crtc output")
-89f5b97c79ac ("drm/stm: ltdc: add support of plane upscaling")
-326eea71a0e4 ("drm/stm: ltdc: refactor interrupt management")
-c4ffda2683bb ("drm/stm: ltdc: set color look-up table for each plane")
-4909e4745e9c ("drm/stm: ltdc: refactor crtc start sequence")
-a3f784f44512 ("drm/stm: ltdc: remove encoder helper functions")
-c273a5bad2aa ("drm/stm: ltdc: add lvds clock")
-6a508bd6b305 ("drm/stm: refactor probe sequence")
-b90306b377d3 ("drm/stm: ltdc:  add property default-on")
-66d934a13b5c ("drm/stm: ltdc: move mode valid & fixup to encoder helper functions")
-e40cd2b4b75b ("drm/stm: ltdc: Check rotation buffer length")
-3d63eeb9313b ("drm/stm: ltdc: Check panel width")
-1102333ad31b ("drm/stm: ltdc: set default parent of pixel clock")
-1bc5bac55257 ("drm/stm: support of new hardware version for soc MP21")
-dc9d876018c6 ("drm/stm: ltdc: Check the security of layer 2.")
-73c7bd933066 ("drm/stm: ltdc: remove mode_set_nofb callback")
-759efa7b4959 ("drm/stm: ltdc: add plane_atomic_enable callback")
-73cc2db18231 ("drm/stm: ltdc: replace pm_runtime_get_sync by pm_runtime_resume_and_get")
-662800081ef7 ("drm/stm: ltdc: flush remaining vblank event")
-6e8b50d319c9 ("drm/stm: ltdc: Check the security of layer 3.")
-3682d604ecbd ("drm/stm: ltdc: reset ltdc on crtc enable")
-bba33e9f0619 ("drm/stm: ltdc: set clock parent before set rate")
-247114342fd4 ("drm/stm: ltdc: ckeck pm_runtime status")
-634d4d01d037 ("drm/stm: ltdc: add clock tolerance module parameter")
-cf2f1b885568 ("drm/stm: ltdc: set configuration register masks to 12 bits")
-a825a4c45283 ("drm/stm: ltdc: check the secure layer")
-e5332eedf04f ("drm/stm: Remove redundant drm_of_panel_bridge_remove call")
-9be78d291d01 ("drm/stm: ltdc: support of plane rotation")
-94097f58f175 ("drm/stm: ltdc: re-map lcd clock tree")
-3bada4c13ed1 ("drm/stm: ltdc: default-on property removed")
-bc54bccfaff4 ("drm/stm: ltdc: fix pm runtime during probe")
-714992840543 ("drm/stm: ltdc:  remove fixup callback from encoder to crtc helpers")
-```
+|TF-A||
+|U-Boot||
+|OPTEE||
+|Linux|OpenWRT kernel + |
 
 ## Starter Package
 
@@ -265,13 +141,13 @@ And you need to install a set of packages as described in the
 
 ### Getting the code
 
-The feed is designed to work with the `openwrt-24.10` branch of OpenWRT (last
-tested commit is [v24.10.8](https://github.com/openwrt/openwrt/tree/v24.10.8)).
+The feed is designed to work with the `master` branch of OpenWRT (last
+tested commit is [d6a91d867b](https://github.com/openwrt/openwrt/commit/d6a91d867bb24c4fc99200743d186b39fde246ac).
 
 ```bash
 $ git clone https://git.openwrt.org/openwrt/openwrt.git
 $ cd openwrt
-$ git checkout v24.10.8
+$ git checkout d6a91d867b
 ```
 
 Next step is to add the [STMicroelectronics](https://www.st.com) feed in the
