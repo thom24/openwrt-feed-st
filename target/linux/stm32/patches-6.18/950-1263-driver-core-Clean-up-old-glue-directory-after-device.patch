@@ -37,10 +37,10 @@ Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
  1 file changed, 3 insertions(+)
 
 diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 01e14f787916..3aa2f9e2e0e6 100644
+index d577c7d7aacd..046cb3e41a3c 100644
 --- a/drivers/base/core.c
 +++ b/drivers/base/core.c
-@@ -4604,6 +4604,7 @@ int device_move(struct device *dev, struct device *new_parent,
+@@ -4670,6 +4670,7 @@ int device_move(struct device *dev, struct device *new_parent,
  	int error;
  	struct device *old_parent;
  	struct kobject *new_parent_kobj;
@@ -48,7 +48,7 @@ index 01e14f787916..3aa2f9e2e0e6 100644
  
  	dev = get_device(dev);
  	if (!dev)
-@@ -4620,6 +4621,7 @@ int device_move(struct device *dev, struct device *new_parent,
+@@ -4686,6 +4687,7 @@ int device_move(struct device *dev, struct device *new_parent,
  
  	pr_debug("device: '%s': %s: moving to '%s'\n", dev_name(dev),
  		 __func__, new_parent ? dev_name(new_parent) : "<NULL>");
@@ -56,7 +56,7 @@ index 01e14f787916..3aa2f9e2e0e6 100644
  	error = kobject_move(&dev->kobj, new_parent_kobj);
  	if (error) {
  		cleanup_glue_dir(dev, new_parent_kobj);
-@@ -4656,6 +4658,7 @@ int device_move(struct device *dev, struct device *new_parent,
+@@ -4722,6 +4724,7 @@ int device_move(struct device *dev, struct device *new_parent,
  			goto out;
  		}
  	}

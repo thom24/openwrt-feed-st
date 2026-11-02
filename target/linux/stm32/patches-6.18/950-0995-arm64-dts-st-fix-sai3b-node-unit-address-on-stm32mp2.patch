@@ -22,7 +22,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index ef5890c2d870..e21e9d6b6fa6 100644
+index ee1ca27fbb0c..30919c1ce32b 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -1457,7 +1457,7 @@ sai3a: audio-controller@402b0004 {

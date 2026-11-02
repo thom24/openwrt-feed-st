@@ -56,7 +56,7 @@ index 4a150c09b02a..1137b04298c2 100644
  		.compatible = "st,stm32mp25-adc-core",
  		.data = (void *)&stm32mp25_adc_priv_cfg
 diff --git a/drivers/iio/adc/stm32-adc.c b/drivers/iio/adc/stm32-adc.c
-index 3d15bdadbbe0..bfb1d7c519a4 100644
+index f061c38a786f..b578ae8bfe5c 100644
 --- a/drivers/iio/adc/stm32-adc.c
 +++ b/drivers/iio/adc/stm32-adc.c
 @@ -574,6 +574,64 @@ static const struct stm32_adc_regspec stm32h7_adc_regspec = {
@@ -151,7 +151,7 @@ index 3d15bdadbbe0..bfb1d7c519a4 100644
  static const struct stm32_adc_regspec stm32mp25_adc_regspec = {
  	.dr = STM32H7_ADC_DR,
  	.ier_eoc = { STM32H7_ADC_IER, STM32H7_EOCIE },
-@@ -3083,9 +3161,29 @@ static const struct stm32_adc_cfg stm32mp13_adc_cfg = {
+@@ -3091,9 +3169,29 @@ static const struct stm32_adc_cfg stm32mp13_adc_cfg = {
  	.vref_charac = 3300,
  };
  
@@ -181,7 +181,7 @@ index 3d15bdadbbe0..bfb1d7c519a4 100644
  static const struct stm32_adc_cfg stm32mp25_adc_cfg = {
  	.regs = &stm32mp25_adc_regspec,
  	.adc_info = &stm32mp25_adc_info,
-@@ -3108,6 +3206,7 @@ static const struct of_device_id stm32_adc_of_match[] = {
+@@ -3116,6 +3214,7 @@ static const struct of_device_id stm32_adc_of_match[] = {
  	{ .compatible = "st,stm32h7-adc", .data = (void *)&stm32h7_adc_cfg },
  	{ .compatible = "st,stm32mp1-adc", .data = (void *)&stm32mp1_adc_cfg },
  	{ .compatible = "st,stm32mp13-adc", .data = (void *)&stm32mp13_adc_cfg },

@@ -53,7 +53,7 @@ index 1868eb609f42..3da4c610a071 100644
  			compatible = "st,stm32mp1-exti";
  			reg = <0x44220000 0x400>;
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 9040a88de343..a6405f568098 100644
+index 4b96c46538db..a06a8802f835 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -2244,6 +2244,11 @@ rcc: clock-controller@44200000 {

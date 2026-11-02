@@ -22,10 +22,10 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  1 file changed, 13 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index 905aa9ab64e1..52168f43f971 100644
+index c57dda9866cf..2b4656010fa5 100644
 --- a/drivers/i2c/busses/i2c-stm32f7.c
 +++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -1525,10 +1525,16 @@ static irqreturn_t stm32f7_i2c_handle_isr_errs(struct stm32f7_i2c_dev *i2c_dev,
+@@ -1530,10 +1530,16 @@ static irqreturn_t stm32f7_i2c_handle_isr_errs(struct stm32f7_i2c_dev *i2c_dev,
  
  	/* Bus error */
  	if (status & STM32F7_I2C_ISR_BERR) {
@@ -45,7 +45,7 @@ index 905aa9ab64e1..52168f43f971 100644
  	}
  
  	/* Arbitration loss */
-@@ -1548,9 +1554,12 @@ static irqreturn_t stm32f7_i2c_handle_isr_errs(struct stm32f7_i2c_dev *i2c_dev,
+@@ -1553,9 +1559,12 @@ static irqreturn_t stm32f7_i2c_handle_isr_errs(struct stm32f7_i2c_dev *i2c_dev,
  		dev_dbg(dev, "SMBus alert received\n");
  		writel_relaxed(STM32F7_I2C_ICR_ALERTCF, base + STM32F7_I2C_ICR);
  		i2c_handle_smbus_alert(i2c_dev->alert->ara);

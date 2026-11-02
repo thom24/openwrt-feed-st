@@ -15,18 +15,18 @@ Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
  5 files changed, 114 insertions(+)
 
 diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-index 85d07ef44f62..035233e1bf65 100644
+index 02e2ae93d176..f58d92eb136f 100644
 --- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
 +++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-@@ -884,6 +884,7 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 	struct v4l2_ctrl_hevc_pps *p_hevc_pps;
+@@ -905,6 +905,7 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
+ 	struct v4l2_ctrl_hevc_slice_params *p_hevc_slice_params;
  	struct v4l2_ctrl_hdr10_mastering_display *p_hdr10_mastering;
  	struct v4l2_ctrl_hevc_decode_params *p_hevc_decode_params;
 +	struct v4l2_ctrl_vp8_encode_params *p_vp8_encode_params;
  	struct v4l2_area *area;
  	struct v4l2_rect *rect;
  	void *p = ptr.p + idx * ctrl->elem_size;
-@@ -1121,6 +1122,15 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
+@@ -1142,6 +1143,15 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
  		zero_padding(p_vp8_frame->coder_state);
  		break;
  
@@ -42,7 +42,7 @@ index 85d07ef44f62..035233e1bf65 100644
  	case V4L2_CTRL_TYPE_HEVC_SPS:
  		p_hevc_sps = p;
  
-@@ -1958,6 +1968,9 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
+@@ -2020,6 +2030,9 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
  	case V4L2_CTRL_TYPE_AREA:
  		elem_size = sizeof(struct v4l2_area);
  		break;

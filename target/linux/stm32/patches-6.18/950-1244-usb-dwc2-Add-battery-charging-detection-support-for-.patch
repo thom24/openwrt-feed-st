@@ -18,11 +18,11 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
 ---
  drivers/usb/dwc2/Kconfig    |   1 +
  drivers/usb/dwc2/core.h     |   9 ++
- drivers/usb/dwc2/gadget.c   |   7 ++
+ drivers/usb/dwc2/gadget.c   |   6 ++
  drivers/usb/dwc2/hw.h       |  15 ++-
  drivers/usb/dwc2/params.c   |   1 +
  drivers/usb/dwc2/platform.c | 183 ++++++++++++++++++++++++++++++++++++
- 6 files changed, 212 insertions(+), 4 deletions(-)
+ 6 files changed, 211 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/usb/dwc2/Kconfig b/drivers/usb/dwc2/Kconfig
 index d7af55a8eced..c6fd252a8b83 100644
@@ -78,18 +78,10 @@ index 035e783565e2..2e39c1501834 100644
  /* Gadget defines */
  #if IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) || \
 diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 679cac066400..dd591e70b952 100644
+index 9507f78fc9a7..f18771b9387a 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -4782,6 +4782,7 @@ static int dwc2_hsotg_pullup(struct usb_gadget *gadget, int is_on)
- {
- 	struct dwc2_hsotg *hsotg = to_hsotg(gadget);
- 	unsigned long flags;
-+	int ret;
- 
- 	dev_dbg(hsotg->dev, "%s: is_on: %d op_state: %d\n", __func__, is_on,
- 		hsotg->op_state);
-@@ -4792,6 +4793,12 @@ static int dwc2_hsotg_pullup(struct usb_gadget *gadget, int is_on)
+@@ -4793,6 +4793,12 @@ static int dwc2_hsotg_pullup(struct usb_gadget *gadget, int is_on)
  		return 0;
  	}
  
@@ -100,8 +92,8 @@ index 679cac066400..dd591e70b952 100644
 +	}
 +
  	spin_lock_irqsave(&hsotg->lock, flags);
- 	if (is_on) {
- 		hsotg->enabled = 1;
+ 	if (hsotg->in_ppd) {
+ 		ret = dwc2_exit_partial_power_down(hsotg, 0, true);
 diff --git a/drivers/usb/dwc2/hw.h b/drivers/usb/dwc2/hw.h
 index 949d3cf5566d..704f313ab97e 100644
 --- a/drivers/usb/dwc2/hw.h

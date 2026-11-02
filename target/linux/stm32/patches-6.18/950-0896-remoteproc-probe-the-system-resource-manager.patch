@@ -14,7 +14,7 @@ Change-Id: I0768405daa33c3658961ccf06252e207042f044a
  1 file changed, 8 insertions(+)
 
 diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index 825672100528..987dd9577446 100644
+index bbc781e41a1b..fa5435b37430 100644
 --- a/drivers/remoteproc/remoteproc_core.c
 +++ b/drivers/remoteproc/remoteproc_core.c
 @@ -37,6 +37,7 @@
@@ -25,7 +25,7 @@ index 825672100528..987dd9577446 100644
  #include <asm/byteorder.h>
  #include <linux/platform_device.h>
  
-@@ -2312,6 +2313,11 @@ int rproc_add(struct rproc *rproc)
+@@ -2323,6 +2324,11 @@ int rproc_add(struct rproc *rproc)
  	/* create debugfs entries */
  	rproc_create_debug_dir(rproc);
  
@@ -37,7 +37,7 @@ index 825672100528..987dd9577446 100644
  	/* if rproc is marked always-on, request it to boot */
  	if (rproc->auto_boot) {
  		ret = rproc_trigger_auto_boot(rproc);
-@@ -2597,6 +2603,8 @@ int rproc_del(struct rproc *rproc)
+@@ -2615,6 +2621,8 @@ int rproc_del(struct rproc *rproc)
  	list_del_rcu(&rproc->node);
  	mutex_unlock(&rproc_list_mutex);
  

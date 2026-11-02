@@ -22,10 +22,10 @@ Tested-by: Christophe KERELLO <christophe.kerello@st.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 2e3ae35c92bb..c9236f65c561 100644
+index 02d1af0f8353..9fa338ed3a8b 100644
 --- a/drivers/usb/dwc3/core.c
 +++ b/drivers/usb/dwc3/core.c
-@@ -2842,6 +2842,7 @@ MODULE_DEVICE_TABLE(acpi, dwc3_acpi_match);
+@@ -2862,6 +2862,7 @@ MODULE_DEVICE_TABLE(acpi, dwc3_acpi_match);
  static struct platform_driver dwc3_driver = {
  	.probe		= dwc3_probe,
  	.remove		= dwc3_remove,

@@ -21,7 +21,7 @@ Change-Id: I6d209d32b31f81f19e5ace1c56cb40bcb0b5c253
  create mode 100644 drivers/remoteproc/rproc_srm_dev.c
 
 diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
-index 3debd6c5ebd1..921cef67840e 100644
+index 930685e2548e..f3c7cd28e33e 100644
 --- a/drivers/remoteproc/Kconfig
 +++ b/drivers/remoteproc/Kconfig
 @@ -31,6 +31,16 @@ config REMOTEPROC_SRM_CORE
@@ -42,7 +42,7 @@ index 3debd6c5ebd1..921cef67840e 100644
  	tristate "i.MX remoteproc support"
  	depends on ARCH_MXC
 diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
-index 6960b8a03e0f..dcc388b0f53e 100644
+index a9c59cd4ea3f..14d22acf4953 100644
 --- a/drivers/remoteproc/Makefile
 +++ b/drivers/remoteproc/Makefile
 @@ -12,6 +12,7 @@ remoteproc-y				+= remoteproc_virtio.o

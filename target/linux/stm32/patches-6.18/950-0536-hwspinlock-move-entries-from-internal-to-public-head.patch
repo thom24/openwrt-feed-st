@@ -21,7 +21,7 @@ Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
  8 files changed, 31 insertions(+), 39 deletions(-)
 
 diff --git a/drivers/hwspinlock/hwspinlock_core.c b/drivers/hwspinlock/hwspinlock_core.c
-index a7610ba755b4..e0227d027cf2 100644
+index a79886f86bd8..2529174a81f9 100644
 --- a/drivers/hwspinlock/hwspinlock_core.c
 +++ b/drivers/hwspinlock/hwspinlock_core.c
 @@ -915,5 +915,13 @@ struct device *hwspin_lock_get_dev(struct hwspinlock *hwlock)

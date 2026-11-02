@@ -15,7 +15,7 @@ Change-Id: I10b2154751adf13a0417c0dd54ffda72a013ada9
  1 file changed, 11 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
-index 20f5b9ab6a1c..2fec10d13913 100644
+index 7004e7fbc425..e1a55d523e3e 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmi.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
 @@ -227,25 +227,18 @@ static int dcmi_restart_capture(struct stm32_dcmi *dcmi)

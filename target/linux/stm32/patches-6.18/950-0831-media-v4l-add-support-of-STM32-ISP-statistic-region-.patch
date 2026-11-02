@@ -16,7 +16,7 @@ Signed-off-by: Fabien Dessenne <fabien.dessenne@foss.st.com>
  4 files changed, 33 insertions(+)
 
 diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-index 772554f7e885..da5f2591dafb 100644
+index 172d2c27a764..94e3d7931bab 100644
 --- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
 +++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
 @@ -441,6 +441,9 @@ void v4l2_ctrl_type_op_log(const struct v4l2_ctrl *ctrl)
@@ -29,7 +29,7 @@ index 772554f7e885..da5f2591dafb 100644
  	default:
  		pr_cont("unknown type %d", ctrl->type);
  		break;
-@@ -1307,6 +1310,9 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
+@@ -1369,6 +1372,9 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
  	case V4L2_CTRL_TYPE_H264_ENCODE_RC:
  		return validate_h264_encode_rc(p);
  
@@ -39,7 +39,7 @@ index 772554f7e885..da5f2591dafb 100644
  	default:
  		return -EINVAL;
  	}
-@@ -2013,6 +2019,9 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
+@@ -2075,6 +2081,9 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
  	case V4L2_CTRL_TYPE_AV1_FILM_GRAIN:
  		elem_size = sizeof(struct v4l2_ctrl_av1_film_grain);
  		break;

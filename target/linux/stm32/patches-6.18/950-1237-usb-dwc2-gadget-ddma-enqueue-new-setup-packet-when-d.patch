@@ -41,7 +41,7 @@ Reviewed-by: Ashish VERMA <ashish.verma@st.com>
  1 file changed, 19 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 2a0daf92cb69..a4356c2978ca 100644
+index 3894d27e1e4a..7af106713cdd 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
 @@ -3028,6 +3028,9 @@ static void dwc2_gadget_handle_nak(struct dwc2_hsotg_ep *hs_ep)

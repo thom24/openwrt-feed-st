@@ -29,7 +29,7 @@ Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
  create mode 100644 drivers/usb/host/usbh-stm32.c
 
 diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-index c4f17ce5c77b..65924dcc1d61 100644
+index 87103b868032..2f0a13dc8b90 100644
 --- a/drivers/usb/host/Kconfig
 +++ b/drivers/usb/host/Kconfig
 @@ -144,6 +144,19 @@ config USB_BRCMSTB

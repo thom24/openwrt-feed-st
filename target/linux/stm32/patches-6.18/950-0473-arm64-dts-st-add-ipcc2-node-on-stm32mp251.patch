@@ -19,7 +19,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  1 file changed, 13 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index bab8d08e0db8..063dad73b3e3 100644
+index 3ff67e373fa2..4c08a75bf851 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -2483,6 +2483,19 @@ exti2: interrupt-controller@46230000 {

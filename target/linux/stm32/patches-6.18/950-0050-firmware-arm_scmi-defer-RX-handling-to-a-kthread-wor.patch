@@ -65,7 +65,7 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  1 file changed, 24 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/firmware/arm_scmi/transports/mailbox.c b/drivers/firmware/arm_scmi/transports/mailbox.c
-index ae0f67e6cc45..5545785a6684 100644
+index 308736c3ead9..3c51794efced 100644
 --- a/drivers/firmware/arm_scmi/transports/mailbox.c
 +++ b/drivers/firmware/arm_scmi/transports/mailbox.c
 @@ -13,6 +13,7 @@
@@ -129,16 +129,16 @@ index ae0f67e6cc45..5545785a6684 100644
  }
  
  static bool mailbox_chan_available(struct device_node *of_node, int idx)
-@@ -211,6 +230,8 @@ static int mailbox_chan_setup(struct scmi_chan_info *cinfo, struct device *dev,
- 	cl->tx_block = false;
- 	cl->knows_txdone = tx;
+@@ -215,6 +234,8 @@ static int mailbox_chan_setup(struct scmi_chan_info *cinfo, struct device *dev,
+ 	smbox->cinfo = cinfo;
+ 	mutex_init(&smbox->chan_lock);
  
 +	INIT_WORK(&smbox->rx_work, rx_work_fn);
 +
  	smbox->chan = mbox_request_channel(cl, tx ? 0 : p2a_chan);
  	if (IS_ERR(smbox->chan)) {
  		ret = PTR_ERR(smbox->chan);
-@@ -254,6 +275,7 @@ static int mailbox_chan_free(int id, void *p, void *data)
+@@ -266,6 +287,7 @@ static int mailbox_chan_free(int id, void *p, void *data)
  	struct scmi_mailbox *smbox = cinfo->transport_info;
  
  	if (smbox && !IS_ERR(smbox->chan)) {

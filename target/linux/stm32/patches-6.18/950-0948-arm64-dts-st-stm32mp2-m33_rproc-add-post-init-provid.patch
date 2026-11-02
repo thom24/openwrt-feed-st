@@ -63,7 +63,7 @@ index d37ec7b6a7af..eb13a18f3c71 100644
  		};
  	};
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 5076847c6e70..1165304bfe58 100644
+index 9606d083e6f1..8f4f77046d00 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -3006,6 +3006,7 @@ m33_rproc: m33@0 {

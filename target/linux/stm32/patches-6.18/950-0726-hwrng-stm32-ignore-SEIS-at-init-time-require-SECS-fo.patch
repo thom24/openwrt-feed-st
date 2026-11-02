@@ -23,7 +23,7 @@ Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
-index 1c7925c5230c..b1e8531cb40a 100644
+index 6e0fd88751e8..c38d8c91f18e 100644
 --- a/drivers/char/hw_random/stm32-rng.c
 +++ b/drivers/char/hw_random/stm32-rng.c
 @@ -37,7 +37,7 @@

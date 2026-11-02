@@ -68,10 +68,10 @@ index a267e79190af..65c1a3677532 100644
  		if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
  		    !hsotg->params.no_clock_gating)
 diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index ef11d31f47e7..d512ea04a0d6 100644
+index ad1edd05b289..a37d3f8aa55b 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -5794,6 +5794,7 @@ int dwc2_gadget_enter_partial_power_down(struct dwc2_hsotg *hsotg)
+@@ -5802,6 +5802,7 @@ int dwc2_gadget_enter_partial_power_down(struct dwc2_hsotg *hsotg)
   * power down.
   *
   * @hsotg: Programming view of the DWC_otg controller
@@ -79,7 +79,7 @@ index ef11d31f47e7..d512ea04a0d6 100644
   * @restore: indicates whether need to restore the registers or not.
   *
   * Return: non-zero if failed to exit device partial power down.
-@@ -5801,7 +5802,7 @@ int dwc2_gadget_enter_partial_power_down(struct dwc2_hsotg *hsotg)
+@@ -5809,7 +5810,7 @@ int dwc2_gadget_enter_partial_power_down(struct dwc2_hsotg *hsotg)
   * This function is for exiting from device mode partial power down.
   */
  int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
@@ -88,7 +88,7 @@ index ef11d31f47e7..d512ea04a0d6 100644
  {
  	u32 pcgcctl;
  	u32 dctl;
-@@ -5834,6 +5835,19 @@ int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+@@ -5842,6 +5843,19 @@ int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
  	dctl |= DCTL_PWRONPRGDONE;
  	dwc2_writel(hsotg, dctl, DCTL);
  

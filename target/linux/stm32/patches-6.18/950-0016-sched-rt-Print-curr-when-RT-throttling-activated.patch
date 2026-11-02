@@ -24,7 +24,7 @@ Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
  1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index 3e81b9d83d14..76383dcf391f 100644
+index fc9737decfb7..bdfbec86ac74 100644
 --- a/kernel/sched/rt.c
 +++ b/kernel/sched/rt.c
 @@ -860,7 +860,7 @@ static int do_sched_rt_period_timer(struct rt_bandwidth *rt_b, int overrun)

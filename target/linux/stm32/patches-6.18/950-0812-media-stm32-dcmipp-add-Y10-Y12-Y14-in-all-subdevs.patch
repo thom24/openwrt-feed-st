@@ -18,7 +18,7 @@ Signed-off-by: Hans Verkuil <hverkuil+cisco@kernel.org>
  3 files changed, 12 insertions(+)
 
 diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
-index 6d42517817fd..dcb791c56d4c 100644
+index 67f0dcdab9cb..0abb36f7fe56 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
 @@ -67,6 +67,9 @@ static const struct dcmipp_bytecap_pix_map dcmipp_bytecap_pix_map_list[] = {

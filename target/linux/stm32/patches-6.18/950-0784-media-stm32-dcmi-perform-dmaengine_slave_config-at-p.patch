@@ -14,7 +14,7 @@ Change-Id: I81dc609a499779217e026dbef80b8452be336510
  1 file changed, 15 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
-index 619b0d981211..787c5d778db2 100644
+index 00a86f3720a9..de58174c77b7 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmi.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
 @@ -301,23 +301,6 @@ static int dcmi_start_dma(struct stm32_dcmi *dcmi,
@@ -69,7 +69,7 @@ index 619b0d981211..787c5d778db2 100644
  	spin_lock_init(&dcmi->irqlock);
  	mutex_init(&dcmi->lock);
  	mutex_init(&dcmi->dma_lock);
-@@ -2072,6 +2069,7 @@ static int dcmi_probe(struct platform_device *pdev)
+@@ -2073,6 +2070,7 @@ static int dcmi_probe(struct platform_device *pdev)
  	v4l2_device_unregister(&dcmi->v4l2_dev);
  err_media_device_cleanup:
  	media_device_cleanup(&dcmi->mdev);

@@ -19,7 +19,7 @@ Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
-index 287487531de2..1c7925c5230c 100644
+index 083dcb10aa23..6e0fd88751e8 100644
 --- a/drivers/char/hw_random/stm32-rng.c
 +++ b/drivers/char/hw_random/stm32-rng.c
 @@ -514,9 +514,9 @@ static const struct stm32_rng_data stm32mp25_rng_data = {

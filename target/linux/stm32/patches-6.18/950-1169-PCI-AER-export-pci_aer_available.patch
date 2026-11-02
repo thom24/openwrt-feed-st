@@ -16,7 +16,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-index 85f1f0cf62d6..f85b23499987 100644
+index 9f90abe3e88e..d3d58c5fa099 100644
 --- a/drivers/pci/pcie/aer.c
 +++ b/drivers/pci/pcie/aer.c
 @@ -138,6 +138,7 @@ bool pci_aer_available(void)

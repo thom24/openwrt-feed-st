@@ -23,7 +23,7 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  2 files changed, 5 insertions(+)
 
 diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
-index cb153ce42c45..22005103073a 100644
+index bbe52ec8ef60..902c93732252 100644
 --- a/drivers/media/v4l2-core/v4l2-fwnode.c
 +++ b/drivers/media/v4l2-core/v4l2-fwnode.c
 @@ -405,6 +405,9 @@ v4l2_fwnode_endpoint_parse_parallel_bus(struct fwnode_handle *fwnode,

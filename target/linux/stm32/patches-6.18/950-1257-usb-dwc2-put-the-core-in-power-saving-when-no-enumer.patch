@@ -69,7 +69,7 @@ index 405fe99a34e9..f3ef9cefbdbc 100644
  		}
  		if (dsts & DSTS_SUSPSTS) {
 diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 590d7ebba876..86badd051b6b 100644
+index 009d453f90e1..874f1312584b 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
 @@ -3254,6 +3254,20 @@ static void dwc2_hsotg_epint(struct dwc2_hsotg *hsotg, unsigned int idx,
@@ -119,7 +119,7 @@ index 590d7ebba876..86badd051b6b 100644
  		dwc2_hsotg_irq_enumdone(hsotg);
  	}
  
-@@ -5250,6 +5271,7 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
+@@ -5258,6 +5279,7 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
  		return -ENOMEM;
  	}
  	INIT_DELAYED_WORK(&hsotg->dw_gsetup, dwc2_gadget_setup_timeout);

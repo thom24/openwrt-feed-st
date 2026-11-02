@@ -17,10 +17,10 @@ Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
  1 file changed, 2 insertions(+)
 
 diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 7b831caf149a..cf8d0c21388f 100644
+index fa2a5c8fd5c5..cacac1dedea1 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -7703,6 +7703,8 @@ int stmmac_dvr_probe(struct device *device,
+@@ -7811,6 +7811,8 @@ int stmmac_dvr_probe(struct device *device,
  error_pcs_setup:
  	stmmac_mdio_unregister(ndev);
  error_mdio_register:

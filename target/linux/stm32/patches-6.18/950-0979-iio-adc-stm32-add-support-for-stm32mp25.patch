@@ -35,8 +35,8 @@ Change-Id: Ie11676f5e1cfeddf6681707c13e858eec59a6d99
 ---
  drivers/iio/adc/stm32-adc-core.c |  92 ++++++--
  drivers/iio/adc/stm32-adc-core.h |  25 +++
- drivers/iio/adc/stm32-adc.c      | 351 +++++++++++++++++++++++++++++--
- 3 files changed, 439 insertions(+), 29 deletions(-)
+ drivers/iio/adc/stm32-adc.c      | 349 +++++++++++++++++++++++++++++--
+ 3 files changed, 437 insertions(+), 29 deletions(-)
 
 diff --git a/drivers/iio/adc/stm32-adc-core.c b/drivers/iio/adc/stm32-adc-core.c
 index e39a4c0db25e..4a150c09b02a 100644
@@ -337,7 +337,7 @@ index db50a9f3b922..766dc6489eb9 100644
  
  #endif
 diff --git a/drivers/iio/adc/stm32-adc.c b/drivers/iio/adc/stm32-adc.c
-index d9c34b08174e..3d15bdadbbe0 100644
+index e1869adf16f8..f061c38a786f 100644
 --- a/drivers/iio/adc/stm32-adc.c
 +++ b/drivers/iio/adc/stm32-adc.c
 @@ -34,6 +34,9 @@
@@ -768,19 +768,17 @@ index d9c34b08174e..3d15bdadbbe0 100644
  		}
  	}
  
-@@ -2292,6 +2579,11 @@ static int stm32_adc_populate_int_ch(struct iio_dev *indio_dev, const char *ch_n
- 					dev_warn(&indio_dev->dev,
- 						 "%s channel not available\n", ch_name);
+@@ -2290,6 +2577,9 @@ static int stm32_adc_populate_int_ch(struct iio_dev *indio_dev, const char *ch_n
+ 			case STM32_ADC_INT_CH_VBAT:
+ 				na = !adc->cfg->regs->ccr_vbat.reg;
  				break;
 +			case STM32_ADC_INT_CH_VDDGPU:
-+				if (!adc->cfg->regs->or_vddgpu.reg)
-+					dev_warn(&indio_dev->dev,
-+						 "%s channel not available\n", ch_name);
++				na = !adc->cfg->regs->or_vddgpu.reg;
 +				break;
+ 			default:
+ 				return -EINVAL;
  			}
- 
- 			if (stm32_adc_ic[i].idx != STM32_ADC_INT_CH_VREFINT) {
-@@ -2567,6 +2859,14 @@ static int stm32_adc_probe(struct platform_device *pdev)
+@@ -2577,6 +2867,14 @@ static int stm32_adc_probe(struct platform_device *pdev)
  	if (ret < 0)
  		return ret;
  
@@ -795,7 +793,7 @@ index d9c34b08174e..3d15bdadbbe0 100644
  	ret = stm32_adc_dma_request(dev, indio_dev);
  	if (ret < 0)
  		return ret;
-@@ -2706,7 +3006,7 @@ static const struct dev_pm_ops stm32_adc_pm_ops = {
+@@ -2716,7 +3014,7 @@ static const struct dev_pm_ops stm32_adc_pm_ops = {
  static const struct stm32_adc_cfg stm32f4_adc_cfg = {
  	.regs = &stm32f4_adc_regspec,
  	.adc_info = &stm32f4_adc_info,
@@ -804,7 +802,7 @@ index d9c34b08174e..3d15bdadbbe0 100644
  	.clk_required = true,
  	.start_conv = stm32f4_adc_start_conv,
  	.stop_conv = stm32f4_adc_stop_conv,
-@@ -2715,17 +3015,19 @@ static const struct stm32_adc_cfg stm32f4_adc_cfg = {
+@@ -2725,17 +3023,19 @@ static const struct stm32_adc_cfg stm32f4_adc_cfg = {
  	.vref_charac = 3300,
  };
  
@@ -826,7 +824,7 @@ index d9c34b08174e..3d15bdadbbe0 100644
  	.start_conv = stm32h7_adc_start_conv,
  	.stop_conv = stm32h7_adc_stop_conv,
  	.prepare = stm32h7_adc_prepare,
-@@ -2737,18 +3039,19 @@ static const struct stm32_adc_cfg stm32h7_adc_cfg = {
+@@ -2747,18 +3047,19 @@ static const struct stm32_adc_cfg stm32h7_adc_cfg = {
  	.vref_charac = 3300,
  };
  
@@ -848,7 +846,7 @@ index d9c34b08174e..3d15bdadbbe0 100644
  	.start_conv = stm32h7_adc_start_conv,
  	.stop_conv = stm32h7_adc_stop_conv,
  	.prepare = stm32h7_adc_prepare,
-@@ -2760,14 +3063,15 @@ static const struct stm32_adc_cfg stm32mp1_adc_cfg = {
+@@ -2770,14 +3071,15 @@ static const struct stm32_adc_cfg stm32mp1_adc_cfg = {
  	.vref_charac = 3300,
  };
  
@@ -866,7 +864,7 @@ index d9c34b08174e..3d15bdadbbe0 100644
  	.start_conv = stm32mp13_adc_start_conv,
  	.stop_conv = stm32h7_adc_stop_conv,
  	.prepare = stm32h7_adc_prepare,
-@@ -2779,12 +3083,33 @@ static const struct stm32_adc_cfg stm32mp13_adc_cfg = {
+@@ -2789,12 +3091,33 @@ static const struct stm32_adc_cfg stm32mp13_adc_cfg = {
  	.vref_charac = 3300,
  };
  

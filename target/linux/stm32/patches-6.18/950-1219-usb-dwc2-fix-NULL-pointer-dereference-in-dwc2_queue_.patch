@@ -44,7 +44,7 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@st.com>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index e34aaa59a3d8..596aea8203c8 100644
+index dc45757c39e8..9b348a40fd14 100644
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
 @@ -1701,7 +1701,8 @@ static void dwc2_hcd_cleanup_channels(struct dwc2_hsotg *hsotg)

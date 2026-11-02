@@ -91,7 +91,7 @@ index ea7ce48693ce..ef9bd4fd8cff 100644
  			} else {
  				ret = dwc2_exit_hibernation(hsotg, 1, 0, 1);
 diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index fe9925ebb9a7..60d6f3e4297f 100644
+index 0e53296ac48c..e8db3f916de9 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
 @@ -3400,6 +3400,7 @@ void dwc2_hsotg_disconnect(struct dwc2_hsotg *hsotg)

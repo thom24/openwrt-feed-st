@@ -53,10 +53,10 @@ index 766dc6489eb9..0f40450844e9 100644
  
  #endif
 diff --git a/drivers/iio/adc/stm32-adc.c b/drivers/iio/adc/stm32-adc.c
-index 62e33ff1daa0..83a61928d5ce 100644
+index 6f65decdbf60..e50cc344054d 100644
 --- a/drivers/iio/adc/stm32-adc.c
 +++ b/drivers/iio/adc/stm32-adc.c
-@@ -2943,6 +2943,7 @@ static int stm32_adc_probe(struct platform_device *pdev)
+@@ -2951,6 +2951,7 @@ static int stm32_adc_probe(struct platform_device *pdev)
  	irqreturn_t (*handler)(int irq, void *p) = NULL;
  	struct stm32_adc *adc;
  	bool timestamping = false;
@@ -64,7 +64,7 @@ index 62e33ff1daa0..83a61928d5ce 100644
  	int ret;
  
  	indio_dev = devm_iio_device_alloc(&pdev->dev, sizeof(*adc));
-@@ -2995,9 +2996,13 @@ static int stm32_adc_probe(struct platform_device *pdev)
+@@ -3003,9 +3004,13 @@ static int stm32_adc_probe(struct platform_device *pdev)
  	if (ret < 0)
  		return ret;
  

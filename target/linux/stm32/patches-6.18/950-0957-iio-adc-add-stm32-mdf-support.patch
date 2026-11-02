@@ -34,10 +34,10 @@ Change-Id: Ie78964ac55356e78f0810269203bde99140ce399
  create mode 100644 include/linux/iio/adc/stm32-mdf-adc.h
 
 diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
-index 58a14e6833f6..0e0ed23d9d39 100644
+index 555c17ac38e4..1566f6f9371a 100644
 --- a/drivers/iio/adc/Kconfig
 +++ b/drivers/iio/adc/Kconfig
-@@ -1501,6 +1501,33 @@ config STM32_DFSDM_ADC
+@@ -1505,6 +1505,33 @@ config STM32_DFSDM_ADC
  	  This driver can also be built as a module.  If so, the module
  	  will be called stm32-dfsdm-adc.
  

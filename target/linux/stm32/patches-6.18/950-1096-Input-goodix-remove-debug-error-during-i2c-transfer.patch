@@ -23,7 +23,7 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/364932
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/input/touchscreen/goodix.c b/drivers/input/touchscreen/goodix.c
-index d67eac13c8ea..5c3f9a613928 100644
+index 927bf45b40ce..e02bfc8b90df 100644
 --- a/drivers/input/touchscreen/goodix.c
 +++ b/drivers/input/touchscreen/goodix.c
 @@ -191,7 +191,7 @@ int goodix_i2c_read(struct i2c_client *client, u16 reg, u8 *buf, int len)

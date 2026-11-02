@@ -38,7 +38,7 @@ index f6f019d04ff0..d1bbf055b595 100644
  		hantro_g1_h264_dec.o \
  		hantro_g1_mpeg2_dec.o \
 diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
-index e0fdc4535b2d..74e012417f68 100644
+index 0353de154a1e..9e0d4bf2b925 100644
 --- a/drivers/media/platform/verisilicon/hantro.h
 +++ b/drivers/media/platform/verisilicon/hantro.h
 @@ -32,6 +32,7 @@ struct hantro_codec_ops;
@@ -49,7 +49,7 @@ index e0fdc4535b2d..74e012417f68 100644
  #define HANTRO_ENCODERS		0x0000ffff
  #define HANTRO_MPEG2_DECODER	BIT(16)
  #define HANTRO_VP8_DECODER	BIT(17)
-@@ -113,6 +114,7 @@ struct hantro_variant {
+@@ -115,6 +116,7 @@ struct hantro_variant {
   * @HANTRO_MODE_HEVC_DEC: HEVC decoder.
   * @HANTRO_MODE_VP9_DEC: VP9 decoder.
   * @HANTRO_MODE_AV1_DEC: AV1 decoder
@@ -57,7 +57,7 @@ index e0fdc4535b2d..74e012417f68 100644
   */
  enum hantro_codec_mode {
  	HANTRO_MODE_NONE = -1,
-@@ -123,6 +125,7 @@ enum hantro_codec_mode {
+@@ -125,6 +127,7 @@ enum hantro_codec_mode {
  	HANTRO_MODE_HEVC_DEC,
  	HANTRO_MODE_VP9_DEC,
  	HANTRO_MODE_AV1_DEC,
@@ -65,7 +65,7 @@ index e0fdc4535b2d..74e012417f68 100644
  };
  
  /*
-@@ -274,6 +277,7 @@ struct hantro_ctx {
+@@ -276,6 +279,7 @@ struct hantro_ctx {
  		struct hantro_hevc_dec_hw_ctx hevc_dec;
  		struct hantro_vp9_dec_hw_ctx vp9_dec;
  		struct hantro_av1_dec_hw_ctx av1_dec;
@@ -73,7 +73,7 @@ index e0fdc4535b2d..74e012417f68 100644
  	};
  };
  
-@@ -381,6 +385,12 @@ extern int hantro_debug;
+@@ -383,6 +387,12 @@ extern int hantro_debug;
  #define vpu_err(fmt, args...)					\
  	pr_err("%s:%d: " fmt, __func__, __LINE__, ##args)
  
@@ -193,10 +193,10 @@ index 000000000000..b08307a40f06
 +		hantro_boolenc_write_bool(e, 128, (val >> n) & 0x1);
 +}
 diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
-index 05a5a7d116d3..0faed0401a22 100644
+index e3954bee316e..d908ec65755f 100644
 --- a/drivers/media/platform/verisilicon/hantro_drv.c
 +++ b/drivers/media/platform/verisilicon/hantro_drv.c
-@@ -446,6 +446,20 @@ static const struct hantro_ctrl controls[] = {
+@@ -447,6 +447,20 @@ static const struct hantro_ctrl controls[] = {
  		.cfg = {
  			.id = V4L2_CID_STATELESS_MPEG2_SEQUENCE,
  		},
@@ -2075,10 +2075,10 @@ index 5f2011529f02..95fab4997c43 100644
 +
  #endif /* HANTRO_HW_H_ */
 diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
-index fcf3bd9bcda2..7f3bfb661d1c 100644
+index 83af9fa1ce94..3448ed82fb60 100644
 --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
 +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
-@@ -355,8 +355,9 @@ static int hantro_try_fmt(const struct hantro_ctx *ctx,
+@@ -359,8 +359,9 @@ static int hantro_try_fmt(const struct hantro_ctx *ctx,
  
  	pix_mp->field = V4L2_FIELD_NONE;
  

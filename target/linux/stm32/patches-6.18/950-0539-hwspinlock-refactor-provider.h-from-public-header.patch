@@ -23,10 +23,10 @@ Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
  create mode 100644 include/linux/hwspinlock/provider.h
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index dd76a6a96d24..c151d653d46e 100644
+index 8e54cdac11c4..d9c1d7473c82 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -10946,6 +10946,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git hw
+@@ -10972,6 +10972,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git hw
  F:	Documentation/devicetree/bindings/hwlock/
  F:	Documentation/locking/hwspinlock.rst
  F:	drivers/hwspinlock/
@@ -35,7 +35,7 @@ index dd76a6a96d24..c151d653d46e 100644
  
  HARDWARE TRACING FACILITIES
 diff --git a/drivers/hwspinlock/hwspinlock_core.c b/drivers/hwspinlock/hwspinlock_core.c
-index adf6fefb382f..6c8a03deb00c 100644
+index 59e43a54ddac..de4726cd152a 100644
 --- a/drivers/hwspinlock/hwspinlock_core.c
 +++ b/drivers/hwspinlock/hwspinlock_core.c
 @@ -13,6 +13,7 @@

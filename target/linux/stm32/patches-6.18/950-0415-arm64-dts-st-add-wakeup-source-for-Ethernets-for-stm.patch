@@ -19,7 +19,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  2 files changed, 10 insertions(+), 4 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index a1caea9f531d..fd0e5c857d74 100644
+index b3e9977c04b2..bc98a07e17fb 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -1783,8 +1783,10 @@ ethernet1: ethernet@482c0000 {

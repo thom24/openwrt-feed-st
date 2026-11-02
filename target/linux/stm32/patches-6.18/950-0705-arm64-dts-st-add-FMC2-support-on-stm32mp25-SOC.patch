@@ -18,7 +18,7 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  1 file changed, 40 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index f3d419ef7768..c11f363c9c6d 100644
+index b5b2154b69a7..ed2e32f3bf28 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -2572,6 +2572,46 @@ ipcc2: mailbox@46250000 {

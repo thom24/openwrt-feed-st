@@ -50,10 +50,10 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  3 files changed, 43 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/firmware/arm_scmi/common.h b/drivers/firmware/arm_scmi/common.h
-index 7c35c95fddba..7086c284bf16 100644
+index ef803e1d25e1..d49e7608aec5 100644
 --- a/drivers/firmware/arm_scmi/common.h
 +++ b/drivers/firmware/arm_scmi/common.h
-@@ -262,7 +262,8 @@ struct scmi_desc {
+@@ -264,7 +264,8 @@ struct scmi_desc {
  static inline bool is_polling_required(struct scmi_chan_info *cinfo,
  				       const struct scmi_desc *desc)
  {
@@ -64,7 +64,7 @@ index 7c35c95fddba..7086c284bf16 100644
  
  static inline bool is_transport_polling_capable(const struct scmi_desc *desc)
 diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
-index 5caa9191a8d1..a411f356c6e7 100644
+index 9e81d7c9a449..c5a698e24bed 100644
 --- a/drivers/firmware/arm_scmi/driver.c
 +++ b/drivers/firmware/arm_scmi/driver.c
 @@ -18,6 +18,7 @@
@@ -75,7 +75,7 @@ index 5caa9191a8d1..a411f356c6e7 100644
  #include <linux/device.h>
  #include <linux/export.h>
  #include <linux/idr.h>
-@@ -1237,8 +1238,7 @@ static void xfer_put(const struct scmi_protocol_handle *ph,
+@@ -1238,8 +1239,7 @@ static void xfer_put(const struct scmi_protocol_handle *ph,
  }
  
  static bool scmi_xfer_done_no_timeout(struct scmi_chan_info *cinfo,
@@ -85,7 +85,7 @@ index 5caa9191a8d1..a411f356c6e7 100644
  {
  	struct scmi_info *info = handle_to_scmi_info(cinfo->handle);
  
-@@ -1247,7 +1247,14 @@ static bool scmi_xfer_done_no_timeout(struct scmi_chan_info *cinfo,
+@@ -1248,7 +1248,14 @@ static bool scmi_xfer_done_no_timeout(struct scmi_chan_info *cinfo,
  	 * in case of out-of-order receptions of delayed responses
  	 */
  	return info->desc->ops->poll_done(cinfo, xfer) ||
@@ -101,7 +101,7 @@ index 5caa9191a8d1..a411f356c6e7 100644
  	       ktime_after(ktime_get(), stop);
  }
  
-@@ -1266,14 +1273,30 @@ static int scmi_wait_for_reply(struct device *dev, const struct scmi_desc *desc,
+@@ -1267,14 +1274,30 @@ static int scmi_wait_for_reply(struct device *dev, const struct scmi_desc *desc,
  		if (!desc->sync_cmds_completed_on_ret) {
  			bool ooo = false;
  

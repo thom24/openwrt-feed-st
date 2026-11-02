@@ -39,10 +39,10 @@ index e02e230319f0..b8ab5f08a2b2 100644
  { return 0; }
  static inline int dwc2_hsotg_resume(struct dwc2_hsotg *dwc2)
 diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 3402832b86d6..ef11d31f47e7 100644
+index aa69476ebcc2..ad1edd05b289 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -5238,6 +5238,18 @@ int dwc2_hsotg_remove(struct dwc2_hsotg *hsotg)
+@@ -5246,6 +5246,18 @@ int dwc2_hsotg_remove(struct dwc2_hsotg *hsotg)
  	return 0;
  }
  

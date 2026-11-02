@@ -33,7 +33,7 @@ Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
-index 6493b9528b06..52732f7dbc65 100644
+index 62a5d45d4979..bbb4ad948ef4 100644
 --- a/drivers/tee/optee/smc_abi.c
 +++ b/drivers/tee/optee/smc_abi.c
 @@ -1167,7 +1167,8 @@ static int optee_it_alloc(struct irq_domain *d, unsigned int virq,
