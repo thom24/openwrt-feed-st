@@ -17,11 +17,9 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  drivers/dma/stm32/stm32-dma3.c | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
-index 0f3acf494007..2ad2d74f7088 100644
 --- a/drivers/dma/stm32/stm32-dma3.c
 +++ b/drivers/dma/stm32/stm32-dma3.c
-@@ -2236,10 +2236,6 @@ static int stm32_dma3_probe(struct platform_device *pdev)
+@@ -2236,10 +2236,6 @@ static int stm32_dma3_probe(struct platf
  			goto err_clk_disable;
  	}
  
@@ -32,7 +30,7 @@ index 0f3acf494007..2ad2d74f7088 100644
  	ddata->chans = devm_kcalloc(&pdev->dev, ddata->dma_channels, sizeof(*ddata->chans),
  				    GFP_KERNEL);
  	if (!ddata->chans) {
-@@ -2256,6 +2252,10 @@ static int stm32_dma3_probe(struct platform_device *pdev)
+@@ -2256,6 +2252,10 @@ static int stm32_dma3_probe(struct platf
  		goto err_clk_disable;
  	}
  
@@ -43,6 +41,3 @@ index 0f3acf494007..2ad2d74f7088 100644
  	/* G_FIFO_SIZE x=0..7 in HWCFGR3 and G_FIFO_SIZE x=8..15 in HWCFGR4 */
  	hwcfgr = readl_relaxed(ddata->base + STM32_DMA3_HWCFGR3);
  	hwcfgr |= ((u64)readl_relaxed(ddata->base + STM32_DMA3_HWCFGR4)) << 32;
--- 
-2.53.0
-

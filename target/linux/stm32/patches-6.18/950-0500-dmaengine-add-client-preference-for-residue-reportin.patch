@@ -31,15 +31,12 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  include/linux/dmaengine.h | 58 +++++++++++++++++++++------------------
  1 file changed, 32 insertions(+), 26 deletions(-)
 
-diff --git a/include/linux/dmaengine.h b/include/linux/dmaengine.h
-index 99efe2b9b4ea..0277895f3260 100644
 --- a/include/linux/dmaengine.h
 +++ b/include/linux/dmaengine.h
-@@ -393,6 +393,32 @@ enum dma_slave_buswidth {
- 	DMA_SLAVE_BUSWIDTH_128_BYTES = 128,
+@@ -394,6 +394,32 @@ enum dma_slave_buswidth {
  };
  
-+/**
+ /**
 + * enum dma_residue_granularity - Granularity of the reported transfer residue
 + * @DMA_RESIDUE_GRANULARITY_DESCRIPTOR: Residue reporting is not supported. The
 + *  DMA channel is only able to tell whether a descriptor has been completed or
@@ -65,9 +62,10 @@ index 99efe2b9b4ea..0277895f3260 100644
 +	DMA_RESIDUE_GRANULARITY_BURST = 2,
 +};
 +
- /**
++/**
   * struct dma_slave_config - dma slave channel runtime config
   * @direction: whether the data shall go in or out on this slave
+  * channel, right now. DMA_MEM_TO_DEV and DMA_DEV_TO_MEM are
 @@ -428,6 +454,11 @@ enum dma_slave_buswidth {
   * @device_fc: Flow Controller Settings. Only valid for slave channels. Fill
   * with 'true' if peripheral should be flow controller. Direction will be
@@ -80,7 +78,7 @@ index 99efe2b9b4ea..0277895f3260 100644
   * @peripheral_config: peripheral configuration for programming peripheral
   * for dmaengine transfer
   * @peripheral_size: peripheral configuration buffer size
-@@ -455,36 +486,11 @@ struct dma_slave_config {
+@@ -455,37 +486,12 @@ struct dma_slave_config {
  	u32 src_port_window_size;
  	u32 dst_port_window_size;
  	bool device_fc;
@@ -89,7 +87,7 @@ index 99efe2b9b4ea..0277895f3260 100644
  	size_t peripheral_size;
  };
  
--/**
+ /**
 - * enum dma_residue_granularity - Granularity of the reported transfer residue
 - * @DMA_RESIDUE_GRANULARITY_DESCRIPTOR: Residue reporting is not support. The
 - *  DMA channel is only able to tell whether a descriptor has been completed or
@@ -115,9 +113,7 @@ index 99efe2b9b4ea..0277895f3260 100644
 -	DMA_RESIDUE_GRANULARITY_BURST = 2,
 -};
 -
- /**
+-/**
   * struct dma_slave_caps - expose capabilities of a slave channel only
   * @src_addr_widths: bit mask of src addr widths the channel supports.
--- 
-2.53.0
-
+  *	Width is specified in bytes, e.g. for a channel supporting

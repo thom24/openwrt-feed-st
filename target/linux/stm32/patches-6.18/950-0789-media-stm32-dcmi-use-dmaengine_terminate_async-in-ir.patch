@@ -23,11 +23,9 @@ Change-Id: Ifd75ede2d79a2420aa4a07433d52f7053962ecae
  drivers/media/platform/st/stm32/stm32-dcmi.c | 8 ++------
  1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
-index 7592b7944c4c..9efa6a8df150 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmi.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
-@@ -334,10 +334,8 @@ static void dcmi_process_frame(struct stm32_dcmi *dcmi)
+@@ -334,10 +334,8 @@ static void dcmi_process_frame(struct st
  		dcmi_buffer_done(dcmi, buf, 0, -EIO);
  	}
  
@@ -39,7 +37,7 @@ index 7592b7944c4c..9efa6a8df150 100644
  }
  
  static irqreturn_t dcmi_irq_thread(int irq, void *arg)
-@@ -355,10 +353,8 @@ static irqreturn_t dcmi_irq_thread(int irq, void *arg)
+@@ -355,10 +353,8 @@ static irqreturn_t dcmi_irq_thread(int i
  		if (dcmi->overrun_count > OVERRUN_ERROR_THRESHOLD)
  			dcmi->errors_count++;
  
@@ -51,6 +49,3 @@ index 7592b7944c4c..9efa6a8df150 100644
  		if (dcmi_restart_capture(dcmi))
  			dev_err(dcmi->dev, "%s: Cannot restart capture\n", __func__);
  		spin_unlock_irq(&dcmi->irqlock);
--- 
-2.53.0
-

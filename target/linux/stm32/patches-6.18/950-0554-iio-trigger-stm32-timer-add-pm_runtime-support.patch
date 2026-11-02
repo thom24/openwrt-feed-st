@@ -11,8 +11,6 @@ Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
  drivers/iio/trigger/stm32-timer-trigger.c | 68 +++++++++++++++++------
  1 file changed, 51 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/iio/trigger/stm32-timer-trigger.c b/drivers/iio/trigger/stm32-timer-trigger.c
-index 3b9a3a6cbb25..8fc76a9ede6d 100644
 --- a/drivers/iio/trigger/stm32-timer-trigger.c
 +++ b/drivers/iio/trigger/stm32-timer-trigger.c
 @@ -15,6 +15,7 @@
@@ -23,7 +21,7 @@ index 3b9a3a6cbb25..8fc76a9ede6d 100644
  #include <linux/property.h>
  
  #define MAX_TRIGGERS 7
-@@ -157,8 +158,8 @@ static int stm32_timer_start(struct stm32_timer_trigger *priv,
+@@ -157,8 +158,8 @@ static int stm32_timer_start(struct stm3
  	guard(mutex)(&priv->lock);
  	if (!priv->enabled) {
  		priv->enabled = true;
@@ -34,7 +32,7 @@ index 3b9a3a6cbb25..8fc76a9ede6d 100644
  			return ret;
  	}
  
-@@ -210,7 +211,7 @@ static void stm32_timer_stop(struct stm32_timer_trigger *priv,
+@@ -210,7 +211,7 @@ static void stm32_timer_stop(struct stm3
  
  	if (priv->enabled) {
  		priv->enabled = false;
@@ -43,7 +41,7 @@ index 3b9a3a6cbb25..8fc76a9ede6d 100644
  	}
  	mutex_unlock(&priv->lock);
  }
-@@ -331,8 +332,8 @@ static ssize_t stm32_tt_store_master_mode(struct device *dev,
+@@ -331,8 +332,8 @@ static ssize_t stm32_tt_store_master_mod
  			if (!priv->enabled) {
  				/* Clock should be enabled first */
  				priv->enabled = true;
@@ -54,7 +52,7 @@ index 3b9a3a6cbb25..8fc76a9ede6d 100644
  					return ret;
  			}
  			regmap_update_bits(priv->regmap, TIM_CR2, mask,
-@@ -503,8 +504,8 @@ static int stm32_counter_write_raw(struct iio_dev *indio_dev,
+@@ -503,8 +504,8 @@ static int stm32_counter_write_raw(struc
  		if (val) {
  			if (!priv->enabled) {
  				priv->enabled = true;
@@ -65,7 +63,7 @@ index 3b9a3a6cbb25..8fc76a9ede6d 100644
  					return ret;
  			}
  			regmap_set_bits(priv->regmap, TIM_CR1, TIM_CR1_CEN);
-@@ -512,7 +513,9 @@ static int stm32_counter_write_raw(struct iio_dev *indio_dev,
+@@ -512,7 +513,9 @@ static int stm32_counter_write_raw(struc
  			regmap_clear_bits(priv->regmap, TIM_CR1, TIM_CR1_CEN);
  			if (priv->enabled) {
  				priv->enabled = false;
@@ -76,7 +74,7 @@ index 3b9a3a6cbb25..8fc76a9ede6d 100644
  			}
  		}
  
-@@ -622,8 +625,8 @@ static int stm32_set_enable_mode(struct iio_dev *indio_dev,
+@@ -622,8 +625,8 @@ static int stm32_set_enable_mode(struct
  	 */
  	scoped_guard(mutex, &priv->lock) {
  		if (sms == 6 && !priv->enabled) {
@@ -87,7 +85,7 @@ index 3b9a3a6cbb25..8fc76a9ede6d 100644
  				return ret;
  
  			priv->enabled = true;
-@@ -813,6 +816,10 @@ static int stm32_timer_trigger_probe(struct platform_device *pdev)
+@@ -813,6 +816,10 @@ static int stm32_timer_trigger_probe(str
  	stm32_timer_detect_trgo2(priv);
  	mutex_init(&priv->lock);
  
@@ -98,7 +96,7 @@ index 3b9a3a6cbb25..8fc76a9ede6d 100644
  	ret = stm32_register_iio_triggers(priv);
  	if (ret)
  		return ret;
-@@ -836,12 +843,13 @@ static void stm32_timer_trigger_remove(struct platform_device *pdev)
+@@ -836,12 +843,13 @@ static void stm32_timer_trigger_remove(s
  		regmap_clear_bits(priv->regmap, TIM_CR1, TIM_CR1_CEN);
  
  	if (priv->enabled)
@@ -113,7 +111,7 @@ index 3b9a3a6cbb25..8fc76a9ede6d 100644
  
  	/* Only take care of enabled timer: don't disturb other MFD child */
  	if (priv->enabled) {
-@@ -855,7 +863,10 @@ static int stm32_timer_trigger_suspend(struct device *dev)
+@@ -855,7 +863,10 @@ static int stm32_timer_trigger_suspend(s
  
  		/* Disable the timer */
  		regmap_clear_bits(priv->regmap, TIM_CR1, TIM_CR1_CEN);
@@ -125,7 +123,7 @@ index 3b9a3a6cbb25..8fc76a9ede6d 100644
  	}
  
  	return 0;
-@@ -867,7 +878,7 @@ static int stm32_timer_trigger_resume(struct device *dev)
+@@ -867,7 +878,7 @@ static int stm32_timer_trigger_resume(st
  	int ret;
  
  	if (priv->enabled) {
@@ -134,7 +132,7 @@ index 3b9a3a6cbb25..8fc76a9ede6d 100644
  		if (ret)
  			return ret;
  
-@@ -887,9 +898,32 @@ static int stm32_timer_trigger_resume(struct device *dev)
+@@ -887,9 +898,32 @@ static int stm32_timer_trigger_resume(st
  	return 0;
  }
  
@@ -170,7 +168,7 @@ index 3b9a3a6cbb25..8fc76a9ede6d 100644
  
  static const struct stm32_timer_trigger_cfg stm32_timer_trg_cfg = {
  	.valids_table = valids_table,
-@@ -932,7 +966,7 @@ static struct platform_driver stm32_timer_trigger_driver = {
+@@ -932,7 +966,7 @@ static struct platform_driver stm32_time
  	.driver = {
  		.name = "stm32-timer-trigger",
  		.of_match_table = stm32_trig_of_match,
@@ -179,6 +177,3 @@ index 3b9a3a6cbb25..8fc76a9ede6d 100644
  	},
  };
  module_platform_driver(stm32_timer_trigger_driver);
--- 
-2.53.0
-

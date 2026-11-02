@@ -12,11 +12,9 @@ Signed-off-by: Michel JAOUEN <michel.jaouen@st.com>
  drivers/mailbox/stm32-ipcc.c | 7 ++++++-
  1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mailbox/stm32-ipcc.c b/drivers/mailbox/stm32-ipcc.c
-index bc09947d7cae..2b39d3ffa0d5 100644
 --- a/drivers/mailbox/stm32-ipcc.c
 +++ b/drivers/mailbox/stm32-ipcc.c
-@@ -520,7 +520,12 @@ static struct platform_driver stm32_ipcc_driver = {
+@@ -520,7 +520,12 @@ static struct platform_driver stm32_ipcc
  	.remove		= stm32_ipcc_remove,
  };
  
@@ -30,6 +28,3 @@ index bc09947d7cae..2b39d3ffa0d5 100644
  
  MODULE_AUTHOR("Ludovic Barre <ludovic.barre@st.com>");
  MODULE_AUTHOR("Fabien Dessenne <fabien.dessenne@st.com>");
--- 
-2.53.0
-

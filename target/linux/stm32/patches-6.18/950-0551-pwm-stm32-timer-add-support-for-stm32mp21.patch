@@ -18,11 +18,9 @@ Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
  drivers/pwm/pwm-stm32.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/pwm/pwm-stm32.c b/drivers/pwm/pwm-stm32.c
-index 935257a890b0..6917cd87c414 100644
 --- a/drivers/pwm/pwm-stm32.c
 +++ b/drivers/pwm/pwm-stm32.c
-@@ -936,6 +936,7 @@ static DEFINE_SIMPLE_DEV_PM_OPS(stm32_pwm_pm_ops, stm32_pwm_suspend, stm32_pwm_r
+@@ -936,6 +936,7 @@ static DEFINE_SIMPLE_DEV_PM_OPS(stm32_pw
  
  static const struct of_device_id stm32_pwm_of_match[] = {
  	{ .compatible = "st,stm32-pwm",	},
@@ -30,6 +28,3 @@ index 935257a890b0..6917cd87c414 100644
  	{ .compatible = "st,stm32mp25-pwm", },
  	{ /* end node */ },
  };
--- 
-2.53.0
-

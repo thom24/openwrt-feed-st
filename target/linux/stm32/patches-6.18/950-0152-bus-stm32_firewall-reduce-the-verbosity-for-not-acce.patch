@@ -20,11 +20,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/bus/stm32_firewall.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/bus/stm32_firewall.c b/drivers/bus/stm32_firewall.c
-index 4a8f5e9cff30..dbdbbe0f73e3 100644
 --- a/drivers/bus/stm32_firewall.c
 +++ b/drivers/bus/stm32_firewall.c
-@@ -326,7 +326,7 @@ int stm32_firewall_populate_bus(struct stm32_firewall_controller *firewall_contr
+@@ -326,7 +326,7 @@ int stm32_firewall_populate_bus(struct s
  				 */
  				fwnode_links_purge(of_fwnode_handle(child));
  				of_detach_node(child);
@@ -33,6 +31,3 @@ index 4a8f5e9cff30..dbdbbe0f73e3 100644
  					child->full_name);
  			}
  		}
--- 
-2.53.0
-

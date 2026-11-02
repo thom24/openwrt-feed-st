@@ -16,9 +16,6 @@ Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
  1 file changed, 48 insertions(+)
  create mode 100644 include/dt-bindings/regulator/st,stm32mp21-regulator.h
 
-diff --git a/include/dt-bindings/regulator/st,stm32mp21-regulator.h b/include/dt-bindings/regulator/st,stm32mp21-regulator.h
-new file mode 100644
-index 000000000000..aac6426363d8
 --- /dev/null
 +++ b/include/dt-bindings/regulator/st,stm32mp21-regulator.h
 @@ -0,0 +1,48 @@
@@ -70,6 +67,3 @@ index 000000000000..aac6426363d8
 +#define VOLTD_SCMI_REGU4		30
 +
 +#endif /*__DT_BINDINGS_REGULATOR_STM32MP21_REGULATOR_H */
--- 
-2.53.0
-

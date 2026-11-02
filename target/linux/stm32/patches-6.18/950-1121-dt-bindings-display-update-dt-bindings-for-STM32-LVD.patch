@@ -15,8 +15,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  .../devicetree/bindings/display/st,stm32mp25-lvds.yaml    | 8 ++++++++
  1 file changed, 8 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/display/st,stm32mp25-lvds.yaml b/Documentation/devicetree/bindings/display/st,stm32mp25-lvds.yaml
-index 84720dc91f87..1e7872be9ab2 100644
 --- a/Documentation/devicetree/bindings/display/st,stm32mp25-lvds.yaml
 +++ b/Documentation/devicetree/bindings/display/st,stm32mp25-lvds.yaml
 @@ -89,6 +89,14 @@ properties:
@@ -34,6 +32,3 @@ index 84720dc91f87..1e7872be9ab2 100644
  required:
    - compatible
    - "#clock-cells"
--- 
-2.53.0
-

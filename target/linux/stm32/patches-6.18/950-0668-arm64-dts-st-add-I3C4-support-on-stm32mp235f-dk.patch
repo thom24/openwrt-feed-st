@@ -18,11 +18,9 @@ Tested-by: Alain VOLMAT <alain.volmat@st.com>
  arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 8 ++++++++
  1 file changed, 8 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-index c99a106bf766..85258ce14452 100644
 --- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-@@ -243,6 +243,14 @@ &i2c8 {
+@@ -243,6 +243,14 @@
  	/delete-property/dma-names;
  };
  
@@ -37,6 +35,3 @@ index c99a106bf766..85258ce14452 100644
  &ipcc1 {
  	status = "okay";
  };
--- 
-2.53.0
-

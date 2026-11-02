@@ -23,11 +23,9 @@ Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
  drivers/irqchip/irq-stm32mp-exti.c | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/drivers/irqchip/irq-stm32mp-exti.c b/drivers/irqchip/irq-stm32mp-exti.c
-index 4d743fde5004..29a7c68b4c44 100644
 --- a/drivers/irqchip/irq-stm32mp-exti.c
 +++ b/drivers/irqchip/irq-stm32mp-exti.c
-@@ -289,6 +289,10 @@ static void stm32mp_chip_suspend(struct stm32mp_exti_chip_data *chip_data, u32 w
+@@ -289,6 +289,10 @@ static void stm32mp_chip_suspend(struct
  	chip_data->ftsr_cache = readl_relaxed(base + bank->ftsr_ofst);
  
  	writel_relaxed(wake_active, base + bank->imr_ofst);
@@ -38,6 +36,3 @@ index 4d743fde5004..29a7c68b4c44 100644
  }
  
  static void stm32mp_chip_resume(struct stm32mp_exti_chip_data *chip_data, u32 mask_cache)
--- 
-2.53.0
-

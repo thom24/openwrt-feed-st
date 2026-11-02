@@ -14,8 +14,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp255.dtsi | 35 ++++++++++++++++++++++++++
  1 file changed, 35 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp255.dtsi b/arch/arm64/boot/dts/st/stm32mp255.dtsi
-index b76097af7126..8c909ca6bb09 100644
 --- a/arch/arm64/boot/dts/st/stm32mp255.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp255.dtsi
 @@ -3,8 +3,30 @@
@@ -49,7 +47,7 @@ index b76097af7126..8c909ca6bb09 100644
  &ltdc {
  	compatible = "st,stm32mp255-ltdc";
  	clocks = <&rcc CK_KER_LTDC>, <&rcc CK_BUS_LTDC>, <&syscfg>, <&lvds>;
-@@ -144,4 +166,17 @@ venc: venc@480e0000 {
+@@ -144,4 +166,17 @@
  		access-controllers = <&rifsc 90>;
  		power-domains = <&d1_pd>;
  	};
@@ -67,6 +65,3 @@ index b76097af7126..8c909ca6bb09 100644
 +		#cooling-cells = <2>;
 +	};
  };
--- 
-2.53.0
-

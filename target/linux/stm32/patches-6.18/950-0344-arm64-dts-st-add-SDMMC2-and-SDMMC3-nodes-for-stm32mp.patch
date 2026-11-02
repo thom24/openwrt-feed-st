@@ -17,11 +17,9 @@ Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
  arch/arm64/boot/dts/st/stm32mp231.dtsi | 32 ++++++++++++++++++++++++++
  1 file changed, 32 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index d45af764235d..1957cf56fe2a 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -818,6 +818,38 @@ sdmmc1: mmc@48220000 {
+@@ -818,6 +818,38 @@
  				status = "disabled";
  			};
  
@@ -60,6 +58,3 @@ index d45af764235d..1957cf56fe2a 100644
  			ethernet1: ethernet@482c0000 {
  				compatible = "st,stm32mp25-dwmac", "snps,dwmac-5.20";
  				reg = <0x482c0000 0x4000>;
--- 
-2.53.0
-

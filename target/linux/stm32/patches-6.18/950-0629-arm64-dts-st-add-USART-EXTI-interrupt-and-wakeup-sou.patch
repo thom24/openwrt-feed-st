@@ -17,11 +17,9 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  arch/arm64/boot/dts/st/stm32mp231.dtsi | 21 ++++++++++++++-------
  1 file changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index e6c9b5b8181c..959b2c443647 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -717,52 +717,56 @@ spdifrx: audio-controller@400d0000 {
+@@ -717,52 +717,56 @@
  			usart2: serial@400e0000 {
  				compatible = "st,stm32h7-uart";
  				reg = <0x400e0000 0x400>;
@@ -82,7 +80,7 @@ index e6c9b5b8181c..959b2c443647 100644
  				status = "disabled";
  			};
  
-@@ -956,13 +960,14 @@ counter {
+@@ -956,13 +960,14 @@
  			usart6: serial@40220000 {
  				compatible = "st,stm32h7-uart";
  				reg = <0x40220000 0x400>;
@@ -98,7 +96,7 @@ index e6c9b5b8181c..959b2c443647 100644
  				status = "disabled";
  			};
  
-@@ -1234,13 +1239,14 @@ sai3b: audio-controller@502b0024 {
+@@ -1234,13 +1239,14 @@
  			usart1: serial@40330000 {
  				compatible = "st,stm32h7-uart";
  				reg = <0x40330000 0x400>;
@@ -114,7 +112,7 @@ index e6c9b5b8181c..959b2c443647 100644
  				status = "disabled";
  			};
  
-@@ -1283,13 +1289,14 @@ sai4b: audio-controller@40340024 {
+@@ -1283,13 +1289,14 @@
  			uart7: serial@40370000 {
  				compatible = "st,stm32h7-uart";
  				reg = <0x40370000 0x400>;
@@ -130,6 +128,3 @@ index e6c9b5b8181c..959b2c443647 100644
  				status = "disabled";
  			};
  
--- 
-2.53.0
-

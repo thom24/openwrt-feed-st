@@ -23,8 +23,6 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  .../devicetree/bindings/mfd/fsl,mc13xxx.yaml  | 74 +++++++++++--------
  1 file changed, 43 insertions(+), 31 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/mfd/fsl,mc13xxx.yaml b/Documentation/devicetree/bindings/mfd/fsl,mc13xxx.yaml
-index d2886f2686a8..cfa69f1f380a 100644
 --- a/Documentation/devicetree/bindings/mfd/fsl,mc13xxx.yaml
 +++ b/Documentation/devicetree/bindings/mfd/fsl,mc13xxx.yaml
 @@ -93,38 +93,14 @@ properties:
@@ -124,6 +122,3 @@ index d2886f2686a8..cfa69f1f380a 100644
                      reg = <3>;
                      label = "system:red:live";
                      linux,default-trigger = "heartbeat";
--- 
-2.53.0
-

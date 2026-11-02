@@ -16,8 +16,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  .../devicetree/bindings/arm/firmware/linaro,optee-tz.yaml  | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml b/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
-index 5d033570b57b..8839c63bec2c 100644
 --- a/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
 +++ b/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
 @@ -31,6 +31,13 @@ properties:
@@ -34,6 +32,3 @@ index 5d033570b57b..8839c63bec2c 100644
    method:
      enum: [smc, hvc]
      description: |
--- 
-2.53.0
-

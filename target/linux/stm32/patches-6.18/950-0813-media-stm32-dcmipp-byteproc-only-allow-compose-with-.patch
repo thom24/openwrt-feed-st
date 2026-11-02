@@ -16,11 +16,9 @@ Signed-off-by: Hans Verkuil <hverkuil+cisco@kernel.org>
  .../platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c | 12 +++++++++++-
  1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-index f45a3027f8f3..f9e4a3a9ef3f 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-@@ -131,6 +131,8 @@ static void dcmipp_byteproc_adjust_crop(struct v4l2_rect *r,
+@@ -131,6 +131,8 @@ static void dcmipp_byteproc_adjust_crop(
  static void dcmipp_byteproc_adjust_compose(struct v4l2_rect *r,
  					   const struct v4l2_mbus_framefmt *fmt)
  {
@@ -29,7 +27,7 @@ index f45a3027f8f3..f9e4a3a9ef3f 100644
  	r->top = 0;
  	r->left = 0;
  
-@@ -142,6 +144,14 @@ static void dcmipp_byteproc_adjust_compose(struct v4l2_rect *r,
+@@ -142,6 +144,14 @@ static void dcmipp_byteproc_adjust_compo
  		return;
  	}
  
@@ -44,7 +42,7 @@ index f45a3027f8f3..f9e4a3a9ef3f 100644
  	/* Adjust height - we can only perform 1/2 decimation */
  	if (r->height <= (fmt->height / 2))
  		r->height = fmt->height / 2;
-@@ -149,7 +159,7 @@ static void dcmipp_byteproc_adjust_compose(struct v4l2_rect *r,
+@@ -149,7 +159,7 @@ static void dcmipp_byteproc_adjust_compo
  		r->height = fmt->height;
  
  	/* Adjust width /2 or /4 for 8bits formats and /2 for 16bits formats */
@@ -53,6 +51,3 @@ index f45a3027f8f3..f9e4a3a9ef3f 100644
  		r->width = fmt->width / 4;
  	else if (r->width <= (fmt->width / 2))
  		r->width = fmt->width / 2;
--- 
-2.53.0
-

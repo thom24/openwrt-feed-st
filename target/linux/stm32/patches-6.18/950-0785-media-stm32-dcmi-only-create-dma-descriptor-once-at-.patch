@@ -16,8 +16,6 @@ Change-Id: I23a999e0e51251e65c606a40da7010c82d989705
  drivers/media/platform/st/stm32/stm32-dcmi.c | 78 +++++++++++---------
  1 file changed, 45 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
-index de58174c77b7..7969fa72c44f 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmi.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
 @@ -113,6 +113,7 @@ struct dcmi_buf {
@@ -38,7 +36,7 @@ index de58174c77b7..7969fa72c44f 100644
  	struct media_device		mdev;
  	struct media_pad		vid_cap_pad;
  	struct media_pipeline		pipeline;
-@@ -300,39 +298,13 @@ static void dcmi_dma_callback(void *param)
+@@ -300,39 +298,13 @@ static void dcmi_dma_callback(void *para
  static int dcmi_start_dma(struct stm32_dcmi *dcmi,
  			  struct dcmi_buf *buf)
  {
@@ -79,7 +77,7 @@ index de58174c77b7..7969fa72c44f 100644
  	dma_async_issue_pending(dcmi->dma_chan);
  
  	return 0;
-@@ -547,6 +519,31 @@ static int dcmi_buf_prepare(struct vb2_buffer *vb)
+@@ -547,6 +519,31 @@ static int dcmi_buf_prepare(struct vb2_b
  			size -= bytes;
  		}
  
@@ -111,7 +109,7 @@ index de58174c77b7..7969fa72c44f 100644
  		buf->prepared = true;
  
  		vb2_set_plane_payload(&buf->vb.vb2_buf, 0, buf->size);
-@@ -555,6 +552,23 @@ static int dcmi_buf_prepare(struct vb2_buffer *vb)
+@@ -555,6 +552,23 @@ static int dcmi_buf_prepare(struct vb2_b
  	return 0;
  }
  
@@ -135,7 +133,7 @@ index de58174c77b7..7969fa72c44f 100644
  static void dcmi_buf_queue(struct vb2_buffer *vb)
  {
  	struct stm32_dcmi *dcmi =  vb2_get_drv_priv(vb->vb2_queue);
-@@ -859,9 +873,7 @@ static void dcmi_stop_streaming(struct vb2_queue *vq)
+@@ -859,9 +873,7 @@ static void dcmi_stop_streaming(struct v
  	spin_unlock_irq(&dcmi->irqlock);
  
  	/* Stop all pending DMA operations */
@@ -145,7 +143,7 @@ index de58174c77b7..7969fa72c44f 100644
  
  	pm_runtime_put(dcmi->dev);
  
-@@ -878,6 +890,7 @@ static const struct vb2_ops dcmi_video_qops = {
+@@ -878,6 +890,7 @@ static const struct vb2_ops dcmi_video_q
  	.queue_setup		= dcmi_queue_setup,
  	.buf_init		= dcmi_buf_init,
  	.buf_prepare		= dcmi_buf_prepare,
@@ -153,7 +151,7 @@ index de58174c77b7..7969fa72c44f 100644
  	.buf_queue		= dcmi_buf_queue,
  	.start_streaming	= dcmi_start_streaming,
  	.stop_streaming		= dcmi_stop_streaming,
-@@ -1953,7 +1966,6 @@ static int dcmi_probe(struct platform_device *pdev)
+@@ -1953,7 +1966,6 @@ static int dcmi_probe(struct platform_de
  
  	spin_lock_init(&dcmi->irqlock);
  	mutex_init(&dcmi->lock);
@@ -161,6 +159,3 @@ index de58174c77b7..7969fa72c44f 100644
  	init_completion(&dcmi->complete);
  	INIT_LIST_HEAD(&dcmi->buffers);
  
--- 
-2.53.0
-

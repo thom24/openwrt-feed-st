@@ -10,11 +10,9 @@ Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
  drivers/spi/spi-stm32-ospi.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
-index 92e7c02254d4..bf8a76eaff8e 100644
 --- a/drivers/spi/spi-stm32-ospi.c
 +++ b/drivers/spi/spi-stm32-ospi.c
-@@ -1402,7 +1402,7 @@ static int stm32_ospi_transfer_one_message(struct spi_controller *ctrl,
+@@ -1402,7 +1402,7 @@ static int stm32_ospi_transfer_one_messa
  	struct spi_transfer *transfer;
  	struct spi_device *spi = msg->spi;
  	struct spi_mem_op op;
@@ -23,6 +21,3 @@ index 92e7c02254d4..bf8a76eaff8e 100644
  	int ret = 0;
  
  	if (!cs_gpiod)
--- 
-2.53.0
-

@@ -20,11 +20,9 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp151.dtsi | 8 +-------
  1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
-index 7910951e24d9..373bac6fd0e4 100644
 --- a/arch/arm/boot/dts/st/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
-@@ -124,15 +124,9 @@ cpu_thermal: cpu-thermal {
+@@ -124,15 +124,9 @@
  			thermal-sensors = <&dts>;
  
  			trips {
@@ -41,6 +39,3 @@ index 7910951e24d9..373bac6fd0e4 100644
  					type = "critical";
  				};
  			};
--- 
-2.53.0
-

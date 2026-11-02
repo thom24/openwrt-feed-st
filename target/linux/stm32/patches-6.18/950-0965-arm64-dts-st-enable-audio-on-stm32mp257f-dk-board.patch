@@ -15,11 +15,9 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 110 ++++++++++++++++++++++
  1 file changed, 110 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index 8d9b1f482cd5..07729d672f6a 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -44,6 +44,34 @@ clk_ext_camera: clk-ext-camera {
+@@ -44,6 +44,34 @@
  		};
  	};
  
@@ -54,7 +52,7 @@ index 8d9b1f482cd5..07729d672f6a 100644
  	gpio-keys {
  		compatible = "gpio-keys";
  
-@@ -87,6 +115,13 @@ memory@80000000 {
+@@ -87,6 +115,13 @@
  		reg = <0x0 0x80000000 0x1 0x0>;
  	};
  
@@ -68,7 +66,7 @@ index 8d9b1f482cd5..07729d672f6a 100644
  	wifi_pwrseq: wifi-pwrseq {
  		compatible = "mmc-pwrseq-simple";
  		reset-gpios = <&gpiog 8 GPIO_ACTIVE_LOW>;
-@@ -391,6 +426,81 @@ &m33_rproc {
+@@ -391,6 +426,81 @@
  	status = "okay";
  };
  
@@ -150,6 +148,3 @@ index 8d9b1f482cd5..07729d672f6a 100644
  &mlahb {
  	intc_rpmsg: interrupt-controller@1 {
  		compatible = "rpmsg,intc";
--- 
-2.53.0
-

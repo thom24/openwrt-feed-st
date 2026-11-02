@@ -13,8 +13,6 @@ Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
  drivers/gpu/drm/stm/drv.c | 24 +++++++++++++++++++++++-
  1 file changed, 23 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/stm/drv.c b/drivers/gpu/drm/stm/drv.c
-index c092bcb32dcb..380536c32760 100644
 --- a/drivers/gpu/drm/stm/drv.c
 +++ b/drivers/gpu/drm/stm/drv.c
 @@ -13,6 +13,7 @@
@@ -25,7 +23,7 @@ index c092bcb32dcb..380536c32760 100644
  #include <linux/platform_device.h>
  #include <linux/pm_runtime.h>
  
-@@ -178,7 +179,28 @@ static int stm_drm_platform_probe(struct platform_device *pdev)
+@@ -178,7 +179,28 @@ static int stm_drm_platform_probe(struct
  	struct device *dev = &pdev->dev;
  	struct drm_device *ddev;
  	struct ltdc_device *ldev;
@@ -55,6 +53,3 @@ index c092bcb32dcb..380536c32760 100644
  
  	ldev = devm_kzalloc(dev, sizeof(*ldev), GFP_KERNEL);
  	if (!ldev)
--- 
-2.53.0
-

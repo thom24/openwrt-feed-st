@@ -16,15 +16,12 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi | 45 +++++++++++++++++++++
  1 file changed, 45 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
-index c3e42849cfbb..289348d182ba 100644
 --- a/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi
-@@ -64,6 +64,51 @@ pins1 {
- 		};
+@@ -65,6 +65,51 @@
  	};
  
-+	/omit-if-no-ref/
+ 	/omit-if-no-ref/
 +	dfsdm_clkout_pins_a: dfsdm-clkout-pins-0 {
 +		pins {
 +			pinmux = <STM32_PINMUX('C', 3, AF3)>; /* DFSDM_CKOUT */
@@ -69,9 +66,7 @@ index c3e42849cfbb..289348d182ba 100644
 +		};
 +	};
 +
- 	/omit-if-no-ref/
++	/omit-if-no-ref/
  	eth1_rgmii_pins_a: eth1-rgmii-0 {
  		pins1 {
--- 
-2.53.0
-
+ 			pinmux = <STM32_PINMUX('G', 13, AF11)>, /* ETH_RGMII_TXD0 */

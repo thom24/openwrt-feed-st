@@ -22,8 +22,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/usb/typec/tcpm/st_tcpp.h |   1 +
  2 files changed, 155 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/usb/typec/tcpm/st_tcpp.c b/drivers/usb/typec/tcpm/st_tcpp.c
-index 8e8f7a6e9f8c..b4dd25681232 100644
 --- a/drivers/usb/typec/tcpm/st_tcpp.c
 +++ b/drivers/usb/typec/tcpm/st_tcpp.c
 @@ -9,12 +9,18 @@
@@ -72,7 +70,7 @@ index 8e8f7a6e9f8c..b4dd25681232 100644
  int tcpp_register_vbus_notifier(struct device *dev, tcpp_vbus_cb_t cb, void *data)
  {
  	struct i2c_client *client = to_i2c_client(dev);
-@@ -57,7 +76,7 @@ void tcpp_unregister_vbus_notifier(struct device *dev)
+@@ -57,7 +76,7 @@ void tcpp_unregister_vbus_notifier(struc
  }
  EXPORT_SYMBOL_GPL(tcpp_unregister_vbus_notifier);
  
@@ -81,7 +79,7 @@ index 8e8f7a6e9f8c..b4dd25681232 100644
  {
  	u32 sr1;
  	int ret;
-@@ -66,8 +85,8 @@ static int tcpp_set_pm(struct st_tcpp *tcpp, int pm)
+@@ -66,8 +85,8 @@ static int tcpp_set_pm(struct st_tcpp *t
  	if (ret)
  		dev_err(tcpp->dev, "%s: Unable to read SR1: %d\n", __func__, ret);
  
@@ -92,7 +90,7 @@ index 8e8f7a6e9f8c..b4dd25681232 100644
  
  	ret = regmap_write(tcpp->regmap, TCPP_CR0, sr1);
  	if (ret)
-@@ -76,6 +95,16 @@ static int tcpp_set_pm(struct st_tcpp *tcpp, int pm)
+@@ -76,6 +95,16 @@ static int tcpp_set_pm(struct st_tcpp *t
  	return ret;
  }
  
@@ -270,7 +268,7 @@ index 8e8f7a6e9f8c..b4dd25681232 100644
  
  	return IRQ_HANDLED;
  }
-@@ -222,6 +346,12 @@ static int tcpp_i2c_probe(struct i2c_client *client)
+@@ -222,6 +346,12 @@ static int tcpp_i2c_probe(struct i2c_cli
  	if (ret)
  		return dev_err_probe(dev, ret, "Failed to request IRQ\n");
  
@@ -283,7 +281,7 @@ index 8e8f7a6e9f8c..b4dd25681232 100644
  	/*
  	 * clientdata is used by stm32_ucpd_probe() to defer ucpd probing
  	 * until the mutex, GPIO, and IRQ have been initialized. They
-@@ -232,10 +362,20 @@ static int tcpp_i2c_probe(struct i2c_client *client)
+@@ -232,10 +362,20 @@ static int tcpp_i2c_probe(struct i2c_cli
  	return 0;
  }
  
@@ -312,8 +310,6 @@ index 8e8f7a6e9f8c..b4dd25681232 100644
  	.id_table = tcpp_id,
  };
  module_i2c_driver(tcpp_driver);
-diff --git a/drivers/usb/typec/tcpm/st_tcpp.h b/drivers/usb/typec/tcpm/st_tcpp.h
-index ca7da2782fdb..9284410af581 100644
 --- a/drivers/usb/typec/tcpm/st_tcpp.h
 +++ b/drivers/usb/typec/tcpm/st_tcpp.h
 @@ -12,6 +12,7 @@ int tcpp_init(struct device *tcpp);
@@ -324,6 +320,3 @@ index ca7da2782fdb..9284410af581 100644
  int tcpp_attach(struct device *tcpp);
  int tcpp_detach(struct device *tcpp);
  int tcpp_register_vbus_notifier(struct device *dev, tcpp_vbus_cb_t cb, void *data);
--- 
-2.53.0
-

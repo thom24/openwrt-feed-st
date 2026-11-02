@@ -21,8 +21,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/pci/controller/dwc/pcie-stm32-ep.c | 29 ++++++++++++++++------
  1 file changed, 22 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/pci/controller/dwc/pcie-stm32-ep.c b/drivers/pci/controller/dwc/pcie-stm32-ep.c
-index 7d48038d576d..b66a64ff0ccf 100644
 --- a/drivers/pci/controller/dwc/pcie-stm32-ep.c
 +++ b/drivers/pci/controller/dwc/pcie-stm32-ep.c
 @@ -26,6 +26,7 @@ struct stm32_pcie {
@@ -33,7 +31,7 @@ index 7d48038d576d..b66a64ff0ccf 100644
  };
  
  static void stm32_pcie_ep_init(struct dw_pcie_ep *ep)
-@@ -182,16 +183,29 @@ static irqreturn_t stm32_pcie_ep_perst_irq_thread(int irq, void *data)
+@@ -182,16 +183,29 @@ static irqreturn_t stm32_pcie_ep_perst_i
  {
  	struct stm32_pcie *stm32_pcie = data;
  	struct dw_pcie *pci = &stm32_pcie->pci;
@@ -49,15 +47,15 @@ index 7d48038d576d..b66a64ff0ccf 100644
 +		dev_err(pci->dev, "Failed read PERST gpio: %d\n", perst);
 +		return IRQ_NONE;
 +	}
-+
+ 
+-	irq_set_irq_type(gpiod_to_irq(stm32_pcie->perst_gpio),
+-			 (perst ? IRQF_TRIGGER_HIGH : IRQF_TRIGGER_LOW));
 +	if (perst != stm32_pcie->last_perst) {
 +		if (perst)
 +			stm32_pcie_perst_assert(pci);
 +		else
 +			stm32_pcie_perst_deassert(pci);
- 
--	irq_set_irq_type(gpiod_to_irq(stm32_pcie->perst_gpio),
--			 (perst ? IRQF_TRIGGER_HIGH : IRQF_TRIGGER_LOW));
++
 +		irq_set_irq_type(gpiod_to_irq(stm32_pcie->perst_gpio),
 +				 (perst ? IRQF_TRIGGER_HIGH : IRQF_TRIGGER_LOW));
 +
@@ -70,7 +68,7 @@ index 7d48038d576d..b66a64ff0ccf 100644
  
  	return IRQ_HANDLED;
  }
-@@ -285,6 +299,7 @@ static int stm32_pcie_probe(struct platform_device *pdev)
+@@ -285,6 +299,7 @@ static int stm32_pcie_probe(struct platf
  	}
  
  	stm32_pcie->perst_irq = gpiod_to_irq(stm32_pcie->perst_gpio);
@@ -78,6 +76,3 @@ index 7d48038d576d..b66a64ff0ccf 100644
  
  	/* Will be enabled in start_link when device is initialized. */
  	irq_set_status_flags(stm32_pcie->perst_irq, IRQ_NOAUTOEN);
--- 
-2.53.0
-

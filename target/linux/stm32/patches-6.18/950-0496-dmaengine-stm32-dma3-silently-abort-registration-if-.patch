@@ -17,11 +17,9 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  drivers/dma/stm32/stm32-dma3.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
-index bb58c629525c..0f3acf494007 100644
 --- a/drivers/dma/stm32/stm32-dma3.c
 +++ b/drivers/dma/stm32/stm32-dma3.c
-@@ -2250,8 +2250,9 @@ static int stm32_dma3_probe(struct platform_device *pdev)
+@@ -2250,8 +2250,9 @@ static int stm32_dma3_probe(struct platf
  	chan_reserved = stm32_dma3_check_rif(ddata);
  
  	if (chan_reserved == GENMASK(ddata->dma_channels - 1, 0)) {
@@ -32,6 +30,3 @@ index bb58c629525c..0f3acf494007 100644
  		goto err_clk_disable;
  	}
  
--- 
-2.53.0
-

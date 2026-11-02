@@ -16,8 +16,6 @@ Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 13 +++++++++++++
  1 file changed, 13 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-index aaa84a8699d8..cfb7c65cf75c 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 @@ -6,6 +6,7 @@
@@ -28,7 +26,7 @@ index aaa84a8699d8..cfb7c65cf75c 100644
  #include "stm32mp215.dtsi"
  #include "stm32mp21xf.dtsi"
  
-@@ -21,6 +22,18 @@ chosen {
+@@ -21,6 +22,18 @@
  		stdout-path = "serial0:115200n8";
  	};
  
@@ -47,6 +45,3 @@ index aaa84a8699d8..cfb7c65cf75c 100644
  	memory@80000000 {
  		device_type = "memory";
  		reg = <0x0 0x80000000 0x0 0x80000000>;
--- 
-2.53.0
-

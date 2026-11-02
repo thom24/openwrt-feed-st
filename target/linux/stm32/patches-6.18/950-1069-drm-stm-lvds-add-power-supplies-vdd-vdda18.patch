@@ -11,8 +11,6 @@ Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
  drivers/gpu/drm/stm/lvds.c | 34 ++++++++++++++++++++++++++++++++++
  1 file changed, 34 insertions(+)
 
-diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
-index 9e0343fb85b9..617388236bfb 100644
 --- a/drivers/gpu/drm/stm/lvds.c
 +++ b/drivers/gpu/drm/stm/lvds.c
 @@ -21,6 +21,7 @@
@@ -33,7 +31,7 @@ index 9e0343fb85b9..617388236bfb 100644
  };
  
  #define bridge_to_stm_lvds(b) \
-@@ -979,9 +983,24 @@ static void lvds_atomic_enable(struct drm_bridge *bridge,
+@@ -979,9 +983,24 @@ static void lvds_atomic_enable(struct dr
  	if (!conn_state)
  		return;
  
@@ -58,7 +56,7 @@ index 9e0343fb85b9..617388236bfb 100644
  		return;
  	}
  
-@@ -1013,6 +1032,9 @@ static void lvds_atomic_disable(struct drm_bridge *bridge,
+@@ -1013,6 +1032,9 @@ static void lvds_atomic_disable(struct d
  	lvds_clear(lvds, LVDS_CR, CR_LVDSEN);
  
  	pm_runtime_put(lvds->dev);
@@ -68,7 +66,7 @@ index 9e0343fb85b9..617388236bfb 100644
  }
  
  static const struct drm_bridge_funcs lvds_bridge_funcs = {
-@@ -1068,6 +1090,18 @@ static int lvds_probe(struct platform_device *pdev)
+@@ -1068,6 +1090,18 @@ static int lvds_probe(struct platform_de
  		return ret;
  	}
  
@@ -87,6 +85,3 @@ index 9e0343fb85b9..617388236bfb 100644
  	reset_control_assert(rstc);
  	usleep_range(10, 20);
  	reset_control_deassert(rstc);
--- 
-2.53.0
-

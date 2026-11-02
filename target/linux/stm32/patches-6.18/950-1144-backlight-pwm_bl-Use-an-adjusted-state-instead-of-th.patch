@@ -32,11 +32,9 @@ Tested-by: Jerome BESNARD <jerome.besnard@st.com>
  drivers/video/backlight/pwm_bl.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/video/backlight/pwm_bl.c b/drivers/video/backlight/pwm_bl.c
-index 237d3d3f3bb1..f952ef78405f 100644
 --- a/drivers/video/backlight/pwm_bl.c
 +++ b/drivers/video/backlight/pwm_bl.c
-@@ -518,7 +518,7 @@ static int pwm_backlight_probe(struct platform_device *pdev)
+@@ -518,7 +518,7 @@ static int pwm_backlight_probe(struct pl
  	if (!state.period && (data->pwm_period_ns > 0))
  		state.period = data->pwm_period_ns;
  
@@ -45,6 +43,3 @@ index 237d3d3f3bb1..f952ef78405f 100644
  	if (ret) {
  		dev_err_probe(&pdev->dev, ret,
  			      "failed to apply initial PWM state");
--- 
-2.53.0
-

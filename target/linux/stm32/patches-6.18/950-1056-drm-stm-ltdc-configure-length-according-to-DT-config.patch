@@ -16,11 +16,9 @@ Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
  drivers/gpu/drm/stm/ltdc.h |  1 +
  2 files changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-index c7f14d08f650..d12dc395d621 100644
 --- a/drivers/gpu/drm/stm/ltdc.c
 +++ b/drivers/gpu/drm/stm/ltdc.c
-@@ -1376,6 +1376,7 @@ static void ltdc_plane_update(struct drm_plane *plane, struct drm_atomic_state *
+@@ -1376,6 +1376,7 @@ static void ltdc_plane_update(struct drm
  {
  	struct ltdc_device *ldev = plane_to_ltdc(plane);
  	struct drm_device *ddev = plane->dev;
@@ -28,7 +26,7 @@ index c7f14d08f650..d12dc395d621 100644
  	struct drm_plane_state *newstate = drm_atomic_get_new_plane_state(state, plane);
  	struct drm_framebuffer *fb = newstate->fb;
  	u32 lofs = plane->index * LAY_OFS;
-@@ -1692,6 +1693,11 @@ static void ltdc_plane_update(struct drm_plane *plane, struct drm_atomic_state *
+@@ -1692,6 +1693,11 @@ static void ltdc_plane_update(struct drm
  		}
  	}
  
@@ -66,8 +64,6 @@ index c7f14d08f650..d12dc395d621 100644
  
  	/* Get endpoints if any */
  	for (i = 0; i < nb_endpoints; i++) {
-diff --git a/drivers/gpu/drm/stm/ltdc.h b/drivers/gpu/drm/stm/ltdc.h
-index 0a4d016069ce..2edb83252521 100644
 --- a/drivers/gpu/drm/stm/ltdc.h
 +++ b/drivers/gpu/drm/stm/ltdc.h
 @@ -71,6 +71,7 @@ struct ltdc_device {
@@ -78,6 +74,3 @@ index 0a4d016069ce..2edb83252521 100644
  	struct reserved_mem *rot_mem;
  	struct stm32_firewall firewall[LTDC_MAX_FIREWALL];
  	bool plane_enabled[LTDC_MAX_LAYER];
--- 
-2.53.0
-

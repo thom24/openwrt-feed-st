@@ -18,17 +18,12 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp235.dtsi | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp235.dtsi b/arch/arm64/boot/dts/st/stm32mp235.dtsi
-index 2719c088dd59..312c6eff9daf 100644
 --- a/arch/arm64/boot/dts/st/stm32mp235.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp235.dtsi
-@@ -12,5 +12,6 @@ vdec: vdec@480d0000 {
+@@ -12,5 +12,6 @@
  		interrupts = <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>;
  		clocks = <&rcc CK_BUS_VDEC>;
  		access-controllers = <&rifsc 89>;
 +		power-domains = <&d1_pd>;
  	};
  };
--- 
-2.53.0
-

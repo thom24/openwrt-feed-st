@@ -49,8 +49,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/firmware/arm_scmi/shmem.c  | 14 +++++-----
  3 files changed, 43 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/firmware/arm_scmi/common.h b/drivers/firmware/arm_scmi/common.h
-index ef803e1d25e1..d49e7608aec5 100644
 --- a/drivers/firmware/arm_scmi/common.h
 +++ b/drivers/firmware/arm_scmi/common.h
 @@ -264,7 +264,8 @@ struct scmi_desc {
@@ -63,8 +61,6 @@ index ef803e1d25e1..d49e7608aec5 100644
  }
  
  static inline bool is_transport_polling_capable(const struct scmi_desc *desc)
-diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
-index 9e81d7c9a449..c5a698e24bed 100644
 --- a/drivers/firmware/arm_scmi/driver.c
 +++ b/drivers/firmware/arm_scmi/driver.c
 @@ -18,6 +18,7 @@
@@ -75,7 +71,7 @@ index 9e81d7c9a449..c5a698e24bed 100644
  #include <linux/device.h>
  #include <linux/export.h>
  #include <linux/idr.h>
-@@ -1238,8 +1239,7 @@ static void xfer_put(const struct scmi_protocol_handle *ph,
+@@ -1238,8 +1239,7 @@ static void xfer_put(const struct scmi_p
  }
  
  static bool scmi_xfer_done_no_timeout(struct scmi_chan_info *cinfo,
@@ -85,7 +81,7 @@ index 9e81d7c9a449..c5a698e24bed 100644
  {
  	struct scmi_info *info = handle_to_scmi_info(cinfo->handle);
  
-@@ -1248,7 +1248,14 @@ static bool scmi_xfer_done_no_timeout(struct scmi_chan_info *cinfo,
+@@ -1248,7 +1248,14 @@ static bool scmi_xfer_done_no_timeout(st
  	 * in case of out-of-order receptions of delayed responses
  	 */
  	return info->desc->ops->poll_done(cinfo, xfer) ||
@@ -101,7 +97,7 @@ index 9e81d7c9a449..c5a698e24bed 100644
  	       ktime_after(ktime_get(), stop);
  }
  
-@@ -1267,14 +1274,30 @@ static int scmi_wait_for_reply(struct device *dev, const struct scmi_desc *desc,
+@@ -1267,14 +1274,30 @@ static int scmi_wait_for_reply(struct de
  		if (!desc->sync_cmds_completed_on_ret) {
  			bool ooo = false;
  
@@ -140,8 +136,6 @@ index 9e81d7c9a449..c5a698e24bed 100644
  			if (!ooo && !info->desc->ops->poll_done(cinfo, xfer)) {
  				dev_err(dev,
  					"timed out in resp(caller: %pS) - polling\n",
-diff --git a/drivers/firmware/arm_scmi/shmem.c b/drivers/firmware/arm_scmi/shmem.c
-index 11c347bff766..202013f1c01b 100644
 --- a/drivers/firmware/arm_scmi/shmem.c
 +++ b/drivers/firmware/arm_scmi/shmem.c
 @@ -7,6 +7,7 @@
@@ -152,7 +146,7 @@ index 11c347bff766..202013f1c01b 100644
  #include <linux/of.h>
  #include <linux/of_address.h>
  #include <linux/processor.h>
-@@ -90,7 +91,8 @@ static void shmem_tx_prepare(struct scmi_shared_mem __iomem *shmem,
+@@ -90,7 +91,8 @@ static void shmem_tx_prepare(struct scmi
  			     struct scmi_chan_info *cinfo,
  			     shmem_copy_toio_t copy_toio)
  {
@@ -162,7 +156,7 @@ index 11c347bff766..202013f1c01b 100644
  
  	/*
  	 * Ideally channel must be free by now unless OS timeout last
-@@ -106,12 +108,10 @@ static void shmem_tx_prepare(struct scmi_shared_mem __iomem *shmem,
+@@ -106,12 +108,10 @@ static void shmem_tx_prepare(struct scmi
  	 * this is just to ease debugging and avoid complete hangs on boot
  	 * due to a misbehaving SCMI firmware.
  	 */
@@ -179,6 +173,3 @@ index 11c347bff766..202013f1c01b 100644
  		WARN_ON_ONCE(1);
  		dev_err(cinfo->dev,
  			"Timeout waiting for a free TX channel !\n");
--- 
-2.53.0
-

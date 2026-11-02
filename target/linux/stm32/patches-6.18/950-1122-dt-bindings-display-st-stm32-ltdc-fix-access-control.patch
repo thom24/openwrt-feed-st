@@ -19,8 +19,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  .../bindings/display/st,stm32-ltdc.yaml       | 60 ++++++++++++++++++-
  1 file changed, 59 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/display/st,stm32-ltdc.yaml b/Documentation/devicetree/bindings/display/st,stm32-ltdc.yaml
-index 77058a5ccf68..2c3849ba4df3 100644
 --- a/Documentation/devicetree/bindings/display/st,stm32-ltdc.yaml
 +++ b/Documentation/devicetree/bindings/display/st,stm32-ltdc.yaml
 @@ -42,7 +42,62 @@ properties:
@@ -97,6 +95,3 @@ index 77058a5ccf68..2c3849ba4df3 100644
  required:
    - compatible
    - reg
--- 
-2.53.0
-

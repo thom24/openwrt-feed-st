@@ -17,11 +17,9 @@ Signed-off-by: Vinod Koul <vkoul@kernel.org>
  drivers/dma/stm32/stm32-dma3.c | 28 +++++++++++++++++-----------
  1 file changed, 17 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
-index 29ea510fa539..84b00c436134 100644
 --- a/drivers/dma/stm32/stm32-dma3.c
 +++ b/drivers/dma/stm32/stm32-dma3.c
-@@ -333,6 +333,11 @@ static struct device *chan2dev(struct stm32_dma3_chan *chan)
+@@ -333,6 +333,11 @@ static struct device *chan2dev(struct st
  	return &chan->vchan.chan.dev->device;
  }
  
@@ -33,7 +31,7 @@ index 29ea510fa539..84b00c436134 100644
  static void stm32_dma3_chan_dump_reg(struct stm32_dma3_chan *chan)
  {
  	struct stm32_dma3_ddata *ddata = to_stm32_dma3_ddata(chan);
-@@ -1110,7 +1115,7 @@ static int stm32_dma3_alloc_chan_resources(struct dma_chan *c)
+@@ -1110,7 +1115,7 @@ static int stm32_dma3_alloc_chan_resourc
  	struct stm32_dma3_ddata *ddata = to_stm32_dma3_ddata(chan);
  	int ret;
  
@@ -42,7 +40,7 @@ index 29ea510fa539..84b00c436134 100644
  	if (ret < 0)
  		return ret;
  
-@@ -1144,7 +1149,7 @@ static int stm32_dma3_alloc_chan_resources(struct dma_chan *c)
+@@ -1144,7 +1149,7 @@ err_pool_destroy:
  	chan->lli_pool = NULL;
  
  err_put_sync:
@@ -51,7 +49,7 @@ index 29ea510fa539..84b00c436134 100644
  
  	return ret;
  }
-@@ -1170,7 +1175,7 @@ static void stm32_dma3_free_chan_resources(struct dma_chan *c)
+@@ -1170,7 +1175,7 @@ static void stm32_dma3_free_chan_resourc
  	if (chan->semaphore_mode)
  		stm32_dma3_put_chan_sem(chan);
  
@@ -60,7 +58,7 @@ index 29ea510fa539..84b00c436134 100644
  
  	/* Reset configuration */
  	memset(&chan->dt_config, 0, sizeof(chan->dt_config));
-@@ -1610,11 +1615,11 @@ static bool stm32_dma3_filter_fn(struct dma_chan *c, void *fn_param)
+@@ -1610,11 +1615,11 @@ static bool stm32_dma3_filter_fn(struct
  		if (!(mask & BIT(chan->id)))
  			return false;
  
@@ -74,7 +72,7 @@ index 29ea510fa539..84b00c436134 100644
  
  	/* Check if chan is free */
  	if (semcr & CSEMCR_SEM_MUTEX)
-@@ -1636,7 +1641,7 @@ static struct dma_chan *stm32_dma3_of_xlate(struct of_phandle_args *dma_spec, st
+@@ -1636,7 +1641,7 @@ static struct dma_chan *stm32_dma3_of_xl
  	struct dma_chan *c;
  
  	if (dma_spec->args_count < 3) {
@@ -83,7 +81,7 @@ index 29ea510fa539..84b00c436134 100644
  		return NULL;
  	}
  
-@@ -1645,14 +1650,14 @@ static struct dma_chan *stm32_dma3_of_xlate(struct of_phandle_args *dma_spec, st
+@@ -1645,14 +1650,14 @@ static struct dma_chan *stm32_dma3_of_xl
  	conf.tr_conf = dma_spec->args[2];
  
  	if (conf.req_line >= ddata->dma_requests) {
@@ -100,7 +98,7 @@ index 29ea510fa539..84b00c436134 100644
  		return NULL;
  	}
  
-@@ -1665,6 +1670,7 @@ static struct dma_chan *stm32_dma3_of_xlate(struct of_phandle_args *dma_spec, st
+@@ -1665,6 +1670,7 @@ static struct dma_chan *stm32_dma3_of_xl
  
  static u32 stm32_dma3_check_rif(struct stm32_dma3_ddata *ddata)
  {
@@ -108,7 +106,7 @@ index 29ea510fa539..84b00c436134 100644
  	u32 chan_reserved, mask = 0, i, ccidcfgr, invalid_cid = 0;
  
  	/* Reserve Secure channels */
-@@ -1676,7 +1682,7 @@ static u32 stm32_dma3_check_rif(struct stm32_dma3_ddata *ddata)
+@@ -1676,7 +1682,7 @@ static u32 stm32_dma3_check_rif(struct s
  	 * In case CID filtering is not configured, dma-channel-mask property can be used to
  	 * specify available DMA channels to the kernel.
  	 */
@@ -117,7 +115,7 @@ index 29ea510fa539..84b00c436134 100644
  
  	/* Reserve !CID-filtered not in dma-channel-mask, static CID != CID1, CID1 not allowed */
  	for (i = 0; i < ddata->dma_channels; i++) {
-@@ -1696,7 +1702,7 @@ static u32 stm32_dma3_check_rif(struct stm32_dma3_ddata *ddata)
+@@ -1696,7 +1702,7 @@ static u32 stm32_dma3_check_rif(struct s
  				ddata->chans[i].semaphore_mode = true;
  			}
  		}
@@ -126,7 +124,7 @@ index 29ea510fa539..84b00c436134 100644
  			!(ccidcfgr & CCIDCFGR_CFEN) ? "!CID-filtered" :
  			ddata->chans[i].semaphore_mode ? "Semaphore" : "Static CID",
  			(chan_reserved & BIT(i)) ? "denied" :
-@@ -1704,7 +1710,7 @@ static u32 stm32_dma3_check_rif(struct stm32_dma3_ddata *ddata)
+@@ -1704,7 +1710,7 @@ static u32 stm32_dma3_check_rif(struct s
  	}
  
  	if (invalid_cid)
@@ -135,6 +133,3 @@ index 29ea510fa539..84b00c436134 100644
  			 ddata->dma_channels, &invalid_cid);
  
  	return chan_reserved;
--- 
-2.53.0
-

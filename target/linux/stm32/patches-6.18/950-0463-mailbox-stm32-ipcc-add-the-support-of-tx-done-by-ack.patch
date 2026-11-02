@@ -12,8 +12,6 @@ Signed-off-by: Michel JAOUEN <michel.jaouen@st.com>
  drivers/mailbox/stm32-ipcc.c | 7 +++++--
  1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/mailbox/stm32-ipcc.c b/drivers/mailbox/stm32-ipcc.c
-index a2a8f681ef7e..2c8e93a9e6eb 100644
 --- a/drivers/mailbox/stm32-ipcc.c
 +++ b/drivers/mailbox/stm32-ipcc.c
 @@ -16,6 +16,8 @@
@@ -25,7 +23,7 @@ index a2a8f681ef7e..2c8e93a9e6eb 100644
  #define IPCC_XCR		0x000
  #define XCR_RXOIE		BIT(0)
  #define XCR_TXOIE		BIT(16)
-@@ -204,8 +206,9 @@ static int stm32_ipcc_send_data(struct mbox_chan *link, void *data)
+@@ -204,8 +206,9 @@ static int stm32_ipcc_send_data(struct m
  			    TX_BIT_CHAN(chan));
  
  	/* unmask 'tx channel free' interrupt */
@@ -37,6 +35,3 @@ index a2a8f681ef7e..2c8e93a9e6eb 100644
  
  	return 0;
  }
--- 
-2.53.0
-

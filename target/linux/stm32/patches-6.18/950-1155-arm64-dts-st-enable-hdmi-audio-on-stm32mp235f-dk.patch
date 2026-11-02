@@ -16,11 +16,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 29 +++++++++++++++++++++++
  1 file changed, 29 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-index f3eaa6a84f1d..52f443d9ea5e 100644
 --- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-@@ -151,6 +151,13 @@ panel_lvds_backlight: panel-lvds-backlight {
+@@ -151,6 +151,13 @@
  		status = "okay";
  	};
  
@@ -34,7 +32,7 @@ index f3eaa6a84f1d..52f443d9ea5e 100644
  	wifi_pwrseq: wifi-pwrseq {
  		compatible = "mmc-pwrseq-simple";
  		reset-gpios = <&gpiog 8 GPIO_ACTIVE_LOW>;
-@@ -441,6 +448,13 @@ adv7535_out: endpoint {
+@@ -441,6 +448,13 @@
  					remote-endpoint = <&hdmi_connector_in>;
  				};
  			};
@@ -48,7 +46,7 @@ index f3eaa6a84f1d..52f443d9ea5e 100644
  		};
  	};
  
-@@ -467,6 +481,21 @@ &i2c8 {
+@@ -467,6 +481,21 @@
  	/delete-property/dma-names;
  };
  
@@ -70,6 +68,3 @@ index f3eaa6a84f1d..52f443d9ea5e 100644
  &i3c4 {
  	pinctrl-names = "default", "init", "sleep";
  	pinctrl-0 = <&i3c4_pins_b>;
--- 
-2.53.0
-

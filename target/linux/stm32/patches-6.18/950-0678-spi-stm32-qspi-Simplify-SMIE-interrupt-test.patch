@@ -15,11 +15,9 @@ Signed-off-by: Mark Brown <broonie@kernel.org>
  drivers/spi/spi-stm32-qspi.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
-index d6f6f9d4e5be..2a0ee96786fa 100644
 --- a/drivers/spi/spi-stm32-qspi.c
 +++ b/drivers/spi/spi-stm32-qspi.c
-@@ -132,7 +132,7 @@ static irqreturn_t stm32_qspi_irq(int irq, void *dev_id)
+@@ -132,7 +132,7 @@ static irqreturn_t stm32_qspi_irq(int ir
  	cr = readl_relaxed(qspi->io_base + QSPI_CR);
  	sr = readl_relaxed(qspi->io_base + QSPI_SR);
  
@@ -28,6 +26,3 @@ index d6f6f9d4e5be..2a0ee96786fa 100644
  		/* disable irq */
  		cr &= ~CR_SMIE;
  		writel_relaxed(cr, qspi->io_base + QSPI_CR);
--- 
-2.53.0
-

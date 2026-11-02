@@ -19,8 +19,6 @@ Change-Id: I8f7b114edaf7634014d24ab682f12d610f1b42fe
  .../bindings/iio/adc/st,stm32-adc.yaml        | 68 ++++++++++++++++++-
  1 file changed, 66 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
-index 17bb60e18a1c..c2c61808d113 100644
 --- a/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
 +++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
 @@ -28,6 +28,7 @@ properties:
@@ -133,6 +131,3 @@ index 17bb60e18a1c..c2c61808d113 100644
      additionalProperties: false
  
      required:
--- 
-2.53.0
-

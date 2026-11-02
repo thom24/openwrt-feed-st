@@ -17,8 +17,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp215f-dk.dts |  4 +
  2 files changed, 92 insertions(+), 11 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index 73c5c0f3dad4..e883319e3e21 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
 @@ -3,8 +3,10 @@
@@ -32,7 +30,7 @@ index 73c5c0f3dad4..e883319e3e21 100644
  
  / {
  	#address-cells = <2>;
-@@ -69,16 +71,12 @@ arm_wdt: watchdog {
+@@ -69,16 +71,12 @@
  		status = "disabled";
  	};
  
@@ -55,7 +53,7 @@ index 73c5c0f3dad4..e883319e3e21 100644
  	};
  
  	firmware {
-@@ -198,13 +196,92 @@ usart2: serial@400e0000 {
+@@ -198,13 +196,92 @@
  				compatible = "st,stm32h7-uart";
  				reg = <0x400e0000 0x0 0x400>;
  				interrupts = <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>;
@@ -149,11 +147,9 @@ index 73c5c0f3dad4..e883319e3e21 100644
  		syscfg: syscon@44230000 {
  			compatible = "st,stm32mp21-syscfg", "syscon";
  			reg = <0x44230000 0x0 0x10000>;
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-index 971a8cc193d3..4cd93d382b6c 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-@@ -55,6 +55,10 @@ &psci {
+@@ -55,6 +55,10 @@
  	bootph-all;
  };
  
@@ -164,6 +160,3 @@ index 971a8cc193d3..4cd93d382b6c 100644
  &rifsc {
  	bootph-all;
  };
--- 
-2.53.0
-

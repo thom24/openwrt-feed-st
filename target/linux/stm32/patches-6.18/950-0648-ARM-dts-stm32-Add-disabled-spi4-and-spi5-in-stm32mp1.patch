@@ -18,11 +18,9 @@ Tested-by: Alain VOLMAT <alain.volmat@st.com>
  arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi | 14 ++++++++++++++
  1 file changed, 14 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-index 63c22d398cf4..a4837d5408ae 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-@@ -736,6 +736,20 @@ &sdmmc3 {
+@@ -736,6 +736,20 @@
  	status = "disabled";
  };
  
@@ -43,6 +41,3 @@ index 63c22d398cf4..a4837d5408ae 100644
  &timers1 {
  	/* spare dmas for other usage */
  	/delete-property/dmas;
--- 
-2.53.0
-

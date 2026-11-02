@@ -20,8 +20,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  .../bindings/display/panel/raydium,rm68200.yaml     | 13 ++++++++++---
  1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/display/panel/raydium,rm68200.yaml b/Documentation/devicetree/bindings/display/panel/raydium,rm68200.yaml
-index 46fe1014ebc4..8fb20df0bfb4 100644
 --- a/Documentation/devicetree/bindings/display/panel/raydium,rm68200.yaml
 +++ b/Documentation/devicetree/bindings/display/panel/raydium,rm68200.yaml
 @@ -28,7 +28,12 @@ properties:
@@ -58,6 +56,3 @@ index 46fe1014ebc4..8fb20df0bfb4 100644
          backlight = <&pwm_backlight>;
        };
      };
--- 
-2.53.0
-

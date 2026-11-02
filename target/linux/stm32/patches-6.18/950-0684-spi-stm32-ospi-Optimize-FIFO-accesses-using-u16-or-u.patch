@@ -22,8 +22,6 @@ Signed-off-by: Mark Brown <broonie@kernel.org>
  drivers/spi/spi-stm32-ospi.c | 47 +++++++++++++++++++++++++++++-------
  1 file changed, 38 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
-index 74da57eee020..014188c8e943 100644
 --- a/drivers/spi/spi-stm32-ospi.c
 +++ b/drivers/spi/spi-stm32-ospi.c
 @@ -142,14 +142,32 @@ struct stm32_ospi {
@@ -34,6 +32,11 @@ index 74da57eee020..014188c8e943 100644
 +static void stm32_ospi_read_fifo(void *val, void __iomem *addr, u8 len)
  {
 -	*val = readb_relaxed(addr);
+-}
+-
+-static void stm32_ospi_write_fifo(u8 *val, void __iomem *addr)
+-{
+-	writeb_relaxed(*val, addr);
 +	switch (len) {
 +	case sizeof(u32):
 +		*((u32 *)val) = readl_relaxed(addr);
@@ -44,12 +47,10 @@ index 74da57eee020..014188c8e943 100644
 +	case sizeof(u8):
 +		*((u8 *)val) = readb_relaxed(addr);
 +	};
- }
- 
--static void stm32_ospi_write_fifo(u8 *val, void __iomem *addr)
++}
++
 +static void stm32_ospi_write_fifo(void *val, void __iomem *addr, u8 len)
- {
--	writeb_relaxed(*val, addr);
++{
 +	switch (len) {
 +	case sizeof(u32):
 +		writel_relaxed(*((u32 *)val), addr);
@@ -63,7 +64,7 @@ index 74da57eee020..014188c8e943 100644
  }
  
  static int stm32_ospi_abort(struct stm32_ospi *ospi)
-@@ -172,19 +190,20 @@ static int stm32_ospi_abort(struct stm32_ospi *ospi)
+@@ -172,19 +190,20 @@ static int stm32_ospi_abort(struct stm32
  	return timeout;
  }
  
@@ -87,7 +88,7 @@ index 74da57eee020..014188c8e943 100644
  		ret = readl_relaxed_poll_timeout_atomic(regs_base + OSPI_SR,
  							sr, sr & SR_FTF, 1,
  							STM32_FIFO_TIMEOUT_US);
-@@ -193,7 +212,17 @@ static int stm32_ospi_poll(struct stm32_ospi *ospi, u8 *buf, u32 len, bool read)
+@@ -193,7 +212,17 @@ static int stm32_ospi_poll(struct stm32_
  				len, sr);
  			return ret;
  		}
@@ -106,7 +107,7 @@ index 74da57eee020..014188c8e943 100644
  	}
  
  	return 0;
-@@ -408,7 +437,7 @@ static int stm32_ospi_xfer(struct stm32_ospi *ospi, const struct spi_mem_op *op)
+@@ -408,7 +437,7 @@ static int stm32_ospi_xfer(struct stm32_
  	if (op->data.dir == SPI_MEM_DATA_IN)
  		buf = op->data.buf.in;
  	else
@@ -115,6 +116,3 @@ index 74da57eee020..014188c8e943 100644
  
  	return stm32_ospi_poll(ospi, buf, op->data.nbytes,
  			       op->data.dir == SPI_MEM_DATA_IN);
--- 
-2.53.0
-

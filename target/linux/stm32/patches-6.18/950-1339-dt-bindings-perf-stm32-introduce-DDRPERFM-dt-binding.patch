@@ -24,9 +24,6 @@ Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
  1 file changed, 94 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/perf/st,stm32-ddr-pmu.yaml
 
-diff --git a/Documentation/devicetree/bindings/perf/st,stm32-ddr-pmu.yaml b/Documentation/devicetree/bindings/perf/st,stm32-ddr-pmu.yaml
-new file mode 100644
-index 000000000000..1d97861e3d44
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/perf/st,stm32-ddr-pmu.yaml
 @@ -0,0 +1,94 @@
@@ -124,6 +121,3 @@ index 000000000000..1d97861e3d44
 +      access-controllers = <&rcc 104>;
 +      memory-channel = <&ddr_channel>;
 +    };
--- 
-2.53.0
-

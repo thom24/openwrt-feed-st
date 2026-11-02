@@ -19,11 +19,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/irqchip/irq-gic-v2m.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/irqchip/irq-gic-v2m.c b/drivers/irqchip/irq-gic-v2m.c
-index 8a3410c2b7b5..cc3a0b08e8c4 100644
 --- a/drivers/irqchip/irq-gic-v2m.c
 +++ b/drivers/irqchip/irq-gic-v2m.c
-@@ -269,6 +269,7 @@ static __init int gicv2m_allocate_domains(struct irq_domain *parent)
+@@ -269,6 +269,7 @@ static __init int gicv2m_allocate_domain
  	struct irq_domain_info info = {
  		.ops		= &gicv2m_domain_ops,
  		.parent		= parent,
@@ -31,6 +29,3 @@ index 8a3410c2b7b5..cc3a0b08e8c4 100644
  	};
  	struct v2m_data *v2m;
  
--- 
-2.53.0
-

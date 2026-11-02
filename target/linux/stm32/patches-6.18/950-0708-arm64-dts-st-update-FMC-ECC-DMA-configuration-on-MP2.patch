@@ -18,11 +18,9 @@ Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
  arch/arm64/boot/dts/st/stm32mp251.dtsi | 2 +-
  3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index 7c0217db6b7c..43c80bae40e2 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -1857,7 +1857,7 @@ nand-controller@4,0 {
+@@ -1857,7 +1857,7 @@
  				interrupts = <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>;
  				dmas = <&hpdma 0 0x62 0x00003121>,
  				       <&hpdma 0 0x62 0x00003112>,
@@ -31,11 +29,9 @@ index 7c0217db6b7c..43c80bae40e2 100644
  				dma-names = "tx", "rx", "ecc";
  				status = "disabled";
  			};
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index f21dc423b74a..aca5b714ca60 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -2291,7 +2291,7 @@ nand-controller@4,0 {
+@@ -2291,7 +2291,7 @@
  				interrupts = <GIC_SPI 122 IRQ_TYPE_LEVEL_HIGH>;
  				dmas = <&hpdma 0 0x62 0x00003101>,
  				       <&hpdma 0 0x62 0x00003110>,
@@ -44,11 +40,9 @@ index f21dc423b74a..aca5b714ca60 100644
  				dma-names = "tx", "rx", "ecc";
  				status = "disabled";
  			};
-diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index ed2e32f3bf28..d9fe386b351f 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -2606,7 +2606,7 @@ nand-controller@4,0 {
+@@ -2606,7 +2606,7 @@
  				interrupts = <GIC_SPI 122 IRQ_TYPE_LEVEL_HIGH>;
  				dmas = <&hpdma 0 0x62 0x00003101>,
  				       <&hpdma 0 0x62 0x00003110>,
@@ -57,6 +51,3 @@ index ed2e32f3bf28..d9fe386b351f 100644
  				dma-names = "tx", "rx", "ecc";
  				status = "disabled";
  			};
--- 
-2.53.0
-

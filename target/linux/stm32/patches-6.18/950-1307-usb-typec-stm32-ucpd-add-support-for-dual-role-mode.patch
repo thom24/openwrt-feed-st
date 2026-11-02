@@ -25,8 +25,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/usb/typec/tcpm/stm32_ucpd.c | 229 ++++++++++++++++++++++++++--
  1 file changed, 214 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/usb/typec/tcpm/stm32_ucpd.c b/drivers/usb/typec/tcpm/stm32_ucpd.c
-index 4b1c4cb369b2..05c3baa238f3 100644
 --- a/drivers/usb/typec/tcpm/stm32_ucpd.c
 +++ b/drivers/usb/typec/tcpm/stm32_ucpd.c
 @@ -6,6 +6,7 @@
@@ -112,7 +110,7 @@ index 4b1c4cb369b2..05c3baa238f3 100644
  	switch (cc) {
  	case 0:
  		return TYPEC_CC_OPEN;
-@@ -109,12 +150,17 @@ static enum typec_cc_status ucpd_ccrd_to_tcpm(struct stm32_ucpd *ucpd, u32 cc)
+@@ -109,12 +150,17 @@ static enum typec_cc_status ucpd_ccrd_to
  	}
  }
  
@@ -134,7 +132,7 @@ index 4b1c4cb369b2..05c3baa238f3 100644
  
  	writel(val, ucpd->base + UCPD_CFGR3);
  }
-@@ -127,12 +173,17 @@ static int stm32_ucpd_init(struct tcpc_dev *dev)
+@@ -127,12 +173,17 @@ static int stm32_ucpd_init(struct tcpc_d
  	int ret;
  	u32 val;
  
@@ -153,7 +151,7 @@ index 4b1c4cb369b2..05c3baa238f3 100644
  	/*
  	 * UCPD_PSC_UCPDCLK can vary from 0..4: power of two prescaler: 1, 2, ... 16
  	 * Recommended ucpd_clk frequency is in the range of 6 to 9 MHz.
-@@ -188,6 +239,7 @@ static void stm32_ucpd_deinit(struct tcpc_dev *dev)
+@@ -188,6 +239,7 @@ static void stm32_ucpd_deinit(struct tcp
  
  	/* Can now disable UCPD (clear UCPD_EN), other register bits will be reset */
  	writel_relaxed(0, ucpd->base + UCPD_CFGR1);
@@ -161,7 +159,7 @@ index 4b1c4cb369b2..05c3baa238f3 100644
  }
  
  static int stm32_ucpd_get_vbus(struct tcpc_dev *dev)
-@@ -200,16 +252,40 @@ static int stm32_ucpd_get_vbus(struct tcpc_dev *dev)
+@@ -200,16 +252,40 @@ static int stm32_ucpd_get_vbus(struct tc
  static int stm32_ucpd_set_vbus(struct tcpc_dev *dev, bool on, bool charge)
  {
  	struct stm32_ucpd *ucpd = container_of(dev, struct stm32_ucpd, tcpc_dev);
@@ -203,7 +201,7 @@ index 4b1c4cb369b2..05c3baa238f3 100644
  	switch (cc) {
  	case TYPEC_CC_OPEN:
  		val = readl(ucpd->base + UCPD_CR);
-@@ -219,6 +295,14 @@ static int __stm32_ucpd_set_cc(struct stm32_ucpd *ucpd, enum typec_cc_status cc)
+@@ -219,6 +295,14 @@ static int __stm32_ucpd_set_cc(struct st
  		val = readl(ucpd->base + UCPD_CR);
  		val |= (UCPD_ANAMODE | UCPD_CCENABLE);
  		break;
@@ -218,7 +216,7 @@ index 4b1c4cb369b2..05c3baa238f3 100644
  	default:
  		dev_err(ucpd->dev, "%s: Unsupported cc status %d\n", __func__, cc);
  
-@@ -227,6 +311,13 @@ static int __stm32_ucpd_set_cc(struct stm32_ucpd *ucpd, enum typec_cc_status cc)
+@@ -227,6 +311,13 @@ static int __stm32_ucpd_set_cc(struct st
  
  	writel(val, ucpd->base + UCPD_CR);
  
@@ -232,7 +230,7 @@ index 4b1c4cb369b2..05c3baa238f3 100644
  	return 0;
  }
  
-@@ -245,10 +336,11 @@ static int stm32_ucpd_get_cc(struct tcpc_dev *dev, enum typec_cc_status *cc1,
+@@ -245,10 +336,11 @@ static int stm32_ucpd_get_cc(struct tcpc
  			     enum typec_cc_status *cc2)
  {
  	struct stm32_ucpd *ucpd = container_of(dev, struct stm32_ucpd, tcpc_dev);
@@ -246,7 +244,7 @@ index 4b1c4cb369b2..05c3baa238f3 100644
  
  	dev_dbg(ucpd->dev, "%s: cc1=0x%x cc2=0x%x\n", __func__, *cc1, *cc2);
  
-@@ -259,17 +351,97 @@ static int stm32_ucpd_set_polarity(struct tcpc_dev *dev, enum typec_cc_polarity
+@@ -259,17 +351,97 @@ static int stm32_ucpd_set_polarity(struc
  {
  	struct stm32_ucpd *ucpd = container_of(dev, struct stm32_ucpd, tcpc_dev);
  
@@ -344,7 +342,7 @@ index 4b1c4cb369b2..05c3baa238f3 100644
  	return 0;
  }
  
-@@ -295,11 +467,6 @@ static int stm32_ucpd_set_roles(struct tcpc_dev *dev, bool attached,
+@@ -295,11 +467,6 @@ static int stm32_ucpd_set_roles(struct t
  		pwr == TYPEC_SINK ? "sink" : "source",
  		data == TYPEC_DEVICE ? "device" : "host");
  
@@ -356,7 +354,7 @@ index 4b1c4cb369b2..05c3baa238f3 100644
  	if (attached) {
  		dev_dbg(ucpd->dev, "attached\n");
  		ret = tcpp_attach(ucpd->tcpp_dev);
-@@ -437,6 +604,14 @@ static int stm32_ucpd_probe(struct platform_device *pdev)
+@@ -437,6 +604,14 @@ static int stm32_ucpd_probe(struct platf
  	if (IS_ERR(ucpd->vdd))
  		return dev_err_probe(&pdev->dev, PTR_ERR(ucpd->vdd), "vdd get failed\n");
  
@@ -371,7 +369,7 @@ index 4b1c4cb369b2..05c3baa238f3 100644
  	ucpd->base = devm_platform_ioremap_resource(pdev, 0);
  	if (IS_ERR(ucpd->base))
  		return PTR_ERR(ucpd->base);
-@@ -456,6 +631,14 @@ static int stm32_ucpd_probe(struct platform_device *pdev)
+@@ -456,6 +631,14 @@ static int stm32_ucpd_probe(struct platf
  	if (ret)
  		return dev_err_probe(dev, ret, "Failed to get trim values\n");
  
@@ -386,7 +384,7 @@ index 4b1c4cb369b2..05c3baa238f3 100644
  	ucpd->ucpd_irq = platform_get_irq_byname(pdev, "ucpd");
  	if (ucpd->ucpd_irq < 0)
  		return ucpd->ucpd_irq;
-@@ -527,6 +710,8 @@ static int stm32_ucpd_probe(struct platform_device *pdev)
+@@ -527,6 +710,8 @@ static int stm32_ucpd_probe(struct platf
  
  	tcpp_register_vbus_notifier(ucpd->tcpp_dev, ucpd_vbus_changed, ucpd);
  
@@ -395,7 +393,7 @@ index 4b1c4cb369b2..05c3baa238f3 100644
  	enable_irq(ucpd->ucpd_irq);
  
  	return 0;
-@@ -561,6 +746,7 @@ static void stm32_ucpd_shutdown(struct platform_device *pdev)
+@@ -561,6 +746,7 @@ static void stm32_ucpd_shutdown(struct p
  	struct stm32_ucpd *ucpd = platform_get_drvdata(pdev);
  
  	disable_irq(ucpd->ucpd_irq);
@@ -403,7 +401,7 @@ index 4b1c4cb369b2..05c3baa238f3 100644
  	stm32_ucpd_deinit(&ucpd->tcpc_dev);
  }
  
-@@ -568,7 +754,14 @@ static int stm32_ucpd_suspend(struct device *dev)
+@@ -568,7 +754,14 @@ static int stm32_ucpd_suspend(struct dev
  {
  	struct stm32_ucpd *ucpd = dev_get_drvdata(dev);
  
@@ -418,7 +416,7 @@ index 4b1c4cb369b2..05c3baa238f3 100644
  	stm32_ucpd_deinit(&ucpd->tcpc_dev);
  	clk_bulk_disable_unprepare(ucpd->num_clks, ucpd->clks);
  	regulator_disable(ucpd->vdd);
-@@ -581,6 +774,10 @@ static int stm32_ucpd_resume(struct device *dev)
+@@ -581,6 +774,10 @@ static int stm32_ucpd_resume(struct devi
  	struct stm32_ucpd *ucpd = dev_get_drvdata(dev);
  	int ret;
  
@@ -429,7 +427,7 @@ index 4b1c4cb369b2..05c3baa238f3 100644
  	ret = regulator_enable(ucpd->vdd);
  	if (ret)
  		return ret;
-@@ -593,6 +790,8 @@ static int stm32_ucpd_resume(struct device *dev)
+@@ -593,6 +790,8 @@ static int stm32_ucpd_resume(struct devi
  
  	stm32_ucpd_init(&ucpd->tcpc_dev);
  	__stm32_ucpd_set_cc(ucpd, ucpd->cc);
@@ -438,6 +436,3 @@ index 4b1c4cb369b2..05c3baa238f3 100644
  	enable_irq(ucpd->ucpd_irq);
  
  	return 0;
--- 
-2.53.0
-

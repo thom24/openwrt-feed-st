@@ -20,8 +20,6 @@ Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
  scripts/Makefile.dtbs | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/scripts/Makefile.dtbs b/scripts/Makefile.dtbs
-index a31b9ebcc800..05a45c53cae5 100644
 --- a/scripts/Makefile.dtbs
 +++ b/scripts/Makefile.dtbs
 @@ -120,7 +120,7 @@ endif
@@ -33,6 +31,3 @@ index a31b9ebcc800..05a45c53cae5 100644
  
  dtc-tmp = $(subst $(comma),_,$(dot-target).dts.tmp)
  
--- 
-2.53.0
-

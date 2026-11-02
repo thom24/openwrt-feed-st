@@ -18,11 +18,9 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/573692
  drivers/net/phy/phy_device.c | 6 +++++-
  1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-index dcbe9f1e6969..c8cea668da44 100644
 --- a/drivers/net/phy/phy_device.c
 +++ b/drivers/net/phy/phy_device.c
-@@ -381,7 +381,7 @@ static __maybe_unused int mdio_bus_phy_suspend(struct device *dev)
+@@ -381,7 +381,7 @@ static __maybe_unused int mdio_bus_phy_s
  static __maybe_unused int mdio_bus_phy_resume(struct device *dev)
  {
  	struct phy_device *phydev = to_phy_device(dev);
@@ -31,7 +29,7 @@ index dcbe9f1e6969..c8cea668da44 100644
  
  	if (phydev->mac_managed_pm)
  		return 0;
-@@ -391,6 +391,10 @@ static __maybe_unused int mdio_bus_phy_resume(struct device *dev)
+@@ -391,6 +391,10 @@ static __maybe_unused int mdio_bus_phy_r
  
  	phydev->suspended_by_mdio_bus = 0;
  
@@ -42,6 +40,3 @@ index dcbe9f1e6969..c8cea668da44 100644
  	/* If we managed to get here with the PHY state machine in a state
  	 * neither PHY_HALTED, PHY_READY nor PHY_UP, this is an indication
  	 * that something went wrong and we should most likely be using
--- 
-2.53.0
-

@@ -21,8 +21,6 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi | 10 +++++++++-
  1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-index cbf48ce0301e..598948dbb3d1 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
 @@ -5,6 +5,7 @@
@@ -33,7 +31,7 @@ index cbf48ce0301e..598948dbb3d1 100644
  #include <dt-bindings/mfd/st,stpmic1.h>
  
  / {
-@@ -79,11 +80,18 @@ linux,cma {
+@@ -79,11 +80,18 @@
  	led {
  		compatible = "gpio-leds";
  		led-blue {
@@ -53,6 +51,3 @@ index cbf48ce0301e..598948dbb3d1 100644
  	};
  
  	sound {
--- 
-2.53.0
-

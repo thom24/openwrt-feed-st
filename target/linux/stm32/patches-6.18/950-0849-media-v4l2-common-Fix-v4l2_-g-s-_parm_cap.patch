@@ -22,11 +22,9 @@ Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
  drivers/media/v4l2-core/v4l2-common.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-index 9a5e5caa4682..c0362f337b89 100644
 --- a/drivers/media/v4l2-core/v4l2-common.c
 +++ b/drivers/media/v4l2-core/v4l2-common.c
-@@ -197,7 +197,7 @@ EXPORT_SYMBOL_GPL(__v4l2_find_nearest_size_conditional);
+@@ -197,7 +197,7 @@ EXPORT_SYMBOL_GPL(__v4l2_find_nearest_si
  int v4l2_g_parm_cap(struct video_device *vdev,
  		    struct v4l2_subdev *sd, struct v4l2_streamparm *a)
  {
@@ -35,7 +33,7 @@ index 9a5e5caa4682..c0362f337b89 100644
  	int ret;
  
  	if (a->type != V4L2_BUF_TYPE_VIDEO_CAPTURE &&
-@@ -219,6 +219,7 @@ int v4l2_s_parm_cap(struct video_device *vdev,
+@@ -219,6 +219,7 @@ int v4l2_s_parm_cap(struct video_device
  		    struct v4l2_subdev *sd, struct v4l2_streamparm *a)
  {
  	struct v4l2_subdev_frame_interval ival = {
@@ -43,6 +41,3 @@ index 9a5e5caa4682..c0362f337b89 100644
  		.interval = a->parm.capture.timeperframe
  	};
  	int ret;
--- 
-2.53.0
-

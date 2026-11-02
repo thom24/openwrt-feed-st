@@ -15,11 +15,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp231.dtsi | 667 +++++++++++++++++++++++++
  1 file changed, 667 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index a3ef73463cf9..89ed3baa04ef 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -297,6 +297,345 @@ rifsc: bus@42080000 {
+@@ -297,6 +297,345 @@
  			#access-controller-cells = <1>;
  			st,mem-map = <0x200c0000 0x2000 0x200c2000 0x2000 0x200c4000 0x4000>;
  
@@ -365,7 +363,7 @@ index a3ef73463cf9..89ed3baa04ef 100644
  			i2s2: audio-controller@400b0000 {
  				compatible = "st,stm32mp25-i2s";
  				reg = <0x400b0000 0x400>;
-@@ -484,6 +823,136 @@ i2c7: i2c@40180000 {
+@@ -484,6 +823,136 @@
  				status = "disabled";
  			};
  
@@ -502,7 +500,7 @@ index a3ef73463cf9..89ed3baa04ef 100644
  			usart6: serial@40220000 {
  				compatible = "st,stm32h7-uart";
  				reg = <0x40220000 0x400>;
-@@ -545,6 +1014,99 @@ spi4: spi@40240000 {
+@@ -545,6 +1014,99 @@
  				status = "disabled";
  			};
  
@@ -602,7 +600,7 @@ index a3ef73463cf9..89ed3baa04ef 100644
  			spi5: spi@40280000 {
  				compatible = "st,stm32mp25-spi";
  				reg = <0x40280000 0x400>;
-@@ -797,6 +1359,111 @@ i2c8: i2c@46040000 {
+@@ -797,6 +1359,111 @@
  				status = "disabled";
  			};
  
@@ -714,6 +712,3 @@ index a3ef73463cf9..89ed3baa04ef 100644
  			csi: csi@48020000 {
  				compatible = "st,stm32mp25-csi";
  				reg = <0x48020000 0x2000>;
--- 
-2.53.0
-

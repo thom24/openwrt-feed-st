@@ -13,11 +13,9 @@ Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
  .../platform/st/stm32/stm32-dcmipp/dcmipp-core.c  | 15 +++++++++++++++
  1 file changed, 15 insertions(+)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
-index 872a6513aca0..74b9e00b1fae 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
-@@ -176,6 +176,20 @@ static const struct dcmipp_pipeline_config stm32mp25_pipe_cfg = {
+@@ -176,6 +176,20 @@ static const struct dcmipp_pipeline_conf
  	.has_tpg	= true
  };
  
@@ -38,7 +36,7 @@ index 872a6513aca0..74b9e00b1fae 100644
  bool dcmipp_is_input_csi(struct dcmipp_device *dcmipp)
  {
  	/* Only valid for DCMIPP having CSI input */
-@@ -269,6 +283,7 @@ static int dcmipp_create_subdevs(struct dcmipp_device *dcmipp)
+@@ -269,6 +283,7 @@ err_init_entity:
  
  static const struct of_device_id dcmipp_of_match[] = {
  	{ .compatible = "st,stm32mp13-dcmipp", .data = &stm32mp13_pipe_cfg },
@@ -46,6 +44,3 @@ index 872a6513aca0..74b9e00b1fae 100644
  	{ .compatible = "st,stm32mp25-dcmipp", .data = &stm32mp25_pipe_cfg },
  	{ /* end node */ },
  };
--- 
-2.53.0
-

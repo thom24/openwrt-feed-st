@@ -12,8 +12,6 @@ Change-Id: Ib0f5977a9a640efcd26d9eea85ec422fb1249e96
  .../devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml          | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
-index be545c1b926c..5a4ad40338c4 100644
 --- a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
 +++ b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
 @@ -46,8 +46,7 @@ properties:
@@ -26,6 +24,3 @@ index be545c1b926c..5a4ad40338c4 100644
  
    st,syscfg:
      description: Phandle+args to the syscon node which includes IRQ mux selection.
--- 
-2.53.0
-

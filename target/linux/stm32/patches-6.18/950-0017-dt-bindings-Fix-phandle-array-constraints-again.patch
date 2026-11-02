@@ -44,8 +44,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  .../devicetree/bindings/usb/ci-hdrc-usb2.yaml  |  7 ++++---
  22 files changed, 139 insertions(+), 12 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/display/rockchip/rockchip,rk3399-cdn-dp.yaml b/Documentation/devicetree/bindings/display/rockchip/rockchip,rk3399-cdn-dp.yaml
-index 1a33128e77f5..195f665970bf 100644
 --- a/Documentation/devicetree/bindings/display/rockchip/rockchip,rk3399-cdn-dp.yaml
 +++ b/Documentation/devicetree/bindings/display/rockchip/rockchip,rk3399-cdn-dp.yaml
 @@ -41,7 +41,9 @@ properties:
@@ -58,8 +56,6 @@ index 1a33128e77f5..195f665970bf 100644
      description:
        List of phandle to the extcon device providing the cable state for the DP PHY.
  
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-demux-pinctrl.yaml b/Documentation/devicetree/bindings/i2c/i2c-demux-pinctrl.yaml
-index 1eaf00b90a77..deca72bfc8cf 100644
 --- a/Documentation/devicetree/bindings/i2c/i2c-demux-pinctrl.yaml
 +++ b/Documentation/devicetree/bindings/i2c/i2c-demux-pinctrl.yaml
 @@ -40,6 +40,7 @@ properties:
@@ -70,8 +66,6 @@ index 1eaf00b90a77..deca72bfc8cf 100644
      items:
        maxItems: 1
      description:
-diff --git a/Documentation/devicetree/bindings/mmc/hisilicon,hi3798cv200-dw-mshc.yaml b/Documentation/devicetree/bindings/mmc/hisilicon,hi3798cv200-dw-mshc.yaml
-index 41c9b22523e7..e447579e0f22 100644
 --- a/Documentation/devicetree/bindings/mmc/hisilicon,hi3798cv200-dw-mshc.yaml
 +++ b/Documentation/devicetree/bindings/mmc/hisilicon,hi3798cv200-dw-mshc.yaml
 @@ -39,10 +39,11 @@ properties:
@@ -89,8 +83,6 @@ index 41c9b22523e7..e447579e0f22 100644
  
  required:
    - compatible
-diff --git a/Documentation/devicetree/bindings/net/qcom,bam-dmux.yaml b/Documentation/devicetree/bindings/net/qcom,bam-dmux.yaml
-index b30544410d09..33746c238513 100644
 --- a/Documentation/devicetree/bindings/net/qcom,bam-dmux.yaml
 +++ b/Documentation/devicetree/bindings/net/qcom,bam-dmux.yaml
 @@ -42,7 +42,19 @@ properties:
@@ -113,8 +105,6 @@ index b30544410d09..33746c238513 100644
  
    qcom,smem-state-names:
      description: Names for the state bits used by the AP to signal the modem.
-diff --git a/Documentation/devicetree/bindings/net/qcom,ipa.yaml b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
-index b4a79912d473..c5135607c47a 100644
 --- a/Documentation/devicetree/bindings/net/qcom,ipa.yaml
 +++ b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
 @@ -124,7 +124,19 @@ properties:
@@ -137,8 +127,6 @@ index b4a79912d473..c5135607c47a 100644
  
    qcom,smem-state-names:
      description: The names of the state bits used for SMP2P output
-diff --git a/Documentation/devicetree/bindings/net/wireless/qcom,ath10k.yaml b/Documentation/devicetree/bindings/net/wireless/qcom,ath10k.yaml
-index f2440d39b7eb..58c2f90660a3 100644
 --- a/Documentation/devicetree/bindings/net/wireless/qcom,ath10k.yaml
 +++ b/Documentation/devicetree/bindings/net/wireless/qcom,ath10k.yaml
 @@ -158,7 +158,13 @@ properties:
@@ -156,8 +144,6 @@ index f2440d39b7eb..58c2f90660a3 100644
  
    qcom,smem-state-names:
      description: The names of the state bits used for SMP2P output.
-diff --git a/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml b/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
-index c089677702cf..5abcf76e81a5 100644
 --- a/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
 +++ b/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
 @@ -80,7 +80,13 @@ properties:
@@ -175,8 +161,6 @@ index c089677702cf..5abcf76e81a5 100644
  
    qcom,smem-state-names:
      description: The names of the state bits used for SMP2P output.
-diff --git a/Documentation/devicetree/bindings/net/wireless/qcom,ipq5332-wifi.yaml b/Documentation/devicetree/bindings/net/wireless/qcom,ipq5332-wifi.yaml
-index 363a0ecb6ad9..8b6c5b9d3fba 100644
 --- a/Documentation/devicetree/bindings/net/wireless/qcom,ipq5332-wifi.yaml
 +++ b/Documentation/devicetree/bindings/net/wireless/qcom,ipq5332-wifi.yaml
 @@ -167,8 +167,26 @@ properties:
@@ -206,8 +190,6 @@ index 363a0ecb6ad9..8b6c5b9d3fba 100644
  
    qcom,smem-state-names:
      description:
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,msm8916-mss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,msm8916-mss-pil.yaml
-index c179b560572b..539888c3f934 100644
 --- a/Documentation/devicetree/bindings/remoteproc/qcom,msm8916-mss-pil.yaml
 +++ b/Documentation/devicetree/bindings/remoteproc/qcom,msm8916-mss-pil.yaml
 @@ -104,6 +104,12 @@ properties:
@@ -223,8 +205,6 @@ index c179b560572b..539888c3f934 100644
  
    qcom,smem-state-names:
      description: Names of the states used by the AP to signal the Hexagon core
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml
-index 4d2055f283ac..5e8e61769257 100644
 --- a/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml
 +++ b/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml
 @@ -101,6 +101,13 @@ properties:
@@ -241,8 +221,6 @@ index 4d2055f283ac..5e8e61769257 100644
  
    qcom,smem-state-names:
      description: Names of the states used by the AP to signal the Hexagon core
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml
-index 63a82e7a8bf8..e24c8cc5343f 100644
 --- a/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml
 +++ b/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml
 @@ -57,6 +57,12 @@ properties:
@@ -258,8 +236,6 @@ index 63a82e7a8bf8..e24c8cc5343f 100644
  
    qcom,smem-state-names:
      description: The names of the state bits used for SMP2P output
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,qcs404-cdsp-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,qcs404-cdsp-pil.yaml
-index bca59394aef4..e5f5f92987e1 100644
 --- a/Documentation/devicetree/bindings/remoteproc/qcom,qcs404-cdsp-pil.yaml
 +++ b/Documentation/devicetree/bindings/remoteproc/qcom,qcs404-cdsp-pil.yaml
 @@ -92,6 +92,12 @@ properties:
@@ -275,8 +251,6 @@ index bca59394aef4..e5f5f92987e1 100644
  
    qcom,smem-state-names:
      description: The names of the state bits used for SMP2P output
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-mss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-mss-pil.yaml
-index b1402bef0ebe..f82ddcd7f1f0 100644
 --- a/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-mss-pil.yaml
 +++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-mss-pil.yaml
 @@ -134,6 +134,12 @@ properties:
@@ -292,8 +266,6 @@ index b1402bef0ebe..f82ddcd7f1f0 100644
  
    qcom,smem-state-names:
      description: The names of the state bits used for SMP2P output
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml
-index 94ca7a0cc203..23b8e3079f3b 100644
 --- a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml
 +++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml
 @@ -91,6 +91,12 @@ properties:
@@ -309,8 +281,6 @@ index 94ca7a0cc203..23b8e3079f3b 100644
  
    qcom,smem-state-names:
      description: The names of the state bits used for SMP2P output
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml
-index 005cb21732af..9af4bf9e46f0 100644
 --- a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml
 +++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml
 @@ -148,6 +148,12 @@ properties:
@@ -326,8 +296,6 @@ index 005cb21732af..9af4bf9e46f0 100644
  
    qcom,smem-state-names:
      description: The names of the state bits used for SMP2P output
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml
-index f4118b2da5f6..f3f3432948ed 100644
 --- a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml
 +++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml
 @@ -104,6 +104,12 @@ properties:
@@ -343,8 +311,6 @@ index f4118b2da5f6..f3f3432948ed 100644
  
    qcom,smem-state-names:
      description: The names of the state bits used for SMP2P output
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sdm845-adsp-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sdm845-adsp-pil.yaml
-index a3c74871457f..9666ebf1e7b6 100644
 --- a/Documentation/devicetree/bindings/remoteproc/qcom,sdm845-adsp-pil.yaml
 +++ b/Documentation/devicetree/bindings/remoteproc/qcom,sdm845-adsp-pil.yaml
 @@ -92,6 +92,12 @@ properties:
@@ -360,8 +326,6 @@ index a3c74871457f..9666ebf1e7b6 100644
  
    qcom,smem-state-names:
      description: The names of the state bits used for SMP2P output
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml
-index 117fb4d0c4ad..a55e55f5f014 100644
 --- a/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml
 +++ b/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml
 @@ -84,6 +84,12 @@ properties:
@@ -377,8 +341,6 @@ index 117fb4d0c4ad..a55e55f5f014 100644
  
    qcom,smem-state-names:
      description: The names of the state bits used for SMP2P output
-diff --git a/Documentation/devicetree/bindings/sound/samsung,tm2.yaml b/Documentation/devicetree/bindings/sound/samsung,tm2.yaml
-index cbc7ba37362a..ebdd9f5efaf5 100644
 --- a/Documentation/devicetree/bindings/sound/samsung,tm2.yaml
 +++ b/Documentation/devicetree/bindings/sound/samsung,tm2.yaml
 @@ -46,8 +46,12 @@ properties:
@@ -396,8 +358,6 @@ index cbc7ba37362a..ebdd9f5efaf5 100644
  
    mic-bias-gpios:
      description: GPIO pin that enables the Main Mic bias regulator.
-diff --git a/Documentation/devicetree/bindings/spi/st,stm32mp25-ospi.yaml b/Documentation/devicetree/bindings/spi/st,stm32mp25-ospi.yaml
-index 272bc308726b..b6be47f67fcb 100644
 --- a/Documentation/devicetree/bindings/spi/st,stm32mp25-ospi.yaml
 +++ b/Documentation/devicetree/bindings/spi/st,stm32mp25-ospi.yaml
 @@ -49,8 +49,9 @@ properties:
@@ -412,8 +372,6 @@ index 272bc308726b..b6be47f67fcb 100644
  
    access-controllers:
      description: phandle to the rifsc device to check access right
-diff --git a/Documentation/devicetree/bindings/usb/chipidea,usb2-common.yaml b/Documentation/devicetree/bindings/usb/chipidea,usb2-common.yaml
-index 10020af15afc..e6a5e79df348 100644
 --- a/Documentation/devicetree/bindings/usb/chipidea,usb2-common.yaml
 +++ b/Documentation/devicetree/bindings/usb/chipidea,usb2-common.yaml
 @@ -97,7 +97,9 @@ properties:
@@ -426,8 +384,6 @@ index 10020af15afc..e6a5e79df348 100644
  
    phy-clkgate-delay-us:
      description:
-diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
-index 691d6cf02c27..fec04702f530 100644
 --- a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
 +++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
 @@ -61,9 +61,10 @@ properties:
@@ -444,6 +400,3 @@ index 691d6cf02c27..fec04702f530 100644
  
    nvidia,phy:
      description: phandle of usb phy that connects to the port. Use "phys" instead.
--- 
-2.53.0
-

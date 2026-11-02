@@ -16,11 +16,9 @@ Change-Id: I24773f2fb3d428d98cf9b21375d56cdc71b927ed
  arch/arm/boot/dts/st/stm32mp131.dtsi | 236 +++++++++++++--------------
  1 file changed, 116 insertions(+), 120 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index e6e9e788cea9..568bce828ae7 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -855,6 +855,122 @@ usb33: usb33 {
+@@ -855,6 +855,122 @@
  			};
  		};
  
@@ -143,7 +141,7 @@ index e6e9e788cea9..568bce828ae7 100644
  		exti: interrupt-controller@5000d000 {
  			compatible = "st,stm32mp1-exti";
  			interrupt-controller;
-@@ -1706,125 +1822,5 @@ usbphyc_port1: usb-phy@1 {
+@@ -1706,125 +1822,5 @@
  				};
  			};
  		};
@@ -269,6 +267,3 @@ index e6e9e788cea9..568bce828ae7 100644
 -		};
  	};
  };
--- 
-2.53.0
-

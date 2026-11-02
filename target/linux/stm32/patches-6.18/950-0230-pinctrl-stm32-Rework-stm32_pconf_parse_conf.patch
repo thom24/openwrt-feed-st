@@ -17,11 +17,9 @@ Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
  drivers/pinctrl/stm32/pinctrl-stm32.c | 15 ++++++---------
  1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
-index e73feb8ac90d..f9eaf1fa2766 100644
 --- a/drivers/pinctrl/stm32/pinctrl-stm32.c
 +++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
-@@ -287,7 +287,7 @@ static void stm32_gpio_rif_release_semaphore(struct stm32_gpio_bank *bank, unsig
+@@ -287,7 +287,7 @@ static void stm32_gpio_rif_release_semap
  /* GPIO functions */
  
  static inline void __stm32_gpio_set(struct stm32_gpio_bank *bank,
@@ -30,7 +28,7 @@ index e73feb8ac90d..f9eaf1fa2766 100644
  {
  	stm32_gpio_backup_value(bank, offset, value);
  
-@@ -1195,10 +1195,11 @@ static bool stm32_pconf_get(struct stm32_gpio_bank *bank,
+@@ -1195,10 +1195,11 @@ static bool stm32_pconf_get(struct stm32
  }
  
  static int stm32_pconf_parse_conf(struct pinctrl_dev *pctldev,
@@ -44,7 +42,7 @@ index e73feb8ac90d..f9eaf1fa2766 100644
  	struct pinctrl_gpio_range *range;
  	struct stm32_gpio_bank *bank;
  	int offset, ret = 0;
-@@ -1267,9 +1268,7 @@ static int stm32_pconf_group_set(struct pinctrl_dev *pctldev, unsigned group,
+@@ -1267,9 +1268,7 @@ static int stm32_pconf_group_set(struct
  
  	for (i = 0; i < num_configs; i++) {
  		mutex_lock(&pctldev->mutex);
@@ -55,7 +53,7 @@ index e73feb8ac90d..f9eaf1fa2766 100644
  		mutex_unlock(&pctldev->mutex);
  		if (ret < 0)
  			return ret;
-@@ -1286,9 +1285,7 @@ static int stm32_pconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
+@@ -1286,9 +1285,7 @@ static int stm32_pconf_set(struct pinctr
  	int i, ret;
  
  	for (i = 0; i < num_configs; i++) {
@@ -66,6 +64,3 @@ index e73feb8ac90d..f9eaf1fa2766 100644
  		if (ret < 0)
  			return ret;
  	}
--- 
-2.53.0
-

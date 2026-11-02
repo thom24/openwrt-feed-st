@@ -25,11 +25,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/tty/serial/stm32-usart.h |  6 ++++
  2 files changed, 53 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 11f7c0cf4c2e..20cd0882fad2 100644
 --- a/drivers/tty/serial/stm32-usart.c
 +++ b/drivers/tty/serial/stm32-usart.c
-@@ -99,6 +99,7 @@ static struct stm32_usart_info __maybe_unused stm32h7_info = {
+@@ -99,6 +99,7 @@ static struct stm32_usart_info __maybe_u
  		.tdr		= 0x28,
  		.presc		= 0x2c,
  		.hwcfgr1	= 0x3f0,
@@ -37,7 +35,7 @@ index 11f7c0cf4c2e..20cd0882fad2 100644
  	},
  	.cfg = {
  		.uart_enable_bit = 0,
-@@ -1011,6 +1012,22 @@ static void stm32_usart_transmit_chars(struct uart_port *port)
+@@ -1011,6 +1012,22 @@ static void stm32_usart_transmit_chars(s
  	}
  }
  
@@ -60,7 +58,7 @@ index 11f7c0cf4c2e..20cd0882fad2 100644
  static irqreturn_t stm32_usart_interrupt(int irq, void *ptr)
  {
  	struct uart_port *port = ptr;
-@@ -1042,7 +1059,11 @@ static irqreturn_t stm32_usart_interrupt(int irq, void *ptr)
+@@ -1042,7 +1059,11 @@ static irqreturn_t stm32_usart_interrupt
  	if (irqd_is_wakeup_set(irq_get_irq_data(port->irq)) &&
  	    (cr1 & USART_CR1_RXNEIE) && (sr & USART_SR_RXNE)) {
  		stm32_usart_clr_bits(port, ofs->cr1, USART_CR1_RXNEIE);
@@ -72,7 +70,7 @@ index 11f7c0cf4c2e..20cd0882fad2 100644
  		ret = IRQ_HANDLED;
  	}
  
-@@ -1751,7 +1772,8 @@ static int stm32_usart_init_port(struct stm32_port *stm32port,
+@@ -1751,7 +1772,8 @@ static int stm32_usart_init_port(struct
  {
  	struct uart_port *port = &stm32port->port;
  	struct resource *res;
@@ -82,7 +80,7 @@ index 11f7c0cf4c2e..20cd0882fad2 100644
  
  	irq = platform_get_irq(pdev, 0);
  	if (irq < 0)
-@@ -1785,10 +1807,11 @@ static int stm32_usart_init_port(struct stm32_port *stm32port,
+@@ -1785,10 +1807,11 @@ static int stm32_usart_init_port(struct
  
  	spin_lock_init(&port->lock);
  
@@ -97,7 +95,7 @@ index 11f7c0cf4c2e..20cd0882fad2 100644
  	/* Ensure that clk rate is correct by enabling the clk */
  	ret = clk_prepare_enable(stm32port->clk);
  	if (ret)
-@@ -1800,6 +1823,18 @@ static int stm32_usart_init_port(struct stm32_port *stm32port,
+@@ -1800,6 +1823,18 @@ static int stm32_usart_init_port(struct
  		goto err_clk;
  	}
  
@@ -116,7 +114,7 @@ index 11f7c0cf4c2e..20cd0882fad2 100644
  	stm32port->fifoen = stm32port->info->cfg.has_fifo;
  	if (stm32port->fifoen) {
  		stm32_usart_get_ftcfg(pdev, stm32port, "rx-threshold", &stm32port->rxftcfg);
-@@ -2341,6 +2376,7 @@ static int __maybe_unused stm32_usart_serial_en_wakeup(struct uart_port *port,
+@@ -2341,6 +2376,7 @@ static int __maybe_unused stm32_usart_se
  static int __maybe_unused stm32_usart_serial_suspend(struct device *dev)
  {
  	struct uart_port *port = dev_get_drvdata(dev);
@@ -124,7 +122,7 @@ index 11f7c0cf4c2e..20cd0882fad2 100644
  	int ret;
  
  	uart_suspend_port(&stm32_usart_driver, port);
-@@ -2349,6 +2385,9 @@ static int __maybe_unused stm32_usart_serial_suspend(struct device *dev)
+@@ -2349,6 +2385,9 @@ static int __maybe_unused stm32_usart_se
  		ret = stm32_usart_serial_en_wakeup(port, true);
  		if (ret)
  			return ret;
@@ -134,7 +132,7 @@ index 11f7c0cf4c2e..20cd0882fad2 100644
  	}
  
  	/*
-@@ -2370,11 +2409,15 @@ static int __maybe_unused stm32_usart_serial_suspend(struct device *dev)
+@@ -2370,11 +2409,15 @@ static int __maybe_unused stm32_usart_se
  static int __maybe_unused stm32_usart_serial_resume(struct device *dev)
  {
  	struct uart_port *port = dev_get_drvdata(dev);
@@ -150,8 +148,6 @@ index 11f7c0cf4c2e..20cd0882fad2 100644
  		ret = stm32_usart_serial_en_wakeup(port, false);
  		if (ret)
  			return ret;
-diff --git a/drivers/tty/serial/stm32-usart.h b/drivers/tty/serial/stm32-usart.h
-index 8c8d6681d058..57fa2a17ab59 100644
 --- a/drivers/tty/serial/stm32-usart.h
 +++ b/drivers/tty/serial/stm32-usart.h
 @@ -27,6 +27,7 @@ struct stm32_usart_offsets {
@@ -188,6 +184,3 @@ index 8c8d6681d058..57fa2a17ab59 100644
  	int rdr_mask;		/* receive data register mask */
  	struct mctrl_gpios *gpios; /* modem control gpios */
  	struct dma_tx_state rx_dma_state;
--- 
-2.53.0
-

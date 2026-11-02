@@ -17,8 +17,6 @@ Change-Id: I2fd520e3f76c8eb719f1fa06099c67625d52249a
  3 files changed, 109 insertions(+)
  create mode 100644 drivers/cpufreq/stm32-cpufreq.c
 
-diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-index 9be0503df55a..5d249dc9334a 100644
 --- a/drivers/cpufreq/Kconfig.arm
 +++ b/drivers/cpufreq/Kconfig.arm
 @@ -228,6 +228,16 @@ config ARM_STI_CPUFREQ
@@ -38,11 +36,9 @@ index 9be0503df55a..5d249dc9334a 100644
  config ARM_TEGRA20_CPUFREQ
  	tristate "Tegra20/30 CPUFreq support"
  	depends on ARCH_TEGRA || COMPILE_TEST
-diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
-index 681d687b5a18..ca3fe072ae9d 100644
 --- a/drivers/cpufreq/Makefile
 +++ b/drivers/cpufreq/Makefile
-@@ -82,6 +82,7 @@ obj-$(CONFIG_ARM_SCMI_CPUFREQ)		+= scmi-cpufreq.o
+@@ -82,6 +82,7 @@ obj-$(CONFIG_ARM_SCMI_CPUFREQ)		+= scmi-
  obj-$(CONFIG_ARM_SCPI_CPUFREQ)		+= scpi-cpufreq.o
  obj-$(CONFIG_ARM_SPEAR_CPUFREQ)		+= spear-cpufreq.o
  obj-$(CONFIG_ARM_STI_CPUFREQ)		+= sti-cpufreq.o
@@ -50,9 +46,6 @@ index 681d687b5a18..ca3fe072ae9d 100644
  obj-$(CONFIG_ARM_ALLWINNER_SUN50I_CPUFREQ_NVMEM) += sun50i-cpufreq-nvmem.o
  obj-$(CONFIG_ARM_TEGRA20_CPUFREQ)	+= tegra20-cpufreq.o
  obj-$(CONFIG_ARM_TEGRA124_CPUFREQ)	+= tegra124-cpufreq.o
-diff --git a/drivers/cpufreq/stm32-cpufreq.c b/drivers/cpufreq/stm32-cpufreq.c
-new file mode 100644
-index 000000000000..aca99a7abfde
 --- /dev/null
 +++ b/drivers/cpufreq/stm32-cpufreq.c
 @@ -0,0 +1,98 @@
@@ -154,6 +147,3 @@ index 000000000000..aca99a7abfde
 +MODULE_DESCRIPTION("STM32 CPU freq driver");
 +MODULE_AUTHOR("Alexandre Torgue <alexandre.torgue@st.com>");
 +MODULE_LICENSE("GPL");
--- 
-2.53.0
-

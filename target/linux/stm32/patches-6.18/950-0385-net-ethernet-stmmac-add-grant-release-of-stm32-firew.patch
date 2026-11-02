@@ -12,8 +12,6 @@ Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
  .../net/ethernet/stmicro/stmmac/dwmac-stm32.c | 31 +++++++++++++++++--
  1 file changed, 28 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
-index cf7269fad303..fbc8db0e0ca2 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
 @@ -6,6 +6,7 @@
@@ -32,7 +30,7 @@ index cf7269fad303..fbc8db0e0ca2 100644
  };
  
  struct stm32_ops {
-@@ -571,10 +573,26 @@ static int stm32_dwmac_probe(struct platform_device *pdev)
+@@ -571,10 +573,26 @@ static int stm32_dwmac_probe(struct plat
  	if (!dwmac)
  		return -ENOMEM;
  
@@ -60,7 +58,7 @@ index cf7269fad303..fbc8db0e0ca2 100644
  	}
  
  	dwmac->ops = data;
-@@ -583,7 +601,7 @@ static int stm32_dwmac_probe(struct platform_device *pdev)
+@@ -583,7 +601,7 @@ static int stm32_dwmac_probe(struct plat
  	ret = stm32_dwmac_parse_data(dwmac, &pdev->dev);
  	if (ret) {
  		dev_err(&pdev->dev, "Unable to parse OF data\n");
@@ -69,7 +67,7 @@ index cf7269fad303..fbc8db0e0ca2 100644
  	}
  
  	plat_dat->flags |= STMMAC_FLAG_EN_TX_LPI_CLK_PHY_CAP;
-@@ -623,7 +641,10 @@ static int stm32_dwmac_probe(struct platform_device *pdev)
+@@ -623,7 +641,10 @@ err_clk_disable_suspend:
  
  err_clk_disable:
  	stm32_dwmac_clk_disable(dwmac);
@@ -81,7 +79,7 @@ index cf7269fad303..fbc8db0e0ca2 100644
  	return ret;
  }
  
-@@ -651,6 +672,10 @@ static void stm32_dwmac_remove(struct platform_device *pdev)
+@@ -651,6 +672,10 @@ static void stm32_dwmac_remove(struct pl
  	}
  
  	phy_power_on(priv->plat->bsp_priv, false);
@@ -92,6 +90,3 @@ index cf7269fad303..fbc8db0e0ca2 100644
  }
  
  static int stm32mp1_suspend(struct stm32_dwmac *dwmac)
--- 
-2.53.0
-

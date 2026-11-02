@@ -23,11 +23,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/media/platform/st/stm32/stm32-csi.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-csi.c b/drivers/media/platform/st/stm32/stm32-csi.c
-index fd2b6dfbd44c..ecd0ed8e76b5 100644
 --- a/drivers/media/platform/st/stm32/stm32-csi.c
 +++ b/drivers/media/platform/st/stm32/stm32-csi.c
-@@ -825,7 +825,7 @@ static int stm32_csi_async_bound(struct v4l2_async_notifier *notifier,
+@@ -825,7 +825,7 @@ static int stm32_csi_async_bound(struct
  	int remote_pad;
  
  	remote_pad = media_entity_get_fwnode_pad(&s_subdev->entity,
@@ -36,6 +34,3 @@ index fd2b6dfbd44c..ecd0ed8e76b5 100644
  						 MEDIA_PAD_FL_SOURCE);
  	if (remote_pad < 0) {
  		dev_err(csidev->dev, "Couldn't find output pad for subdev %s\n",
--- 
-2.53.0
-

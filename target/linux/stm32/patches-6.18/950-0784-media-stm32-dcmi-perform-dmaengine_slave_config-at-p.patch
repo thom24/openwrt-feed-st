@@ -13,11 +13,9 @@ Change-Id: I81dc609a499779217e026dbef80b8452be336510
  drivers/media/platform/st/stm32/stm32-dcmi.c | 32 +++++++++-----------
  1 file changed, 15 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
-index 00a86f3720a9..de58174c77b7 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmi.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
-@@ -301,23 +301,6 @@ static int dcmi_start_dma(struct stm32_dcmi *dcmi,
+@@ -301,23 +301,6 @@ static int dcmi_start_dma(struct stm32_d
  			  struct dcmi_buf *buf)
  {
  	struct dma_async_tx_descriptor *desc = NULL;
@@ -41,7 +39,7 @@ index 00a86f3720a9..de58174c77b7 100644
  
  	/*
  	 * Avoid call of dmaengine_terminate_sync() between
-@@ -1888,6 +1871,7 @@ static int dcmi_probe(struct platform_device *pdev)
+@@ -1888,6 +1871,7 @@ static int dcmi_probe(struct platform_de
  	struct vb2_queue *q;
  	struct dma_chan *chan;
  	struct dma_slave_caps caps;
@@ -49,7 +47,7 @@ index 00a86f3720a9..de58174c77b7 100644
  	struct clk *mclk;
  	int ret = 0;
  
-@@ -1954,6 +1938,19 @@ static int dcmi_probe(struct platform_device *pdev)
+@@ -1954,6 +1938,19 @@ static int dcmi_probe(struct platform_de
  	if (!ret && caps.max_sg_burst)
  		dcmi->dma_max_burst = caps.max_sg_burst	* DMA_SLAVE_BUSWIDTH_4_BYTES;
  
@@ -69,7 +67,7 @@ index 00a86f3720a9..de58174c77b7 100644
  	spin_lock_init(&dcmi->irqlock);
  	mutex_init(&dcmi->lock);
  	mutex_init(&dcmi->dma_lock);
-@@ -2073,6 +2070,7 @@ static int dcmi_probe(struct platform_device *pdev)
+@@ -2073,6 +2070,7 @@ err_device_unregister:
  	v4l2_device_unregister(&dcmi->v4l2_dev);
  err_media_device_cleanup:
  	media_device_cleanup(&dcmi->mdev);
@@ -77,6 +75,3 @@ index 00a86f3720a9..de58174c77b7 100644
  	dma_release_channel(dcmi->dma_chan);
  
  	return ret;
--- 
-2.53.0
-

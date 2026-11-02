@@ -26,11 +26,9 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  drivers/gpu/drm/bridge/sii902x.c | 34 ++++++++++++++++++++++++++++++++
  1 file changed, 34 insertions(+)
 
-diff --git a/drivers/gpu/drm/bridge/sii902x.c b/drivers/gpu/drm/bridge/sii902x.c
-index 1c719c6f271c..a4be6fe8eaa9 100644
 --- a/drivers/gpu/drm/bridge/sii902x.c
 +++ b/drivers/gpu/drm/bridge/sii902x.c
-@@ -804,6 +804,40 @@ static int sii902x_audio_get_eld(struct device *dev, void *data,
+@@ -804,6 +804,40 @@ static int sii902x_audio_get_eld(struct
  				 uint8_t *buf, size_t len)
  {
  	struct sii902x *sii902x = dev_get_drvdata(dev);
@@ -71,6 +69,3 @@ index 1c719c6f271c..a4be6fe8eaa9 100644
  
  	mutex_lock(&sii902x->mutex);
  
--- 
-2.53.0
-

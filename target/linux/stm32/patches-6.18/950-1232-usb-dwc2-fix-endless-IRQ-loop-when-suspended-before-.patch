@@ -18,11 +18,9 @@ Change-Id: I99da2b9b8f9979b2ce4f7080ecfbaf5816ebff61
  drivers/usb/dwc2/core_intr.c | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
-index 90b969abcf7f..16a429327340 100644
 --- a/drivers/usb/dwc2/core_intr.c
 +++ b/drivers/usb/dwc2/core_intr.c
-@@ -98,7 +98,9 @@ static void dwc2_handle_otg_intr(struct dwc2_hsotg *hsotg)
+@@ -98,7 +98,9 @@ static void dwc2_handle_otg_intr(struct
  		gotgctl = dwc2_readl(hsotg, GOTGCTL);
  
  		if (dwc2_is_device_mode(hsotg)) {
@@ -33,6 +31,3 @@ index 90b969abcf7f..16a429327340 100644
  				/* Clear the Gate hclk. */
  				pcgctl = dwc2_readl(hsotg, PCGCTL);
  				pcgctl &= ~PCGCTL_GATEHCLK;
--- 
-2.53.0
-

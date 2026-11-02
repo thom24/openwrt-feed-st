@@ -23,8 +23,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  Documentation/devicetree/bindings/sound/wlf,wm8994.yaml | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/sound/wlf,wm8994.yaml b/Documentation/devicetree/bindings/sound/wlf,wm8994.yaml
-index 8f045de02850..ef13bd0e801d 100644
 --- a/Documentation/devicetree/bindings/sound/wlf,wm8994.yaml
 +++ b/Documentation/devicetree/bindings/sound/wlf,wm8994.yaml
 @@ -71,6 +71,13 @@ properties:
@@ -41,6 +39,3 @@ index 8f045de02850..ef13bd0e801d 100644
    wlf,gpio-cfg:
      $ref: /schemas/types.yaml#/definitions/uint32-array
      maxItems: 11
--- 
-2.53.0
-

@@ -22,11 +22,9 @@ Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
  arch/arm/boot/dts/st/stm32mp157f-dk2.dts | 5 +++++
  6 files changed, 30 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157a-dk1.dts b/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
-index c3f18f9b5bdb..03dc11d5feca 100644
 --- a/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
-@@ -47,6 +47,11 @@ &i2c4 {
+@@ -47,6 +47,11 @@
  	resets = <&scmi_reset RST_SCMI_I2C4>;
  };
  
@@ -38,11 +36,9 @@ index c3f18f9b5bdb..03dc11d5feca 100644
  &iwdg2 {
  	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
-index 64d4e66b56b6..21bf9d477bd2 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
-@@ -52,6 +52,11 @@ &i2c4 {
+@@ -52,6 +52,11 @@
  	resets = <&scmi_reset RST_SCMI_I2C4>;
  };
  
@@ -54,11 +50,9 @@ index 64d4e66b56b6..21bf9d477bd2 100644
  &iwdg2 {
  	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1.dts b/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
-index 8045d47fc780..bd29f93edfce 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
-@@ -52,6 +52,11 @@ &i2c4 {
+@@ -52,6 +52,11 @@
  	resets = <&scmi_reset RST_SCMI_I2C4>;
  };
  
@@ -70,11 +64,9 @@ index 8045d47fc780..bd29f93edfce 100644
  &iwdg2 {
  	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
-index b2f722f9cbe9..8c65fac10e49 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
-@@ -52,6 +52,11 @@ &i2c4 {
+@@ -52,6 +52,11 @@
  	resets = <&scmi_reset RST_SCMI_I2C4>;
  };
  
@@ -86,11 +78,9 @@ index b2f722f9cbe9..8c65fac10e49 100644
  &iwdg2 {
  	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-dk1.dts b/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
-index f4b540997f63..2baf19973998 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
-@@ -59,6 +59,11 @@ &i2c4 {
+@@ -59,6 +59,11 @@
  	resets = <&scmi_reset RST_SCMI_I2C4>;
  };
  
@@ -102,11 +92,9 @@ index f4b540997f63..2baf19973998 100644
  &iwdg2 {
  	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
-index ac3f0c60591b..701bc9ab7a4c 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
-@@ -112,6 +112,11 @@ &i2c4 {
+@@ -112,6 +112,11 @@
  	resets = <&scmi_reset RST_SCMI_I2C4>;
  };
  
@@ -118,6 +106,3 @@ index ac3f0c60591b..701bc9ab7a4c 100644
  &iwdg2 {
  	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
  };
--- 
-2.53.0
-

@@ -19,11 +19,9 @@ Reviewed-by: Yannick FERTRE <yannick.fertre@foss.st.com>
  drivers/gpu/drm/display/drm_bridge_connector.c | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/drivers/gpu/drm/display/drm_bridge_connector.c b/drivers/gpu/drm/display/drm_bridge_connector.c
-index baacd21e7341..ca2611a9f809 100644
 --- a/drivers/gpu/drm/display/drm_bridge_connector.c
 +++ b/drivers/gpu/drm/display/drm_bridge_connector.c
-@@ -156,6 +156,10 @@ static void drm_bridge_connector_handle_hpd(struct drm_bridge_connector *drm_bri
+@@ -156,6 +156,10 @@ static void drm_bridge_connector_handle_
  	connector->status = status;
  	mutex_unlock(&dev->mode_config.mutex);
  
@@ -34,6 +32,3 @@ index baacd21e7341..ca2611a9f809 100644
  	drm_bridge_connector_hpd_notify(connector, status);
  
  	drm_kms_helper_connector_hotplug_event(connector);
--- 
-2.53.0
-

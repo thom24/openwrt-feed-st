@@ -13,11 +13,9 @@ Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
  drivers/gpu/drm/stm/ltdc.h |   6 +-
  3 files changed, 115 insertions(+), 73 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/drv.c b/drivers/gpu/drm/stm/drv.c
-index 2baedd3e2077..c092bcb32dcb 100644
 --- a/drivers/gpu/drm/stm/drv.c
 +++ b/drivers/gpu/drm/stm/drv.c
-@@ -73,15 +73,8 @@ static const struct drm_driver drv_driver = {
+@@ -73,15 +73,8 @@ static const struct drm_driver drv_drive
  static int drv_load(struct drm_device *ddev)
  {
  	struct platform_device *pdev = to_platform_device(ddev->dev);
@@ -33,7 +31,7 @@ index 2baedd3e2077..c092bcb32dcb 100644
  	ret = drmm_mode_config_init(ddev);
  	if (ret)
  		return ret;
-@@ -157,9 +150,10 @@ static __maybe_unused int drv_resume(struct device *dev)
+@@ -157,9 +150,10 @@ static __maybe_unused int drv_resume(str
  static __maybe_unused int drv_runtime_suspend(struct device *dev)
  {
  	struct drm_device *ddev = dev_get_drvdata(dev);
@@ -45,7 +43,7 @@ index 2baedd3e2077..c092bcb32dcb 100644
  
  	return 0;
  }
-@@ -167,9 +161,10 @@ static __maybe_unused int drv_runtime_suspend(struct device *dev)
+@@ -167,9 +161,10 @@ static __maybe_unused int drv_runtime_su
  static __maybe_unused int drv_runtime_resume(struct device *dev)
  {
  	struct drm_device *ddev = dev_get_drvdata(dev);
@@ -57,7 +55,7 @@ index 2baedd3e2077..c092bcb32dcb 100644
  }
  
  static const struct dev_pm_ops drv_pm_ops = {
-@@ -182,17 +177,39 @@ static int stm_drm_platform_probe(struct platform_device *pdev)
+@@ -182,17 +177,39 @@ static int stm_drm_platform_probe(struct
  {
  	struct device *dev = &pdev->dev;
  	struct drm_device *ddev;
@@ -100,7 +98,7 @@ index 2baedd3e2077..c092bcb32dcb 100644
  
  	ret = drv_load(ddev);
  	if (ret)
-@@ -210,6 +227,8 @@ static int stm_drm_platform_probe(struct platform_device *pdev)
+@@ -210,6 +227,8 @@ err_unload:
  	drv_unload(ddev);
  err_put:
  	drm_dev_put(ddev);
@@ -109,11 +107,9 @@ index 2baedd3e2077..c092bcb32dcb 100644
  
  	return ret;
  }
-diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-index d1501e86a5b1..2949ae88f73b 100644
 --- a/drivers/gpu/drm/stm/ltdc.c
 +++ b/drivers/gpu/drm/stm/ltdc.c
-@@ -1877,11 +1877,8 @@ static int ltdc_get_caps(struct drm_device *ddev)
+@@ -1877,11 +1877,8 @@ static int ltdc_get_caps(struct drm_devi
  	return 0;
  }
  
@@ -126,7 +122,7 @@ index d1501e86a5b1..2949ae88f73b 100644
  	clk_disable_unprepare(ldev->pixel_clk);
  	if (ldev->bus_clk)
  		clk_disable_unprepare(ldev->bus_clk);
-@@ -1889,32 +1886,22 @@ void ltdc_suspend(struct drm_device *ddev)
+@@ -1889,32 +1886,22 @@ void ltdc_suspend(struct drm_device *dde
  		clk_disable_unprepare(ldev->lvds_clk);
  }
  
@@ -231,7 +227,7 @@ index d1501e86a5b1..2949ae88f73b 100644
  	return ret;
  }
  
-@@ -2105,6 +2053,79 @@ void ltdc_unload(struct drm_device *ddev)
+@@ -2105,6 +2053,79 @@ void ltdc_unload(struct drm_device *ddev
  	pm_runtime_disable(ddev->dev);
  }
  
@@ -311,8 +307,6 @@ index d1501e86a5b1..2949ae88f73b 100644
  MODULE_AUTHOR("Philippe Cornu <philippe.cornu@st.com>");
  MODULE_AUTHOR("Yannick Fertre <yannick.fertre@st.com>");
  MODULE_AUTHOR("Fabien Dessenne <fabien.dessenne@st.com>");
-diff --git a/drivers/gpu/drm/stm/ltdc.h b/drivers/gpu/drm/stm/ltdc.h
-index 17b51a7ce28e..349ea768a055 100644
 --- a/drivers/gpu/drm/stm/ltdc.h
 +++ b/drivers/gpu/drm/stm/ltdc.h
 @@ -63,9 +63,11 @@ struct ltdc_device {
@@ -329,6 +323,3 @@ index 17b51a7ce28e..349ea768a055 100644
 +int ltdc_resume(struct ltdc_device *ldev);
  
  #endif
--- 
-2.53.0
-

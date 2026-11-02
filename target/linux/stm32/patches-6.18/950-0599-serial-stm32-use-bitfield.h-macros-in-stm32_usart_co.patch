@@ -14,11 +14,9 @@ Change-Id: Ieef6cc7cde6974f4cfa4074efa483356118d3ce6
  drivers/tty/serial/stm32-usart.h |  2 --
  2 files changed, 4 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 8a99e2cad0f8..08f06b879e49 100644
 --- a/drivers/tty/serial/stm32-usart.c
 +++ b/drivers/tty/serial/stm32-usart.c
-@@ -187,7 +187,6 @@ static void stm32_usart_config_reg_rs485(u32 *cr1, u32 *cr3, u32 delay_ADE,
+@@ -187,7 +187,6 @@ static void stm32_usart_config_reg_rs485
  					 u32 delay_DDE, u32 baud)
  {
  	u32 rs485_deat_dedt;
@@ -26,7 +24,7 @@ index 8a99e2cad0f8..08f06b879e49 100644
  	bool over8;
  
  	*cr3 |= USART_CR3_DEM;
-@@ -201,11 +200,8 @@ static void stm32_usart_config_reg_rs485(u32 *cr1, u32 *cr3, u32 delay_ADE,
+@@ -201,11 +200,8 @@ static void stm32_usart_config_reg_rs485
  		rs485_deat_dedt = delay_ADE * baud * 16;
  
  	rs485_deat_dedt = DIV_ROUND_UP(rs485_deat_dedt, 1000);
@@ -40,7 +38,7 @@ index 8a99e2cad0f8..08f06b879e49 100644
  
  	if (over8)
  		rs485_deat_dedt = delay_DDE * baud * 8;
-@@ -213,11 +209,8 @@ static void stm32_usart_config_reg_rs485(u32 *cr1, u32 *cr3, u32 delay_ADE,
+@@ -213,11 +209,8 @@ static void stm32_usart_config_reg_rs485
  		rs485_deat_dedt = delay_DDE * baud * 16;
  
  	rs485_deat_dedt = DIV_ROUND_UP(rs485_deat_dedt, 1000);
@@ -54,8 +52,6 @@ index 8a99e2cad0f8..08f06b879e49 100644
  }
  
  static int stm32_usart_config_rs485(struct uart_port *port, struct ktermios *termios,
-diff --git a/drivers/tty/serial/stm32-usart.h b/drivers/tty/serial/stm32-usart.h
-index 3eb4860a772a..8c8d6681d058 100644
 --- a/drivers/tty/serial/stm32-usart.h
 +++ b/drivers/tty/serial/stm32-usart.h
 @@ -117,8 +117,6 @@ struct stm32_usart_info {
@@ -67,6 +63,3 @@ index 3eb4860a772a..8c8d6681d058 100644
  
  /* USART_CR2 */
  #define USART_CR2_ADD_MASK	GENMASK(3, 0)	/* F4 */
--- 
-2.53.0
-

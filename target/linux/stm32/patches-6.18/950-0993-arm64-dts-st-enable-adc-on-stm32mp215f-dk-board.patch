@@ -43,11 +43,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 34 +++++++++++++++++++++++
  1 file changed, 34 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-index ebe0671ee9be..49dca12b6c35 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-@@ -70,6 +70,22 @@ memory@80000000 {
+@@ -70,6 +70,22 @@
  		reg = <0x0 0x80000000 0x0 0x80000000>;
  	};
  
@@ -70,7 +68,7 @@ index ebe0671ee9be..49dca12b6c35 100644
  	wifi_pwrseq: wifi-pwrseq {
  		compatible = "mmc-pwrseq-simple";
  		reset-gpios = <&gpiob 2 GPIO_ACTIVE_LOW>;
-@@ -82,6 +98,24 @@ &a35ss_syscfg {
+@@ -82,6 +98,24 @@
  	status = "okay";
  };
  
@@ -95,6 +93,3 @@ index ebe0671ee9be..49dca12b6c35 100644
  &arm_wdt {
  	timeout-sec = <32>;
  	bootph-all;
--- 
-2.53.0
-

@@ -26,11 +26,9 @@ Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  drivers/remoteproc/stm32_rproc.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index 0db90005e908..517167645b49 100644
 --- a/drivers/remoteproc/stm32_rproc.c
 +++ b/drivers/remoteproc/stm32_rproc.c
-@@ -165,7 +165,8 @@ static u64 stm32_rproc_get_vect_table(struct rproc *rproc, const struct firmware
+@@ -165,7 +165,8 @@ static u64 stm32_rproc_get_vect_table(st
  		return elf_shdr_get_sh_addr(class, shdr);
  	}
  
@@ -40,6 +38,3 @@ index 0db90005e908..517167645b49 100644
  }
  
  static int stm32_rproc_pa_to_da(struct rproc *rproc, phys_addr_t pa, u64 *da)
--- 
-2.53.0
-

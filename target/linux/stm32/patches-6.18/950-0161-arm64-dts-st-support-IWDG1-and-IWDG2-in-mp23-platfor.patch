@@ -16,11 +16,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp231.dtsi | 20 ++++++++++++++++++++
  1 file changed, 20 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index 4690b06949d3..08acd3b0155b 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -726,6 +726,26 @@ rng: rng@42020000 {
+@@ -726,6 +726,26 @@
  				status = "disabled";
  			};
  
@@ -47,6 +45,3 @@ index 4690b06949d3..08acd3b0155b 100644
  			spi8: spi@46020000 {
  				compatible = "st,stm32mp25-spi";
  				reg = <0x46020000 0x400>;
--- 
-2.53.0
-

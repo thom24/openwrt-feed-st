@@ -40,11 +40,9 @@ Change-Id: I80a8c31a8a5a91672fc5d1d1794623f0113b7fb3
  drivers/irqchip/irq-stm32mp-exti.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/irqchip/irq-stm32mp-exti.c b/drivers/irqchip/irq-stm32mp-exti.c
-index a018847f4b71..6221e6b44423 100644
 --- a/drivers/irqchip/irq-stm32mp-exti.c
 +++ b/drivers/irqchip/irq-stm32mp-exti.c
-@@ -333,6 +333,8 @@ static void stm32mp_exti_eoi(struct irq_data *d)
+@@ -333,6 +333,8 @@ static void stm32mp_exti_eoi(struct irq_
  	stm32mp_exti_write_bit(d, bank->rpr_ofst);
  	stm32mp_exti_write_bit(d, bank->fpr_ofst);
  
@@ -53,6 +51,3 @@ index a018847f4b71..6221e6b44423 100644
  	raw_spin_unlock(&chip_data->rlock);
  
  	irq_chip_eoi_parent(d);
--- 
-2.53.0
-

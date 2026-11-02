@@ -22,11 +22,9 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/556928
  arch/arm/boot/dts/st/stm32mp151.dtsi | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
-index ed8921703667..591f8e244793 100644
 --- a/arch/arm/boot/dts/st/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
-@@ -2183,8 +2183,8 @@ qspi: spi@58003000 {
+@@ -2183,8 +2183,8 @@
  				reg = <0x58003000 0x1000>, <0x70000000 0x10000000>;
  				reg-names = "qspi", "qspi_mm";
  				interrupts = <GIC_SPI 92 IRQ_TYPE_LEVEL_HIGH>;
@@ -37,6 +35,3 @@ index ed8921703667..591f8e244793 100644
  				dma-names = "tx", "rx";
  				clocks = <&rcc QSPI_K>;
  				resets = <&rcc QSPI_R>;
--- 
-2.53.0
-

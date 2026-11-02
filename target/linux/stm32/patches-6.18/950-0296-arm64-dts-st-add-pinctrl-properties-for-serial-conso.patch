@@ -16,11 +16,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 14 ++++++++++++++
  1 file changed, 14 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-index ef0bfb9723da..397f64b95645 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-@@ -154,5 +154,19 @@ &syscfg {
+@@ -154,5 +154,19 @@
  
  &usart2 {
  	bootph-all;
@@ -40,6 +38,3 @@ index ef0bfb9723da..397f64b95645 100644
 +		bootph-all;
 +	};
 +};
--- 
-2.53.0
-

@@ -24,8 +24,6 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml b/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml
-index 4970b9167d1c..9d7984cf0224 100644
 --- a/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml
 +++ b/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml
 @@ -36,6 +36,7 @@ properties:
@@ -36,6 +34,3 @@ index 4970b9167d1c..9d7984cf0224 100644
      maxItems: 3
  
    '#address-cells':
--- 
-2.53.0
-

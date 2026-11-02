@@ -26,11 +26,9 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  arch/arm/boot/dts/st/stm32mp157f-ev1.dts      | 312 ++++++++++++++++++
  3 files changed, 936 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
-index fde8b51709ac..30d3b19f6d3c 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
-@@ -32,6 +32,58 @@ clk_ext_camera: clk-ext-camera {
+@@ -32,6 +32,58 @@
  		};
  	};
  
@@ -89,7 +87,7 @@ index fde8b51709ac..30d3b19f6d3c 100644
  	joystick {
  		compatible = "gpio-keys";
  		pinctrl-0 = <&joystick_pins>;
-@@ -74,6 +126,44 @@ panel_backlight: panel-backlight {
+@@ -74,6 +126,44 @@
  		default-on;
  		status = "okay";
  	};
@@ -134,7 +132,7 @@ index fde8b51709ac..30d3b19f6d3c 100644
  };
  
  &cec {
-@@ -109,6 +199,113 @@ dcmi_0: endpoint {
+@@ -109,6 +199,113 @@
  	};
  };
  
@@ -248,7 +246,7 @@ index fde8b51709ac..30d3b19f6d3c 100644
  &dsi {
  	#address-cells = <1>;
  	#size-cells = <0>;
-@@ -187,6 +384,49 @@ &i2c2 {
+@@ -187,6 +384,49 @@
  	/delete-property/dma-names;
  	status = "okay";
  
@@ -298,7 +296,7 @@ index fde8b51709ac..30d3b19f6d3c 100644
  	ov5640: camera@3c {
  		compatible = "ovti,ov5640";
  		reg = <0x3c>;
-@@ -338,6 +578,65 @@ pins {
+@@ -338,6 +578,65 @@
  	};
  };
  
@@ -364,7 +362,7 @@ index fde8b51709ac..30d3b19f6d3c 100644
  &sdmmc3 {
  	pinctrl-names = "default", "opendrain", "sleep";
  	pinctrl-0 = <&sdmmc3_b4_pins_a>;
-@@ -350,6 +649,19 @@ &sdmmc3 {
+@@ -350,6 +649,19 @@
  	status = "disabled";
  };
  
@@ -384,11 +382,9 @@ index fde8b51709ac..30d3b19f6d3c 100644
  &spi1 {
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&spi1_pins_a>;
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-index f7574e9f5b2c..fd0fc9ac48c5 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-@@ -32,6 +32,58 @@ clk_ext_camera: clk-ext-camera {
+@@ -32,6 +32,58 @@
  		};
  	};
  
@@ -447,7 +443,7 @@ index f7574e9f5b2c..fd0fc9ac48c5 100644
  	joystick {
  		compatible = "gpio-keys";
  		pinctrl-0 = <&joystick_pins>;
-@@ -74,6 +126,44 @@ panel_backlight: panel-backlight {
+@@ -74,6 +126,44 @@
  		default-on;
  		status = "okay";
  	};
@@ -492,7 +488,7 @@ index f7574e9f5b2c..fd0fc9ac48c5 100644
  };
  
  &cec {
-@@ -109,6 +199,113 @@ dcmi_0: endpoint {
+@@ -109,6 +199,113 @@
  	};
  };
  
@@ -606,7 +602,7 @@ index f7574e9f5b2c..fd0fc9ac48c5 100644
  &dsi {
  	#address-cells = <1>;
  	#size-cells = <0>;
-@@ -187,6 +384,49 @@ &i2c2 {
+@@ -187,6 +384,49 @@
  	/delete-property/dma-names;
  	status = "okay";
  
@@ -656,7 +652,7 @@ index f7574e9f5b2c..fd0fc9ac48c5 100644
  	ov5640: camera@3c {
  		compatible = "ovti,ov5640";
  		reg = <0x3c>;
-@@ -339,6 +579,65 @@ pins {
+@@ -339,6 +579,65 @@
  	};
  };
  
@@ -722,7 +718,7 @@ index f7574e9f5b2c..fd0fc9ac48c5 100644
  &sdmmc3 {
  	pinctrl-names = "default", "opendrain", "sleep";
  	pinctrl-0 = <&sdmmc3_b4_pins_a>;
-@@ -351,6 +650,19 @@ &sdmmc3 {
+@@ -351,6 +650,19 @@
  	status = "disabled";
  };
  
@@ -742,11 +738,9 @@ index f7574e9f5b2c..fd0fc9ac48c5 100644
  &spi1 {
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&spi1_pins_a>;
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-index fabb384fb61a..0c460482445f 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-@@ -32,6 +32,58 @@ clk_ext_camera: clk-ext-camera {
+@@ -32,6 +32,58 @@
  		};
  	};
  
@@ -805,7 +799,7 @@ index fabb384fb61a..0c460482445f 100644
  	joystick {
  		compatible = "gpio-keys";
  		pinctrl-0 = <&joystick_pins>;
-@@ -74,6 +126,44 @@ panel_backlight: panel-backlight {
+@@ -74,6 +126,44 @@
  		default-on;
  		status = "okay";
  	};
@@ -850,7 +844,7 @@ index fabb384fb61a..0c460482445f 100644
  };
  
  &cec {
-@@ -109,6 +199,113 @@ dcmi_0: endpoint {
+@@ -109,6 +199,113 @@
  	};
  };
  
@@ -964,7 +958,7 @@ index fabb384fb61a..0c460482445f 100644
  &dsi {
  	#address-cells = <1>;
  	#size-cells = <0>;
-@@ -187,6 +384,49 @@ &i2c2 {
+@@ -187,6 +384,49 @@
  	/delete-property/dma-names;
  	status = "okay";
  
@@ -1014,7 +1008,7 @@ index fabb384fb61a..0c460482445f 100644
  	ov5640: camera@3c {
  		compatible = "ovti,ov5640";
  		reg = <0x3c>;
-@@ -339,6 +579,65 @@ pins {
+@@ -339,6 +579,65 @@
  	};
  };
  
@@ -1080,7 +1074,7 @@ index fabb384fb61a..0c460482445f 100644
  &sdmmc3 {
  	pinctrl-names = "default", "opendrain", "sleep";
  	pinctrl-0 = <&sdmmc3_b4_pins_a>;
-@@ -351,6 +650,19 @@ &sdmmc3 {
+@@ -351,6 +650,19 @@
  	status = "disabled";
  };
  
@@ -1100,6 +1094,3 @@ index fabb384fb61a..0c460482445f 100644
  &spi1 {
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&spi1_pins_a>;
--- 
-2.53.0
-

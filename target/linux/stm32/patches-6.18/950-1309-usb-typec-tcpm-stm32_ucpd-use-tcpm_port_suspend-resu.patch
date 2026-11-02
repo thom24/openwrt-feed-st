@@ -19,11 +19,9 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/usb/typec/tcpm/stm32_ucpd.c | 11 +++++++++++
  1 file changed, 11 insertions(+)
 
-diff --git a/drivers/usb/typec/tcpm/stm32_ucpd.c b/drivers/usb/typec/tcpm/stm32_ucpd.c
-index 05c3baa238f3..556161ccbfce 100644
 --- a/drivers/usb/typec/tcpm/stm32_ucpd.c
 +++ b/drivers/usb/typec/tcpm/stm32_ucpd.c
-@@ -759,6 +759,13 @@ static int stm32_ucpd_suspend(struct device *dev)
+@@ -759,6 +759,13 @@ static int stm32_ucpd_suspend(struct dev
  		return 0;
  
  	disable_irq(ucpd->ucpd_irq);
@@ -37,7 +35,7 @@ index 05c3baa238f3..556161ccbfce 100644
  	/* backup vconn_on flag */
  	ucpd->vconn_restore = ucpd->vconn_on;
  	stm32_ucpd_set_vconn(&ucpd->tcpc_dev, false);
-@@ -792,6 +799,10 @@ static int stm32_ucpd_resume(struct device *dev)
+@@ -792,6 +799,10 @@ static int stm32_ucpd_resume(struct devi
  	__stm32_ucpd_set_cc(ucpd, ucpd->cc);
  	stm32_ucpd_set_vconn(&ucpd->tcpc_dev, ucpd->vconn_restore);
  	tcpp_set_vbus(ucpd->tcpp_dev, ucpd->vbus_on, ucpd->charge_on);
@@ -48,6 +46,3 @@ index 05c3baa238f3..556161ccbfce 100644
  	enable_irq(ucpd->ucpd_irq);
  
  	return 0;
--- 
-2.53.0
-

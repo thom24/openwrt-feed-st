@@ -14,8 +14,6 @@ Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
  .../bindings/pinctrl/pincfg-node.yaml           | 17 +++++++++++++++++
  1 file changed, 17 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/pincfg-node.yaml b/Documentation/devicetree/bindings/pinctrl/pincfg-node.yaml
-index cbfcf215e571..d1bc389e0a6d 100644
 --- a/Documentation/devicetree/bindings/pinctrl/pincfg-node.yaml
 +++ b/Documentation/devicetree/bindings/pinctrl/pincfg-node.yaml
 @@ -153,4 +153,21 @@ properties:
@@ -40,6 +38,3 @@ index cbfcf215e571..d1bc389e0a6d 100644
 +    skew-delay-output-ps: false
 +
  additionalProperties: true
--- 
-2.53.0
-

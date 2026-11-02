@@ -16,8 +16,6 @@ Change-Id: I517635592ea3fcb67176c29934cb24d46e98d66a
  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-index 457bb0702ed9..64aaa0dfa8fa 100644
 --- a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
 +++ b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
 @@ -127,6 +127,9 @@ properties:
@@ -30,6 +28,3 @@ index 457bb0702ed9..64aaa0dfa8fa 100644
    access-controllers:
      minItems: 1
      maxItems: 2
--- 
-2.53.0
-

@@ -17,11 +17,9 @@ Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index bf888d60cd4f..d89f5d365ac8 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -121,8 +121,8 @@ intc: interrupt-controller@4ac10000 {
+@@ -121,8 +121,8 @@
  			      <0x4ac20000 0x0 0x20000>,
  			      <0x4ac40000 0x0 0x20000>,
  			      <0x4ac60000 0x0 0x20000>;
@@ -32,6 +30,3 @@ index bf888d60cd4f..d89f5d365ac8 100644
  		};
  	};
  };
--- 
-2.53.0
-

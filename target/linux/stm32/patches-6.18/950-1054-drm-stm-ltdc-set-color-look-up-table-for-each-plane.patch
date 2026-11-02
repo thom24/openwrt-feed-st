@@ -12,11 +12,9 @@ Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
  drivers/gpu/drm/stm/ltdc.c | 54 +++++++++++++++++++++++---------------
  1 file changed, 33 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-index 5630a269a1f7..ddcefbe91fa1 100644
 --- a/drivers/gpu/drm/stm/ltdc.c
 +++ b/drivers/gpu/drm/stm/ltdc.c
-@@ -818,25 +818,6 @@ static irqreturn_t ltdc_irq(int irq, void *arg)
+@@ -818,25 +818,6 @@ static irqreturn_t ltdc_irq(int irq, voi
   * DRM_CRTC
   */
  
@@ -42,7 +40,7 @@ index 5630a269a1f7..ddcefbe91fa1 100644
  static void ltdc_crtc_atomic_enable(struct drm_crtc *crtc,
  				    struct drm_atomic_state *state)
  {
-@@ -1122,8 +1103,6 @@ static void ltdc_crtc_atomic_flush(struct drm_crtc *crtc,
+@@ -1122,8 +1103,6 @@ static void ltdc_crtc_atomic_flush(struc
  
  	drm_dbg_atomic(crtc->dev, "\n");
  
@@ -51,7 +49,7 @@ index 5630a269a1f7..ddcefbe91fa1 100644
  	/* Commit shadow registers = update planes at next vblank */
  	if (!ldev->caps.plane_reg_shadow)
  		regmap_set_bits(ldev->regmap, LTDC_SRCR, SRCR_VBR);
-@@ -1366,6 +1345,35 @@ static u32 calculateScalingFactor(u32 in, u32 out)
+@@ -1366,6 +1345,35 @@ static u32 calculateScalingFactor(u32 in
  	return factor & 0xFFFF;
  }
  
@@ -87,7 +85,7 @@ index 5630a269a1f7..ddcefbe91fa1 100644
  static void ltdc_plane_update(struct drm_plane *plane, struct drm_atomic_state *state)
  {
  	struct ltdc_device *ldev = plane_to_ltdc(plane);
-@@ -1686,6 +1694,10 @@ static void ltdc_plane_update(struct drm_plane *plane, struct drm_atomic_state *
+@@ -1686,6 +1694,10 @@ static void ltdc_plane_update(struct drm
  		}
  	}
  
@@ -98,6 +96,3 @@ index 5630a269a1f7..ddcefbe91fa1 100644
  	/* Enable layer and CLUT if needed */
  	lxcr = fb->format->format == DRM_FORMAT_C8 ? LXCR_CLUTEN : 0;
  
--- 
-2.53.0
-

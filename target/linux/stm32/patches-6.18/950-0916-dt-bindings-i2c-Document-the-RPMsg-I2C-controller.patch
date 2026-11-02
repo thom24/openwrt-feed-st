@@ -14,9 +14,6 @@ Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
  2 files changed, 57 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-rpmsg.yaml
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-rpmsg.yaml b/Documentation/devicetree/bindings/i2c/i2c-rpmsg.yaml
-new file mode 100644
-index 000000000000..ccdbcce6d037
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/i2c/i2c-rpmsg.yaml
 @@ -0,0 +1,55 @@
@@ -75,8 +72,6 @@ index 000000000000..ccdbcce6d037
 +            reg = <0x20>;
 +        };
 +    };
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index a9cf85fd6fbe..1a23295013d4 100644
 --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
 +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
 @@ -1367,6 +1367,8 @@ patternProperties:
@@ -88,6 +83,3 @@ index a9cf85fd6fbe..1a23295013d4 100644
    "^rve,.*":
      description: Recharge Véhicule Électrique (RVE) inc.
    "^saef,.*":
--- 
-2.53.0
-

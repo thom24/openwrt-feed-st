@@ -11,11 +11,9 @@ Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
  drivers/gpu/drm/stm/lvds.c | 17 +++++++++++++----
  1 file changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
-index 30d9429ea257..02b9683b6d8f 100644
 --- a/drivers/gpu/drm/stm/lvds.c
 +++ b/drivers/gpu/drm/stm/lvds.c
-@@ -1090,6 +1090,7 @@ static int lvds_probe(struct platform_device *pdev)
+@@ -1090,6 +1090,7 @@ static int lvds_probe(struct platform_de
  	struct reset_control *rstc;
  	struct stm_lvds *lvds;
  	int ret, dual_link;
@@ -23,7 +21,7 @@ index 30d9429ea257..02b9683b6d8f 100644
  
  	dev_dbg(dev, "Probing LVDS driver...\n");
  
-@@ -1139,10 +1140,6 @@ static int lvds_probe(struct platform_device *pdev)
+@@ -1139,10 +1140,6 @@ static int lvds_probe(struct platform_de
  		return  PTR_ERR(lvds->vdda18_supply);
  	}
  
@@ -34,7 +32,7 @@ index 30d9429ea257..02b9683b6d8f 100644
  	port1 = of_graph_get_port_by_id(dev->of_node, 1);
  	port2 = of_graph_get_port_by_id(dev->of_node, 2);
  	dual_link = drm_of_lvds_get_dual_link_pixel_order(port1, port2);
-@@ -1218,6 +1215,18 @@ static int lvds_probe(struct platform_device *pdev)
+@@ -1218,6 +1215,18 @@ static int lvds_probe(struct platform_de
  		return ret;
  	}
  
@@ -53,6 +51,3 @@ index 30d9429ea257..02b9683b6d8f 100644
  	lvds->lvds_bridge.of_node = dev->of_node;
  	lvds->hw_version = lvds_read(lvds, LVDS_VERR);
  
--- 
-2.53.0
-

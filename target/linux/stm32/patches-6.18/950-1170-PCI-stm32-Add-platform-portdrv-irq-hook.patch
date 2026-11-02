@@ -18,8 +18,6 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/pci/controller/dwc/pcie-stm32.h |   2 +
  2 files changed, 107 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pci/controller/dwc/pcie-stm32.c b/drivers/pci/controller/dwc/pcie-stm32.c
-index 295f70ce6311..9330f1093980 100644
 --- a/drivers/pci/controller/dwc/pcie-stm32.c
 +++ b/drivers/pci/controller/dwc/pcie-stm32.c
 @@ -19,6 +19,7 @@
@@ -39,7 +37,7 @@ index 295f70ce6311..9330f1093980 100644
  };
  
  static void stm32_pcie_deassert_perst(struct stm32_pcie *stm32_pcie)
-@@ -147,12 +150,110 @@ static const struct dw_pcie_ops dw_pcie_ops = {
+@@ -147,12 +150,110 @@ static const struct dw_pcie_ops dw_pcie_
  	.stop_link = stm32_pcie_stop_link
  };
  
@@ -151,7 +149,7 @@ index 295f70ce6311..9330f1093980 100644
  	ret = phy_set_mode(stm32_pcie->phy, PHY_MODE_PCIE);
  	if (ret)
  		return ret;
-@@ -196,6 +297,8 @@ static void stm32_remove_pcie_port(struct stm32_pcie *stm32_pcie)
+@@ -196,6 +297,8 @@ static void stm32_remove_pcie_port(struc
  
  	stm32_pcie_assert_perst(stm32_pcie);
  
@@ -160,7 +158,7 @@ index 295f70ce6311..9330f1093980 100644
  	phy_exit(stm32_pcie->phy);
  }
  
-@@ -276,7 +379,7 @@ static int stm32_pcie_probe(struct platform_device *pdev)
+@@ -276,7 +379,7 @@ static int stm32_pcie_probe(struct platf
  
  	platform_set_drvdata(pdev, stm32_pcie);
  
@@ -169,8 +167,6 @@ index 295f70ce6311..9330f1093980 100644
  	if (ret)
  		return ret;
  
-diff --git a/drivers/pci/controller/dwc/pcie-stm32.h b/drivers/pci/controller/dwc/pcie-stm32.h
-index 09d39f04e469..27562c757b7b 100644
 --- a/drivers/pci/controller/dwc/pcie-stm32.h
 +++ b/drivers/pci/controller/dwc/pcie-stm32.h
 @@ -14,3 +14,5 @@
@@ -179,6 +175,3 @@ index 09d39f04e469..27562c757b7b 100644
  #define SYSCFG_PCIECR			0x6000
 +#define SYSCFG_PCIEPMEMSICR		0x6004
 +#define SYSCFG_PCIEAERRCMSICR		0x6008
--- 
-2.53.0
-

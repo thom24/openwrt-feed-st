@@ -15,11 +15,9 @@ Signed-off-by: Mark Brown <broonie@kernel.org>
  drivers/spi/spi-stm32.c | 20 ++++++++++++--------
  1 file changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index 7a6ee93be9bd..2749778cba5c 100644
 --- a/drivers/spi/spi-stm32.c
 +++ b/drivers/spi/spi-stm32.c
-@@ -2410,11 +2410,13 @@ static int stm32_spi_probe(struct platform_device *pdev)
+@@ -2410,11 +2410,13 @@ static int stm32_spi_probe(struct platfo
  	spi->dma_tx = dma_request_chan(spi->dev, "tx");
  	if (IS_ERR(spi->dma_tx)) {
  		ret = PTR_ERR(spi->dma_tx);
@@ -37,7 +35,7 @@ index 7a6ee93be9bd..2749778cba5c 100644
  	} else {
  		ctrl->dma_tx = spi->dma_tx;
  	}
-@@ -2422,11 +2424,13 @@ static int stm32_spi_probe(struct platform_device *pdev)
+@@ -2422,11 +2424,13 @@ static int stm32_spi_probe(struct platfo
  	spi->dma_rx = dma_request_chan(spi->dev, "rx");
  	if (IS_ERR(spi->dma_rx)) {
  		ret = PTR_ERR(spi->dma_rx);
@@ -55,6 +53,3 @@ index 7a6ee93be9bd..2749778cba5c 100644
  	} else {
  		ctrl->dma_rx = spi->dma_rx;
  	}
--- 
-2.53.0
-

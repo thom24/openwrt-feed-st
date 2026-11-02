@@ -21,11 +21,9 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  drivers/cpufreq/stm32-cpufreq.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/cpufreq/stm32-cpufreq.c b/drivers/cpufreq/stm32-cpufreq.c
-index aca99a7abfde..702148ed1f17 100644
 --- a/drivers/cpufreq/stm32-cpufreq.c
 +++ b/drivers/cpufreq/stm32-cpufreq.c
-@@ -35,7 +35,7 @@ static int stm32_cpufreq_probe(struct platform_device *pdev)
+@@ -35,7 +35,7 @@ static int stm32_cpufreq_probe(struct pl
  	}
  	opp_node = dev_pm_opp_of_get_opp_desc_node(cpu_dev);
  	if (!opp_node) {
@@ -34,6 +32,3 @@ index aca99a7abfde..702148ed1f17 100644
  		return -ENODEV;
  	}
  
--- 
-2.53.0
-

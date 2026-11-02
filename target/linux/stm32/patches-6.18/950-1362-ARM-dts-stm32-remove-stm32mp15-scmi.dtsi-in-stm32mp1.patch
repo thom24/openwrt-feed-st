@@ -20,8 +20,6 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp151c-plyaqm.dts | 69 ++++++++++++++++++++-
  1 file changed, 68 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp151c-plyaqm.dts b/arch/arm/boot/dts/st/stm32mp151c-plyaqm.dts
-index 658f5f4ec212..7242f40756a7 100644
 --- a/arch/arm/boot/dts/st/stm32mp151c-plyaqm.dts
 +++ b/arch/arm/boot/dts/st/stm32mp151c-plyaqm.dts
 @@ -5,7 +5,6 @@
@@ -32,7 +30,7 @@ index 658f5f4ec212..7242f40756a7 100644
  #include <dt-bindings/gpio/gpio.h>
  #include <dt-bindings/leds/common.h>
  
-@@ -34,6 +33,27 @@ firmware {
+@@ -34,6 +33,27 @@
  		optee {
  			compatible = "linaro,optee-tz";
  			method = "smc";
@@ -60,7 +58,7 @@ index 658f5f4ec212..7242f40756a7 100644
  		};
  	};
  
-@@ -82,12 +102,26 @@ sound {
+@@ -82,12 +102,26 @@
  		dais = <&i2s1_port>;
  	};
  
@@ -87,7 +85,7 @@ index 658f5f4ec212..7242f40756a7 100644
  &adc {
  	pinctrl-names = "default";
  	pinctrl-0 = <&adc1_in10_pins_a>;
-@@ -143,35 +177,64 @@ ethphy0: ethernet-phy@0 {
+@@ -143,35 +177,64 @@
  };
  
  &gpioa {
@@ -152,7 +150,7 @@ index 658f5f4ec212..7242f40756a7 100644
  &gpioz {
  	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
  };
-@@ -375,3 +438,7 @@ bluetooth {
+@@ -375,3 +438,7 @@
  		interrupt-names = "host-wakeup";
  	};
  };
@@ -160,6 +158,3 @@ index 658f5f4ec212..7242f40756a7 100644
 +&usart1 {
 +	clocks = <&scmi_clk CK_SCMI_USART1>;
 +};
--- 
-2.53.0
-

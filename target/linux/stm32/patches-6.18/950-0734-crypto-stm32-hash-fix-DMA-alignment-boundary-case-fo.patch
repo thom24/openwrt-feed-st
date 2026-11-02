@@ -32,11 +32,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/crypto/stm32/stm32-hash.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/crypto/stm32/stm32-hash.c b/drivers/crypto/stm32/stm32-hash.c
-index 08b51ac7ab7e..68296c6587d8 100644
 --- a/drivers/crypto/stm32/stm32-hash.c
 +++ b/drivers/crypto/stm32/stm32-hash.c
-@@ -1173,7 +1173,7 @@ static int stm32_hash_align_sgs(struct scatterlist *sg,
+@@ -1173,7 +1173,7 @@ static int stm32_hash_align_sgs(struct s
  		 */
  		if (init && secure_ctx) {
  			new_len += sizeof(u32);
@@ -45,6 +43,3 @@ index 08b51ac7ab7e..68296c6587d8 100644
  				new_len -= bs;
  		}
  	}
--- 
-2.53.0
-

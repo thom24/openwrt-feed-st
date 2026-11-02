@@ -17,11 +17,9 @@ Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 36 +++++++++++++++++++----
  1 file changed, 31 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index da0ffcfeedcf..7407b5901a54 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -191,6 +191,19 @@ sound {
+@@ -191,6 +191,19 @@
  		status = "okay";
  	};
  
@@ -41,7 +39,7 @@ index da0ffcfeedcf..7407b5901a54 100644
  	wifi_pwrseq: wifi-pwrseq {
  		compatible = "mmc-pwrseq-simple";
  		reset-gpios = <&gpiog 8 GPIO_ACTIVE_LOW>;
-@@ -932,9 +945,23 @@ connector {
+@@ -932,9 +945,23 @@
  		typec-power-opmode = "1.5A";
  		pd-disable;
  		self-powered;
@@ -68,7 +66,7 @@ index da0ffcfeedcf..7407b5901a54 100644
  			};
  		};
  	};
-@@ -1006,11 +1033,10 @@ &usb3dr {
+@@ -1006,11 +1033,10 @@
  	dwc3: usb@48300000 {
  		phys = <&usb2_phy2>, <&combophy PHY_TYPE_USB3>;
  		phy-names = "usb2-phy", "usb3-phy";
@@ -81,6 +79,3 @@ index da0ffcfeedcf..7407b5901a54 100644
  			};
  		};
  	};
--- 
-2.53.0
-

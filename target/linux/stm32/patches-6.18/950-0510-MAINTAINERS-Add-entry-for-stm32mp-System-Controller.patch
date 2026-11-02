@@ -19,8 +19,6 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  MAINTAINERS | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a699b7b7c7aa..f9e76205a037 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
 @@ -24392,6 +24392,12 @@ L:	linux-spi@vger.kernel.org
@@ -36,6 +34,3 @@ index a699b7b7c7aa..f9e76205a037 100644
  ST STPDDC60 DRIVER
  M:	Daniel Nilsson <daniel.nilsson@flex.com>
  L:	linux-hwmon@vger.kernel.org
--- 
-2.53.0
-

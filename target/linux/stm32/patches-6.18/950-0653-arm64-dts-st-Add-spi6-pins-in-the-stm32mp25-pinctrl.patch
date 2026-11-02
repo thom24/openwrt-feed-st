@@ -18,15 +18,12 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi | 24 +++++++++++++++++++
  1 file changed, 24 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
-index aebdec5f6735..208f55532a2e 100644
 --- a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
-@@ -699,6 +699,30 @@ pins1 {
- 		};
+@@ -700,6 +700,30 @@
  	};
  
-+	/omit-if-no-ref/
+ 	/omit-if-no-ref/
 +	spi6_pins_a: spi6-0 {
 +		pins1 {
 +			pinmux = <STM32_PINMUX('F', 7, AF3)>, /* SPI6_SCK */
@@ -50,9 +47,7 @@ index aebdec5f6735..208f55532a2e 100644
 +		};
 +	};
 +
- 	/omit-if-no-ref/
++	/omit-if-no-ref/
  	tim10_counter_pins_a: tim10-counter-0 {
  		pins {
--- 
-2.53.0
-
+ 			pinmux = <STM32_PINMUX('B', 9, AF9)>; /* TIM10_CH1 */

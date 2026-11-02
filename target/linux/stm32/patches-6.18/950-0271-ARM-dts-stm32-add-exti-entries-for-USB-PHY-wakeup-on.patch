@@ -14,11 +14,9 @@ Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
  arch/arm/boot/dts/st/stm32mp131.dtsi | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index 4d926d87b5a9..52372f388820 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -903,8 +903,8 @@ exti: interrupt-controller@5000d000 {
+@@ -903,8 +903,8 @@
  				<0>,
  				<0>,						/* EXTI_40 */
  				<0>,
@@ -29,6 +27,3 @@ index 4d926d87b5a9..52372f388820 100644
  				<&intc GIC_SPI 96  IRQ_TYPE_LEVEL_HIGH>,
  				<0>,
  				<0>,
--- 
-2.53.0
-

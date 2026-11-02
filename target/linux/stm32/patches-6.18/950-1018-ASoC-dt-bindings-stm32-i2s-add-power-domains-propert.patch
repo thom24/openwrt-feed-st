@@ -16,8 +16,6 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml b/Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml
-index b4f44f9c7c7d..e8c4d9465e23 100644
 --- a/Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml
 +++ b/Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml
 @@ -57,6 +57,9 @@ properties:
@@ -30,6 +28,3 @@ index b4f44f9c7c7d..e8c4d9465e23 100644
    "#clock-cells":
      description: Configure the I2S device as MCLK clock provider.
      const: 0
--- 
-2.53.0
-

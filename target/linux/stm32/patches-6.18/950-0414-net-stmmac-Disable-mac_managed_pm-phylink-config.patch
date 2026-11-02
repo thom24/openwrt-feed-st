@@ -26,11 +26,9 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/572631
  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index cacac1dedea1..ef8c322465d2 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -1189,7 +1189,7 @@ static int stmmac_phy_setup(struct stmmac_priv *priv)
+@@ -1189,7 +1189,7 @@ static int stmmac_phy_setup(struct stmma
  
  	config->dev = &priv->dev->dev;
  	config->type = PHYLINK_NETDEV;
@@ -39,6 +37,3 @@ index cacac1dedea1..ef8c322465d2 100644
  
  	/* Stmmac always requires an RX clock for hardware initialization */
  	config->mac_requires_rxc = true;
--- 
-2.53.0
-

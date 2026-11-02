@@ -15,8 +15,6 @@ Change-Id: If63227ca78804a9405a486ca34a4a5bbf43523a5
  drivers/gpu/drm/stm/ltdc.h |   1 +
  2 files changed, 203 insertions(+), 137 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-index 3f45d6525eac..5eae3b2f790c 100644
 --- a/drivers/gpu/drm/stm/ltdc.c
 +++ b/drivers/gpu/drm/stm/ltdc.c
 @@ -16,6 +16,7 @@
@@ -27,7 +25,7 @@ index 3f45d6525eac..5eae3b2f790c 100644
  #include <linux/pinctrl/consumer.h>
  #include <linux/platform_device.h>
  #include <linux/pm_runtime.h>
-@@ -786,7 +787,7 @@ static void ltdc_crtc_atomic_enable(struct drm_crtc *crtc,
+@@ -786,7 +787,7 @@ static void ltdc_crtc_atomic_enable(stru
  	u32 bus_formats = MEDIA_BUS_FMT_RGB888_1X24;
  	u32 bus_flags = 0;
  	u32 val;
@@ -36,7 +34,7 @@ index 3f45d6525eac..5eae3b2f790c 100644
  
  	drm_dbg_driver(crtc->dev, "\n");
  
-@@ -821,10 +822,61 @@ static void ltdc_crtc_atomic_enable(struct drm_crtc *crtc,
+@@ -821,10 +822,61 @@ static void ltdc_crtc_atomic_enable(stru
  			bus_formats = connector->display_info.bus_formats[0];
  	}
  
@@ -101,7 +99,7 @@ index 3f45d6525eac..5eae3b2f790c 100644
  			return;
  		}
  	}
-@@ -926,6 +978,13 @@ static void ltdc_crtc_atomic_enable(struct drm_crtc *crtc,
+@@ -926,6 +978,13 @@ static void ltdc_crtc_atomic_enable(stru
  		regmap_set_bits(ldev->regmap, LTDC_SRCR, SRCR_VBR);
  
  	drm_crtc_vblank_on(crtc);
@@ -115,7 +113,7 @@ index 3f45d6525eac..5eae3b2f790c 100644
  }
  
  static void ltdc_crtc_atomic_disable(struct drm_crtc *crtc,
-@@ -934,6 +993,7 @@ static void ltdc_crtc_atomic_disable(struct drm_crtc *crtc,
+@@ -934,6 +993,7 @@ static void ltdc_crtc_atomic_disable(str
  	struct ltdc_device *ldev = crtc_to_ltdc(crtc);
  	struct drm_device *ddev = crtc->dev;
  	int layer_index = 0;
@@ -123,7 +121,7 @@ index 3f45d6525eac..5eae3b2f790c 100644
  
  	drm_dbg_driver(crtc->dev, "\n");
  
-@@ -950,7 +1010,22 @@ static void ltdc_crtc_atomic_disable(struct drm_crtc *crtc,
+@@ -950,7 +1010,22 @@ static void ltdc_crtc_atomic_disable(str
  	if (!ldev->caps.plane_reg_shadow)
  		regmap_set_bits(ldev->regmap, LTDC_SRCR, SRCR_IMR);
  
@@ -147,7 +145,7 @@ index 3f45d6525eac..5eae3b2f790c 100644
  
  	/*  clear interrupt error counters */
  	mutex_lock(&ldev->err_lock);
-@@ -958,73 +1033,14 @@ static void ltdc_crtc_atomic_disable(struct drm_crtc *crtc,
+@@ -958,73 +1033,14 @@ static void ltdc_crtc_atomic_disable(str
  	ldev->fifo_err = 0;
  	ldev->fifo_warn = 0;
  	mutex_unlock(&ldev->err_lock);
@@ -170,9 +168,9 @@ index 3f45d6525eac..5eae3b2f790c 100644
 -		drm_dbg_driver(crtc->dev, "lvds pixclk rate target %d, available %d\n",
 -			       target, result);
 -	}
--
--	result = clk_round_rate(ldev->pixel_clk, target);
  
+-	result = clk_round_rate(ldev->pixel_clk, target);
+-
 -	drm_dbg_driver(crtc->dev, "clk rate target %d, available %d\n", target, result);
 -
 -	/* Filter modes according to the max frequency supported by the pads */
@@ -227,7 +225,7 @@ index 3f45d6525eac..5eae3b2f790c 100644
  }
  
  static void ltdc_crtc_atomic_flush(struct drm_crtc *crtc,
-@@ -1108,8 +1124,6 @@ static bool ltdc_crtc_get_scanout_position(struct drm_crtc *crtc,
+@@ -1108,8 +1124,6 @@ static bool ltdc_crtc_get_scanout_positi
  }
  
  static const struct drm_crtc_helper_funcs ltdc_crtc_helper_funcs = {
@@ -236,7 +234,7 @@ index 3f45d6525eac..5eae3b2f790c 100644
  	.atomic_flush = ltdc_crtc_atomic_flush,
  	.atomic_enable = ltdc_crtc_atomic_enable,
  	.atomic_disable = ltdc_crtc_atomic_disable,
-@@ -1269,10 +1283,7 @@ static void ltdc_plane_atomic_update(struct drm_plane *plane,
+@@ -1269,10 +1283,7 @@ static void ltdc_plane_atomic_update(str
  	u32 paddr, paddr1, paddr2;
  	enum ltdc_pix_fmt pf;
  
@@ -248,7 +246,7 @@ index 3f45d6525eac..5eae3b2f790c 100644
  
  	/* convert src_ from 16:16 format */
  	src_x = newstate->src_x >> 16;
-@@ -1496,6 +1507,8 @@ static void ltdc_plane_atomic_update(struct drm_plane *plane,
+@@ -1496,6 +1507,8 @@ static void ltdc_plane_atomic_update(str
  		}
  	}
  	mutex_unlock(&ldev->err_lock);
@@ -257,7 +255,7 @@ index 3f45d6525eac..5eae3b2f790c 100644
  }
  
  static void ltdc_plane_atomic_disable(struct drm_plane *plane,
-@@ -1599,6 +1612,7 @@ static struct drm_plane *ltdc_plane_create(struct drm_device *ddev,
+@@ -1599,6 +1612,7 @@ static struct drm_plane *ltdc_plane_crea
  			       ARRAY_SIZE(ltdc_drm_fmt_ycbcr_cp) * sizeof(*formats));
  			nb_fmt += ARRAY_SIZE(ltdc_drm_fmt_ycbcr_cp);
  		}
@@ -265,7 +263,7 @@ index 3f45d6525eac..5eae3b2f790c 100644
  		if (val & LXCR_C1R_YSPA) {
  			memcpy(&formats[nb_fmt], ltdc_drm_fmt_ycbcr_sp,
  			       ARRAY_SIZE(ltdc_drm_fmt_ycbcr_sp) * sizeof(*formats));
-@@ -1699,56 +1713,60 @@ static int ltdc_crtc_init(struct drm_device *ddev, struct drm_crtc *crtc)
+@@ -1699,56 +1713,60 @@ static int ltdc_crtc_init(struct drm_dev
  	return 0;
  }
  
@@ -363,7 +361,7 @@ index 3f45d6525eac..5eae3b2f790c 100644
  };
  
  static int ltdc_encoder_init(struct drm_device *ddev, struct drm_bridge *bridge)
-@@ -1873,8 +1891,6 @@ void ltdc_suspend(struct ltdc_device *ldev)
+@@ -1873,8 +1891,6 @@ void ltdc_suspend(struct ltdc_device *ld
  	clk_disable_unprepare(ldev->pixel_clk);
  	if (ldev->bus_clk)
  		clk_disable_unprepare(ldev->bus_clk);
@@ -372,7 +370,7 @@ index 3f45d6525eac..5eae3b2f790c 100644
  }
  
  int ltdc_resume(struct ltdc_device *ldev)
-@@ -1891,9 +1907,6 @@ int ltdc_resume(struct ltdc_device *ldev)
+@@ -1891,9 +1907,6 @@ int ltdc_resume(struct ltdc_device *ldev
  			return -ENODEV;
  	}
  
@@ -497,7 +495,7 @@ index 3f45d6525eac..5eae3b2f790c 100644
  	return ret;
  }
  
-@@ -2041,6 +2095,9 @@ void ltdc_unload(struct drm_device *ddev)
+@@ -2041,6 +2095,9 @@ void ltdc_unload(struct drm_device *ddev
  {
  	drm_dbg_driver(ddev, "\n");
  
@@ -507,7 +505,7 @@ index 3f45d6525eac..5eae3b2f790c 100644
  	pm_runtime_disable(ddev->dev);
  }
  
-@@ -2079,14 +2136,6 @@ int ltdc_get_clk(struct device *dev, struct ltdc_device *ldev)
+@@ -2079,14 +2136,6 @@ int ltdc_get_clk(struct device *dev, str
  {
  	struct device_node *node;
  
@@ -522,7 +520,7 @@ index 3f45d6525eac..5eae3b2f790c 100644
  	if (of_device_is_compatible(dev->of_node, "st,stm32mp251-ltdc") ||
  	    of_device_is_compatible(dev->of_node, "st,stm32mp255-ltdc")) {
  		ldev->bus_clk = devm_clk_get(dev, "bus");
-@@ -2112,6 +2161,22 @@ int ltdc_get_clk(struct device *dev, struct ltdc_device *ldev)
+@@ -2112,6 +2161,22 @@ int ltdc_get_clk(struct device *dev, str
  			}
  			of_node_put(node);
  		}
@@ -545,8 +543,6 @@ index 3f45d6525eac..5eae3b2f790c 100644
  	}
  
  	return 0;
-diff --git a/drivers/gpu/drm/stm/ltdc.h b/drivers/gpu/drm/stm/ltdc.h
-index 349ea768a055..fbe534bde7b6 100644
 --- a/drivers/gpu/drm/stm/ltdc.h
 +++ b/drivers/gpu/drm/stm/ltdc.h
 @@ -48,6 +48,7 @@ struct ltdc_device {
@@ -557,6 +553,3 @@ index 349ea768a055..fbe534bde7b6 100644
  	struct clk *lvds_clk;	/* lvds pixel clock */
  	struct clk *bus_clk;	/* bus clock */
  	struct mutex err_lock;	/* protecting error_status */
--- 
-2.53.0
-

@@ -26,11 +26,9 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 23 ++++++++++++++++++++++
  3 files changed, 43 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-index 7c03e269e6df..08a5f3a9eb6a 100644
 --- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-@@ -92,6 +92,16 @@ led-blue {
+@@ -92,6 +92,16 @@
  			linux,default-trigger = "heartbeat";
  			default-state = "off";
  		};
@@ -47,11 +45,9 @@ index 7c03e269e6df..08a5f3a9eb6a 100644
  	};
  
  	hdmi: connector {
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index 7407b5901a54..3a5771ca87df 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -125,6 +125,16 @@ led-blue {
+@@ -125,6 +125,16 @@
  			linux,default-trigger = "heartbeat";
  			default-state = "off";
  		};
@@ -68,8 +64,6 @@ index 7407b5901a54..3a5771ca87df 100644
  	};
  
  	hdmi: connector {
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-index 8005063a3965..22263ed38444 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
 @@ -8,6 +8,7 @@
@@ -80,7 +74,7 @@ index 8005063a3965..22263ed38444 100644
  #include <dt-bindings/media/video-interfaces.h>
  #include <dt-bindings/regulator/st,stm32mp25-regulator.h>
  #include "stm32mp257.dtsi"
-@@ -93,6 +94,28 @@ button-wake-up {
+@@ -93,6 +94,28 @@
  		};
  	};
  
@@ -109,6 +103,3 @@ index 8005063a3965..22263ed38444 100644
  	hdmi: connector {
  		compatible = "hdmi-connector";
  		label = "hdmi";
--- 
-2.53.0
-

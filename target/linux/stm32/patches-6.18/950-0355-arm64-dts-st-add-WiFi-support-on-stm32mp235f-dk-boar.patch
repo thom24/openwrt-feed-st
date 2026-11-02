@@ -17,11 +17,9 @@ Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
  arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 28 +++++++++++++++++++++++
  1 file changed, 28 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-index 3e5f8c766b43..b74edf929e61 100644
 --- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-@@ -70,6 +70,11 @@ memory@80000000 {
+@@ -70,6 +70,11 @@
  		device_type = "memory";
  		reg = <0x0 0x80000000 0x0 0x80000000>;
  	};
@@ -33,7 +31,7 @@ index 3e5f8c766b43..b74edf929e61 100644
  };
  
  &arm_wdt {
-@@ -307,6 +312,29 @@ &sdmmc2 {
+@@ -307,6 +312,29 @@
  	status = "okay";
  };
  
@@ -63,6 +61,3 @@ index 3e5f8c766b43..b74edf929e61 100644
  &syscfg {
  	bootph-all;
  };
--- 
-2.53.0
-

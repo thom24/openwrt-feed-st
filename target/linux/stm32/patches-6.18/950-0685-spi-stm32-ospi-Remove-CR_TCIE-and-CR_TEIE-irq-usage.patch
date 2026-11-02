@@ -18,8 +18,6 @@ Signed-off-by: Mark Brown <broonie@kernel.org>
  drivers/spi/spi-stm32-ospi.c | 31 ++++++-------------------------
  1 file changed, 6 insertions(+), 25 deletions(-)
 
-diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
-index 014188c8e943..5021d356a395 100644
 --- a/drivers/spi/spi-stm32-ospi.c
 +++ b/drivers/spi/spi-stm32-ospi.c
 @@ -34,8 +34,6 @@
@@ -48,7 +46,7 @@ index 014188c8e943..5021d356a395 100644
  	struct completion match_completion;
  
  	struct dma_chan *dma_chtx;
-@@ -240,22 +237,16 @@ static int stm32_ospi_wait_nobusy(struct stm32_ospi *ospi)
+@@ -240,22 +237,16 @@ static int stm32_ospi_wait_nobusy(struct
  static int stm32_ospi_wait_cmd(struct stm32_ospi *ospi)
  {
  	void __iomem *regs_base = ospi->regs_base;
@@ -76,7 +74,7 @@ index 014188c8e943..5021d356a395 100644
  	if (sr & SR_TCF)
  		/* avoid false timeout */
  		err = 0;
-@@ -293,15 +284,6 @@ static irqreturn_t stm32_ospi_irq(int irq, void *dev_id)
+@@ -293,15 +284,6 @@ static irqreturn_t stm32_ospi_irq(int ir
  		cr &= ~CR_SMIE;
  		writel_relaxed(cr, regs_base + OSPI_CR);
  		complete(&ospi->match_completion);
@@ -92,7 +90,7 @@ index 014188c8e943..5021d356a395 100644
  	}
  
  	return IRQ_HANDLED;
-@@ -884,7 +866,6 @@ static int stm32_ospi_get_resources(struct platform_device *pdev)
+@@ -884,7 +866,6 @@ static int stm32_ospi_get_resources(stru
  		dev_info(dev, "No memory-map region found\n");
  	}
  
@@ -100,6 +98,3 @@ index 014188c8e943..5021d356a395 100644
  	init_completion(&ospi->match_completion);
  
  	return 0;
--- 
-2.53.0
-

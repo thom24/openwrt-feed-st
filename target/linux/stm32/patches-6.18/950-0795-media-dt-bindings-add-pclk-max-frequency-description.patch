@@ -12,8 +12,6 @@ Change-Id: Icb855b88a924e2850c49436567917f9382d182e4
  .../devicetree/bindings/media/video-interfaces.yaml          | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/video-interfaces.yaml b/Documentation/devicetree/bindings/media/video-interfaces.yaml
-index 038e85b45bef..56c1d34aa717 100644
 --- a/Documentation/devicetree/bindings/media/video-interfaces.yaml
 +++ b/Documentation/devicetree/bindings/media/video-interfaces.yaml
 @@ -238,4 +238,9 @@ properties:
@@ -26,6 +24,3 @@ index 038e85b45bef..56c1d34aa717 100644
 +      Maximum acceptable pixel clock frequency.
 +
  additionalProperties: true
--- 
-2.53.0
-

@@ -23,11 +23,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c | 14 +++++++++++---
  2 files changed, 22 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
-index 4f5d4e069c29..0f401d63da58 100644
 --- a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
 +++ b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
-@@ -319,6 +319,7 @@ static int dw_mipi_dsi_host_attach(struct mipi_dsi_host *host,
+@@ -319,6 +319,7 @@ static int dw_mipi_dsi_host_attach(struc
  {
  	struct dw_mipi_dsi *dsi = host_to_dsi(host);
  	const struct dw_mipi_dsi_plat_data *pdata = dsi->plat_data;
@@ -35,7 +33,7 @@ index 4f5d4e069c29..0f401d63da58 100644
  	struct drm_bridge *bridge;
  	int ret;
  
-@@ -333,9 +334,16 @@ static int dw_mipi_dsi_host_attach(struct mipi_dsi_host *host,
+@@ -333,9 +334,16 @@ static int dw_mipi_dsi_host_attach(struc
  	dsi->format = device->format;
  	dsi->mode_flags = device->mode_flags;
  
@@ -55,11 +53,9 @@ index 4f5d4e069c29..0f401d63da58 100644
  
  	bridge->pre_enable_prev_first = true;
  	dsi->panel_bridge = bridge;
-diff --git a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c
-index 5926a3a05d79..12e6954a9de3 100644
 --- a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c
 +++ b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c
-@@ -514,6 +514,7 @@ static int dw_mipi_dsi2_host_attach(struct mipi_dsi_host *host,
+@@ -514,6 +514,7 @@ static int dw_mipi_dsi2_host_attach(stru
  {
  	struct dw_mipi_dsi2 *dsi2 = host_to_dsi2(host);
  	const struct dw_mipi_dsi2_plat_data *pdata = dsi2->plat_data;
@@ -67,7 +63,7 @@ index 5926a3a05d79..12e6954a9de3 100644
  	struct drm_bridge *bridge;
  	int ret;
  
-@@ -528,9 +529,16 @@ static int dw_mipi_dsi2_host_attach(struct mipi_dsi_host *host,
+@@ -528,9 +529,16 @@ static int dw_mipi_dsi2_host_attach(stru
  	dsi2->format = device->format;
  	dsi2->mode_flags = device->mode_flags;
  
@@ -87,6 +83,3 @@ index 5926a3a05d79..12e6954a9de3 100644
  
  	bridge->pre_enable_prev_first = true;
  	dsi2->panel_bridge = bridge;
--- 
-2.53.0
-

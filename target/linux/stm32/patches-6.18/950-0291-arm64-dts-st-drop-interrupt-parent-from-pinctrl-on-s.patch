@@ -12,11 +12,9 @@ Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp251.dtsi | 2 --
  1 file changed, 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index ecca2bb7219b..2c63a5c25d08 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -2065,7 +2065,6 @@ pinctrl: pinctrl@44240000 {
+@@ -2065,7 +2065,6 @@
  			#size-cells = <1>;
  			compatible = "st,stm32mp257-pinctrl";
  			ranges = <0 0x44240000 0xa0400>;
@@ -24,7 +22,7 @@ index ecca2bb7219b..2c63a5c25d08 100644
  			interrupts-extended =
  				<&exti1  0 0>, <&exti1  1 0>, <&exti1  2 0>, <&exti1  3 0>,
  				<&exti1  4 0>, <&exti1  5 0>, <&exti1  6 0>, <&exti1  7 0>,
-@@ -2213,7 +2212,6 @@ pinctrl_z: pinctrl@46200000 {
+@@ -2213,7 +2212,6 @@
  			#size-cells = <1>;
  			compatible = "st,stm32mp257-z-pinctrl";
  			ranges = <0 0x46200000 0x400>;
@@ -32,6 +30,3 @@ index ecca2bb7219b..2c63a5c25d08 100644
  			interrupts-extended =
  				<&exti1  0 0>, <&exti1  1 0>, <&exti1  2 0>, <&exti1  3 0>,
  				<&exti1  4 0>, <&exti1  5 0>, <&exti1  6 0>, <&exti1  7 0>,
--- 
-2.53.0
-

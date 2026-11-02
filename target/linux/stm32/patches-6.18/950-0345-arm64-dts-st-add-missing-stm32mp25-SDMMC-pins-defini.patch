@@ -18,11 +18,9 @@ Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
  arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi | 172 ++++++++++++++++++
  1 file changed, 172 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
-index 92d04dc327c7..449bd24aca7a 100644
 --- a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
-@@ -351,6 +351,25 @@ pins2 {
+@@ -351,6 +351,25 @@
  		};
  	};
  
@@ -48,7 +46,7 @@ index 92d04dc327c7..449bd24aca7a 100644
  	sdmmc1_b4_od_pins_a: sdmmc1-b4-od-0 {
  		pins1 {
  			pinmux = <STM32_PINMUX('E', 4, AF10)>, /* SDMMC1_D0 */
-@@ -375,6 +394,30 @@ pins3 {
+@@ -375,6 +394,30 @@
  		};
  	};
  
@@ -79,7 +77,7 @@ index 92d04dc327c7..449bd24aca7a 100644
  	sdmmc1_b4_sleep_pins_a: sdmmc1-b4-sleep-0 {
  		pins {
  			pinmux = <STM32_PINMUX('E', 4, ANALOG)>, /* SDMMC1_D0 */
-@@ -386,6 +429,135 @@ pins {
+@@ -386,6 +429,135 @@
  		};
  	};
  
@@ -215,6 +213,3 @@ index 92d04dc327c7..449bd24aca7a 100644
  	spi3_pins_a: spi3-0 {
  		pins1 {
  			pinmux = <STM32_PINMUX('B', 7, AF1)>, /* SPI3_SCK */
--- 
-2.53.0
-

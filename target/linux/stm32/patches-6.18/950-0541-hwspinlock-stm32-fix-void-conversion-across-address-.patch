@@ -17,8 +17,6 @@ Change-Id: I3548b3b78df91b48af0472e1dbf4f5231a0f9c69
  drivers/hwspinlock/stm32_hwspinlock.c | 28 ++++++++++++++++++---------
  1 file changed, 19 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/hwspinlock/stm32_hwspinlock.c b/drivers/hwspinlock/stm32_hwspinlock.c
-index 2620d722ee1d..5a612bc3e34e 100644
 --- a/drivers/hwspinlock/stm32_hwspinlock.c
 +++ b/drivers/hwspinlock/stm32_hwspinlock.c
 @@ -18,15 +18,22 @@
@@ -45,7 +43,7 @@ index 2620d722ee1d..5a612bc3e34e 100644
  	writel(STM32_MUTEX_LOCK_BIT | STM32_MUTEX_COREID, lock_addr);
  	status = readl(lock_addr);
  
-@@ -35,7 +42,11 @@ static int stm32_hwspinlock_trylock(struct hwspinlock *lock)
+@@ -35,7 +42,11 @@ static int stm32_hwspinlock_trylock(stru
  
  static void stm32_hwspinlock_unlock(struct hwspinlock *lock)
  {
@@ -58,7 +56,7 @@ index 2620d722ee1d..5a612bc3e34e 100644
  
  	writel(STM32_MUTEX_COREID, lock_addr);
  }
-@@ -47,7 +58,7 @@ static void stm32_hwspinlock_relax(struct hwspinlock *lock)
+@@ -47,7 +58,7 @@ static void stm32_hwspinlock_relax(struc
  
  static void *stm32_hwspinlock_init_priv(int local_id, void *init_data)
  {
@@ -67,7 +65,7 @@ index 2620d722ee1d..5a612bc3e34e 100644
  }
  
  static const struct hwspinlock_ops stm32_hwspinlock_ops = {
-@@ -75,17 +86,16 @@ static int stm32_hwspinlock_probe(struct platform_device *pdev)
+@@ -75,17 +86,16 @@ static int stm32_hwspinlock_probe(struct
  {
  	struct device *dev = &pdev->dev;
  	struct stm32_hwspinlock *hw;
@@ -89,7 +87,7 @@ index 2620d722ee1d..5a612bc3e34e 100644
  	hw->clk = devm_clk_get(dev, "hsem");
  	if (IS_ERR(hw->clk))
  		return PTR_ERR(hw->clk);
-@@ -110,7 +120,7 @@ static int stm32_hwspinlock_probe(struct platform_device *pdev)
+@@ -110,7 +120,7 @@ static int stm32_hwspinlock_probe(struct
  	}
  
  	ret = devm_hwspin_lock_register_errno(dev, &stm32_hwspinlock_ops,
@@ -98,6 +96,3 @@ index 2620d722ee1d..5a612bc3e34e 100644
  
  	if (ret)
  		dev_err(dev, "Failed to register hwspinlock\n");
--- 
-2.53.0
-

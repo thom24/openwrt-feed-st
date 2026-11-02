@@ -17,11 +17,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/counter/stm32-lptimer-cnt.c | 22 ----------------------
  1 file changed, 22 deletions(-)
 
-diff --git a/drivers/counter/stm32-lptimer-cnt.c b/drivers/counter/stm32-lptimer-cnt.c
-index bb11777ae025..79103ae016b5 100644
 --- a/drivers/counter/stm32-lptimer-cnt.c
 +++ b/drivers/counter/stm32-lptimer-cnt.c
-@@ -514,30 +514,8 @@ static int stm32_lptim_cnt_resume(struct device *dev)
+@@ -514,30 +514,8 @@ static int stm32_lptim_cnt_resume(struct
  	return 0;
  }
  
@@ -52,6 +50,3 @@ index bb11777ae025..79103ae016b5 100644
  };
  
  static const struct of_device_id stm32_lptim_cnt_of_match[] = {
--- 
-2.53.0
-

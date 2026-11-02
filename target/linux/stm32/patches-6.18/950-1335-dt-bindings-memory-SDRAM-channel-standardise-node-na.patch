@@ -25,8 +25,6 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  .../memory-controllers/ddr/jedec,sdram-channel.yaml        | 7 +++++--
  1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,sdram-channel.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,sdram-channel.yaml
-index 866af40b654d..5cdd8ef45100 100644
 --- a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,sdram-channel.yaml
 +++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,sdram-channel.yaml
 @@ -17,6 +17,9 @@ maintainers:
@@ -57,6 +55,3 @@ index 866af40b654d..5cdd8ef45100 100644
        #address-cells = <1>;
        #size-cells = <0>;
        compatible = "jedec,lpddr4-channel";
--- 
-2.53.0
-

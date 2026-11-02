@@ -21,11 +21,9 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 8 ++++++++
  1 file changed, 8 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-index b566790ffe08..9e5bd42713ed 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-@@ -409,6 +409,14 @@ &ipcc1 {
+@@ -409,6 +409,14 @@
  	status = "okay";
  };
  
@@ -40,6 +38,3 @@ index b566790ffe08..9e5bd42713ed 100644
  &ltdc {
  	bootph-some-ram;
  	pinctrl-names = "default", "sleep";
--- 
-2.53.0
-

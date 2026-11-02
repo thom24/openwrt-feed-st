@@ -22,11 +22,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index fd8e88db9b20..bd1b6d004477 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -31,6 +31,11 @@ chosen {
+@@ -31,6 +31,11 @@
  		stdout-path = "serial0:115200n8";
  	};
  
@@ -38,6 +36,3 @@ index fd8e88db9b20..bd1b6d004477 100644
  	clocks {
  		clk_ext_camera: clk-ext-camera {
  			#clock-cells = <0>;
--- 
-2.53.0
-

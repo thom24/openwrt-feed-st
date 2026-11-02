@@ -17,11 +17,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/pinctrl/stm32/pinctrl-stm32-hdp.c | 143 ++++++++++++++++++++++
  1 file changed, 143 insertions(+)
 
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32-hdp.c b/drivers/pinctrl/stm32/pinctrl-stm32-hdp.c
-index 3b75e0805c06..365cdbf57f98 100644
 --- a/drivers/pinctrl/stm32/pinctrl-stm32-hdp.c
 +++ b/drivers/pinctrl/stm32/pinctrl-stm32-hdp.c
-@@ -344,6 +344,145 @@ static const char * const func_name_mp15[] = {
+@@ -344,6 +344,145 @@ static const char * const func_name_mp15
  	"gpoval7"
  };
  
@@ -167,17 +165,14 @@ index 3b75e0805c06..365cdbf57f98 100644
  static const char * const func_name_mp25[] = {
  	//HDP0 functions:
  	"pwr_pwrwake_sys",
-@@ -597,6 +736,10 @@ static const struct of_device_id stm32_hdp_of_match[] = {
- 		.compatible = "st,stm32mp151-hdp",
+@@ -598,6 +737,10 @@ static const struct of_device_id stm32_h
  		.data = &func_name_mp15,
  	},
-+	{
+ 	{
 +		.compatible = "st,stm32mp211-hdp",
 +		.data = &func_name_mp21,
 +	},
- 	{
++	{
  		.compatible = "st,stm32mp231-hdp",
  		.data = &func_name_mp25,
--- 
-2.53.0
-
+ 	},

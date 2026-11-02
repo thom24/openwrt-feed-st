@@ -22,11 +22,9 @@ Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
  9 files changed, 67 insertions(+), 49 deletions(-)
  create mode 100644 include/linux/hwspinlock/provider.h
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8e54cdac11c4..d9c1d7473c82 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -10972,6 +10972,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git hw
+@@ -10972,6 +10972,7 @@ T:	git git://git.kernel.org/pub/scm/linu
  F:	Documentation/devicetree/bindings/hwlock/
  F:	Documentation/locking/hwspinlock.rst
  F:	drivers/hwspinlock/
@@ -34,8 +32,6 @@ index 8e54cdac11c4..d9c1d7473c82 100644
  F:	include/linux/hwspinlock.h
  
  HARDWARE TRACING FACILITIES
-diff --git a/drivers/hwspinlock/hwspinlock_core.c b/drivers/hwspinlock/hwspinlock_core.c
-index 59e43a54ddac..de4726cd152a 100644
 --- a/drivers/hwspinlock/hwspinlock_core.c
 +++ b/drivers/hwspinlock/hwspinlock_core.c
 @@ -13,6 +13,7 @@
@@ -46,8 +42,6 @@ index 59e43a54ddac..de4726cd152a 100644
  #include <linux/jiffies.h>
  #include <linux/kernel.h>
  #include <linux/module.h>
-diff --git a/drivers/hwspinlock/omap_hwspinlock.c b/drivers/hwspinlock/omap_hwspinlock.c
-index e8fa0db33542..5ee96762d07a 100644
 --- a/drivers/hwspinlock/omap_hwspinlock.c
 +++ b/drivers/hwspinlock/omap_hwspinlock.c
 @@ -19,7 +19,7 @@
@@ -59,8 +53,6 @@ index e8fa0db33542..5ee96762d07a 100644
  #include <linux/of.h>
  #include <linux/platform_device.h>
  
-diff --git a/drivers/hwspinlock/qcom_hwspinlock.c b/drivers/hwspinlock/qcom_hwspinlock.c
-index 22cc6f9003df..7fdbb1e58b29 100644
 --- a/drivers/hwspinlock/qcom_hwspinlock.c
 +++ b/drivers/hwspinlock/qcom_hwspinlock.c
 @@ -4,7 +4,7 @@
@@ -72,8 +64,6 @@ index 22cc6f9003df..7fdbb1e58b29 100644
  #include <linux/io.h>
  #include <linux/kernel.h>
  #include <linux/mfd/syscon.h>
-diff --git a/drivers/hwspinlock/sprd_hwspinlock.c b/drivers/hwspinlock/sprd_hwspinlock.c
-index 0f4fc622e3cd..46b55d939ea8 100644
 --- a/drivers/hwspinlock/sprd_hwspinlock.c
 +++ b/drivers/hwspinlock/sprd_hwspinlock.c
 @@ -7,7 +7,7 @@
@@ -85,8 +75,6 @@ index 0f4fc622e3cd..46b55d939ea8 100644
  #include <linux/io.h>
  #include <linux/kernel.h>
  #include <linux/module.h>
-diff --git a/drivers/hwspinlock/stm32_hwspinlock.c b/drivers/hwspinlock/stm32_hwspinlock.c
-index 8eafe1a74b1b..2620d722ee1d 100644
 --- a/drivers/hwspinlock/stm32_hwspinlock.c
 +++ b/drivers/hwspinlock/stm32_hwspinlock.c
 @@ -6,7 +6,7 @@
@@ -98,8 +86,6 @@ index 8eafe1a74b1b..2620d722ee1d 100644
  #include <linux/io.h>
  #include <linux/kernel.h>
  #include <linux/module.h>
-diff --git a/drivers/hwspinlock/sun6i_hwspinlock.c b/drivers/hwspinlock/sun6i_hwspinlock.c
-index 145d284c5ab5..24e60009fa76 100644
 --- a/drivers/hwspinlock/sun6i_hwspinlock.c
 +++ b/drivers/hwspinlock/sun6i_hwspinlock.c
 @@ -7,7 +7,7 @@
@@ -111,8 +97,6 @@ index 145d284c5ab5..24e60009fa76 100644
  #include <linux/io.h>
  #include <linux/module.h>
  #include <linux/of.h>
-diff --git a/include/linux/hwspinlock.h b/include/linux/hwspinlock.h
-index 4f5b6932712e..4fe1c8831cd1 100644
 --- a/include/linux/hwspinlock.h
 +++ b/include/linux/hwspinlock.h
 @@ -27,34 +27,6 @@ struct hwspinlock_ops;
@@ -150,7 +134,7 @@ index 4f5b6932712e..4fe1c8831cd1 100644
  struct hwspinlock *hwspin_lock_request_specific(unsigned int id);
  int hwspin_lock_free(struct hwspinlock *hwlock);
  int of_hwspin_lock_get_id(struct device_node *np, int index);
-@@ -67,18 +39,6 @@ int hwspin_lock_bust(struct hwspinlock *hwlock, unsigned int id);
+@@ -67,18 +39,6 @@ int hwspin_lock_bust(struct hwspinlock *
  int devm_hwspin_lock_free(struct device *dev, struct hwspinlock *hwlock);
  struct hwspinlock *devm_hwspin_lock_request_specific(struct device *dev,
  						     unsigned int id);
@@ -169,7 +153,7 @@ index 4f5b6932712e..4fe1c8831cd1 100644
  #else /* !CONFIG_HWSPINLOCK */
  
  /*
-@@ -87,10 +47,6 @@ static inline int devm_hwspin_lock_register_errno(struct device *dev,
+@@ -87,10 +47,6 @@ static inline int devm_hwspin_lock_regis
   * code path get compiled away. This way, if CONFIG_HWSPINLOCK is not
   * required on a given setup, users will still work.
   *
@@ -180,9 +164,6 @@ index 4f5b6932712e..4fe1c8831cd1 100644
   * Note: ERR_PTR(-ENODEV) will still be considered a success for NULL-checking
   * users. Others, which care, can still check this with IS_ERR.
   */
-diff --git a/include/linux/hwspinlock/provider.h b/include/linux/hwspinlock/provider.h
-new file mode 100644
-index 000000000000..73c7b0cb6735
 --- /dev/null
 +++ b/include/linux/hwspinlock/provider.h
 @@ -0,0 +1,60 @@
@@ -246,6 +227,3 @@ index 000000000000..73c7b0cb6735
 +}
 +
 +#endif /* __LINUX_HWSPINLOCK_PROVIDER_H */
--- 
-2.53.0
-

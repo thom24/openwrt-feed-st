@@ -23,11 +23,9 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@st.com>
  drivers/usb/core/phy.h |  6 ++++--
  3 files changed, 22 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index 4f198351ca9b..7ffceefce1df 100644
 --- a/drivers/usb/core/hcd.c
 +++ b/drivers/usb/core/hcd.c
-@@ -2286,7 +2286,8 @@ int hcd_bus_suspend(struct usb_device *rhdev, pm_message_t msg)
+@@ -2286,7 +2286,8 @@ int hcd_bus_suspend(struct usb_device *r
  
  		if (!PMSG_IS_AUTO(msg))
  			usb_phy_roothub_suspend(hcd->self.sysdev,
@@ -37,7 +35,7 @@ index 4f198351ca9b..7ffceefce1df 100644
  
  		/* Did we race with a root-hub wakeup event? */
  		if (rhdev->do_remote_wakeup) {
-@@ -2327,7 +2328,8 @@ int hcd_bus_resume(struct usb_device *rhdev, pm_message_t msg)
+@@ -2327,7 +2328,8 @@ int hcd_bus_resume(struct usb_device *rh
  
  	if (!PMSG_IS_AUTO(msg)) {
  		status = usb_phy_roothub_resume(hcd->self.sysdev,
@@ -47,7 +45,7 @@ index 4f198351ca9b..7ffceefce1df 100644
  		if (status)
  			return status;
  	}
-@@ -2372,7 +2374,8 @@ int hcd_bus_resume(struct usb_device *rhdev, pm_message_t msg)
+@@ -2372,7 +2374,8 @@ int hcd_bus_resume(struct usb_device *rh
  		}
  	} else {
  		hcd->state = old_state;
@@ -57,11 +55,9 @@ index 4f198351ca9b..7ffceefce1df 100644
  		dev_dbg(&rhdev->dev, "bus %s fail, err %d\n",
  				"resume", status);
  		if (status != -ESHUTDOWN)
-diff --git a/drivers/usb/core/phy.c b/drivers/usb/core/phy.c
-index 4d966cc9cdc9..e7937442474e 100644
 --- a/drivers/usb/core/phy.c
 +++ b/drivers/usb/core/phy.c
-@@ -336,34 +336,36 @@ void usb_phy_roothub_power_off(struct usb_phy_roothub *phy_roothub)
+@@ -336,34 +336,36 @@ void usb_phy_roothub_power_off(struct us
  EXPORT_SYMBOL_GPL(usb_phy_roothub_power_off);
  
  int usb_phy_roothub_suspend(struct device *controller_dev,
@@ -108,11 +104,9 @@ index 4d966cc9cdc9..e7937442474e 100644
  		usb_phy_roothub_exit(phy_roothub);
  
  	return err;
-diff --git a/drivers/usb/core/phy.h b/drivers/usb/core/phy.h
-index 88b49c0ea6b5..bdca1fcaf0ea 100644
 --- a/drivers/usb/core/phy.h
 +++ b/drivers/usb/core/phy.h
-@@ -26,8 +26,10 @@ int usb_phy_roothub_power_on(struct usb_phy_roothub *phy_roothub);
+@@ -26,8 +26,10 @@ int usb_phy_roothub_power_on(struct usb_
  void usb_phy_roothub_power_off(struct usb_phy_roothub *phy_roothub);
  
  int usb_phy_roothub_suspend(struct device *controller_dev,
@@ -125,6 +119,3 @@ index 88b49c0ea6b5..bdca1fcaf0ea 100644
 +			   unsigned wakeup_enabled_descendants);
  
  #endif /* __USB_CORE_PHY_H_ */
--- 
-2.53.0
-

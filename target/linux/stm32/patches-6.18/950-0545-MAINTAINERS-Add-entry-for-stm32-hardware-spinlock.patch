@@ -11,8 +11,6 @@ Change-Id: I5a51084a10610c3a02b923a1c685a5475d58eebc
  MAINTAINERS | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6c2e138681ca..da54cc68d9e0 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
 @@ -24358,6 +24358,12 @@ F:	drivers/bus/stm32_etzpc.c
@@ -28,6 +26,3 @@ index 6c2e138681ca..da54cc68d9e0 100644
  ST STM32 HDP PINCTRL DRIVER
  M:	Clément Le Goffic <legoffic.clement@gmail.com>
  S:	Maintained
--- 
-2.53.0
-

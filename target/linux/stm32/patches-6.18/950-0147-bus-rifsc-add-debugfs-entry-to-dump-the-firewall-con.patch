@@ -19,8 +19,6 @@ Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
  drivers/bus/stm32_rifsc.c | 598 +++++++++++++++++++++++++++++++++++++-
  1 file changed, 594 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/bus/stm32_rifsc.c b/drivers/bus/stm32_rifsc.c
-index 59872134c322..0b0e50fbac1c 100644
 --- a/drivers/bus/stm32_rifsc.c
 +++ b/drivers/bus/stm32_rifsc.c
 @@ -5,6 +5,7 @@
@@ -607,7 +605,7 @@ index 59872134c322..0b0e50fbac1c 100644
  static bool stm32_rifsc_is_semaphore_available(void __iomem *addr)
  {
  	return !(readl(addr) & SEMCR_MUTEX);
-@@ -191,9 +754,19 @@ static int stm32_rifsc_probe(struct platform_device *pdev)
+@@ -191,9 +754,19 @@ static int stm32_rifsc_probe(struct plat
  	rifsc_controller->release_access = stm32_rifsc_release_access;
  
  	/* Get number of RIFSC entries*/
@@ -630,7 +628,7 @@ index 59872134c322..0b0e50fbac1c 100644
  	rifsc_controller->max_entries = nb_risup + nb_rimu + nb_risal;
  
  	platform_set_drvdata(pdev, rifsc_controller);
-@@ -212,12 +785,29 @@ static int stm32_rifsc_probe(struct platform_device *pdev)
+@@ -212,12 +785,29 @@ static int stm32_rifsc_probe(struct plat
  		return rc;
  	}
  
@@ -661,6 +659,3 @@ index 59872134c322..0b0e50fbac1c 100644
  	{}
  };
  MODULE_DEVICE_TABLE(of, stm32_rifsc_of_match);
--- 
-2.53.0
-

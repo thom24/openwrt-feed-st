@@ -25,11 +25,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi | 12 ++++++++++++
  1 file changed, 12 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-index a4837d5408ae..7b77bed0ec08 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-@@ -740,6 +740,11 @@ &spi4 {
+@@ -740,6 +740,11 @@
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&spi4_pins_b>;
  	pinctrl-1 = <&spi4_sleep_pins_b>;
@@ -41,7 +39,7 @@ index a4837d5408ae..7b77bed0ec08 100644
  	status = "disabled";
  };
  
-@@ -750,6 +755,13 @@ &spi5 {
+@@ -750,6 +755,13 @@
  	status = "disabled";
  };
  
@@ -55,6 +53,3 @@ index a4837d5408ae..7b77bed0ec08 100644
  &timers1 {
  	/* spare dmas for other usage */
  	/delete-property/dmas;
--- 
-2.53.0
-

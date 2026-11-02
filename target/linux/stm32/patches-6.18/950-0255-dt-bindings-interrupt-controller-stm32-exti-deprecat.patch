@@ -28,8 +28,6 @@ Change-Id: Ic21b64e568dba22c4ec720f85d0b6f63a16eda02
  .../bindings/interrupt-controller/st,stm32-exti.yaml     | 9 +++++++--
  1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml b/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml
-index 0a516e51fcb5..b4bc1d4132ef 100644
 --- a/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml
 +++ b/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml
 @@ -12,16 +12,21 @@ maintainers:
@@ -72,6 +70,3 @@ index 0a516e51fcb5..b4bc1d4132ef 100644
          interrupt-controller;
          #interrupt-cells = <2>;
          reg = <0x5000d000 0x400>;
--- 
-2.53.0
-

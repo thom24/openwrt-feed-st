@@ -18,11 +18,9 @@ Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 10 ++++++++++
  1 file changed, 10 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-index 28b4a5c72cca..f917abba11dd 100644
 --- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-@@ -800,3 +800,13 @@ &usart6 {
+@@ -800,3 +800,13 @@
  	uart-has-rtscts;
  	status = "disabled";
  };
@@ -36,6 +34,3 @@ index 28b4a5c72cca..f917abba11dd 100644
 +	vdd33-supply = <&scmi_vdd3v3_usb>;
 +	status = "okay";
 +};
--- 
-2.53.0
-

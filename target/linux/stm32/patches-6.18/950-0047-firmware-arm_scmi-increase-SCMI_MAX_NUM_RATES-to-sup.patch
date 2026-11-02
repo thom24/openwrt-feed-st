@@ -22,8 +22,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  include/linux/scmi_protocol.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/scmi_protocol.h b/include/linux/scmi_protocol.h
-index aafaac1496b0..d94dbd276489 100644
 --- a/include/linux/scmi_protocol.h
 +++ b/include/linux/scmi_protocol.h
 @@ -15,7 +15,7 @@
@@ -35,6 +33,3 @@ index aafaac1496b0..d94dbd276489 100644
  
  /**
   * struct scmi_revision_info - version information structure
--- 
-2.53.0
-

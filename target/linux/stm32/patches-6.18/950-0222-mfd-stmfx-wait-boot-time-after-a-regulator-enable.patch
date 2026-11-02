@@ -20,11 +20,9 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/561097
  drivers/mfd/stmfx.c | 36 +++++++++++++++++++++++++++++++++---
  1 file changed, 33 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/mfd/stmfx.c b/drivers/mfd/stmfx.c
-index d59cd94fe04c..0a7bbbdb395f 100644
 --- a/drivers/mfd/stmfx.c
 +++ b/drivers/mfd/stmfx.c
-@@ -303,6 +303,21 @@ static int stmfx_irq_init(struct i2c_client *client)
+@@ -303,6 +303,21 @@ irq_exit:
  	return ret;
  }
  
@@ -46,7 +44,7 @@ index d59cd94fe04c..0a7bbbdb395f 100644
  static int stmfx_chip_reset(struct stmfx *stmfx)
  {
  	int ret;
-@@ -339,6 +354,11 @@ static int stmfx_chip_init(struct i2c_client *client)
+@@ -339,6 +354,11 @@ static int stmfx_chip_init(struct i2c_cl
  			return ret;
  		}
  	}
@@ -58,7 +56,7 @@ index d59cd94fe04c..0a7bbbdb395f 100644
  
  	ret = regmap_read(stmfx->map, STMFX_REG_CHIP_ID, &id);
  	if (ret) {
-@@ -506,24 +526,29 @@ static int stmfx_resume(struct device *dev)
+@@ -506,24 +526,29 @@ static int stmfx_resume(struct device *d
  			return ret;
  		}
  	}
@@ -91,7 +89,7 @@ index d59cd94fe04c..0a7bbbdb395f 100644
  
  	ret = regmap_raw_write(stmfx->map, STMFX_REG_IRQ_SRC_EN,
  			       &stmfx->irq_src, sizeof(stmfx->irq_src));
-@@ -533,6 +558,11 @@ static int stmfx_resume(struct device *dev)
+@@ -533,6 +558,11 @@ static int stmfx_resume(struct device *d
  	enable_irq(stmfx->irq);
  
  	return 0;
@@ -103,6 +101,3 @@ index d59cd94fe04c..0a7bbbdb395f 100644
  }
  
  static DEFINE_SIMPLE_DEV_PM_OPS(stmfx_dev_pm_ops, stmfx_suspend, stmfx_resume);
--- 
-2.53.0
-

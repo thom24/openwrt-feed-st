@@ -20,11 +20,9 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  drivers/mfd/stpmic1.c | 6 +++++-
  1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mfd/stpmic1.c b/drivers/mfd/stpmic1.c
-index 2feb00ecef15..ec33fa1ec06e 100644
 --- a/drivers/mfd/stpmic1.c
 +++ b/drivers/mfd/stpmic1.c
-@@ -186,7 +186,11 @@ static int stpmic1_probe(struct i2c_client *i2c)
+@@ -186,7 +186,11 @@ static int stpmic1_probe(struct i2c_clie
  		return ret;
  	}
  
@@ -37,6 +35,3 @@ index 2feb00ecef15..ec33fa1ec06e 100644
  	if (ret) {
  		dev_err(ddata->dev, "failed to register sys-off handler: %d\n", ret);
  		return ret;
--- 
-2.53.0
-

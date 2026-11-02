@@ -41,8 +41,6 @@ Tested-by: Hugues FRUCHET <hugues.fruchet@st.com>
  .../st/stm32/stm32-dcmipp/dcmipp-pixelproc.c  |  2 +-
  4 files changed, 70 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
-index 956437195c46..d4979611e015 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
 @@ -240,6 +240,14 @@ struct dcmipp_capture_device {
@@ -60,7 +58,7 @@ index 956437195c46..d4979611e015 100644
  };
  
  static const struct dcmipp_capture_pix_map *
-@@ -437,6 +445,15 @@ static int dcmipp_capture_s_fmt_vid_cap(struct file *file, void *priv,
+@@ -437,6 +445,15 @@ static int dcmipp_capture_s_fmt_vid_cap(
  
  	vcap->format = f->fmt.pix;
  
@@ -76,7 +74,7 @@ index 956437195c46..d4979611e015 100644
  	return 0;
  }
  
-@@ -669,6 +686,36 @@ static int dcmipp_capture_start_streaming(struct vb2_queue *vq,
+@@ -669,6 +686,36 @@ static int dcmipp_capture_start_streamin
  	if (ret)
  		goto err_media_pipeline_stop;
  
@@ -113,7 +111,7 @@ index 956437195c46..d4979611e015 100644
  	spin_lock_irq(&vcap->irqlock);
  
  	if (vcap->pipe_id != 0) {
-@@ -960,7 +1007,8 @@ static void dcmipp_buffer_done(struct dcmipp_capture_device *vcap,
+@@ -960,7 +1007,8 @@ static void dcmipp_buffer_done(struct dc
  	vbuf = &buf->vb;
  
  	vbuf->sequence = vcap->sequence++;
@@ -123,7 +121,7 @@ index 956437195c46..d4979611e015 100644
  	vbuf->vb2_buf.timestamp = ktime_get_ns();
  	vb2_set_plane_payload(&vbuf->vb2_buf, 0, bytesused);
  	vb2_buffer_done(&vbuf->vb2_buf,
-@@ -1091,8 +1139,24 @@ static irqreturn_t dcmipp_capture_irq_thread(int irq, void *arg)
+@@ -1091,8 +1139,24 @@ static irqreturn_t dcmipp_capture_irq_th
  		 */
  		if (--vcap->vsync_frame_refresh_cnt == 0) {
  			vcap->vsync_frame_refresh_cnt = vcap->frame_skip_ratio;
@@ -150,11 +148,9 @@ index 956437195c46..d4979611e015 100644
  		}
  	}
  
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
-index b8601ae74b1f..be24df2b761a 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
-@@ -268,7 +268,7 @@ static void dcmipp_inp_adjust_fmt(struct dcmipp_inp_device *inp,
+@@ -268,7 +268,7 @@ static void dcmipp_inp_adjust_fmt(struct
  	fmt->height = clamp_t(u32, fmt->height, DCMIPP_FRAME_MIN_HEIGHT,
  			      DCMIPP_FRAME_MAX_HEIGHT);
  
@@ -163,11 +159,9 @@ index b8601ae74b1f..be24df2b761a 100644
  		fmt->field = fmt_default.field;
  
  	dcmipp_colorimetry_clamp(fmt);
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
-index 73c858c7c0e5..f06642c6ddf8 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
-@@ -85,7 +85,7 @@ static void dcmipp_isp_adjust_fmt(struct v4l2_mbus_framefmt *fmt, u32 pad)
+@@ -85,7 +85,7 @@ static void dcmipp_isp_adjust_fmt(struct
  	fmt->height = clamp_t(u32, fmt->height, DCMIPP_FRAME_MIN_HEIGHT,
  			      DCMIPP_PIXEL_FRAME_MAX_HEIGHT);
  
@@ -176,11 +170,9 @@ index 73c858c7c0e5..f06642c6ddf8 100644
  		fmt->field = V4L2_FIELD_NONE;
  
  	dcmipp_colorimetry_clamp(fmt);
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
-index 39bb6b0a84ba..32aa63782af5 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
-@@ -461,7 +461,7 @@ dcmipp_pixelproc_adjust_fmt(struct dcmipp_pixelproc_device *pixelproc,
+@@ -461,7 +461,7 @@ dcmipp_pixelproc_adjust_fmt(struct dcmip
  	fmt->height = clamp_t(u32, fmt->height, DCMIPP_FRAME_MIN_HEIGHT,
  			      DCMIPP_PIXEL_FRAME_MAX_HEIGHT);
  
@@ -189,6 +181,3 @@ index 39bb6b0a84ba..32aa63782af5 100644
  		fmt->field = V4L2_FIELD_NONE;
  
  	dcmipp_colorimetry_clamp(fmt);
--- 
-2.53.0
-

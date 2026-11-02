@@ -15,11 +15,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/stm/ltdc.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-index 5e44be06031a..be8102a1c317 100644
 --- a/drivers/gpu/drm/stm/ltdc.c
 +++ b/drivers/gpu/drm/stm/ltdc.c
-@@ -1738,10 +1738,8 @@ static void ltdc_plane_update(struct drm_plane *plane, struct drm_atomic_state *
+@@ -1738,10 +1738,8 @@ static void ltdc_plane_update(struct drm
  
  	mode = &newstate->crtc->state->adjusted_mode;
  	if (dst.x1 < 0 || dst.y1 < 0 || dst.x2 <= dst.x1 || dst.y2 <= dst.y1 ||
@@ -32,6 +30,3 @@ index 5e44be06031a..be8102a1c317 100644
  
  	if (plane_rotation & DRM_MODE_ROTATE_90) {
  		/* stop display streaming to allows rotation */
--- 
-2.53.0
-

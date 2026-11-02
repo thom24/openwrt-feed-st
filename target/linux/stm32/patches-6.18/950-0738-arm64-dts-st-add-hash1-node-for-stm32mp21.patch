@@ -19,11 +19,9 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/551364
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 13 +++++++++++++
  1 file changed, 13 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index 0552d31b2a4b..8fe0723e54cc 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -1113,6 +1113,19 @@ rng2: rng@42020000 {
+@@ -1113,6 +1113,19 @@
  				status = "disabled";
  			};
  
@@ -43,6 +41,3 @@ index 0552d31b2a4b..8fe0723e54cc 100644
  			rng1: rng@42030800 {
  				compatible = "st,stm32mp21-rng";
  				reg = <0x42030800 0x0 0x400>;
--- 
-2.53.0
-

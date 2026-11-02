@@ -18,11 +18,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp135f-dk.dts | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index 620ef54f6715..ec19a258335b 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -245,6 +245,8 @@ phy0_eth1: ethernet-phy@0 {
+@@ -245,6 +245,8 @@
  			compatible = "ethernet-phy-id0007.c131";
  			reg = <0>;
  			reset-gpios = <&mcp23017 9 GPIO_ACTIVE_LOW>;
@@ -31,7 +29,7 @@ index 620ef54f6715..ec19a258335b 100644
  			wakeup-source;
  		};
  	};
-@@ -269,6 +271,8 @@ phy0_eth2: ethernet-phy@0 {
+@@ -269,6 +271,8 @@
  			compatible = "ethernet-phy-id0007.c131";
  			reg = <0>;
  			reset-gpios = <&mcp23017 10 GPIO_ACTIVE_LOW>;
@@ -40,6 +38,3 @@ index 620ef54f6715..ec19a258335b 100644
  		};
  	};
  };
--- 
-2.53.0
-

@@ -24,11 +24,9 @@ Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
  drivers/crypto/stm32/stm32-hash.c | 11 -----------
  1 file changed, 11 deletions(-)
 
-diff --git a/drivers/crypto/stm32/stm32-hash.c b/drivers/crypto/stm32/stm32-hash.c
-index a4436728b0db..96510c3ff1d4 100644
 --- a/drivers/crypto/stm32/stm32-hash.c
 +++ b/drivers/crypto/stm32/stm32-hash.c
-@@ -1288,17 +1288,6 @@ static int stm32_hash_prepare_request(struct ahash_request *req)
+@@ -1288,17 +1288,6 @@ static int stm32_hash_prepare_request(st
  
  	rctx->total = nbytes;
  
@@ -46,6 +44,3 @@ index a4436728b0db..96510c3ff1d4 100644
  	/* copy buffer in a temporary one that is used for sg alignment */
  	if (state->bufcnt)
  		memcpy(hdev->xmit_buf, state->buffer, state->bufcnt);
--- 
-2.53.0
-

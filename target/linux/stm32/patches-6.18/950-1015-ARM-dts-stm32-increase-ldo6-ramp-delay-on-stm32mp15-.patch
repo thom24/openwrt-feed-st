@@ -27,11 +27,9 @@ Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp157f-ev1.dts         | 5 +++++
  3 files changed, 15 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
-index 30d3b19f6d3c..0c1c4736da0d 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
-@@ -805,3 +805,8 @@ &usbphyc_port1 {
+@@ -805,3 +805,8 @@
  	st,tune-hs-rx-offset = <2>;
  	st,no-lsfs-sc;
  };
@@ -40,11 +38,9 @@ index 30d3b19f6d3c..0c1c4736da0d 100644
 +&v1v8 {
 +	regulator-enable-ramp-delay = <300000>;
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-index fd0fc9ac48c5..f917e0ae7b96 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-@@ -806,3 +806,8 @@ &usbphyc_port1 {
+@@ -806,3 +806,8 @@
  	st,tune-hs-rx-offset = <2>;
  	st,no-lsfs-sc;
  };
@@ -53,11 +49,9 @@ index fd0fc9ac48c5..f917e0ae7b96 100644
 +&v1v8 {
 +	regulator-enable-ramp-delay = <300000>;
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-index 0c460482445f..7ca87ac913c2 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-@@ -806,3 +806,8 @@ &usbphyc_port1 {
+@@ -806,3 +806,8 @@
  	st,tune-hs-rx-offset = <2>;
  	st,no-lsfs-sc;
  };
@@ -66,6 +60,3 @@ index 0c460482445f..7ca87ac913c2 100644
 +&v1v8 {
 +	regulator-enable-ramp-delay = <300000>;
 +};
--- 
-2.53.0
-

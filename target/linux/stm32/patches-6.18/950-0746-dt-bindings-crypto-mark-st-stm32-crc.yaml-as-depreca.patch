@@ -17,8 +17,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  Documentation/devicetree/bindings/crypto/st,stm32-crc.yaml | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-crc.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-crc.yaml
-index 50b2c2e0c3cd..b50f2e65a6f4 100644
 --- a/Documentation/devicetree/bindings/crypto/st,stm32-crc.yaml
 +++ b/Documentation/devicetree/bindings/crypto/st,stm32-crc.yaml
 @@ -9,6 +9,8 @@ title: STMicroelectronics STM32 CRC
@@ -30,6 +28,3 @@ index 50b2c2e0c3cd..b50f2e65a6f4 100644
  properties:
    compatible:
      const: st,stm32f7-crc
--- 
-2.53.0
-

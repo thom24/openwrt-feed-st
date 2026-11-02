@@ -20,11 +20,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp231.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index 0aab00d099f7..d45af764235d 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -807,7 +807,7 @@ sdmmc1: mmc@48220000 {
+@@ -807,7 +807,7 @@
  				reg = <0x48220000 0x400>, <0x44230400 0x8>;
  				arm,primecell-periphid = <0x00353180>;
  				interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>;
@@ -33,6 +31,3 @@ index 0aab00d099f7..d45af764235d 100644
  				clock-names = "apb_pclk";
  				resets = <&rcc SDMMC1_R>;
  				cap-sd-highspeed;
--- 
-2.53.0
-

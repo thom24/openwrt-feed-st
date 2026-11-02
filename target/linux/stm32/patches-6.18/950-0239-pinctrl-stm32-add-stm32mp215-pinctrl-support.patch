@@ -15,8 +15,6 @@ Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
  4 files changed, 1817 insertions(+)
  create mode 100644 drivers/pinctrl/stm32/pinctrl-stm32mp215.c
 
-diff --git a/drivers/pinctrl/stm32/Kconfig b/drivers/pinctrl/stm32/Kconfig
-index d6a171523012..dba43a2b82c1 100644
 --- a/drivers/pinctrl/stm32/Kconfig
 +++ b/drivers/pinctrl/stm32/Kconfig
 @@ -52,6 +52,12 @@ config PINCTRL_STM32MP157
@@ -32,19 +30,15 @@ index d6a171523012..dba43a2b82c1 100644
  config PINCTRL_STM32MP257
  	tristate "STMicroelectronics STM32MP257 pin control"
  	depends on OF && HAS_IOMEM
-diff --git a/drivers/pinctrl/stm32/Makefile b/drivers/pinctrl/stm32/Makefile
-index 98a1bbc7e16c..3bf78bb849bb 100644
 --- a/drivers/pinctrl/stm32/Makefile
 +++ b/drivers/pinctrl/stm32/Makefile
-@@ -10,5 +10,6 @@ obj-$(CONFIG_PINCTRL_STM32F769)	+= pinctrl-stm32f769.o
+@@ -10,5 +10,6 @@ obj-$(CONFIG_PINCTRL_STM32F769)	+= pinct
  obj-$(CONFIG_PINCTRL_STM32H743)	+= pinctrl-stm32h743.o
  obj-$(CONFIG_PINCTRL_STM32MP135) += pinctrl-stm32mp135.o
  obj-$(CONFIG_PINCTRL_STM32MP157) += pinctrl-stm32mp157.o
 +obj-$(CONFIG_PINCTRL_STM32MP215) += pinctrl-stm32mp215.o
  obj-$(CONFIG_PINCTRL_STM32MP257) += pinctrl-stm32mp257.o
  obj-$(CONFIG_PINCTRL_STM32_HDP) += pinctrl-stm32-hdp.o
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.h b/drivers/pinctrl/stm32/pinctrl-stm32.h
-index 319fc0441de3..52ade2244ec3 100644
 --- a/drivers/pinctrl/stm32/pinctrl-stm32.h
 +++ b/drivers/pinctrl/stm32/pinctrl-stm32.h
 @@ -29,6 +29,9 @@
@@ -57,9 +51,6 @@ index 319fc0441de3..52ade2244ec3 100644
  
  struct stm32_desc_function {
  	const char *name;
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32mp215.c b/drivers/pinctrl/stm32/pinctrl-stm32mp215.c
-new file mode 100644
-index 000000000000..b702aaa67b01
 --- /dev/null
 +++ b/drivers/pinctrl/stm32/pinctrl-stm32mp215.c
 @@ -0,0 +1,1807 @@
@@ -1870,6 +1861,3 @@ index 000000000000..b702aaa67b01
 +MODULE_AUTHOR("Alexandre Torgue <alexandre.torgue@foss.st.com>");
 +MODULE_DESCRIPTION("STM32MP215 pinctrl driver");
 +MODULE_LICENSE("GPL");
--- 
-2.53.0
-

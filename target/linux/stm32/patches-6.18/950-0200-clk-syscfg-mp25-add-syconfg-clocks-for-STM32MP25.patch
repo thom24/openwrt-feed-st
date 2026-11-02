@@ -24,20 +24,15 @@ Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  2 files changed, 212 insertions(+)
  create mode 100644 drivers/clk/stm32/clk-stm32mp25-syscfg.c
 
-diff --git a/drivers/clk/stm32/Makefile b/drivers/clk/stm32/Makefile
-index 63dfae11faf0..5707ad17a25f 100644
 --- a/drivers/clk/stm32/Makefile
 +++ b/drivers/clk/stm32/Makefile
-@@ -2,5 +2,6 @@ obj-$(CONFIG_COMMON_CLK_STM32MP135)	+= clk-stm32mp13.o clk-stm32-core.o reset-st
+@@ -2,5 +2,6 @@ obj-$(CONFIG_COMMON_CLK_STM32MP135)	+= c
  obj-$(CONFIG_COMMON_CLK_STM32MP157)	+= clk-stm32mp1.o reset-stm32.o
  obj-$(CONFIG_COMMON_CLK_STM32MP215)	+= clk-stm32mp21.o clk-stm32-core.o reset-stm32.o
  obj-$(CONFIG_COMMON_CLK_STM32MP257)	+= clk-stm32mp25.o clk-stm32-core.o reset-stm32.o
 +obj-$(CONFIG_COMMON_CLK_STM32MP257)	+= clk-stm32mp25-syscfg.o
  
  obj-${CONFIG_CLK_STM32MP2_CA35SS} += clk-stm32mp2-ca35ss.o
-diff --git a/drivers/clk/stm32/clk-stm32mp25-syscfg.c b/drivers/clk/stm32/clk-stm32mp25-syscfg.c
-new file mode 100644
-index 000000000000..eed7ae25d2d9
 --- /dev/null
 +++ b/drivers/clk/stm32/clk-stm32mp25-syscfg.c
 @@ -0,0 +1,211 @@
@@ -252,6 +247,3 @@ index 000000000000..eed7ae25d2d9
 +	},
 +};
 +module_platform_driver(stm32mp25_syscfg_driver);
--- 
-2.53.0
-

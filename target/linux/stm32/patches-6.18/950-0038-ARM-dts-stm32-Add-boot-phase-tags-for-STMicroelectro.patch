@@ -45,11 +45,9 @@ Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
  arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi     | 122 ++++++++++++
  28 files changed, 1276 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
-index fd58bb700f6c..f32294ff0302 100644
 --- a/arch/arm/boot/dts/st/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
-@@ -30,7 +30,7 @@ arm-pmu {
+@@ -30,7 +30,7 @@
  		interrupt-parent = <&intc>;
  	};
  
@@ -58,11 +56,9 @@ index fd58bb700f6c..f32294ff0302 100644
  		compatible = "arm,psci-1.0";
  		method = "smc";
  	};
-diff --git a/arch/arm/boot/dts/st/stm32mp157a-dk1-scmi.dts b/arch/arm/boot/dts/st/stm32mp157a-dk1-scmi.dts
-index 53e40e2f776b..102fd8007c70 100644
 --- a/arch/arm/boot/dts/st/stm32mp157a-dk1-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157a-dk1-scmi.dts
-@@ -65,6 +65,7 @@ &mdma1 {
+@@ -65,6 +65,7 @@
  &optee {
  	interrupt-parent = <&intc>;
  	interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
@@ -70,7 +66,7 @@ index 53e40e2f776b..102fd8007c70 100644
  };
  
  &rcc {
-@@ -85,3 +86,7 @@ &rng1 {
+@@ -85,3 +86,7 @@
  &rtc {
  	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
  };
@@ -78,11 +74,9 @@ index 53e40e2f776b..102fd8007c70 100644
 +&scmi {
 +	bootph-some-ram;
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp157a-icore-stm32mp1-ctouch2-of10.dts b/arch/arm/boot/dts/st/stm32mp157a-icore-stm32mp1-ctouch2-of10.dts
-index df97e03d2a5a..4ad1313efca9 100644
 --- a/arch/arm/boot/dts/st/stm32mp157a-icore-stm32mp1-ctouch2-of10.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157a-icore-stm32mp1-ctouch2-of10.dts
-@@ -92,6 +92,7 @@ bridge_out: endpoint {
+@@ -92,6 +92,7 @@
  };
  
  &ltdc {
@@ -90,11 +84,9 @@ index df97e03d2a5a..4ad1313efca9 100644
  	status = "okay";
  
  	port {
-diff --git a/arch/arm/boot/dts/st/stm32mp157a-icore-stm32mp1-ctouch2.dts b/arch/arm/boot/dts/st/stm32mp157a-icore-stm32mp1-ctouch2.dts
-index 60ce4425a7fd..ac4e313ca371 100644
 --- a/arch/arm/boot/dts/st/stm32mp157a-icore-stm32mp1-ctouch2.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157a-icore-stm32mp1-ctouch2.dts
-@@ -35,15 +35,40 @@ &sdmmc1 {
+@@ -35,15 +35,40 @@
  	pinctrl-2 = <&sdmmc1_b4_sleep_pins_a>;
  	st,neg-edge;
  	vmmc-supply = <&v3v3>;
@@ -135,11 +127,9 @@ index 60ce4425a7fd..ac4e313ca371 100644
 +		bias-pull-up;
 +	};
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp157a-icore-stm32mp1-edimm2.2.dts b/arch/arm/boot/dts/st/stm32mp157a-icore-stm32mp1-edimm2.2.dts
-index f8e404346396..cc24a29fba15 100644
 --- a/arch/arm/boot/dts/st/stm32mp157a-icore-stm32mp1-edimm2.2.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157a-icore-stm32mp1-edimm2.2.dts
-@@ -92,6 +92,7 @@ bridge_out_panel: endpoint {
+@@ -92,6 +92,7 @@
  };
  
  &ltdc {
@@ -147,7 +137,7 @@ index f8e404346396..cc24a29fba15 100644
  	status = "okay";
  
  	port {
-@@ -110,15 +111,40 @@ &sdmmc1 {
+@@ -110,15 +111,40 @@
  	pinctrl-2 = <&sdmmc1_b4_sleep_pins_a>;
  	st,neg-edge;
  	vmmc-supply = <&v3v3>;
@@ -188,11 +178,9 @@ index f8e404346396..cc24a29fba15 100644
 +		bias-pull-up;
 +	};
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp157a-icore-stm32mp1.dtsi b/arch/arm/boot/dts/st/stm32mp157a-icore-stm32mp1.dtsi
-index 569a7e940ecc..db93934019d1 100644
 --- a/arch/arm/boot/dts/st/stm32mp157a-icore-stm32mp1.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp157a-icore-stm32mp1.dtsi
-@@ -61,6 +61,7 @@ vddcore: regulator-vddcore {
+@@ -61,6 +61,7 @@
  		regulator-min-microvolt = <1200000>;
  		regulator-max-microvolt = <1200000>;
  		regulator-always-on;
@@ -200,7 +188,7 @@ index 569a7e940ecc..db93934019d1 100644
  	};
  
  	vdd: regulator-vdd {
-@@ -69,6 +70,7 @@ vdd: regulator-vdd {
+@@ -69,6 +70,7 @@
  		regulator-min-microvolt = <3300000>;
  		regulator-max-microvolt = <3300000>;
  		regulator-always-on;
@@ -208,7 +196,7 @@ index 569a7e940ecc..db93934019d1 100644
  	};
  
  	vdd_usb: regulator-vdd-usb {
-@@ -77,6 +79,7 @@ vdd_usb: regulator-vdd-usb {
+@@ -77,6 +79,7 @@
  		regulator-min-microvolt = <3300000>;
  		regulator-max-microvolt = <3300000>;
  		regulator-always-on;
@@ -216,7 +204,7 @@ index 569a7e940ecc..db93934019d1 100644
  	};
  
  	vdda: regulator-vdda {
-@@ -85,6 +88,7 @@ vdda: regulator-vdda {
+@@ -85,6 +88,7 @@
  		regulator-min-microvolt = <3300000>;
  		regulator-max-microvolt = <3300000>;
  		regulator-always-on;
@@ -224,7 +212,7 @@ index 569a7e940ecc..db93934019d1 100644
  	};
  
  	vdd_ddr: regulator-vdd-ddr {
-@@ -93,6 +97,7 @@ vdd_ddr: regulator-vdd-ddr {
+@@ -93,6 +97,7 @@
  		regulator-min-microvolt = <1350000>;
  		regulator-max-microvolt = <1350000>;
  		regulator-always-on;
@@ -232,7 +220,7 @@ index 569a7e940ecc..db93934019d1 100644
  	};
  
  	vtt_ddr: regulator-vtt-ddr {
-@@ -102,6 +107,7 @@ vtt_ddr: regulator-vtt-ddr {
+@@ -102,6 +107,7 @@
  		regulator-max-microvolt = <675000>;
  		regulator-always-on;
  		vin-supply = <&vdd>;
@@ -240,7 +228,7 @@ index 569a7e940ecc..db93934019d1 100644
  	};
  
  	vref_ddr: regulator-vref-ddr {
-@@ -111,6 +117,7 @@ vref_ddr: regulator-vref-ddr {
+@@ -111,6 +117,7 @@
  		regulator-max-microvolt = <675000>;
  		regulator-always-on;
  		vin-supply = <&vdd>;
@@ -248,7 +236,7 @@ index 569a7e940ecc..db93934019d1 100644
  	};
  
  	vdd_sd: regulator-vdd-sd {
-@@ -119,6 +126,7 @@ vdd_sd: regulator-vdd-sd {
+@@ -119,6 +126,7 @@
  		regulator-min-microvolt = <3300000>;
  		regulator-max-microvolt = <3300000>;
  		regulator-always-on;
@@ -256,7 +244,7 @@ index 569a7e940ecc..db93934019d1 100644
  	};
  
  	v3v3: regulator-v3v3 {
-@@ -127,6 +135,7 @@ v3v3: regulator-v3v3 {
+@@ -127,6 +135,7 @@
  		regulator-min-microvolt = <3300000>;
  		regulator-max-microvolt = <3300000>;
  		regulator-always-on;
@@ -264,7 +252,7 @@ index 569a7e940ecc..db93934019d1 100644
  	};
  
  	v2v8: regulator-v2v8 {
-@@ -136,6 +145,7 @@ v2v8: regulator-v2v8 {
+@@ -136,6 +145,7 @@
  		regulator-max-microvolt = <2800000>;
  		regulator-always-on;
  		vin-supply = <&v3v3>;
@@ -272,7 +260,7 @@ index 569a7e940ecc..db93934019d1 100644
  	};
  
  	v1v8: regulator-v1v8 {
-@@ -145,13 +155,86 @@ v1v8: regulator-v1v8 {
+@@ -145,13 +155,86 @@
  		regulator-max-microvolt = <1800000>;
  		regulator-always-on;
  		vin-supply = <&v3v3>;
@@ -359,7 +347,7 @@ index 569a7e940ecc..db93934019d1 100644
  &i2c2 {
  	i2c-scl-falling-time-ns = <20>;
  	i2c-scl-rising-time-ns = <185>;
-@@ -167,6 +250,7 @@ &ipcc {
+@@ -167,6 +250,7 @@
  
  &iwdg2 {
  	timeout-sec = <32>;
@@ -367,7 +355,7 @@ index 569a7e940ecc..db93934019d1 100644
  	status = "okay";
  };
  
-@@ -180,6 +264,22 @@ &m4_rproc {
+@@ -180,6 +264,22 @@
  	status = "okay";
  };
  
@@ -390,11 +378,9 @@ index 569a7e940ecc..db93934019d1 100644
  &rng1 {
  	status = "okay";
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157a-microgea-stm32mp1-microdev2.0-of7.dts b/arch/arm/boot/dts/st/stm32mp157a-microgea-stm32mp1-microdev2.0-of7.dts
-index 5116a7785201..7bfd7da4a8db 100644
 --- a/arch/arm/boot/dts/st/stm32mp157a-microgea-stm32mp1-microdev2.0-of7.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157a-microgea-stm32mp1-microdev2.0-of7.dts
-@@ -78,6 +78,7 @@ &i2c2 {
+@@ -78,6 +78,7 @@
  &ltdc {
  	pinctrl-names = "default";
  	pinctrl-0 = <&ltdc_pins>;
@@ -402,7 +388,7 @@ index 5116a7785201..7bfd7da4a8db 100644
  	status = "okay";
  
  	port {
-@@ -134,19 +135,45 @@ &sdmmc1 {
+@@ -134,19 +135,45 @@
  	pinctrl-2 = <&sdmmc1_b4_sleep_pins_a>;
  	st,neg-edge;
  	vmmc-supply = <&vdd>;
@@ -448,11 +434,9 @@ index 5116a7785201..7bfd7da4a8db 100644
  /* J31: RS323 */
  &uart8 {
  	pinctrl-names = "default";
-diff --git a/arch/arm/boot/dts/st/stm32mp157a-microgea-stm32mp1-microdev2.0.dts b/arch/arm/boot/dts/st/stm32mp157a-microgea-stm32mp1-microdev2.0.dts
-index d949559be020..a1f79659d7c5 100644
 --- a/arch/arm/boot/dts/st/stm32mp157a-microgea-stm32mp1-microdev2.0.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157a-microgea-stm32mp1-microdev2.0.dts
-@@ -36,19 +36,46 @@ &sdmmc1 {
+@@ -36,19 +36,46 @@
  	pinctrl-2 = <&sdmmc1_b4_sleep_pins_a>;
  	st,neg-edge;
  	vmmc-supply = <&vdd>;
@@ -499,11 +483,9 @@ index d949559be020..a1f79659d7c5 100644
  /* J31: RS323 */
  &uart8 {
  	pinctrl-names = "default";
-diff --git a/arch/arm/boot/dts/st/stm32mp157a-microgea-stm32mp1.dtsi b/arch/arm/boot/dts/st/stm32mp157a-microgea-stm32mp1.dtsi
-index a75f50cf7123..4f6f4712d634 100644
 --- a/arch/arm/boot/dts/st/stm32mp157a-microgea-stm32mp1.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp157a-microgea-stm32mp1.dtsi
-@@ -61,6 +61,7 @@ vin: regulator-vin {
+@@ -61,6 +61,7 @@
  		regulator-min-microvolt = <5000000>;
  		regulator-max-microvolt = <5000000>;
  		regulator-always-on;
@@ -511,7 +493,7 @@ index a75f50cf7123..4f6f4712d634 100644
  	};
  
  	vddcore: regulator-vddcore {
-@@ -70,6 +71,7 @@ vddcore: regulator-vddcore {
+@@ -70,6 +71,7 @@
  		regulator-max-microvolt = <1200000>;
  		regulator-always-on;
  		vin-supply = <&vin>;
@@ -519,7 +501,7 @@ index a75f50cf7123..4f6f4712d634 100644
  	};
  
  	vdd: regulator-vdd {
-@@ -79,6 +81,7 @@ vdd: regulator-vdd {
+@@ -79,6 +81,7 @@
  		regulator-max-microvolt = <3300000>;
  		regulator-always-on;
  		vin-supply = <&vin>;
@@ -527,7 +509,7 @@ index a75f50cf7123..4f6f4712d634 100644
  	};
  
  	vddq_ddr: regulator-vddq-ddr {
-@@ -88,9 +91,34 @@ vddq_ddr: regulator-vddq-ddr {
+@@ -88,9 +91,34 @@
  		regulator-max-microvolt = <1350000>;
  		regulator-always-on;
  		vin-supply = <&vin>;
@@ -562,7 +544,7 @@ index a75f50cf7123..4f6f4712d634 100644
  &dts {
  	status = "okay";
  };
-@@ -113,12 +141,61 @@ nand@0 {
+@@ -113,12 +141,61 @@
  	};
  };
  
@@ -624,7 +606,7 @@ index a75f50cf7123..4f6f4712d634 100644
  	status = "okay";
  };
  
-@@ -132,6 +209,26 @@ &m4_rproc {
+@@ -132,6 +209,26 @@
  	status = "okay";
  };
  
@@ -651,11 +633,9 @@ index a75f50cf7123..4f6f4712d634 100644
  &rng1 {
  	status = "okay";
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dts
-index 0790ed426ebc..9019b5b0f204 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dts
-@@ -71,6 +71,7 @@ &mdma1 {
+@@ -71,6 +71,7 @@
  &optee {
  	interrupt-parent = <&intc>;
  	interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
@@ -663,7 +643,7 @@ index 0790ed426ebc..9019b5b0f204 100644
  };
  
  &rcc {
-@@ -91,3 +92,7 @@ &rng1 {
+@@ -91,3 +92,7 @@
  &rtc {
  	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
  };
@@ -671,11 +651,9 @@ index 0790ed426ebc..9019b5b0f204 100644
 +&scmi {
 +	bootph-some-ram;
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
-index 1ec3b8f2faa9..bf9fdf0d611c 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
-@@ -80,6 +80,7 @@ touchscreen@38 {
+@@ -80,6 +80,7 @@
  };
  
  &ltdc {
@@ -683,11 +661,9 @@ index 1ec3b8f2faa9..bf9fdf0d611c 100644
  	status = "okay";
  
  	port {
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ed1-scmi.dts
-index 0a3894aff4ae..17b25930637d 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ed1-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ed1-scmi.dts
-@@ -70,6 +70,7 @@ &mdma1 {
+@@ -70,6 +70,7 @@
  &optee {
  	interrupt-parent = <&intc>;
  	interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
@@ -695,7 +671,7 @@ index 0a3894aff4ae..17b25930637d 100644
  };
  
  &rcc {
-@@ -90,3 +91,7 @@ &rng1 {
+@@ -90,3 +91,7 @@
  &rtc {
  	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
  };
@@ -703,11 +679,9 @@ index 0a3894aff4ae..17b25930637d 100644
 +&scmi {
 +	bootph-some-ram;
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1.dts b/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
-index e73a26d0dad2..51812d85139f 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
-@@ -132,6 +132,30 @@ channel@6 {
+@@ -132,6 +132,30 @@
  	};
  };
  
@@ -738,7 +712,7 @@ index e73a26d0dad2..51812d85139f 100644
  &crc1 {
  	status = "okay";
  };
-@@ -157,6 +181,58 @@ &dts {
+@@ -157,6 +181,58 @@
  	status = "okay";
  };
  
@@ -797,7 +771,7 @@ index e73a26d0dad2..51812d85139f 100644
  &hash1 {
  	status = "okay";
  };
-@@ -168,7 +244,9 @@ &i2c4 {
+@@ -168,7 +244,9 @@
  	i2c-scl-rising-time-ns = <185>;
  	i2c-scl-falling-time-ns = <20>;
  	clock-frequency = <400000>;
@@ -807,7 +781,7 @@ index e73a26d0dad2..51812d85139f 100644
  	/* spare dmas for other usage */
  	/delete-property/dmas;
  	/delete-property/dma-names;
-@@ -179,6 +257,7 @@ pmic: stpmic@33 {
+@@ -179,6 +257,7 @@
  		interrupts-extended = <&gpioa 0 IRQ_TYPE_EDGE_FALLING>;
  		interrupt-controller;
  		#interrupt-cells = <2>;
@@ -815,7 +789,7 @@ index e73a26d0dad2..51812d85139f 100644
  		status = "okay";
  
  		regulators {
-@@ -314,12 +393,20 @@ watchdog {
+@@ -314,12 +393,20 @@
  	};
  };
  
@@ -836,7 +810,7 @@ index e73a26d0dad2..51812d85139f 100644
  	status = "okay";
  };
  
-@@ -335,9 +422,26 @@ &m4_rproc {
+@@ -335,9 +422,26 @@
  	status = "okay";
  };
  
@@ -863,7 +837,7 @@ index e73a26d0dad2..51812d85139f 100644
  };
  
  &rng1 {
-@@ -365,9 +469,30 @@ &sdmmc1 {
+@@ -365,9 +469,30 @@
  	sd-uhs-sdr25;
  	sd-uhs-sdr50;
  	sd-uhs-ddr50;
@@ -894,7 +868,7 @@ index e73a26d0dad2..51812d85139f 100644
  &sdmmc2 {
  	pinctrl-names = "default", "opendrain", "sleep";
  	pinctrl-0 = <&sdmmc2_b4_pins_a &sdmmc2_d47_pins_a>;
-@@ -381,9 +506,27 @@ &sdmmc2 {
+@@ -381,9 +506,27 @@
  	vmmc-supply = <&v3v3>;
  	vqmmc-supply = <&vdd>;
  	mmc-ddr-3_3v;
@@ -922,7 +896,7 @@ index e73a26d0dad2..51812d85139f 100644
  &timers6 {
  	status = "okay";
  	/* spare dmas for other usage */
-@@ -399,11 +542,22 @@ &uart4 {
+@@ -399,11 +542,22 @@
  	pinctrl-0 = <&uart4_pins_a>;
  	pinctrl-1 = <&uart4_sleep_pins_a>;
  	pinctrl-2 = <&uart4_idle_pins_a>;
@@ -945,11 +919,9 @@ index e73a26d0dad2..51812d85139f 100644
  &usbotg_hs {
  	vbus-supply = <&vbus_otg>;
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dts
-index c2b6efb1cbb7..6bf16f40625f 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dts
-@@ -75,6 +75,7 @@ &mdma1 {
+@@ -75,6 +75,7 @@
  &optee {
  	interrupt-parent = <&intc>;
  	interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
@@ -957,7 +929,7 @@ index c2b6efb1cbb7..6bf16f40625f 100644
  };
  
  &rcc {
-@@ -95,3 +96,7 @@ &rng1 {
+@@ -95,3 +96,7 @@
  &rtc {
  	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
  };
@@ -965,11 +937,9 @@ index c2b6efb1cbb7..6bf16f40625f 100644
 +&scmi {
 +	bootph-some-ram;
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
-index 8f99c30f1af1..3f712c77689e 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
-@@ -231,6 +231,7 @@ &i2c5 {
+@@ -231,6 +231,7 @@
  };
  
  &ltdc {
@@ -977,7 +947,7 @@ index 8f99c30f1af1..3f712c77689e 100644
  	status = "okay";
  
  	port {
-@@ -262,6 +263,7 @@ &qspi_bk2_sleep_pins_a
+@@ -262,6 +263,7 @@
  	reg = <0x58003000 0x1000>, <0x70000000 0x4000000>;
  	#address-cells = <1>;
  	#size-cells = <0>;
@@ -985,7 +955,7 @@ index 8f99c30f1af1..3f712c77689e 100644
  	status = "okay";
  
  	flash0: flash@0 {
-@@ -271,6 +273,7 @@ flash0: flash@0 {
+@@ -271,6 +273,7 @@
  		spi-max-frequency = <108000000>;
  		#address-cells = <1>;
  		#size-cells = <1>;
@@ -993,7 +963,7 @@ index 8f99c30f1af1..3f712c77689e 100644
  	};
  
  	flash1: flash@1 {
-@@ -283,6 +286,41 @@ flash1: flash@1 {
+@@ -283,6 +286,41 @@
  	};
  };
  
@@ -1035,11 +1005,9 @@ index 8f99c30f1af1..3f712c77689e 100644
  &sdmmc3 {
  	pinctrl-names = "default", "opendrain", "sleep";
  	pinctrl-0 = <&sdmmc3_b4_pins_a>;
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-lxa-mc1.dts b/arch/arm/boot/dts/st/stm32mp157c-lxa-mc1.dts
-index eada9cf257be..9f513045c559 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-lxa-mc1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-lxa-mc1.dts
-@@ -158,6 +158,7 @@ &ltdc {
+@@ -158,6 +158,7 @@
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&ltdc_pins_c>;
  	pinctrl-1 = <&ltdc_sleep_pins_c>;
@@ -1047,11 +1015,9 @@ index eada9cf257be..9f513045c559 100644
  	status = "okay";
  
  	port {
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-odyssey-som.dtsi b/arch/arm/boot/dts/st/stm32mp157c-odyssey-som.dtsi
-index cf7485251490..1c5517f57ecd 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-odyssey-som.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp157c-odyssey-som.dtsi
-@@ -75,11 +75,84 @@ led-blue {
+@@ -75,11 +75,84 @@
  	};
  };
  
@@ -1136,7 +1102,7 @@ index cf7485251490..1c5517f57ecd 100644
  	status = "okay";
  	/* spare dmas for other usage */
  	/delete-property/dmas;
-@@ -91,6 +164,7 @@ pmic: stpmic@33 {
+@@ -91,6 +164,7 @@
  		interrupts-extended = <&gpioa 0 IRQ_TYPE_EDGE_FALLING>;
  		interrupt-controller;
  		#interrupt-cells = <2>;
@@ -1144,7 +1110,7 @@ index cf7485251490..1c5517f57ecd 100644
  
  		regulators {
  			compatible = "st,stpmic1-regulators";
-@@ -218,12 +292,20 @@ watchdog {
+@@ -218,12 +292,20 @@
  	};
  };
  
@@ -1165,7 +1131,7 @@ index cf7485251490..1c5517f57ecd 100644
  	status = "okay";
  };
  
-@@ -237,6 +319,26 @@ &m4_rproc {
+@@ -237,6 +319,26 @@
  	status = "okay";
  };
  
@@ -1192,7 +1158,7 @@ index cf7485251490..1c5517f57ecd 100644
  &rng1 {
  	status = "okay";
  };
-@@ -258,6 +360,23 @@ &sdmmc2 {
+@@ -258,6 +360,23 @@
  	vmmc-supply = <&v3v3>;
  	vqmmc-supply = <&vdd>;
  	mmc-ddr-3_3v;
@@ -1216,11 +1182,9 @@ index cf7485251490..1c5517f57ecd 100644
 +		bootph-pre-ram;
 +	};
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-odyssey.dts b/arch/arm/boot/dts/st/stm32mp157c-odyssey.dts
-index a8b3f7a54703..92bc25b3f563 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-odyssey.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-odyssey.dts
-@@ -75,14 +75,35 @@ &sdmmc1 {
+@@ -75,14 +75,35 @@
  	st,neg-edge;
  	bus-width = <4>;
  	vmmc-supply = <&v3v3>;
@@ -1256,11 +1220,9 @@ index a8b3f7a54703..92bc25b3f563 100644
 +		bootph-all;
 +	};
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-osd32mp1-red.dts b/arch/arm/boot/dts/st/stm32mp157c-osd32mp1-red.dts
-index 36e6055b5665..b404ea3752d9 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-osd32mp1-red.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-osd32mp1-red.dts
-@@ -131,6 +131,7 @@ i2s2_endpoint: endpoint {
+@@ -131,6 +131,7 @@
  };
  
  &ltdc {
@@ -1268,11 +1230,9 @@ index 36e6055b5665..b404ea3752d9 100644
  	status = "okay";
  
  	port {
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi
-index 89de85a2eff3..5d29c2154b46 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi
-@@ -87,6 +87,7 @@ &mdma1 {
+@@ -87,6 +87,7 @@
  &optee {
  	interrupt-parent = <&intc>;
  	interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
@@ -1280,7 +1240,7 @@ index 89de85a2eff3..5d29c2154b46 100644
  };
  
  &pwr_regulators {
-@@ -114,6 +115,10 @@ &rtc {
+@@ -114,6 +115,10 @@
  	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
  };
  
@@ -1291,11 +1251,9 @@ index 89de85a2eff3..5d29c2154b46 100644
  &scmi_reguls {
  	scmi_vddcore: regulator@3 {
  		reg = <VOLTD_SCMI_STPMIC1_BUCK1>;
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
-index 8fa61e54d026..4d857b3575fd 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
-@@ -97,6 +97,7 @@ stpmic@33 {
+@@ -97,6 +97,7 @@
  };
  
  &ltdc {
@@ -1303,11 +1261,9 @@ index 8fa61e54d026..4d857b3575fd 100644
  	status = "okay";
  
  	port {
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2.dtsi
-index 5c77202ee196..4be74ae3089c 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2.dtsi
-@@ -159,6 +159,7 @@ &i2c5 {	/* Header X21 */
+@@ -159,6 +159,7 @@
  	pinctrl-0 = <&i2c5_pins_a>;
  	i2c-scl-rising-time-ns = <185>;
  	i2c-scl-falling-time-ns = <20>;
@@ -1315,7 +1271,7 @@ index 5c77202ee196..4be74ae3089c 100644
  	status = "okay";
  	/* spare dmas for other usage */
  	/delete-property/dmas;
-@@ -186,7 +187,6 @@ sgtl5000_rx_endpoint: endpoint@1 {
+@@ -186,7 +187,6 @@
  				remote-endpoint = <&sai2b_endpoint>;
  			};
  		};
@@ -1323,7 +1279,7 @@ index 5c77202ee196..4be74ae3089c 100644
  	};
  
  	touchscreen@38 {
-@@ -201,6 +201,7 @@ &ltdc {
+@@ -201,6 +201,7 @@
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&ltdc_pins_b>;
  	pinctrl-1 = <&ltdc_sleep_pins_b>;
@@ -1331,11 +1287,9 @@ index 5c77202ee196..4be74ae3089c 100644
  	status = "okay";
  
  	port {
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-som.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-som.dtsi
-index 4cc633683c6b..04e91d02cc28 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-som.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-som.dtsi
-@@ -103,6 +103,10 @@ channel@1 {
+@@ -103,6 +103,10 @@
  	};
  };
  
@@ -1346,7 +1300,7 @@ index 4cc633683c6b..04e91d02cc28 100644
  &crc1 {
  	status = "okay";
  };
-@@ -121,6 +125,26 @@ dac2: dac@2 {
+@@ -121,6 +125,26 @@
  	};
  };
  
@@ -1373,7 +1327,7 @@ index 4cc633683c6b..04e91d02cc28 100644
  &dts {
  	status = "okay";
  };
-@@ -190,6 +214,7 @@ &gpioa {
+@@ -190,6 +214,7 @@
  			  "", "", "DHCOM-K", "",
  			  "", "", "", "",
  			  "", "", "", "";
@@ -1381,7 +1335,7 @@ index 4cc633683c6b..04e91d02cc28 100644
  };
  
  &gpiob {
-@@ -197,6 +222,7 @@ &gpiob {
+@@ -197,6 +222,7 @@
  			  "", "", "", "",
  			  "DHCOM-Q", "", "", "",
  			  "", "", "", "";
@@ -1389,7 +1343,7 @@ index 4cc633683c6b..04e91d02cc28 100644
  };
  
  &gpioc {
-@@ -204,6 +230,7 @@ &gpioc {
+@@ -204,6 +230,7 @@
  			  "", "", "DHCOM-E", "",
  			  "", "", "", "",
  			  "", "", "", "";
@@ -1397,7 +1351,7 @@ index 4cc633683c6b..04e91d02cc28 100644
  };
  
  &gpiod {
-@@ -211,6 +238,7 @@ &gpiod {
+@@ -211,6 +238,7 @@
  			  "", "", "DHCOM-B", "",
  			  "", "", "", "DHCOM-F",
  			  "DHCOM-D", "", "", "";
@@ -1405,7 +1359,7 @@ index 4cc633683c6b..04e91d02cc28 100644
  };
  
  &gpioe {
-@@ -218,6 +246,7 @@ &gpioe {
+@@ -218,6 +246,7 @@
  			  "", "", "DHCOM-P", "",
  			  "", "", "", "",
  			  "", "", "", "";
@@ -1413,7 +1367,7 @@ index 4cc633683c6b..04e91d02cc28 100644
  };
  
  &gpiof {
-@@ -225,6 +254,7 @@ &gpiof {
+@@ -225,6 +254,7 @@
  			  "", "", "", "",
  			  "", "", "", "",
  			  "", "", "", "";
@@ -1421,7 +1375,7 @@ index 4cc633683c6b..04e91d02cc28 100644
  };
  
  &gpiog {
-@@ -232,6 +262,7 @@ &gpiog {
+@@ -232,6 +262,7 @@
  			  "", "", "", "",
  			  "DHCOM-L", "", "", "",
  			  "", "", "", "";
@@ -1429,7 +1383,7 @@ index 4cc633683c6b..04e91d02cc28 100644
  };
  
  &gpioh {
-@@ -239,6 +270,7 @@ &gpioh {
+@@ -239,6 +270,7 @@
  			  "", "", "", "DHCOM-N",
  			  "DHCOM-J", "DHCOM-W", "DHCOM-V", "DHCOM-U",
  			  "DHCOM-T", "", "DHCOM-S", "";
@@ -1437,7 +1391,7 @@ index 4cc633683c6b..04e91d02cc28 100644
  };
  
  &gpioi {
-@@ -246,6 +278,20 @@ &gpioi {
+@@ -246,6 +278,20 @@
  			  "DHCOM-R", "DHCOM-M", "", "",
  			  "", "", "", "",
  			  "", "", "", "";
@@ -1458,7 +1412,7 @@ index 4cc633683c6b..04e91d02cc28 100644
  };
  
  &i2c4 {
-@@ -253,6 +299,8 @@ &i2c4 {
+@@ -253,6 +299,8 @@
  	pinctrl-0 = <&i2c4_pins_a>;
  	i2c-scl-rising-time-ns = <185>;
  	i2c-scl-falling-time-ns = <20>;
@@ -1467,7 +1421,7 @@ index 4cc633683c6b..04e91d02cc28 100644
  	status = "okay";
  	/* spare dmas for other usage */
  	/delete-property/dmas;
-@@ -269,6 +317,8 @@ pmic: stpmic@33 {
+@@ -269,6 +317,8 @@
  		interrupts-extended = <&gpioa 0 IRQ_TYPE_EDGE_FALLING>;
  		interrupt-controller;
  		#interrupt-cells = <2>;
@@ -1476,7 +1430,7 @@ index 4cc633683c6b..04e91d02cc28 100644
  
  		regulators {
  			compatible = "st,stpmic1-regulators";
-@@ -279,6 +329,7 @@ regulators {
+@@ -279,6 +329,7 @@
  			ldo6-supply = <&v3v3>;
  			pwr_sw1-supply = <&bst_out>;
  			pwr_sw2-supply = <&bst_out>;
@@ -1484,7 +1438,7 @@ index 4cc633683c6b..04e91d02cc28 100644
  
  			vddcore: buck1 {
  				regulator-name = "vddcore";
-@@ -409,12 +460,20 @@ eeprom@50 {
+@@ -409,12 +460,20 @@
  	};
  };
  
@@ -1505,7 +1459,7 @@ index 4cc633683c6b..04e91d02cc28 100644
  	status = "okay";
  };
  
-@@ -428,9 +487,22 @@ &m4_rproc {
+@@ -428,9 +487,22 @@
  	status = "okay";
  };
  
@@ -1528,7 +1482,7 @@ index 4cc633683c6b..04e91d02cc28 100644
  };
  
  &qspi {
-@@ -444,6 +516,7 @@ &qspi_bk1_sleep_pins_a
+@@ -444,6 +516,7 @@
  	reg = <0x58003000 0x1000>, <0x70000000 0x4000000>;
  	#address-cells = <1>;
  	#size-cells = <0>;
@@ -1536,7 +1490,7 @@ index 4cc633683c6b..04e91d02cc28 100644
  	status = "okay";
  
  	flash0: flash@0 {
-@@ -453,6 +526,28 @@ flash0: flash@0 {
+@@ -453,6 +526,28 @@
  		spi-max-frequency = <108000000>;
  		#address-cells = <1>;
  		#size-cells = <1>;
@@ -1565,7 +1519,7 @@ index 4cc633683c6b..04e91d02cc28 100644
  	};
  };
  
-@@ -469,6 +564,15 @@ &rcc {
+@@ -469,6 +564,15 @@
  	assigned-clocks = <&rcc CK_MCO2>, <&rcc PLL4_P>;
  	assigned-clock-parents = <&rcc PLL4_P>;
  	assigned-clock-rates = <50000000>, <100000000>;
@@ -1581,7 +1535,7 @@ index 4cc633683c6b..04e91d02cc28 100644
  };
  
  &rng1 {
-@@ -495,6 +599,7 @@ &sdmmc1 {
+@@ -495,6 +599,7 @@
  	st,ckin-gpios = <&gpioe 4 0>;
  	bus-width = <4>;
  	vmmc-supply = <&vdd_sd>;
@@ -1589,7 +1543,7 @@ index 4cc633683c6b..04e91d02cc28 100644
  	status = "okay";
  };
  
-@@ -504,11 +609,24 @@ &sdmmc1_b4_pins_a {
+@@ -504,11 +609,24 @@
  	 * - optional on SoMs with SD voltage translator
  	 * - mandatory on SoMs without SD voltage translator
  	 */
@@ -1614,7 +1568,7 @@ index 4cc633683c6b..04e91d02cc28 100644
  	};
  };
  
-@@ -525,9 +643,27 @@ &sdmmc2 {
+@@ -525,9 +643,27 @@
  	vmmc-supply = <&v3v3>;
  	vqmmc-supply = <&v3v3>;
  	mmc-ddr-3_3v;
@@ -1642,7 +1596,7 @@ index 4cc633683c6b..04e91d02cc28 100644
  &sdmmc3 {
  	pinctrl-names = "default", "opendrain", "sleep";
  	pinctrl-0 = <&sdmmc3_b4_pins_a>;
-@@ -545,7 +681,46 @@ &sdmmc3 {
+@@ -545,7 +681,46 @@
  &uart4 {
  	pinctrl-names = "default";
  	pinctrl-0 = <&uart4_pins_a>;
@@ -1689,11 +1643,9 @@ index 4cc633683c6b..04e91d02cc28 100644
 +&vdd_usb {
 +	bootph-pre-ram;
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcor-avenger96.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dhcor-avenger96.dtsi
-index aceeff6c38ba..e7e2203ab11a 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dhcor-avenger96.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcor-avenger96.dtsi
-@@ -355,6 +355,7 @@ &ltdc {
+@@ -355,6 +355,7 @@
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&ltdc_pins_d>;
  	pinctrl-1 = <&ltdc_sleep_pins_d>;
@@ -1701,7 +1653,7 @@ index aceeff6c38ba..e7e2203ab11a 100644
  	status = "okay";
  
  	port {
-@@ -402,9 +403,30 @@ &sdmmc1 {
+@@ -402,9 +403,30 @@
  	bus-width = <4>;
  	vmmc-supply = <&vdd_sd>;
  	vqmmc-supply = <&sd_switch>;
@@ -1732,7 +1684,7 @@ index aceeff6c38ba..e7e2203ab11a 100644
  &sdmmc2 {
  	pinctrl-names = "default", "opendrain", "sleep";
  	pinctrl-0 = <&sdmmc2_b4_pins_a &sdmmc2_d47_pins_c>;
-@@ -418,9 +440,27 @@ &sdmmc2 {
+@@ -418,9 +440,27 @@
  	st,neg-edge;
  	vmmc-supply = <&v3v3>;
  	vqmmc-supply = <&vdd_io>;
@@ -1760,7 +1712,7 @@ index aceeff6c38ba..e7e2203ab11a 100644
  &sdmmc3 {
  	pinctrl-names = "default", "opendrain", "sleep";
  	pinctrl-0 = <&sdmmc3_b4_pins_b>;
-@@ -455,11 +495,22 @@ &uart4 {
+@@ -455,11 +495,22 @@
  	label = "LS-UART1";
  	pinctrl-names = "default";
  	pinctrl-0 = <&uart4_pins_b>;
@@ -1783,7 +1735,7 @@ index aceeff6c38ba..e7e2203ab11a 100644
  &uart7 {
  	/* On Low speed expansion header */
  	label = "LS-UART0";
-@@ -512,3 +563,7 @@ &usbphyc_port0 {
+@@ -512,3 +563,7 @@
  &usbphyc_port1 {
  	phy-supply = <&vdd_usb>;
  };
@@ -1791,11 +1743,9 @@ index aceeff6c38ba..e7e2203ab11a 100644
 +&vdd_io {
 +	bootph-pre-ram;
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcor-drc-compact.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dhcor-drc-compact.dtsi
-index bc4ddcbdd5cf..9c6a04b4c2e3 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dhcor-drc-compact.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcor-drc-compact.dtsi
-@@ -231,9 +231,30 @@ &sdmmc1 {	/* MicroSD */
+@@ -231,9 +231,30 @@
  	bus-width = <4>;
  	vmmc-supply = <&vdd>;
  	vqmmc-supply = <&vdd>;
@@ -1826,7 +1776,7 @@ index bc4ddcbdd5cf..9c6a04b4c2e3 100644
  &sdmmc2 {	/* eMMC */
  	pinctrl-names = "default", "opendrain", "sleep";
  	pinctrl-0 = <&sdmmc2_b4_pins_a &sdmmc2_d47_pins_c>;
-@@ -246,9 +267,27 @@ &sdmmc2 {	/* eMMC */
+@@ -246,9 +267,27 @@
  	st,neg-edge;
  	vmmc-supply = <&v3v3>;
  	vqmmc-supply = <&vdd>;
@@ -1854,7 +1804,7 @@ index bc4ddcbdd5cf..9c6a04b4c2e3 100644
  &sdmmc3 {	/* SDIO Wi-Fi */
  	pinctrl-names = "default", "opendrain", "sleep";
  	pinctrl-0 = <&sdmmc3_b4_pins_a>;
-@@ -276,11 +315,22 @@ &uart4 {
+@@ -276,11 +315,22 @@
  	label = "UART0";
  	pinctrl-names = "default";
  	pinctrl-0 = <&uart4_pins_d>;
@@ -1877,11 +1827,9 @@ index bc4ddcbdd5cf..9c6a04b4c2e3 100644
  &uart5 {	/* X11 UART */
  	label = "X11-UART5";
  	pinctrl-names = "default";
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcor-som.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dhcor-som.dtsi
-index 89881a26c614..3d469e29d41a 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dhcor-som.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcor-som.dtsi
-@@ -63,6 +63,30 @@ retram: retram@38000000 {
+@@ -63,6 +63,30 @@
  	};
  };
  
@@ -1912,7 +1860,7 @@ index 89881a26c614..3d469e29d41a 100644
  &crc1 {
  	status = "okay";
  };
-@@ -71,11 +95,61 @@ &dts {
+@@ -71,11 +95,61 @@
  	status = "okay";
  };
  
@@ -1974,7 +1922,7 @@ index 89881a26c614..3d469e29d41a 100644
  	status = "okay";
  	/delete-property/dmas;
  	/delete-property/dma-names;
-@@ -86,6 +160,8 @@ pmic: stpmic@33 {
+@@ -86,6 +160,8 @@
  		interrupts-extended = <&gpioa 0 IRQ_TYPE_EDGE_FALLING>;
  		interrupt-controller;
  		#interrupt-cells = <2>;
@@ -1983,7 +1931,7 @@ index 89881a26c614..3d469e29d41a 100644
  		status = "okay";
  
  		regulators {
-@@ -98,6 +174,7 @@ regulators {
+@@ -98,6 +174,7 @@
  			ldo6-supply = <&v3v3>;
  			pwr_sw1-supply = <&bst_out>;
  			pwr_sw2-supply = <&bst_out>;
@@ -1991,7 +1939,7 @@ index 89881a26c614..3d469e29d41a 100644
  
  			vddcore: buck1 {
  				regulator-name = "vddcore";
-@@ -215,12 +292,20 @@ watchdog {
+@@ -215,12 +292,20 @@
  	};
  };
  
@@ -2012,7 +1960,7 @@ index 89881a26c614..3d469e29d41a 100644
  	status = "okay";
  };
  
-@@ -234,9 +319,23 @@ &m4_rproc {
+@@ -234,9 +319,23 @@
  	status = "okay";
  };
  
@@ -2036,7 +1984,7 @@ index 89881a26c614..3d469e29d41a 100644
  };
  
  &qspi {
-@@ -250,6 +349,7 @@ &qspi_bk1_sleep_pins_a
+@@ -250,6 +349,7 @@
  	reg = <0x58003000 0x1000>, <0x70000000 0x200000>;
  	#address-cells = <1>;
  	#size-cells = <0>;
@@ -2044,7 +1992,7 @@ index 89881a26c614..3d469e29d41a 100644
  	status = "okay";
  
  	flash0: flash@0 {
-@@ -262,6 +362,35 @@ flash0: flash@0 {
+@@ -262,6 +362,35 @@
  	};
  };
  
@@ -2080,7 +2028,7 @@ index 89881a26c614..3d469e29d41a 100644
  &rng1 {
  	status = "okay";
  };
-@@ -269,3 +398,31 @@ &rng1 {
+@@ -269,3 +398,31 @@
  &rtc {
  	status = "okay";
  };
@@ -2112,11 +2060,9 @@ index 89881a26c614..3d469e29d41a 100644
 +&vdd_usb {
 +	bootph-pre-ram;
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcor-testbench.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dhcor-testbench.dtsi
-index 6e79c4b6fe32..3b5debd0ffc9 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dhcor-testbench.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcor-testbench.dtsi
-@@ -131,9 +131,30 @@ &sdmmc1 {
+@@ -131,9 +131,30 @@
  	bus-width = <4>;
  	vmmc-supply = <&vdd_sd>;
  	vqmmc-supply = <&sd_switch>;
@@ -2147,7 +2093,7 @@ index 6e79c4b6fe32..3b5debd0ffc9 100644
  &sdmmc2 {
  	pinctrl-names = "default", "opendrain", "sleep";
  	pinctrl-0 = <&sdmmc2_b4_pins_a &sdmmc2_d47_pins_c>;
-@@ -147,17 +168,46 @@ &sdmmc2 {
+@@ -147,17 +168,46 @@
  	st,neg-edge;
  	vmmc-supply = <&v3v3>;
  	vqmmc-supply = <&v3v3>;
@@ -2194,11 +2140,9 @@ index 6e79c4b6fe32..3b5debd0ffc9 100644
  &uart7 {
  	pinctrl-names = "default";
  	pinctrl-0 = <&uart7_pins_a>;
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-index 8cea6facd27b..bb960279a2a7 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-@@ -129,6 +129,10 @@ channel@19 {
+@@ -129,6 +129,10 @@
  	};
  };
  
@@ -2209,7 +2153,7 @@ index 8cea6facd27b..bb960279a2a7 100644
  &cec {
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&cec_pins_b>;
-@@ -136,6 +140,26 @@ &cec {
+@@ -136,6 +140,26 @@
  	status = "okay";
  };
  
@@ -2236,7 +2180,7 @@ index 8cea6facd27b..bb960279a2a7 100644
  &crc1 {
  	status = "okay";
  };
-@@ -163,6 +187,54 @@ phy0: ethernet-phy@0 {
+@@ -163,6 +187,54 @@
  	};
  };
  
@@ -2291,7 +2235,7 @@ index 8cea6facd27b..bb960279a2a7 100644
  &hash1 {
  	status = "okay";
  };
-@@ -249,6 +321,7 @@ &i2c4 {
+@@ -249,6 +321,7 @@
  	i2c-scl-rising-time-ns = <185>;
  	i2c-scl-falling-time-ns = <20>;
  	clock-frequency = <400000>;
@@ -2299,7 +2243,7 @@ index 8cea6facd27b..bb960279a2a7 100644
  	status = "okay";
  	/* spare dmas for other usage */
  	/delete-property/dmas;
-@@ -284,6 +357,7 @@ pmic: stpmic@33 {
+@@ -284,6 +357,7 @@
  		interrupts-extended = <&gpioa 0 IRQ_TYPE_EDGE_FALLING>;
  		interrupt-controller;
  		#interrupt-cells = <2>;
@@ -2307,7 +2251,7 @@ index 8cea6facd27b..bb960279a2a7 100644
  		status = "okay";
  
  		regulators {
-@@ -422,6 +496,13 @@ watchdog {
+@@ -422,6 +496,13 @@
  	};
  };
  
@@ -2321,7 +2265,7 @@ index 8cea6facd27b..bb960279a2a7 100644
  &i2c5 {
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&i2c5_pins_a>;
-@@ -458,6 +539,7 @@ &ipcc {
+@@ -458,6 +539,7 @@
  
  &iwdg2 {
  	timeout-sec = <32>;
@@ -2329,7 +2273,7 @@ index 8cea6facd27b..bb960279a2a7 100644
  	status = "okay";
  };
  
-@@ -465,6 +547,7 @@ &ltdc {
+@@ -465,6 +547,7 @@
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&ltdc_pins_a>;
  	pinctrl-1 = <&ltdc_sleep_pins_a>;
@@ -2337,7 +2281,7 @@ index 8cea6facd27b..bb960279a2a7 100644
  	status = "okay";
  
  	port {
-@@ -486,9 +569,26 @@ &m4_rproc {
+@@ -486,9 +569,26 @@
  	status = "okay";
  };
  
@@ -2364,7 +2308,7 @@ index 8cea6facd27b..bb960279a2a7 100644
  };
  
  &rng1 {
-@@ -553,9 +653,20 @@ &sdmmc1 {
+@@ -553,9 +653,20 @@
  	st,neg-edge;
  	bus-width = <4>;
  	vmmc-supply = <&v3v3>;
@@ -2385,7 +2329,7 @@ index 8cea6facd27b..bb960279a2a7 100644
  &sdmmc3 {
  	pinctrl-names = "default", "opendrain", "sleep";
  	pinctrl-0 = <&sdmmc3_b4_pins_a>;
-@@ -676,11 +787,22 @@ &uart4 {
+@@ -676,11 +787,22 @@
  	pinctrl-0 = <&uart4_pins_a>;
  	pinctrl-1 = <&uart4_sleep_pins_a>;
  	pinctrl-2 = <&uart4_idle_pins_a>;
@@ -2408,6 +2352,3 @@ index 8cea6facd27b..bb960279a2a7 100644
  &uart7 {
  	pinctrl-names = "default", "sleep", "idle";
  	pinctrl-0 = <&uart7_pins_c>;
--- 
-2.53.0
-

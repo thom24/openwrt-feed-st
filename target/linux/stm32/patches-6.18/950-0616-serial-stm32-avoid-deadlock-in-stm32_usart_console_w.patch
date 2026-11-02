@@ -35,11 +35,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/tty/serial/stm32-usart.c | 5 -----
  1 file changed, 5 deletions(-)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 6725bb5f6761..652aad6d2bb1 100644
 --- a/drivers/tty/serial/stm32-usart.c
 +++ b/drivers/tty/serial/stm32-usart.c
-@@ -2276,8 +2276,6 @@ static void stm32_usart_console_write(struct console *co, const char *s,
+@@ -2276,8 +2276,6 @@ static void stm32_usart_console_write(st
  	else
  		uart_port_lock_irqsave(port, &flags);
  
@@ -48,7 +46,7 @@ index 6725bb5f6761..652aad6d2bb1 100644
  	/* Save and disable interrupts, enable the transmitter */
  	old_cr1 = readl_relaxed(port->membase + ofs->cr1);
  	new_cr1 = old_cr1 & ~USART_CR1_IE_MASK;
-@@ -2289,9 +2287,6 @@ static void stm32_usart_console_write(struct console *co, const char *s,
+@@ -2289,9 +2287,6 @@ static void stm32_usart_console_write(st
  	/* Restore interrupt state */
  	writel_relaxed(old_cr1, port->membase + ofs->cr1);
  
@@ -58,6 +56,3 @@ index 6725bb5f6761..652aad6d2bb1 100644
  	if (locked)
  		uart_port_unlock_irqrestore(port, flags);
  }
--- 
-2.53.0
-

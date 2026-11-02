@@ -20,11 +20,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/bus/stm32_rifsc.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/bus/stm32_rifsc.c b/drivers/bus/stm32_rifsc.c
-index 73efd5ac9863..b4a70857464c 100644
 --- a/drivers/bus/stm32_rifsc.c
 +++ b/drivers/bus/stm32_rifsc.c
-@@ -791,8 +791,8 @@ static int stm32_rifsc_populate_bus(struct stm32_firewall_controller *ctrl)
+@@ -791,8 +791,8 @@ static int stm32_rifsc_populate_bus(stru
  				 */
  				fwnode_links_purge(of_fwnode_handle(child));
  				of_detach_node(child);
@@ -35,6 +33,3 @@ index 73efd5ac9863..b4a70857464c 100644
  			}
  			if (IS_ENABLED(CONFIG_STM32_RIFSC_DEBUG)) {
  				dev_dbg(parent, "Unprivileged %s", child->full_name);
--- 
-2.53.0
-

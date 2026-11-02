@@ -17,11 +17,9 @@ Change-Id: I69d13d81b32be0d3405eb746d5144a51c0746379
  drivers/usb/dwc2/platform.c | 89 ++++++++++++++++++++++++-------------
  1 file changed, 57 insertions(+), 32 deletions(-)
 
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index e73800f171c0..821e607c8349 100644
 --- a/drivers/usb/dwc2/platform.c
 +++ b/drivers/usb/dwc2/platform.c
-@@ -353,20 +353,25 @@ static int dwc2_stm32_hw_disable(struct dwc2_hsotg *hsotg)
+@@ -353,20 +353,25 @@ static int dwc2_stm32_hw_disable(struct
  	return 0;
  }
  
@@ -55,7 +53,7 @@ index e73800f171c0..821e607c8349 100644
  	}
  
  	if (hsotg->clk) {
-@@ -375,6 +380,33 @@ static int __dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg)
+@@ -375,6 +380,33 @@ static int __dwc2_lowlevel_hw_enable(str
  			goto err_dis_utmi_clk;
  	}
  
@@ -89,7 +87,7 @@ index e73800f171c0..821e607c8349 100644
  	if (hsotg->uphy) {
  		ret = usb_phy_init(hsotg->uphy);
  	} else if (hsotg->plat && hsotg->plat->phy_init) {
-@@ -408,12 +440,7 @@ static int __dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg)
+@@ -408,12 +440,7 @@ err_dis_phy:
  	}
  
  err_dis_clk:
@@ -103,7 +101,7 @@ index e73800f171c0..821e607c8349 100644
  
  err_dis_reg:
  	regulator_bulk_disable(ARRAY_SIZE(hsotg->supplies), hsotg->supplies);
-@@ -430,18 +457,22 @@ static int __dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg)
+@@ -430,18 +457,22 @@ err_dis_reg:
   */
  int dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg)
  {
@@ -128,7 +126,7 @@ index e73800f171c0..821e607c8349 100644
  	ret = dwc2_stm32_hw_disable(hsotg);
  	if (ret)
  		return ret;
-@@ -458,11 +489,7 @@ static int __dwc2_lowlevel_hw_disable(struct dwc2_hsotg *hsotg)
+@@ -458,11 +489,7 @@ static int __dwc2_lowlevel_hw_disable(st
  	if (ret)
  		return ret;
  
@@ -141,7 +139,7 @@ index e73800f171c0..821e607c8349 100644
  
  	return regulator_bulk_disable(ARRAY_SIZE(hsotg->supplies), hsotg->supplies);
  }
-@@ -476,7 +503,7 @@ static int __dwc2_lowlevel_hw_disable(struct dwc2_hsotg *hsotg)
+@@ -476,7 +503,7 @@ static int __dwc2_lowlevel_hw_disable(st
   */
  int dwc2_lowlevel_hw_disable(struct dwc2_hsotg *hsotg)
  {
@@ -150,7 +148,7 @@ index e73800f171c0..821e607c8349 100644
  
  	if (ret == 0)
  		hsotg->ll_hw_enabled = false;
-@@ -978,11 +1005,10 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+@@ -978,11 +1005,10 @@ static int __maybe_unused dwc2_suspend(s
  
  	dwc2_drd_suspend(dwc2);
  
@@ -166,7 +164,7 @@ index e73800f171c0..821e607c8349 100644
  
  	/* If HW has been kept enabled for wakeup, enable wake irq */
  	if (!dwc2->phy_off_for_suspend)
-@@ -1002,11 +1028,10 @@ static int __maybe_unused dwc2_resume(struct device *dev)
+@@ -1002,11 +1028,10 @@ static int __maybe_unused dwc2_resume(st
  	if (!dwc2->phy_off_for_suspend)
  		disable_irq_wake(dwc2->irq);
  
@@ -182,6 +180,3 @@ index e73800f171c0..821e607c8349 100644
  	dwc2->phy_off_for_suspend = false;
  
  	if (!dwc2->role_sw) {
--- 
-2.53.0
-

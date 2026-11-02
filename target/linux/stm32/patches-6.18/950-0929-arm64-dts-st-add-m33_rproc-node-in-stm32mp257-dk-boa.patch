@@ -19,11 +19,9 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 15 +++++++++++++++
  1 file changed, 15 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index 76dcf3c056e8..1e7f9e3debc6 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -90,6 +90,10 @@ wifi_pwrseq: wifi-pwrseq {
+@@ -90,6 +90,10 @@
  	};
  };
  
@@ -34,7 +32,7 @@ index 76dcf3c056e8..1e7f9e3debc6 100644
  &arm_wdt {
  	timeout-sec = <32>;
  	bootph-all;
-@@ -338,6 +342,17 @@ &ipcc1 {
+@@ -338,6 +342,17 @@
  	status = "okay";
  };
  
@@ -52,6 +50,3 @@ index 76dcf3c056e8..1e7f9e3debc6 100644
  &optee {
  	bootph-all;
  };
--- 
-2.53.0
-

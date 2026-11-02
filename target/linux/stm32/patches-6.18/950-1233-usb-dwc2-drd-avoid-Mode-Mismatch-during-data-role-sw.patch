@@ -21,11 +21,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/usb/dwc2/drd.c | 29 ++++++++++++++++-------------
  1 file changed, 16 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
-index ede5fd8b5733..8b6eaaa3e510 100644
 --- a/drivers/usb/dwc2/drd.c
 +++ b/drivers/usb/dwc2/drd.c
-@@ -143,25 +143,28 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+@@ -143,25 +143,28 @@ static int dwc2_drd_role_sw_set(struct u
  		already = dwc2_ovr_avalid(hsotg, true);
  	} else if (role == USB_ROLE_DEVICE) {
  		already = dwc2_ovr_bvalid(hsotg, true);
@@ -67,6 +65,3 @@ index ede5fd8b5733..8b6eaaa3e510 100644
  
  	if (!hsotg->ll_hw_enabled && hsotg->clk)
  		clk_disable_unprepare(hsotg->clk);
--- 
-2.53.0
-

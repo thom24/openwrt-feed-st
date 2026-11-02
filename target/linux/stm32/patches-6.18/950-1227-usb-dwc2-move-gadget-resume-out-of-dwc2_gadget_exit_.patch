@@ -20,11 +20,9 @@ Change-Id: Iec6e9d82e7d6dd80e79cf11270d3665f94488678
  drivers/usb/dwc2/gadget.c    | 3 ---
  2 files changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
-index 7d3e641806f8..3cf39cd19c4d 100644
 --- a/drivers/usb/dwc2/core_intr.c
 +++ b/drivers/usb/dwc2/core_intr.c
-@@ -440,7 +440,6 @@ static void dwc2_handle_wakeup_detected_intr(struct dwc2_hsotg *hsotg)
+@@ -440,7 +440,6 @@ static void dwc2_handle_wakeup_detected_
  				if (ret)
  					dev_err(hsotg->dev,
  						"exit partial_power_down failed\n");
@@ -32,7 +30,7 @@ index 7d3e641806f8..3cf39cd19c4d 100644
  			}
  
  			/* Exit gadget mode clock gating. */
-@@ -448,10 +447,11 @@ static void dwc2_handle_wakeup_detected_intr(struct dwc2_hsotg *hsotg)
+@@ -448,10 +447,11 @@ static void dwc2_handle_wakeup_detected_
  			    DWC2_POWER_DOWN_PARAM_NONE && hsotg->bus_suspended &&
  			    !hsotg->params.no_clock_gating)
  				dwc2_gadget_exit_clock_gating(hsotg, 0);
@@ -47,11 +45,9 @@ index 7d3e641806f8..3cf39cd19c4d 100644
  	} else {
  		if (hsotg->lx_state == DWC2_L2) {
  			if (hsotg->in_ppd) {
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 8282de6df011..ee7551031a15 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -4607,9 +4607,7 @@ static int dwc2_hsotg_udc_stop(struct usb_gadget *gadget)
+@@ -4607,9 +4607,7 @@ static int dwc2_hsotg_udc_stop(struct us
  	/* Exit clock gating when driver is stopped. */
  	if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
  	    hsotg->bus_suspended && !hsotg->params.no_clock_gating) {
@@ -61,7 +57,7 @@ index 8282de6df011..ee7551031a15 100644
  	}
  
  	/* all endpoints should be shutdown */
-@@ -5742,7 +5740,6 @@ void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
+@@ -5742,7 +5740,6 @@ void dwc2_gadget_exit_clock_gating(struc
  	}
  
  	/* Change to L0 state */
@@ -69,6 +65,3 @@ index 8282de6df011..ee7551031a15 100644
  	hsotg->lx_state = DWC2_L0;
  	hsotg->bus_suspended = false;
  }
--- 
-2.53.0
-

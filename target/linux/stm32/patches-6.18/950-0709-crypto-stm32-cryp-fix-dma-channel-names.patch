@@ -12,11 +12,9 @@ Change-Id: I21db10935db15e60d8eaa41a47db6894e0df619a
  drivers/crypto/stm32/stm32-cryp.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/crypto/stm32/stm32-cryp.c b/drivers/crypto/stm32/stm32-cryp.c
-index 5e82e8a1f71a..74164a8903f3 100644
 --- a/drivers/crypto/stm32/stm32-cryp.c
 +++ b/drivers/crypto/stm32/stm32-cryp.c
-@@ -2235,7 +2235,7 @@ static int stm32_cryp_dma_init(struct stm32_cryp *cryp)
+@@ -2235,7 +2235,7 @@ static int stm32_cryp_dma_init(struct st
  	dma_conf.dst_maxburst = CRYP_DMA_BURST_REG;
  	dma_conf.device_fc = false;
  
@@ -25,7 +23,7 @@ index 5e82e8a1f71a..74164a8903f3 100644
  	if (IS_ERR(chan))
  		return PTR_ERR(chan);
  
-@@ -2256,7 +2256,7 @@ static int stm32_cryp_dma_init(struct stm32_cryp *cryp)
+@@ -2256,7 +2256,7 @@ static int stm32_cryp_dma_init(struct st
  	dma_conf.src_maxburst = CRYP_DMA_BURST_REG;
  	dma_conf.device_fc = false;
  
@@ -34,6 +32,3 @@ index 5e82e8a1f71a..74164a8903f3 100644
  	if (IS_ERR(chan)) {
  		dma_release_channel(cryp->dma_lch_in);
  		cryp->dma_lch_in = NULL;
--- 
-2.53.0
-

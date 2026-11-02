@@ -25,11 +25,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/stm/dw_mipi_dsi-stm.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
-index 675d0b803651..1f99eefe0610 100644
 --- a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
 +++ b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
-@@ -1513,8 +1513,8 @@ static int dw_mipi_dsi_stm_resume(struct device *dev)
+@@ -1513,8 +1513,8 @@ static int dw_mipi_dsi_stm_resume(struct
  }
  
  static const struct dev_pm_ops dw_mipi_dsi_stm_pm_ops = {
@@ -40,6 +38,3 @@ index 675d0b803651..1f99eefe0610 100644
  	RUNTIME_PM_OPS(dw_mipi_dsi_stm_suspend,
  		       dw_mipi_dsi_stm_resume, NULL)
  };
--- 
-2.53.0
-

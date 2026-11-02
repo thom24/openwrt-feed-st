@@ -11,11 +11,9 @@ Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
  drivers/irqchip/irq-stm32mp-exti.c | 24 +++++++++---------------
  1 file changed, 9 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/irqchip/irq-stm32mp-exti.c b/drivers/irqchip/irq-stm32mp-exti.c
-index 29a7c68b4c44..5c31030124da 100644
 --- a/drivers/irqchip/irq-stm32mp-exti.c
 +++ b/drivers/irqchip/irq-stm32mp-exti.c
-@@ -279,7 +279,7 @@ static int stm32mp_exti_convert_type(struct irq_data *d, unsigned int type, u32
+@@ -279,7 +279,7 @@ static int stm32mp_exti_convert_type(str
  	return 0;
  }
  
@@ -24,7 +22,7 @@ index 29a7c68b4c44..5c31030124da 100644
  {
  	const struct stm32mp_exti_bank *bank = chip_data->reg_bank;
  	void __iomem *base = chip_data->host_data->base;
-@@ -288,14 +288,14 @@ static void stm32mp_chip_suspend(struct stm32mp_exti_chip_data *chip_data, u32 w
+@@ -288,14 +288,14 @@ static void stm32mp_chip_suspend(struct
  	chip_data->rtsr_cache = readl_relaxed(base + bank->rtsr_ofst);
  	chip_data->ftsr_cache = readl_relaxed(base + bank->ftsr_ofst);
  
@@ -42,7 +40,7 @@ index 29a7c68b4c44..5c31030124da 100644
  {
  	const struct stm32mp_exti_bank *bank = chip_data->reg_bank;
  	void __iomem *base = chip_data->host_data->base;
-@@ -304,7 +304,7 @@ static void stm32mp_chip_resume(struct stm32mp_exti_chip_data *chip_data, u32 ma
+@@ -304,7 +304,7 @@ static void stm32mp_chip_resume(struct s
  	writel_relaxed(chip_data->rtsr_cache, base + bank->rtsr_ofst);
  	writel_relaxed(chip_data->ftsr_cache, base + bank->ftsr_ofst);
  
@@ -51,7 +49,7 @@ index 29a7c68b4c44..5c31030124da 100644
  }
  
  /* directly set the target bit without reading first. */
-@@ -444,13 +444,10 @@ static int stm32mp_exti_set_wake(struct irq_data *d, unsigned int on)
+@@ -444,13 +444,10 @@ static int stm32mp_exti_set_wake(struct
  static int stm32mp_exti_suspend(struct device *dev)
  {
  	struct stm32mp_exti_host_data *host_data = dev_get_drvdata(dev);
@@ -67,7 +65,7 @@ index 29a7c68b4c44..5c31030124da 100644
  
  	return 0;
  }
-@@ -478,14 +475,11 @@ static void stm32mp_exti_resume_gpio_mux(struct stm32mp_exti_host_data *host_dat
+@@ -478,14 +475,11 @@ static void stm32mp_exti_resume_gpio_mux
  static int stm32mp_exti_resume(struct device *dev)
  {
  	struct stm32mp_exti_host_data *host_data = dev_get_drvdata(dev);
@@ -84,6 +82,3 @@ index 29a7c68b4c44..5c31030124da 100644
  
  	return 0;
  }
--- 
-2.53.0
-

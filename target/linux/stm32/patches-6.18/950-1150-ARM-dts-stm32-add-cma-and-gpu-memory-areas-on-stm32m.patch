@@ -19,11 +19,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp157f-ed1.dts       | 18 ++++++++++++++++++
  3 files changed, 54 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
-index 0937021b5272..4c6af2c946c3 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
-@@ -70,6 +70,20 @@ retram: retram@38000000 {
+@@ -70,6 +70,20 @@
  			reg = <0x38000000 0x10000>;
  			no-map;
  		};
@@ -44,7 +42,7 @@ index 0937021b5272..4c6af2c946c3 100644
  	};
  
  	led {
-@@ -277,6 +291,10 @@ &gpioz {
+@@ -277,6 +291,10 @@
  	bootph-all;
  };
  
@@ -55,11 +53,9 @@ index 0937021b5272..4c6af2c946c3 100644
  &hash1 {
  	status = "okay";
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
-index a816dd41e7a0..85a36c97d508 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
-@@ -72,10 +72,24 @@ retram: retram@38000000 {
+@@ -72,10 +72,24 @@
  			no-map;
  		};
  
@@ -84,7 +80,7 @@ index a816dd41e7a0..85a36c97d508 100644
  	};
  
  	led {
-@@ -283,6 +297,10 @@ &gpioz {
+@@ -283,6 +297,10 @@
  	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
  };
  
@@ -95,11 +91,9 @@ index a816dd41e7a0..85a36c97d508 100644
  &hash1 {
  	clocks = <&scmi_clk CK_SCMI_HASH1>;
  	resets = <&scmi_reset RST_SCMI_HASH1>;
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
-index 0577ba174118..bf8dccb7e1a3 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
-@@ -72,10 +72,24 @@ retram: retram@38000000 {
+@@ -72,10 +72,24 @@
  			no-map;
  		};
  
@@ -124,7 +118,7 @@ index 0577ba174118..bf8dccb7e1a3 100644
  	};
  
  	led {
-@@ -290,6 +304,10 @@ &gpioz {
+@@ -290,6 +304,10 @@
  	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
  };
  
@@ -135,6 +129,3 @@ index 0577ba174118..bf8dccb7e1a3 100644
  &hash1 {
  	clocks = <&scmi_clk CK_SCMI_HASH1>;
  	resets = <&scmi_reset RST_SCMI_HASH1>;
--- 
-2.53.0
-

@@ -13,8 +13,6 @@ Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
  2 files changed, 30 insertions(+), 47 deletions(-)
  delete mode 100644 drivers/hwspinlock/hwspinlock_internal.h
 
-diff --git a/drivers/hwspinlock/hwspinlock_core.c b/drivers/hwspinlock/hwspinlock_core.c
-index 2529174a81f9..4840ef46145b 100644
 --- a/drivers/hwspinlock/hwspinlock_core.c
 +++ b/drivers/hwspinlock/hwspinlock_core.c
 @@ -10,6 +10,7 @@
@@ -62,9 +60,6 @@ index 2529174a81f9..4840ef46145b 100644
  
  /* retry delay used in atomic context */
  #define HWSPINLOCK_RETRY_DELAY_US	100
-diff --git a/drivers/hwspinlock/hwspinlock_internal.h b/drivers/hwspinlock/hwspinlock_internal.h
-deleted file mode 100644
-index 20ae531fc389..000000000000
 --- a/drivers/hwspinlock/hwspinlock_internal.h
 +++ /dev/null
 @@ -1,46 +0,0 @@
@@ -114,6 +109,3 @@ index 20ae531fc389..000000000000
 -};
 -
 -#endif /* __HWSPINLOCK_HWSPINLOCK_H */
--- 
-2.53.0
-

@@ -24,11 +24,9 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/404476
  include/linux/stmmac.h                                |  2 ++
  4 files changed, 21 insertions(+)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac4_dma.c b/drivers/net/ethernet/stmicro/stmmac/dwmac4_dma.c
-index 617e55c3711e..a2b47633d996 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/dwmac4_dma.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac4_dma.c
-@@ -77,6 +77,12 @@ static void dwmac4_dma_init_rx_chan(struct stmmac_priv *priv,
+@@ -77,6 +77,12 @@ static void dwmac4_dma_init_rx_chan(stru
  
  	value = readl(ioaddr + DMA_CHAN_RX_CONTROL(dwmac4_addrs, chan));
  	value = value | FIELD_PREP(DMA_CHAN_RX_CTRL_RXPBL_MASK, rxpbl);
@@ -41,7 +39,7 @@ index 617e55c3711e..a2b47633d996 100644
  	writel(value, ioaddr + DMA_CHAN_RX_CONTROL(dwmac4_addrs, chan));
  
  	if (IS_ENABLED(CONFIG_ARCH_DMA_ADDR_T_64BIT) && likely(dma_cfg->eame))
-@@ -102,6 +108,11 @@ static void dwmac4_dma_init_tx_chan(struct stmmac_priv *priv,
+@@ -102,6 +108,11 @@ static void dwmac4_dma_init_tx_chan(stru
  	/* Enable OSP to get best performance */
  	value |= DMA_CONTROL_OSP;
  
@@ -53,11 +51,9 @@ index 617e55c3711e..a2b47633d996 100644
  	writel(value, ioaddr + DMA_CHAN_TX_CONTROL(dwmac4_addrs, chan));
  
  	if (IS_ENABLED(CONFIG_ARCH_DMA_ADDR_T_64BIT) && likely(dma_cfg->eame))
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac4_dma.h b/drivers/net/ethernet/stmicro/stmmac/dwmac4_dma.h
-index a019eb07afcf..bd32ade8f250 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/dwmac4_dma.h
 +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac4_dma.h
-@@ -131,12 +131,18 @@ static inline u32 dma_chanx_base_addr(const struct dwmac4_addrs *addrs,
+@@ -131,12 +131,18 @@ static inline u32 dma_chanx_base_addr(co
  /* DMA Tx Channel X Control register defines */
  #define DMA_CONTROL_EDSE		BIT(28)
  #define DMA_CHAN_TX_CTRL_TXPBL_MASK	GENMASK(21, 16)
@@ -76,11 +72,9 @@ index a019eb07afcf..bd32ade8f250 100644
  #define DMA_RBSZ_MASK			GENMASK(14, 1)
  #define DMA_CONTROL_SR			BIT(0)
  
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-index 1f1c5cb1e2fc..57ea16fd0019 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-@@ -604,6 +604,8 @@ stmmac_probe_config_dt(struct platform_device *pdev, u8 *mac)
+@@ -604,6 +604,8 @@ stmmac_probe_config_dt(struct platform_d
  	of_property_read_u32(np, "snps,txpbl", &dma_cfg->txpbl);
  	of_property_read_u32(np, "snps,rxpbl", &dma_cfg->rxpbl);
  	dma_cfg->pblx8 = !of_property_read_bool(np, "snps,no-pbl-x8");
@@ -89,8 +83,6 @@ index 1f1c5cb1e2fc..57ea16fd0019 100644
  
  	dma_cfg->aal = of_property_read_bool(np, "snps,aal");
  	dma_cfg->fixed_burst = of_property_read_bool(np, "snps,fixed-burst");
-diff --git a/include/linux/stmmac.h b/include/linux/stmmac.h
-index 6b171a0a207a..70d753e5311c 100644
 --- a/include/linux/stmmac.h
 +++ b/include/linux/stmmac.h
 @@ -96,6 +96,8 @@ struct stmmac_dma_cfg {
@@ -102,6 +94,3 @@ index 6b171a0a207a..70d753e5311c 100644
  	bool pblx8;
  	int fixed_burst;
  	int mixed_burst;
--- 
-2.53.0
-

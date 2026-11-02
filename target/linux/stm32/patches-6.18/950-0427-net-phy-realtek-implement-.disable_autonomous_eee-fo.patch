@@ -19,11 +19,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/net/phy/realtek/realtek_main.c | 11 +++++++++++
  1 file changed, 11 insertions(+)
 
-diff --git a/drivers/net/phy/realtek/realtek_main.c b/drivers/net/phy/realtek/realtek_main.c
-index 22da3275e9f2..dd0f04c718c8 100644
 --- a/drivers/net/phy/realtek/realtek_main.c
 +++ b/drivers/net/phy/realtek/realtek_main.c
-@@ -1640,6 +1640,16 @@ static int rtl8211e_led_hw_control_set(struct phy_device *phydev, u8 index,
+@@ -1640,6 +1640,16 @@ static int rtl8211e_led_hw_control_set(s
  	return ret;
  }
  
@@ -40,7 +38,7 @@ index 22da3275e9f2..dd0f04c718c8 100644
  static int rtl8211e_config_init(struct phy_device *phydev)
  {
  	u16 val;
-@@ -3890,6 +3900,7 @@ static struct phy_driver realtek_drvs[] = {
+@@ -3890,6 +3900,7 @@ static struct phy_driver realtek_drvs[]
  		.led_hw_is_supported = rtl8211x_led_hw_is_supported,
  		.led_hw_control_get = rtl8211e_led_hw_control_get,
  		.led_hw_control_set = rtl8211e_led_hw_control_set,
@@ -48,6 +46,3 @@ index 22da3275e9f2..dd0f04c718c8 100644
  	}, {
  		PHY_ID_MATCH_EXACT(0x001cc916),
  		.name		= "RTL8211F Gigabit Ethernet",
--- 
-2.53.0
-

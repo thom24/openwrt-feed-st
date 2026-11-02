@@ -27,8 +27,6 @@ Signed-off-by: Etienne Carriere <etienne.carriere@foss.st.com>
  drivers/firmware/arm_scmi/transports/optee.c | 421 ++++++++++++++++++-
  1 file changed, 403 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/firmware/arm_scmi/transports/optee.c b/drivers/firmware/arm_scmi/transports/optee.c
-index dc0f46340153..719788c078ad 100644
 --- a/drivers/firmware/arm_scmi/transports/optee.c
 +++ b/drivers/firmware/arm_scmi/transports/optee.c
 @@ -79,8 +79,39 @@ enum scmi_optee_pta_cmd {
@@ -191,7 +189,7 @@ index dc0f46340153..719788c078ad 100644
  	struct list_head link;
  };
  
-@@ -222,7 +349,7 @@ static int get_capabilities(struct scmi_optee_agent *agent)
+@@ -222,7 +349,7 @@ static int get_capabilities(struct scmi_
  
  static int get_channel(struct scmi_optee_channel *channel)
  {
@@ -200,7 +198,7 @@ index dc0f46340153..719788c078ad 100644
  	struct tee_ioctl_invoke_arg arg = { };
  	struct tee_param param[1] = { };
  	unsigned int caps = 0;
-@@ -233,6 +360,9 @@ static int get_channel(struct scmi_optee_channel *channel)
+@@ -233,6 +360,9 @@ static int get_channel(struct scmi_optee
  	else
  		caps = PTA_SCMI_CAPS_SMT_HEADER;
  
@@ -210,7 +208,7 @@ index dc0f46340153..719788c078ad 100644
  	arg.func = PTA_SCMI_CMD_GET_CHANNEL;
  	arg.session = channel->tee_session;
  	arg.num_params = 1;
-@@ -241,7 +371,28 @@ static int get_channel(struct scmi_optee_channel *channel)
+@@ -241,7 +371,28 @@ static int get_channel(struct scmi_optee
  	param[0].u.value.a = channel->channel_id;
  	param[0].u.value.b = caps;
  
@@ -240,7 +238,7 @@ index dc0f46340153..719788c078ad 100644
  
  	if (ret || arg.ret) {
  		dev_err(dev, "Can't get channel with caps %#x: %d / %#x\n", caps, ret, arg.ret);
-@@ -255,6 +406,213 @@ static int get_channel(struct scmi_optee_channel *channel)
+@@ -255,6 +406,213 @@ static int get_channel(struct scmi_optee
  	return 0;
  }
  
@@ -454,7 +452,7 @@ index dc0f46340153..719788c078ad 100644
  static int invoke_process_smt_channel(struct scmi_optee_channel *channel)
  {
  	struct tee_ioctl_invoke_arg arg = {
-@@ -268,9 +626,9 @@ static int invoke_process_smt_channel(struct scmi_optee_channel *channel)
+@@ -268,9 +626,9 @@ static int invoke_process_smt_channel(st
  	param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_VALUE_INPUT;
  	param[0].u.value.a = channel->channel_id;
  
@@ -466,7 +464,7 @@ index dc0f46340153..719788c078ad 100644
  			channel->channel_id, ret, arg.ret);
  		return -EIO;
  	}
-@@ -299,9 +657,9 @@ static int invoke_process_msg_channel(struct scmi_optee_channel *channel, size_t
+@@ -299,9 +657,9 @@ static int invoke_process_msg_channel(st
  	param[2].u.memref.shm = channel->tee_shm;
  	param[2].u.memref.size = SCMI_SHMEM_MAX_PAYLOAD_SIZE;
  
@@ -478,7 +476,7 @@ index dc0f46340153..719788c078ad 100644
  			channel->channel_id, ret, arg.ret);
  		return -EIO;
  	}
-@@ -388,13 +746,14 @@ static int scmi_optee_chan_setup(struct scmi_chan_info *cinfo, struct device *de
+@@ -388,13 +746,14 @@ static int scmi_optee_chan_setup(struct
  	cinfo->transport_info = channel;
  	channel->cinfo = cinfo;
  	channel->channel_id = channel_id;
@@ -494,7 +492,7 @@ index dc0f46340153..719788c078ad 100644
  	if (ret)
  		goto err_free_shm;
  
-@@ -406,17 +765,27 @@ static int scmi_optee_chan_setup(struct scmi_chan_info *cinfo, struct device *de
+@@ -406,17 +765,27 @@ static int scmi_optee_chan_setup(struct
  	if (ret)
  		goto err_close_sess;
  
@@ -526,7 +524,7 @@ index dc0f46340153..719788c078ad 100644
  err_free_shm:
  	if (channel->tee_shm)
  		tee_shm_free(channel->tee_shm);
-@@ -428,6 +797,7 @@ static int scmi_optee_chan_free(int id, void *p, void *data)
+@@ -428,6 +797,7 @@ static int scmi_optee_chan_free(int id,
  {
  	struct scmi_chan_info *cinfo = p;
  	struct scmi_optee_channel *channel = cinfo->transport_info;
@@ -534,7 +532,7 @@ index dc0f46340153..719788c078ad 100644
  
  	/*
  	 * Different protocols might share the same chan info, so a previous
-@@ -436,11 +806,15 @@ static int scmi_optee_chan_free(int id, void *p, void *data)
+@@ -436,11 +806,15 @@ static int scmi_optee_chan_free(int id,
  	if (!channel)
  		return 0;
  
@@ -553,7 +551,7 @@ index dc0f46340153..719788c078ad 100644
  
  	if (channel->tee_shm) {
  		tee_shm_free(channel->tee_shm);
-@@ -450,6 +824,8 @@ static int scmi_optee_chan_free(int id, void *p, void *data)
+@@ -450,6 +824,8 @@ static int scmi_optee_chan_free(int id,
  	cinfo->transport_info = NULL;
  	channel->cinfo = NULL;
  
@@ -562,7 +560,7 @@ index dc0f46340153..719788c078ad 100644
  	return 0;
  }
  
-@@ -463,12 +839,21 @@ static int scmi_optee_send_message(struct scmi_chan_info *cinfo,
+@@ -463,12 +839,21 @@ static int scmi_optee_send_message(struc
  
  	if (channel->tee_shm) {
  		core->msg->tx_prepare(channel->req.msg, xfer);
@@ -587,6 +585,3 @@ index dc0f46340153..719788c078ad 100644
  	}
  
  	if (ret)
--- 
-2.53.0
-

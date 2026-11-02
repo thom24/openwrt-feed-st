@@ -20,11 +20,9 @@ Reviewed-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
  arch/arm/boot/dts/st/stm32mp131.dtsi | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index 0cf0ab5db1c8..ae43ef75b07e 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -20,6 +20,8 @@ cpu0: cpu@0 {
+@@ -20,6 +20,8 @@
  			compatible = "arm,cortex-a7";
  			device_type = "cpu";
  			reg = <0>;
@@ -33,7 +31,7 @@ index 0cf0ab5db1c8..ae43ef75b07e 100644
  		};
  	};
  
-@@ -44,6 +46,11 @@ scmi: scmi {
+@@ -44,6 +46,11 @@
  			#size-cells = <0>;
  			linaro,optee-channel-id = <0>;
  
@@ -45,6 +43,3 @@ index 0cf0ab5db1c8..ae43ef75b07e 100644
  			scmi_clk: protocol@14 {
  				reg = <0x14>;
  				#clock-cells = <1>;
--- 
-2.53.0
-

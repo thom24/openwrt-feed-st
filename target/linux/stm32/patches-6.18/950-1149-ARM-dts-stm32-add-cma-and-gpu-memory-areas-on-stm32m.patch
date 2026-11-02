@@ -17,11 +17,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi | 18 ++++++++++++++++++
  1 file changed, 18 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-index be815f858231..d1f2f497abbf 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-@@ -60,6 +60,20 @@ retram: retram@38000000 {
+@@ -60,6 +60,20 @@
  			reg = <0x38000000 0x10000>;
  			no-map;
  		};
@@ -42,7 +40,7 @@ index be815f858231..d1f2f497abbf 100644
  	};
  
  	led {
-@@ -282,6 +296,10 @@ &gpioz {
+@@ -282,6 +296,10 @@
  	bootph-all;
  };
  
@@ -53,6 +51,3 @@ index be815f858231..d1f2f497abbf 100644
  &hash1 {
  	status = "okay";
  };
--- 
-2.53.0
-

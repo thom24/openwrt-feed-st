@@ -50,11 +50,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  Makefile | 39 ++++++++++++++++++++++++++++++++++++---
  1 file changed, 36 insertions(+), 3 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index f15dd2fcb7ae..ee2116a29a35 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -1516,17 +1516,50 @@ ifneq ($(wildcard $(srctree)/arch/$(SRCARCH)/boot/dts/),)
+@@ -1516,17 +1516,50 @@ ifneq ($(wildcard $(srctree)/arch/$(SRCA
  dtstree := arch/$(SRCARCH)/boot/dts
  endif
  
@@ -108,6 +106,3 @@ index f15dd2fcb7ae..ee2116a29a35 100644
  
  # include/config/kernel.release is actually needed when installing DTBs because
  # INSTALL_DTBS_PATH contains $(KERNELRELEASE). However, we do not want to make
--- 
-2.53.0
-

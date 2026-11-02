@@ -41,11 +41,9 @@ Change-Id: I4131d8dc474e52404226f84096e4a30dd38b6547
  drivers/usb/dwc2/platform.c | 160 +++++++++++++++++++-----------------
  1 file changed, 85 insertions(+), 75 deletions(-)
 
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index 643d67ce28ea..32d132704468 100644
 --- a/drivers/usb/dwc2/platform.c
 +++ b/drivers/usb/dwc2/platform.c
-@@ -91,6 +91,70 @@ static int dwc2_get_dr_mode(struct dwc2_hsotg *hsotg)
+@@ -91,6 +91,70 @@ static int dwc2_get_dr_mode(struct dwc2_
  	return 0;
  }
  
@@ -116,7 +114,7 @@ index 643d67ce28ea..32d132704468 100644
  static int __dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg)
  {
  	struct platform_device *pdev = to_platform_device(hsotg->dev);
-@@ -129,8 +193,22 @@ static int __dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg)
+@@ -129,8 +193,22 @@ static int __dwc2_lowlevel_hw_enable(str
  	if (ret)
  		goto err_dis_clk;
  
@@ -139,7 +137,7 @@ index 643d67ce28ea..32d132704468 100644
  err_dis_clk:
  	if (hsotg->clk)
  		clk_disable_unprepare(hsotg->clk);
-@@ -166,6 +244,10 @@ static int __dwc2_lowlevel_hw_disable(struct dwc2_hsotg *hsotg)
+@@ -166,6 +244,10 @@ static int __dwc2_lowlevel_hw_disable(st
  	struct platform_device *pdev = to_platform_device(hsotg->dev);
  	int ret = 0;
  
@@ -150,7 +148,7 @@ index 643d67ce28ea..32d132704468 100644
  	if (hsotg->uphy) {
  		usb_phy_shutdown(hsotg->uphy);
  	} else if (hsotg->plat && hsotg->plat->phy_exit) {
-@@ -346,9 +428,6 @@ static void dwc2_driver_remove(struct platform_device *dev)
+@@ -346,9 +428,6 @@ static void dwc2_driver_remove(struct pl
  
  	dwc2_drd_exit(hsotg);
  
@@ -160,7 +158,7 @@ index 643d67ce28ea..32d132704468 100644
  	if (hsotg->ll_hw_enabled)
  		dwc2_lowlevel_hw_disable(hsotg);
  }
-@@ -541,33 +620,23 @@ static int dwc2_driver_probe(struct platform_device *dev)
+@@ -541,33 +620,23 @@ static int dwc2_driver_probe(struct plat
  		goto error;
  
  	if (hsotg->params.activate_stm_id_vb_detection) {
@@ -197,7 +195,7 @@ index 643d67ce28ea..32d132704468 100644
  	}
  
  	if (hsotg->dr_mode != USB_DR_MODE_HOST) {
-@@ -637,9 +706,6 @@ static int dwc2_driver_probe(struct platform_device *dev)
+@@ -637,9 +706,6 @@ error_debugfs:
  error_drd:
  	dwc2_drd_exit(hsotg);
  
@@ -207,7 +205,7 @@ index 643d67ce28ea..32d132704468 100644
  error:
  	if (hsotg->ll_hw_enabled)
  		dwc2_lowlevel_hw_disable(hsotg);
-@@ -661,37 +727,6 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+@@ -661,37 +727,6 @@ static int __maybe_unused dwc2_suspend(s
  
  	dwc2_drd_suspend(dwc2);
  
@@ -245,7 +243,7 @@ index 643d67ce28ea..32d132704468 100644
  	if (dwc2->ll_hw_enabled &&
  	    (is_device_mode || dwc2_host_can_poweroff_phy(dwc2))) {
  		ret = __dwc2_lowlevel_hw_disable(dwc2);
-@@ -716,31 +751,6 @@ static int __maybe_unused dwc2_resume(struct device *dev)
+@@ -716,31 +751,6 @@ static int __maybe_unused dwc2_resume(st
  	}
  	dwc2->phy_off_for_suspend = false;
  
@@ -277,6 +275,3 @@ index 643d67ce28ea..32d132704468 100644
  	if (!dwc2->role_sw) {
  		/* Need to restore FORCEDEVMODE/FORCEHOSTMODE */
  		dwc2_force_dr_mode(dwc2);
--- 
-2.53.0
-

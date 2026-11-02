@@ -23,11 +23,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  sound/soc/stm/stm32_sai_sub.c | 16 +++++++++++-----
  1 file changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/sound/soc/stm/stm32_sai_sub.c b/sound/soc/stm/stm32_sai_sub.c
-index 38a305a6615e..4c3d56e4d187 100644
 --- a/sound/soc/stm/stm32_sai_sub.c
 +++ b/sound/soc/stm/stm32_sai_sub.c
-@@ -414,7 +414,8 @@ static int stm32_sai_set_parent_rate(struct stm32_sai_sub_data *sai,
+@@ -414,7 +414,8 @@ static int stm32_sai_set_parent_rate(str
  
  	/*
  	 * Set minimum and maximum expected kernel clock frequency
@@ -37,7 +35,7 @@ index 38a305a6615e..4c3d56e4d187 100644
  	 *   f_sai_ck = MCKDIV * mclk-fs * fs
  	 *   Here typical 256 ratio is assumed for mclk-fs
  	 * - mclk off:
-@@ -423,15 +424,20 @@ static int stm32_sai_set_parent_rate(struct stm32_sai_sub_data *sai,
+@@ -423,15 +424,20 @@ static int stm32_sai_set_parent_rate(str
  	 *   Set constraint MCKDIV * FRL <= 256, to ensure MCKDIV is in available range
  	 *   f_sai_ck = sai_ck_max_rate * pow_of_two(FRL) / 256
  	 */
@@ -62,6 +60,3 @@ index 38a305a6615e..4c3d56e4d187 100644
  	}
  
  	/*
--- 
-2.53.0
-

@@ -34,8 +34,6 @@ Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  .../devicetree/bindings/remoteproc/st,stm32-rproc.yaml          | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
-index aa63899c1406..456f97902c03 100644
 --- a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
 +++ b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
 @@ -179,6 +179,8 @@ properties:
@@ -47,6 +45,3 @@ index aa63899c1406..456f97902c03 100644
    keep-power-in-suspend:
      $ref: /schemas/types.yaml#/definitions/flag
      description:
--- 
-2.53.0
-

@@ -23,11 +23,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi        | 4 ++++
  5 files changed, 20 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index 70ebbfbf1186..f1f5b237bf31 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -185,6 +185,10 @@ &cryp {
+@@ -185,6 +185,10 @@
  	status = "okay";
  };
  
@@ -38,11 +36,9 @@ index 70ebbfbf1186..f1f5b237bf31 100644
  &dcmipp {
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&dcmipp_pins_a>;
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
-index c6efca3d5015..57a30227f82c 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
-@@ -185,6 +185,10 @@ dac2: dac@2 {
+@@ -185,6 +185,10 @@
  	};
  };
  
@@ -53,11 +49,9 @@ index c6efca3d5015..57a30227f82c 100644
  &dts {
  	status = "okay";
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
-index 97d1ba1d5142..23050709e78a 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
-@@ -175,6 +175,10 @@ dac2: dac@2 {
+@@ -175,6 +175,10 @@
  	};
  };
  
@@ -68,11 +62,9 @@ index 97d1ba1d5142..23050709e78a 100644
  &dsi {
  	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
-index 0fc849a12d1a..7904563a0794 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
-@@ -181,6 +181,10 @@ dac2: dac@2 {
+@@ -181,6 +181,10 @@
  	};
  };
  
@@ -83,11 +75,9 @@ index 0fc849a12d1a..7904563a0794 100644
  &dsi {
  	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-index fd52b34b6349..f9807e85e0e7 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-@@ -172,6 +172,10 @@ &crc1 {
+@@ -172,6 +172,10 @@
  	status = "okay";
  };
  
@@ -98,6 +88,3 @@ index fd52b34b6349..f9807e85e0e7 100644
  &dts {
  	status = "okay";
  };
--- 
-2.53.0
-

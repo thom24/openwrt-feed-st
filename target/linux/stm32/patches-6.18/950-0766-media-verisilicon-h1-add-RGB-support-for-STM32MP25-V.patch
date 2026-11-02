@@ -18,15 +18,12 @@ Tested-by: Hugues FRUCHET <hugues.fruchet@st.com>
  .../platform/verisilicon/stm32mp25_vpu_hw.c   | 55 +++++++++++++++++++
  1 file changed, 55 insertions(+)
 
-diff --git a/drivers/media/platform/verisilicon/stm32mp25_vpu_hw.c b/drivers/media/platform/verisilicon/stm32mp25_vpu_hw.c
-index 344e0e8071b2..651f33c916b1 100644
 --- a/drivers/media/platform/verisilicon/stm32mp25_vpu_hw.c
 +++ b/drivers/media/platform/verisilicon/stm32mp25_vpu_hw.c
-@@ -78,6 +78,61 @@ static const struct hantro_fmt stm32mp25_venc_fmts[] = {
- 		.codec_mode = HANTRO_MODE_NONE,
+@@ -79,6 +79,61 @@ static const struct hantro_fmt stm32mp25
  		.enc_fmt = ROCKCHIP_VPU_ENC_FMT_UYVY422,
  	},
-+	{
+ 	{
 +		.fourcc = V4L2_PIX_FMT_RGB565,
 +		.codec_mode = HANTRO_MODE_NONE,
 +		.enc_fmt = ROCKCHIP_VPU_ENC_FMT_RGB565,
@@ -81,9 +78,7 @@ index 344e0e8071b2..651f33c916b1 100644
 +		.codec_mode = HANTRO_MODE_NONE,
 +		.enc_fmt = ROCKCHIP_VPU_ENC_FMT_RGB888,
 +	},
- 	{
++	{
  		.fourcc = V4L2_PIX_FMT_JPEG,
  		.codec_mode = HANTRO_MODE_JPEG_ENC,
--- 
-2.53.0
-
+ 		.max_depth = 2,

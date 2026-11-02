@@ -18,11 +18,9 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  arch/arm/boot/dts/st/stm32mp131.dtsi | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index 143ebb80a8f3..97014d2311d2 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -1398,13 +1398,14 @@ usbotg_hs: usb@49000000 {
+@@ -1398,13 +1398,14 @@
  				clock-names = "otg";
  				resets = <&rcc USBO_R>;
  				reset-names = "dwc2";
@@ -38,6 +36,3 @@ index 143ebb80a8f3..97014d2311d2 100644
  				access-controllers = <&etzpc 34>;
  				status = "disabled";
  			};
--- 
-2.53.0
-

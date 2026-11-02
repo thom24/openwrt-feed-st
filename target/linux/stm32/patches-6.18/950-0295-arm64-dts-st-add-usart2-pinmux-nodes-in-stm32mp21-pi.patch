@@ -16,8 +16,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi | 32 +++++++++++++++++++
  1 file changed, 32 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi
-index 7e9b74f3d9d9..01d64a1f0760 100644
 --- a/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi
 @@ -4,3 +4,35 @@
@@ -56,6 +54,3 @@ index 7e9b74f3d9d9..01d64a1f0760 100644
 +		};
 +	};
 +};
--- 
-2.53.0
-

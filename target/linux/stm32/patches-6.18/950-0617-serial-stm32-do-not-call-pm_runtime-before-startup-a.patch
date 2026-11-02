@@ -40,11 +40,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/tty/serial/stm32-usart.h |  1 +
  2 files changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 652aad6d2bb1..02bc28665f2e 100644
 --- a/drivers/tty/serial/stm32-usart.c
 +++ b/drivers/tty/serial/stm32-usart.c
-@@ -1336,7 +1336,7 @@ static int stm32_usart_startup(struct uart_port *port)
+@@ -1336,7 +1336,7 @@ static int stm32_usart_startup(struct ua
  	u32 val;
  	int ret;
  
@@ -53,7 +51,7 @@ index 652aad6d2bb1..02bc28665f2e 100644
  
  	ret = request_irq(port->irq, stm32_usart_interrupt, 0, name, port);
  	if (ret)
-@@ -1365,6 +1365,8 @@ static int stm32_usart_startup(struct uart_port *port)
+@@ -1365,6 +1365,8 @@ static int stm32_usart_startup(struct ua
  	val = stm32_port->cr1_irq | USART_CR1_RE | BIT(cfg->uart_enable_bit);
  	stm32_usart_set_bits(port, ofs->cr1, val);
  
@@ -62,7 +60,7 @@ index 652aad6d2bb1..02bc28665f2e 100644
  out:
  	pm_runtime_put_sync_autosuspend(port->dev);
  
-@@ -1379,7 +1381,9 @@ static void stm32_usart_shutdown(struct uart_port *port)
+@@ -1379,7 +1381,9 @@ static void stm32_usart_shutdown(struct
  	u32 val, isr;
  	int ret;
  
@@ -73,7 +71,7 @@ index 652aad6d2bb1..02bc28665f2e 100644
  
  	ret = readl_relaxed_poll_timeout(port->membase + ofs->isr,
  					 isr, (isr & USART_SR_TC),
-@@ -1419,8 +1423,7 @@ static void stm32_usart_shutdown(struct uart_port *port)
+@@ -1419,8 +1423,7 @@ static void stm32_usart_shutdown(struct
  
  	stm32_usart_clr_bits(port, ofs->cr1, val);
  
@@ -83,7 +81,7 @@ index 652aad6d2bb1..02bc28665f2e 100644
  
  	free_irq(port->irq, port);
  }
-@@ -2213,7 +2216,6 @@ static void stm32_usart_serial_remove(struct platform_device *pdev)
+@@ -2213,7 +2216,6 @@ static void stm32_usart_serial_remove(st
  
  	pm_runtime_disable(&pdev->dev);
  	pm_runtime_set_suspended(&pdev->dev);
@@ -91,7 +89,7 @@ index 652aad6d2bb1..02bc28665f2e 100644
  
  	stm32_usart_clr_bits(port, ofs->cr1, USART_CR1_PEIE);
  
-@@ -2405,7 +2407,7 @@ static int __maybe_unused stm32_usart_serial_en_wakeup(struct uart_port *port,
+@@ -2405,7 +2407,7 @@ static int __maybe_unused stm32_usart_se
  	unsigned int size = 0;
  	unsigned long flags;
  
@@ -100,8 +98,6 @@ index 652aad6d2bb1..02bc28665f2e 100644
  		return 0;
  
  	/*
-diff --git a/drivers/tty/serial/stm32-usart.h b/drivers/tty/serial/stm32-usart.h
-index fa89c515de9a..28eecc307b27 100644
 --- a/drivers/tty/serial/stm32-usart.h
 +++ b/drivers/tty/serial/stm32-usart.h
 @@ -239,6 +239,7 @@ struct stm32_port {
@@ -112,6 +108,3 @@ index fa89c515de9a..28eecc307b27 100644
  	bool throttled;		 /* port throttled            */
  	bool hw_flow_control;
  	bool swap;		 /* swap RX & TX pins */
--- 
-2.53.0
-

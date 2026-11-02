@@ -15,11 +15,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-index 459738c8ec27..35f50a7d24b5 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-@@ -627,3 +627,10 @@ &usb2_phy2 {
+@@ -627,3 +627,10 @@
  	vdd33-supply = <&scmi_vdd3v3_usb>;
  	status = "okay";
  };
@@ -30,6 +28,3 @@ index 459738c8ec27..35f50a7d24b5 100644
 +	usb-role-switch;
 +	status = "okay";
 +};
--- 
-2.53.0
-

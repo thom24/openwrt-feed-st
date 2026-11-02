@@ -13,11 +13,9 @@ Reviewed-by: Chen-Yu Tsai <wens@kernel.org>
  drivers/hwspinlock/sun6i_hwspinlock.c | 18 ++++++++----------
  1 file changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/hwspinlock/sun6i_hwspinlock.c b/drivers/hwspinlock/sun6i_hwspinlock.c
-index a0c76bba3f05..c3db81cb1793 100644
 --- a/drivers/hwspinlock/sun6i_hwspinlock.c
 +++ b/drivers/hwspinlock/sun6i_hwspinlock.c
-@@ -74,9 +74,15 @@ static void sun6i_hwspinlock_unlock(struct hwspinlock *lock)
+@@ -74,9 +74,15 @@ static void sun6i_hwspinlock_unlock(stru
  	writel(SPINLOCK_NOTTAKEN, lock_addr);
  }
  
@@ -33,7 +31,7 @@ index a0c76bba3f05..c3db81cb1793 100644
  };
  
  static void sun6i_hwspinlock_disable(void *data)
-@@ -91,10 +97,9 @@ static void sun6i_hwspinlock_disable(void *data)
+@@ -91,10 +97,9 @@ static void sun6i_hwspinlock_disable(voi
  static int sun6i_hwspinlock_probe(struct platform_device *pdev)
  {
  	struct sun6i_hwspinlock_data *priv;
@@ -45,7 +43,7 @@ index a0c76bba3f05..c3db81cb1793 100644
  
  	io_base = devm_platform_ioremap_resource(pdev, SPINLOCK_BASE_ID);
  	if (IS_ERR(io_base))
-@@ -161,11 +166,6 @@ static int sun6i_hwspinlock_probe(struct platform_device *pdev)
+@@ -161,11 +166,6 @@ static int sun6i_hwspinlock_probe(struct
  		goto bank_fail;
  	}
  
@@ -57,7 +55,7 @@ index a0c76bba3f05..c3db81cb1793 100644
  	/* failure of debugfs is considered non-fatal */
  	sun6i_hwspinlock_debugfs_init(priv);
  	if (IS_ERR(priv->debugfs))
-@@ -177,10 +177,8 @@ static int sun6i_hwspinlock_probe(struct platform_device *pdev)
+@@ -177,10 +177,8 @@ static int sun6i_hwspinlock_probe(struct
  		goto bank_fail;
  	}
  
@@ -69,6 +67,3 @@ index a0c76bba3f05..c3db81cb1793 100644
  
  bank_fail:
  	clk_disable_unprepare(priv->ahb_clk);
--- 
-2.53.0
-

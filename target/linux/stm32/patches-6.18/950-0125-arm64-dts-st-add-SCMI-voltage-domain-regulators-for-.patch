@@ -21,8 +21,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 27 ++++++++++++++++++++++++++
  1 file changed, 27 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index 7eb991add1a0..bb7067f8299f 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
 @@ -4,6 +4,7 @@
@@ -33,7 +31,7 @@ index 7eb991add1a0..bb7067f8299f 100644
  
  / {
  	#address-cells = <2>;
-@@ -71,6 +72,32 @@ scmi_reset: protocol@16 {
+@@ -71,6 +72,32 @@
  				reg = <0x16>;
  				#reset-cells = <1>;
  			};
@@ -66,6 +64,3 @@ index 7eb991add1a0..bb7067f8299f 100644
  		};
  	};
  
--- 
-2.53.0
-

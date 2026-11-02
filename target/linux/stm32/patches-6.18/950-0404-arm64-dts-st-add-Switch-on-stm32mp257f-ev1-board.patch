@@ -20,11 +20,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 9 +++++++++
  1 file changed, 9 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-index 0abd0398509d..6434874865a5 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-@@ -604,6 +604,15 @@ &spi8 {
+@@ -604,6 +604,15 @@
  	status = "disabled";
  };
  
@@ -40,6 +38,3 @@ index 0abd0398509d..6434874865a5 100644
  &syscfg {
  	bootph-all;
  };
--- 
-2.53.0
-

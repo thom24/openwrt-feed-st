@@ -19,11 +19,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm/boot/dts/st/stm32mp135f-dk.dts | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index d668f2e37f43..2b16f0c68be6 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -236,6 +236,8 @@ &ethernet1 {
+@@ -236,6 +236,8 @@
  	max-speed = <100>;
  	phy-handle = <&phy0_eth1>;
  	st,phy-wol;
@@ -32,7 +30,7 @@ index d668f2e37f43..2b16f0c68be6 100644
  
  	mdio {
  		#address-cells = <1>;
-@@ -262,6 +264,8 @@ &ethernet2 {
+@@ -262,6 +264,8 @@
  	phy-handle = <&phy0_eth2>;
  	st,ext-phyclk;
  	phy-supply = <&scmi_v3v3_sw>;
@@ -41,6 +39,3 @@ index d668f2e37f43..2b16f0c68be6 100644
  
  	mdio {
  		#address-cells = <1>;
--- 
-2.53.0
-

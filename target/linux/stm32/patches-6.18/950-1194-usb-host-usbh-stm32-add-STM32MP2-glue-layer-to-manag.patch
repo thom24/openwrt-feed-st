@@ -28,8 +28,6 @@ Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
  3 files changed, 244 insertions(+)
  create mode 100644 drivers/usb/host/usbh-stm32.c
 
-diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-index 87103b868032..2f0a13dc8b90 100644
 --- a/drivers/usb/host/Kconfig
 +++ b/drivers/usb/host/Kconfig
 @@ -144,6 +144,19 @@ config USB_BRCMSTB
@@ -52,8 +50,6 @@ index 87103b868032..2f0a13dc8b90 100644
  config USB_EHCI_HCD
  	tristate "EHCI HCD (USB 2.0) support"
  	depends on HAS_DMA && HAS_IOMEM
-diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
-index 4df946c05ba0..e6e6bdc0632f 100644
 --- a/drivers/usb/host/Makefile
 +++ b/drivers/usb/host/Makefile
 @@ -89,3 +89,4 @@ obj-$(CONFIG_USB_HCD_BCMA)	+= bcma-hcd.o
@@ -61,9 +57,6 @@ index 4df946c05ba0..e6e6bdc0632f 100644
  obj-$(CONFIG_USB_MAX3421_HCD)	+= max3421-hcd.o
  obj-$(CONFIG_USB_XEN_HCD)	+= xen-hcd.o
 +obj-$(CONFIG_USB_STM32_USBH)	+= usbh-stm32.o
-diff --git a/drivers/usb/host/usbh-stm32.c b/drivers/usb/host/usbh-stm32.c
-new file mode 100644
-index 000000000000..5b2552b8466f
 --- /dev/null
 +++ b/drivers/usb/host/usbh-stm32.c
 @@ -0,0 +1,230 @@
@@ -297,6 +290,3 @@ index 000000000000..5b2552b8466f
 +MODULE_AUTHOR("Pankaj Dev <pankaj.dev@st.com>");
 +MODULE_DESCRIPTION("STMicroelectronics STM32 EHCI/OHCI Specific Glue layer");
 +MODULE_LICENSE("GPL");
--- 
-2.53.0
-

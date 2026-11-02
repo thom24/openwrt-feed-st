@@ -19,11 +19,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  scripts/Makefile.dtbs | 11 +++++++++++
  1 file changed, 11 insertions(+)
 
-diff --git a/scripts/Makefile.dtbs b/scripts/Makefile.dtbs
-index 05a45c53cae5..15d9207d8ad5 100644
 --- a/scripts/Makefile.dtbs
 +++ b/scripts/Makefile.dtbs
-@@ -135,6 +135,17 @@ quiet_cmd_dtc = DTC $(quiet_dtb_check_tag) $@
+@@ -135,6 +135,17 @@ quiet_cmd_dtc = DTC $(quiet_dtb_check_ta
  $(obj)/%.dtb: $(obj)/%.dts $(DTC) $(DT_TMP_SCHEMA) FORCE
  	$(call if_changed_dep,dtc)
  
@@ -41,6 +39,3 @@ index 05a45c53cae5..15d9207d8ad5 100644
  $(obj)/%.dtbo: $(src)/%.dtso $(DTC) FORCE
  	$(call if_changed_dep,dtc)
  
--- 
-2.53.0
-

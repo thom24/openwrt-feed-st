@@ -28,8 +28,6 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  create mode 100644 drivers/usb/typec/tcpm/st_tcpp.c
  create mode 100644 drivers/usb/typec/tcpm/st_tcpp.h
 
-diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
-index 8cdd84ca5d6f..216dd1de4330 100644
 --- a/drivers/usb/typec/tcpm/Kconfig
 +++ b/drivers/usb/typec/tcpm/Kconfig
 @@ -63,6 +63,16 @@ config TYPEC_FUSB302
@@ -49,8 +47,6 @@ index 8cdd84ca5d6f..216dd1de4330 100644
  config TYPEC_WCOVE
  	tristate "Intel WhiskeyCove PMIC USB Type-C PHY driver"
  	depends on ACPI
-diff --git a/drivers/usb/typec/tcpm/Makefile b/drivers/usb/typec/tcpm/Makefile
-index 7a8cad0c0bdb..0ee6ff598f75 100644
 --- a/drivers/usb/typec/tcpm/Makefile
 +++ b/drivers/usb/typec/tcpm/Makefile
 @@ -1,6 +1,7 @@
@@ -61,9 +57,6 @@ index 7a8cad0c0bdb..0ee6ff598f75 100644
  obj-$(CONFIG_TYPEC_WCOVE)		+= typec_wcove.o
  typec_wcove-y				:= wcove.o
  obj-$(CONFIG_TYPEC_TCPCI)		+= tcpci.o
-diff --git a/drivers/usb/typec/tcpm/st_tcpp.c b/drivers/usb/typec/tcpm/st_tcpp.c
-new file mode 100644
-index 000000000000..8e8f7a6e9f8c
 --- /dev/null
 +++ b/drivers/usb/typec/tcpm/st_tcpp.c
 @@ -0,0 +1,282 @@
@@ -349,9 +342,6 @@ index 000000000000..8e8f7a6e9f8c
 +MODULE_DESCRIPTION("TCPP02/03 USB Type-C PD protection driver");
 +MODULE_AUTHOR("Christian Bruel <christian.bruel@foss.st.com>");
 +MODULE_LICENSE("GPL");
-diff --git a/drivers/usb/typec/tcpm/st_tcpp.h b/drivers/usb/typec/tcpm/st_tcpp.h
-new file mode 100644
-index 000000000000..ca7da2782fdb
 --- /dev/null
 +++ b/drivers/usb/typec/tcpm/st_tcpp.h
 @@ -0,0 +1,20 @@
@@ -375,6 +365,3 @@ index 000000000000..ca7da2782fdb
 +void tcpp_unregister_vbus_notifier(struct device *dev);
 +
 +#endif
--- 
-2.53.0
-

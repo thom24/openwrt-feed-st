@@ -41,8 +41,6 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  3 files changed, 909 insertions(+)
  create mode 100644 drivers/perf/stm32_ddr_pmu.c
 
-diff --git a/drivers/perf/Kconfig b/drivers/perf/Kconfig
-index 638321fc9800..526da26d4720 100644
 --- a/drivers/perf/Kconfig
 +++ b/drivers/perf/Kconfig
 @@ -207,6 +207,17 @@ config QCOM_L3_PMU
@@ -63,8 +61,6 @@ index 638321fc9800..526da26d4720 100644
  config THUNDERX2_PMU
  	tristate "Cavium ThunderX2 SoC PMU UNCORE"
  	depends on ARCH_THUNDER2 || COMPILE_TEST
-diff --git a/drivers/perf/Makefile b/drivers/perf/Makefile
-index ea52711a87e3..7da2d86b7762 100644
 --- a/drivers/perf/Makefile
 +++ b/drivers/perf/Makefile
 @@ -21,6 +21,7 @@ obj-$(CONFIG_RISCV_PMU) += riscv_pmu.o
@@ -75,9 +71,6 @@ index ea52711a87e3..7da2d86b7762 100644
  obj-$(CONFIG_THUNDERX2_PMU) += thunderx2_pmu.o
  obj-$(CONFIG_XGENE_PMU) += xgene_pmu.o
  obj-$(CONFIG_ARM_SPE_PMU) += arm_spe_pmu.o
-diff --git a/drivers/perf/stm32_ddr_pmu.c b/drivers/perf/stm32_ddr_pmu.c
-new file mode 100644
-index 000000000000..38328663d2c5
 --- /dev/null
 +++ b/drivers/perf/stm32_ddr_pmu.c
 @@ -0,0 +1,897 @@
@@ -978,6 +971,3 @@ index 000000000000..38328663d2c5
 +MODULE_AUTHOR("Clément Le Goffic");
 +MODULE_DESCRIPTION("STMicroelectronics STM32 DDR performance monitor driver");
 +MODULE_LICENSE("GPL");
--- 
-2.53.0
-

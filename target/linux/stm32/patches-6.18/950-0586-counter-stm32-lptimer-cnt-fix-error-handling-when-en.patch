@@ -24,11 +24,9 @@ Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
  drivers/counter/stm32-lptimer-cnt.c | 9 ++-------
  1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/counter/stm32-lptimer-cnt.c b/drivers/counter/stm32-lptimer-cnt.c
-index 79103ae016b5..9b064b3512be 100644
 --- a/drivers/counter/stm32-lptimer-cnt.c
 +++ b/drivers/counter/stm32-lptimer-cnt.c
-@@ -62,7 +62,7 @@ static int stm32_lptim_set_enable_state(struct stm32_lptim_cnt *priv,
+@@ -62,7 +62,7 @@ static int stm32_lptim_set_enable_state(
  		return 0;
  	}
  
@@ -37,7 +35,7 @@ index 79103ae016b5..9b064b3512be 100644
  	if (ret)
  		goto disable_cnt;
  
-@@ -87,11 +87,6 @@ static int stm32_lptim_set_enable_state(struct stm32_lptim_cnt *priv,
+@@ -87,11 +87,6 @@ static int stm32_lptim_set_enable_state(
  	if (ret)
  		goto disable_clk;
  
@@ -49,7 +47,7 @@ index 79103ae016b5..9b064b3512be 100644
  	priv->enabled = true;
  
  	/* Start LP timer in continuous mode */
-@@ -99,7 +94,7 @@ static int stm32_lptim_set_enable_state(struct stm32_lptim_cnt *priv,
+@@ -99,7 +94,7 @@ static int stm32_lptim_set_enable_state(
  				  STM32_LPTIM_CNTSTRT, STM32_LPTIM_CNTSTRT);
  
  disable_clk:
@@ -58,6 +56,3 @@ index 79103ae016b5..9b064b3512be 100644
  disable_cnt:
  	regmap_write(priv->regmap, STM32_LPTIM_CR, 0);
  
--- 
-2.53.0
-

@@ -38,11 +38,9 @@ Change-Id: Ied80fefb44ea4bd866da9f05b9361c19550966f8
  drivers/usb/dwc2/platform.c |  4 +++-
  2 files changed, 27 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index e8db3f916de9..aa69476ebcc2 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -4702,6 +4702,8 @@ static int dwc2_hsotg_udc_start(struct usb_gadget *gadget,
+@@ -4702,6 +4702,8 @@ static int dwc2_hsotg_udc_start(struct u
  	gadget->sg_supported = using_desc_dma(hsotg);
  	dev_info(hsotg->dev, "bound driver %s\n", driver->driver.name);
  
@@ -51,7 +49,7 @@ index e8db3f916de9..aa69476ebcc2 100644
  	return 0;
  
  err:
-@@ -4724,6 +4726,8 @@ static int dwc2_hsotg_udc_stop(struct usb_gadget *gadget)
+@@ -4724,6 +4726,8 @@ static int dwc2_hsotg_udc_stop(struct us
  	if (!hsotg)
  		return -ENODEV;
  
@@ -60,7 +58,7 @@ index e8db3f916de9..aa69476ebcc2 100644
  	/* Exit clock gating when driver is stopped. */
  	if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
  	    hsotg->bus_suspended && !hsotg->params.no_clock_gating) {
-@@ -5246,7 +5250,13 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
+@@ -5246,7 +5250,13 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg
  {
  	unsigned long flags;
  
@@ -75,7 +73,7 @@ index e8db3f916de9..aa69476ebcc2 100644
  		hsotg->gadget_off_for_suspend = false;
  		return 0;
  	}
-@@ -5254,6 +5264,19 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
+@@ -5254,6 +5264,19 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg
  	if (hsotg->driver) {
  		int ep;
  
@@ -95,11 +93,9 @@ index e8db3f916de9..aa69476ebcc2 100644
  		dev_info(hsotg->dev, "suspending usb gadget %s\n",
  			 hsotg->driver->driver.name);
  
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index 0afc22b06ecf..278cc1b41478 100644
 --- a/drivers/usb/dwc2/platform.c
 +++ b/drivers/usb/dwc2/platform.c
-@@ -964,7 +964,9 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+@@ -964,7 +964,9 @@ static int __maybe_unused dwc2_suspend(s
  		    dwc2->bus_suspended && !dwc2->params.no_clock_gating)
  			dwc2_gadget_exit_clock_gating(dwc2, 0);
  
@@ -110,6 +106,3 @@ index 0afc22b06ecf..278cc1b41478 100644
  	}
  
  	dwc2_drd_suspend(dwc2);
--- 
-2.53.0
-

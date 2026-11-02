@@ -32,8 +32,6 @@ Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
  drivers/usb/dwc2/platform.c  | 74 ++++++++++++++++++++++++++++--------
  8 files changed, 201 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index 8fbcd2c77728..035e783565e2 100644
 --- a/drivers/usb/dwc2/core.h
 +++ b/drivers/usb/dwc2/core.h
 @@ -402,6 +402,9 @@ enum dwc2_ep0_state {
@@ -62,11 +60,9 @@ index 8fbcd2c77728..035e783565e2 100644
  
  	/* GREFCLK parameters */
  	u32 ref_clk_per;
-diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
-index 16a429327340..ea7ce48693ce 100644
 --- a/drivers/usb/dwc2/core_intr.c
 +++ b/drivers/usb/dwc2/core_intr.c
-@@ -681,6 +681,12 @@ static void dwc2_handle_lpm_intr(struct dwc2_hsotg *hsotg)
+@@ -681,6 +681,12 @@ static void dwc2_handle_lpm_intr(struct
  			 GINTSTS_USBSUSP | GINTSTS_PRTINT |		\
  			 GINTSTS_LPMTRANRCVD)
  
@@ -79,7 +75,7 @@ index 16a429327340..ea7ce48693ce 100644
  /*
   * This function returns the Core Interrupt register
   */
-@@ -695,6 +701,11 @@ static u32 dwc2_read_common_intr(struct dwc2_hsotg *hsotg)
+@@ -695,6 +701,11 @@ static u32 dwc2_read_common_intr(struct
  	gintmsk = dwc2_readl(hsotg, GINTMSK);
  	gahbcfg = dwc2_readl(hsotg, GAHBCFG);
  
@@ -91,8 +87,6 @@ index 16a429327340..ea7ce48693ce 100644
  	/* If any common interrupts set */
  	if (gintsts & gintmsk_common)
  		dev_dbg(hsotg->dev, "gintsts=%08x  gintmsk=%08x\n",
-diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
-index f7b2f6a8bd90..a267e79190af 100644
 --- a/drivers/usb/dwc2/drd.c
 +++ b/drivers/usb/dwc2/drd.c
 @@ -17,11 +17,63 @@
@@ -159,7 +153,7 @@ index f7b2f6a8bd90..a267e79190af 100644
  	spin_lock_irqsave(&hsotg->lock, flags);
  
  	gotgctl = dwc2_readl(hsotg, GOTGCTL);
-@@ -43,6 +95,9 @@ static int dwc2_ovr_avalid(struct dwc2_hsotg *hsotg, bool valid)
+@@ -43,6 +95,9 @@ static int dwc2_ovr_avalid(struct dwc2_h
  {
  	u32 gotgctl = dwc2_readl(hsotg, GOTGCTL);
  
@@ -169,7 +163,7 @@ index f7b2f6a8bd90..a267e79190af 100644
  	/* Check if A-Session is already in the right state */
  	if ((valid && (gotgctl & GOTGCTL_AVALOVAL) && (gotgctl & GOTGCTL_VBVALOVAL)) ||
  	    (!valid && !(gotgctl & (GOTGCTL_AVALOVAL | GOTGCTL_VBVALOVAL))))
-@@ -73,6 +128,9 @@ static int dwc2_ovr_bvalid(struct dwc2_hsotg *hsotg, bool valid)
+@@ -73,6 +128,9 @@ static int dwc2_ovr_bvalid(struct dwc2_h
  {
  	u32 gotgctl = dwc2_readl(hsotg, GOTGCTL);
  
@@ -179,7 +173,7 @@ index f7b2f6a8bd90..a267e79190af 100644
  	/* Check if B-Session is already in the right state */
  	if ((valid && (gotgctl & GOTGCTL_BVALOVAL) && (gotgctl & GOTGCTL_VBVALOVAL)) ||
  	    (!valid && !(gotgctl & (GOTGCTL_BVALOVAL | GOTGCTL_VBVALOVAL))))
-@@ -175,6 +233,19 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+@@ -175,6 +233,19 @@ static int dwc2_drd_role_sw_set(struct u
  			dwc2_ovr_avalid(hsotg, false);
  	}
  
@@ -199,11 +193,9 @@ index f7b2f6a8bd90..a267e79190af 100644
  	hsotg->current_role = role;
  	spin_unlock_irqrestore(&hsotg->lock, flags);
  
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 2715de3553a7..9507f78fc9a7 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -3533,12 +3533,22 @@ void dwc2_hsotg_core_init_disconnected(struct dwc2_hsotg *hsotg,
+@@ -3533,12 +3533,22 @@ void dwc2_hsotg_core_init_disconnected(s
  
  	/* Clear any pending interrupts */
  	dwc2_writel(hsotg, 0xffffffff, GINTSTS);
@@ -232,11 +224,9 @@ index 2715de3553a7..9507f78fc9a7 100644
  
  	if (!using_desc_dma(hsotg))
  		intmsk |= GINTSTS_INCOMPL_SOIN | GINTSTS_INCOMPL_SOOUT;
-diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index c1d8d10ba2b5..04cc115d628b 100644
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
-@@ -50,15 +50,24 @@ static void dwc2_enable_common_interrupts(struct dwc2_hsotg *hsotg)
+@@ -50,15 +50,24 @@ static void dwc2_enable_common_interrupt
  	dwc2_writel(hsotg, 0xffffffff, GINTSTS);
  
  	/* Enable the interrupts in the GINTMSK */
@@ -265,8 +255,6 @@ index c1d8d10ba2b5..04cc115d628b 100644
  
  	if (dwc2_is_device_mode(hsotg) && hsotg->params.lpm)
  		intmsk |= GINTSTS_LPMTRANRCVD;
-diff --git a/drivers/usb/dwc2/hw.h b/drivers/usb/dwc2/hw.h
-index fe8c87a2f8b5..949d3cf5566d 100644
 --- a/drivers/usb/dwc2/hw.h
 +++ b/drivers/usb/dwc2/hw.h
 @@ -219,6 +219,9 @@
@@ -279,11 +267,9 @@ index fe8c87a2f8b5..949d3cf5566d 100644
  
  #define GUID				HSOTG_REG(0x003c)
  #define GSNPSID				HSOTG_REG(0x0040)
-diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-index 091bfcfef753..fd67106eae16 100644
 --- a/drivers/usb/dwc2/params.c
 +++ b/drivers/usb/dwc2/params.c
-@@ -303,6 +303,26 @@ static void dwc2_set_stm32mp15_hsotg_params(struct dwc2_hsotg *hsotg)
+@@ -303,6 +303,26 @@ static void dwc2_set_stm32mp15_hsotg_par
  	p->hird_threshold_en = false;
  }
  
@@ -310,7 +296,7 @@ index 091bfcfef753..fd67106eae16 100644
  const struct of_device_id dwc2_of_match_table[] = {
  	{ .compatible = "brcm,bcm2835-usb", .data = dwc2_set_bcm_params },
  	{ .compatible = "hisilicon,hi6220-usb", .data = dwc2_set_his_params },
-@@ -345,6 +365,8 @@ const struct of_device_id dwc2_of_match_table[] = {
+@@ -345,6 +365,8 @@ const struct of_device_id dwc2_of_match_
  	  .data = dwc2_set_stm32mp15_fsotg_params },
  	{ .compatible = "st,stm32mp15-hsotg",
  	  .data = dwc2_set_stm32mp15_hsotg_params },
@@ -319,8 +305,6 @@ index 091bfcfef753..fd67106eae16 100644
  	{ .compatible = "intel,socfpga-agilex-hsotg",
  	  .data = dwc2_set_socfpga_agilex_params },
  	{},
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index 205642852c57..c5002482023f 100644
 --- a/drivers/usb/dwc2/platform.c
 +++ b/drivers/usb/dwc2/platform.c
 @@ -12,10 +12,12 @@
@@ -336,7 +320,7 @@ index 205642852c57..c5002482023f 100644
  #include <linux/reset.h>
  
  #include <linux/usb/of.h>
-@@ -97,20 +99,39 @@ static int dwc2_stm32_hw_enable(struct dwc2_hsotg *hsotg)
+@@ -97,20 +99,39 @@ static int dwc2_stm32_hw_enable(struct d
  	int ret;
  
  	/* params are only known, once dwc2_init_params() has been probed */
@@ -387,7 +371,7 @@ index 205642852c57..c5002482023f 100644
  
  	return 0;
  }
-@@ -517,6 +538,7 @@ int dwc2_check_core_version(struct dwc2_hsotg *hsotg)
+@@ -517,6 +538,7 @@ int dwc2_check_core_version(struct dwc2_
   */
  static int dwc2_driver_probe(struct platform_device *dev)
  {
@@ -395,7 +379,7 @@ index 205642852c57..c5002482023f 100644
  	struct dwc2_hsotg *hsotg;
  	struct resource *res;
  	int retval;
-@@ -619,6 +641,24 @@ static int dwc2_driver_probe(struct platform_device *dev)
+@@ -619,6 +641,24 @@ static int dwc2_driver_probe(struct plat
  	if (retval)
  		goto error;
  
@@ -420,7 +404,7 @@ index 205642852c57..c5002482023f 100644
  	if (hsotg->params.activate_stm_id_vb_detection) {
  		hsotg->usb33d = devm_regulator_get(hsotg->dev, "usb33d");
  		if (IS_ERR(hsotg->usb33d)) {
-@@ -626,11 +666,6 @@ static int dwc2_driver_probe(struct platform_device *dev)
+@@ -626,11 +666,6 @@ static int dwc2_driver_probe(struct plat
  			dev_err_probe(hsotg->dev, retval, "failed to request usb33d supply\n");
  			goto error;
  		}
@@ -432,7 +416,7 @@ index 205642852c57..c5002482023f 100644
  	}
  
  	retval = dwc2_drd_init(hsotg);
-@@ -639,6 +674,13 @@ static int dwc2_driver_probe(struct platform_device *dev)
+@@ -639,6 +674,13 @@ static int dwc2_driver_probe(struct plat
  		goto error;
  	}
  
@@ -446,6 +430,3 @@ index 205642852c57..c5002482023f 100644
  	if (hsotg->dr_mode != USB_DR_MODE_HOST) {
  		retval = dwc2_gadget_init(hsotg);
  		if (retval)
--- 
-2.53.0
-

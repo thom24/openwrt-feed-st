@@ -26,8 +26,6 @@ Tested-by: Hugues FRUCHET <hugues.fruchet@st.com>
  7 files changed, 1305 insertions(+)
  create mode 100644 drivers/media/platform/verisilicon/hantro_h1_h264_enc.c
 
-diff --git a/drivers/media/platform/verisilicon/Makefile b/drivers/media/platform/verisilicon/Makefile
-index d1bbf055b595..f21f31d0aaf8 100644
 --- a/drivers/media/platform/verisilicon/Makefile
 +++ b/drivers/media/platform/verisilicon/Makefile
 @@ -9,6 +9,7 @@ hantro-vpu-y += \
@@ -38,8 +36,6 @@ index d1bbf055b595..f21f31d0aaf8 100644
  		hantro_g1.o \
  		hantro_g1_h264_dec.o \
  		hantro_g1_mpeg2_dec.o \
-diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
-index 9e0d4bf2b925..0cad5c4b6ab9 100644
 --- a/drivers/media/platform/verisilicon/hantro.h
 +++ b/drivers/media/platform/verisilicon/hantro.h
 @@ -33,6 +33,7 @@ struct hantro_postproc_ops;
@@ -74,15 +70,12 @@ index 9e0d4bf2b925..0cad5c4b6ab9 100644
  	};
  };
  
-diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
-index d908ec65755f..2e576db2a279 100644
 --- a/drivers/media/platform/verisilicon/hantro_drv.c
 +++ b/drivers/media/platform/verisilicon/hantro_drv.c
-@@ -461,6 +461,16 @@ static const struct hantro_ctrl controls[] = {
- 			.step = 1,
+@@ -462,6 +462,16 @@ static const struct hantro_ctrl controls
  			.def = 0,
  		},
-+	}, {
+ 	}, {
 +		.codec = HANTRO_H264_ENCODER,
 +		.cfg = {
 +			.id = V4L2_CID_STATELESS_H264_ENCODE_PARAMS,
@@ -92,12 +85,10 @@ index d908ec65755f..2e576db2a279 100644
 +		.cfg = {
 +			.id = V4L2_CID_STATELESS_H264_ENCODE_RC,
 +		},
- 	}, {
++	}, {
  		.codec = HANTRO_MPEG2_DECODER,
  		.cfg = {
-diff --git a/drivers/media/platform/verisilicon/hantro_h1_h264_enc.c b/drivers/media/platform/verisilicon/hantro_h1_h264_enc.c
-new file mode 100644
-index 000000000000..ccfbc1252118
+ 			.id = V4L2_CID_STATELESS_MPEG2_PICTURE,
 --- /dev/null
 +++ b/drivers/media/platform/verisilicon/hantro_h1_h264_enc.c
 @@ -0,0 +1,474 @@
@@ -575,8 +566,6 @@ index 000000000000..ccfbc1252118
 +	if (ctx->h264_enc.reconstr_idx == ctx->h264_enc.ltr_idx)
 +		hantro_h1_bump_reconstr_idx(ctx);
 +}
-diff --git a/drivers/media/platform/verisilicon/hantro_h1_regs.h b/drivers/media/platform/verisilicon/hantro_h1_regs.h
-index c1c66c934a24..4be852630cf7 100644
 --- a/drivers/media/platform/verisilicon/hantro_h1_regs.h
 +++ b/drivers/media/platform/verisilicon/hantro_h1_regs.h
 @@ -23,6 +23,15 @@
@@ -621,8 +610,6 @@ index c1c66c934a24..4be852630cf7 100644
  #define H1_REG_VP8_BOOL_ENC				0x08c
  #define H1_REG_CHKPT_DELTA_QP				0x090
  #define     H1_REG_CHKPT_DELTA_QP_CHK0(x)		(((x) & 0x0f) << 0)
-diff --git a/drivers/media/platform/verisilicon/hantro_h264.c b/drivers/media/platform/verisilicon/hantro_h264.c
-index 2414782f1eb6..43521ed7fe3a 100644
 --- a/drivers/media/platform/verisilicon/hantro_h264.c
 +++ b/drivers/media/platform/verisilicon/hantro_h264.c
 @@ -198,6 +198,586 @@ static const u32 h264_cabac_table[] = {
@@ -1212,7 +1199,7 @@ index 2414782f1eb6..43521ed7fe3a 100644
  static void
  assemble_scaling_list(struct hantro_ctx *ctx)
  {
-@@ -519,3 +1099,202 @@ int hantro_h264_dec_init(struct hantro_ctx *ctx)
+@@ -519,3 +1099,202 @@ int hantro_h264_dec_init(struct hantro_c
  
  	return 0;
  }
@@ -1415,8 +1402,6 @@ index 2414782f1eb6..43521ed7fe3a 100644
 +
 +	return ret;
 +}
-diff --git a/drivers/media/platform/verisilicon/hantro_hw.h b/drivers/media/platform/verisilicon/hantro_hw.h
-index 95fab4997c43..688f80443b01 100644
 --- a/drivers/media/platform/verisilicon/hantro_hw.h
 +++ b/drivers/media/platform/verisilicon/hantro_hw.h
 @@ -426,6 +426,24 @@ struct hantro_vp8_enc_hw_ctx {
@@ -1444,7 +1429,7 @@ index 95fab4997c43..688f80443b01 100644
  /**
   * struct hantro_codec_ops - codec mode specific operations
   *
-@@ -677,4 +695,9 @@ void hantro_vp8_enc_exit(struct hantro_ctx *ctx);
+@@ -677,4 +695,9 @@ void hantro_vp8_enc_exit(struct hantro_c
  int hantro_h1_vp8_enc_run(struct hantro_ctx *ctx);
  void hantro_h1_vp8_enc_done(struct hantro_ctx *ctx);
  
@@ -1454,6 +1439,3 @@ index 95fab4997c43..688f80443b01 100644
 +void hantro_h264_enc_exit(struct hantro_ctx *ctx);
 +
  #endif /* HANTRO_HW_H_ */
--- 
-2.53.0
-

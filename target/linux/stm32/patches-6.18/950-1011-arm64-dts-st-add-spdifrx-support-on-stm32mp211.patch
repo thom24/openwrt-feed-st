@@ -17,11 +17,9 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/551675
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 14 ++++++++++++++
  1 file changed, 14 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index d7f4a984186b..ae51822f65b3 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -715,6 +715,20 @@ spi3: spi@400c0000 {
+@@ -715,6 +715,20 @@
  				status = "disabled";
  			};
  
@@ -42,6 +40,3 @@ index d7f4a984186b..ae51822f65b3 100644
  			usart2: serial@400e0000 {
  				compatible = "st,stm32h7-uart";
  				reg = <0x400e0000 0x0 0x400>;
--- 
-2.53.0
-

@@ -16,8 +16,6 @@ Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
  .../bindings/dma/stm32/st,stm32-dma3.yaml     | 21 +++++++++++++++++++
  1 file changed, 21 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma3.yaml b/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma3.yaml
-index 36f9fe860eb9..cb4d364ab29a 100644
 --- a/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma3.yaml
 +++ b/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma3.yaml
 @@ -48,6 +48,15 @@ properties:
@@ -61,6 +59,3 @@ index 36f9fe860eb9..cb4d364ab29a 100644
 +      memory-region = <&dma_lli>;
      };
  ...
--- 
-2.53.0
-

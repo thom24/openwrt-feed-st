@@ -17,8 +17,6 @@ Signed-off-by: Vinod Koul <vkoul@kernel.org>
  drivers/dma/stm32/stm32-dma3.c | 55 +++++++++++++++++++++++++++-------
  1 file changed, 44 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
-index 9500164c8f68..a1583face7ec 100644
 --- a/drivers/dma/stm32/stm32-dma3.c
 +++ b/drivers/dma/stm32/stm32-dma3.c
 @@ -288,6 +288,7 @@ struct stm32_dma3_chan {
@@ -29,7 +27,7 @@ index 9500164c8f68..a1583face7ec 100644
  	struct stm32_dma3_dt_conf dt_config;
  	struct dma_slave_config dma_config;
  	u8 config_set;
-@@ -1063,11 +1064,50 @@ static irqreturn_t stm32_dma3_chan_irq(int irq, void *devid)
+@@ -1063,11 +1064,50 @@ static irqreturn_t stm32_dma3_chan_irq(i
  	return IRQ_HANDLED;
  }
  
@@ -81,7 +79,7 @@ index 9500164c8f68..a1583face7ec 100644
  	int ret;
  
  	ret = pm_runtime_resume_and_get(ddata->dma_dev.dev);
-@@ -1092,16 +1132,9 @@ static int stm32_dma3_alloc_chan_resources(struct dma_chan *c)
+@@ -1092,16 +1132,9 @@ static int stm32_dma3_alloc_chan_resourc
  
  	/* Take the channel semaphore */
  	if (chan->semaphore_mode) {
@@ -100,7 +98,7 @@ index 9500164c8f68..a1583face7ec 100644
  	}
  
  	return 0;
-@@ -1135,7 +1168,7 @@ static void stm32_dma3_free_chan_resources(struct dma_chan *c)
+@@ -1135,7 +1168,7 @@ static void stm32_dma3_free_chan_resourc
  
  	/* Release the channel semaphore */
  	if (chan->semaphore_mode)
@@ -109,6 +107,3 @@ index 9500164c8f68..a1583face7ec 100644
  
  	pm_runtime_put_sync(ddata->dma_dev.dev);
  
--- 
-2.53.0
-

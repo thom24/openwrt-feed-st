@@ -23,11 +23,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 37 +++++++++++++++++++++++
  1 file changed, 37 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index 7d3dbfa5b204..0de1e32d6ee7 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -224,6 +224,11 @@ &bsec {
+@@ -224,6 +224,11 @@
  	bootph-all;
  };
  
@@ -39,7 +37,7 @@ index 7d3dbfa5b204..0de1e32d6ee7 100644
  &cryp1 {
  	status = "okay";
  };
-@@ -737,6 +742,23 @@ i2c_rpmsg: i2c@2 {
+@@ -737,6 +742,23 @@
  		#address-cells = <1>;
  		#size-cells = <0>;
  		status = "okay";
@@ -63,7 +61,7 @@ index 7d3dbfa5b204..0de1e32d6ee7 100644
  	};
  };
  
-@@ -967,6 +989,21 @@ &usb2_phy2 {
+@@ -967,6 +989,21 @@
  	status = "okay";
  };
  
@@ -85,6 +83,3 @@ index 7d3dbfa5b204..0de1e32d6ee7 100644
  &usbh {
  	status = "okay";
  
--- 
-2.53.0
-

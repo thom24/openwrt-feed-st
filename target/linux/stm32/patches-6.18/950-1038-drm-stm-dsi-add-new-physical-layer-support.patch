@@ -11,8 +11,6 @@ Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
  drivers/gpu/drm/stm/dw_mipi_dsi-stm.c | 814 +++++++++++++++++++++++---
  1 file changed, 747 insertions(+), 67 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
-index 2c7bc064bc66..93ab2ec76a22 100644
 --- a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
 +++ b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
 @@ -24,6 +24,7 @@
@@ -100,7 +98,7 @@ index 2c7bc064bc66..93ab2ec76a22 100644
  };
  
  static inline void dsi_write(struct dw_mipi_dsi_stm *dsi, u32 reg, u32 val)
-@@ -201,6 +258,227 @@ static int dsi_pll_get_params(struct dw_mipi_dsi_stm *dsi,
+@@ -201,6 +258,227 @@ static int dsi_pll_get_params(struct dw_
  	return 0;
  }
  
@@ -328,7 +326,7 @@ index 2c7bc064bc66..93ab2ec76a22 100644
  #define clk_to_dw_mipi_dsi_stm(clk) \
  	container_of(clk, struct dw_mipi_dsi_stm, txbyte_clk)
  
-@@ -336,16 +614,6 @@ static int dw_mipi_dsi_clk_set_rate(struct clk_hw *hw, unsigned long rate,
+@@ -336,16 +614,6 @@ static int dw_mipi_dsi_clk_set_rate(stru
  	return 0;
  }
  
@@ -345,7 +343,7 @@ index 2c7bc064bc66..93ab2ec76a22 100644
  static const struct clk_ops dw_mipi_dsi_stm_clk_ops = {
  	.enable = dw_mipi_dsi_clk_enable,
  	.disable = dw_mipi_dsi_clk_disable,
-@@ -362,21 +630,189 @@ static struct clk_init_data cdata_init = {
+@@ -362,21 +630,189 @@ static struct clk_init_data cdata_init =
  	.num_parents = 1,
  };
  
@@ -388,8 +386,7 @@ index 2c7bc064bc66..93ab2ec76a22 100644
 +
 +static unsigned long dw_mipi_dsi_phy_141_clk_recalc_rate(struct clk_hw *hw,
 +							 unsigned long parent_rate)
- {
--	struct device_node *node = dev->of_node;
++{
 +	struct dw_mipi_dsi_stm *dsi = clk_to_dw_mipi_dsi_stm(hw);
 +	unsigned int idf, ndiv, odf, pll_in_khz, pll_out_khz;
 +	u32 val;
@@ -515,7 +512,8 @@ index 2c7bc064bc66..93ab2ec76a22 100644
 +};
 +
 +static int dw_mipi_dsi_clk_register(struct dw_mipi_dsi_stm *dsi)
-+{
+ {
+-	struct device_node *node = dev->of_node;
 +	struct device *dev = dsi->dev;
  	int ret;
  
@@ -540,7 +538,7 @@ index 2c7bc064bc66..93ab2ec76a22 100644
  				     &dsi->txbyte_clk);
  	if (ret)
  		clk_hw_unregister(&dsi->txbyte_clk);
-@@ -384,12 +820,24 @@ static int dw_mipi_dsi_clk_register(struct dw_mipi_dsi_stm *dsi,
+@@ -384,12 +820,24 @@ static int dw_mipi_dsi_clk_register(stru
  	return ret;
  }
  
@@ -567,7 +565,7 @@ index 2c7bc064bc66..93ab2ec76a22 100644
  	return ret;
  }
  
-@@ -484,6 +932,107 @@ dw_mipi_dsi_phy_get_timing(void *priv_data, unsigned int lane_mbps,
+@@ -484,6 +932,107 @@ dw_mipi_dsi_phy_get_timing(void *priv_da
  	return 0;
  }
  
@@ -675,7 +673,7 @@ index 2c7bc064bc66..93ab2ec76a22 100644
  #define CLK_TOLERANCE_HZ 50
  
  static enum drm_mode_status
-@@ -581,6 +1130,107 @@ dw_mipi_dsi_stm_mode_valid(void *priv_data,
+@@ -581,6 +1130,107 @@ dw_mipi_dsi_stm_mode_valid(void *priv_da
  	return MODE_OK;
  }
  
@@ -783,7 +781,7 @@ index 2c7bc064bc66..93ab2ec76a22 100644
  static const struct dw_mipi_dsi_phy_ops dw_mipi_dsi_stm_phy_ops = {
  	.init = dw_mipi_dsi_phy_init,
  	.power_on = dw_mipi_dsi_phy_power_on,
-@@ -589,14 +1239,29 @@ static const struct dw_mipi_dsi_phy_ops dw_mipi_dsi_stm_phy_ops = {
+@@ -589,14 +1239,29 @@ static const struct dw_mipi_dsi_phy_ops
  	.get_timing = dw_mipi_dsi_phy_get_timing,
  };
  
@@ -813,7 +811,7 @@ index 2c7bc064bc66..93ab2ec76a22 100644
  	{ },
  };
  MODULE_DEVICE_TABLE(of, dw_mipi_dsi_stm_dt_ids);
-@@ -619,104 +1284,105 @@ static int dw_mipi_dsi_stm_probe(struct platform_device *pdev)
+@@ -619,104 +1284,105 @@ static int dw_mipi_dsi_stm_probe(struct
  		return ret;
  	}
  
@@ -966,7 +964,7 @@ index 2c7bc064bc66..93ab2ec76a22 100644
  	return ret;
  }
  
-@@ -725,9 +1391,7 @@ static void dw_mipi_dsi_stm_remove(struct platform_device *pdev)
+@@ -725,9 +1391,7 @@ static void dw_mipi_dsi_stm_remove(struc
  	struct dw_mipi_dsi_stm *dsi = platform_get_drvdata(pdev);
  
  	dw_mipi_dsi_remove(dsi->dsi);
@@ -976,7 +974,7 @@ index 2c7bc064bc66..93ab2ec76a22 100644
  }
  
  static int dw_mipi_dsi_stm_suspend(struct device *dev)
-@@ -739,6 +1403,8 @@ static int dw_mipi_dsi_stm_suspend(struct device *dev)
+@@ -739,6 +1403,8 @@ static int dw_mipi_dsi_stm_suspend(struc
  	clk_disable_unprepare(dsi->pllref_clk);
  	clk_disable_unprepare(dsi->pclk);
  	regulator_disable(dsi->vdd_supply);
@@ -985,7 +983,7 @@ index 2c7bc064bc66..93ab2ec76a22 100644
  
  	return 0;
  }
-@@ -750,15 +1416,27 @@ static int dw_mipi_dsi_stm_resume(struct device *dev)
+@@ -750,15 +1416,27 @@ static int dw_mipi_dsi_stm_resume(struct
  
  	DRM_DEBUG_DRIVER("\n");
  
@@ -1014,7 +1012,7 @@ index 2c7bc064bc66..93ab2ec76a22 100644
  		DRM_ERROR("Failed to enable pclk: %d\n", ret);
  		return ret;
  	}
-@@ -767,6 +1445,8 @@ static int dw_mipi_dsi_stm_resume(struct device *dev)
+@@ -767,6 +1445,8 @@ static int dw_mipi_dsi_stm_resume(struct
  	if (ret) {
  		clk_disable_unprepare(dsi->pclk);
  		regulator_disable(dsi->vdd_supply);
@@ -1023,6 +1021,3 @@ index 2c7bc064bc66..93ab2ec76a22 100644
  		DRM_ERROR("Failed to enable pllref_clk: %d\n", ret);
  		return ret;
  	}
--- 
-2.53.0
-

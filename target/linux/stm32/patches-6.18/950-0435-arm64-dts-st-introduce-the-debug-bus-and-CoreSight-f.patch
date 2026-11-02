@@ -22,8 +22,6 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 277 +++++++++++++++++++++++++
  1 file changed, 277 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index 0026c2f62002..cefe47cca86d 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
 @@ -3,6 +3,7 @@
@@ -34,7 +32,7 @@ index 0026c2f62002..cefe47cca86d 100644
  #include <dt-bindings/clock/st,stm32mp21-rcc.h>
  #include <dt-bindings/interrupt-controller/arm-gic.h>
  #include <dt-bindings/regulator/st,stm32mp21-regulator.h>
-@@ -810,5 +811,281 @@ mtl_tx_setup_1: tx-queues-config {
+@@ -810,5 +811,281 @@
  				queue3 {};
  			};
  		};
@@ -316,6 +314,3 @@ index 0026c2f62002..cefe47cca86d 100644
 +		};
  	};
  };
--- 
-2.53.0
-

@@ -20,11 +20,9 @@ Tested-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
  arch/arm/boot/dts/st/stm32mp131.dtsi | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index ae43ef75b07e..0c3cb23940b2 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -38,6 +38,8 @@ optee: optee {
+@@ -38,6 +38,8 @@
  			compatible = "linaro,optee-tz";
  			interrupt-parent = <&intc>;
  			interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
@@ -33,6 +31,3 @@ index ae43ef75b07e..0c3cb23940b2 100644
  		};
  
  		scmi: scmi {
--- 
-2.53.0
-

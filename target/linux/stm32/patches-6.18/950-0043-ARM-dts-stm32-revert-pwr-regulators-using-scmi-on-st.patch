@@ -20,8 +20,6 @@ Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
  .../arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi |  1 -
  4 files changed, 56 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp15-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp15-scmi.dtsi
-index 98552fe45d4e..aeedab8e5af9 100644
 --- a/arch/arm/boot/dts/st/stm32mp15-scmi.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15-scmi.dtsi
 @@ -4,8 +4,6 @@
@@ -33,7 +31,7 @@ index 98552fe45d4e..aeedab8e5af9 100644
  / {
  	firmware {
  		optee: optee {
-@@ -30,61 +28,10 @@ scmi_reset: protocol@16 {
+@@ -30,61 +28,10 @@
  				reg = <0x16>;
  				#reset-cells = <1>;
  			};
@@ -95,11 +93,9 @@ index 98552fe45d4e..aeedab8e5af9 100644
  /delete-node/ &clk_hse;
  /delete-node/ &clk_hsi;
  /delete-node/ &clk_lse;
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dts
-index 9019b5b0f204..3d970cb6de43 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dts
-@@ -35,7 +35,6 @@ &cryp1 {
+@@ -35,7 +35,6 @@
  };
  
  &dsi {
@@ -107,11 +103,9 @@ index 9019b5b0f204..3d970cb6de43 100644
  	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
  };
  
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dts
-index 6bf16f40625f..bc8cdd2215d2 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dts
-@@ -35,7 +35,6 @@ &cryp1 {
+@@ -35,7 +35,6 @@
  };
  
  &dsi {
@@ -119,11 +113,9 @@ index 6bf16f40625f..bc8cdd2215d2 100644
  	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
  };
  
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi
-index ab7b437055e0..ff49a2c493b7 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi
-@@ -36,7 +36,6 @@ &cryp1 {
+@@ -36,7 +36,6 @@
  };
  
  &dsi {
@@ -131,6 +123,3 @@ index ab7b437055e0..ff49a2c493b7 100644
  	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
  };
  
--- 
-2.53.0
-

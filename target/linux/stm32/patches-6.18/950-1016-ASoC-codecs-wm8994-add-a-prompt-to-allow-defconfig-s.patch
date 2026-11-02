@@ -29,8 +29,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  sound/soc/codecs/Kconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
-index 91ac99bc3edb..ccc92ff78168 100644
 --- a/sound/soc/codecs/Kconfig
 +++ b/sound/soc/codecs/Kconfig
 @@ -2570,7 +2570,7 @@ config SND_SOC_WM8993
@@ -42,6 +40,3 @@ index 91ac99bc3edb..ccc92ff78168 100644
  	depends on MFD_WM8994
  
  config SND_SOC_WM8995
--- 
-2.53.0
-

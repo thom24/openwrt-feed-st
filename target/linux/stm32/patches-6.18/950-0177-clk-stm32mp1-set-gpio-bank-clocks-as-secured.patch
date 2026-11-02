@@ -18,11 +18,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/clk/stm32/clk-stm32mp1.c | 11 +++++++++++
  1 file changed, 11 insertions(+)
 
-diff --git a/drivers/clk/stm32/clk-stm32mp1.c b/drivers/clk/stm32/clk-stm32mp1.c
-index 83bbcdd8d8f0..fee4449f117c 100644
 --- a/drivers/clk/stm32/clk-stm32mp1.c
 +++ b/drivers/clk/stm32/clk-stm32mp1.c
-@@ -2239,6 +2239,17 @@ static const u32 stm32mp1_clock_secured[] = {
+@@ -2239,6 +2239,17 @@ static const u32 stm32mp1_clock_secured[
  	IWDG1,
  	BSEC,
  	STGEN,
@@ -40,6 +38,3 @@ index 83bbcdd8d8f0..fee4449f117c 100644
  	GPIOZ,
  	CRYP1,
  	HASH1,
--- 
-2.53.0
-

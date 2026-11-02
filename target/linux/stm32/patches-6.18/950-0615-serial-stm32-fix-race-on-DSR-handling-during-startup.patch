@@ -28,11 +28,9 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/tty/serial/stm32-usart.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 9843fa1b2d23..6725bb5f6761 100644
 --- a/drivers/tty/serial/stm32-usart.c
 +++ b/drivers/tty/serial/stm32-usart.c
-@@ -1442,7 +1442,7 @@ static void stm32_usart_set_termios(struct uart_port *port,
+@@ -1442,7 +1442,7 @@ static void stm32_usart_set_termios(stru
  	unsigned long flags;
  	int brr_fit = 0, ret;
  
@@ -41,6 +39,3 @@ index 9843fa1b2d23..6725bb5f6761 100644
  
  	if (!stm32_port->hw_flow_control)
  		cflag &= ~CRTSCTS;
--- 
-2.53.0
-

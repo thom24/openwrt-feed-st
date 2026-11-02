@@ -17,11 +17,9 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  arch/arm/boot/dts/st/stm32mp151.dtsi | 25 +++++++++++++++++++++++++
  1 file changed, 25 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
-index ba1ab59f6c83..b128016eb52b 100644
 --- a/arch/arm/boot/dts/st/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
-@@ -1123,6 +1123,11 @@ counter {
+@@ -1123,6 +1123,11 @@
  					compatible = "st,stm32-lptimer-counter";
  					status = "disabled";
  				};
@@ -33,7 +31,7 @@ index ba1ab59f6c83..b128016eb52b 100644
  			};
  
  			i2s2: audio-controller@4000b000 {
-@@ -1985,6 +1990,11 @@ counter {
+@@ -1985,6 +1990,11 @@
  					compatible = "st,stm32-lptimer-counter";
  					status = "disabled";
  				};
@@ -45,7 +43,7 @@ index ba1ab59f6c83..b128016eb52b 100644
  			};
  
  			lptimer3: timer@50022000 {
-@@ -2010,6 +2020,11 @@ trigger@2 {
+@@ -2010,6 +2020,11 @@
  					reg = <2>;
  					status = "disabled";
  				};
@@ -57,7 +55,7 @@ index ba1ab59f6c83..b128016eb52b 100644
  			};
  
  			lptimer4: timer@50023000 {
-@@ -2027,6 +2042,11 @@ pwm {
+@@ -2027,6 +2042,11 @@
  					#pwm-cells = <3>;
  					status = "disabled";
  				};
@@ -69,7 +67,7 @@ index ba1ab59f6c83..b128016eb52b 100644
  			};
  
  			lptimer5: timer@50024000 {
-@@ -2044,6 +2064,11 @@ pwm {
+@@ -2044,6 +2064,11 @@
  					#pwm-cells = <3>;
  					status = "disabled";
  				};
@@ -81,6 +79,3 @@ index ba1ab59f6c83..b128016eb52b 100644
  			};
  
  			vrefbuf: vrefbuf@50025000 {
--- 
-2.53.0
-

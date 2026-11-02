@@ -16,8 +16,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml b/Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml
-index b15de4eb209c..1cfce19bdb34 100644
 --- a/Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml
 +++ b/Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml
 @@ -49,6 +49,9 @@ properties:
@@ -30,6 +28,3 @@ index b15de4eb209c..1cfce19bdb34 100644
  additionalProperties: false
  
  required:
--- 
-2.53.0
-

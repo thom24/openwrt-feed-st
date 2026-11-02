@@ -20,8 +20,6 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  drivers/clk/clk-bulk.c | 14 ++++++++------
  1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/clk/clk-bulk.c b/drivers/clk/clk-bulk.c
-index 826b3ff99433..d048811963fb 100644
 --- a/drivers/clk/clk-bulk.c
 +++ b/drivers/clk/clk-bulk.c
 @@ -12,7 +12,8 @@
@@ -34,7 +32,7 @@ index 826b3ff99433..d048811963fb 100644
  					struct clk_bulk_data *clks)
  {
  	int ret;
-@@ -28,8 +29,8 @@ static int __must_check of_clk_bulk_get(struct device_node *np, int num_clks,
+@@ -28,8 +29,8 @@ static int __must_check of_clk_bulk_get(
  		clks[i].clk = of_clk_get(np, i);
  		if (IS_ERR(clks[i].clk)) {
  			ret = PTR_ERR(clks[i].clk);
@@ -45,7 +43,7 @@ index 826b3ff99433..d048811963fb 100644
  			clks[i].clk = NULL;
  			goto err;
  		}
-@@ -43,7 +44,8 @@ static int __must_check of_clk_bulk_get(struct device_node *np, int num_clks,
+@@ -43,7 +44,8 @@ err:
  	return ret;
  }
  
@@ -55,7 +53,7 @@ index 826b3ff99433..d048811963fb 100644
  					    struct clk_bulk_data **clks)
  {
  	struct clk_bulk_data *clk_bulk;
-@@ -58,7 +60,7 @@ static int __must_check of_clk_bulk_get_all(struct device_node *np,
+@@ -58,7 +60,7 @@ static int __must_check of_clk_bulk_get_
  	if (!clk_bulk)
  		return -ENOMEM;
  
@@ -64,7 +62,7 @@ index 826b3ff99433..d048811963fb 100644
  	if (ret) {
  		kfree(clk_bulk);
  		return ret;
-@@ -144,7 +146,7 @@ int __must_check clk_bulk_get_all(struct device *dev,
+@@ -144,7 +146,7 @@ int __must_check clk_bulk_get_all(struct
  	if (!np)
  		return 0;
  
@@ -73,6 +71,3 @@ index 826b3ff99433..d048811963fb 100644
  }
  EXPORT_SYMBOL(clk_bulk_get_all);
  
--- 
-2.53.0
-

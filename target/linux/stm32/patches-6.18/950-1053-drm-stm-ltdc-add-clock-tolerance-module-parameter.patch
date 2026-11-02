@@ -15,11 +15,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/stm/ltdc.c | 11 +++++++----
  1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-index 8743c097b171..5630a269a1f7 100644
 --- a/drivers/gpu/drm/stm/ltdc.c
 +++ b/drivers/gpu/drm/stm/ltdc.c
-@@ -525,6 +525,11 @@ static const struct regmap_config stm32_ltdc_regmap_cfg = {
+@@ -525,6 +525,11 @@ static const struct regmap_config stm32_
  	.cache_type = REGCACHE_NONE,
  };
  
@@ -31,7 +29,7 @@ index 8743c097b171..5630a269a1f7 100644
  static const u32 ltdc_ycbcr2rgb_coeffs[DRM_COLOR_ENCODING_MAX][DRM_COLOR_RANGE_MAX][2] = {
  	[DRM_COLOR_YCBCR_BT601][DRM_COLOR_YCBCR_LIMITED_RANGE] = {
  		0x02040199,	/* (b_cb = 516 / r_cr = 409) */
-@@ -2012,8 +2017,6 @@ static int ltdc_crtc_init(struct drm_device *ddev, struct drm_crtc *crtc)
+@@ -2012,8 +2017,6 @@ static int ltdc_crtc_init(struct drm_dev
  	return 0;
  }
  
@@ -40,7 +38,7 @@ index 8743c097b171..5630a269a1f7 100644
  static enum drm_mode_status ltdc_encoder_mode_valid(struct drm_encoder *encoder,
  						    const struct drm_display_mode *mode)
  {
-@@ -2021,8 +2024,8 @@ static enum drm_mode_status ltdc_encoder_mode_valid(struct drm_encoder *encoder,
+@@ -2021,8 +2024,8 @@ static enum drm_mode_status ltdc_encoder
  	struct ltdc_device *ldev =  ddev->dev_private;
  	struct device *dev = ddev->dev;
  	int target = mode->clock * 1000;
@@ -51,6 +49,3 @@ index 8743c097b171..5630a269a1f7 100644
  	int result;
  
  	if (of_device_is_compatible(dev->of_node, "st,stm32mp255-ltdc")) {
--- 
-2.53.0
-

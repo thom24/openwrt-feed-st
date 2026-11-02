@@ -21,11 +21,9 @@ Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp255.dtsi |  2 +-
  3 files changed, 35 insertions(+), 35 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 1057fba6ed32..09d198ac8df7 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -22,7 +22,7 @@ cpu0: cpu@0 {
+@@ -22,7 +22,7 @@
  			device_type = "cpu";
  			reg = <0>;
  			enable-method = "psci";
@@ -34,7 +32,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  			power-domain-names = "psci";
  		};
  	};
-@@ -145,17 +145,17 @@ psci: psci {
+@@ -145,17 +145,17 @@
  		compatible = "arm,psci-1.0";
  		method = "smc";
  
@@ -57,7 +55,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  			#power-domain-cells = <0>;
  		};
  	};
-@@ -261,7 +261,7 @@ ommanager: ommanager@40500000 {
+@@ -261,7 +261,7 @@
  				 <&scmi_reset RST_SCMI_OSPI2>;
  			reset-names = "omm", "ospi1", "ospi2";
  			access-controllers = <&rifsc 111>;
@@ -66,7 +64,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  			#address-cells = <2>;
  			#size-cells = <1>;
  			st,syscfg-amcr = <&syscfg 0x2c00 0x7>;
-@@ -278,7 +278,7 @@ ospi1: spi@0 {
+@@ -278,7 +278,7 @@
  				resets = <&scmi_reset RST_SCMI_OSPI1>,
  					 <&scmi_reset RST_SCMI_OSPI1DLL>;
  				access-controllers = <&rifsc 74>;
@@ -75,7 +73,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  				st,syscfg-dlyb = <&syscfg 0x1000>;
  				status = "disabled";
  			};
-@@ -294,7 +294,7 @@ ospi2: spi@1 {
+@@ -294,7 +294,7 @@
  				resets = <&scmi_reset RST_SCMI_OSPI2>,
  					 <&scmi_reset RST_SCMI_OSPI2DLL>;
  				access-controllers = <&rifsc 75>;
@@ -84,7 +82,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  				st,syscfg-dlyb = <&syscfg 0x1400>;
  				status = "disabled";
  			};
-@@ -318,7 +318,7 @@ timers2: timer@40000000 {
+@@ -318,7 +318,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 1>;
@@ -93,7 +91,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  				status = "disabled";
  
  				counter {
-@@ -349,7 +349,7 @@ timers3: timer@40010000 {
+@@ -349,7 +349,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 2>;
@@ -102,7 +100,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  				status = "disabled";
  
  				counter {
-@@ -380,7 +380,7 @@ timers4: timer@40020000 {
+@@ -380,7 +380,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 3>;
@@ -111,7 +109,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  				status = "disabled";
  
  				counter {
-@@ -411,7 +411,7 @@ timers5: timer@40030000 {
+@@ -411,7 +411,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 4>;
@@ -120,7 +118,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  				status = "disabled";
  
  				counter {
-@@ -442,7 +442,7 @@ timers6: timer@40040000 {
+@@ -442,7 +442,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 5>;
@@ -129,7 +127,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  				status = "disabled";
  
  				counter {
-@@ -467,7 +467,7 @@ timers7: timer@40050000 {
+@@ -467,7 +467,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 6>;
@@ -138,7 +136,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  				status = "disabled";
  
  				counter {
-@@ -492,7 +492,7 @@ timers12: timer@40060000 {
+@@ -492,7 +492,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 10>;
@@ -147,7 +145,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  				status = "disabled";
  
  				counter {
-@@ -523,7 +523,7 @@ timers13: timer@40070000 {
+@@ -523,7 +523,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 11>;
@@ -156,7 +154,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  				status = "disabled";
  
  				counter {
-@@ -554,7 +554,7 @@ timers14: timer@40080000 {
+@@ -554,7 +554,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 12>;
@@ -165,7 +163,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  				status = "disabled";
  
  				counter {
-@@ -584,7 +584,7 @@ lptimer1: timer@40090000 {
+@@ -584,7 +584,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 17>;
@@ -174,7 +172,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  				wakeup-source;
  				status = "disabled";
  
-@@ -620,7 +620,7 @@ lptimer2: timer@400a0000 {
+@@ -620,7 +620,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 18>;
@@ -183,7 +181,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  				wakeup-source;
  				status = "disabled";
  
-@@ -891,7 +891,7 @@ timers10: timer@401c0000 {
+@@ -891,7 +891,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 8>;
@@ -192,7 +190,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  				status = "disabled";
  
  				counter {
-@@ -922,7 +922,7 @@ timers11: timer@401d0000 {
+@@ -922,7 +922,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 9>;
@@ -201,7 +199,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  				status = "disabled";
  
  				counter {
-@@ -956,7 +956,7 @@ timers1: timer@40200000 {
+@@ -956,7 +956,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 0>;
@@ -210,7 +208,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  				status = "disabled";
  
  				counter {
-@@ -990,7 +990,7 @@ timers8: timer@40210000 {
+@@ -990,7 +990,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 7>;
@@ -219,7 +217,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  				status = "disabled";
  
  				counter {
-@@ -1078,7 +1078,7 @@ timers15: timer@40250000 {
+@@ -1078,7 +1078,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 13>;
@@ -228,7 +226,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  				status = "disabled";
  
  				counter {
-@@ -1109,7 +1109,7 @@ timers16: timer@40260000 {
+@@ -1109,7 +1109,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 14>;
@@ -237,7 +235,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  				status = "disabled";
  
  				counter {
-@@ -1140,7 +1140,7 @@ timers17: timer@40270000 {
+@@ -1140,7 +1140,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 15>;
@@ -246,7 +244,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  				status = "disabled";
  
  				counter {
-@@ -1303,7 +1303,7 @@ timers20: timer@40320000 {
+@@ -1303,7 +1303,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 16>;
@@ -255,7 +253,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  				status = "disabled";
  
  				counter {
-@@ -1614,7 +1614,7 @@ combophy: phy@480c0000 {
+@@ -1614,7 +1614,7 @@
  				resets = <&rcc USB3PCIEPHY_R>;
  				reset-names = "phy";
  				access-controllers = <&rifsc 67>;
@@ -264,7 +262,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  				wakeup-source;
  				interrupts-extended = <&exti1 45 IRQ_TYPE_EDGE_FALLING>;
  				status = "disabled";
-@@ -1695,7 +1695,7 @@ pcie_ep: pcie-ep@48400000 {
+@@ -1695,7 +1695,7 @@
  				resets = <&rcc PCIE_R>;
  				phys = <&combophy PHY_TYPE_PCIE>;
  				access-controllers = <&rifsc 68>;
@@ -273,7 +271,7 @@ index 1057fba6ed32..09d198ac8df7 100644
  				status = "disabled";
  			};
  
-@@ -1721,7 +1721,7 @@ pcie_rc: pcie@48400000 {
+@@ -1721,7 +1721,7 @@
  				resets = <&rcc PCIE_R>;
  				msi-parent = <&v2m0>;
  				access-controllers = <&rifsc 68>;
@@ -282,11 +280,9 @@ index 1057fba6ed32..09d198ac8df7 100644
  				status = "disabled";
  
  				pcie@0,0 {
-diff --git a/arch/arm64/boot/dts/st/stm32mp253.dtsi b/arch/arm64/boot/dts/st/stm32mp253.dtsi
-index eeceb086252b..b93f0aa89299 100644
 --- a/arch/arm64/boot/dts/st/stm32mp253.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp253.dtsi
-@@ -12,7 +12,7 @@ cpu1: cpu@1 {
+@@ -12,7 +12,7 @@
  			device_type = "cpu";
  			reg = <1>;
  			enable-method = "psci";
@@ -295,7 +291,7 @@ index eeceb086252b..b93f0aa89299 100644
  			power-domain-names = "psci";
  		};
  	};
-@@ -24,9 +24,9 @@ arm-pmu {
+@@ -24,9 +24,9 @@
  	};
  
  	psci {
@@ -307,11 +303,9 @@ index eeceb086252b..b93f0aa89299 100644
  		};
  	};
  
-diff --git a/arch/arm64/boot/dts/st/stm32mp255.dtsi b/arch/arm64/boot/dts/st/stm32mp255.dtsi
-index 3ba4e6166586..92cada71a0e8 100644
 --- a/arch/arm64/boot/dts/st/stm32mp255.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp255.dtsi
-@@ -20,7 +20,7 @@ lvds: lvds@48060000 {
+@@ -20,7 +20,7 @@
  		clock-names = "pclk", "ref";
  		resets = <&rcc LVDS_R>;
  		access-controllers = <&rifsc 84>;
@@ -320,6 +314,3 @@ index 3ba4e6166586..92cada71a0e8 100644
  		status = "disabled";
  	};
  
--- 
-2.53.0
-

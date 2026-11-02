@@ -19,11 +19,9 @@ Acked-by: Andy Shevchenko <andriy.shevchenko@intel.com>
  4 files changed, 167 deletions(-)
  delete mode 100644 drivers/hwspinlock/u8500_hsem.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f9e76205a037..8e54cdac11c4 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -3057,7 +3057,6 @@ F:	drivers/clocksource/clksrc-dbx500-prcmu.c
+@@ -3057,7 +3057,6 @@ F:	drivers/clocksource/clksrc-dbx500-prc
  F:	drivers/dma/ste_dma40*
  F:	drivers/pmdomain/st/ste-ux500-pm-domain.c
  F:	drivers/gpio/gpio-nomadik.c
@@ -31,8 +29,6 @@ index f9e76205a037..8e54cdac11c4 100644
  F:	drivers/i2c/busses/i2c-nomadik.c
  F:	drivers/iio/adc/ab8500-gpadc.c
  F:	drivers/mfd/ab8500*
-diff --git a/drivers/hwspinlock/Kconfig b/drivers/hwspinlock/Kconfig
-index 3874d15b0e9b..d84e00084ee2 100644
 --- a/drivers/hwspinlock/Kconfig
 +++ b/drivers/hwspinlock/Kconfig
 @@ -53,14 +53,4 @@ config HWSPINLOCK_SUN6I
@@ -50,18 +46,13 @@ index 3874d15b0e9b..d84e00084ee2 100644
 -	  If unsure, say N.
 -
  endif # HWSPINLOCK
-diff --git a/drivers/hwspinlock/Makefile b/drivers/hwspinlock/Makefile
-index a0f16c9aaa82..3a740805949d 100644
 --- a/drivers/hwspinlock/Makefile
 +++ b/drivers/hwspinlock/Makefile
-@@ -9,4 +9,3 @@ obj-$(CONFIG_HWSPINLOCK_QCOM)		+= qcom_hwspinlock.o
+@@ -9,4 +9,3 @@ obj-$(CONFIG_HWSPINLOCK_QCOM)		+= qcom_h
  obj-$(CONFIG_HWSPINLOCK_SPRD)		+= sprd_hwspinlock.o
  obj-$(CONFIG_HWSPINLOCK_STM32)		+= stm32_hwspinlock.o
  obj-$(CONFIG_HWSPINLOCK_SUN6I)		+= sun6i_hwspinlock.o
 -obj-$(CONFIG_HSEM_U8500)		+= u8500_hsem.o
-diff --git a/drivers/hwspinlock/u8500_hsem.c b/drivers/hwspinlock/u8500_hsem.c
-deleted file mode 100644
-index 5a2d8c3e0d80..000000000000
 --- a/drivers/hwspinlock/u8500_hsem.c
 +++ /dev/null
 @@ -1,155 +0,0 @@
@@ -220,6 +211,3 @@ index 5a2d8c3e0d80..000000000000
 -MODULE_LICENSE("GPL v2");
 -MODULE_DESCRIPTION("Hardware Spinlock driver for u8500");
 -MODULE_AUTHOR("Mathieu Poirier <mathieu.poirier@linaro.org>");
--- 
-2.53.0
-

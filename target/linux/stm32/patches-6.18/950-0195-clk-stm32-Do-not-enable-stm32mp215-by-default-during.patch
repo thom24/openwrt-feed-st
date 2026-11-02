@@ -21,8 +21,6 @@ Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  drivers/clk/stm32/Kconfig | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/stm32/Kconfig b/drivers/clk/stm32/Kconfig
-index 9fd023687895..b697c28d6f88 100644
 --- a/drivers/clk/stm32/Kconfig
 +++ b/drivers/clk/stm32/Kconfig
 @@ -27,8 +27,8 @@ config COMMON_CLK_STM32MP157
@@ -36,6 +34,3 @@ index 9fd023687895..b697c28d6f88 100644
  	help
  	  Support for stm32mp21x SoC family clocks
  
--- 
-2.53.0
-

@@ -16,11 +16,9 @@ Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
  drivers/pwm/pwm-stm32-lp.c | 22 ----------------------
  1 file changed, 22 deletions(-)
 
-diff --git a/drivers/pwm/pwm-stm32-lp.c b/drivers/pwm/pwm-stm32-lp.c
-index c9c5da4975ca..1e6319a62b21 100644
 --- a/drivers/pwm/pwm-stm32-lp.c
 +++ b/drivers/pwm/pwm-stm32-lp.c
-@@ -424,30 +424,8 @@ static int stm32_pwm_lp_resume(struct device *dev)
+@@ -424,30 +424,8 @@ static int stm32_pwm_lp_resume(struct de
  	return pinctrl_pm_select_default_state(dev);
  }
  
@@ -51,6 +49,3 @@ index c9c5da4975ca..1e6319a62b21 100644
  };
  
  static const struct of_device_id stm32_pwm_lp_of_match[] = {
--- 
-2.53.0
-

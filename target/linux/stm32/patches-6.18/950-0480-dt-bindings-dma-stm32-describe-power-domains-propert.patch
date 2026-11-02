@@ -20,8 +20,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  Documentation/devicetree/bindings/dma/stm32/st,stm32-mdma.yaml | 3 +++
  3 files changed, 9 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma.yaml b/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma.yaml
-index 11a289f1d505..fa27a5b20e12 100644
 --- a/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma.yaml
 +++ b/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma.yaml
 @@ -86,6 +86,9 @@ properties:
@@ -34,8 +32,6 @@ index 11a289f1d505..fa27a5b20e12 100644
  required:
    - compatible
    - reg
-diff --git a/Documentation/devicetree/bindings/dma/stm32/st,stm32-dmamux.yaml b/Documentation/devicetree/bindings/dma/stm32/st,stm32-dmamux.yaml
-index b7bca1a83769..1b241b9cb50e 100644
 --- a/Documentation/devicetree/bindings/dma/stm32/st,stm32-dmamux.yaml
 +++ b/Documentation/devicetree/bindings/dma/stm32/st,stm32-dmamux.yaml
 @@ -42,6 +42,9 @@ properties:
@@ -48,8 +44,6 @@ index b7bca1a83769..1b241b9cb50e 100644
  required:
    - compatible
    - reg
-diff --git a/Documentation/devicetree/bindings/dma/stm32/st,stm32-mdma.yaml b/Documentation/devicetree/bindings/dma/stm32/st,stm32-mdma.yaml
-index 45fe91db11db..1143da57ba37 100644
 --- a/Documentation/devicetree/bindings/dma/stm32/st,stm32-mdma.yaml
 +++ b/Documentation/devicetree/bindings/dma/stm32/st,stm32-mdma.yaml
 @@ -78,6 +78,9 @@ properties:
@@ -62,6 +56,3 @@ index 45fe91db11db..1143da57ba37 100644
  required:
    - compatible
    - reg
--- 
-2.53.0
-

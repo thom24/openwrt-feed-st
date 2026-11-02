@@ -14,9 +14,6 @@ Change-Id: I19d28c63218937b5963e09e7e0bb72940b06db01
  1 file changed, 268 insertions(+)
  create mode 100644 include/uapi/linux/stm32-dcmipp-config.h
 
-diff --git a/include/uapi/linux/stm32-dcmipp-config.h b/include/uapi/linux/stm32-dcmipp-config.h
-new file mode 100644
-index 000000000000..d4adee54064d
 --- /dev/null
 +++ b/include/uapi/linux/stm32-dcmipp-config.h
 @@ -0,0 +1,268 @@
@@ -288,6 +285,3 @@ index 000000000000..d4adee54064d
 +};
 +
 +#endif
--- 
-2.53.0
-

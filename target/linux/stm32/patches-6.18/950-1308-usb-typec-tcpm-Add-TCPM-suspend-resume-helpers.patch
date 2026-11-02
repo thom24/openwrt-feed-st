@@ -23,11 +23,9 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  include/linux/usb/tcpm.h      |  2 ++
  2 files changed, 25 insertions(+)
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index d568f01d04f2..0d461b1ab985 100644
 --- a/drivers/usb/typec/tcpm/tcpm.c
 +++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -8008,6 +8008,29 @@ void tcpm_unregister_port(struct tcpm_port *port)
+@@ -8008,6 +8008,29 @@ void tcpm_unregister_port(struct tcpm_po
  }
  EXPORT_SYMBOL_GPL(tcpm_unregister_port);
  
@@ -57,11 +55,9 @@ index d568f01d04f2..0d461b1ab985 100644
  MODULE_AUTHOR("Guenter Roeck <groeck@chromium.org>");
  MODULE_DESCRIPTION("USB Type-C Port Manager");
  MODULE_LICENSE("GPL");
-diff --git a/include/linux/usb/tcpm.h b/include/linux/usb/tcpm.h
-index b22e659f81ba..20520c980913 100644
 --- a/include/linux/usb/tcpm.h
 +++ b/include/linux/usb/tcpm.h
-@@ -191,5 +191,7 @@ void tcpm_tcpc_reset(struct tcpm_port *port);
+@@ -191,5 +191,7 @@ void tcpm_tcpc_reset(struct tcpm_port *p
  void tcpm_port_clean(struct tcpm_port *port);
  bool tcpm_port_is_toggling(struct tcpm_port *port);
  void tcpm_port_error_recovery(struct tcpm_port *port);
@@ -69,6 +65,3 @@ index b22e659f81ba..20520c980913 100644
 +void tcpm_port_resume(struct tcpm_port *port);
  
  #endif /* __LINUX_USB_TCPM_H */
--- 
-2.53.0
-

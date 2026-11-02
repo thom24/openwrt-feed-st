@@ -18,11 +18,9 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index 2abcad6c1977..d43e61e2ab0d 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -236,6 +236,10 @@ &i2c8 {
+@@ -236,6 +236,10 @@
  	/delete-property/dma-names;
  };
  
@@ -33,6 +31,3 @@ index 2abcad6c1977..d43e61e2ab0d 100644
  &optee {
  	bootph-all;
  };
--- 
-2.53.0
-

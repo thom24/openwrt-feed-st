@@ -13,11 +13,9 @@ Change-Id: Ia70b0afa00e82b524f18d2eb2e5637cbec98b651
  arch/arm64/boot/dts/st/stm32mp251.dtsi | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index e4bb57b0b4c5..ecca2bb7219b 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -1961,7 +1961,7 @@ rcc: clock-controller@44200000 {
+@@ -1961,7 +1961,7 @@
  		};
  
  		exti1: interrupt-controller@44220000 {
@@ -26,7 +24,7 @@ index e4bb57b0b4c5..ecca2bb7219b 100644
  			interrupt-controller;
  			#interrupt-cells = <2>;
  			power-domains = <&ret_pd>;
-@@ -2066,7 +2066,6 @@ pinctrl: pinctrl@44240000 {
+@@ -2066,7 +2066,6 @@
  			compatible = "st,stm32mp257-pinctrl";
  			ranges = <0 0x44240000 0xa0400>;
  			interrupt-parent = <&exti1>;
@@ -34,7 +32,7 @@ index e4bb57b0b4c5..ecca2bb7219b 100644
  			interrupts-extended =
  				<&exti1  0 0>, <&exti1  1 0>, <&exti1  2 0>, <&exti1  3 0>,
  				<&exti1  4 0>, <&exti1  5 0>, <&exti1  6 0>, <&exti1  7 0>,
-@@ -2215,7 +2214,6 @@ pinctrl_z: pinctrl@46200000 {
+@@ -2215,7 +2214,6 @@
  			compatible = "st,stm32mp257-z-pinctrl";
  			ranges = <0 0x46200000 0x400>;
  			interrupt-parent = <&exti1>;
@@ -42,7 +40,7 @@ index e4bb57b0b4c5..ecca2bb7219b 100644
  			interrupts-extended =
  				<&exti1  0 0>, <&exti1  1 0>, <&exti1  2 0>, <&exti1  3 0>,
  				<&exti1  4 0>, <&exti1  5 0>, <&exti1  6 0>, <&exti1  7 0>,
-@@ -2240,7 +2238,7 @@ gpioz: gpio@46200000 {
+@@ -2240,7 +2238,7 @@
  		};
  
  		exti2: interrupt-controller@46230000 {
@@ -51,6 +49,3 @@ index e4bb57b0b4c5..ecca2bb7219b 100644
  			interrupt-controller;
  			#interrupt-cells = <2>;
  			reg = <0x46230000 0x400>;
--- 
-2.53.0
-

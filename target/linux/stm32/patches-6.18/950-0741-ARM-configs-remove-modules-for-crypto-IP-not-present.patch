@@ -18,8 +18,6 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm/configs/stm32mp_defconfig | 11 -----------
  1 file changed, 11 deletions(-)
 
-diff --git a/arch/arm/configs/stm32mp_defconfig b/arch/arm/configs/stm32mp_defconfig
-index 47a4257b5563..0545fa3c0fa3 100644
 --- a/arch/arm/configs/stm32mp_defconfig
 +++ b/arch/arm/configs/stm32mp_defconfig
 @@ -1162,17 +1162,6 @@ CONFIG_CRYPTO_GHASH_ARM_CE=m
@@ -40,6 +38,3 @@ index 47a4257b5563..0545fa3c0fa3 100644
  CONFIG_CRYPTO_DEV_STM32_HASH=m
  CONFIG_CRYPTO_DEV_STM32_CRYP=m
  CONFIG_CMA_SIZE_MBYTES=64
--- 
-2.53.0
-

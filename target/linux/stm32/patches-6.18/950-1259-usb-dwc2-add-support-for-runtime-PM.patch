@@ -43,8 +43,6 @@ Change-Id: I21851f9a71a09d7aa08b1b9ebb89255bb3b570ca
  drivers/usb/dwc2/platform.c  |  87 +++++++++++++++++++++
  7 files changed, 375 insertions(+), 39 deletions(-)
 
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index eed84b439fd2..1ba15fea68d7 100644
 --- a/drivers/usb/dwc2/core.h
 +++ b/drivers/usb/dwc2/core.h
 @@ -859,6 +859,8 @@ struct dwc2_hregs_backup {
@@ -82,11 +80,9 @@ index eed84b439fd2..1ba15fea68d7 100644
  	enum usb_device_state suspended_from;
  	unsigned int reset_phy_on_wake:1;
  	unsigned int need_phy_for_wake:1;
-diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
-index 3a15c2ee7968..2347388a647f 100644
 --- a/drivers/usb/dwc2/core_intr.c
 +++ b/drivers/usb/dwc2/core_intr.c
-@@ -572,10 +572,22 @@ static void dwc2_handle_usb_suspend_intr(struct dwc2_hsotg *hsotg)
+@@ -572,10 +572,22 @@ static void dwc2_handle_usb_suspend_intr
  			if (hsotg->wq_gadget)
  				queue_delayed_work(hsotg->wq_gadget, &hsotg->dw_enumtimeout,
  						   msecs_to_jiffies(2000));
@@ -110,11 +106,9 @@ index 3a15c2ee7968..2347388a647f 100644
  
  			/*
  			 * Change to L2 (suspend) state before releasing
-diff --git a/drivers/usb/dwc2/debugfs.c b/drivers/usb/dwc2/debugfs.c
-index 3116ac72747f..61dad3c47121 100644
 --- a/drivers/usb/dwc2/debugfs.c
 +++ b/drivers/usb/dwc2/debugfs.c
-@@ -126,7 +126,11 @@ static const struct file_operations testmode_fops = {
+@@ -126,7 +126,11 @@ static const struct file_operations test
  static int state_show(struct seq_file *seq, void *v)
  {
  	struct dwc2_hsotg *hsotg = seq->private;
@@ -127,7 +121,7 @@ index 3116ac72747f..61dad3c47121 100644
  
  	seq_printf(seq, "DCFG=0x%08x, DCTL=0x%08x, DSTS=0x%08x\n",
  		   dwc2_readl(hsotg, DCFG),
-@@ -168,6 +172,8 @@ static int state_show(struct seq_file *seq, void *v)
+@@ -168,6 +172,8 @@ static int state_show(struct seq_file *s
  		seq_puts(seq, "\n");
  	}
  
@@ -136,7 +130,7 @@ index 3116ac72747f..61dad3c47121 100644
  	return 0;
  }
  DEFINE_SHOW_ATTRIBUTE(state);
-@@ -185,7 +191,11 @@ static int fifo_show(struct seq_file *seq, void *v)
+@@ -185,7 +191,11 @@ static int fifo_show(struct seq_file *se
  	struct dwc2_hsotg *hsotg = seq->private;
  	int fifo_count = dwc2_hsotg_tx_fifo_count(hsotg);
  	u32 val;
@@ -149,7 +143,7 @@ index 3116ac72747f..61dad3c47121 100644
  
  	seq_puts(seq, "Non-periodic FIFOs:\n");
  	seq_printf(seq, "RXFIFO: Size %d\n", dwc2_readl(hsotg, GRXFSIZ));
-@@ -205,6 +215,8 @@ static int fifo_show(struct seq_file *seq, void *v)
+@@ -205,6 +215,8 @@ static int fifo_show(struct seq_file *se
  			   val & FIFOSIZE_STARTADDR_MASK);
  	}
  
@@ -158,7 +152,7 @@ index 3116ac72747f..61dad3c47121 100644
  	return 0;
  }
  DEFINE_SHOW_ATTRIBUTE(fifo);
-@@ -230,6 +242,11 @@ static int ep_show(struct seq_file *seq, void *v)
+@@ -230,6 +242,11 @@ static int ep_show(struct seq_file *seq,
  	int index = ep->index;
  	int show_limit = 15;
  	unsigned long flags;
@@ -170,7 +164,7 @@ index 3116ac72747f..61dad3c47121 100644
  
  	seq_printf(seq, "Endpoint index %d, named %s,  dir %s:\n",
  		   ep->index, ep->ep.name, decode_direction(ep->dir_in));
-@@ -252,6 +269,8 @@ static int ep_show(struct seq_file *seq, void *v)
+@@ -252,6 +269,8 @@ static int ep_show(struct seq_file *seq,
  		   dwc2_readl(hsotg, DIEPTSIZ(index)),
  		   dwc2_readl(hsotg, DOEPTSIZ(index)));
  
@@ -179,7 +173,7 @@ index 3116ac72747f..61dad3c47121 100644
  	seq_puts(seq, "\n");
  	seq_printf(seq, "mps %d\n", ep->ep.maxpacket);
  	seq_printf(seq, "total_data=%ld\n", ep->total_data);
-@@ -772,11 +791,129 @@ static int dr_mode_show(struct seq_file *seq, void *v)
+@@ -772,11 +791,129 @@ static int dr_mode_show(struct seq_file
  }
  DEFINE_SHOW_ATTRIBUTE(dr_mode);
  
@@ -309,7 +303,7 @@ index 3116ac72747f..61dad3c47121 100644
  	root = debugfs_create_dir(dev_name(hsotg->dev), usb_debug_root);
  	hsotg->debug_root = root;
  
-@@ -797,12 +934,15 @@ int dwc2_debugfs_init(struct dwc2_hsotg *hsotg)
+@@ -797,12 +934,15 @@ int dwc2_debugfs_init(struct dwc2_hsotg
  	hsotg->regset->regs = dwc2_regs;
  	hsotg->regset->nregs = ARRAY_SIZE(dwc2_regs);
  	hsotg->regset->base = hsotg->regs;
@@ -325,7 +319,7 @@ index 3116ac72747f..61dad3c47121 100644
  	return ret;
  }
  
-@@ -810,4 +950,7 @@ void dwc2_debugfs_exit(struct dwc2_hsotg *hsotg)
+@@ -810,4 +950,7 @@ void dwc2_debugfs_exit(struct dwc2_hsotg
  {
  	debugfs_remove_recursive(hsotg->debug_root);
  	hsotg->debug_root = NULL;
@@ -333,11 +327,9 @@ index 3116ac72747f..61dad3c47121 100644
 +	if (hsotg->ddev)
 +		device_unregister(hsotg->ddev);
  }
-diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
-index 16ba6bc7fb64..73f34a2ae45b 100644
 --- a/drivers/usb/dwc2/drd.c
 +++ b/drivers/usb/dwc2/drd.c
-@@ -210,6 +210,9 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+@@ -210,6 +210,9 @@ static int dwc2_drd_role_sw_set(struct u
  		goto skip;
  	}
  
@@ -347,7 +339,7 @@ index 16ba6bc7fb64..73f34a2ae45b 100644
  	if ((IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) ||
  	     IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)) &&
  	     dwc2_is_device_mode(hsotg) &&
-@@ -265,6 +268,8 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+@@ -265,6 +268,8 @@ static int dwc2_drd_role_sw_set(struct u
  			dwc2_hsotg_core_disconnect(hsotg);
  	}
  
@@ -356,7 +348,7 @@ index 16ba6bc7fb64..73f34a2ae45b 100644
  skip:
  	if (!hsotg->ll_hw_enabled && hsotg->clk)
  		clk_disable_unprepare(hsotg->clk);
-@@ -273,6 +278,19 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+@@ -273,6 +278,19 @@ skip:
  		role == USB_ROLE_NONE ? "No" :
  		role == USB_ROLE_HOST ? "A" : "B");
  
@@ -376,11 +368,9 @@ index 16ba6bc7fb64..73f34a2ae45b 100644
  	return 0;
  }
  
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 874f1312584b..aaae0cc26d47 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -3254,6 +3254,23 @@ static void dwc2_hsotg_epint(struct dwc2_hsotg *hsotg, unsigned int idx,
+@@ -3254,6 +3254,23 @@ static void dwc2_hsotg_epint(struct dwc2
  	}
  }
  
@@ -404,7 +394,7 @@ index 874f1312584b..aaae0cc26d47 100644
  static void dwc2_gadget_enum_timeout(struct work_struct *work)
  {
  	struct dwc2_hsotg *hsotg = container_of(work, struct dwc2_hsotg, dw_enumtimeout.work);
-@@ -3262,9 +3279,12 @@ static void dwc2_gadget_enum_timeout(struct work_struct *work)
+@@ -3262,9 +3279,12 @@ static void dwc2_gadget_enum_timeout(str
  	dev_dbg(hsotg->dev, "%s enumeration timeout\n",  __func__);
  
  	spin_lock_irqsave(&hsotg->lock, flags);
@@ -418,7 +408,7 @@ index 874f1312584b..aaae0cc26d47 100644
  	spin_unlock_irqrestore(&hsotg->lock, flags);
  }
  
-@@ -3696,21 +3716,6 @@ void dwc2_hsotg_core_init_disconnected(struct dwc2_hsotg *hsotg,
+@@ -3696,21 +3716,6 @@ void dwc2_hsotg_core_init_disconnected(s
  
  void dwc2_hsotg_core_disconnect(struct dwc2_hsotg *hsotg)
  {
@@ -440,7 +430,7 @@ index 874f1312584b..aaae0cc26d47 100644
  	/* set the soft-disconnect bit */
  	dwc2_set_bit(hsotg, DCTL, DCTL_SFTDISCON);
  }
-@@ -4442,6 +4447,9 @@ static int dwc2_hsotg_ep_disable_lock(struct usb_ep *ep)
+@@ -4442,6 +4447,9 @@ static int dwc2_hsotg_ep_disable_lock(st
  	unsigned long flags;
  	int ret;
  
@@ -450,7 +440,7 @@ index 874f1312584b..aaae0cc26d47 100644
  	spin_lock_irqsave(&hsotg->lock, flags);
  	ret = dwc2_hsotg_ep_disable(ep);
  	spin_unlock_irqrestore(&hsotg->lock, flags);
-@@ -4710,6 +4718,9 @@ static int dwc2_hsotg_udc_start(struct usb_gadget *gadget,
+@@ -4710,6 +4718,9 @@ static int dwc2_hsotg_udc_start(struct u
  			goto err;
  	}
  
@@ -460,7 +450,7 @@ index 874f1312584b..aaae0cc26d47 100644
  	if (!IS_ERR_OR_NULL(hsotg->uphy))
  		otg_set_peripheral(hsotg->uphy->otg, &hsotg->gadget);
  
-@@ -4752,10 +4763,7 @@ static int dwc2_hsotg_udc_stop(struct usb_gadget *gadget)
+@@ -4752,10 +4763,7 @@ static int dwc2_hsotg_udc_stop(struct us
  	device_set_wakeup_capable(&gadget->dev, false);
  
  	/* Exit clock gating when driver is stopped. */
@@ -472,7 +462,7 @@ index 874f1312584b..aaae0cc26d47 100644
  
  	/* all endpoints should be shutdown */
  	for (ep = 1; ep < hsotg->num_of_eps; ep++) {
-@@ -4777,6 +4785,11 @@ static int dwc2_hsotg_udc_stop(struct usb_gadget *gadget)
+@@ -4777,6 +4785,11 @@ static int dwc2_hsotg_udc_stop(struct us
  	if (!IS_ERR_OR_NULL(hsotg->uphy))
  		otg_set_peripheral(hsotg->uphy->otg, NULL);
  
@@ -484,7 +474,7 @@ index 874f1312584b..aaae0cc26d47 100644
  	if (hsotg->dr_mode == USB_DR_MODE_PERIPHERAL)
  		dwc2_lowlevel_hw_disable(hsotg);
  
-@@ -4830,6 +4843,12 @@ static int dwc2_hsotg_wakeup(struct usb_gadget *gadget)
+@@ -4830,6 +4843,12 @@ static int dwc2_hsotg_wakeup(struct usb_
  		return -EINVAL;
  	}
  
@@ -497,7 +487,7 @@ index 874f1312584b..aaae0cc26d47 100644
  	if (hsotg->in_ppd && hsotg->lx_state == DWC2_L2) {
  		dwc2_gadget_exit_partial_power_down(hsotg, 1, true);
  	} else if (hsotg->params.power_down ==
-@@ -4890,6 +4909,11 @@ static int dwc2_hsotg_pullup(struct usb_gadget *gadget, int is_on)
+@@ -4890,6 +4909,11 @@ static int dwc2_hsotg_pullup(struct usb_
  		return 0;
  	}
  
@@ -509,7 +499,7 @@ index 874f1312584b..aaae0cc26d47 100644
  	if (hsotg->params.stm32_has_batt_chg_det && is_on) {
  		ret = stm32mp2_usb2phy_batt_chg_det(hsotg);
  		if (ret)
-@@ -4935,12 +4959,7 @@ static int dwc2_hsotg_vbus_session(struct usb_gadget *gadget, int is_active)
+@@ -4935,12 +4959,7 @@ static int dwc2_hsotg_vbus_session(struc
  	 * If controller is in partial power down state, it must exit from
  	 * that state before being initialized / de-initialized
  	 */
@@ -523,7 +513,7 @@ index 874f1312584b..aaae0cc26d47 100644
  
  	if (is_active) {
  		hsotg->op_state = OTG_STATE_B_PERIPHERAL;
-@@ -5206,6 +5225,8 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
+@@ -5206,6 +5225,8 @@ int dwc2_gadget_init(struct dwc2_hsotg *
  	int epnum;
  	int ret;
  
@@ -532,7 +522,7 @@ index 874f1312584b..aaae0cc26d47 100644
  	/* Dump fifo information */
  	dev_dbg(dev, "NonPeriodic TXFIFO size: %d\n",
  		hsotg->params.g_np_tx_fifo_size);
-@@ -5344,7 +5365,7 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
+@@ -5344,7 +5365,7 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg
  	unsigned long flags;
  
  	if ((hsotg->remote_wakeup_allowed || device_may_wakeup(&hsotg->gadget.dev)) &&
@@ -541,7 +531,7 @@ index 874f1312584b..aaae0cc26d47 100644
  		/*
  		 * The bus has been suspended by the HOST, and the remote
  		 * wakeup has been enabled. So don't suspend gadget or it
-@@ -5405,6 +5426,8 @@ int dwc2_hsotg_resume(struct dwc2_hsotg *hsotg)
+@@ -5405,6 +5426,8 @@ int dwc2_hsotg_resume(struct dwc2_hsotg
  			 hsotg->driver->driver.name);
  
  		spin_lock_irqsave(&hsotg->lock, flags);
@@ -550,7 +540,7 @@ index 874f1312584b..aaae0cc26d47 100644
  		dwc2_hsotg_core_init_disconnected(hsotg, false);
  		if (hsotg->enabled) {
  			/* Enable ACG feature in device mode,if supported */
-@@ -5899,6 +5922,16 @@ int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+@@ -5899,6 +5922,16 @@ int dwc2_gadget_exit_partial_power_down(
  
  	dev_dbg(hsotg->dev, "Exiting device partial Power Down started.\n");
  
@@ -567,7 +557,7 @@ index 874f1312584b..aaae0cc26d47 100644
  	pcgcctl = dwc2_readl(hsotg, PCGCTL);
  	pcgcctl &= ~PCGCTL_STOPPCLK;
  	dwc2_writel(hsotg, pcgcctl, PCGCTL);
-@@ -5991,6 +6024,15 @@ void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
+@@ -5991,6 +6024,15 @@ void dwc2_gadget_exit_clock_gating(struc
  
  	dev_dbg(hsotg->dev, "Exiting device clock gating.\n");
  
@@ -583,7 +573,7 @@ index 874f1312584b..aaae0cc26d47 100644
  	/* Clear the Gate hclk. */
  	pcgctl = dwc2_readl(hsotg, PCGCTL);
  	pcgctl &= ~PCGCTL_GATEHCLK;
-@@ -6025,12 +6067,15 @@ void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
+@@ -6025,12 +6067,15 @@ void dwc2_gadget_exit_clock_gating(struc
   */
  int dwc2_gadget_enter_lp(struct dwc2_hsotg *hsotg)
  {
@@ -599,7 +589,7 @@ index 874f1312584b..aaae0cc26d47 100644
  			dev_err(hsotg->dev, "enter hibernation failed %d\n", ret);
  			return ret;
  		}
-@@ -6039,6 +6084,7 @@ int dwc2_gadget_enter_lp(struct dwc2_hsotg *hsotg)
+@@ -6039,6 +6084,7 @@ int dwc2_gadget_enter_lp(struct dwc2_hso
  	case DWC2_POWER_DOWN_PARAM_PARTIAL:
  		ret = dwc2_gadget_enter_partial_power_down(hsotg);
  		if (ret) {
@@ -607,7 +597,7 @@ index 874f1312584b..aaae0cc26d47 100644
  			dev_err(hsotg->dev, "enter partial_power_down failed %d\n", ret);
  			return ret;
  		}
-@@ -6052,6 +6098,7 @@ int dwc2_gadget_enter_lp(struct dwc2_hsotg *hsotg)
+@@ -6052,6 +6098,7 @@ int dwc2_gadget_enter_lp(struct dwc2_hso
  		if (!hsotg->params.no_clock_gating)
  			dwc2_gadget_enter_clock_gating(hsotg);
  	}
@@ -615,11 +605,9 @@ index 874f1312584b..aaae0cc26d47 100644
  
  	/* Core hasn't been put into one of the power saving modes: simply return */
  	if (!(hsotg->bus_suspended || hsotg->in_ppd || hsotg->hibernated))
-diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index 12533a57f96f..b01d8f55c57c 100644
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
-@@ -3316,9 +3316,10 @@ int dwc2_port_suspend(struct dwc2_hsotg *hsotg, u16 windex)
+@@ -3316,9 +3316,10 @@ int dwc2_port_suspend(struct dwc2_hsotg
  		hsotg->op_state = OTG_STATE_A_SUSPEND;
  	}
  
@@ -633,7 +621,7 @@ index 12533a57f96f..b01d8f55c57c 100644
  
  	/* For HNP the bus must be suspended for at least 200ms */
  	if (dwc2_host_is_b_hnp_enabled(hsotg)) {
-@@ -4355,13 +4356,16 @@ static int _dwc2_hcd_suspend(struct usb_hcd *hcd)
+@@ -4355,13 +4356,16 @@ static int _dwc2_hcd_suspend(struct usb_
  	if (!(dwc2_read_hprt0(hsotg) & HPRT0_CONNSTS))
  		goto skip_power_saving;
  
@@ -656,7 +644,7 @@ index 12533a57f96f..b01d8f55c57c 100644
  
  skip_power_saving:
  	hsotg->lx_state = DWC2_L2;
-@@ -5818,6 +5822,15 @@ int dwc2_host_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+@@ -5818,6 +5822,15 @@ int dwc2_host_exit_partial_power_down(st
  
  	dev_dbg(hsotg->dev, "Exiting host partial power down started.\n");
  
@@ -672,7 +660,7 @@ index 12533a57f96f..b01d8f55c57c 100644
  	pcgcctl = dwc2_readl(hsotg, PCGCTL);
  	pcgcctl &= ~PCGCTL_STOPPCLK;
  	dwc2_writel(hsotg, pcgcctl, PCGCTL);
-@@ -5934,6 +5947,15 @@ void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg, int flags)
+@@ -5934,6 +5947,15 @@ void dwc2_host_exit_clock_gating(struct
  
  	dev_dbg(hsotg->dev, "Exiting host clock gating.\n");
  
@@ -688,11 +676,9 @@ index 12533a57f96f..b01d8f55c57c 100644
  	/* Clear the Gate hclk. */
  	pcgctl = dwc2_readl(hsotg, PCGCTL);
  	pcgctl &= ~PCGCTL_GATEHCLK;
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index 8b8481ba4a27..da5b428f4c84 100644
 --- a/drivers/usb/dwc2/platform.c
 +++ b/drivers/usb/dwc2/platform.c
-@@ -775,6 +775,20 @@ static int dwc2_driver_probe(struct platform_device *dev)
+@@ -775,6 +775,20 @@ static int dwc2_driver_probe(struct plat
  	if (retval)
  		return retval;
  
@@ -713,7 +699,7 @@ index 8b8481ba4a27..da5b428f4c84 100644
  	spin_lock_init(&hsotg->lock);
  
  	hsotg->vbus_supply = devm_regulator_get_optional(hsotg->dev, "vbus");
-@@ -928,6 +942,9 @@ static int dwc2_driver_probe(struct platform_device *dev)
+@@ -928,6 +942,9 @@ static int dwc2_driver_probe(struct plat
  	platform_set_drvdata(dev, hsotg);
  	hsotg->hibernated = 0;
  
@@ -723,7 +709,7 @@ index 8b8481ba4a27..da5b428f4c84 100644
  	dwc2_debugfs_init(hsotg);
  
  	/* Gadget code manages lowlevel hw on its own */
-@@ -1006,6 +1023,8 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+@@ -1006,6 +1023,8 @@ static int __maybe_unused dwc2_suspend(s
  
  	dwc2_drd_suspend(dwc2);
  
@@ -732,7 +718,7 @@ index 8b8481ba4a27..da5b428f4c84 100644
  	dwc2->phy_off_for_suspend =
  		dwc2_gadget_can_poweroff_phy(dwc2) || dwc2_host_can_poweroff_phy(dwc2);
  
-@@ -1035,6 +1054,17 @@ static int __maybe_unused dwc2_resume(struct device *dev)
+@@ -1035,6 +1054,17 @@ static int __maybe_unused dwc2_resume(st
  
  	dwc2->phy_off_for_suspend = false;
  
@@ -750,7 +736,7 @@ index 8b8481ba4a27..da5b428f4c84 100644
  	if (!dwc2->role_sw) {
  		/* Need to restore FORCEDEVMODE/FORCEHOSTMODE */
  		dwc2_force_dr_mode(dwc2);
-@@ -1064,8 +1094,65 @@ static int __maybe_unused dwc2_resume(struct device *dev)
+@@ -1064,8 +1094,65 @@ static int __maybe_unused dwc2_resume(st
  	return ret;
  }
  
@@ -816,6 +802,3 @@ index 8b8481ba4a27..da5b428f4c84 100644
  };
  
  static struct platform_driver dwc2_platform_driver = {
--- 
-2.53.0
-

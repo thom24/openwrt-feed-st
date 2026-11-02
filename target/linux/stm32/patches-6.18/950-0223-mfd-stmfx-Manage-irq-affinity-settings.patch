@@ -18,11 +18,9 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/401705
  drivers/mfd/stmfx.c | 16 ++++++++++++++++
  1 file changed, 16 insertions(+)
 
-diff --git a/drivers/mfd/stmfx.c b/drivers/mfd/stmfx.c
-index 0a7bbbdb395f..1a3b2f9e48cd 100644
 --- a/drivers/mfd/stmfx.c
 +++ b/drivers/mfd/stmfx.c
-@@ -191,12 +191,28 @@ static void stmfx_irq_unmask(struct irq_data *data)
+@@ -191,12 +191,28 @@ static void stmfx_irq_unmask(struct irq_
  	stmfx->irq_src |= BIT(data->hwirq % 8);
  }
  
@@ -51,6 +49,3 @@ index 0a7bbbdb395f..1a3b2f9e48cd 100644
  };
  
  static irqreturn_t stmfx_irq_handler(int irq, void *data)
--- 
-2.53.0
-

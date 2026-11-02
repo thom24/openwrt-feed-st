@@ -19,8 +19,6 @@ Signed-off-by: Mark Brown <broonie@kernel.org>
  drivers/spi/spi-stm32.c | 77 +++++++++++++++++++++++++++++++++++++++++
  1 file changed, 77 insertions(+)
 
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index 2749778cba5c..2e72c7f8c090 100644
 --- a/drivers/spi/spi-stm32.c
 +++ b/drivers/spi/spi-stm32.c
 @@ -202,6 +202,10 @@
@@ -50,11 +48,10 @@ index 2749778cba5c..2e72c7f8c090 100644
  	irqreturn_t (*irq_handler_event)(int irq, void *dev_id);
  	irqreturn_t (*irq_handler_thread)(int irq, void *dev_id);
  	unsigned int baud_rate_div_min;
-@@ -1355,6 +1361,55 @@ static int stm32fx_spi_transfer_one_irq(struct stm32_spi *spi)
- 	return 1;
+@@ -1356,6 +1362,55 @@ static int stm32fx_spi_transfer_one_irq(
  }
  
-+/**
+ /**
 + * stm32h7_spi_transfer_one_poll - transfer a single spi_transfer by direct
 + *				   register access without interrupt usage
 + * @spi: pointer to the spi controller data structure
@@ -103,14 +100,14 @@ index 2749778cba5c..2e72c7f8c090 100644
 +	return 0;
 +}
 +
- /**
++/**
   * stm32h7_spi_transfer_one_irq - transfer a single spi_transfer using
   *				  interrupts
-@@ -2029,6 +2084,24 @@ static int stm32_spi_transfer_one_setup(struct stm32_spi *spi,
- 	return ret;
+  * @spi: pointer to the spi controller data structure
+@@ -2030,6 +2085,24 @@ out:
  }
  
-+/**
+ /**
 + * stm32_spi_can_poll - detect if poll based transfer is appropriate
 + * @spi: pointer to the spi controller data structure
 + *
@@ -128,10 +125,11 @@ index 2749778cba5c..2e72c7f8c090 100644
 +	return (spi->cur_xferlen < byte_limit) ? true : false;
 +}
 +
- /**
++/**
   * stm32_spi_transfer_one - transfer a single spi_transfer
   * @ctrl: controller interface
-@@ -2061,6 +2134,8 @@ static int stm32_spi_transfer_one(struct spi_controller *ctrl,
+  * @spi_dev: pointer to the spi device
+@@ -2061,6 +2134,8 @@ static int stm32_spi_transfer_one(struct
  
  	if (spi->cur_usedma)
  		return stm32_spi_transfer_one_dma(spi, transfer);
@@ -140,7 +138,7 @@ index 2749778cba5c..2e72c7f8c090 100644
  	else
  		return spi->cfg->transfer_one_irq(spi);
  }
-@@ -2219,6 +2294,7 @@ static const struct stm32_spi_cfg stm32h7_spi_cfg = {
+@@ -2219,6 +2294,7 @@ static const struct stm32_spi_cfg stm32h
  	 * SPI access hence handling is performed within the SPI interrupt
  	 */
  	.transfer_one_irq = stm32h7_spi_transfer_one_irq,
@@ -148,7 +146,7 @@ index 2749778cba5c..2e72c7f8c090 100644
  	.irq_handler_thread = stm32h7_spi_irq_thread,
  	.baud_rate_div_min = STM32H7_SPI_MBR_DIV_MIN,
  	.baud_rate_div_max = STM32H7_SPI_MBR_DIV_MAX,
-@@ -2248,6 +2324,7 @@ static const struct stm32_spi_cfg stm32mp25_spi_cfg = {
+@@ -2248,6 +2324,7 @@ static const struct stm32_spi_cfg stm32m
  	 * SPI access hence handling is performed within the SPI interrupt
  	 */
  	.transfer_one_irq = stm32h7_spi_transfer_one_irq,
@@ -156,6 +154,3 @@ index 2749778cba5c..2e72c7f8c090 100644
  	.irq_handler_thread = stm32h7_spi_irq_thread,
  	.baud_rate_div_min = STM32H7_SPI_MBR_DIV_MIN,
  	.baud_rate_div_max = STM32H7_SPI_MBR_DIV_MAX,
--- 
-2.53.0
-

@@ -27,11 +27,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp135f-dk.dts | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index b7c0cee5bfc7..074945d381a5 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -439,23 +439,23 @@ &scmi_clk {
+@@ -439,23 +439,23 @@
  };
  
  &scmi_regu {
@@ -60,6 +58,3 @@ index b7c0cee5bfc7..074945d381a5 100644
  		reg = <VOLTD_SCMI_STPMIC1_PWR_SW2>;
  		regulator-name = "v3v3_sw";
  	};
--- 
-2.53.0
-

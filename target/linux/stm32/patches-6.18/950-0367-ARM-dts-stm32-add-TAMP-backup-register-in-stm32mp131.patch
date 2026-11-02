@@ -18,11 +18,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp131.dtsi | 34 ++++++++++++++++++++++++++++
  1 file changed, 34 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index d8be152ef0e2..5b00bb7f51a2 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -1939,5 +1939,39 @@ usbphyc_port1: usb-phy@1 {
+@@ -1939,5 +1939,39 @@
  				};
  			};
  		};
@@ -62,6 +60,3 @@ index d8be152ef0e2..5b00bb7f51a2 100644
 +		};
  	};
  };
--- 
-2.53.0
-

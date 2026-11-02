@@ -31,8 +31,6 @@ Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
  drivers/dma/stm32/stm32-dma3.c | 198 +++++++++++++++++++++++++++------
  2 files changed, 166 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/dma/stm32/Kconfig b/drivers/dma/stm32/Kconfig
-index 4d8d8063133b..27a36ebdda6e 100644
 --- a/drivers/dma/stm32/Kconfig
 +++ b/drivers/dma/stm32/Kconfig
 @@ -38,6 +38,7 @@ config STM32_DMA3
@@ -43,8 +41,6 @@ index 4d8d8063133b..27a36ebdda6e 100644
  	help
  	  Enable support for the on-chip DMA3 controller on STMicroelectronics
  	  STM32 platforms.
-diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
-index c534ccc6a624..b152009498be 100644
 --- a/drivers/dma/stm32/stm32-dma3.c
 +++ b/drivers/dma/stm32/stm32-dma3.c
 @@ -11,11 +11,13 @@
@@ -78,7 +74,7 @@ index c534ccc6a624..b152009498be 100644
  };
  
  static inline struct stm32_dma3_ddata *to_stm32_dma3_ddata(struct stm32_dma3_chan *chan)
-@@ -401,11 +404,158 @@ static void stm32_dma3_chan_dump_hwdesc(struct stm32_dma3_chan *chan,
+@@ -401,11 +404,158 @@ static void stm32_dma3_chan_dump_hwdesc(
  	}
  }
  
@@ -238,7 +234,7 @@ index c534ccc6a624..b152009498be 100644
  
  	/*
  	 * If the memory to be allocated for the number of hwdesc is greater than the maximum
-@@ -421,11 +571,12 @@ static struct stm32_dma3_swdesc *stm32_dma3_chan_desc_alloc(struct stm32_dma3_ch
+@@ -421,11 +571,12 @@ static struct stm32_dma3_swdesc *stm32_d
  		return NULL;
  	swdesc->lli_size = count;
  
@@ -256,7 +252,7 @@ index c534ccc6a624..b152009498be 100644
  	}
  	swdesc->ccr = 0;
  
-@@ -437,23 +588,16 @@ static struct stm32_dma3_swdesc *stm32_dma3_chan_desc_alloc(struct stm32_dma3_ch
+@@ -437,23 +588,16 @@ static struct stm32_dma3_swdesc *stm32_d
  	swdesc->ccr &= ~CCR_LAP;
  
  	return swdesc;
@@ -282,7 +278,7 @@ index c534ccc6a624..b152009498be 100644
  
  	kfree(swdesc);
  }
-@@ -1127,28 +1271,15 @@ static int stm32_dma3_alloc_chan_resources(struct dma_chan *c)
+@@ -1127,28 +1271,15 @@ static int stm32_dma3_alloc_chan_resourc
  		goto err_put_sync;
  	}
  
@@ -312,7 +308,7 @@ index c534ccc6a624..b152009498be 100644
  err_put_sync:
  	pm_runtime_put_sync(ddata2dev(ddata));
  
-@@ -1169,9 +1300,6 @@ static void stm32_dma3_free_chan_resources(struct dma_chan *c)
+@@ -1169,9 +1300,6 @@ static void stm32_dma3_free_chan_resourc
  
  	vchan_free_chan_resources(to_virt_chan(c));
  
@@ -322,7 +318,7 @@ index c534ccc6a624..b152009498be 100644
  	/* Release the channel semaphore */
  	if (chan->semaphore_mode)
  		stm32_dma3_put_chan_sem(chan);
-@@ -1835,6 +1963,10 @@ static int stm32_dma3_probe(struct platform_device *pdev)
+@@ -1835,6 +1963,10 @@ static int stm32_dma3_probe(struct platf
  			ddata->axi_max_burst_len);
  	}
  
@@ -333,6 +329,3 @@ index c534ccc6a624..b152009498be 100644
  	ddata->chans = devm_kcalloc(&pdev->dev, ddata->dma_channels, sizeof(*ddata->chans),
  				    GFP_KERNEL);
  	if (!ddata->chans) {
--- 
-2.53.0
-

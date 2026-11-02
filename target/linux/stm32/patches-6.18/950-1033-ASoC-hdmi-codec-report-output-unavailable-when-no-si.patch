@@ -18,8 +18,6 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  sound/soc/codecs/hdmi-codec.c | 14 +++++++++++++-
  1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/hdmi-codec.c b/sound/soc/codecs/hdmi-codec.c
-index df32032e631f..87fc6fbd5561 100644
 --- a/sound/soc/codecs/hdmi-codec.c
 +++ b/sound/soc/codecs/hdmi-codec.c
 @@ -18,6 +18,7 @@
@@ -30,7 +28,7 @@ index df32032e631f..87fc6fbd5561 100644
  
  #define HDMI_CODEC_CHMAP_IDX_UNKNOWN  -1
  
-@@ -472,8 +473,19 @@ static int hdmi_codec_startup(struct snd_pcm_substream *substream,
+@@ -472,8 +473,19 @@ static int hdmi_codec_startup(struct snd
  	if (tx && hcp->hcd.ops->get_eld) {
  		ret = hcp->hcd.ops->get_eld(dai->dev->parent, hcp->hcd.data,
  					    hcp->eld, sizeof(hcp->eld));
@@ -51,6 +49,3 @@ index df32032e631f..87fc6fbd5561 100644
  
  		snd_parse_eld(dai->dev, &hcp->eld_parsed,
  			      hcp->eld, sizeof(hcp->eld));
--- 
-2.53.0
-

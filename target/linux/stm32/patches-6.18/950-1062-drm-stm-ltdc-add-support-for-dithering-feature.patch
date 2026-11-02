@@ -18,11 +18,9 @@ Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
  drivers/gpu/drm/stm/ltdc.c | 15 ++++++++++++++-
  1 file changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-index 4edf6e9c53df..01a65ecd417b 100644
 --- a/drivers/gpu/drm/stm/ltdc.c
 +++ b/drivers/gpu/drm/stm/ltdc.c
-@@ -951,8 +951,11 @@ static void ltdc_crtc_atomic_enable(struct drm_crtc *crtc,
+@@ -951,8 +951,11 @@ static void ltdc_crtc_atomic_enable(stru
  	if (bus_flags & DRM_BUS_FLAG_PIXDATA_DRIVE_NEGEDGE)
  		val |= GCR_PCPOL;
  
@@ -35,7 +33,7 @@ index 4edf6e9c53df..01a65ecd417b 100644
  
  	/* Set Synchronization size */
  	val = (hsync << 16) | vsync;
-@@ -1979,6 +1982,16 @@ static int ltdc_crtc_init(struct drm_device *ddev, struct drm_crtc *crtc)
+@@ -1979,6 +1982,16 @@ static int ltdc_crtc_init(struct drm_dev
  	struct drm_plane *primary, *overlay;
  	unsigned int i;
  	int ret;
@@ -52,6 +50,3 @@ index 4edf6e9c53df..01a65ecd417b 100644
  
  	primary = ltdc_plane_create(ddev, DRM_PLANE_TYPE_PRIMARY, 0);
  	if (!primary) {
--- 
-2.53.0
-

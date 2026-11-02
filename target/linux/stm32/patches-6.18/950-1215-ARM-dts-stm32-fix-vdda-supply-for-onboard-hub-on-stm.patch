@@ -22,11 +22,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm/boot/dts/st/stm32mp135f-dk.dts | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index 590cd146b500..10c5f7615184 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -793,6 +793,7 @@ hub@1 {
+@@ -793,6 +793,7 @@
  		compatible = "usb424,2514";
  		reg = <1>;
  		vdd-supply = <&scmi_v3v3_sw>;
@@ -34,6 +32,3 @@ index 590cd146b500..10c5f7615184 100644
  	};
  };
  
--- 
-2.53.0
-

@@ -23,8 +23,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp135.dtsi | 42 ++++++++++++++--------------
  1 file changed, 21 insertions(+), 21 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135.dtsi b/arch/arm/boot/dts/st/stm32mp135.dtsi
-index 834a4d545fe4..f573335edf6b 100644
 --- a/arch/arm/boot/dts/st/stm32mp135.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp135.dtsi
 @@ -6,29 +6,29 @@
@@ -78,6 +76,3 @@ index 834a4d545fe4..f573335edf6b 100644
 +		status = "disabled";
  	};
  };
--- 
-2.53.0
-

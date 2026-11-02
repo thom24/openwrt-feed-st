@@ -13,8 +13,6 @@ Change-Id: Ie662eb1de711d12371ec0aa0acbfb2c2afa67c42
  .../st/stm32/stm32-dcmipp/dcmipp-core.c       | 26 +++++++++++++++++++
  2 files changed, 29 insertions(+)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
-index b123d4ee90a4..6981636def01 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
 @@ -11,6 +11,7 @@
@@ -34,8 +32,6 @@ index b123d4ee90a4..6981636def01 100644
  };
  
  #define DCMIPP_ENT_LINK(src, srcpad, sink, sinkpad, link_flags) {	\
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
-index 6ccf97743894..872a6513aca0 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
 @@ -8,6 +8,7 @@
@@ -46,7 +42,7 @@ index 6ccf97743894..872a6513aca0 100644
  #include <linux/clk.h>
  #include <linux/delay.h>
  #include <linux/init.h>
-@@ -580,11 +581,29 @@ static int dcmipp_probe(struct platform_device *pdev)
+@@ -580,11 +581,29 @@ static int dcmipp_probe(struct platform_
  	if (!dcmipp->entity)
  		return -ENOMEM;
  
@@ -76,7 +72,7 @@ index 6ccf97743894..872a6513aca0 100644
  		return ret;
  	}
  
-@@ -603,6 +622,9 @@ static int dcmipp_probe(struct platform_device *pdev)
+@@ -603,6 +622,9 @@ static int dcmipp_probe(struct platform_
  	if (ret) {
  		media_device_cleanup(&dcmipp->mdev);
  		v4l2_device_unregister(&dcmipp->v4l2_dev);
@@ -86,7 +82,7 @@ index 6ccf97743894..872a6513aca0 100644
  		return ret;
  	}
  
-@@ -630,6 +652,10 @@ static void dcmipp_remove(struct platform_device *pdev)
+@@ -630,6 +652,10 @@ static void dcmipp_remove(struct platfor
  	media_device_cleanup(&dcmipp->mdev);
  
  	v4l2_device_unregister(&dcmipp->v4l2_dev);
@@ -97,6 +93,3 @@ index 6ccf97743894..872a6513aca0 100644
  }
  
  static int dcmipp_runtime_suspend(struct device *dev)
--- 
-2.53.0
-

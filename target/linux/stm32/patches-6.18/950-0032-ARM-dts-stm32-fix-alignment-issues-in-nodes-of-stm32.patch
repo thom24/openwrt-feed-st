@@ -16,11 +16,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp131.dtsi | 14 +++++++-------
  1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index fd730aa37c22..f1ef92b18728 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -1122,7 +1122,7 @@ usart1: serial@4c000000 {
+@@ -1122,7 +1122,7 @@
  				resets = <&rcc USART1_R>;
  				wakeup-source;
  				dmas = <&dmamux1 41 0x400 0x5>,
@@ -29,7 +27,7 @@ index fd730aa37c22..f1ef92b18728 100644
  				dma-names = "rx", "tx";
  				access-controllers = <&etzpc 16>;
  				status = "disabled";
-@@ -1136,7 +1136,7 @@ usart2: serial@4c001000 {
+@@ -1136,7 +1136,7 @@
  				resets = <&rcc USART2_R>;
  				wakeup-source;
  				dmas = <&dmamux1 43 0x400 0x5>,
@@ -38,7 +36,7 @@ index fd730aa37c22..f1ef92b18728 100644
  				dma-names = "rx", "tx";
  				access-controllers = <&etzpc 17>;
  				status = "disabled";
-@@ -1148,7 +1148,7 @@ i2s4: audio-controller@4c002000 {
+@@ -1148,7 +1148,7 @@
  				#sound-dai-cells = <0>;
  				interrupts = <GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>;
  				dmas = <&dmamux1 83 0x400 0x01>,
@@ -47,7 +45,7 @@ index fd730aa37c22..f1ef92b18728 100644
  				dma-names = "rx", "tx";
  				access-controllers = <&etzpc 13>;
  				status = "disabled";
-@@ -1341,9 +1341,9 @@ timers15: timer@4c00a000 {
+@@ -1341,9 +1341,9 @@
  				clocks = <&rcc TIM15_K>;
  				clock-names = "int";
  				dmas = <&dmamux1 105 0x400 0x1>,
@@ -60,7 +58,7 @@ index fd730aa37c22..f1ef92b18728 100644
  				dma-names = "ch1", "up", "trig", "com";
  				access-controllers = <&etzpc 26>;
  				status = "disabled";
-@@ -1376,7 +1376,7 @@ timers16: timer@4c00b000 {
+@@ -1376,7 +1376,7 @@
  				clocks = <&rcc TIM16_K>;
  				clock-names = "int";
  				dmas = <&dmamux1 109 0x400 0x1>,
@@ -69,6 +67,3 @@ index fd730aa37c22..f1ef92b18728 100644
  				dma-names = "ch1", "up";
  				access-controllers = <&etzpc 27>;
  				status = "disabled";
--- 
-2.53.0
-

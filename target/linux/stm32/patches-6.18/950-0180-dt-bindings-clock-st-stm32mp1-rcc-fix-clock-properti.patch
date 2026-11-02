@@ -23,8 +23,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  .../bindings/clock/st,stm32mp1-rcc.yaml       | 42 ++++++++-----------
  1 file changed, 17 insertions(+), 25 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml b/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
-index 0d4a5db45b1b..1f0bc159d160 100644
 --- a/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
 +++ b/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
 @@ -102,43 +102,35 @@ allOf:
@@ -88,6 +86,3 @@ index 0d4a5db45b1b..1f0bc159d160 100644
  
  additionalProperties: false
  
--- 
-2.53.0
-

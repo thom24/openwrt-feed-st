@@ -21,8 +21,6 @@ Signed-off-by: Hans Verkuil <hverkuil+cisco@kernel.org>
  .../st/stm32/stm32-dcmipp/dcmipp-bytecap.c      | 17 ++++++-----------
  1 file changed, 6 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
-index 0abb36f7fe56..d184772b6a06 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
 @@ -147,7 +147,6 @@ struct dcmipp_bytecap_device {
@@ -33,7 +31,7 @@ index 0abb36f7fe56..d184772b6a06 100644
  	u32 cmsr2;
  
  	struct {
-@@ -445,8 +444,7 @@ static int dcmipp_bytecap_start_streaming(struct vb2_queue *vq,
+@@ -445,8 +444,7 @@ static int dcmipp_bytecap_start_streamin
  	dcmipp_start_capture(vcap, vcap->next);
  
  	/* Enable interruptions */
@@ -43,7 +41,7 @@ index 0abb36f7fe56..d184772b6a06 100644
  
  	vcap->state = DCMIPP_RUNNING;
  
-@@ -502,7 +500,7 @@ static void dcmipp_bytecap_stop_streaming(struct vb2_queue *vq)
+@@ -502,7 +500,7 @@ static void dcmipp_bytecap_stop_streamin
  	media_pipeline_stop(vcap->vdev.entity.pads);
  
  	/* Disable interruptions */
@@ -52,7 +50,7 @@ index 0abb36f7fe56..d184772b6a06 100644
  
  	/* Stop capture */
  	reg_clear(vcap, DCMIPP_P0FCTCR, DCMIPP_P0FCTCR_CPTREQ);
-@@ -751,23 +749,20 @@ static irqreturn_t dcmipp_bytecap_irq_thread(int irq, void *arg)
+@@ -751,23 +749,20 @@ static irqreturn_t dcmipp_bytecap_irq_th
  	struct dcmipp_bytecap_device *vcap =
  			container_of(arg, struct dcmipp_bytecap_device, ved);
  	size_t bytesused = 0;
@@ -78,7 +76,7 @@ index 0abb36f7fe56..d184772b6a06 100644
  		vcap->count.frame++;
  
  		/* Read captured buffer size */
-@@ -775,7 +770,7 @@ static irqreturn_t dcmipp_bytecap_irq_thread(int irq, void *arg)
+@@ -775,7 +770,7 @@ static irqreturn_t dcmipp_bytecap_irq_th
  		dcmipp_bytecap_process_frame(vcap, bytesused);
  	}
  
@@ -87,7 +85,7 @@ index 0abb36f7fe56..d184772b6a06 100644
  		vcap->count.vsync++;
  		if (vcap->state == DCMIPP_WAIT_FOR_BUFFER) {
  			vcap->count.underrun++;
-@@ -806,7 +801,7 @@ static irqreturn_t dcmipp_bytecap_irq_callback(int irq, void *arg)
+@@ -806,7 +801,7 @@ static irqreturn_t dcmipp_bytecap_irq_ca
  			container_of(arg, struct dcmipp_bytecap_device, ved);
  
  	/* Store interrupt status register */
@@ -96,6 +94,3 @@ index 0abb36f7fe56..d184772b6a06 100644
  	vcap->count.it++;
  
  	/* Clear interrupt */
--- 
-2.53.0
-

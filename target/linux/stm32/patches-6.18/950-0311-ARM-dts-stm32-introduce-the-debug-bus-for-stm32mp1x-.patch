@@ -26,8 +26,6 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp153.dtsi |  68 +++++++++++
  3 files changed, 357 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index 568bce828ae7..d8be152ef0e2 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
 @@ -3,6 +3,7 @@
@@ -38,7 +36,7 @@ index 568bce828ae7..d8be152ef0e2 100644
  #include <dt-bindings/interrupt-controller/arm-gic.h>
  #include <dt-bindings/clock/stm32mp13-clks.h>
  #include <dt-bindings/regulator/st,stm32mp13-regulator.h>
-@@ -1112,9 +1113,125 @@ hdp: pinctrl@5002a000 {
+@@ -1112,9 +1113,125 @@
  			compatible = "st,stm32mp131-hdp";
  			reg = <0x5002a000 0x400>;
  			clocks = <&rcc HDP>;
@@ -164,8 +162,6 @@ index 568bce828ae7..d8be152ef0e2 100644
  		mdma: dma-controller@58000000 {
  			compatible = "st,stm32h7-mdma";
  			reg = <0x58000000 0x1000>;
-diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
-index 7308ff685d5b..bf962ae761d5 100644
 --- a/arch/arm/boot/dts/st/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
 @@ -3,6 +3,7 @@
@@ -176,7 +172,7 @@ index 7308ff685d5b..bf962ae761d5 100644
  #include <dt-bindings/interrupt-controller/arm-gic.h>
  #include <dt-bindings/clock/stm32mp1-clks.h>
  #include <dt-bindings/reset/stm32mp1-resets.h>
-@@ -439,9 +440,180 @@ hdp: pinctrl@5002a000 {
+@@ -439,9 +440,180 @@
  			compatible = "st,stm32mp151-hdp";
  			reg = <0x5002a000 0x400>;
  			clocks = <&rcc HDP>;
@@ -357,11 +353,9 @@ index 7308ff685d5b..bf962ae761d5 100644
  		pinctrl_z: pinctrl@54004000 {
  			compatible = "st,stm32mp157-z-pinctrl";
  			#address-cells = <1>;
-diff --git a/arch/arm/boot/dts/st/stm32mp153.dtsi b/arch/arm/boot/dts/st/stm32mp153.dtsi
-index 483b8ac90e98..1a26c599cfbc 100644
 --- a/arch/arm/boot/dts/st/stm32mp153.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp153.dtsi
-@@ -32,6 +32,74 @@ timer {
+@@ -32,6 +32,74 @@
  	};
  };
  
@@ -436,6 +430,3 @@ index 483b8ac90e98..1a26c599cfbc 100644
  &etzpc {
  	m_can1: can@4400e000 {
  		compatible = "bosch,m_can";
--- 
-2.53.0
-

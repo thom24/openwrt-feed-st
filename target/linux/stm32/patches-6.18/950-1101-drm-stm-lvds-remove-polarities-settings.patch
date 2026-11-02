@@ -13,11 +13,9 @@ Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
  drivers/gpu/drm/stm/lvds.c | 27 +--------------------------
  1 file changed, 1 insertion(+), 26 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
-index 72b1446dfc53..f69f24fc2884 100644
 --- a/drivers/gpu/drm/stm/lvds.c
 +++ b/drivers/gpu/drm/stm/lvds.c
-@@ -836,22 +836,7 @@ static void lvds_config_data_mapping(struct stm_lvds *lvds)
+@@ -836,22 +836,7 @@ static void lvds_config_data_mapping(str
  
  static void lvds_config_mode(struct stm_lvds *lvds)
  {
@@ -41,7 +39,7 @@ index 72b1446dfc53..f69f24fc2884 100644
  
  	lvds_clear(lvds, LVDS_CR, CR_LKMOD);
  	lvds_clear(lvds, LVDS_CDL1CR, CDLCR_DISTR0 | CDLCR_DISTR1 | CDLCR_DISTR2 |
-@@ -872,16 +857,6 @@ static void lvds_config_mode(struct stm_lvds *lvds)
+@@ -872,16 +857,6 @@ static void lvds_config_mode(struct stm_
  		}
  	}
  
@@ -58,6 +56,3 @@ index 72b1446dfc53..f69f24fc2884 100644
  	switch (lvds->link_type) {
  	case LVDS_SINGLE_LINK_PRIMARY:
  	case LVDS_SINGLE_LINK_SECONDARY:
--- 
-2.53.0
-

@@ -17,11 +17,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/panel/panel-simple.c | 11 +++++++++--
  1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
-index 878a5dc7748f..1a1525ef1cb8 100644
 --- a/drivers/gpu/drm/panel/panel-simple.c
 +++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -687,12 +687,19 @@ static struct panel_simple *panel_simple_probe(struct device *dev)
+@@ -687,12 +687,19 @@ static struct panel_simple *panel_simple
  	if (IS_ERR(panel->supply))
  		return ERR_CAST(panel->supply);
  
@@ -43,6 +41,3 @@ index 878a5dc7748f..1a1525ef1cb8 100644
  	err = of_drm_get_panel_orientation(dev->of_node, &panel->orientation);
  	if (err) {
  		dev_err(dev, "%pOF: failed to get orientation %d\n", dev->of_node, err);
--- 
-2.53.0
-

@@ -23,11 +23,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 56 +++++++++++-----------
  1 file changed, 28 insertions(+), 28 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-index 0c5fc7a7be8d..67b6dc2c73dd 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-@@ -264,34 +264,6 @@ &i2c8 {
+@@ -264,34 +264,6 @@
  	status = "disabled";
  };
  
@@ -62,10 +60,11 @@ index 0c5fc7a7be8d..67b6dc2c73dd 100644
  /* use LPTIMER with tick broadcast for suspend mode */
  &lptimer3 {
  	status = "okay";
-@@ -331,6 +303,34 @@ lvds_out0: endpoint {
+@@ -330,6 +302,34 @@
+ 		};
  	};
  };
- 
++
 +&ommanager {
 +	memory-region = <&mm_ospi1>;
 +	memory-region-names = "ospi1";
@@ -93,10 +92,6 @@ index 0c5fc7a7be8d..67b6dc2c73dd 100644
 +		};
 +	};
 +};
-+
+ 
  &pcie_ep {
  	pinctrl-names = "default", "init";
- 	pinctrl-0 = <&pcie_pins_a>;
--- 
-2.53.0
-

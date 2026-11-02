@@ -23,11 +23,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-index de125130185a..ca5ebee64cd6 100644
 --- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-@@ -181,7 +181,7 @@ scmi_vddio1: regulator@0 {
+@@ -181,7 +181,7 @@
  		regulator-min-microvolt = <1800000>;
  		regulator-max-microvolt = <3300000>;
  	};
@@ -36,6 +34,3 @@ index de125130185a..ca5ebee64cd6 100644
  		reg = <VOLTD_SCMI_STPMIC2_LDO7>;
  		regulator-name = "vdd_sdcard";
  	};
--- 
-2.53.0
-

@@ -11,11 +11,9 @@ Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
  drivers/pinctrl/stm32/pinctrl-stm32.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
-index d9bac58e60fb..61a16dedb07d 100644
 --- a/drivers/pinctrl/stm32/pinctrl-stm32.c
 +++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
-@@ -1148,7 +1148,7 @@ static u32 stm32_pconf_get_bias(struct stm32_gpio_bank *bank,
+@@ -1148,7 +1148,7 @@ static u32 stm32_pconf_get_bias(struct s
  static bool stm32_pconf_get(struct stm32_gpio_bank *bank,
  	unsigned int offset, bool dir)
  {
@@ -24,6 +22,3 @@ index d9bac58e60fb..61a16dedb07d 100644
  
  	if (dir)
  		val = !!(readl_relaxed(bank->base + STM32_GPIO_IDR) &
--- 
-2.53.0
-

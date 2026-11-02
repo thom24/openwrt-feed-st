@@ -29,8 +29,6 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  include/linux/i3c/master.h     |  1 +
  2 files changed, 57 insertions(+)
 
-diff --git a/drivers/i3c/master/stm32-i3c.c b/drivers/i3c/master/stm32-i3c.c
-index 3c4ea421ad05..2895cf69c03c 100644
 --- a/drivers/i3c/master/stm32-i3c.c
 +++ b/drivers/i3c/master/stm32-i3c.c
 @@ -336,6 +336,7 @@ struct stm32_i3c_ddata {
@@ -41,7 +39,7 @@ index 3c4ea421ad05..2895cf69c03c 100644
  };
  
  static inline struct stm32_i3c_ddata *to_stm32_i3c_ddata(struct i3c_master_controller *m)
-@@ -448,6 +449,58 @@ static int stm32_i3c_master_write_txfifo(struct stm32_i3c_ddata *ddata)
+@@ -448,6 +449,58 @@ static int stm32_i3c_master_write_txfifo
  	return 0;
  }
  
@@ -100,7 +98,7 @@ index 3c4ea421ad05..2895cf69c03c 100644
  static int stm32_i3c_master_read_rxfifo(struct stm32_i3c_ddata *ddata, unsigned int max_len)
  {
  	struct stm32_i3c_cmd *cmd = stm32_i3c_master_next_data_cmd(ddata, true);
-@@ -1042,6 +1095,7 @@ static int stm32_i3c_pure_timing_cfg(struct i3c_master_controller *m, unsigned l
+@@ -1042,6 +1095,7 @@ static int stm32_i3c_pure_timing_cfg(str
  	writel_relaxed(timingr0, ddata->base + STM32_I3C_TIMINGR0);
  	writel_relaxed(timingr1, ddata->base + STM32_I3C_TIMINGR1);
  	writel_relaxed(0, ddata->base + STM32_I3C_TIMINGR2);
@@ -108,7 +106,7 @@ index 3c4ea421ad05..2895cf69c03c 100644
  
  	dev_dbg(ddata->dev, "%s: timingr0=%#x timingr1=%#x\n", __func__, timingr0, timingr1);
  
-@@ -1163,6 +1217,7 @@ static int stm32_i3c_mixed_timing_cfg(struct i3c_master_controller *m, unsigned
+@@ -1163,6 +1217,7 @@ static int stm32_i3c_mixed_timing_cfg(st
  	writel_relaxed(timingr0, ddata->base + STM32_I3C_TIMINGR0);
  	writel_relaxed(timingr1, ddata->base + STM32_I3C_TIMINGR1);
  	writel_relaxed(0, ddata->base + STM32_I3C_TIMINGR2);
@@ -116,7 +114,7 @@ index 3c4ea421ad05..2895cf69c03c 100644
  
  	dev_dbg(ddata->dev, "%s: timingr0=%#x timingr1=%#x\n", __func__, timingr0, timingr1);
  
-@@ -2114,6 +2169,7 @@ static const struct i3c_master_controller_ops stm32_i3c_master_ops = {
+@@ -2114,6 +2169,7 @@ static const struct i3c_master_controlle
  	.recycle_ibi_slot = stm32_i3c_master_recycle_ibi_slot,	/* Required if .request_ibi */
  	.enable_hotjoin = stm32_i3c_master_enable_hotjoin,
  	.disable_hotjoin = stm32_i3c_master_disable_hotjoin,
@@ -124,8 +122,6 @@ index 3c4ea421ad05..2895cf69c03c 100644
  };
  
  static int stm32_i3c_probe(struct platform_device *pdev)
-diff --git a/include/linux/i3c/master.h b/include/linux/i3c/master.h
-index df0132048a10..d7fc7f35fcad 100644
 --- a/include/linux/i3c/master.h
 +++ b/include/linux/i3c/master.h
 @@ -262,6 +262,7 @@ struct i3c_device {
@@ -136,6 +132,3 @@ index df0132048a10..d7fc7f35fcad 100644
  
  /**
   * enum i3c_bus_mode - I3C bus mode
--- 
-2.53.0
-

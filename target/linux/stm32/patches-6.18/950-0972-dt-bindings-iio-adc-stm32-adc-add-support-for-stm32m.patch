@@ -14,8 +14,6 @@ Signed-off-by: Cheick TRAORE <cheick.traore-ext@st.com>
  .../bindings/iio/adc/st,stm32-adc.yaml        | 62 ++++++++++++++++++-
  1 file changed, 61 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
-index c2c61808d113..cccb0fee39c1 100644
 --- a/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
 +++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
 @@ -28,6 +28,7 @@ properties:
@@ -26,14 +24,10 @@ index c2c61808d113..cccb0fee39c1 100644
        - st,stm32mp25-adc-core
  
    reg:
-@@ -219,6 +220,31 @@ allOf:
-           maximum: 75000000
-           default: 75000000
- 
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
+@@ -223,6 +224,31 @@ allOf:
+       properties:
+         compatible:
+           contains:
 +            const: st,stm32mp21-adc-core
 +
 +    then:
@@ -55,9 +49,13 @@ index c2c61808d113..cccb0fee39c1 100644
 +          maximum: 70000000
 +          default: 70000000
 +
-   - if:
-       properties:
-         compatible:
++  - if:
++      properties:
++        compatible:
++          contains:
+             const: st,stm32mp25-adc-core
+ 
+     then:
 @@ -273,6 +299,7 @@ patternProperties:
            - st,stm32h7-adc
            - st,stm32mp1-adc
@@ -115,6 +113,3 @@ index c2c61808d113..cccb0fee39c1 100644
        - if:
            properties:
              compatible:
--- 
-2.53.0
-

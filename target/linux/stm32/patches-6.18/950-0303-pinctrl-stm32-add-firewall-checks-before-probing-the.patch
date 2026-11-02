@@ -14,8 +14,6 @@ Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
  drivers/pinctrl/stm32/pinctrl-stm32-hdp.c | 14 ++++++++++++++
  1 file changed, 14 insertions(+)
 
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32-hdp.c b/drivers/pinctrl/stm32/pinctrl-stm32-hdp.c
-index 0b1dff01e04c..cce477e86ef9 100644
 --- a/drivers/pinctrl/stm32/pinctrl-stm32-hdp.c
 +++ b/drivers/pinctrl/stm32/pinctrl-stm32-hdp.c
 @@ -4,6 +4,7 @@
@@ -38,7 +36,7 @@ index 0b1dff01e04c..cce477e86ef9 100644
  	const char * const *func_name;
  };
  
-@@ -615,6 +618,13 @@ static int stm32_hdp_probe(struct platform_device *pdev)
+@@ -615,6 +618,13 @@ static int stm32_hdp_probe(struct platfo
  		return -ENOMEM;
  	hdp->dev = dev;
  
@@ -52,7 +50,7 @@ index 0b1dff01e04c..cce477e86ef9 100644
  	platform_set_drvdata(pdev, hdp);
  
  	hdp->base = devm_platform_ioremap_resource(pdev, 0);
-@@ -670,8 +680,12 @@ static int stm32_hdp_probe(struct platform_device *pdev)
+@@ -670,8 +680,12 @@ static int stm32_hdp_probe(struct platfo
  static void stm32_hdp_remove(struct platform_device *pdev)
  {
  	struct stm32_hdp *hdp = platform_get_drvdata(pdev);
@@ -65,6 +63,3 @@ index 0b1dff01e04c..cce477e86ef9 100644
  }
  
  static int stm32_hdp_suspend(struct device *dev)
--- 
-2.53.0
-

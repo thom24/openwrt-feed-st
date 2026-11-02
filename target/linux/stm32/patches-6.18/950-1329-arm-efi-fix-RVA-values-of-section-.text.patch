@@ -37,8 +37,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/compressed/efi-header.S | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/compressed/efi-header.S b/arch/arm/boot/compressed/efi-header.S
-index 65a3025c0e13..0d8abbc06199 100644
 --- a/arch/arm/boot/compressed/efi-header.S
 +++ b/arch/arm/boot/compressed/efi-header.S
 @@ -104,9 +104,9 @@ extra_header_fields:
@@ -53,6 +51,3 @@ index 65a3025c0e13..0d8abbc06199 100644
  		.long	0				@ PointerToRelocations
  		.long	0				@ PointerToLineNumbers
  		.short	0				@ NumberOfRelocations
--- 
-2.53.0
-

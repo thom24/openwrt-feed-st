@@ -12,11 +12,9 @@ Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
  drivers/gpu/drm/stm/ltdc.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-index 7f1f21422caa..9a114779e6bb 100644
 --- a/drivers/gpu/drm/stm/ltdc.c
 +++ b/drivers/gpu/drm/stm/ltdc.c
-@@ -742,7 +742,7 @@ static inline void ltdc_set_ycbcr_coeffs(struct drm_plane *plane)
+@@ -742,7 +742,7 @@ static inline void ltdc_set_ycbcr_coeffs
  		ran = DRM_COLOR_YCBCR_LIMITED_RANGE;
  	}
  
@@ -25,6 +23,3 @@ index 7f1f21422caa..9a114779e6bb 100644
  	regmap_write(ldev->regmap, LTDC_L1CYR0R + lofs,
  		     ltdc_ycbcr2rgb_coeffs[enc][ran][0]);
  	regmap_write(ldev->regmap, LTDC_L1CYR1R + lofs,
--- 
-2.53.0
-

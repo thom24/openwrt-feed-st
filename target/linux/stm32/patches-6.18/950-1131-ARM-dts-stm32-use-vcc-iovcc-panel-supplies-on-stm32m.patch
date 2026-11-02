@@ -21,11 +21,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp157f-ev1.dts         | 3 ++-
  3 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
-index ce6183a00020..8fb8a29f7f29 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
-@@ -345,7 +345,8 @@ panel_dsi: panel@0 {
+@@ -345,7 +345,8 @@
  		reg = <0>;
  		reset-gpios = <&gpiof 15 GPIO_ACTIVE_LOW>;
  		backlight = <&panel_backlight>;
@@ -35,11 +33,9 @@ index ce6183a00020..8fb8a29f7f29 100644
  		status = "okay";
  
  		port {
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-index 475433f7b19a..eb49109adee7 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-@@ -345,7 +345,8 @@ panel_dsi: panel@0 {
+@@ -345,7 +345,8 @@
  		reg = <0>;
  		reset-gpios = <&gpiof 15 GPIO_ACTIVE_LOW>;
  		backlight = <&panel_backlight>;
@@ -49,11 +45,9 @@ index 475433f7b19a..eb49109adee7 100644
  		status = "okay";
  
  		port {
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-index a5486405eb94..2d6ae39105a5 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-@@ -345,7 +345,8 @@ panel_dsi: panel@0 {
+@@ -345,7 +345,8 @@
  		reg = <0>;
  		reset-gpios = <&gpiof 15 GPIO_ACTIVE_LOW>;
  		backlight = <&panel_backlight>;
@@ -63,6 +57,3 @@ index a5486405eb94..2d6ae39105a5 100644
  		status = "okay";
  
  		port {
--- 
-2.53.0
-

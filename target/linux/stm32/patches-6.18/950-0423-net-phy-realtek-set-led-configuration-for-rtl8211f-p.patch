@@ -21,11 +21,9 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/573988
  drivers/net/phy/realtek/realtek_main.c | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/drivers/net/phy/realtek/realtek_main.c b/drivers/net/phy/realtek/realtek_main.c
-index c461ccc03871..f87534932c29 100644
 --- a/drivers/net/phy/realtek/realtek_main.c
 +++ b/drivers/net/phy/realtek/realtek_main.c
-@@ -1315,6 +1315,11 @@ static int rtl8211f_config_init(struct phy_device *phydev)
+@@ -1315,6 +1315,11 @@ static int rtl8211f_config_init(struct p
  	struct device *dev = &phydev->mdio.dev;
  	int ret;
  
@@ -37,6 +35,3 @@ index c461ccc03871..f87534932c29 100644
  	ret = rtl8211f_config_aldps(phydev);
  	if (ret) {
  		dev_err(dev, "aldps mode configuration failed: %pe\n",
--- 
-2.53.0
-

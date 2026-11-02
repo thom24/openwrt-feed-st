@@ -23,11 +23,9 @@ Change-Id: I7deb8aecbec1420060ee05a74c4fa0a5e7315a7d
  drivers/usb/dwc2/platform.c | 19 ++++++++++++++++++-
  1 file changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index c34031556402..205642852c57 100644
 --- a/drivers/usb/dwc2/platform.c
 +++ b/drivers/usb/dwc2/platform.c
-@@ -722,8 +722,25 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+@@ -722,8 +722,25 @@ static int __maybe_unused dwc2_suspend(s
  		return 0;
  
  	is_device_mode = dwc2_is_device_mode(dwc2);
@@ -54,6 +52,3 @@ index c34031556402..205642852c57 100644
  
  	dwc2_drd_suspend(dwc2);
  
--- 
-2.53.0
-

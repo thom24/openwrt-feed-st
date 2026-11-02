@@ -25,11 +25,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 186 ++++++++++++++++++++++
  1 file changed, 186 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index 4cf17da3ca45..e522c57be4c0 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -29,6 +29,17 @@ aliases {
+@@ -29,6 +29,17 @@
  
  	chosen {
  		stdout-path = "serial0:115200n8";
@@ -47,7 +45,7 @@ index 4cf17da3ca45..e522c57be4c0 100644
  	};
  
  	clock-hog {
-@@ -42,6 +53,12 @@ clk_ext_camera: clk-ext-camera {
+@@ -42,6 +53,12 @@
  			compatible = "fixed-clock";
  			clock-frequency = <24000000>;
  		};
@@ -60,7 +58,7 @@ index 4cf17da3ca45..e522c57be4c0 100644
  	};
  
  	dmic0: dmic-0 {
-@@ -110,11 +127,63 @@ led-blue {
+@@ -110,11 +127,63 @@
  		};
  	};
  
@@ -124,7 +122,7 @@ index 4cf17da3ca45..e522c57be4c0 100644
  	sound {
  		compatible = "audio-graph-card";
  		label = "STM32MP25-DK";
-@@ -245,6 +314,31 @@ dcmipp_0: endpoint {
+@@ -245,6 +314,31 @@
  	};
  };
  
@@ -156,7 +154,7 @@ index 4cf17da3ca45..e522c57be4c0 100644
  &ethernet1 {
  	pinctrl-0 = <&eth1_rgmii_pins_b>;
  	pinctrl-1 = <&eth1_rgmii_sleep_pins_b>;
-@@ -366,6 +460,53 @@ imx335_ep: endpoint {
+@@ -366,6 +460,53 @@
  			};
  		};
  	};
@@ -210,7 +208,7 @@ index 4cf17da3ca45..e522c57be4c0 100644
  };
  
  &i2c8 {
-@@ -397,6 +538,51 @@ &ipcc2 {
+@@ -397,6 +538,51 @@
  	status = "okay";
  };
  
@@ -262,6 +260,3 @@ index 4cf17da3ca45..e522c57be4c0 100644
  &m0_rproc {
  	memory-region = <&cm0_cube_fw>, <&cm0_cube_data>;
  	clocks = <&rcc CK_CPU3>,
--- 
-2.53.0
-

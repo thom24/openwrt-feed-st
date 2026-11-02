@@ -24,8 +24,6 @@ Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
  Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml b/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
-index 7b03a77adbce..162a0c526d5d 100644
 --- a/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
 +++ b/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
 @@ -37,6 +37,9 @@ properties:
@@ -38,6 +36,3 @@ index 7b03a77adbce..162a0c526d5d 100644
    access-controllers:
      minItems: 1
      maxItems: 2
--- 
-2.53.0
-

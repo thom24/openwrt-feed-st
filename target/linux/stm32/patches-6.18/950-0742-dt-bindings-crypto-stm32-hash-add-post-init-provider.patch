@@ -29,8 +29,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-index 822318414095..e86bc0bc9238 100644
 --- a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
 +++ b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
 @@ -51,6 +51,8 @@ properties:
@@ -42,6 +40,3 @@ index 822318414095..e86bc0bc9238 100644
    access-controllers:
      minItems: 1
      maxItems: 2
--- 
-2.53.0
-

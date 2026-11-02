@@ -20,11 +20,9 @@ Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 9 +++++++++
  1 file changed, 9 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-index 52f443d9ea5e..28b4a5c72cca 100644
 --- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-@@ -508,6 +508,15 @@ &ipcc1 {
+@@ -508,6 +508,15 @@
  	status = "okay";
  };
  
@@ -40,6 +38,3 @@ index 52f443d9ea5e..28b4a5c72cca 100644
  &ltdc {
  	bootph-some-ram;
  	status = "okay";
--- 
-2.53.0
-

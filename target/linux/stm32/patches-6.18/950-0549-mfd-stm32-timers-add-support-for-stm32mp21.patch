@@ -17,11 +17,9 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  include/linux/mfd/stm32-timers.h | 1 +
  2 files changed, 2 insertions(+)
 
-diff --git a/drivers/mfd/stm32-timers.c b/drivers/mfd/stm32-timers.c
-index b3dbc02aaf79..b57ea65c3694 100644
 --- a/drivers/mfd/stm32-timers.c
 +++ b/drivers/mfd/stm32-timers.c
-@@ -349,6 +349,7 @@ static void stm32_timers_remove(struct platform_device *pdev)
+@@ -349,6 +349,7 @@ static void stm32_timers_remove(struct p
  
  static const struct of_device_id stm32_timers_of_match[] = {
  	{ .compatible = "st,stm32-timers", },
@@ -29,8 +27,6 @@ index b3dbc02aaf79..b57ea65c3694 100644
  	{ .compatible = "st,stm32mp25-timers", .data = (void *)STM32MP25_TIM_IPIDR },
  	{ /* end node */ },
  };
-diff --git a/include/linux/mfd/stm32-timers.h b/include/linux/mfd/stm32-timers.h
-index 23b0cae4a9f8..20ef06917a88 100644
 --- a/include/linux/mfd/stm32-timers.h
 +++ b/include/linux/mfd/stm32-timers.h
 @@ -119,6 +119,7 @@
@@ -41,6 +37,3 @@ index 23b0cae4a9f8..20ef06917a88 100644
  #define STM32MP25_TIM_IPIDR	0x00120002
  
  enum stm32_timers_dmas {
--- 
-2.53.0
-

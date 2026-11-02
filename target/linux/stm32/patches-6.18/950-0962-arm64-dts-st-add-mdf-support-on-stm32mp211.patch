@@ -14,11 +14,9 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 81 ++++++++++++++++++++++++++
  1 file changed, 81 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index 7b385b6d8aae..37eafa07005a 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -1146,6 +1146,87 @@ dcmi: dcmi@404a0000 {
+@@ -1146,6 +1146,87 @@
  				status = "disabled";
  			};
  
@@ -106,6 +104,3 @@ index 7b385b6d8aae..37eafa07005a 100644
  			hash2: hash@42010000 {
  				compatible = "st,stm32mp13-hash";
  				reg = <0x42010000 0x0 0x400>;
--- 
-2.53.0
-

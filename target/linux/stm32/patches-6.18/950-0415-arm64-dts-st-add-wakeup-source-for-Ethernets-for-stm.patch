@@ -18,11 +18,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp253.dtsi | 7 +++++--
  2 files changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index b3e9977c04b2..bc98a07e17fb 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -1783,8 +1783,10 @@ ethernet1: ethernet@482c0000 {
+@@ -1783,8 +1783,10 @@
  				compatible = "st,stm32mp25-dwmac", "snps,dwmac-5.20";
  				reg = <0x482c0000 0x4000>;
  				reg-names = "stmmaceth";
@@ -35,7 +33,7 @@ index b3e9977c04b2..bc98a07e17fb 100644
  				clock-names = "stmmaceth",
  					      "mac-clk-tx",
  					      "mac-clk-rx",
-@@ -1808,6 +1810,7 @@ ethernet1: ethernet@482c0000 {
+@@ -1808,6 +1810,7 @@
  				st,syscon = <&syscfg 0x3000>;
  				access-controllers = <&rifsc 60>;
  				power-domains = <&d1_pd>;
@@ -43,11 +41,9 @@ index b3e9977c04b2..bc98a07e17fb 100644
  				status = "disabled";
  
  				mtl_rx_setup_1: rx-queues-config {
-diff --git a/arch/arm64/boot/dts/st/stm32mp253.dtsi b/arch/arm64/boot/dts/st/stm32mp253.dtsi
-index 21bb9e3c735b..976736ee37bf 100644
 --- a/arch/arm64/boot/dts/st/stm32mp253.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp253.dtsi
-@@ -100,8 +100,10 @@ ethernet2: ethernet@482d0000 {
+@@ -100,8 +100,10 @@
  		compatible = "st,stm32mp25-dwmac", "snps,dwmac-5.20";
  		reg = <0x482d0000 0x4000>;
  		reg-names = "stmmaceth";
@@ -60,7 +56,7 @@ index 21bb9e3c735b..976736ee37bf 100644
  		clock-names = "stmmaceth",
  			      "mac-clk-tx",
  			      "mac-clk-rx",
-@@ -125,6 +127,7 @@ ethernet2: ethernet@482d0000 {
+@@ -125,6 +127,7 @@
  		st,syscon = <&syscfg 0x3400>;
  		access-controllers = <&rifsc 61>;
  		power-domains = <&d1_pd>;
@@ -68,6 +64,3 @@ index 21bb9e3c735b..976736ee37bf 100644
  		status = "disabled";
  
  		mtl_rx_setup_2: rx-queues-config {
--- 
-2.53.0
-

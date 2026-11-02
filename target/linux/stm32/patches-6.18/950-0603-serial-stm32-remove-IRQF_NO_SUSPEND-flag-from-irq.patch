@@ -18,11 +18,9 @@ Change-Id: I41cc14937e6a244f38bf1a6d8b4278118f2aa62c
  drivers/tty/serial/stm32-usart.c | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 20cd0882fad2..e053e3bfb73a 100644
 --- a/drivers/tty/serial/stm32-usart.c
 +++ b/drivers/tty/serial/stm32-usart.c
-@@ -1269,8 +1269,7 @@ static int stm32_usart_startup(struct uart_port *port)
+@@ -1269,8 +1269,7 @@ static int stm32_usart_startup(struct ua
  	u32 val;
  	int ret;
  
@@ -32,6 +30,3 @@ index 20cd0882fad2..e053e3bfb73a 100644
  	if (ret)
  		return ret;
  
--- 
-2.53.0
-

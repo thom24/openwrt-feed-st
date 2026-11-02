@@ -20,11 +20,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp151.dtsi | 42 ++++++++++++++++++++--------
  1 file changed, 30 insertions(+), 12 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
-index a0c9a186416d..a587d3bfd594 100644
 --- a/arch/arm/boot/dts/st/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
-@@ -1237,12 +1237,15 @@ i2c1: i2c@40012000 {
+@@ -1237,12 +1237,15 @@
  				compatible = "st,stm32mp15-i2c";
  				reg = <0x40012000 0x400>;
  				interrupt-names = "event", "error";
@@ -42,7 +40,7 @@ index a0c9a186416d..a587d3bfd594 100644
  				st,syscfg-fmp = <&syscfg 0x4 0x1>;
  				wakeup-source;
  				i2c-analog-filter;
-@@ -1254,12 +1257,15 @@ i2c2: i2c@40013000 {
+@@ -1254,12 +1257,15 @@
  				compatible = "st,stm32mp15-i2c";
  				reg = <0x40013000 0x400>;
  				interrupt-names = "event", "error";
@@ -60,7 +58,7 @@ index a0c9a186416d..a587d3bfd594 100644
  				st,syscfg-fmp = <&syscfg 0x4 0x2>;
  				wakeup-source;
  				i2c-analog-filter;
-@@ -1271,12 +1277,15 @@ i2c3: i2c@40014000 {
+@@ -1271,12 +1277,15 @@
  				compatible = "st,stm32mp15-i2c";
  				reg = <0x40014000 0x400>;
  				interrupt-names = "event", "error";
@@ -78,7 +76,7 @@ index a0c9a186416d..a587d3bfd594 100644
  				st,syscfg-fmp = <&syscfg 0x4 0x4>;
  				wakeup-source;
  				i2c-analog-filter;
-@@ -1288,12 +1297,15 @@ i2c5: i2c@40015000 {
+@@ -1288,12 +1297,15 @@
  				compatible = "st,stm32mp15-i2c";
  				reg = <0x40015000 0x400>;
  				interrupt-names = "event", "error";
@@ -96,7 +94,7 @@ index a0c9a186416d..a587d3bfd594 100644
  				st,syscfg-fmp = <&syscfg 0x4 0x10>;
  				wakeup-source;
  				i2c-analog-filter;
-@@ -2202,12 +2214,15 @@ i2c4: i2c@5c002000 {
+@@ -2202,12 +2214,15 @@
  				compatible = "st,stm32mp15-i2c";
  				reg = <0x5c002000 0x400>;
  				interrupt-names = "event", "error";
@@ -114,7 +112,7 @@ index a0c9a186416d..a587d3bfd594 100644
  				st,syscfg-fmp = <&syscfg 0x4 0x8>;
  				wakeup-source;
  				i2c-analog-filter;
-@@ -2219,12 +2234,15 @@ i2c6: i2c@5c009000 {
+@@ -2219,12 +2234,15 @@
  				compatible = "st,stm32mp15-i2c";
  				reg = <0x5c009000 0x400>;
  				interrupt-names = "event", "error";
@@ -132,6 +130,3 @@ index a0c9a186416d..a587d3bfd594 100644
  				st,syscfg-fmp = <&syscfg 0x4 0x20>;
  				wakeup-source;
  				i2c-analog-filter;
--- 
-2.53.0
-

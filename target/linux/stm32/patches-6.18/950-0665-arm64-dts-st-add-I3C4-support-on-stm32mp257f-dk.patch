@@ -18,11 +18,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 8 ++++++++
  1 file changed, 8 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index 5d42b2052e92..1af3ade1947b 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -251,6 +251,14 @@ &i2c8 {
+@@ -251,6 +251,14 @@
  	/delete-property/dma-names;
  };
  
@@ -37,6 +35,3 @@ index 5d42b2052e92..1af3ade1947b 100644
  &ipcc1 {
  	status = "okay";
  };
--- 
-2.53.0
-

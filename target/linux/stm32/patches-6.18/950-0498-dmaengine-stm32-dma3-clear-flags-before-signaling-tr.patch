@@ -31,11 +31,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/dma/stm32/stm32-dma3.c | 19 +++++++++----------
  1 file changed, 9 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
-index 2ad2d74f7088..b128e2291829 100644
 --- a/drivers/dma/stm32/stm32-dma3.c
 +++ b/drivers/dma/stm32/stm32-dma3.c
-@@ -1344,7 +1344,7 @@ static irqreturn_t stm32_dma3_chan_irq(int irq, void *devid)
+@@ -1344,7 +1344,7 @@ static irqreturn_t stm32_dma3_chan_irq(i
  {
  	struct stm32_dma3_chan *chan = devid;
  	struct stm32_dma3_ddata *ddata = to_stm32_dma3_ddata(chan);
@@ -44,7 +42,7 @@ index 2ad2d74f7088..b128e2291829 100644
  
  	spin_lock(&chan->vchan.lock);
  
-@@ -1357,6 +1357,14 @@ static irqreturn_t stm32_dma3_chan_irq(int irq, void *devid)
+@@ -1357,6 +1357,14 @@ static irqreturn_t stm32_dma3_chan_irq(i
  	csr = readl_relaxed(ddata->base + STM32_DMA3_CSR(chan->id));
  	ccr = readl_relaxed(ddata->base + STM32_DMA3_CCR(chan->id)) & CCR_ALLIE;
  
@@ -59,7 +57,7 @@ index 2ad2d74f7088..b128e2291829 100644
  	if (csr & CSR_TCF && ccr & CCR_TCIE) {
  		if (chan->swdesc->cyclic)
  			vchan_cyclic_callback(&chan->swdesc->vdesc);
-@@ -1386,15 +1394,6 @@ static irqreturn_t stm32_dma3_chan_irq(int irq, void *devid)
+@@ -1386,15 +1394,6 @@ static irqreturn_t stm32_dma3_chan_irq(i
  		stm32_dma3_chan_reset(chan);
  	}
  
@@ -75,6 +73,3 @@ index 2ad2d74f7088..b128e2291829 100644
  	spin_unlock(&chan->vchan.lock);
  
  	return IRQ_HANDLED;
--- 
-2.53.0
-

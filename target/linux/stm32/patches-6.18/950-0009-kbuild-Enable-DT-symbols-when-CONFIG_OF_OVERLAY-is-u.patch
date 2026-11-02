@@ -17,8 +17,6 @@ Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
  scripts/Makefile.dtbs | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/scripts/Makefile.dtbs b/scripts/Makefile.dtbs
-index 2d321b813600..a31b9ebcc800 100644
 --- a/scripts/Makefile.dtbs
 +++ b/scripts/Makefile.dtbs
 @@ -111,8 +111,12 @@ endif
@@ -34,6 +32,3 @@ index 2d321b813600..a31b9ebcc800 100644
  
  DTC_INCLUDE := $(srctree)/scripts/dtc/include-prefixes
  
--- 
-2.53.0
-

@@ -15,8 +15,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  .../devicetree/bindings/net/snps,dwmac.yaml        | 14 ++++++++++++++
  1 file changed, 14 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-index 31a34b9bf93d..e97c4b777441 100644
 --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
 +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
 @@ -476,6 +476,20 @@ properties:
@@ -40,6 +38,3 @@ index 31a34b9bf93d..e97c4b777441 100644
    snps,no-pbl-x8:
      $ref: /schemas/types.yaml#/definitions/flag
      description:
--- 
-2.53.0
-

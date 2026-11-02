@@ -18,11 +18,9 @@ Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 51 ++++++++++++++++++++++++++
  1 file changed, 51 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index 2af26f80d4b7..aa0d72447e62 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -221,6 +221,57 @@ iwdg2: watchdog@44020000 {
+@@ -221,6 +221,57 @@
  				access-controllers = <&rifsc 101>;
  				status = "disabled";
  			};
@@ -80,6 +78,3 @@ index 2af26f80d4b7..aa0d72447e62 100644
  		};
  
  		risaf1: risaf@420a0000 {
--- 
-2.53.0
-

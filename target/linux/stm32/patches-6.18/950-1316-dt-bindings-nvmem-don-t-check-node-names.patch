@@ -24,8 +24,6 @@ Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
  Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
-index 8f5365544e98..242468943390 100644
 --- a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
 +++ b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
 @@ -34,7 +34,7 @@ properties:
@@ -37,6 +35,3 @@ index 8f5365544e98..242468943390 100644
      type: object
      $ref: layouts/fixed-cell.yaml
      unevaluatedProperties: false
--- 
-2.53.0
-

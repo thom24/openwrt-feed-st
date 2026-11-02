@@ -19,8 +19,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/bridge/sii902x.c | 86 +++++++++++++++++++++++++++++---
  1 file changed, 80 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/sii902x.c b/drivers/gpu/drm/bridge/sii902x.c
-index 8feccf4963e1..71a71df2a177 100644
 --- a/drivers/gpu/drm/bridge/sii902x.c
 +++ b/drivers/gpu/drm/bridge/sii902x.c
 @@ -17,6 +17,7 @@
@@ -39,7 +37,7 @@ index 8feccf4963e1..71a71df2a177 100644
  	u32 bus_width;
  
  	/*
-@@ -1201,8 +1203,9 @@ static int sii902x_init(struct sii902x *sii902x)
+@@ -1201,8 +1203,9 @@ static int sii902x_init(struct sii902x *
  	regmap_write(sii902x->regmap, SII902X_INT_STATUS, status);
  
  	if (sii902x->i2c->irq > 0) {
@@ -51,7 +49,7 @@ index 8feccf4963e1..71a71df2a177 100644
  
  		ret = devm_request_threaded_irq(dev, sii902x->i2c->irq, NULL,
  						sii902x_interrupt,
-@@ -1256,7 +1259,6 @@ static int sii902x_probe(struct i2c_client *client)
+@@ -1256,7 +1259,6 @@ static int sii902x_probe(struct i2c_clie
  	struct device *dev = &client->dev;
  	struct device_node *endpoint;
  	struct sii902x *sii902x;
@@ -59,7 +57,7 @@ index 8feccf4963e1..71a71df2a177 100644
  	int ret;
  
  	ret = i2c_check_functionality(client->adapter,
-@@ -1314,11 +1316,27 @@ static int sii902x_probe(struct i2c_client *client)
+@@ -1314,11 +1316,27 @@ static int sii902x_probe(struct i2c_clie
  	mutex_init(&sii902x->mutex);
  	mutex_init(&sii902x->audio.lock);
  
@@ -90,7 +88,7 @@ index 8feccf4963e1..71a71df2a177 100644
  }
  
  static void sii902x_remove(struct i2c_client *client)
-@@ -1332,6 +1350,61 @@ static void sii902x_remove(struct i2c_client *client)
+@@ -1332,6 +1350,61 @@ static void sii902x_remove(struct i2c_cl
  		platform_device_unregister(sii902x->audio.pdev);
  }
  
@@ -152,7 +150,7 @@ index 8feccf4963e1..71a71df2a177 100644
  static const struct of_device_id sii902x_dt_ids[] = {
  	{ .compatible = "sil,sii9022", },
  	{ }
-@@ -1350,6 +1423,7 @@ static struct i2c_driver sii902x_driver = {
+@@ -1350,6 +1423,7 @@ static struct i2c_driver sii902x_driver
  	.driver = {
  		.name = "sii902x",
  		.of_match_table = sii902x_dt_ids,
@@ -160,6 +158,3 @@ index 8feccf4963e1..71a71df2a177 100644
  	},
  	.id_table = sii902x_i2c_ids,
  };
--- 
-2.53.0
-

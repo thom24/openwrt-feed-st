@@ -11,8 +11,6 @@ Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
  drivers/remoteproc/stm32_rproc.c | 28 +++++++++++++++++++++++++---
  1 file changed, 25 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index 4fd1f9bc4dca..2c57f267f793 100644
 --- a/drivers/remoteproc/stm32_rproc.c
 +++ b/drivers/remoteproc/stm32_rproc.c
 @@ -49,6 +49,9 @@
@@ -45,7 +43,7 @@ index 4fd1f9bc4dca..2c57f267f793 100644
  	void __iomem *rsc_va;
  };
  
-@@ -790,9 +799,18 @@ static const struct rproc_ops st_rproc_tee_ops = {
+@@ -790,9 +799,18 @@ static const struct rproc_ops st_rproc_t
  	.load		= stm32_rproc_tee_elf_load,
  };
  
@@ -66,7 +64,7 @@ index 4fd1f9bc4dca..2c57f267f793 100644
  	{},
  };
  MODULE_DEVICE_TABLE(of, stm32_rproc_match);
-@@ -951,12 +969,15 @@ static int stm32_rproc_probe(struct platform_device *pdev)
+@@ -951,12 +969,15 @@ static int stm32_rproc_probe(struct plat
  	struct device *dev = &pdev->dev;
  	struct stm32_rproc *ddata;
  	struct device_node *np = dev->of_node;
@@ -82,7 +80,7 @@ index 4fd1f9bc4dca..2c57f267f793 100644
  	ret = dma_coerce_mask_and_coherent(dev, DMA_BIT_MASK(32));
  	if (ret)
  		return ret;
-@@ -967,7 +988,7 @@ static int stm32_rproc_probe(struct platform_device *pdev)
+@@ -967,7 +988,7 @@ static int stm32_rproc_probe(struct plat
  		return ret;
  
  	if (of_device_is_compatible(np, "st,stm32mp1-m4-tee")) {
@@ -91,7 +89,7 @@ index 4fd1f9bc4dca..2c57f267f793 100644
  		if (IS_ERR(trproc)) {
  			dev_err_probe(dev, PTR_ERR(trproc),
  				      "signed firmware not supported by TEE\n");
-@@ -988,6 +1009,7 @@ static int stm32_rproc_probe(struct platform_device *pdev)
+@@ -988,6 +1009,7 @@ static int stm32_rproc_probe(struct plat
  	}
  
  	ddata = rproc->priv;
@@ -99,6 +97,3 @@ index 4fd1f9bc4dca..2c57f267f793 100644
  	ddata->trproc = trproc;
  	if (trproc) {
  		trproc->rproc = rproc;
--- 
-2.53.0
-

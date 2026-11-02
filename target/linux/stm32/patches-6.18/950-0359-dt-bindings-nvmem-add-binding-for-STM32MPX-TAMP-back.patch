@@ -16,9 +16,6 @@ Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
  2 files changed, 62 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/nvmem/st,stm32-tamp-nvram.yaml
 
-diff --git a/Documentation/devicetree/bindings/nvmem/st,stm32-tamp-nvram.yaml b/Documentation/devicetree/bindings/nvmem/st,stm32-tamp-nvram.yaml
-new file mode 100644
-index 000000000000..4af40a706d01
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/nvmem/st,stm32-tamp-nvram.yaml
 @@ -0,0 +1,56 @@
@@ -78,11 +75,9 @@ index 000000000000..4af40a706d01
 +        };
 +      };
 +    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d7f226ec2d3b..60ccaaccb437 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -24704,6 +24704,12 @@ M:	Gatien Chevallier <gatien.chevallier@foss.st.com>
+@@ -24704,6 +24704,12 @@ M:	Gatien Chevallier <gatien.chevallier@
  S:	Maintained
  F:	Documentation/devicetree/bindings/soc/st/*rif*
  
@@ -95,6 +90,3 @@ index d7f226ec2d3b..60ccaaccb437 100644
  STM32 TIMER/LPTIMER DRIVERS
  M:	Fabrice Gasnier <fabrice.gasnier@foss.st.com>
  S:	Maintained
--- 
-2.53.0
-

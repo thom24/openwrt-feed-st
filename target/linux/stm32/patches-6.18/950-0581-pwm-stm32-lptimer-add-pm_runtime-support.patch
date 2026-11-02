@@ -13,8 +13,6 @@ Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
  drivers/pwm/pwm-stm32-lp.c | 62 ++++++++++++++++++++++++++++++++------
  1 file changed, 53 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/pwm/pwm-stm32-lp.c b/drivers/pwm/pwm-stm32-lp.c
-index 35098b2adf46..e5f7543a3001 100644
 --- a/drivers/pwm/pwm-stm32-lp.c
 +++ b/drivers/pwm/pwm-stm32-lp.c
 @@ -15,9 +15,11 @@
@@ -29,7 +27,7 @@ index 35098b2adf46..e5f7543a3001 100644
  	struct clk *clk;
  	struct regmap *regmap;
  	unsigned int num_cc_chans;
-@@ -157,7 +159,7 @@ static int stm32_pwm_lp_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+@@ -157,7 +159,7 @@ static int stm32_pwm_lp_apply(struct pwm
  			}
  
  			/* disable clock to PWM counter */
@@ -38,7 +36,7 @@ index 35098b2adf46..e5f7543a3001 100644
  		}
  		return 0;
  	}
-@@ -186,6 +188,13 @@ static int stm32_pwm_lp_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+@@ -186,6 +188,13 @@ static int stm32_pwm_lp_apply(struct pwm
  	dty = prd * state->duty_cycle;
  	dty = DIV_ROUND_CLOSEST_ULL(dty, state->period);
  
@@ -52,7 +50,7 @@ index 35098b2adf46..e5f7543a3001 100644
  	ret = regmap_read(priv->regmap, STM32_LPTIM_CFGR, &cfgr);
  	if (ret)
  		return ret;
-@@ -205,7 +214,7 @@ static int stm32_pwm_lp_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+@@ -205,7 +214,7 @@ static int stm32_pwm_lp_apply(struct pwm
  
  	if (!cstate.enabled) {
  		/* enable clock to drive PWM counter */
@@ -61,7 +59,7 @@ index 35098b2adf46..e5f7543a3001 100644
  		if (ret)
  			return ret;
  	}
-@@ -286,7 +295,7 @@ static int stm32_pwm_lp_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+@@ -286,7 +295,7 @@ static int stm32_pwm_lp_apply(struct pwm
  	return 0;
  err:
  	if (!cstate.enabled)
@@ -70,7 +68,7 @@ index 35098b2adf46..e5f7543a3001 100644
  
  	return ret;
  }
-@@ -300,6 +309,12 @@ static int stm32_pwm_lp_get_state(struct pwm_chip *chip,
+@@ -300,6 +309,12 @@ static int stm32_pwm_lp_get_state(struct
  	u32 val, presc, prd, ccmr1;
  	bool enabled;
  	u64 tmp;
@@ -83,7 +81,7 @@ index 35098b2adf46..e5f7543a3001 100644
  
  	regmap_read(priv->regmap, STM32_LPTIM_CR, &val);
  	enabled = !!FIELD_GET(STM32_LPTIM_ENABLE, val);
-@@ -315,10 +330,11 @@ static int stm32_pwm_lp_get_state(struct pwm_chip *chip,
+@@ -315,10 +330,11 @@ static int stm32_pwm_lp_get_state(struct
  
  	/* Keep PWM counter clock refcount in sync with PWM initial state */
  	if (state->enabled) {
@@ -98,7 +96,7 @@ index 35098b2adf46..e5f7543a3001 100644
  	}
  
  	regmap_read(priv->regmap, STM32_LPTIM_CFGR, &val);
-@@ -342,7 +358,7 @@ static int stm32_pwm_lp_get_state(struct pwm_chip *chip,
+@@ -342,7 +358,7 @@ static int stm32_pwm_lp_get_state(struct
  	tmp = (tmp << presc) * NSEC_PER_SEC;
  	state->duty_cycle = DIV_ROUND_CLOSEST_ULL(tmp, rate);
  
@@ -107,7 +105,7 @@ index 35098b2adf46..e5f7543a3001 100644
  }
  
  static const struct pwm_ops stm32_pwm_lp_ops = {
-@@ -370,12 +386,17 @@ static int stm32_pwm_lp_probe(struct platform_device *pdev)
+@@ -370,12 +386,17 @@ static int stm32_pwm_lp_probe(struct pla
  	if (IS_ERR(chip))
  		return PTR_ERR(chip);
  	priv = to_stm32_pwm_lp(chip);
@@ -125,7 +123,7 @@ index 35098b2adf46..e5f7543a3001 100644
  	ret = devm_pwmchip_add(&pdev->dev, chip);
  	if (ret < 0)
  		return ret;
-@@ -408,8 +429,31 @@ static int stm32_pwm_lp_resume(struct device *dev)
+@@ -408,8 +429,31 @@ static int stm32_pwm_lp_resume(struct de
  	return pinctrl_pm_select_default_state(dev);
  }
  
@@ -159,6 +157,3 @@ index 35098b2adf46..e5f7543a3001 100644
  
  static const struct of_device_id stm32_pwm_lp_of_match[] = {
  	{ .compatible = "st,stm32-pwm-lp", },
--- 
-2.53.0
-

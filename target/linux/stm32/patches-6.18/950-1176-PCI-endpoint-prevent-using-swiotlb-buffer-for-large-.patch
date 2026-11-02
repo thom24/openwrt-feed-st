@@ -25,8 +25,6 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/pci/endpoint/functions/pci-epf-test.c | 13 +++++++++----
  1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-index 97e003782216..7d6a25168c6b 100644
 --- a/drivers/pci/endpoint/functions/pci-epf-test.c
 +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
 @@ -10,6 +10,7 @@
@@ -45,7 +43,7 @@ index 97e003782216..7d6a25168c6b 100644
  	const struct pci_epc_features *epc_features;
  	struct pci_epf_bar	db_bar;
  };
-@@ -454,11 +456,12 @@ static void pci_epf_test_read(struct pci_epf_test *epf_test,
+@@ -454,11 +456,12 @@ static void pci_epf_test_read(struct pci
  	ssize_t map_size = 0;
  	u32 flags = le32_to_cpu(reg->flags);
  	u32 checksum = le32_to_cpu(reg->checksum);
@@ -60,7 +58,7 @@ index 97e003782216..7d6a25168c6b 100644
  	if (!src_buf) {
  		ret = -ENOMEM;
  		goto set_status;
-@@ -550,11 +553,12 @@ static void pci_epf_test_write(struct pci_epf_test *epf_test,
+@@ -550,11 +553,12 @@ static void pci_epf_test_write(struct pc
  	size_t orig_size, dst_size;
  	ssize_t map_size = 0;
  	u32 flags = le32_to_cpu(reg->flags);
@@ -75,7 +73,7 @@ index 97e003782216..7d6a25168c6b 100644
  	if (!dst_buf) {
  		ret = -ENOMEM;
  		goto set_status;
-@@ -950,6 +954,7 @@ static int pci_epf_test_epc_init(struct pci_epf *epf)
+@@ -950,6 +954,7 @@ static int pci_epf_test_epc_init(struct
  	int ret;
  
  	epf_test->dma_supported = true;
@@ -83,6 +81,3 @@ index 97e003782216..7d6a25168c6b 100644
  
  	ret = pci_epf_test_init_dma_chan(epf_test);
  	if (ret)
--- 
-2.53.0
-

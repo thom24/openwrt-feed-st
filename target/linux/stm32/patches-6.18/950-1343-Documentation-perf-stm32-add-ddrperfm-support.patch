@@ -26,8 +26,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  2 files changed, 87 insertions(+)
  create mode 100644 Documentation/admin-guide/perf/stm32-ddr-pmu.rst
 
-diff --git a/Documentation/admin-guide/perf/index.rst b/Documentation/admin-guide/perf/index.rst
-index 47d9a3df6329..fcc3665c321c 100644
 --- a/Documentation/admin-guide/perf/index.rst
 +++ b/Documentation/admin-guide/perf/index.rst
 @@ -30,3 +30,4 @@ Performance monitor support
@@ -35,9 +33,6 @@ index 47d9a3df6329..fcc3665c321c 100644
     mrvl-pem-pmu
     fujitsu_uncore_pmu
 +   stm32-ddr-pmu
-diff --git a/Documentation/admin-guide/perf/stm32-ddr-pmu.rst b/Documentation/admin-guide/perf/stm32-ddr-pmu.rst
-new file mode 100644
-index 000000000000..5b02bf44dd7a
 --- /dev/null
 +++ b/Documentation/admin-guide/perf/stm32-ddr-pmu.rst
 @@ -0,0 +1,86 @@
@@ -127,6 +122,3 @@ index 000000000000..5b02bf44dd7a
 +                 752347686      stm32_ddr_pmu/time_cnt/
 +
 +               5.014910750 seconds time elapsed
--- 
-2.53.0
-

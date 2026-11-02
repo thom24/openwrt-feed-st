@@ -17,8 +17,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  include/dt-bindings/regulator/st,stm32mp25-regulator.h | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/include/dt-bindings/regulator/st,stm32mp25-regulator.h b/include/dt-bindings/regulator/st,stm32mp25-regulator.h
-index 3c3d30911dd0..ab18cd7d5c07 100644
 --- a/include/dt-bindings/regulator/st,stm32mp25-regulator.h
 +++ b/include/dt-bindings/regulator/st,stm32mp25-regulator.h
 @@ -45,4 +45,11 @@
@@ -33,6 +31,3 @@ index 3c3d30911dd0..ab18cd7d5c07 100644
 +#define VOLTD_SCMI_STPMIC_GPO5		35
 +
  #endif /*__DT_BINDINGS_REGULATOR_ST_STM32MP25_REGULATOR_H */
--- 
-2.53.0
-

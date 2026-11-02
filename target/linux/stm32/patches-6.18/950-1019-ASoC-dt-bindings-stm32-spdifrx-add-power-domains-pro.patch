@@ -17,8 +17,6 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  Documentation/devicetree/bindings/sound/st,stm32-spdifrx.yaml | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/sound/st,stm32-spdifrx.yaml b/Documentation/devicetree/bindings/sound/st,stm32-spdifrx.yaml
-index 56c5738ea4c5..087713fefba5 100644
 --- a/Documentation/devicetree/bindings/sound/st,stm32-spdifrx.yaml
 +++ b/Documentation/devicetree/bindings/sound/st,stm32-spdifrx.yaml
 @@ -50,6 +50,9 @@ properties:
@@ -31,6 +29,3 @@ index 56c5738ea4c5..087713fefba5 100644
    port:
      $ref: audio-graph-port.yaml#
      unevaluatedProperties: false
--- 
-2.53.0
-

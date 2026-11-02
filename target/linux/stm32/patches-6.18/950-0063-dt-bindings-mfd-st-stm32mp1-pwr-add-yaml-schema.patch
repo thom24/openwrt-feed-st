@@ -20,9 +20,6 @@ Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  1 file changed, 80 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/mfd/st,stm32mp1-pwr.yaml
 
-diff --git a/Documentation/devicetree/bindings/mfd/st,stm32mp1-pwr.yaml b/Documentation/devicetree/bindings/mfd/st,stm32mp1-pwr.yaml
-new file mode 100644
-index 000000000000..b78c8c8c5215
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/mfd/st,stm32mp1-pwr.yaml
 @@ -0,0 +1,80 @@
@@ -106,6 +103,3 @@ index 000000000000..b78c8c8c5215
 +                        <&gpioc 1 GPIO_ACTIVE_HIGH>;
 +      };
 +...
--- 
-2.53.0
-

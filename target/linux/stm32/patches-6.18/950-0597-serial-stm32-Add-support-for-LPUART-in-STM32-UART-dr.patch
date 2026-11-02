@@ -21,8 +21,6 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/tty/serial/stm32-usart.h |  18 ++++
  2 files changed, 132 insertions(+), 47 deletions(-)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 4b5070b52f4a..a8536073aa0a 100644
 --- a/drivers/tty/serial/stm32-usart.c
 +++ b/drivers/tty/serial/stm32-usart.c
 @@ -30,6 +30,7 @@
@@ -33,7 +31,7 @@ index 4b5070b52f4a..a8536073aa0a 100644
  #include <linux/tty_flip.h>
  #include <linux/tty.h>
  
-@@ -454,6 +455,8 @@ static void stm32_usart_rx_dma_terminate(struct stm32_port *stm32_port)
+@@ -454,6 +455,8 @@ static void stm32_usart_rx_dma_terminate
  {
  	dmaengine_terminate_async(stm32_port->rx_ch);
  	stm32_port->rx_dma_busy = false;
@@ -42,7 +40,7 @@ index 4b5070b52f4a..a8536073aa0a 100644
  }
  
  static int stm32_usart_dma_pause_resume(struct stm32_port *stm32_port,
-@@ -484,6 +487,8 @@ static int stm32_usart_dma_pause_resume(struct stm32_port *stm32_port,
+@@ -484,6 +487,8 @@ static int stm32_usart_dma_pause_resume(
  
  static int stm32_usart_rx_dma_pause(struct stm32_port *stm32_port)
  {
@@ -51,7 +49,7 @@ index 4b5070b52f4a..a8536073aa0a 100644
  	return stm32_usart_dma_pause_resume(stm32_port, stm32_port->rx_ch,
  					    DMA_IN_PROGRESS, dmaengine_pause,
  					    stm32_usart_rx_dma_started,
-@@ -689,6 +694,7 @@ static unsigned int stm32_usart_receive_chars(struct uart_port *port, bool force
+@@ -689,6 +694,7 @@ static unsigned int stm32_usart_receive_
  static void stm32_usart_rx_dma_complete(void *arg)
  {
  	struct uart_port *port = arg;
@@ -59,7 +57,7 @@ index 4b5070b52f4a..a8536073aa0a 100644
  	struct tty_port *tport = &port->state->port;
  	unsigned int size;
  	unsigned long flags;
-@@ -698,6 +704,16 @@ static void stm32_usart_rx_dma_complete(void *arg)
+@@ -698,6 +704,16 @@ static void stm32_usart_rx_dma_complete(
  	uart_unlock_and_check_sysrq_irqrestore(port, flags);
  	if (size)
  		tty_flip_buffer_push(tport);
@@ -76,7 +74,7 @@ index 4b5070b52f4a..a8536073aa0a 100644
  }
  
  static int stm32_usart_rx_dma_start_or_resume(struct uart_port *port)
-@@ -750,6 +766,10 @@ static int stm32_usart_rx_dma_start_or_resume(struct uart_port *port)
+@@ -750,6 +766,10 @@ static int stm32_usart_rx_dma_start_or_r
  		return ret;
  	}
  
@@ -87,7 +85,7 @@ index 4b5070b52f4a..a8536073aa0a 100644
  	/* Issue pending DMA requests */
  	dma_async_issue_pending(stm32_port->rx_ch);
  
-@@ -1325,20 +1345,18 @@ static void stm32_usart_set_termios(struct uart_port *port,
+@@ -1325,20 +1345,18 @@ static void stm32_usart_set_termios(stru
  	const struct stm32_usart_offsets *ofs = &stm32_port->info->ofs;
  	const struct stm32_usart_config *cfg = &stm32_port->info->cfg;
  	struct serial_rs485 *rs485conf = &port->rs485;
@@ -111,7 +109,7 @@ index 4b5070b52f4a..a8536073aa0a 100644
  	uart_port_lock_irqsave(port, &flags);
  
  	ret = readl_relaxed_poll_timeout_atomic(port->membase + ofs->isr,
-@@ -1407,24 +1425,25 @@ static void stm32_usart_set_termios(struct uart_port *port,
+@@ -1407,24 +1425,25 @@ static void stm32_usart_set_termios(stru
  			cr1 |= USART_CR1_M0;
  		}
  	}
@@ -155,7 +153,7 @@ index 4b5070b52f4a..a8536073aa0a 100644
  	}
  
  	cr1 |= stm32_port->cr1_irq;
-@@ -1441,41 +1460,54 @@ static void stm32_usart_set_termios(struct uart_port *port,
+@@ -1441,41 +1460,54 @@ static void stm32_usart_set_termios(stru
  
  	for (presc = 0; presc <= USART_PRESC_MAX; presc++) {
  		uart_clk_pres = DIV_ROUND_CLOSEST(uart_clk, stm32_usart_presc_val[presc]);
@@ -233,7 +231,7 @@ index 4b5070b52f4a..a8536073aa0a 100644
  			break;
  		}
  	}
-@@ -1748,7 +1780,8 @@ static int stm32_usart_init_port(struct stm32_port *stm32port,
+@@ -1748,7 +1780,8 @@ static int stm32_usart_init_port(struct
  	port->irq = irq;
  	port->rs485_config = stm32_usart_config_rs485;
  	port->rs485_supported = stm32_rs485_supported;
@@ -243,7 +241,7 @@ index 4b5070b52f4a..a8536073aa0a 100644
  
  	ret = stm32_usart_init_rs485(port, pdev);
  	if (ret)
-@@ -1862,6 +1895,8 @@ static void stm32_usart_of_dma_rx_remove(struct stm32_port *stm32port,
+@@ -1862,6 +1895,8 @@ static void stm32_usart_of_dma_rx_remove
  	if (stm32port->rx_buf)
  		dma_free_coherent(&pdev->dev, RX_BUF_L, stm32port->rx_buf,
  				  stm32port->rx_dma_buf);
@@ -252,7 +250,7 @@ index 4b5070b52f4a..a8536073aa0a 100644
  }
  
  static int stm32_usart_of_dma_rx_probe(struct stm32_port *stm32port,
-@@ -1890,6 +1925,8 @@ static int stm32_usart_of_dma_rx_probe(struct stm32_port *stm32port,
+@@ -1890,6 +1925,8 @@ static int stm32_usart_of_dma_rx_probe(s
  		stm32_usart_of_dma_rx_remove(stm32port, pdev);
  		return ret;
  	}
@@ -261,7 +259,7 @@ index 4b5070b52f4a..a8536073aa0a 100644
  
  	return 0;
  }
-@@ -1990,6 +2027,35 @@ static int stm32_usart_serial_probe(struct platform_device *pdev)
+@@ -1990,6 +2027,35 @@ static int stm32_usart_serial_probe(stru
  	if (!stm32port->tx_ch)
  		dev_info(&pdev->dev, "interrupt mode for tx (no dma)\n");
  
@@ -297,7 +295,7 @@ index 4b5070b52f4a..a8536073aa0a 100644
  	platform_set_drvdata(pdev, &stm32port->port);
  
  	pm_runtime_get_noresume(&pdev->dev);
-@@ -2009,6 +2075,7 @@ static int stm32_usart_serial_probe(struct platform_device *pdev)
+@@ -2009,6 +2075,7 @@ err_port:
  	pm_runtime_set_suspended(&pdev->dev);
  	pm_runtime_put_noidle(&pdev->dev);
  
@@ -305,8 +303,6 @@ index 4b5070b52f4a..a8536073aa0a 100644
  	if (stm32port->tx_ch)
  		stm32_usart_of_dma_tx_remove(stm32port, pdev);
  	if (stm32port->rx_ch)
-diff --git a/drivers/tty/serial/stm32-usart.h b/drivers/tty/serial/stm32-usart.h
-index c1a4740a6a49..3eb4860a772a 100644
 --- a/drivers/tty/serial/stm32-usart.h
 +++ b/drivers/tty/serial/stm32-usart.h
 @@ -8,6 +8,11 @@
@@ -369,6 +365,3 @@ index c1a4740a6a49..3eb4860a772a 100644
  };
  
  static struct stm32_port stm32_ports[STM32_MAX_PORTS];
--- 
-2.53.0
-

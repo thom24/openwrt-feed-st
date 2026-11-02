@@ -20,11 +20,9 @@ Reviewed-by: Pankaj DEV <pankaj.dev@st.com>
  drivers/usb/dwc2/drd.c | 13 ++++++++-----
  1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
-index 1ad8fa3f862a..ede5fd8b5733 100644
 --- a/drivers/usb/dwc2/drd.c
 +++ b/drivers/usb/dwc2/drd.c
-@@ -130,11 +130,14 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+@@ -130,11 +130,14 @@ static int dwc2_drd_role_sw_set(struct u
  	if ((IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) ||
  	     IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)) &&
  	     dwc2_is_device_mode(hsotg) &&
@@ -44,6 +42,3 @@ index 1ad8fa3f862a..ede5fd8b5733 100644
  
  	if (role == USB_ROLE_HOST) {
  		already = dwc2_ovr_avalid(hsotg, true);
--- 
-2.53.0
-

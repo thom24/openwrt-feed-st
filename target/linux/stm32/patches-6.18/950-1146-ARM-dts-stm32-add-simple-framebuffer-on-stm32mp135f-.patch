@@ -15,11 +15,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp135f-dk.dts | 10 ++++++++++
  1 file changed, 10 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index 0f5576593573..1cc5d9761a21 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -29,6 +29,16 @@ aliases {
+@@ -29,6 +29,16 @@
  
  	chosen {
  		stdout-path = "serial0:115200n8";
@@ -36,6 +34,3 @@ index 0f5576593573..1cc5d9761a21 100644
  	};
  
  	clocks {
--- 
-2.53.0
-

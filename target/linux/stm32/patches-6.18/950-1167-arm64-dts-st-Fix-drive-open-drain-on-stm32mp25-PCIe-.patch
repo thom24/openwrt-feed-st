@@ -22,11 +22,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
-index b11f6bc6e321..7916d6c7b559 100644
 --- a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
-@@ -477,6 +477,7 @@ pins {
+@@ -477,6 +477,7 @@
  	pcie_pins_a: pcie-0 {
  		pins {
  			pinmux = <STM32_PINMUX('J', 0, AF4)>;
@@ -34,6 +32,3 @@ index b11f6bc6e321..7916d6c7b559 100644
  			bias-disable;
  		};
  	};
--- 
-2.53.0
-

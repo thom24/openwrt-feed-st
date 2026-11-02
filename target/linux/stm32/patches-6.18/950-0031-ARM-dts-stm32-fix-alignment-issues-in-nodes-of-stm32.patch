@@ -16,11 +16,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp151.dtsi | 14 +++++++-------
  1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
-index b1b568dfd126..fd58bb700f6c 100644
 --- a/arch/arm/boot/dts/st/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
-@@ -1083,7 +1083,7 @@ usart6: serial@44003000 {
+@@ -1083,7 +1083,7 @@
  				clocks = <&rcc USART6_K>;
  				wakeup-source;
  				dmas = <&dmamux1 71 0x400 0x15>,
@@ -29,7 +27,7 @@ index b1b568dfd126..fd58bb700f6c 100644
  				dma-names = "rx", "tx";
  				access-controllers = <&etzpc 51>;
  				status = "disabled";
-@@ -1095,7 +1095,7 @@ i2s1: audio-controller@44004000 {
+@@ -1095,7 +1095,7 @@
  				reg = <0x44004000 0x400>;
  				interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
  				dmas = <&dmamux1 37 0x400 0x01>,
@@ -38,7 +36,7 @@ index b1b568dfd126..fd58bb700f6c 100644
  				dma-names = "rx", "tx";
  				access-controllers = <&etzpc 52>;
  				status = "disabled";
-@@ -1110,7 +1110,7 @@ spi1: spi@44004000 {
+@@ -1110,7 +1110,7 @@
  				clocks = <&rcc SPI1_K>;
  				resets = <&rcc SPI1_R>;
  				dmas = <&dmamux1 37 0x400 0x05>,
@@ -47,7 +45,7 @@ index b1b568dfd126..fd58bb700f6c 100644
  				dma-names = "rx", "tx";
  				access-controllers = <&etzpc 52>;
  				status = "disabled";
-@@ -1125,7 +1125,7 @@ spi4: spi@44005000 {
+@@ -1125,7 +1125,7 @@
  				clocks = <&rcc SPI4_K>;
  				resets = <&rcc SPI4_R>;
  				dmas = <&dmamux1 83 0x400 0x05>,
@@ -56,7 +54,7 @@ index b1b568dfd126..fd58bb700f6c 100644
  				dma-names = "rx", "tx";
  				access-controllers = <&etzpc 53>;
  				status = "disabled";
-@@ -1176,7 +1176,7 @@ timers16: timer@44007000 {
+@@ -1176,7 +1176,7 @@
  				clocks = <&rcc TIM16_K>;
  				clock-names = "int";
  				dmas = <&dmamux1 109 0x400 0x1>,
@@ -65,7 +63,7 @@ index b1b568dfd126..fd58bb700f6c 100644
  				dma-names = "ch1", "up";
  				access-controllers = <&etzpc 55>;
  				status = "disabled";
-@@ -1209,7 +1209,7 @@ timers17: timer@44008000 {
+@@ -1209,7 +1209,7 @@
  				clocks = <&rcc TIM17_K>;
  				clock-names = "int";
  				dmas = <&dmamux1 111 0x400 0x1>,
@@ -74,7 +72,7 @@ index b1b568dfd126..fd58bb700f6c 100644
  				dma-names = "ch1", "up";
  				access-controllers = <&etzpc 56>;
  				status = "disabled";
-@@ -1241,7 +1241,7 @@ spi5: spi@44009000 {
+@@ -1241,7 +1241,7 @@
  				clocks = <&rcc SPI5_K>;
  				resets = <&rcc SPI5_R>;
  				dmas = <&dmamux1 85 0x400 0x05>,
@@ -83,6 +81,3 @@ index b1b568dfd126..fd58bb700f6c 100644
  				dma-names = "rx", "tx";
  				access-controllers = <&etzpc 57>;
  				status = "disabled";
--- 
-2.53.0
-

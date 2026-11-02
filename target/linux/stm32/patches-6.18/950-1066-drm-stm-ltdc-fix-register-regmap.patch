@@ -16,11 +16,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/stm/ltdc.c | 260 ++++++++++++++++++++++++++++++++++++-
  2 files changed, 262 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/drv.c b/drivers/gpu/drm/stm/drv.c
-index f2acc583c57f..377f0f30ae39 100644
 --- a/drivers/gpu/drm/stm/drv.c
 +++ b/drivers/gpu/drm/stm/drv.c
-@@ -97,23 +97,25 @@ static int drv_load(struct drm_device *ddev)
+@@ -97,23 +97,25 @@ static int drv_load(struct drm_device *d
  	ddev->mode_config.helper_private = &drv_mode_config_helpers;
  	ddev->mode_config.normalize_zpos = true;
  
@@ -49,11 +47,9 @@ index f2acc583c57f..377f0f30ae39 100644
  }
  
  static __maybe_unused int drv_suspend(struct device *dev)
-diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-index 9a114779e6bb..6712754153fb 100644
 --- a/drivers/gpu/drm/stm/ltdc.c
 +++ b/drivers/gpu/drm/stm/ltdc.c
-@@ -516,11 +516,263 @@ static const u64 ltdc_format_modifiers[] = {
+@@ -516,11 +516,263 @@ static const u64 ltdc_format_modifiers[]
  	DRM_FORMAT_MOD_INVALID
  };
  
@@ -318,7 +314,7 @@ index 9a114779e6bb..6712754153fb 100644
  	.use_relaxed_mmio = true,
  	.cache_type = REGCACHE_NONE,
  };
-@@ -1933,9 +2185,10 @@ static struct drm_plane *ltdc_plane_create(struct drm_device *ddev,
+@@ -1933,9 +2185,10 @@ static struct drm_plane *ltdc_plane_crea
  		formats[nb_fmt++] = drm_fmt;
  	}
  
@@ -330,7 +326,7 @@ index 9a114779e6bb..6712754153fb 100644
  		if (val & LXCR_C1R_YIA) {
  			memcpy(&formats[nb_fmt], ltdc_drm_fmt_ycbcr_cp,
  			       ARRAY_SIZE(ltdc_drm_fmt_ycbcr_cp) * sizeof(*formats));
-@@ -2225,10 +2478,11 @@ static int ltdc_get_caps(struct drm_device *ddev)
+@@ -2225,10 +2478,11 @@ static int ltdc_get_caps(struct drm_devi
  
  	/* set data bus width */
  	regmap_read(ldev->regmap, LTDC_GC2R, &gc2r);
@@ -343,6 +339,3 @@ index 9a114779e6bb..6712754153fb 100644
  	ldev->caps.pad_max_freq_hz = pdata->pad_max_freq_hz;
  
  	switch (ldev->caps.hw_version) {
--- 
-2.53.0
-

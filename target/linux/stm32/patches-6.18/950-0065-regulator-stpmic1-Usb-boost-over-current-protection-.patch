@@ -20,8 +20,6 @@ Reviewed-by: Alexandre TORGUE <alexandre.torgue@st.com>
  drivers/regulator/stpmic1_regulator.c | 181 ++++++++++++++++++++++++--
  1 file changed, 168 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/regulator/stpmic1_regulator.c b/drivers/regulator/stpmic1_regulator.c
-index a498df7cb016..ff16ca5960cd 100644
 --- a/drivers/regulator/stpmic1_regulator.c
 +++ b/drivers/regulator/stpmic1_regulator.c
 @@ -2,7 +2,9 @@
@@ -62,7 +60,7 @@ index a498df7cb016..ff16ca5960cd 100644
  
  enum {
  	STPMIC1_BUCK1 = 0,
-@@ -182,8 +200,8 @@ static const struct regulator_ops stpmic1_vref_ddr_ops = {
+@@ -182,8 +200,8 @@ static const struct regulator_ops stpmic
  
  static const struct regulator_ops stpmic1_boost_regul_ops = {
  	.is_enabled = regulator_is_enabled_regmap,
@@ -73,7 +71,7 @@ index a498df7cb016..ff16ca5960cd 100644
  	.set_over_current_protection = stpmic1_set_icc,
  };
  
-@@ -529,6 +547,78 @@ static irqreturn_t stpmic1_curlim_irq_handler(int irq, void *data)
+@@ -529,6 +547,78 @@ static irqreturn_t stpmic1_curlim_irq_ha
  	return IRQ_HANDLED;
  }
  
@@ -152,7 +150,7 @@ index a498df7cb016..ff16ca5960cd 100644
  #define MATCH(_name, _id) \
  	[STPMIC1_##_id] = { \
  		.name = #_name, \
-@@ -552,9 +642,10 @@ static struct of_regulator_match stpmic1_matches[] = {
+@@ -552,9 +642,10 @@ static struct of_regulator_match stpmic1
  	MATCH(pwr_sw2, SW_OUT),
  };
  
@@ -166,7 +164,7 @@ index a498df7cb016..ff16ca5960cd 100644
  {
  	struct stpmic1 *pmic_dev = dev_get_drvdata(pdev->dev.parent);
  	struct regulator_dev *rdev;
-@@ -572,7 +663,7 @@ static int stpmic1_regulator_register(struct platform_device *pdev, int id,
+@@ -572,7 +663,7 @@ static int stpmic1_regulator_register(st
  	if (IS_ERR(rdev)) {
  		dev_err(&pdev->dev, "failed to register %s regulator\n",
  			cfg->desc.name);
@@ -175,7 +173,7 @@ index a498df7cb016..ff16ca5960cd 100644
  	}
  
  	/* set mask reset */
-@@ -584,7 +675,7 @@ static int stpmic1_regulator_register(struct platform_device *pdev, int id,
+@@ -584,7 +675,7 @@ static int stpmic1_regulator_register(st
  					 cfg->mask_reset_mask);
  		if (ret) {
  			dev_err(&pdev->dev, "set mask reset failed\n");
@@ -184,15 +182,14 @@ index a498df7cb016..ff16ca5960cd 100644
  		}
  	}
  
-@@ -598,15 +689,60 @@ static int stpmic1_regulator_register(struct platform_device *pdev, int id,
+@@ -598,15 +689,60 @@ static int stpmic1_regulator_register(st
  						pdev->name, rdev);
  		if (ret) {
  			dev_err(&pdev->dev, "Request IRQ failed\n");
 -			return ret;
 +			return ERR_PTR(ret);
- 		}
- 	}
--	return 0;
++		}
++	}
 +
 +	return rdev;
 +}
@@ -233,8 +230,9 @@ index a498df7cb016..ff16ca5960cd 100644
 +		if (ret) {
 +			dev_err(&pdev->dev, "Request IRQ failed\n");
 +			return ERR_PTR(ret);
-+		}
-+	}
+ 		}
+ 	}
+-	return 0;
 +
 +	return rdev;
  }
@@ -247,7 +245,7 @@ index a498df7cb016..ff16ca5960cd 100644
  
  	ret = of_regulator_match(&pdev->dev, pdev->dev.of_node, stpmic1_matches,
  				 ARRAY_SIZE(stpmic1_matches));
-@@ -616,11 +752,30 @@ static int stpmic1_regulator_probe(struct platform_device *pdev)
+@@ -616,11 +752,30 @@ static int stpmic1_regulator_probe(struc
  		return ret;
  	}
  
@@ -282,6 +280,3 @@ index a498df7cb016..ff16ca5960cd 100644
  	}
  
  	dev_dbg(&pdev->dev, "stpmic1_regulator driver probed\n");
--- 
-2.53.0
-

@@ -21,8 +21,6 @@ Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
  drivers/spi/spi-stm32-ospi.c | 295 ++++++++++++++++++++++++++++++++++-
  1 file changed, 292 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
-index 689b9b343773..54057a61b320 100644
 --- a/drivers/spi/spi-stm32-ospi.c
 +++ b/drivers/spi/spi-stm32-ospi.c
 @@ -24,6 +24,7 @@
@@ -98,7 +96,7 @@ index 689b9b343773..54057a61b320 100644
  static void stm32_ospi_read_fifo(void *val, void __iomem *addr, u8 len)
  {
  	switch (len) {
-@@ -181,7 +209,7 @@ static int stm32_ospi_abort(struct stm32_ospi *ospi)
+@@ -181,7 +209,7 @@ static int stm32_ospi_abort(struct stm32
  						    cr, !(cr & CR_ABORT), 1,
  						    STM32_ABT_TIMEOUT_US);
  
@@ -107,7 +105,7 @@ index 689b9b343773..54057a61b320 100644
  		dev_err(ospi->dev, "%s abort timeout:%d\n", __func__, timeout);
  
  	return timeout;
-@@ -205,8 +233,10 @@ static int stm32_ospi_poll(struct stm32_ospi *ospi, void *buf, u32 len, bool rea
+@@ -205,8 +233,10 @@ static int stm32_ospi_poll(struct stm32_
  							sr, sr & SR_FTF, 1,
  							STM32_FIFO_TIMEOUT_US);
  		if (ret) {
@@ -120,7 +118,7 @@ index 689b9b343773..54057a61b320 100644
  			return ret;
  		}
  
-@@ -328,6 +358,251 @@ static int stm32_ospi_dma_setup(struct stm32_ospi *ospi,
+@@ -328,6 +358,251 @@ static int stm32_ospi_dma_setup(struct s
  	return ret;
  }
  
@@ -372,7 +370,7 @@ index 689b9b343773..54057a61b320 100644
  static int stm32_ospi_tx_mm(struct stm32_ospi *ospi,
  			    const struct spi_mem_op *op)
  {
-@@ -830,6 +1105,20 @@ static int stm32_ospi_get_resources(struct platform_device *pdev)
+@@ -830,6 +1105,20 @@ static int stm32_ospi_get_resources(stru
  		return dev_err_probe(dev, PTR_ERR(ospi->rstc),
  				     "Can't get reset\n");
  
@@ -393,6 +391,3 @@ index 689b9b343773..54057a61b320 100644
  	ospi->dma_chrx = dma_request_chan(dev, "rx");
  	if (IS_ERR(ospi->dma_chrx)) {
  		ret = PTR_ERR(ospi->dma_chrx);
--- 
-2.53.0
-

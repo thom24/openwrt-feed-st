@@ -32,8 +32,6 @@ Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
  drivers/media/platform/verisilicon/hantro_hw.h  |  1 +
  7 files changed, 28 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/verisilicon/hantro_g1.c b/drivers/media/platform/verisilicon/hantro_g1.c
-index 0ab1cee62218..50715f35357c 100644
 --- a/drivers/media/platform/verisilicon/hantro_g1.c
 +++ b/drivers/media/platform/verisilicon/hantro_g1.c
 @@ -11,6 +11,23 @@
@@ -60,11 +58,9 @@ index 0ab1cee62218..50715f35357c 100644
  irqreturn_t hantro_g1_irq(int irq, void *dev_id)
  {
  	struct hantro_dev *vpu = dev_id;
-diff --git a/drivers/media/platform/verisilicon/hantro_g1_h264_dec.c b/drivers/media/platform/verisilicon/hantro_g1_h264_dec.c
-index ad5c1a6634f5..19aa4c20e414 100644
 --- a/drivers/media/platform/verisilicon/hantro_g1_h264_dec.c
 +++ b/drivers/media/platform/verisilicon/hantro_g1_h264_dec.c
-@@ -253,6 +253,8 @@ int hantro_g1_h264_dec_run(struct hantro_ctx *ctx)
+@@ -253,6 +253,8 @@ int hantro_g1_h264_dec_run(struct hantro
  	struct vb2_v4l2_buffer *src_buf;
  	int ret;
  
@@ -73,7 +69,7 @@ index ad5c1a6634f5..19aa4c20e414 100644
  	/* Prepare the H264 decoder context. */
  	ret = hantro_h264_dec_prepare_run(ctx);
  	if (ret)
-@@ -269,7 +271,6 @@ int hantro_g1_h264_dec_run(struct hantro_ctx *ctx)
+@@ -269,7 +271,6 @@ int hantro_g1_h264_dec_run(struct hantro
  	/* Start decoding! */
  	vdpu_write_relaxed(vpu,
  			   G1_REG_CONFIG_DEC_AXI_RD_ID(0xffu) |
@@ -81,11 +77,9 @@ index ad5c1a6634f5..19aa4c20e414 100644
  			   G1_REG_CONFIG_DEC_OUT_ENDIAN |
  			   G1_REG_CONFIG_DEC_STRENDIAN_E |
  			   G1_REG_CONFIG_DEC_MAX_BURST(16) |
-diff --git a/drivers/media/platform/verisilicon/hantro_g1_jpeg_dec.c b/drivers/media/platform/verisilicon/hantro_g1_jpeg_dec.c
-index 3bea63bd1db6..b8f385273e1a 100644
 --- a/drivers/media/platform/verisilicon/hantro_g1_jpeg_dec.c
 +++ b/drivers/media/platform/verisilicon/hantro_g1_jpeg_dec.c
-@@ -238,6 +238,8 @@ int hantro_g1_jpeg_dec_run(struct hantro_ctx *ctx)
+@@ -238,6 +238,8 @@ int hantro_g1_jpeg_dec_run(struct hantro
  	int ret;
  	u32 i;
  
@@ -94,11 +88,9 @@ index 3bea63bd1db6..b8f385273e1a 100644
  	hantro_start_prepare_run(ctx);
  
  	src_buf = hantro_get_src_buf(ctx);
-diff --git a/drivers/media/platform/verisilicon/hantro_g1_mpeg2_dec.c b/drivers/media/platform/verisilicon/hantro_g1_mpeg2_dec.c
-index e0d6bd0a6e44..935740602ad4 100644
 --- a/drivers/media/platform/verisilicon/hantro_g1_mpeg2_dec.c
 +++ b/drivers/media/platform/verisilicon/hantro_g1_mpeg2_dec.c
-@@ -156,6 +156,8 @@ int hantro_g1_mpeg2_dec_run(struct hantro_ctx *ctx)
+@@ -156,6 +156,8 @@ int hantro_g1_mpeg2_dec_run(struct hantr
  	src_buf = hantro_get_src_buf(ctx);
  	dst_buf = hantro_get_dst_buf(ctx);
  
@@ -107,7 +99,7 @@ index e0d6bd0a6e44..935740602ad4 100644
  	/* Apply request controls if any */
  	hantro_start_prepare_run(ctx);
  
-@@ -165,7 +167,6 @@ int hantro_g1_mpeg2_dec_run(struct hantro_ctx *ctx)
+@@ -165,7 +167,6 @@ int hantro_g1_mpeg2_dec_run(struct hantr
  			      V4L2_CID_STATELESS_MPEG2_PICTURE);
  
  	reg = G1_REG_DEC_AXI_RD_ID(0) |
@@ -115,8 +107,6 @@ index e0d6bd0a6e44..935740602ad4 100644
  	      G1_REG_DEC_STRSWAP32_E(1) |
  	      G1_REG_DEC_STRENDIAN_E(1) |
  	      G1_REG_DEC_INSWAP32_E(1) |
-diff --git a/drivers/media/platform/verisilicon/hantro_g1_regs.h b/drivers/media/platform/verisilicon/hantro_g1_regs.h
-index 6ab258550cfe..175efbf7567b 100644
 --- a/drivers/media/platform/verisilicon/hantro_g1_regs.h
 +++ b/drivers/media/platform/verisilicon/hantro_g1_regs.h
 @@ -22,6 +22,7 @@
@@ -127,11 +117,9 @@ index 6ab258550cfe..175efbf7567b 100644
  #define     G1_REG_INTERRUPT_DEC_IRQ_DIS		BIT(4)
  #define     G1_REG_INTERRUPT_DEC_E			BIT(0)
  #define G1_REG_CONFIG					0x008
-diff --git a/drivers/media/platform/verisilicon/hantro_g1_vp8_dec.c b/drivers/media/platform/verisilicon/hantro_g1_vp8_dec.c
-index c6a7584b716a..66dfdbc8f843 100644
 --- a/drivers/media/platform/verisilicon/hantro_g1_vp8_dec.c
 +++ b/drivers/media/platform/verisilicon/hantro_g1_vp8_dec.c
-@@ -444,6 +444,8 @@ int hantro_g1_vp8_dec_run(struct hantro_ctx *ctx)
+@@ -444,6 +444,8 @@ int hantro_g1_vp8_dec_run(struct hantro_
  	u32 mb_width, mb_height;
  	u32 reg;
  
@@ -140,7 +128,7 @@ index c6a7584b716a..66dfdbc8f843 100644
  	hantro_start_prepare_run(ctx);
  
  	hdr = hantro_get_ctrl(ctx, V4L2_CID_STATELESS_VP8_FRAME);
-@@ -457,8 +459,7 @@ int hantro_g1_vp8_dec_run(struct hantro_ctx *ctx)
+@@ -457,8 +459,7 @@ int hantro_g1_vp8_dec_run(struct hantro_
  
  	hantro_vp8_prob_update(ctx, hdr);
  
@@ -150,11 +138,9 @@ index c6a7584b716a..66dfdbc8f843 100644
  	      G1_REG_CONFIG_DEC_INSWAP32_E |
  	      G1_REG_CONFIG_DEC_STRSWAP32_E |
  	      G1_REG_CONFIG_DEC_OUTSWAP32_E |
-diff --git a/drivers/media/platform/verisilicon/hantro_hw.h b/drivers/media/platform/verisilicon/hantro_hw.h
-index 041424a24f7a..0d7348640076 100644
 --- a/drivers/media/platform/verisilicon/hantro_hw.h
 +++ b/drivers/media/platform/verisilicon/hantro_hw.h
-@@ -520,6 +520,7 @@ void hantro_irq_done(struct hantro_dev *vpu,
+@@ -520,6 +520,7 @@ void hantro_irq_done(struct hantro_dev *
  void hantro_start_prepare_run(struct hantro_ctx *ctx);
  void hantro_end_prepare_run(struct hantro_ctx *ctx);
  
@@ -162,6 +148,3 @@ index 041424a24f7a..0d7348640076 100644
  irqreturn_t hantro_g1_irq(int irq, void *dev_id);
  void hantro_g1_reset(struct hantro_ctx *ctx);
  
--- 
-2.53.0
-

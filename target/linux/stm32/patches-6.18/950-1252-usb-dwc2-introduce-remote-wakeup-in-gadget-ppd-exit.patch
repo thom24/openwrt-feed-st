@@ -19,11 +19,9 @@ Reviewed-by: Pankaj DEV <pankaj.dev@st.com>
  drivers/usb/dwc2/gadget.c | 16 +++++++++++++++-
  4 files changed, 19 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/dwc2/core.c b/drivers/usb/dwc2/core.c
-index 368da20ae14d..dd206a7bd8c0 100644
 --- a/drivers/usb/dwc2/core.c
 +++ b/drivers/usb/dwc2/core.c
-@@ -120,7 +120,7 @@ int dwc2_exit_partial_power_down(struct dwc2_hsotg *hsotg, int rem_wakeup,
+@@ -120,7 +120,7 @@ int dwc2_exit_partial_power_down(struct
  		return dwc2_host_exit_partial_power_down(hsotg, rem_wakeup,
  							 restore);
  	else
@@ -32,11 +30,9 @@ index 368da20ae14d..dd206a7bd8c0 100644
  }
  
  /**
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index b8ab5f08a2b2..4dffedffe07d 100644
 --- a/drivers/usb/dwc2/core.h
 +++ b/drivers/usb/dwc2/core.h
-@@ -1456,7 +1456,7 @@ int dwc2_gadget_exit_hibernation(struct dwc2_hsotg *hsotg,
+@@ -1456,7 +1456,7 @@ int dwc2_gadget_exit_hibernation(struct
  				 int rem_wakeup, int reset);
  int dwc2_gadget_enter_partial_power_down(struct dwc2_hsotg *hsotg);
  int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
@@ -45,7 +41,7 @@ index b8ab5f08a2b2..4dffedffe07d 100644
  void dwc2_gadget_enter_clock_gating(struct dwc2_hsotg *hsotg);
  void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg,
  				   int rem_wakeup);
-@@ -1504,7 +1504,7 @@ static inline int dwc2_gadget_exit_hibernation(struct dwc2_hsotg *hsotg,
+@@ -1504,7 +1504,7 @@ static inline int dwc2_gadget_exit_hiber
  static inline int dwc2_gadget_enter_partial_power_down(struct dwc2_hsotg *hsotg)
  { return 0; }
  static inline int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
@@ -54,11 +50,9 @@ index b8ab5f08a2b2..4dffedffe07d 100644
  { return 0; }
  static inline void dwc2_gadget_enter_clock_gating(struct dwc2_hsotg *hsotg) {}
  static inline void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg,
-diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
-index a267e79190af..65c1a3677532 100644
 --- a/drivers/usb/dwc2/drd.c
 +++ b/drivers/usb/dwc2/drd.c
-@@ -215,7 +215,7 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+@@ -215,7 +215,7 @@ static int dwc2_drd_role_sw_set(struct u
  	     dwc2_is_device_mode(hsotg) &&
  	     hsotg->lx_state == DWC2_L2) {
  		if (hsotg->in_ppd)
@@ -67,11 +61,9 @@ index a267e79190af..65c1a3677532 100644
  
  		if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
  		    !hsotg->params.no_clock_gating)
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index ad1edd05b289..a37d3f8aa55b 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -5802,6 +5802,7 @@ int dwc2_gadget_enter_partial_power_down(struct dwc2_hsotg *hsotg)
+@@ -5802,6 +5802,7 @@ int dwc2_gadget_enter_partial_power_down
   * power down.
   *
   * @hsotg: Programming view of the DWC_otg controller
@@ -79,7 +71,7 @@ index ad1edd05b289..a37d3f8aa55b 100644
   * @restore: indicates whether need to restore the registers or not.
   *
   * Return: non-zero if failed to exit device partial power down.
-@@ -5809,7 +5810,7 @@ int dwc2_gadget_enter_partial_power_down(struct dwc2_hsotg *hsotg)
+@@ -5809,7 +5810,7 @@ int dwc2_gadget_enter_partial_power_down
   * This function is for exiting from device mode partial power down.
   */
  int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
@@ -88,7 +80,7 @@ index ad1edd05b289..a37d3f8aa55b 100644
  {
  	u32 pcgcctl;
  	u32 dctl;
-@@ -5842,6 +5843,19 @@ int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+@@ -5842,6 +5843,19 @@ int dwc2_gadget_exit_partial_power_down(
  	dctl |= DCTL_PWRONPRGDONE;
  	dwc2_writel(hsotg, dctl, DCTL);
  
@@ -108,6 +100,3 @@ index ad1edd05b289..a37d3f8aa55b 100644
  	/* Set in_ppd flag to 0 as here core exits from suspend. */
  	hsotg->in_ppd = 0;
  	hsotg->lx_state = DWC2_L0;
--- 
-2.53.0
-

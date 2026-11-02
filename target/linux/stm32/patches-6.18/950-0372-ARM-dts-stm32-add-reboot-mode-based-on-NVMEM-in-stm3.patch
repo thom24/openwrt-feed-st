@@ -23,11 +23,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm/boot/dts/st/stm32mp131.dtsi | 14 ++++++++++++++
  1 file changed, 14 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index 5b00bb7f51a2..605a22b29256 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -1972,6 +1972,20 @@ boot_counter: tamp-bkp@7c {
+@@ -1972,6 +1972,20 @@
  					};
  				};
  			};
@@ -48,6 +46,3 @@ index 5b00bb7f51a2..605a22b29256 100644
  		};
  	};
  };
--- 
-2.53.0
-

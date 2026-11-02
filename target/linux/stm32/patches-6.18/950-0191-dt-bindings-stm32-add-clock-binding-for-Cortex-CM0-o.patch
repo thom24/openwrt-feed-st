@@ -21,8 +21,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  include/dt-bindings/clock/st,stm32mp25-rcc.h  | 38 ++++++++++++++++++-
  2 files changed, 44 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/clock/st,stm32mp25-rcc.yaml b/Documentation/devicetree/bindings/clock/st,stm32mp25-rcc.yaml
-index 1e3b5d218bb0..fe8779864761 100644
 --- a/Documentation/devicetree/bindings/clock/st,stm32mp25-rcc.yaml
 +++ b/Documentation/devicetree/bindings/clock/st,stm32mp25-rcc.yaml
 @@ -113,6 +113,9 @@ properties:
@@ -46,8 +44,6 @@ index 1e3b5d218bb0..fe8779864761 100644
 +                  <&scmi_clk CK_SCMI_MSI_KER_CK>;
      };
  ...
-diff --git a/include/dt-bindings/clock/st,stm32mp25-rcc.h b/include/dt-bindings/clock/st,stm32mp25-rcc.h
-index 66b3f95329af..04b7fd605a41 100644
 --- a/include/dt-bindings/clock/st,stm32mp25-rcc.h
 +++ b/include/dt-bindings/clock/st,stm32mp25-rcc.h
 @@ -365,8 +365,37 @@
@@ -102,6 +98,3 @@ index 66b3f95329af..04b7fd605a41 100644
 +#define CK_SCMI_RTC_AM		131
  
  #endif /* _DT_BINDINGS_STM32MP25_CLKS_H_ */
--- 
-2.53.0
-

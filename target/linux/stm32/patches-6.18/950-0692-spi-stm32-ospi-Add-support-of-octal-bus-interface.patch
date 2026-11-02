@@ -14,8 +14,6 @@ Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
  drivers/spi/spi-stm32-ospi.c | 63 +++++++++++++++++++++++++++---------
  1 file changed, 47 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
-index f077debc292e..fac9e601c678 100644
 --- a/drivers/spi/spi-stm32-ospi.c
 +++ b/drivers/spi/spi-stm32-ospi.c
 @@ -144,6 +144,7 @@ struct stm32_ospi_flash {
@@ -26,7 +24,7 @@ index f077debc292e..fac9e601c678 100644
  };
  
  struct stm32_ospi {
-@@ -1442,6 +1443,7 @@ static int stm32_ospi_setup(struct spi_device *spi)
+@@ -1442,6 +1443,7 @@ static int stm32_ospi_setup(struct spi_d
  	struct spi_controller *ctrl = spi->controller;
  	struct stm32_ospi *ospi = spi_controller_get_devdata(ctrl);
  	void __iomem *regs_base = ospi->regs_base;
@@ -34,7 +32,7 @@ index f077debc292e..fac9e601c678 100644
  	int ret;
  	u8 cs = spi->chip_select[ffs(spi->cs_index_mask) - 1];
  
-@@ -1474,30 +1476,52 @@ static int stm32_ospi_setup(struct spi_device *spi)
+@@ -1474,30 +1476,52 @@ static int stm32_ospi_setup(struct spi_d
  	stm32_ospi_set_prescaler(ospi, flash->presc);
  
  	ospi->last_cs = cs;
@@ -102,7 +100,7 @@ index f077debc292e..fac9e601c678 100644
  }
  
  static bool stm32_ospi_supports_mem_op(struct spi_mem *mem,
-@@ -1683,7 +1707,8 @@ static int stm32_ospi_probe(struct platform_device *pdev)
+@@ -1683,7 +1707,8 @@ static int stm32_ospi_probe(struct platf
  	 */
  	for_each_available_child_of_node(dev->of_node, child) {
  		if (of_device_is_compatible(child, "jedec,spi-nor") ||
@@ -112,7 +110,7 @@ index f077debc292e..fac9e601c678 100644
  			spi_flash_count++;
  	}
  
-@@ -1773,6 +1798,12 @@ static int stm32_ospi_probe(struct platform_device *pdev)
+@@ -1773,6 +1798,12 @@ static int stm32_ospi_probe(struct platf
  
  			flash->is_spi_nor = true;
  		}
@@ -125,6 +123,3 @@ index f077debc292e..fac9e601c678 100644
  	}
  
  	ret = spi_register_controller(ctrl);
--- 
-2.53.0
-

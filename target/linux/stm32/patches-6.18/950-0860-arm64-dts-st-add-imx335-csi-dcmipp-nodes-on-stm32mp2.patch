@@ -20,8 +20,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 70 +++++++++++++++++++++++
  1 file changed, 70 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-index 8319e6eedb58..1dde54fd06bd 100644
 --- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
 @@ -9,6 +9,7 @@
@@ -32,7 +30,7 @@ index 8319e6eedb58..1dde54fd06bd 100644
  #include "stm32mp235.dtsi"
  #include "stm32mp23xf.dtsi"
  #include "stm32mp25-pinctrl.dtsi"
-@@ -30,6 +31,14 @@ chosen {
+@@ -30,6 +31,14 @@
  		stdout-path = "serial0:115200n8";
  	};
  
@@ -47,7 +45,7 @@ index 8319e6eedb58..1dde54fd06bd 100644
  	gpio-keys {
  		compatible = "gpio-keys";
  
-@@ -143,10 +152,44 @@ &cs_tpiu {
+@@ -143,10 +152,44 @@
  	status = "okay";
  };
  
@@ -92,7 +90,7 @@ index 8319e6eedb58..1dde54fd06bd 100644
  &ethernet1 {
  	pinctrl-0 = <&eth1_rgmii_pins_b>;
  	pinctrl-1 = <&eth1_rgmii_sleep_pins_b>;
-@@ -176,6 +219,13 @@ &gpioa {
+@@ -176,6 +219,13 @@
  
  &gpiob {
  	bootph-all;
@@ -106,7 +104,7 @@ index 8319e6eedb58..1dde54fd06bd 100644
  };
  
  &gpioc {
-@@ -233,6 +283,26 @@ &i2c2 {
+@@ -233,6 +283,26 @@
  	/* spare dmas for other usage */
  	/delete-property/dmas;
  	/delete-property/dma-names;
@@ -133,6 +131,3 @@ index 8319e6eedb58..1dde54fd06bd 100644
  };
  
  &i2c8 {
--- 
-2.53.0
-

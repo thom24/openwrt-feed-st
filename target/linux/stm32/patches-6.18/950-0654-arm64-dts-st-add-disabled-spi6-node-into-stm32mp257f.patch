@@ -18,11 +18,9 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index c1263a2521f6..5d42b2052e92 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -401,6 +401,13 @@ brcmf: wifi@1 {
+@@ -401,6 +401,13 @@
  	};
  };
  
@@ -36,6 +34,3 @@ index c1263a2521f6..5d42b2052e92 100644
  &syscfg {
  	bootph-all;
  };
--- 
-2.53.0
-

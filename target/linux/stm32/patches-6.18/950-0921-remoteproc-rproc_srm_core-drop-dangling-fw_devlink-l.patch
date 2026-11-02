@@ -34,8 +34,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/remoteproc/rproc_srm_core.c | 21 +++++++++++++++++++++
  1 file changed, 21 insertions(+)
 
-diff --git a/drivers/remoteproc/rproc_srm_core.c b/drivers/remoteproc/rproc_srm_core.c
-index 3aeba5b8a2b5..1935914b6b85 100644
 --- a/drivers/remoteproc/rproc_srm_core.c
 +++ b/drivers/remoteproc/rproc_srm_core.c
 @@ -5,8 +5,10 @@
@@ -49,7 +47,7 @@ index 3aeba5b8a2b5..1935914b6b85 100644
  #include <linux/platform_device.h>
  #include <linux/of_platform.h>
  #include <linux/remoteproc.h>
-@@ -232,6 +234,23 @@ static void rproc_srm_core_unprepare(struct rproc_subdev *subdev)
+@@ -232,6 +234,23 @@ static void rproc_srm_core_unprepare(str
  	devm_of_platform_depopulate(dev);
  }
  
@@ -73,7 +71,7 @@ index 3aeba5b8a2b5..1935914b6b85 100644
  static int rproc_srm_core_probe(struct platform_device *pdev)
  {
  	struct device *dev = &pdev->dev;
-@@ -246,6 +265,8 @@ static int rproc_srm_core_probe(struct platform_device *pdev)
+@@ -246,6 +265,8 @@ static int rproc_srm_core_probe(struct p
  	rproc_srm_core->dev = dev;
  	BLOCKING_INIT_NOTIFIER_HEAD(&rproc_srm_core->notifier);
  
@@ -82,6 +80,3 @@ index 3aeba5b8a2b5..1935914b6b85 100644
  	/* Register rproc subdevice with (un)prepare ops */
  	rproc_srm_core->subdev.prepare = rproc_srm_core_prepare;
  	rproc_srm_core->subdev.unprepare = rproc_srm_core_unprepare;
--- 
-2.53.0
-

@@ -15,11 +15,9 @@ Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
  include/linux/pinctrl/pinconf-generic.h | 11 ++++-
  2 files changed, 50 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/pinctrl/pinconf-generic.c b/drivers/pinctrl/pinconf-generic.c
-index c58a9b9557d4..556bafb9bb4f 100644
 --- a/drivers/pinctrl/pinconf-generic.c
 +++ b/drivers/pinctrl/pinconf-generic.c
-@@ -65,11 +65,12 @@ static void pinconf_generic_dump_one(struct pinctrl_dev *pctldev,
+@@ -65,11 +65,12 @@ static void pinconf_generic_dump_one(str
  	int i;
  
  	for (i = 0; i < nitems; i++) {
@@ -33,7 +31,7 @@ index c58a9b9557d4..556bafb9bb4f 100644
  		if (gname)
  			ret = pin_config_group_get(dev_name(pctldev->dev),
  						   gname, &config);
-@@ -86,15 +87,22 @@ static void pinconf_generic_dump_one(struct pinctrl_dev *pctldev,
+@@ -86,15 +87,22 @@ static void pinconf_generic_dump_one(str
  		if (*print_sep)
  			seq_puts(s, ", ");
  		*print_sep = 1;
@@ -60,7 +58,7 @@ index c58a9b9557d4..556bafb9bb4f 100644
  		}
  	}
  }
-@@ -205,10 +213,10 @@ static const struct pinconf_generic_params dt_params[] = {
+@@ -205,10 +213,10 @@ static const struct pinconf_generic_para
   * @ncfg. @ncfg is updated to reflect the number of entries after parsing. @cfg
   * needs to have enough memory allocated to hold all possible entries.
   */
@@ -75,7 +73,7 @@ index c58a9b9557d4..556bafb9bb4f 100644
  {
  	int i;
  
-@@ -217,7 +225,19 @@ static void parse_dt_cfg(struct device_node *np,
+@@ -217,7 +225,19 @@ static void parse_dt_cfg(struct device_n
  		int ret;
  		const struct pinconf_generic_params *par = &params[i];
  
@@ -96,7 +94,7 @@ index c58a9b9557d4..556bafb9bb4f 100644
  
  		/* property not found */
  		if (ret == -EINVAL)
-@@ -231,6 +251,8 @@ static void parse_dt_cfg(struct device_node *np,
+@@ -231,6 +251,8 @@ static void parse_dt_cfg(struct device_n
  		cfg[*ncfg] = pinconf_to_config_packed(par->param, val);
  		(*ncfg)++;
  	}
@@ -105,7 +103,7 @@ index c58a9b9557d4..556bafb9bb4f 100644
  }
  
  /**
-@@ -328,13 +350,16 @@ int pinconf_generic_parse_dt_config(struct device_node *np,
+@@ -328,13 +350,16 @@ int pinconf_generic_parse_dt_config(stru
  	if (!cfg)
  		return -ENOMEM;
  
@@ -128,11 +126,9 @@ index c58a9b9557d4..556bafb9bb4f 100644
  
  	/* no configs found at all */
  	if (ncfg == 0) {
-diff --git a/include/linux/pinctrl/pinconf-generic.h b/include/linux/pinctrl/pinconf-generic.h
-index 4e22aa44bcd4..d99cfffa74f4 100644
 --- a/include/linux/pinctrl/pinconf-generic.h
 +++ b/include/linux/pinctrl/pinconf-generic.h
-@@ -181,21 +181,28 @@ static inline unsigned long pinconf_to_config_packed(enum pin_config_param param
+@@ -181,21 +181,28 @@ static inline unsigned long pinconf_to_c
  	return PIN_CONF_PACKED(param, argument);
  }
  
@@ -163,6 +159,3 @@ index 4e22aa44bcd4..d99cfffa74f4 100644
  };
  
  int pinconf_generic_dt_subnode_to_map(struct pinctrl_dev *pctldev,
--- 
-2.53.0
-

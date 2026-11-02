@@ -27,11 +27,9 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/iio/adc/stm32-adc.c | 9 +++++++--
  1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/iio/adc/stm32-adc.c b/drivers/iio/adc/stm32-adc.c
-index e50cc344054d..a0356f72a126 100644
 --- a/drivers/iio/adc/stm32-adc.c
 +++ b/drivers/iio/adc/stm32-adc.c
-@@ -375,9 +375,14 @@ static const struct stm32_adc_info stm32mp13_adc_info = {
+@@ -375,9 +375,14 @@ static const struct stm32_adc_info stm32
  	.num_ovs = ARRAY_SIZE(stm32mp13_adc_oversampling_avail),
  };
  
@@ -48,6 +46,3 @@ index e50cc344054d..a0356f72a126 100644
  	.resolutions = stm32f4_adc_resolutions,
  	.oversampling = stm32h7_adc_oversampling_avail,
  	.num_res = ARRAY_SIZE(stm32f4_adc_resolutions),
--- 
-2.53.0
-

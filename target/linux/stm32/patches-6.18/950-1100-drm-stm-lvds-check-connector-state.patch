@@ -12,11 +12,9 @@ Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
  drivers/gpu/drm/stm/lvds.c | 8 +++++---
  1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
-index 02b9683b6d8f..72b1446dfc53 100644
 --- a/drivers/gpu/drm/stm/lvds.c
 +++ b/drivers/gpu/drm/stm/lvds.c
-@@ -921,14 +921,16 @@ static int lvds_connector_atomic_check(struct drm_connector *connector,
+@@ -921,14 +921,16 @@ static int lvds_connector_atomic_check(s
  	if (!conn_state)
  		return -EINVAL;
  
@@ -36,6 +34,3 @@ index 02b9683b6d8f..72b1446dfc53 100644
  	panel_mode = list_first_entry(&connector->modes,
  				      struct drm_display_mode, head);
  
--- 
-2.53.0
-

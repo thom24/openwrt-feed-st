@@ -15,11 +15,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/panel/panel-simple.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
-index 1a1525ef1cb8..7adb8b14f3f9 100644
 --- a/drivers/gpu/drm/panel/panel-simple.c
 +++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -4129,6 +4129,8 @@ static const struct panel_desc rocktech_rk043fn48h = {
+@@ -4129,6 +4129,8 @@ static const struct panel_desc rocktech_
  		.width = 95,
  		.height = 54,
  	},
@@ -28,6 +26,3 @@ index 1a1525ef1cb8..7adb8b14f3f9 100644
  	.bus_format = MEDIA_BUS_FMT_RGB888_1X24,
  	.connector_type = DRM_MODE_CONNECTOR_DPI,
  };
--- 
-2.53.0
-

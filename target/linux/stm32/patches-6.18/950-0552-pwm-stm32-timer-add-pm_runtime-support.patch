@@ -11,8 +11,6 @@ Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
  drivers/pwm/pwm-stm32.c | 104 +++++++++++++++++++++++++++++++---------
  1 file changed, 82 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/pwm/pwm-stm32.c b/drivers/pwm/pwm-stm32.c
-index 6917cd87c414..1a8a5554150c 100644
 --- a/drivers/pwm/pwm-stm32.c
 +++ b/drivers/pwm/pwm-stm32.c
 @@ -14,6 +14,7 @@
@@ -40,7 +38,7 @@ index 6917cd87c414..1a8a5554150c 100644
  	struct mutex lock; /* protect pwm config/enable */
  	struct clk *clk;
  	struct regmap *regmap;
-@@ -79,7 +83,7 @@ static int stm32_pwm_round_waveform_tohw(struct pwm_chip *chip,
+@@ -79,7 +83,7 @@ static int stm32_pwm_round_waveform_tohw
  		return 0;
  	}
  
@@ -49,7 +47,7 @@ index 6917cd87c414..1a8a5554150c 100644
  	if (ret)
  		return ret;
  
-@@ -188,7 +192,7 @@ static int stm32_pwm_round_waveform_tohw(struct pwm_chip *chip,
+@@ -188,7 +192,7 @@ out:
  		pwm->hwpwm, wf->duty_length_ns, wf->period_length_ns, wf->duty_offset_ns,
  		rate, wfhw->ccer, wfhw->psc, wfhw->arr, wfhw->ccr);
  
@@ -58,7 +56,7 @@ index 6917cd87c414..1a8a5554150c 100644
  
  	return ret;
  }
-@@ -261,7 +265,7 @@ static int stm32_pwm_read_waveform(struct pwm_chip *chip,
+@@ -261,7 +265,7 @@ static int stm32_pwm_read_waveform(struc
  	unsigned int ch = pwm->hwpwm;
  	int ret;
  
@@ -67,7 +65,7 @@ index 6917cd87c414..1a8a5554150c 100644
  	if (ret)
  		return ret;
  
-@@ -290,7 +294,7 @@ static int stm32_pwm_read_waveform(struct pwm_chip *chip,
+@@ -290,7 +294,7 @@ static int stm32_pwm_read_waveform(struc
  	}
  
  out:
@@ -76,7 +74,7 @@ index 6917cd87c414..1a8a5554150c 100644
  
  	return ret;
  }
-@@ -304,7 +308,7 @@ static int stm32_pwm_write_waveform(struct pwm_chip *chip,
+@@ -304,7 +308,7 @@ static int stm32_pwm_write_waveform(stru
  	unsigned int ch = pwm->hwpwm;
  	int ret;
  
@@ -85,7 +83,7 @@ index 6917cd87c414..1a8a5554150c 100644
  	if (ret)
  		return ret;
  
-@@ -382,9 +386,9 @@ static int stm32_pwm_write_waveform(struct pwm_chip *chip,
+@@ -382,9 +386,9 @@ static int stm32_pwm_write_waveform(stru
  		if (!(ccer & TIM_CCER_CCxE(ch + 1))) {
  			mask = TIM_CCER_CCxE(ch + 1) | TIM_CCER_CCxNE(ch + 1);
  
@@ -97,7 +95,7 @@ index 6917cd87c414..1a8a5554150c 100644
  
  			ccer = (ccer & ~mask) | (wfhw->ccer & mask);
  			regmap_write(priv->regmap, TIM_CCER, ccer);
-@@ -422,12 +426,12 @@ static int stm32_pwm_write_waveform(struct pwm_chip *chip,
+@@ -422,12 +426,12 @@ static int stm32_pwm_write_waveform(stru
  					goto out;
  			}
  
@@ -112,7 +110,7 @@ index 6917cd87c414..1a8a5554150c 100644
  
  	return ret;
  }
-@@ -549,16 +553,16 @@ static int stm32_pwm_capture(struct pwm_chip *chip, struct pwm_device *pwm,
+@@ -549,16 +553,16 @@ static int stm32_pwm_capture(struct pwm_
  		goto unlock;
  	}
  
@@ -133,7 +131,7 @@ index 6917cd87c414..1a8a5554150c 100644
  	}
  
  	/* prescaler: fit timeout window provided by upper layer */
-@@ -681,8 +685,8 @@ static int stm32_pwm_capture(struct pwm_chip *chip, struct pwm_device *pwm,
+@@ -681,8 +685,8 @@ stop:
  	regmap_write(priv->regmap, TIM_CCER, 0);
  	regmap_write(priv->regmap, pwm->hwpwm < 2 ? TIM_CCMR1 : TIM_CCMR2, 0);
  	regmap_write(priv->regmap, TIM_PSC, 0);
@@ -144,7 +142,7 @@ index 6917cd87c414..1a8a5554150c 100644
  unlock:
  	mutex_unlock(&priv->lock);
  
-@@ -848,6 +852,7 @@ static int stm32_pwm_probe(struct platform_device *pdev)
+@@ -848,6 +852,7 @@ static int stm32_pwm_probe(struct platfo
  	if (IS_ERR(chip))
  		return PTR_ERR(chip);
  	priv = to_stm32_pwm_dev(chip);
@@ -152,7 +150,7 @@ index 6917cd87c414..1a8a5554150c 100644
  
  	mutex_init(&priv->lock);
  	priv->regmap = ddata->regmap;
-@@ -880,19 +885,28 @@ static int stm32_pwm_probe(struct platform_device *pdev)
+@@ -880,19 +885,28 @@ static int stm32_pwm_probe(struct platfo
  	chip->ops = &stm32pwm_ops;
  
  	/* Initialize clock refcount to number of enabled PWM channels. */
@@ -184,7 +182,7 @@ index 6917cd87c414..1a8a5554150c 100644
  	return 0;
  }
  
-@@ -902,6 +916,7 @@ static int stm32_pwm_suspend(struct device *dev)
+@@ -902,6 +916,7 @@ static int stm32_pwm_suspend(struct devi
  	struct stm32_pwm *priv = to_stm32_pwm_dev(chip);
  	unsigned int i;
  	u32 ccer, mask;
@@ -192,7 +190,7 @@ index 6917cd87c414..1a8a5554150c 100644
  
  	/* Look for active channels */
  	ccer = active_channels(priv);
-@@ -915,7 +930,11 @@ static int stm32_pwm_suspend(struct device *dev)
+@@ -915,7 +930,11 @@ static int stm32_pwm_suspend(struct devi
  		}
  	}
  
@@ -205,7 +203,7 @@ index 6917cd87c414..1a8a5554150c 100644
  }
  
  static int stm32_pwm_resume(struct device *dev)
-@@ -924,15 +943,56 @@ static int stm32_pwm_resume(struct device *dev)
+@@ -924,15 +943,56 @@ static int stm32_pwm_resume(struct devic
  	struct stm32_pwm *priv = to_stm32_pwm_dev(chip);
  	int ret;
  
@@ -265,6 +263,3 @@ index 6917cd87c414..1a8a5554150c 100644
  
  static const struct of_device_id stm32_pwm_of_match[] = {
  	{ .compatible = "st,stm32-pwm",	},
--- 
-2.53.0
-

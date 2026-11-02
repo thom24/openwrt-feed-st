@@ -18,11 +18,9 @@ Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  drivers/clk/stm32/clk-stm32mp25.c  | 22 ++++++++++++
  3 files changed, 101 insertions(+)
 
-diff --git a/drivers/clk/stm32/clk-stm32-core.c b/drivers/clk/stm32/clk-stm32-core.c
-index e921c25a929c..3d360e93303b 100644
 --- a/drivers/clk/stm32/clk-stm32-core.c
 +++ b/drivers/clk/stm32/clk-stm32-core.c
-@@ -130,6 +130,29 @@ static int stm32_mux_set_parent(void __iomem *base,
+@@ -130,6 +130,29 @@ static int stm32_mux_set_parent(void __i
  	return 0;
  }
  
@@ -52,7 +50,7 @@ index e921c25a929c..3d360e93303b 100644
  static void stm32_gate_endisable(void __iomem *base,
  				 struct clk_stm32_clock_data *data,
  				 u16 gate_id, int enable)
-@@ -325,11 +348,28 @@ static void clk_stm32_gate_disable_unused(struct clk_hw *hw)
+@@ -325,11 +348,28 @@ static void clk_stm32_gate_disable_unuse
  	spin_unlock_irqrestore(gate->lock, flags);
  }
  
@@ -81,7 +79,7 @@ index e921c25a929c..3d360e93303b 100644
  };
  
  static int clk_stm32_divider_set_rate(struct clk_hw *hw, unsigned long rate,
-@@ -599,6 +639,21 @@ static void clk_stm32_composite_disable_unused(struct clk_hw *hw)
+@@ -599,6 +639,21 @@ static void clk_stm32_composite_disable_
  	spin_unlock_irqrestore(composite->lock, flags);
  }
  
@@ -103,7 +101,7 @@ index e921c25a929c..3d360e93303b 100644
  const struct clk_ops clk_stm32_composite_ops = {
  	.set_rate	= clk_stm32_composite_set_rate,
  	.recalc_rate	= clk_stm32_composite_recalc_rate,
-@@ -609,6 +664,9 @@ const struct clk_ops clk_stm32_composite_ops = {
+@@ -609,6 +664,9 @@ const struct clk_ops clk_stm32_composite
  	.disable	= clk_stm32_composite_gate_disable,
  	.is_enabled	= clk_stm32_composite_is_enabled,
  	.disable_unused	= clk_stm32_composite_disable_unused,
@@ -113,8 +111,6 @@ index e921c25a929c..3d360e93303b 100644
  };
  
  struct clk_hw *clk_stm32_mux_register(struct device *dev,
-diff --git a/drivers/clk/stm32/clk-stm32mp21.c b/drivers/clk/stm32/clk-stm32mp21.c
-index bdb17419908c..a23d933cb21b 100644
 --- a/drivers/clk/stm32/clk-stm32mp21.c
 +++ b/drivers/clk/stm32/clk-stm32mp21.c
 @@ -6,6 +6,7 @@
@@ -125,7 +121,7 @@ index bdb17419908c..a23d933cb21b 100644
  #include <linux/clk-provider.h>
  #include <linux/io.h>
  #include <linux/platform_device.h>
-@@ -1570,6 +1571,26 @@ static int stm32mp21_rcc_clocks_probe(struct platform_device *pdev)
+@@ -1570,6 +1571,26 @@ static int stm32mp21_rcc_clocks_probe(st
  	return stm32_rcc_init(dev, stm32mp21_match_data, base);
  }
  
@@ -152,8 +148,6 @@ index bdb17419908c..a23d933cb21b 100644
  static struct platform_driver stm32mp21_rcc_clocks_driver = {
  	.driver	= {
  		.name = "stm32mp21_rcc",
-diff --git a/drivers/clk/stm32/clk-stm32mp25.c b/drivers/clk/stm32/clk-stm32mp25.c
-index eb0bc918ecee..575677df65ee 100644
 --- a/drivers/clk/stm32/clk-stm32mp25.c
 +++ b/drivers/clk/stm32/clk-stm32mp25.c
 @@ -6,6 +6,7 @@
@@ -164,7 +158,7 @@ index eb0bc918ecee..575677df65ee 100644
  #include <linux/clk-provider.h>
  #include <linux/io.h>
  #include <linux/platform_device.h>
-@@ -1986,10 +1987,31 @@ static int stm32mp25_rcc_clocks_probe(struct platform_device *pdev)
+@@ -1986,10 +1987,31 @@ static int stm32mp25_rcc_clocks_probe(st
  	return stm32_rcc_init(dev, stm32mp25_match_data, base);
  }
  
@@ -196,6 +190,3 @@ index eb0bc918ecee..575677df65ee 100644
  	},
  	.probe = stm32mp25_rcc_clocks_probe,
  };
--- 
-2.53.0
-

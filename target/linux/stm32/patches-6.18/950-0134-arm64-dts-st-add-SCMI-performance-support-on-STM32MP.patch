@@ -22,11 +22,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp253.dtsi | 4 ++--
  5 files changed, 25 insertions(+), 10 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index b39e51402d5b..6f6a6d17c4fa 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -19,8 +19,8 @@ cpu0: cpu@0 {
+@@ -19,8 +19,8 @@
  			reg = <0>;
  			device_type = "cpu";
  			enable-method = "psci";
@@ -37,7 +35,7 @@ index b39e51402d5b..6f6a6d17c4fa 100644
  		};
  
  		idle-states {
-@@ -97,6 +97,11 @@ scmi: scmi {
+@@ -97,6 +97,11 @@
  			#size-cells = <0>;
  			linaro,optee-channel-id = <0>;
  
@@ -49,11 +47,9 @@ index b39e51402d5b..6f6a6d17c4fa 100644
  			scmi_clk: protocol@14 {
  				reg = <0x14>;
  				#clock-cells = <1>;
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index 18736a9978b7..74920950867b 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -21,8 +21,8 @@ cpu0: cpu@0 {
+@@ -21,8 +21,8 @@
  			reg = <0>;
  			device_type = "cpu";
  			enable-method = "psci";
@@ -64,7 +60,7 @@ index 18736a9978b7..74920950867b 100644
  		};
  
  		idle-states {
-@@ -111,6 +111,11 @@ scmi_devpd: protocol@11 {
+@@ -111,6 +111,11 @@
  				#power-domain-cells = <1>;
  			};
  
@@ -76,11 +72,9 @@ index 18736a9978b7..74920950867b 100644
  			scmi_clk: protocol@14 {
  				reg = <0x14>;
  				#clock-cells = <1>;
-diff --git a/arch/arm64/boot/dts/st/stm32mp233.dtsi b/arch/arm64/boot/dts/st/stm32mp233.dtsi
-index 8d0abd7a7925..76762bf7bdad 100644
 --- a/arch/arm64/boot/dts/st/stm32mp233.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp233.dtsi
-@@ -12,8 +12,8 @@ cpu1: cpu@1 {
+@@ -12,8 +12,8 @@
  			reg = <1>;
  			device_type = "cpu";
  			enable-method = "psci";
@@ -91,11 +85,9 @@ index 8d0abd7a7925..76762bf7bdad 100644
  		};
  	};
  
-diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 94402e36a7e7..34ac0bd2acaf 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -22,8 +22,8 @@ cpu0: cpu@0 {
+@@ -22,8 +22,8 @@
  			device_type = "cpu";
  			reg = <0>;
  			enable-method = "psci";
@@ -106,7 +98,7 @@ index 94402e36a7e7..34ac0bd2acaf 100644
  		};
  
  		idle-states {
-@@ -120,6 +120,11 @@ scmi_devpd: protocol@11 {
+@@ -120,6 +120,11 @@
  				#power-domain-cells = <1>;
  			};
  
@@ -118,11 +110,9 @@ index 94402e36a7e7..34ac0bd2acaf 100644
  			scmi_clk: protocol@14 {
  				reg = <0x14>;
  				#clock-cells = <1>;
-diff --git a/arch/arm64/boot/dts/st/stm32mp253.dtsi b/arch/arm64/boot/dts/st/stm32mp253.dtsi
-index ebc6ccfad3ff..e39f2d1d2902 100644
 --- a/arch/arm64/boot/dts/st/stm32mp253.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp253.dtsi
-@@ -12,8 +12,8 @@ cpu1: cpu@1 {
+@@ -12,8 +12,8 @@
  			device_type = "cpu";
  			reg = <1>;
  			enable-method = "psci";
@@ -133,6 +123,3 @@ index ebc6ccfad3ff..e39f2d1d2902 100644
  		};
  	};
  
--- 
-2.53.0
-

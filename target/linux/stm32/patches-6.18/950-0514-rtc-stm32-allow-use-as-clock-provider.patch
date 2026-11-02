@@ -25,11 +25,9 @@ Domain-Review: Amelie Delaunay <amelie.delaunay@foss.st.com>
  drivers/rtc/rtc-stm32.c | 11 +++++++++--
  1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/rtc/rtc-stm32.c b/drivers/rtc/rtc-stm32.c
-index 0868ec435323..1f5ca88764c8 100644
 --- a/drivers/rtc/rtc-stm32.c
 +++ b/drivers/rtc/rtc-stm32.c
-@@ -326,6 +326,7 @@ static int stm32_rtc_pinmux_action_lsco(struct pinctrl_dev *pctldev, unsigned in
+@@ -326,6 +326,7 @@ static int stm32_rtc_pinmux_action_lsco(
  	struct stm32_rtc *rtc = pinctrl_dev_get_drvdata(pctldev);
  	struct stm32_rtc_registers regs = rtc->data->regs;
  	struct device *dev = rtc->rtc_dev->dev.parent;
@@ -37,7 +35,7 @@ index 0868ec435323..1f5ca88764c8 100644
  	u8 lscoen;
  	int ret;
  
-@@ -338,8 +339,14 @@ static int stm32_rtc_pinmux_action_lsco(struct pinctrl_dev *pctldev, unsigned in
+@@ -338,8 +339,14 @@ static int stm32_rtc_pinmux_action_lsco(
  
  	lscoen = (pin == OUT1) ? STM32_RTC_CFGR_LSCOEN_OUT1 : STM32_RTC_CFGR_LSCOEN_OUT2_RMP;
  
@@ -54,6 +52,3 @@ index 0868ec435323..1f5ca88764c8 100644
  					  rtc->base + regs.cfgr, lscoen, 0, NULL);
  	if (IS_ERR(rtc->clk_lsco))
  		return PTR_ERR(rtc->clk_lsco);
--- 
-2.53.0
-

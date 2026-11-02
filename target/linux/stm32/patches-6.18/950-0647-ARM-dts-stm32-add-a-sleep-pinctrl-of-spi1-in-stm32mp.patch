@@ -22,11 +22,9 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp157f-ev1.dts | 3 ++-
  2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-index ca53bd35f063..e419d4762b76 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-@@ -342,8 +342,9 @@ &sdmmc3 {
+@@ -342,8 +342,9 @@
  };
  
  &spi1 {
@@ -37,11 +35,9 @@ index ca53bd35f063..e419d4762b76 100644
  	status = "disabled";
  };
  
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-index 6e9e35087a01..8ab1d0730bb5 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-@@ -342,8 +342,9 @@ &sdmmc3 {
+@@ -342,8 +342,9 @@
  };
  
  &spi1 {
@@ -52,6 +48,3 @@ index 6e9e35087a01..8ab1d0730bb5 100644
  	status = "disabled";
  };
  
--- 
-2.53.0
-

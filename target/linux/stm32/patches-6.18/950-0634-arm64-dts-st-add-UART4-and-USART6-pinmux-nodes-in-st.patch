@@ -17,15 +17,12 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi | 77 +++++++++++++++++++
  1 file changed, 77 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi
-index 11a7a2d4f275..e653c6c770a0 100644
 --- a/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi
-@@ -264,6 +264,39 @@ pins {
- 		};
+@@ -265,6 +265,39 @@
  	};
  
-+	/omit-if-no-ref/
+ 	/omit-if-no-ref/
 +	uart4_pins_a: uart4-0 {
 +		pins1 {
 +			pinmux = <STM32_PINMUX('H', 7, AF4)>; /* UART4_TX */
@@ -58,10 +55,11 @@ index 11a7a2d4f275..e653c6c770a0 100644
 +		};
 +	};
 +
- 	/omit-if-no-ref/
++	/omit-if-no-ref/
  	usart2_pins_a: usart2-0 {
  		pins1 {
-@@ -296,4 +329,48 @@ pins {
+ 			pinmux = <STM32_PINMUX('A', 4, AF6)>; /* USART2_TX */
+@@ -296,4 +329,48 @@
  				 <STM32_PINMUX('A', 8, ANALOG)>; /* USART2_RX */
  		};
  	};
@@ -110,6 +108,3 @@ index 11a7a2d4f275..e653c6c770a0 100644
 +		};
 +	};
  };
--- 
-2.53.0
-

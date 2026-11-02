@@ -23,11 +23,9 @@ Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
  arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 48 +++++++++++++++++++++++
  1 file changed, 48 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-index d5165cd0404a..4175e8432f23 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-@@ -163,6 +163,54 @@ &scmi_reset {
+@@ -163,6 +163,54 @@
  	bootph-all;
  };
  
@@ -82,6 +80,3 @@ index d5165cd0404a..4175e8432f23 100644
  &syscfg {
  	bootph-all;
  };
--- 
-2.53.0
-

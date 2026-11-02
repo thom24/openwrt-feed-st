@@ -18,8 +18,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp135f-dk.dts | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index c17d6acdaf64..b7c0cee5bfc7 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 @@ -9,7 +9,6 @@
@@ -30,6 +28,3 @@ index c17d6acdaf64..b7c0cee5bfc7 100644
  #include "stm32mp135.dtsi"
  #include "stm32mp13xf.dtsi"
  #include "stm32mp13-pinctrl.dtsi"
--- 
-2.53.0
-

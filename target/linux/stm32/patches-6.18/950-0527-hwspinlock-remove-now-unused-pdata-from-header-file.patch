@@ -13,8 +13,6 @@ Acked-by: Andy Shevchenko <andriy.shevchenko@intel.com>
  include/linux/hwspinlock.h | 28 ----------------------------
  1 file changed, 28 deletions(-)
 
-diff --git a/include/linux/hwspinlock.h b/include/linux/hwspinlock.h
-index f35b42e8c5de..74b91244fe0e 100644
 --- a/include/linux/hwspinlock.h
 +++ b/include/linux/hwspinlock.h
 @@ -25,34 +25,6 @@ struct hwspinlock;
@@ -52,6 +50,3 @@ index f35b42e8c5de..74b91244fe0e 100644
  #ifdef CONFIG_HWSPINLOCK
  
  int hwspin_lock_register(struct hwspinlock_device *bank, struct device *dev,
--- 
-2.53.0
-

@@ -20,8 +20,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml b/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
-index 793662f6f3bf..c0e60848d8ab 100644
 --- a/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
 +++ b/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
 @@ -22,6 +22,7 @@ properties:
@@ -32,6 +30,3 @@ index 793662f6f3bf..c0e60848d8ab 100644
            - pericom,pi3usb102
            - ti,tmuxhs4212
        - const: gpio-sbu-mux
--- 
-2.53.0
-

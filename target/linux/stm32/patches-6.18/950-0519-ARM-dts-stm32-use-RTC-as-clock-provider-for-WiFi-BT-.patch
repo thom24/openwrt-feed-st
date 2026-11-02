@@ -17,11 +17,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm/boot/dts/st/stm32mp135f-dk.dts | 9 ++++++---
  1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index 2b16f0c68be6..dedf8599338e 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -140,6 +140,8 @@ v3v3_ao: v3v3-ao {
+@@ -140,6 +140,8 @@
  	wifi_pwrseq: wifi-pwrseq {
  		compatible = "mmc-pwrseq-simple";
  		reset-gpios = <&mcp23017 11 GPIO_ACTIVE_LOW>;
@@ -30,7 +28,7 @@ index 2b16f0c68be6..dedf8599338e 100644
  	};
  };
  
-@@ -490,8 +492,9 @@ &rcc {
+@@ -490,8 +492,9 @@
  };
  
  &rtc {
@@ -41,7 +39,7 @@ index 2b16f0c68be6..dedf8599338e 100644
  	status = "okay";
  
  	rtc_lsco_pins_a: rtc-lsco-0 {
-@@ -595,8 +598,6 @@ &sdmmc2 {
+@@ -595,8 +598,6 @@
  	brcmf: wifi@1 {
  		reg = <1>;
  		compatible = "brcm,bcm4329-fmac";
@@ -50,7 +48,7 @@ index 2b16f0c68be6..dedf8599338e 100644
  	};
  };
  
-@@ -737,6 +738,8 @@ &usart2 {
+@@ -737,6 +738,8 @@
  	bluetooth {
  		shutdown-gpios = <&mcp23017 13 GPIO_ACTIVE_HIGH>;
  		compatible = "brcm,bcm43438-bt";
@@ -59,6 +57,3 @@ index 2b16f0c68be6..dedf8599338e 100644
  		max-speed = <3000000>;
  		vbat-supply = <&v3v3_ao>;
  		vddio-supply = <&v3v3_ao>;
--- 
-2.53.0
-

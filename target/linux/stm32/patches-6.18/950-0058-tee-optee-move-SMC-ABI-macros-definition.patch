@@ -20,11 +20,9 @@ Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
  drivers/tee/optee/optee_smc.h | 11 ++++++-----
  1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/tee/optee/optee_smc.h b/drivers/tee/optee/optee_smc.h
-index bb23135caef4..d2cdaaa7fbe2 100644
 --- a/drivers/tee/optee/optee_smc.h
 +++ b/drivers/tee/optee/optee_smc.h
-@@ -454,6 +454,12 @@ struct optee_smc_disable_shm_cache_result {
+@@ -454,6 +454,12 @@ struct optee_smc_disable_shm_cache_resul
  #define OPTEE_SMC_IT_NOTIF_VALUE_VALID		BIT(0)
  #define OPTEE_SMC_IT_NOTIF_VALUE_PENDING	BIT(1)
  
@@ -37,7 +35,7 @@ index bb23135caef4..d2cdaaa7fbe2 100644
  /*
   * Notification that OP-TEE generates and interruption.
   */
-@@ -465,11 +471,6 @@ struct optee_smc_disable_shm_cache_result {
+@@ -465,11 +471,6 @@ struct optee_smc_disable_shm_cache_resul
  #define OPTEE_SMC_SET_IT_NOTIF_MASK \
  	OPTEE_SMC_FAST_CALL_VAL(OPTEE_SMC_FUNCID_SET_IT_NOTIF_MASK)
  
@@ -49,6 +47,3 @@ index bb23135caef4..d2cdaaa7fbe2 100644
  /*
   * Get protected memory config
   *
--- 
-2.53.0
-

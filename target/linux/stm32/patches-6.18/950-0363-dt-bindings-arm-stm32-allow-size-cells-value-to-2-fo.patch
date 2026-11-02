@@ -13,8 +13,6 @@ Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
  .../devicetree/bindings/arm/stm32/st,stm32-syscon.yaml        | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
-index ab1d780840e6..99aca81816b4 100644
 --- a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
 +++ b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
 @@ -45,7 +45,9 @@ properties:
@@ -28,6 +26,3 @@ index ab1d780840e6..99aca81816b4 100644
  
    ranges: true
  
--- 
-2.53.0
-

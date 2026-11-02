@@ -17,11 +17,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp157f-dk2.dts         | 3 ++-
  2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2-no-scmi.dts
-index 251cd246da29..e5ab4cfc8f2d 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-dk2-no-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-dk2-no-scmi.dts
-@@ -42,7 +42,7 @@ &dsi {
+@@ -42,7 +42,7 @@
  	#size-cells = <0>;
  	status = "okay";
  
@@ -30,7 +28,7 @@ index 251cd246da29..e5ab4cfc8f2d 100644
  		compatible = "orisetech,otm8009a";
  		reg = <0>;
  		reset-gpios = <&gpioe 4 GPIO_ACTIVE_LOW>;
-@@ -80,6 +80,7 @@ touchscreen@38 {
+@@ -80,6 +80,7 @@
  		touchscreen-size-y = <800>;
  		vcc-supply = <&v3v3>;
  		iovcc-supply = <&v3v3>;
@@ -38,11 +36,9 @@ index 251cd246da29..e5ab4cfc8f2d 100644
  	};
  };
  
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
-index 2826481d15f1..7c64ec78c94b 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
-@@ -68,7 +68,7 @@ &dsi {
+@@ -68,7 +68,7 @@
  	#size-cells = <0>;
  	status = "okay";
  
@@ -51,7 +47,7 @@ index 2826481d15f1..7c64ec78c94b 100644
  		compatible = "orisetech,otm8009a";
  		reg = <0>;
  		reset-gpios = <&gpioe 4 GPIO_ACTIVE_LOW>;
-@@ -160,6 +160,7 @@ touchscreen@38 {
+@@ -160,6 +160,7 @@
  		touchscreen-size-y = <800>;
  		vcc-supply = <&v3v3>;
  		iovcc-supply = <&v3v3>;
@@ -59,6 +55,3 @@ index 2826481d15f1..7c64ec78c94b 100644
  	};
  };
  
--- 
-2.53.0
-

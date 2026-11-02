@@ -21,11 +21,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-index 6434874865a5..1966bdd564b9 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-@@ -278,7 +278,7 @@ phy0_eth2: ethernet-phy@1 {
+@@ -278,7 +278,7 @@
  			compatible = "ethernet-phy-id001c.c916";
  			reg = <1>;
  			reset-assert-us = <10000>;
@@ -34,6 +32,3 @@ index 6434874865a5..1966bdd564b9 100644
  			reset-gpios = <&gpiog 6 GPIO_ACTIVE_LOW>;
  		};
  	};
--- 
-2.53.0
-

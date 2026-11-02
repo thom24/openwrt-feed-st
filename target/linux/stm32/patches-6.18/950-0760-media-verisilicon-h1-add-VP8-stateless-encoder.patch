@@ -23,8 +23,6 @@ Change-Id: I7369849403effb4056f78a367875c34ab1118000
  create mode 100644 drivers/media/platform/verisilicon/hantro_boolenc.h
  create mode 100644 drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c
 
-diff --git a/drivers/media/platform/verisilicon/Makefile b/drivers/media/platform/verisilicon/Makefile
-index f6f019d04ff0..d1bbf055b595 100644
 --- a/drivers/media/platform/verisilicon/Makefile
 +++ b/drivers/media/platform/verisilicon/Makefile
 @@ -6,7 +6,9 @@ hantro-vpu-y += \
@@ -37,8 +35,6 @@ index f6f019d04ff0..d1bbf055b595 100644
  		hantro_g1.o \
  		hantro_g1_h264_dec.o \
  		hantro_g1_mpeg2_dec.o \
-diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
-index 0353de154a1e..9e0d4bf2b925 100644
 --- a/drivers/media/platform/verisilicon/hantro.h
 +++ b/drivers/media/platform/verisilicon/hantro.h
 @@ -32,6 +32,7 @@ struct hantro_codec_ops;
@@ -86,9 +82,6 @@ index 0353de154a1e..9e0d4bf2b925 100644
  /* Structure access helpers. */
  static __always_inline struct hantro_ctx *file_to_ctx(struct file *filp)
  {
-diff --git a/drivers/media/platform/verisilicon/hantro_boolenc.c b/drivers/media/platform/verisilicon/hantro_boolenc.c
-new file mode 100644
-index 000000000000..f827c0c310a4
 --- /dev/null
 +++ b/drivers/media/platform/verisilicon/hantro_boolenc.c
 @@ -0,0 +1,73 @@
@@ -165,9 +158,6 @@ index 000000000000..f827c0c310a4
 +		}
 +	}
 +}
-diff --git a/drivers/media/platform/verisilicon/hantro_boolenc.h b/drivers/media/platform/verisilicon/hantro_boolenc.h
-new file mode 100644
-index 000000000000..b08307a40f06
 --- /dev/null
 +++ b/drivers/media/platform/verisilicon/hantro_boolenc.h
 @@ -0,0 +1,21 @@
@@ -192,15 +182,12 @@ index 000000000000..b08307a40f06
 +	while (n--)
 +		hantro_boolenc_write_bool(e, 128, (val >> n) & 0x1);
 +}
-diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
-index e3954bee316e..d908ec65755f 100644
 --- a/drivers/media/platform/verisilicon/hantro_drv.c
 +++ b/drivers/media/platform/verisilicon/hantro_drv.c
-@@ -447,6 +447,20 @@ static const struct hantro_ctrl controls[] = {
- 		.cfg = {
+@@ -448,6 +448,20 @@ static const struct hantro_ctrl controls
  			.id = V4L2_CID_STATELESS_MPEG2_SEQUENCE,
  		},
-+	}, {
+ 	}, {
 +		.codec = HANTRO_VP8_ENCODER,
 +		.cfg = {
 +			.id = V4L2_CID_STATELESS_VP8_ENCODE_PARAMS,
@@ -214,11 +201,10 @@ index e3954bee316e..d908ec65755f 100644
 +			.step = 1,
 +			.def = 0,
 +		},
- 	}, {
++	}, {
  		.codec = HANTRO_MPEG2_DECODER,
  		.cfg = {
-diff --git a/drivers/media/platform/verisilicon/hantro_h1_regs.h b/drivers/media/platform/verisilicon/hantro_h1_regs.h
-index 8650cc489392..c1c66c934a24 100644
+ 			.id = V4L2_CID_STATELESS_MPEG2_PICTURE,
 --- a/drivers/media/platform/verisilicon/hantro_h1_regs.h
 +++ b/drivers/media/platform/verisilicon/hantro_h1_regs.h
 @@ -34,9 +34,12 @@
@@ -347,9 +333,6 @@ index 8650cc489392..c1c66c934a24 100644
 +#define     H1_REG_VP8_LF_MODE_DELTA_BPRED(x)		(((x) & 0x7f) << 0)
  
  #endif /* HANTRO_H1_REGS_H_ */
-diff --git a/drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c b/drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c
-new file mode 100644
-index 000000000000..2ba5cff3e15f
 --- /dev/null
 +++ b/drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c
 @@ -0,0 +1,1600 @@
@@ -1953,8 +1936,6 @@ index 000000000000..2ba5cff3e15f
 +	else
 +		dst_buf->flags |= V4L2_BUF_FLAG_PFRAME;
 +}
-diff --git a/drivers/media/platform/verisilicon/hantro_hw.h b/drivers/media/platform/verisilicon/hantro_hw.h
-index 5f2011529f02..95fab4997c43 100644
 --- a/drivers/media/platform/verisilicon/hantro_hw.h
 +++ b/drivers/media/platform/verisilicon/hantro_hw.h
 @@ -17,6 +17,7 @@
@@ -2032,7 +2013,7 @@ index 5f2011529f02..95fab4997c43 100644
  /**
   * struct hantro_codec_ops - codec mode specific operations
   *
-@@ -564,6 +625,28 @@ size_t hantro_g2_motion_vectors_offset(struct hantro_ctx *ctx);
+@@ -564,6 +625,28 @@ size_t hantro_g2_motion_vectors_offset(s
  size_t hantro_g2_luma_compress_offset(struct hantro_ctx *ctx);
  size_t hantro_g2_chroma_compress_offset(struct hantro_ctx *ctx);
  
@@ -2061,7 +2042,7 @@ index 5f2011529f02..95fab4997c43 100644
  int hantro_g1_mpeg2_dec_run(struct hantro_ctx *ctx);
  int rockchip_vpu2_mpeg2_dec_run(struct hantro_ctx *ctx);
  void hantro_mpeg2_dec_copy_qtable(u8 *qtable,
-@@ -586,4 +669,12 @@ void hantro_g2_check_idle(struct hantro_dev *vpu);
+@@ -586,4 +669,12 @@ void hantro_g2_check_idle(struct hantro_
  void hantro_g2_reset(struct hantro_ctx *ctx);
  irqreturn_t hantro_g2_irq(int irq, void *dev_id);
  
@@ -2074,11 +2055,9 @@ index 5f2011529f02..95fab4997c43 100644
 +void hantro_h1_vp8_enc_done(struct hantro_ctx *ctx);
 +
  #endif /* HANTRO_HW_H_ */
-diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
-index 83af9fa1ce94..3448ed82fb60 100644
 --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
 +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
-@@ -359,8 +359,9 @@ static int hantro_try_fmt(const struct hantro_ctx *ctx,
+@@ -359,8 +359,9 @@ static int hantro_try_fmt(const struct h
  
  	pix_mp->field = V4L2_FIELD_NONE;
  
@@ -2090,11 +2069,9 @@ index 83af9fa1ce94..3448ed82fb60 100644
  
  	if (!coded) {
  		/* Fill remaining fields */
-diff --git a/drivers/media/platform/verisilicon/hantro_vp8.c b/drivers/media/platform/verisilicon/hantro_vp8.c
-index 381bc1d3bfda..0f5a596dbe7f 100644
 --- a/drivers/media/platform/verisilicon/hantro_vp8.c
 +++ b/drivers/media/platform/verisilicon/hantro_vp8.c
-@@ -199,3 +199,122 @@ void hantro_vp8_dec_exit(struct hantro_ctx *ctx)
+@@ -199,3 +199,122 @@ void hantro_vp8_dec_exit(struct hantro_c
  	dma_free_coherent(vpu->dev, vp8_dec->prob_tbl.size,
  			  vp8_dec->prob_tbl.cpu, vp8_dec->prob_tbl.dma);
  }
@@ -2217,6 +2194,3 @@ index 381bc1d3bfda..0f5a596dbe7f 100644
 +				  ctx->vp8_enc.ref_frames[i].cpu,
 +				  ctx->vp8_enc.ref_frames[i].dma);
 +}
--- 
-2.53.0
-

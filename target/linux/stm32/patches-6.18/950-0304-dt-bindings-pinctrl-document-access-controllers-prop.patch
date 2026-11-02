@@ -13,8 +13,6 @@ Acked-by: Rob Herring (Arm) <robh@kernel.org>
  Documentation/devicetree/bindings/pinctrl/st,stm32-hdp.yaml | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/st,stm32-hdp.yaml b/Documentation/devicetree/bindings/pinctrl/st,stm32-hdp.yaml
-index 845b6b7b7552..8f8b4b68aaa3 100644
 --- a/Documentation/devicetree/bindings/pinctrl/st,stm32-hdp.yaml
 +++ b/Documentation/devicetree/bindings/pinctrl/st,stm32-hdp.yaml
 @@ -27,6 +27,12 @@ properties:
@@ -30,6 +28,3 @@ index 845b6b7b7552..8f8b4b68aaa3 100644
  patternProperties:
    "^hdp[0-7]-pins$":
      type: object
--- 
-2.53.0
-

@@ -17,11 +17,9 @@ Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 28 +++++++++++++++++++++++
  1 file changed, 28 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index 25a62641b7e9..79fd48bc34b3 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -70,6 +70,11 @@ memory@80000000 {
+@@ -70,6 +70,11 @@
  		device_type = "memory";
  		reg = <0x0 0x80000000 0x1 0x0>;
  	};
@@ -33,7 +31,7 @@ index 25a62641b7e9..79fd48bc34b3 100644
  };
  
  &arm_wdt {
-@@ -315,6 +320,29 @@ &sdmmc2 {
+@@ -315,6 +320,29 @@
  	status = "okay";
  };
  
@@ -63,6 +61,3 @@ index 25a62641b7e9..79fd48bc34b3 100644
  &syscfg {
  	bootph-all;
  };
--- 
-2.53.0
-

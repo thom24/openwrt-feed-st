@@ -13,8 +13,6 @@ Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
  drivers/counter/stm32-lptimer-cnt.c | 46 +++++++++++++++++++++++++----
  1 file changed, 40 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/counter/stm32-lptimer-cnt.c b/drivers/counter/stm32-lptimer-cnt.c
-index b249c8647639..bb11777ae025 100644
 --- a/drivers/counter/stm32-lptimer-cnt.c
 +++ b/drivers/counter/stm32-lptimer-cnt.c
 @@ -17,6 +17,7 @@
@@ -25,7 +23,7 @@ index b249c8647639..bb11777ae025 100644
  #include <linux/types.h>
  
  struct stm32_lptim_cnt {
-@@ -53,7 +54,10 @@ static int stm32_lptim_set_enable_state(struct stm32_lptim_cnt *priv,
+@@ -53,7 +54,10 @@ static int stm32_lptim_set_enable_state(
  		return ret;
  
  	if (!enable) {
@@ -37,7 +35,7 @@ index b249c8647639..bb11777ae025 100644
  		priv->enabled = false;
  		return 0;
  	}
-@@ -83,6 +87,11 @@ static int stm32_lptim_set_enable_state(struct stm32_lptim_cnt *priv,
+@@ -83,6 +87,11 @@ static int stm32_lptim_set_enable_state(
  	if (ret)
  		goto disable_clk;
  
@@ -49,7 +47,7 @@ index b249c8647639..bb11777ae025 100644
  	priv->enabled = true;
  
  	/* Start LP timer in continuous mode */
-@@ -449,6 +458,10 @@ static int stm32_lptim_cnt_probe(struct platform_device *pdev)
+@@ -449,6 +458,10 @@ static int stm32_lptim_cnt_probe(struct
  
  	platform_set_drvdata(pdev, priv);
  
@@ -60,7 +58,7 @@ index b249c8647639..bb11777ae025 100644
  	ret = devm_counter_add(&pdev->dev, counter);
  	if (ret < 0)
  		return dev_err_probe(&pdev->dev, ret, "Failed to add counter\n");
-@@ -456,7 +469,6 @@ static int stm32_lptim_cnt_probe(struct platform_device *pdev)
+@@ -456,7 +469,6 @@ static int stm32_lptim_cnt_probe(struct
  	return 0;
  }
  
@@ -68,7 +66,7 @@ index b249c8647639..bb11777ae025 100644
  static int stm32_lptim_cnt_suspend(struct device *dev)
  {
  	struct stm32_lptim_cnt *priv = dev_get_drvdata(dev);
-@@ -501,10 +513,32 @@ static int stm32_lptim_cnt_resume(struct device *dev)
+@@ -501,10 +513,32 @@ static int stm32_lptim_cnt_resume(struct
  
  	return 0;
  }
@@ -104,7 +102,7 @@ index b249c8647639..bb11777ae025 100644
  
  static const struct of_device_id stm32_lptim_cnt_of_match[] = {
  	{ .compatible = "st,stm32-lptimer-counter", },
-@@ -517,7 +551,7 @@ static struct platform_driver stm32_lptim_cnt_driver = {
+@@ -517,7 +551,7 @@ static struct platform_driver stm32_lpti
  	.driver = {
  		.name = "stm32-lptimer-counter",
  		.of_match_table = stm32_lptim_cnt_of_match,
@@ -113,6 +111,3 @@ index b249c8647639..bb11777ae025 100644
  	},
  };
  module_platform_driver(stm32_lptim_cnt_driver);
--- 
-2.53.0
-

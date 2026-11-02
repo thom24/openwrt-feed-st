@@ -18,11 +18,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm/boot/dts/st/stm32mp157f-ev1.dts         | 9 +++++++++
  3 files changed, 27 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
-index 58ec4f76ebad..ce6183a00020 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
-@@ -21,7 +21,16 @@ aliases {
+@@ -21,7 +21,16 @@
  	};
  
  	chosen {
@@ -39,11 +37,9 @@ index 58ec4f76ebad..ce6183a00020 100644
  	};
  
  	clocks {
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-index 21f50353bbb6..475433f7b19a 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-@@ -21,7 +21,16 @@ aliases {
+@@ -21,7 +21,16 @@
  	};
  
  	chosen {
@@ -60,11 +56,9 @@ index 21f50353bbb6..475433f7b19a 100644
  	};
  
  	clocks {
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-index 51bb0e1eb09f..a5486405eb94 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-@@ -21,7 +21,16 @@ aliases {
+@@ -21,7 +21,16 @@
  	};
  
  	chosen {
@@ -81,6 +75,3 @@ index 51bb0e1eb09f..a5486405eb94 100644
  	};
  
  	clocks {
--- 
-2.53.0
-

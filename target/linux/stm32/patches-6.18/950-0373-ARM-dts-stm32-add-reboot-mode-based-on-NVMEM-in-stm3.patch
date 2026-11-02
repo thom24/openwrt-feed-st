@@ -23,11 +23,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp151.dtsi | 14 ++++++++++++++
  1 file changed, 14 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
-index ca922f07a457..46ce6ac5fc89 100644
 --- a/arch/arm/boot/dts/st/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
-@@ -2312,6 +2312,20 @@ m4_wakeup_area_hash: tamp-bkp@60 {
+@@ -2312,6 +2312,20 @@
  					};
  				};
  			};
@@ -48,6 +46,3 @@ index ca922f07a457..46ce6ac5fc89 100644
  		};
  	};
  
--- 
-2.53.0
-

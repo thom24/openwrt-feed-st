@@ -22,11 +22,9 @@ Reviewed-by: Thomas BOURGOIN <thomas.bourgoin@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-index d83a3b2ff8b8..8c7bcb9b0827 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-@@ -67,6 +67,10 @@ &arm_wdt {
+@@ -67,6 +67,10 @@
  	status = "okay";
  };
  
@@ -37,6 +35,3 @@ index d83a3b2ff8b8..8c7bcb9b0827 100644
  &cs_cti0 {
  	status = "okay";
  };
--- 
-2.53.0
-

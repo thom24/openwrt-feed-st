@@ -24,8 +24,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  .../devicetree/bindings/pinctrl/st,stm32-hdp.yaml          | 7 +++++--
  1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/st,stm32-hdp.yaml b/Documentation/devicetree/bindings/pinctrl/st,stm32-hdp.yaml
-index 8f8b4b68aaa3..7103f3a84903 100644
 --- a/Documentation/devicetree/bindings/pinctrl/st,stm32-hdp.yaml
 +++ b/Documentation/devicetree/bindings/pinctrl/st,stm32-hdp.yaml
 @@ -1,5 +1,5 @@
@@ -54,6 +52,3 @@ index 8f8b4b68aaa3..7103f3a84903 100644
      then:
        patternProperties:
          "^hdp[0-7]-pins$":
--- 
-2.53.0
-

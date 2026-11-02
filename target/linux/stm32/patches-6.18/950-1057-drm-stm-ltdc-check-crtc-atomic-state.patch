@@ -11,11 +11,9 @@ Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
  drivers/gpu/drm/stm/ltdc.c | 15 +++++++++++++++
  1 file changed, 15 insertions(+)
 
-diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-index d12dc395d621..4edf6e9c53df 100644
 --- a/drivers/gpu/drm/stm/ltdc.c
 +++ b/drivers/gpu/drm/stm/ltdc.c
-@@ -1108,6 +1108,20 @@ static void ltdc_crtc_atomic_flush(struct drm_crtc *crtc,
+@@ -1108,6 +1108,20 @@ static void ltdc_crtc_atomic_flush(struc
  	}
  }
  
@@ -36,7 +34,7 @@ index d12dc395d621..4edf6e9c53df 100644
  static bool ltdc_crtc_get_scanout_position(struct drm_crtc *crtc,
  					   bool in_vblank_irq,
  					   int *vpos, int *hpos,
-@@ -1165,6 +1179,7 @@ static const struct drm_crtc_helper_funcs ltdc_crtc_helper_funcs = {
+@@ -1165,6 +1179,7 @@ static const struct drm_crtc_helper_func
  	.atomic_flush = ltdc_crtc_atomic_flush,
  	.atomic_enable = ltdc_crtc_atomic_enable,
  	.atomic_disable = ltdc_crtc_atomic_disable,
@@ -44,6 +42,3 @@ index d12dc395d621..4edf6e9c53df 100644
  	.get_scanout_position = ltdc_crtc_get_scanout_position,
  };
  
--- 
-2.53.0
-

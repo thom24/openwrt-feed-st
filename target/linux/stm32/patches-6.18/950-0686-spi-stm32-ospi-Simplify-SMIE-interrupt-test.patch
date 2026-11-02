@@ -14,11 +14,9 @@ Signed-off-by: Mark Brown <broonie@kernel.org>
  drivers/spi/spi-stm32-ospi.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
-index 5021d356a395..7541ada95da5 100644
 --- a/drivers/spi/spi-stm32-ospi.c
 +++ b/drivers/spi/spi-stm32-ospi.c
-@@ -279,7 +279,7 @@ static irqreturn_t stm32_ospi_irq(int irq, void *dev_id)
+@@ -279,7 +279,7 @@ static irqreturn_t stm32_ospi_irq(int ir
  	cr = readl_relaxed(regs_base + OSPI_CR);
  	sr = readl_relaxed(regs_base + OSPI_SR);
  
@@ -27,6 +25,3 @@ index 5021d356a395..7541ada95da5 100644
  		/* disable irq */
  		cr &= ~CR_SMIE;
  		writel_relaxed(cr, regs_base + OSPI_CR);
--- 
-2.53.0
-

@@ -25,8 +25,6 @@ Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
  drivers/dma/stm32/stm32-dma3.c | 213 ++++++++++++++++++++++++++++++---
  1 file changed, 197 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
-index 662e942106d3..f8504f4ecaaa 100644
 --- a/drivers/dma/stm32/stm32-dma3.c
 +++ b/drivers/dma/stm32/stm32-dma3.c
 @@ -8,6 +8,7 @@
@@ -80,7 +78,7 @@ index 662e942106d3..f8504f4ecaaa 100644
  };
  
  static inline struct stm32_dma3_ddata *to_stm32_dma3_ddata(struct stm32_dma3_chan *chan)
-@@ -348,7 +356,8 @@ static void stm32_dma3_chan_dump_reg(struct stm32_dma3_chan *chan)
+@@ -348,7 +356,8 @@ static void stm32_dma3_chan_dump_reg(str
  {
  	struct stm32_dma3_ddata *ddata = to_stm32_dma3_ddata(chan);
  	struct device *dev = chan2dev(chan);
@@ -90,7 +88,7 @@ index 662e942106d3..f8504f4ecaaa 100644
  
  	offset = STM32_DMA3_SECCFGR;
  	dev_dbg(dev, "SECCFGR(0x%03x): %08x\n", offset, readl_relaxed(ddata->base + offset));
-@@ -358,43 +367,67 @@ static void stm32_dma3_chan_dump_reg(struct stm32_dma3_chan *chan)
+@@ -358,43 +367,67 @@ static void stm32_dma3_chan_dump_reg(str
  	dev_dbg(dev, "C%dCIDCFGR(0x%03x): %08x\n", id, offset, readl_relaxed(ddata->base + offset));
  	offset = STM32_DMA3_CSEMCR(id);
  	dev_dbg(dev, "C%dSEMCR(0x%03x): %08x\n", id, offset, readl_relaxed(ddata->base + offset));
@@ -168,7 +166,7 @@ index 662e942106d3..f8504f4ecaaa 100644
  	}
  
  	if (swdesc->cyclic) {
-@@ -403,6 +436,10 @@ static void stm32_dma3_chan_dump_hwdesc(struct stm32_dma3_chan *chan,
+@@ -403,6 +436,10 @@ static void stm32_dma3_chan_dump_hwdesc(
  	} else {
  		dev_dbg(chan2dev(chan), "X\n");
  	}
@@ -179,7 +177,7 @@ index 662e942106d3..f8504f4ecaaa 100644
  }
  
  static int stm32_dma3_lli_pool_create(struct stm32_dma3_ddata *ddata)
-@@ -552,10 +589,43 @@ static int stm32_dma3_lli_pool_dma_alloc(struct stm32_dma3_ddata *ddata, struct
+@@ -552,10 +589,43 @@ err_pool_free:
  	return -ENOMEM;
  }
  
@@ -223,7 +221,7 @@ index 662e942106d3..f8504f4ecaaa 100644
  	int ret;
  
  	/*
-@@ -580,8 +650,23 @@ static struct stm32_dma3_swdesc *stm32_dma3_chan_desc_alloc(struct stm32_dma3_ch
+@@ -580,8 +650,23 @@ static struct stm32_dma3_swdesc *stm32_d
  		return NULL;
  	}
  
@@ -248,7 +246,7 @@ index 662e942106d3..f8504f4ecaaa 100644
  
  	return swdesc;
  }
-@@ -711,6 +796,7 @@ static int stm32_dma3_chan_prep_hw(struct stm32_dma3_chan *chan, enum dma_transf
+@@ -711,6 +796,7 @@ static int stm32_dma3_chan_prep_hw(struc
  				   dma_addr_t src_addr, dma_addr_t dst_addr, u32 len)
  {
  	struct stm32_dma3_ddata *ddata = to_stm32_dma3_ddata(chan);
@@ -256,7 +254,7 @@ index 662e942106d3..f8504f4ecaaa 100644
  	struct dma_device dma_device = ddata->dma_dev;
  	u32 src_max_burst = STM32_DMA3_MAX_BURST_LEN, dst_max_burst = STM32_DMA3_MAX_BURST_LEN;
  	u32 sdw, ddw, sbl_max, dbl_max, tcem, init_dw, init_bl_max;
-@@ -719,6 +805,7 @@ static int stm32_dma3_chan_prep_hw(struct stm32_dma3_chan *chan, enum dma_transf
+@@ -719,6 +805,7 @@ static int stm32_dma3_chan_prep_hw(struc
  	u32 tr_conf = chan->dt_config.tr_conf;
  	u32 sap = FIELD_GET(STM32_DMA3_DT_SAP, tr_conf), sap_max_dw;
  	u32 dap = FIELD_GET(STM32_DMA3_DT_DAP, tr_conf), dap_max_dw;
@@ -264,7 +262,7 @@ index 662e942106d3..f8504f4ecaaa 100644
  
  	dev_dbg(chan2dev(chan), "%s from %pad to %pad\n",
  		dmaengine_get_direction_text(dir), &src_addr, &dst_addr);
-@@ -749,6 +836,45 @@ static int stm32_dma3_chan_prep_hw(struct stm32_dma3_chan *chan, enum dma_transf
+@@ -749,6 +836,45 @@ static int stm32_dma3_chan_prep_hw(struc
  		return -EINVAL;
  	}
  
@@ -310,7 +308,7 @@ index 662e942106d3..f8504f4ecaaa 100644
  	if (FIELD_GET(STM32_DMA3_DT_SINC, tr_conf))
  		_ctr1 |= CTR1_SINC;
  	if (sap)
-@@ -1797,6 +1923,44 @@ static struct dma_chan *stm32_dma3_of_xlate(struct of_phandle_args *dma_spec, st
+@@ -1797,6 +1923,44 @@ static struct dma_chan *stm32_dma3_of_xl
  	return c;
  }
  
@@ -355,7 +353,7 @@ index 662e942106d3..f8504f4ecaaa 100644
  static u32 stm32_dma3_check_rif(struct stm32_dma3_ddata *ddata)
  {
  	struct device *dev = ddata2dev(ddata);
-@@ -1845,11 +2009,17 @@ static u32 stm32_dma3_check_rif(struct stm32_dma3_ddata *ddata)
+@@ -1845,11 +2009,17 @@ static u32 stm32_dma3_check_rif(struct s
  	return chan_reserved;
  }
  
@@ -373,7 +371,7 @@ index 662e942106d3..f8504f4ecaaa 100644
  	{ .compatible = "st,stm32mp25-dma3", .data = &stm32mp25_pdata, },
  	{ /* sentinel */ },
  };
-@@ -1872,6 +2042,11 @@ static int stm32_dma3_probe(struct platform_device *pdev)
+@@ -1872,6 +2042,11 @@ static int stm32_dma3_probe(struct platf
  		return -ENOMEM;
  	platform_set_drvdata(pdev, ddata);
  
@@ -385,7 +383,7 @@ index 662e942106d3..f8504f4ecaaa 100644
  	dma_dev = &ddata->dma_dev;
  
  	ddata->base = devm_platform_ioremap_resource(pdev, 0);
-@@ -1963,12 +2138,18 @@ static int stm32_dma3_probe(struct platform_device *pdev)
+@@ -1963,12 +2138,18 @@ static int stm32_dma3_probe(struct platf
  
  	/* axi_max_burst_len is optional, if not defined, use STM32_DMA3_MAX_BURST_LEN  */
  	ddata->axi_max_burst_len = STM32_DMA3_MAX_BURST_LEN;
@@ -408,6 +406,3 @@ index 662e942106d3..f8504f4ecaaa 100644
  	}
  
  	ret = stm32_dma3_lli_pool_create(ddata);
--- 
-2.53.0
-

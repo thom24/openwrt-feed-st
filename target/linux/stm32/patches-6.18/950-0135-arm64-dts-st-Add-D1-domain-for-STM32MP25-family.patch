@@ -22,11 +22,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp255.dtsi |  5 +-
  3 files changed, 79 insertions(+), 25 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 34ac0bd2acaf..ce3b6b42f893 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -190,6 +190,12 @@ v2m0: v2m@48090000 {
+@@ -190,6 +190,12 @@
  		};
  	};
  
@@ -39,7 +37,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  	psci: psci {
  		compatible = "arm,psci-1.0";
  		method = "smc";
-@@ -249,6 +255,7 @@ hpdma: dma-controller@40400000 {
+@@ -249,6 +255,7 @@
  				     <GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>,
  				     <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
  			clocks = <&scmi_clk CK_SCMI_HPDMA1>;
@@ -47,7 +45,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  			#dma-cells = <3>;
  		};
  
-@@ -272,6 +279,7 @@ hpdma2: dma-controller@40410000 {
+@@ -272,6 +279,7 @@
  				     <GIC_SPI 63 IRQ_TYPE_LEVEL_HIGH>,
  				     <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
  			clocks = <&scmi_clk CK_SCMI_HPDMA2>;
@@ -55,7 +53,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  			#dma-cells = <3>;
  		};
  
-@@ -295,6 +303,7 @@ hpdma3: dma-controller@40420000 {
+@@ -295,6 +303,7 @@
  				     <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>,
  				     <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
  			clocks = <&scmi_clk CK_SCMI_HPDMA3>;
@@ -63,7 +61,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  			#dma-cells = <3>;
  		};
  
-@@ -313,7 +322,7 @@ ommanager: ommanager@40500000 {
+@@ -313,7 +322,7 @@
  				 <&scmi_reset RST_SCMI_OSPI2>;
  			reset-names = "omm", "ospi1", "ospi2";
  			access-controllers = <&rifsc 111>;
@@ -72,7 +70,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  			#address-cells = <2>;
  			#size-cells = <1>;
  			st,syscfg-amcr = <&syscfg 0x2c00 0x7>;
-@@ -330,7 +339,7 @@ ospi1: spi@0 {
+@@ -330,7 +339,7 @@
  				resets = <&scmi_reset RST_SCMI_OSPI1>,
  					 <&scmi_reset RST_SCMI_OSPI1DLL>;
  				access-controllers = <&rifsc 74>;
@@ -81,7 +79,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				st,syscfg-dlyb = <&syscfg 0x1000>;
  				status = "disabled";
  			};
-@@ -346,7 +355,7 @@ ospi2: spi@1 {
+@@ -346,7 +355,7 @@
  				resets = <&scmi_reset RST_SCMI_OSPI2>,
  					 <&scmi_reset RST_SCMI_OSPI2DLL>;
  				access-controllers = <&rifsc 75>;
@@ -90,7 +88,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				st,syscfg-dlyb = <&syscfg 0x1400>;
  				status = "disabled";
  			};
-@@ -370,7 +379,7 @@ timers2: timer@40000000 {
+@@ -370,7 +379,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 1>;
@@ -99,7 +97,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  
  				counter {
-@@ -401,7 +410,7 @@ timers3: timer@40010000 {
+@@ -401,7 +410,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 2>;
@@ -108,7 +106,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  
  				counter {
-@@ -432,7 +441,7 @@ timers4: timer@40020000 {
+@@ -432,7 +441,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 3>;
@@ -117,7 +115,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  
  				counter {
-@@ -463,7 +472,7 @@ timers5: timer@40030000 {
+@@ -463,7 +472,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 4>;
@@ -126,7 +124,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  
  				counter {
-@@ -494,7 +503,7 @@ timers6: timer@40040000 {
+@@ -494,7 +503,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 5>;
@@ -135,7 +133,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  
  				counter {
-@@ -519,7 +528,7 @@ timers7: timer@40050000 {
+@@ -519,7 +528,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 6>;
@@ -144,7 +142,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  
  				counter {
-@@ -544,7 +553,7 @@ timers12: timer@40060000 {
+@@ -544,7 +553,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 10>;
@@ -153,7 +151,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  
  				counter {
-@@ -575,7 +584,7 @@ timers13: timer@40070000 {
+@@ -575,7 +584,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 11>;
@@ -162,7 +160,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  
  				counter {
-@@ -606,7 +615,7 @@ timers14: timer@40080000 {
+@@ -606,7 +615,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 12>;
@@ -171,7 +169,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  
  				counter {
-@@ -711,6 +720,7 @@ i2s2: audio-controller@400b0000 {
+@@ -711,6 +720,7 @@
  				       <&hpdma 52 0x43 0x21>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 23>;
@@ -179,7 +177,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -726,6 +736,7 @@ spi2: spi@400b0000 {
+@@ -726,6 +736,7 @@
  				       <&hpdma 52 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 23>;
@@ -187,7 +185,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -741,6 +752,7 @@ i2s3: audio-controller@400c0000 {
+@@ -741,6 +752,7 @@
  				       <&hpdma 54 0x43 0x21>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 24>;
@@ -195,7 +193,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -756,6 +768,7 @@ spi3: spi@400c0000 {
+@@ -756,6 +768,7 @@
  				       <&hpdma 54 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 24>;
@@ -203,7 +201,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -782,6 +795,7 @@ usart2: serial@400e0000 {
+@@ -782,6 +795,7 @@
  				       <&hpdma 12 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 32>;
@@ -211,7 +209,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -794,6 +808,7 @@ usart3: serial@400f0000 {
+@@ -794,6 +808,7 @@
  				       <&hpdma 14 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 33>;
@@ -219,7 +217,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -806,6 +821,7 @@ uart4: serial@40100000 {
+@@ -806,6 +821,7 @@
  				       <&hpdma 16 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 34>;
@@ -227,7 +225,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -818,6 +834,7 @@ uart5: serial@40110000 {
+@@ -818,6 +834,7 @@
  				       <&hpdma 18 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 35>;
@@ -235,7 +233,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -834,6 +851,7 @@ i2c1: i2c@40120000 {
+@@ -834,6 +851,7 @@
  				       <&hpdma 28 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 41>;
@@ -243,7 +241,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -850,6 +868,7 @@ i2c2: i2c@40130000 {
+@@ -850,6 +868,7 @@
  				       <&hpdma 31 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 42>;
@@ -251,7 +249,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -866,6 +885,7 @@ i2c3: i2c@40140000 {
+@@ -866,6 +885,7 @@
  				       <&hpdma 34 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 43>;
@@ -259,7 +257,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -882,6 +902,7 @@ i2c4: i2c@40150000 {
+@@ -882,6 +902,7 @@
  				       <&hpdma 37 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 44>;
@@ -267,7 +265,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -898,6 +919,7 @@ i2c5: i2c@40160000 {
+@@ -898,6 +919,7 @@
  				       <&hpdma 40 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 45>;
@@ -275,7 +273,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -914,6 +936,7 @@ i2c6: i2c@40170000 {
+@@ -914,6 +936,7 @@
  				       <&hpdma 43 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 46>;
@@ -283,7 +281,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -930,6 +953,7 @@ i2c7: i2c@40180000 {
+@@ -930,6 +953,7 @@
  				       <&hpdma 46 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 47>;
@@ -291,7 +289,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -943,7 +967,7 @@ timers10: timer@401c0000 {
+@@ -943,7 +967,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 8>;
@@ -300,7 +298,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  
  				counter {
-@@ -974,7 +998,7 @@ timers11: timer@401d0000 {
+@@ -974,7 +998,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 9>;
@@ -309,7 +307,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  
  				counter {
-@@ -1008,7 +1032,7 @@ timers1: timer@40200000 {
+@@ -1008,7 +1032,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 0>;
@@ -318,7 +316,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  
  				counter {
-@@ -1042,7 +1066,7 @@ timers8: timer@40210000 {
+@@ -1042,7 +1066,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 7>;
@@ -327,7 +325,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  
  				counter {
-@@ -1072,6 +1096,7 @@ usart6: serial@40220000 {
+@@ -1072,6 +1096,7 @@
  				       <&hpdma 20 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 36>;
@@ -335,7 +333,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -1087,6 +1112,7 @@ i2s1: audio-controller@40230000 {
+@@ -1087,6 +1112,7 @@
  				       <&hpdma 50 0x43 0x21>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 22>;
@@ -343,7 +341,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -1102,6 +1128,7 @@ spi1: spi@40230000 {
+@@ -1102,6 +1128,7 @@
  				       <&hpdma 50 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 22>;
@@ -351,7 +349,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -1117,6 +1144,7 @@ spi4: spi@40240000 {
+@@ -1117,6 +1144,7 @@
  				       <&hpdma 56 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 25>;
@@ -359,7 +357,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -1130,7 +1158,7 @@ timers15: timer@40250000 {
+@@ -1130,7 +1158,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 13>;
@@ -368,7 +366,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  
  				counter {
-@@ -1161,7 +1189,7 @@ timers16: timer@40260000 {
+@@ -1161,7 +1189,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 14>;
@@ -377,7 +375,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  
  				counter {
-@@ -1192,7 +1220,7 @@ timers17: timer@40270000 {
+@@ -1192,7 +1220,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 15>;
@@ -386,7 +384,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  
  				counter {
-@@ -1225,6 +1253,7 @@ spi5: spi@40280000 {
+@@ -1225,6 +1253,7 @@
  				       <&hpdma 58 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 26>;
@@ -394,7 +392,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -1248,6 +1277,7 @@ sai1a: audio-controller@40290004 {
+@@ -1248,6 +1277,7 @@
  					clocks = <&rcc CK_KER_SAI1>;
  					clock-names = "sai_ck";
  					dmas = <&hpdma 73 0x43 0x21>;
@@ -402,7 +400,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  					status = "disabled";
  				};
  
-@@ -1258,6 +1288,7 @@ sai1b: audio-controller@40290024 {
+@@ -1258,6 +1288,7 @@
  					clocks = <&rcc CK_KER_SAI1>;
  					clock-names = "sai_ck";
  					dmas = <&hpdma 74 0x43 0x12>;
@@ -410,7 +408,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  					status = "disabled";
  				};
  			};
-@@ -1282,6 +1313,7 @@ sai2a: audio-controller@402a0004 {
+@@ -1282,6 +1313,7 @@
  					clocks = <&rcc CK_KER_SAI2>;
  					clock-names = "sai_ck";
  					dmas = <&hpdma 75 0x43 0x21>;
@@ -418,7 +416,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  					status = "disabled";
  				};
  
-@@ -1292,6 +1324,7 @@ sai2b: audio-controller@402a0024 {
+@@ -1292,6 +1324,7 @@
  					clocks = <&rcc CK_KER_SAI2>;
  					clock-names = "sai_ck";
  					dmas = <&hpdma 76 0x43 0x12>;
@@ -426,7 +424,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  					status = "disabled";
  				};
  			};
-@@ -1316,6 +1349,7 @@ sai3a: audio-controller@402b0004 {
+@@ -1316,6 +1349,7 @@
  					clocks = <&rcc CK_KER_SAI3>;
  					clock-names = "sai_ck";
  					dmas = <&hpdma 77 0x43 0x21>;
@@ -434,7 +432,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  					status = "disabled";
  				};
  
-@@ -1326,6 +1360,7 @@ sai3b: audio-controller@502b0024 {
+@@ -1326,6 +1360,7 @@
  					clocks = <&rcc CK_KER_SAI3>;
  					clock-names = "sai_ck";
  					dmas = <&hpdma 78 0x43 0x12>;
@@ -442,7 +440,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  					status = "disabled";
  				};
  			};
-@@ -1339,6 +1374,7 @@ uart9: serial@402c0000 {
+@@ -1339,6 +1374,7 @@
  				       <&hpdma 26 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 39>;
@@ -450,7 +448,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -1355,7 +1391,7 @@ timers20: timer@40320000 {
+@@ -1355,7 +1391,7 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				access-controllers = <&rifsc 16>;
@@ -459,7 +457,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  
  				counter {
-@@ -1385,6 +1421,7 @@ usart1: serial@40330000 {
+@@ -1385,6 +1421,7 @@
  				       <&hpdma 10 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 31>;
@@ -467,7 +465,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -1408,6 +1445,7 @@ sai4a: audio-controller@40340004 {
+@@ -1408,6 +1445,7 @@
  					clocks = <&rcc CK_KER_SAI4>;
  					clock-names = "sai_ck";
  					dmas = <&hpdma 79 0x63 0x21>;
@@ -475,7 +473,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  					status = "disabled";
  				};
  
-@@ -1418,6 +1456,7 @@ sai4b: audio-controller@40340024 {
+@@ -1418,6 +1456,7 @@
  					clocks = <&rcc CK_KER_SAI4>;
  					clock-names = "sai_ck";
  					dmas = <&hpdma 80 0x43 0x12>;
@@ -483,7 +481,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  					status = "disabled";
  				};
  			};
-@@ -1434,6 +1473,7 @@ spi6: spi@40350000 {
+@@ -1434,6 +1473,7 @@
  				       <&hpdma 60 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 27>;
@@ -491,7 +489,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -1449,6 +1489,7 @@ spi7: spi@40360000 {
+@@ -1449,6 +1489,7 @@
  				       <&hpdma 62 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 28>;
@@ -499,7 +497,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -1461,6 +1502,7 @@ uart7: serial@40370000 {
+@@ -1461,6 +1502,7 @@
  				       <&hpdma 22 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 37>;
@@ -507,7 +505,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -1473,6 +1515,7 @@ uart8: serial@40380000 {
+@@ -1473,6 +1515,7 @@
  				       <&hpdma 24 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 38>;
@@ -515,7 +513,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -1483,6 +1526,7 @@ rng: rng@42020000 {
+@@ -1483,6 +1526,7 @@
  				clock-names = "core", "bus";
  				resets = <&rcc RNG_R>;
  				access-controllers = <&rifsc 92>;
@@ -523,7 +521,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -1498,6 +1542,7 @@ spi8: spi@46020000 {
+@@ -1498,6 +1542,7 @@
  				       <&hpdma 172 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 29>;
@@ -531,7 +529,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -1514,6 +1559,7 @@ i2c8: i2c@46040000 {
+@@ -1514,6 +1559,7 @@
  				       <&hpdma 169 0x20 0x3021>;
  				dma-names = "rx", "tx";
  				access-controllers = <&rifsc 48>;
@@ -539,7 +537,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -1630,6 +1676,7 @@ ltdc: display-controller@48010000 {
+@@ -1630,6 +1676,7 @@
  				clocks = <&rcc CK_KER_LTDC>, <&rcc CK_BUS_LTDC>;
  				clock-names = "lcd", "bus";
  				resets = <&rcc LTDC_R>;
@@ -547,7 +545,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				access-controllers = <&rifsc 80>;
  				status = "disabled";
  			};
-@@ -1643,6 +1690,7 @@ csi: csi@48020000 {
+@@ -1643,6 +1690,7 @@
  					 <&rcc CK_KER_CSIPHY>;
  				clock-names = "pclk", "txesc", "csi2phy";
  				access-controllers = <&rifsc 86>;
@@ -555,7 +553,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -1654,6 +1702,7 @@ dcmipp: dcmipp@48030000 {
+@@ -1654,6 +1702,7 @@
  				clocks = <&rcc CK_BUS_DCMIPP>, <&rcc CK_KER_CSI>;
  				clock-names = "kclk", "mclk";
  				access-controllers = <&rifsc 87>;
@@ -563,7 +561,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -1666,7 +1715,7 @@ combophy: phy@480c0000 {
+@@ -1666,7 +1715,7 @@
  				resets = <&rcc USB3PCIEPHY_R>;
  				reset-names = "phy";
  				access-controllers = <&rifsc 67>;
@@ -572,7 +570,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				wakeup-source;
  				interrupts-extended = <&exti1 45 IRQ_TYPE_EDGE_FALLING>;
  				status = "disabled";
-@@ -1684,6 +1733,7 @@ sdmmc1: mmc@48220000 {
+@@ -1684,6 +1733,7 @@
  				cap-mmc-highspeed;
  				max-frequency = <120000000>;
  				access-controllers = <&rifsc 76>;
@@ -580,7 +578,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -1713,6 +1763,7 @@ ethernet1: ethernet@482c0000 {
+@@ -1713,6 +1763,7 @@
  				snps,tso;
  				st,syscon = <&syscfg 0x3000>;
  				access-controllers = <&rifsc 60>;
@@ -588,7 +586,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  
  				mtl_rx_setup_1: rx-queues-config {
-@@ -1747,7 +1798,7 @@ pcie_ep: pcie-ep@48400000 {
+@@ -1747,7 +1798,7 @@
  				resets = <&rcc PCIE_R>;
  				phys = <&combophy PHY_TYPE_PCIE>;
  				access-controllers = <&rifsc 68>;
@@ -597,7 +595,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  			};
  
-@@ -1773,7 +1824,7 @@ pcie_rc: pcie@48400000 {
+@@ -1773,7 +1824,7 @@
  				resets = <&rcc PCIE_R>;
  				msi-parent = <&v2m0>;
  				access-controllers = <&rifsc 68>;
@@ -606,7 +604,7 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  				status = "disabled";
  
  				pcie@0,0 {
-@@ -1902,6 +1953,7 @@ exti1: interrupt-controller@44220000 {
+@@ -1902,6 +1953,7 @@
  			compatible = "st,stm32mp1-exti", "syscon";
  			interrupt-controller;
  			#interrupt-cells = <2>;
@@ -614,11 +612,9 @@ index 34ac0bd2acaf..ce3b6b42f893 100644
  			reg = <0x44220000 0x400>;
  			interrupts-extended =
  				<&intc GIC_SPI 268 IRQ_TYPE_LEVEL_HIGH>,	/* EXTI_0 */
-diff --git a/arch/arm64/boot/dts/st/stm32mp253.dtsi b/arch/arm64/boot/dts/st/stm32mp253.dtsi
-index e39f2d1d2902..fd0ebac488be 100644
 --- a/arch/arm64/boot/dts/st/stm32mp253.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp253.dtsi
-@@ -70,6 +70,7 @@ ethernet2: ethernet@482d0000 {
+@@ -70,6 +70,7 @@
  		snps,tso;
  		st,syscon = <&syscfg 0x3400>;
  		access-controllers = <&rifsc 61>;
@@ -626,11 +622,9 @@ index e39f2d1d2902..fd0ebac488be 100644
  		status = "disabled";
  
  		mtl_rx_setup_2: rx-queues-config {
-diff --git a/arch/arm64/boot/dts/st/stm32mp255.dtsi b/arch/arm64/boot/dts/st/stm32mp255.dtsi
-index 92cada71a0e8..a82a51291e47 100644
 --- a/arch/arm64/boot/dts/st/stm32mp255.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp255.dtsi
-@@ -20,7 +20,7 @@ lvds: lvds@48060000 {
+@@ -20,7 +20,7 @@
  		clock-names = "pclk", "ref";
  		resets = <&rcc LVDS_R>;
  		access-controllers = <&rifsc 84>;
@@ -639,7 +633,7 @@ index 92cada71a0e8..a82a51291e47 100644
  		status = "disabled";
  	};
  
-@@ -30,7 +30,7 @@ vdec: vdec@480d0000 {
+@@ -30,7 +30,7 @@
  		interrupts = <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>;
  		clocks = <&rcc CK_BUS_VDEC>;
  		access-controllers = <&rifsc 89>;
@@ -648,13 +642,10 @@ index 92cada71a0e8..a82a51291e47 100644
  	};
  
  	venc: venc@480e0000 {
-@@ -39,5 +39,6 @@ venc: venc@480e0000 {
+@@ -39,5 +39,6 @@
  		interrupts = <GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH>;
  		clocks = <&rcc CK_BUS_VENC>;
  		access-controllers = <&rifsc 90>;
 +		power-domains = <&d1_pd>;
  	};
  };
--- 
-2.53.0
-

@@ -19,11 +19,9 @@ Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 12 ++++++++++++
  1 file changed, 12 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index c25052672e3d..d5a08b15a350 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -1949,6 +1949,18 @@ soc@1 {
+@@ -1949,6 +1949,18 @@
  		#address-cells = <1>;
  		#size-cells = <1>;
  
@@ -42,6 +40,3 @@ index c25052672e3d..d5a08b15a350 100644
  		ethernet1: ethernet@482c0000 {
  			compatible = "st,stm32mp25-dwmac", "snps,dwmac-5.20";
  			reg = <0x482c0000 0x4000>;
--- 
-2.53.0
-

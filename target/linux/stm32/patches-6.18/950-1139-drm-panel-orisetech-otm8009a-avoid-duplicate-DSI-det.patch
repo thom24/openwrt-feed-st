@@ -17,11 +17,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/panel/panel-orisetech-otm8009a.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-orisetech-otm8009a.c b/drivers/gpu/drm/panel/panel-orisetech-otm8009a.c
-index fc68224535ef..a9ba122599f6 100644
 --- a/drivers/gpu/drm/panel/panel-orisetech-otm8009a.c
 +++ b/drivers/gpu/drm/panel/panel-orisetech-otm8009a.c
-@@ -492,7 +492,8 @@ static void otm8009a_remove(struct mipi_dsi_device *dsi)
+@@ -492,7 +492,8 @@ static void otm8009a_remove(struct mipi_
  {
  	struct otm8009a *ctx = mipi_dsi_get_drvdata(dsi);
  
@@ -31,6 +29,3 @@ index fc68224535ef..a9ba122599f6 100644
  	drm_panel_remove(&ctx->panel);
  }
  
--- 
-2.53.0
-

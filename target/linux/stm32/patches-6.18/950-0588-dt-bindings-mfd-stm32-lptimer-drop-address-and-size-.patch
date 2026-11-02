@@ -32,8 +32,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml | 2 --
  1 file changed, 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml b/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml
-index 4eabafb8079d..946e840e189d 100644
 --- a/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml
 +++ b/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml
 @@ -133,8 +133,6 @@ patternProperties:
@@ -45,6 +43,3 @@ index 4eabafb8079d..946e840e189d 100644
    - compatible
    - reg
    - clocks
--- 
-2.53.0
-

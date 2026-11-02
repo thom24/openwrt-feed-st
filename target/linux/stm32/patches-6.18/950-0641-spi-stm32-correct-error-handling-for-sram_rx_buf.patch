@@ -23,11 +23,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/spi/spi-stm32.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index 9555545bfeb1..75d49cc27912 100644
 --- a/drivers/spi/spi-stm32.c
 +++ b/drivers/spi/spi-stm32.c
-@@ -2572,7 +2572,7 @@ static int stm32_spi_probe(struct platform_device *pdev)
+@@ -2572,7 +2572,7 @@ err_pm_disable:
  	if (spi->mdma_rx)
  		dma_release_channel(spi->mdma_rx);
  err_pool_free:
@@ -36,6 +34,3 @@ index 9555545bfeb1..75d49cc27912 100644
  		gen_pool_free(spi->sram_pool, (unsigned long)spi->sram_rx_buf,
  			      spi->sram_rx_buf_size);
  	if (spi->dma_rx)
--- 
-2.53.0
-
