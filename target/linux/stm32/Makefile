@@ -10,7 +10,7 @@ BOARDNAME:=STMicroelectronics STM32
 FEATURES:=boot-part emmc ext4 gpio rtc usb display audio
 SUBTARGETS:=stm32mp1 stm32mp2
 
-KERNEL_PATCHVER:=6.6
+KERNEL_PATCHVER:=6.18
 
 include $(INCLUDE_DIR)/target.mk
 
