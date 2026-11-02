@@ -3,7 +3,7 @@ jobs:
   build-all:
     runs-on: self-hosted
     env:
-      OPENWRT_VERSION: 24.10.8
+      OPENWRT_VERSION: d6a91d867bb24c4fc99200743d186b39fde246ac
       REF: "${{ github.ref_type == 'tag' && github.ref_name || 'latest' }}"
       B2: "${{ secrets.B2_KEY_ID != '' && 'store' }}"
       NPROC: 32
@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: openwrt/openwrt
-          ref: v${{ env.OPENWRT_VERSION }}
+          ref: ${{ env.OPENWRT_VERSION }}
           path: openwrt
 
       - name: Add ST feed
