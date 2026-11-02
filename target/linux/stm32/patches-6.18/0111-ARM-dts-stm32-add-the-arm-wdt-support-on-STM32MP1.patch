@@ -12,11 +12,9 @@ Change-Id: If2e3f30caed2ea4589ff947be223c5e332687aaf
  arch/arm/boot/dts/st/stm32mp151.dtsi | 6 ++++++
  2 files changed, 12 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index 7f365c7de8c7..750e2fd73a3e 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -32,6 +32,12 @@ arm-pmu {
+@@ -32,6 +32,12 @@
  		interrupt-parent = <&intc>;
  	};
  
@@ -29,11 +27,9 @@ index 7f365c7de8c7..750e2fd73a3e 100644
  	firmware {
  		optee: optee {
  			method = "smc";
-diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
-index 92346c32ece5..011f81c633e0 100644
 --- a/arch/arm/boot/dts/st/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
-@@ -55,6 +55,12 @@ arm-pmu {
+@@ -55,6 +55,12 @@
  		interrupt-parent = <&intc>;
  	};
  
@@ -46,6 +42,3 @@ index 92346c32ece5..011f81c633e0 100644
  	psci: psci {
  		compatible = "arm,psci-1.0";
  		method = "smc";
--- 
-2.53.0
-

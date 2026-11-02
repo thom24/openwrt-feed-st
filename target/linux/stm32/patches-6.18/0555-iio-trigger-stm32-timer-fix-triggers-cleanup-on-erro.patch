@@ -22,11 +22,9 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/iio/trigger/stm32-timer-trigger.c | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/iio/trigger/stm32-timer-trigger.c b/drivers/iio/trigger/stm32-timer-trigger.c
-index 8fc76a9ede6d..ad3a00b5d70e 100644
 --- a/drivers/iio/trigger/stm32-timer-trigger.c
 +++ b/drivers/iio/trigger/stm32-timer-trigger.c
-@@ -437,10 +437,8 @@ static int stm32_register_iio_triggers(struct stm32_timer_trigger *priv)
+@@ -437,10 +437,8 @@ static int stm32_register_iio_triggers(s
  		iio_trigger_set_drvdata(trig, priv);
  
  		ret = iio_trigger_register(trig);
@@ -38,7 +36,7 @@ index 8fc76a9ede6d..ad3a00b5d70e 100644
  
  		list_add_tail(&trig->alloc_list, &priv->tr_list);
  		cur++;
-@@ -821,8 +819,10 @@ static int stm32_timer_trigger_probe(struct platform_device *pdev)
+@@ -821,8 +819,10 @@ static int stm32_timer_trigger_probe(str
  		return ret;
  
  	ret = stm32_register_iio_triggers(priv);
@@ -50,6 +48,3 @@ index 8fc76a9ede6d..ad3a00b5d70e 100644
  
  	platform_set_drvdata(pdev, priv);
  
--- 
-2.53.0
-

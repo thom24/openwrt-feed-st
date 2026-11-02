@@ -14,11 +14,9 @@ Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
  drivers/pinctrl/stm32/pinctrl-stm32.c | 35 +++++++++++++++++++++------
  1 file changed, 27 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
-index 216efe299289..38360af2c624 100644
 --- a/drivers/pinctrl/stm32/pinctrl-stm32.c
 +++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
-@@ -370,11 +370,9 @@ static int stm32_gpio_request(struct gpio_chip *chip, unsigned offset)
+@@ -370,11 +370,9 @@ static int stm32_gpio_request(struct gpi
  		return -EINVAL;
  	}
  
@@ -33,7 +31,7 @@ index 216efe299289..38360af2c624 100644
  	}
  
  	return pinctrl_gpio_request(chip, offset);
-@@ -1143,7 +1141,9 @@ static int stm32_pmx_gpio_set_direction(struct pinctrl_dev *pctldev,
+@@ -1143,7 +1141,9 @@ static int stm32_pmx_gpio_set_direction(
  static int stm32_pmx_request(struct pinctrl_dev *pctldev, unsigned int gpio)
  {
  	struct stm32_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
@@ -43,7 +41,7 @@ index 216efe299289..38360af2c624 100644
  
  	range = pinctrl_find_gpio_range_from_pin_nolock(pctldev, gpio);
  	if (!range) {
-@@ -1151,11 +1151,20 @@ static int stm32_pmx_request(struct pinctrl_dev *pctldev, unsigned int gpio)
+@@ -1151,11 +1151,20 @@ static int stm32_pmx_request(struct pinc
  		return -EINVAL;
  	}
  
@@ -65,7 +63,7 @@ index 216efe299289..38360af2c624 100644
  	return 0;
  }
  
-@@ -1497,6 +1506,11 @@ static int stm32_pconf_parse_conf(struct pinctrl_dev *pctldev,
+@@ -1497,6 +1506,11 @@ static int stm32_pconf_parse_conf(struct
  		return -EACCES;
  	}
  
@@ -77,7 +75,7 @@ index 216efe299289..38360af2c624 100644
  	switch (param) {
  	case PIN_CONFIG_DRIVE_PUSH_PULL:
  		ret = stm32_pconf_set_driving(bank, offset, 0);
-@@ -2195,16 +2209,21 @@ static int __maybe_unused stm32_pinctrl_restore_gpio_regs(
+@@ -2195,16 +2209,21 @@ static int __maybe_unused stm32_pinctrl_
  	if (!range)
  		return 0;
  
@@ -101,6 +99,3 @@ index 216efe299289..38360af2c624 100644
  	mode = bank->pin_backup[offset].mode;
  	ret = stm32_pmx_set_mode(bank, offset, mode, bank->pin_backup[offset].alt);
  	if (ret)
--- 
-2.53.0
-

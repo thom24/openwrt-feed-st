@@ -15,11 +15,9 @@ Change-Id: I043e4148ee68126154cb75d515aecdbdae9a83c4
  drivers/cpufreq/cpufreq-dt-platdev.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-index 47dd76acd31e..27a721508085 100644
 --- a/drivers/cpufreq/cpufreq-dt-platdev.c
 +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-@@ -186,6 +186,9 @@ static const struct of_device_id blocklist[] __initconst = {
+@@ -186,6 +186,9 @@ static const struct of_device_id blockli
  	{ .compatible = "st,stih407", },
  	{ .compatible = "st,stih410", },
  	{ .compatible = "st,stih418", },
@@ -29,6 +27,3 @@ index 47dd76acd31e..27a721508085 100644
  
  	{ .compatible = "ti,am33xx", },
  	{ .compatible = "ti,am43", },
--- 
-2.53.0
-

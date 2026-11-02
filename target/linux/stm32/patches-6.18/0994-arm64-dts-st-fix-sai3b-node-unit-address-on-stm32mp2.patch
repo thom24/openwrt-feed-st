@@ -21,11 +21,9 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  arch/arm64/boot/dts/st/stm32mp231.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index a95e5bd7b524..7edf0bf4f3f1 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -1348,7 +1348,7 @@ sai3a: audio-controller@402b0004 {
+@@ -1348,7 +1348,7 @@
  					status = "disabled";
  				};
  
@@ -34,6 +32,3 @@ index a95e5bd7b524..7edf0bf4f3f1 100644
  					compatible = "st,stm32-sai-sub-b";
  					reg = <0x24 0x20>;
  					#sound-dai-cells = <0>;
--- 
-2.53.0
-

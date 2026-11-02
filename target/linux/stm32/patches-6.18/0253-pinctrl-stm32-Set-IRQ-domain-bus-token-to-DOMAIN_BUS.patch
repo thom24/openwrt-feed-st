@@ -38,11 +38,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/pinctrl/stm32/pinctrl-stm32.c | 30 ++++++++++-----------------
  1 file changed, 11 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
-index 381f4189984c..2de2cedd418c 100644
 --- a/drivers/pinctrl/stm32/pinctrl-stm32.c
 +++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
-@@ -627,8 +627,7 @@ static int stm32_gpio_domain_select(struct irq_domain *dm,
+@@ -627,8 +627,7 @@ static int stm32_gpio_domain_select(stru
  	struct irq_fwspec parent_fwspec;
  	struct stm32_gpio_bank *bank;
  
@@ -52,7 +50,7 @@ index 381f4189984c..2de2cedd418c 100644
  		return 0;
  
  	bank = stm32_pctrl_fwnode_to_bank(pctl, fwnode);
-@@ -638,6 +637,12 @@ static int stm32_gpio_domain_select(struct irq_domain *dm,
+@@ -638,6 +637,12 @@ static int stm32_gpio_domain_select(stru
  	if (!pctl->has_irq_extended)
  		return 1;
  
@@ -65,7 +63,7 @@ index 381f4189984c..2de2cedd418c 100644
  	if (!dm->parent->ops->select)
  		return 0;
  
-@@ -650,22 +655,6 @@ static int stm32_gpio_domain_select(struct irq_domain *dm,
+@@ -650,22 +655,6 @@ static int stm32_gpio_domain_select(stru
  	return dm->parent->ops->select(dm->parent, &parent_fwspec, bus_token);
  }
  
@@ -88,7 +86,7 @@ index 381f4189984c..2de2cedd418c 100644
  static int stm32_gpio_domain_translate(struct irq_domain *d,
  				       struct irq_fwspec *fwspec,
  				       unsigned long *hwirq,
-@@ -782,7 +771,6 @@ static void stm32_gpio_domain_free(struct irq_domain *d, unsigned int virq,
+@@ -782,7 +771,6 @@ static void stm32_gpio_domain_free(struc
  
  static const struct irq_domain_ops stm32_gpio_domain_ops = {
  	.select		= stm32_gpio_domain_select,
@@ -96,7 +94,7 @@ index 381f4189984c..2de2cedd418c 100644
  	.translate	= stm32_gpio_domain_translate,
  	.alloc		= stm32_gpio_domain_alloc,
  	.free		= stm32_gpio_domain_free,
-@@ -1897,6 +1885,8 @@ static struct irq_domain *stm32_pctrl_get_irq_domain(struct stm32_pinctrl *pctl)
+@@ -1897,6 +1885,8 @@ static struct irq_domain *stm32_pctrl_ge
  				irq_domain_free_fwnode(fwnode);
  				return ERR_PTR(ret);
  			}
@@ -105,7 +103,7 @@ index 381f4189984c..2de2cedd418c 100644
  		}
  
  		pctl->has_irq_extended = true;
-@@ -1930,6 +1920,8 @@ static struct irq_domain *stm32_pctrl_get_irq_domain(struct stm32_pinctrl *pctl)
+@@ -1930,6 +1920,8 @@ static struct irq_domain *stm32_pctrl_ge
  		return ERR_PTR(ret);
  	}
  
@@ -114,6 +112,3 @@ index 381f4189984c..2de2cedd418c 100644
  	return domain;
  }
  
--- 
-2.53.0
-

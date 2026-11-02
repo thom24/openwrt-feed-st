@@ -25,8 +25,6 @@ Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
  Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
-index 8f5e9ea1ad8f..3aa4d35e3f67 100644
 --- a/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
 +++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
 @@ -536,7 +536,9 @@ patternProperties:
@@ -40,6 +38,3 @@ index 8f5e9ea1ad8f..3aa4d35e3f67 100644
  
              assigned-resolution-bits:
                enum: [6, 8, 10, 12]
--- 
-2.53.0
-

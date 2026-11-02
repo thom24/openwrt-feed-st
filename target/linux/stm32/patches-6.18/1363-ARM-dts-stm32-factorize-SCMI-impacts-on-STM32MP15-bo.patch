@@ -37,9 +37,6 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  create mode 100644 arch/arm/boot/dts/st/stm32mp157-scmi.dtsi
  create mode 100644 arch/arm/boot/dts/st/stm32mp15xc-scmi.dtsi
 
-diff --git a/arch/arm/boot/dts/st/stm32mp15-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp15-scmi.dtsi
-deleted file mode 100644
-index aeedab8e5af9..000000000000
 --- a/arch/arm/boot/dts/st/stm32mp15-scmi.dtsi
 +++ /dev/null
 @@ -1,39 +0,0 @@
@@ -82,9 +79,6 @@ index aeedab8e5af9..000000000000
 -/delete-node/ &clk_lse;
 -/delete-node/ &clk_lsi;
 -/delete-node/ &clk_csi;
-diff --git a/arch/arm/boot/dts/st/stm32mp151-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp151-scmi.dtsi
-new file mode 100644
-index 000000000000..945da268773d
 --- /dev/null
 +++ b/arch/arm/boot/dts/st/stm32mp151-scmi.dtsi
 @@ -0,0 +1,152 @@
@@ -240,9 +234,6 @@ index 000000000000..945da268773d
 +&usart1 {
 +	clocks = <&scmi_clk CK_SCMI_USART1>;
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp153-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp153-scmi.dtsi
-new file mode 100644
-index 000000000000..da97b31ca122
 --- /dev/null
 +++ b/arch/arm/boot/dts/st/stm32mp153-scmi.dtsi
 @@ -0,0 +1,19 @@
@@ -265,9 +256,6 @@ index 000000000000..da97b31ca122
 +&optee {
 +	interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp157-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp157-scmi.dtsi
-new file mode 100644
-index 000000000000..72c2776d9f21
 --- /dev/null
 +++ b/arch/arm/boot/dts/st/stm32mp157-scmi.dtsi
 @@ -0,0 +1,11 @@
@@ -282,8 +270,6 @@ index 000000000000..72c2776d9f21
 +&dsi {
 +	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp157a-dk1.dts b/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
-index 524bd234e7ba..7cc572bd9c40 100644
 --- a/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
 @@ -7,7 +7,7 @@
@@ -295,7 +281,7 @@ index 524bd234e7ba..7cc572bd9c40 100644
  
  / {
  	model = "STMicroelectronics STM32MP157A-DK1 Discovery Board";
-@@ -27,137 +27,7 @@ &arm_wdt {
+@@ -27,137 +27,7 @@
  	status = "okay";
  };
  
@@ -433,8 +419,6 @@ index 524bd234e7ba..7cc572bd9c40 100644
 -&usart1 {
 -	clocks = <&scmi_clk CK_SCMI_USART1>;
 -};
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
-index ae8b605ef438..c7ab06279431 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
 @@ -7,7 +7,8 @@
@@ -447,7 +431,7 @@ index ae8b605ef438..c7ab06279431 100644
  
  / {
  	model = "STMicroelectronics STM32MP157C-DK2 Discovery Board";
-@@ -27,143 +28,7 @@ &arm_wdt {
+@@ -27,143 +28,7 @@
  	status = "okay";
  };
  
@@ -591,11 +575,9 @@ index ae8b605ef438..c7ab06279431 100644
 -&usart1 {
 -	clocks = <&scmi_clk CK_SCMI_USART1>;
 -};
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
-index 2508f871befc..ec719c751567 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
-@@ -337,7 +337,7 @@ &i2c4 {
+@@ -337,7 +337,7 @@
  	/delete-property/dmas;
  	/delete-property/dma-names;
  
@@ -604,8 +586,6 @@ index 2508f871befc..ec719c751567 100644
  		compatible = "st,stpmic1";
  		reg = <0x33>;
  		interrupts-extended = <&gpioa 0 IRQ_TYPE_EDGE_FALLING>;
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1.dts b/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
-index 4da559dc9b7e..110a99baced5 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
 @@ -7,7 +7,8 @@
@@ -618,7 +598,7 @@ index 4da559dc9b7e..110a99baced5 100644
  
  / {
  	model = "STMicroelectronics STM32MP157C eval daughter";
-@@ -27,143 +28,7 @@ &arm_wdt {
+@@ -27,143 +28,7 @@
  	status = "okay";
  };
  
@@ -762,8 +742,6 @@ index 4da559dc9b7e..110a99baced5 100644
 -&usart1 {
 -	clocks = <&scmi_clk CK_SCMI_USART1>;
 -};
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
-index 053ff6a9cab1..5001ca74e766 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
 @@ -7,7 +7,8 @@
@@ -776,7 +754,7 @@ index 053ff6a9cab1..5001ca74e766 100644
  
  / {
  	model = "STMicroelectronics STM32MP157C eval daughter on eval mother";
-@@ -27,147 +28,7 @@ &arm_wdt {
+@@ -27,147 +28,7 @@
  	status = "okay";
  };
  
@@ -924,8 +902,6 @@ index 053ff6a9cab1..5001ca74e766 100644
 -&usart1 {
 -	clocks = <&scmi_clk CK_SCMI_USART1>;
 -};
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-dk1.dts b/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
-index 039b27ce6fd6..b709b65360f0 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
 @@ -11,7 +11,7 @@
@@ -937,7 +913,7 @@ index 039b27ce6fd6..b709b65360f0 100644
  
  / {
  	model = "STMicroelectronics STM32MP157D-DK1 Discovery Board";
-@@ -39,137 +39,7 @@ &arm_wdt {
+@@ -39,137 +39,7 @@
  	status = "okay";
  };
  
@@ -1075,8 +1051,6 @@ index 039b27ce6fd6..b709b65360f0 100644
 -&usart1 {
 -	clocks = <&scmi_clk CK_SCMI_USART1>;
 -};
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
-index 34c35ef452e4..0f17c0b2f96a 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
 @@ -9,7 +9,7 @@
@@ -1088,7 +1062,7 @@ index 34c35ef452e4..0f17c0b2f96a 100644
  #include <dt-bindings/gpio/gpio.h>
  #include <dt-bindings/input/linux-event-codes.h>
  #include <dt-bindings/leds/common.h>
-@@ -187,12 +187,10 @@ &bsec {
+@@ -187,12 +187,10 @@
  };
  
  &cpu0 {
@@ -1101,7 +1075,7 @@ index 34c35ef452e4..0f17c0b2f96a 100644
  	cpu-supply = <&vddcore>;
  };
  
-@@ -249,10 +247,6 @@ &dbg_bus {
+@@ -249,10 +247,6 @@
  	status = "okay";
  };
  
@@ -1112,7 +1086,7 @@ index 34c35ef452e4..0f17c0b2f96a 100644
  &dts {
  	status = "okay";
  };
-@@ -263,62 +257,50 @@ &etzpc {
+@@ -263,62 +257,50 @@
  
  &gpioa {
  	bootph-all;
@@ -1175,7 +1149,7 @@ index 34c35ef452e4..0f17c0b2f96a 100644
  };
  
  &gpu {
-@@ -326,9 +308,6 @@ &gpu {
+@@ -326,9 +308,6 @@
  };
  
  &hash1 {
@@ -1185,7 +1159,7 @@ index 34c35ef452e4..0f17c0b2f96a 100644
  	status = "okay";
  };
  
-@@ -497,27 +476,17 @@ pins {
+@@ -497,27 +476,17 @@
  	};
  };
  
@@ -1213,7 +1187,7 @@ index 34c35ef452e4..0f17c0b2f96a 100644
  	memory-region = <&retram>, <&mcuram>, <&mcuram2>, <&vdev0vring0>,
  			<&vdev0vring1>, <&vdev0buffer>;
  	mboxes = <&ipcc 0>, <&ipcc 1>, <&ipcc 2>, <&ipcc 3>;
-@@ -529,16 +498,6 @@ &m4_rproc {
+@@ -529,16 +498,6 @@
  	status = "okay";
  };
  
@@ -1230,7 +1204,7 @@ index 34c35ef452e4..0f17c0b2f96a 100644
  &pinctrl {
  	bootph-all;
  };
-@@ -558,31 +517,13 @@ &pwr_regulators {
+@@ -558,31 +517,13 @@
  };
  
  &rcc {
@@ -1262,7 +1236,7 @@ index 34c35ef452e4..0f17c0b2f96a 100644
  &sdmmc1 {
  	pinctrl-names = "default", "opendrain", "sleep";
  	pinctrl-0 = <&sdmmc1_b4_pins_a &sdmmc1_dir_pins_a>;
-@@ -658,11 +599,6 @@ pins {
+@@ -658,11 +599,6 @@
  	};
  };
  
@@ -1274,7 +1248,7 @@ index 34c35ef452e4..0f17c0b2f96a 100644
  &timers6 {
  	status = "okay";
  	/* spare dmas for other usage */
-@@ -694,10 +630,6 @@ pins2 {
+@@ -694,10 +630,6 @@
  	};
  };
  
@@ -1285,11 +1259,9 @@ index 34c35ef452e4..0f17c0b2f96a 100644
  &usbotg_hs {
  	vbus-supply = <&vbus_otg>;
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-index 5dff509813d2..606aa6104da1 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-@@ -548,7 +548,6 @@ ltdc_ep0_out: endpoint {
+@@ -548,7 +548,6 @@
  };
  
  &m_can1 {
@@ -1297,8 +1269,6 @@ index 5dff509813d2..606aa6104da1 100644
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&m_can1_pins_a>;
  	pinctrl-1 = <&m_can1_sleep_pins_a>;
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
-index 9d51bbcc3bf1..9725a2a9c55b 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
 @@ -11,7 +11,8 @@
@@ -1311,7 +1281,7 @@ index 9d51bbcc3bf1..9725a2a9c55b 100644
  
  / {
  	model = "STMicroelectronics STM32MP157F-DK2 Discovery Board";
-@@ -56,23 +57,11 @@ &arm_wdt {
+@@ -56,23 +57,11 @@
  	status = "okay";
  };
  
@@ -1335,7 +1305,7 @@ index 9d51bbcc3bf1..9725a2a9c55b 100644
  	#address-cells = <1>;
  	#size-cells = <0>;
  	status = "okay";
-@@ -99,60 +88,6 @@ &dsi_out {
+@@ -99,60 +88,6 @@
  	remote-endpoint = <&panel_in>;
  };
  
@@ -1396,7 +1366,7 @@ index 9d51bbcc3bf1..9725a2a9c55b 100644
  &hdp {
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&hdp2_gpo &hdp2_pins_a>;
-@@ -173,25 +108,11 @@ touchscreen@38 {
+@@ -173,25 +108,11 @@
  	};
  };
  
@@ -1422,7 +1392,7 @@ index 9d51bbcc3bf1..9725a2a9c55b 100644
  &ltdc {
  	bootph-some-ram;
  	status = "okay";
-@@ -207,41 +128,7 @@ ltdc_ep1_out: endpoint@1 {
+@@ -207,41 +128,7 @@
  	};
  };
  
@@ -1464,7 +1434,7 @@ index 9d51bbcc3bf1..9725a2a9c55b 100644
  	#clock-cells = <0>;
  	pinctrl-names = "default";
  	pinctrl-0 = <&rtc_rsvd_pins_a &rtc_lsco_pins_a>;
-@@ -252,10 +139,6 @@ rtc_lsco_pins_a: rtc-lsco-0 {
+@@ -252,10 +139,6 @@
  	};
  };
  
@@ -1475,7 +1445,7 @@ index 9d51bbcc3bf1..9725a2a9c55b 100644
  /* Wifi */
  &sdmmc2 {
  	pinctrl-names = "default", "opendrain", "sleep";
-@@ -279,15 +162,6 @@ brcmf: wifi@1 {
+@@ -279,15 +162,6 @@
  	};
  };
  
@@ -1491,8 +1461,6 @@ index 9d51bbcc3bf1..9725a2a9c55b 100644
  /* Bluetooth */
  &usart2 {
  	pinctrl-names = "default", "sleep", "idle";
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
-index e41336df8d2b..010d90d2429f 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
 @@ -9,7 +9,8 @@
@@ -1505,7 +1473,7 @@ index e41336df8d2b..010d90d2429f 100644
  #include <dt-bindings/gpio/gpio.h>
  #include <dt-bindings/input/linux-event-codes.h>
  #include <dt-bindings/leds/common.h>
-@@ -187,19 +188,14 @@ &bsec {
+@@ -187,19 +188,14 @@
  };
  
  &cpu0 {
@@ -1525,7 +1493,7 @@ index e41336df8d2b..010d90d2429f 100644
  	status = "okay";
  };
  
-@@ -256,10 +252,6 @@ &dbg_bus {
+@@ -256,10 +252,6 @@
  	status = "okay";
  };
  
@@ -1536,7 +1504,7 @@ index e41336df8d2b..010d90d2429f 100644
  &dts {
  	status = "okay";
  };
-@@ -270,62 +262,50 @@ &etzpc {
+@@ -270,62 +262,50 @@
  
  &gpioa {
  	bootph-all;
@@ -1599,7 +1567,7 @@ index e41336df8d2b..010d90d2429f 100644
  };
  
  &gpu {
-@@ -333,9 +313,6 @@ &gpu {
+@@ -333,9 +313,6 @@
  };
  
  &hash1 {
@@ -1609,7 +1577,7 @@ index e41336df8d2b..010d90d2429f 100644
  	status = "okay";
  };
  
-@@ -504,27 +481,17 @@ pins {
+@@ -504,27 +481,17 @@
  	};
  };
  
@@ -1637,7 +1605,7 @@ index e41336df8d2b..010d90d2429f 100644
  	memory-region = <&retram>, <&mcuram>, <&mcuram2>, <&vdev0vring0>,
  			<&vdev0vring1>, <&vdev0buffer>;
  	mboxes = <&ipcc 0>, <&ipcc 1>, <&ipcc 2>, <&ipcc 3>;
-@@ -536,16 +503,6 @@ &m4_rproc {
+@@ -536,16 +503,6 @@
  	status = "okay";
  };
  
@@ -1654,7 +1622,7 @@ index e41336df8d2b..010d90d2429f 100644
  &pinctrl {
  	bootph-all;
  };
-@@ -558,38 +515,14 @@ &psci {
+@@ -558,38 +515,14 @@
  	bootph-some-ram;
  };
  
@@ -1693,7 +1661,7 @@ index e41336df8d2b..010d90d2429f 100644
  &sdmmc1 {
  	pinctrl-names = "default", "opendrain", "sleep";
  	pinctrl-0 = <&sdmmc1_b4_pins_a &sdmmc1_dir_pins_a>;
-@@ -665,11 +598,6 @@ pins {
+@@ -665,11 +598,6 @@
  	};
  };
  
@@ -1705,7 +1673,7 @@ index e41336df8d2b..010d90d2429f 100644
  &timers6 {
  	status = "okay";
  	/* spare dmas for other usage */
-@@ -701,10 +629,6 @@ pins2 {
+@@ -701,10 +629,6 @@
  	};
  };
  
@@ -1716,11 +1684,9 @@ index e41336df8d2b..010d90d2429f 100644
  &usbotg_hs {
  	vbus-supply = <&vbus_otg>;
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-index 30a8ddb70b76..9e5ca0e3312c 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-@@ -548,7 +548,6 @@ ltdc_ep0_out: endpoint {
+@@ -548,7 +548,6 @@
  };
  
  &m_can1 {
@@ -1728,9 +1694,6 @@ index 30a8ddb70b76..9e5ca0e3312c 100644
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&m_can1_pins_a>;
  	pinctrl-1 = <&m_can1_sleep_pins_a>;
-diff --git a/arch/arm/boot/dts/st/stm32mp15xc-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp15xc-scmi.dtsi
-new file mode 100644
-index 000000000000..e3ee5b055d7c
 --- /dev/null
 +++ b/arch/arm/boot/dts/st/stm32mp15xc-scmi.dtsi
 @@ -0,0 +1,11 @@
@@ -1745,11 +1708,9 @@ index 000000000000..e3ee5b055d7c
 +	resets = <&scmi_reset RST_SCMI_CRYP1>;
 +	post-init-providers = <&scmi_clk>, <&scmi_reset>;
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-index 9c07b711497a..b89962f74b55 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-@@ -442,7 +442,7 @@ con_usbotg_hs_ep: endpoint {
+@@ -442,7 +442,7 @@
  		};
  	};
  
@@ -1758,6 +1719,3 @@ index 9c07b711497a..b89962f74b55 100644
  		compatible = "st,stpmic1";
  		reg = <0x33>;
  		interrupts-extended = <&gpioa 0 IRQ_TYPE_EDGE_FALLING>;
--- 
-2.53.0
-

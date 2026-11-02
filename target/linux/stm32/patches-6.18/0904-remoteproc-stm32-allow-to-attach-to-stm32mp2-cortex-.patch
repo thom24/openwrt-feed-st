@@ -16,8 +16,6 @@ Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
  drivers/remoteproc/stm32_rproc.c | 115 ++++++++++++++++++++++---------
  1 file changed, 82 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index 2c57f267f793..97b9296f8d69 100644
 --- a/drivers/remoteproc/stm32_rproc.c
 +++ b/drivers/remoteproc/stm32_rproc.c
 @@ -40,12 +40,21 @@
@@ -57,7 +55,7 @@ index 2c57f267f793..97b9296f8d69 100644
  	struct stm32_syscon rsctbl;
  	int wdg_irq;
  	u32 nb_rmems;
-@@ -265,11 +274,11 @@ static int stm32_rproc_release(struct rproc *rproc)
+@@ -265,11 +274,11 @@ static int stm32_rproc_release(struct rp
  	}
  
  	/* Update coprocessor state to OFF if available. */
@@ -74,7 +72,7 @@ index 2c57f267f793..97b9296f8d69 100644
  		if (err) {
  			dev_err(&rproc->dev, "failed to set copro state\n");
  			return err;
-@@ -799,12 +808,68 @@ static const struct rproc_ops st_rproc_tee_ops = {
+@@ -799,12 +808,68 @@ static const struct rproc_ops st_rproc_t
  	.load		= stm32_rproc_tee_elf_load,
  };
  
@@ -143,7 +141,7 @@ index 2c57f267f793..97b9296f8d69 100644
  };
  
  static const struct of_device_id stm32_rproc_match[] = {
-@@ -925,11 +990,11 @@ static int stm32_rproc_parse_dt(struct platform_device *pdev,
+@@ -925,11 +990,11 @@ static int stm32_rproc_parse_dt(struct p
  	 * See if we can check the M4 status, i.e if it was started
  	 * from the boot loader or not.
  	 */
@@ -158,7 +156,7 @@ index 2c57f267f793..97b9296f8d69 100644
  		/* no coprocessor state syscon (optional) */
  		dev_warn(dev, "m4 state not supported\n");
  
-@@ -948,22 +1013,6 @@ static int stm32_rproc_parse_dt(struct platform_device *pdev,
+@@ -948,22 +1013,6 @@ static int stm32_rproc_parse_dt(struct p
  	return 0;
  }
  
@@ -181,7 +179,7 @@ index 2c57f267f793..97b9296f8d69 100644
  static int stm32_rproc_probe(struct platform_device *pdev)
  {
  	struct device *dev = &pdev->dev;
-@@ -1028,11 +1077,11 @@ static int stm32_rproc_probe(struct platform_device *pdev)
+@@ -1028,11 +1077,11 @@ static int stm32_rproc_probe(struct plat
  	if (ret)
  		goto free_rproc;
  
@@ -195,6 +193,3 @@ index 2c57f267f793..97b9296f8d69 100644
  		rproc->state = RPROC_DETACHED;
  
  	rproc->has_iommu = false;
--- 
-2.53.0
-

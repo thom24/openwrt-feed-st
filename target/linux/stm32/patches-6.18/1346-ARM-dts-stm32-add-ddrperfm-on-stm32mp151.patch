@@ -22,11 +22,9 @@ Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
  arch/arm/boot/dts/st/stm32mp151.dtsi | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
-index a692317f2086..d12e31a6a2c1 100644
 --- a/arch/arm/boot/dts/st/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
-@@ -755,6 +755,13 @@ usbphyc_port1: usb-phy@1 {
+@@ -755,6 +755,13 @@
  			};
  		};
  
@@ -40,6 +38,3 @@ index a692317f2086..d12e31a6a2c1 100644
  		iwdg1: watchdog@5c003000 {
  			compatible = "st,stm32mp1-iwdg";
  			reg = <0x5c003000 0x400>;
--- 
-2.53.0
-

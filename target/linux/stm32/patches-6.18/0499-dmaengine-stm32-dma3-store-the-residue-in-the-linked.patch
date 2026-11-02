@@ -21,8 +21,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/dma/stm32/stm32-dma3.c | 24 +++++++++++++++++++-----
  1 file changed, 19 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
-index b128e2291829..fa703294e0d8 100644
 --- a/drivers/dma/stm32/stm32-dma3.c
 +++ b/drivers/dma/stm32/stm32-dma3.c
 @@ -274,6 +274,7 @@ struct stm32_dma3_hwdesc {
@@ -33,7 +31,7 @@ index b128e2291829..fa703294e0d8 100644
  };
  
  struct stm32_dma3_swdesc {
-@@ -1182,10 +1183,12 @@ static int stm32_dma3_chan_get_curr_hwdesc(struct stm32_dma3_swdesc *swdesc, u32
+@@ -1182,10 +1183,12 @@ static int stm32_dma3_chan_get_curr_hwde
  
  	/* As transfer is in progress, look backward from the last item */
  	for (i = swdesc->lli_size - 1; i > 0; i--) {
@@ -48,7 +46,7 @@ index b128e2291829..fa703294e0d8 100644
  	}
  
  	return -EINVAL;
-@@ -1562,7 +1565,7 @@ static struct dma_async_tx_descriptor *stm32_dma3_prep_dma_memcpy(struct dma_cha
+@@ -1562,7 +1565,7 @@ static struct dma_async_tx_descriptor *s
  {
  	struct stm32_dma3_chan *chan = to_stm32_dma3_chan(c);
  	struct stm32_dma3_swdesc *swdesc;
@@ -57,7 +55,7 @@ index b128e2291829..fa703294e0d8 100644
  	u32 count, i, ctr1, ctr2;
  	bool prevent_refactor = !!FIELD_GET(STM32_DMA3_DT_NOPACK, chan->dt_config.tr_conf) ||
  				!!FIELD_GET(STM32_DMA3_DT_NOREFACT, chan->dt_config.tr_conf);
-@@ -1598,6 +1601,9 @@ static struct dma_async_tx_descriptor *stm32_dma3_prep_dma_memcpy(struct dma_cha
+@@ -1598,6 +1601,9 @@ static struct dma_async_tx_descriptor *s
  
  		stm32_dma3_chan_prep_hwdesc(chan, swdesc, i, src + offset, dst + offset, next_size,
  					    ctr1, ctr2, next_size == remaining, false);
@@ -67,7 +65,7 @@ index b128e2291829..fa703294e0d8 100644
  	}
  
  	/* Enable Errors interrupts */
-@@ -1624,7 +1630,7 @@ static struct dma_async_tx_descriptor *stm32_dma3_prep_slave_sg(struct dma_chan
+@@ -1624,7 +1630,7 @@ static struct dma_async_tx_descriptor *s
  	struct stm32_dma3_chan *chan = to_stm32_dma3_chan(c);
  	struct stm32_dma3_swdesc *swdesc;
  	struct scatterlist *sg;
@@ -76,7 +74,7 @@ index b128e2291829..fa703294e0d8 100644
  	dma_addr_t sg_addr, dev_addr, src, dst;
  	u32 i, j, count, ctr1, ctr2;
  	bool prevent_refactor = !!FIELD_GET(STM32_DMA3_DT_NOPACK, chan->dt_config.tr_conf) ||
-@@ -1636,8 +1642,10 @@ static struct dma_async_tx_descriptor *stm32_dma3_prep_slave_sg(struct dma_chan
+@@ -1636,8 +1642,10 @@ static struct dma_async_tx_descriptor *s
  		return NULL;
  
  	count = 0;
@@ -88,7 +86,7 @@ index b128e2291829..fa703294e0d8 100644
  
  	swdesc = stm32_dma3_chan_desc_alloc(chan, count);
  	if (!swdesc)
-@@ -1684,6 +1692,8 @@ static struct dma_async_tx_descriptor *stm32_dma3_prep_slave_sg(struct dma_chan
+@@ -1684,6 +1692,8 @@ static struct dma_async_tx_descriptor *s
  			stm32_dma3_chan_prep_hwdesc(chan, swdesc, j, src, dst, chunk,
  						    ctr1, ctr2, j == (count - 1), false);
  
@@ -97,7 +95,7 @@ index b128e2291829..fa703294e0d8 100644
  			sg_addr += chunk;
  			len -= chunk;
  			j++;
-@@ -1717,6 +1727,7 @@ static struct dma_async_tx_descriptor *stm32_dma3_prep_dma_cyclic(struct dma_cha
+@@ -1717,6 +1727,7 @@ static struct dma_async_tx_descriptor *s
  {
  	struct stm32_dma3_chan *chan = to_stm32_dma3_chan(c);
  	struct stm32_dma3_swdesc *swdesc;
@@ -105,7 +103,7 @@ index b128e2291829..fa703294e0d8 100644
  	dma_addr_t src, dst;
  	u32 count, i, ctr1, ctr2;
  	int ret;
-@@ -1771,6 +1782,9 @@ static struct dma_async_tx_descriptor *stm32_dma3_prep_dma_cyclic(struct dma_cha
+@@ -1771,6 +1782,9 @@ static struct dma_async_tx_descriptor *s
  
  		stm32_dma3_chan_prep_hwdesc(chan, swdesc, i, src, dst, period_len,
  					    ctr1, ctr2, i == (count - 1), true);
@@ -115,6 +113,3 @@ index b128e2291829..fa703294e0d8 100644
  	}
  
  	/* Enable Error interrupts */
--- 
-2.53.0
-

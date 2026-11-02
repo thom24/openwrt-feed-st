@@ -14,8 +14,6 @@ Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
  .../st/stm32/stm32-dcmipp/dcmipp-core.c       | 37 -------------------
  2 files changed, 37 insertions(+), 37 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
-index 3c3996472e03..9e7b2434200a 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
 @@ -83,6 +83,43 @@ struct dcmipp_device {
@@ -62,8 +60,6 @@ index 3c3996472e03..9e7b2434200a 100644
  /**
   * struct dcmipp_ent_device - core struct that represents a node in the topology
   *
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
-index b06a4931ae95..3a0a4df410d8 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
 @@ -25,14 +25,6 @@
@@ -81,7 +77,7 @@ index b06a4931ae95..3a0a4df410d8 100644
  #define DCMIPP_CMSR2	0x3f8
  
  static inline struct dcmipp_device *
-@@ -41,35 +33,6 @@ notifier_to_dcmipp(struct v4l2_async_notifier *n)
+@@ -41,35 +33,6 @@ notifier_to_dcmipp(struct v4l2_async_not
  	return container_of(n, struct dcmipp_device, notifier);
  }
  
@@ -117,6 +113,3 @@ index b06a4931ae95..3a0a4df410d8 100644
  /* --------------------------------------------------------------------------
   * Topology Configuration
   */
--- 
-2.53.0
-

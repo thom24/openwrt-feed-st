@@ -29,8 +29,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml
-index 27354658d054..57faedeef3c4 100644
 --- a/Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml
 +++ b/Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml
 @@ -46,6 +46,8 @@ properties:
@@ -42,6 +40,3 @@ index 27354658d054..57faedeef3c4 100644
    access-controllers:
      minItems: 1
      maxItems: 2
--- 
-2.53.0
-

@@ -30,11 +30,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 8 ++++++++
  1 file changed, 8 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-index 5121f3092b24..d83a3b2ff8b8 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-@@ -209,6 +209,14 @@ &i3c1 {
+@@ -209,6 +209,14 @@
  	status = "disabled";
  };
  
@@ -49,6 +47,3 @@ index 5121f3092b24..d83a3b2ff8b8 100644
  &ipcc1 {
  	status = "okay";
  };
--- 
-2.53.0
-

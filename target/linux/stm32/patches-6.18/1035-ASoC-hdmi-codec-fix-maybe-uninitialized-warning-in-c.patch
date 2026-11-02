@@ -22,11 +22,9 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  sound/soc/codecs/hdmi-codec.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/hdmi-codec.c b/sound/soc/codecs/hdmi-codec.c
-index 9559c5eb5abf..b9451e989c3b 100644
 --- a/sound/soc/codecs/hdmi-codec.c
 +++ b/sound/soc/codecs/hdmi-codec.c
-@@ -382,7 +382,7 @@ static int hdmi_codec_get_ch_alloc_table_idx(struct hdmi_codec_priv *hcp,
+@@ -382,7 +382,7 @@ static int hdmi_codec_get_ch_alloc_table
  static int hdmi_codec_chmap_ctl_get(struct snd_kcontrol *kcontrol,
  			      struct snd_ctl_elem_value *ucontrol)
  {
@@ -35,6 +33,3 @@ index 9559c5eb5abf..b9451e989c3b 100644
  	unsigned int i;
  	struct snd_pcm_chmap *info = snd_kcontrol_chip(kcontrol);
  	struct hdmi_codec_priv *hcp = info->private_data;
--- 
-2.53.0
-

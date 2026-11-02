@@ -15,11 +15,9 @@ Signed-off-by: Mark Brown <broonie@kernel.org>
  drivers/spi/spi-stm32-ospi.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
-index 7541ada95da5..06252df24474 100644
 --- a/drivers/spi/spi-stm32-ospi.c
 +++ b/drivers/spi/spi-stm32-ospi.c
-@@ -150,7 +150,7 @@ static void stm32_ospi_read_fifo(void *val, void __iomem *addr, u8 len)
+@@ -150,7 +150,7 @@ static void stm32_ospi_read_fifo(void *v
  		break;
  	case sizeof(u8):
  		*((u8 *)val) = readb_relaxed(addr);
@@ -28,7 +26,7 @@ index 7541ada95da5..06252df24474 100644
  }
  
  static void stm32_ospi_write_fifo(void *val, void __iomem *addr, u8 len)
-@@ -164,7 +164,7 @@ static void stm32_ospi_write_fifo(void *val, void __iomem *addr, u8 len)
+@@ -164,7 +164,7 @@ static void stm32_ospi_write_fifo(void *
  		break;
  	case sizeof(u8):
  		writeb_relaxed(*((u8 *)val), addr);
@@ -37,6 +35,3 @@ index 7541ada95da5..06252df24474 100644
  }
  
  static int stm32_ospi_abort(struct stm32_ospi *ospi)
--- 
-2.53.0
-

@@ -13,11 +13,9 @@ Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
  drivers/media/platform/verisilicon/hantro_drv.c | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
-index 560841e237d1..c6d9fe321654 100644
 --- a/drivers/media/platform/verisilicon/hantro_drv.c
 +++ b/drivers/media/platform/verisilicon/hantro_drv.c
-@@ -990,7 +990,6 @@ static int hantro_add_func(struct hantro_dev *vpu, unsigned int funcid)
+@@ -990,7 +990,6 @@ static int hantro_add_func(struct hantro
  		vpu->decoder = func;
  		v4l2_disable_ioctl(vfd, VIDIOC_TRY_ENCODER_CMD);
  		v4l2_disable_ioctl(vfd, VIDIOC_ENCODER_CMD);
@@ -25,6 +23,3 @@ index 560841e237d1..c6d9fe321654 100644
  		v4l2_disable_ioctl(vfd, VIDIOC_S_SELECTION);
  	}
  
--- 
-2.53.0
-

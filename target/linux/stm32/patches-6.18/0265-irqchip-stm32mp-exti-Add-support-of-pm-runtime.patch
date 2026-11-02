@@ -21,8 +21,6 @@ Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
  drivers/irqchip/irq-stm32mp-exti.c | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/drivers/irqchip/irq-stm32mp-exti.c b/drivers/irqchip/irq-stm32mp-exti.c
-index 0f7aded2aa95..4d743fde5004 100644
 --- a/drivers/irqchip/irq-stm32mp-exti.c
 +++ b/drivers/irqchip/irq-stm32mp-exti.c
 @@ -19,6 +19,7 @@
@@ -33,7 +31,7 @@ index 0f7aded2aa95..4d743fde5004 100644
  
  #include <dt-bindings/interrupt-controller/arm-gic.h>
  
-@@ -893,6 +894,8 @@ static int stm32mp_exti_probe(struct platform_device *pdev)
+@@ -893,6 +894,8 @@ static int stm32mp_exti_probe(struct pla
  	if (ret)
  		return ret;
  
@@ -42,7 +40,7 @@ index 0f7aded2aa95..4d743fde5004 100644
  	host_data->dt_has_irqs_desc = of_property_present(np, "interrupts-extended");
  
  	wakeup_np = of_parse_phandle(np, "wakeup-parent", 0);
-@@ -931,8 +934,12 @@ static int stm32mp_exti_probe(struct platform_device *pdev)
+@@ -931,8 +934,12 @@ static int stm32mp_exti_probe(struct pla
  		ret = devm_add_action_or_reset(dev, stm32mp_exti_remove_irq, domain);
  		if (ret)
  			return ret;
@@ -55,6 +53,3 @@ index 0f7aded2aa95..4d743fde5004 100644
  	return 0;
  }
  
--- 
-2.53.0
-

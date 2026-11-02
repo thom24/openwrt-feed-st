@@ -15,11 +15,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/bluetooth/hci_bcm.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/bluetooth/hci_bcm.c b/drivers/bluetooth/hci_bcm.c
-index 0a54a7cf2bde..27e9c325e26b 100644
 --- a/drivers/bluetooth/hci_bcm.c
 +++ b/drivers/bluetooth/hci_bcm.c
-@@ -1575,6 +1575,7 @@ static struct bcm_device_data bcm4354_device_data = {
+@@ -1575,6 +1575,7 @@ static struct bcm_device_data bcm4354_de
  
  static struct bcm_device_data bcm43438_device_data = {
  	.drive_rts_on_open = true,
@@ -27,6 +25,3 @@ index 0a54a7cf2bde..27e9c325e26b 100644
  };
  
  static struct bcm_device_data cyw4373a0_device_data = {
--- 
-2.53.0
-

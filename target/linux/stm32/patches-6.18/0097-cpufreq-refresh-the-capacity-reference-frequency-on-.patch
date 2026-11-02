@@ -38,11 +38,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  include/linux/cpufreq.h   | 7 +++++++
  2 files changed, 14 insertions(+)
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index ec577a20567b..2037472ec638 100644
 --- a/drivers/cpufreq/cpufreq.c
 +++ b/drivers/cpufreq/cpufreq.c
-@@ -2793,6 +2793,13 @@ int cpufreq_boost_set_sw(struct cpufreq_policy *policy, int state)
+@@ -2793,6 +2793,13 @@ int cpufreq_boost_set_sw(struct cpufreq_
  		return ret;
  	}
  
@@ -56,11 +54,9 @@ index ec577a20567b..2037472ec638 100644
  	ret = freq_qos_update_request(policy->max_freq_req, policy->max);
  	if (ret < 0)
  		return ret;
-diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-index fd26b3a4aa28..129d36c6d668 100644
 --- a/include/linux/cpufreq.h
 +++ b/include/linux/cpufreq.h
-@@ -1224,6 +1224,13 @@ void arch_set_freq_scale(const struct cpumask *cpus,
+@@ -1224,6 +1224,13 @@ void arch_set_freq_scale(const struct cp
  }
  #endif
  
@@ -74,6 +70,3 @@ index fd26b3a4aa28..129d36c6d668 100644
  /* the following are really really optional */
  extern struct freq_attr cpufreq_freq_attr_scaling_available_freqs;
  extern struct freq_attr cpufreq_freq_attr_scaling_boost_freqs;
--- 
-2.53.0
-

@@ -22,11 +22,9 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp131.dtsi | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index 97014d2311d2..bd39dd52c0c1 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -1291,6 +1291,13 @@ iwdg2: watchdog@5a002000 {
+@@ -1291,6 +1291,13 @@
  			status = "disabled";
  		};
  
@@ -40,6 +38,3 @@ index 97014d2311d2..bd39dd52c0c1 100644
  		iwdg1: watchdog@5c003000 {
  			compatible = "st,stm32mp1-iwdg";
  			reg = <0x5c003000 0x400>;
--- 
-2.53.0
-

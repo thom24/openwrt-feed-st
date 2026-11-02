@@ -14,8 +14,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/mailbox/Kconfig | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/mailbox/Kconfig b/drivers/mailbox/Kconfig
-index 29f16f220384..719b25c766f9 100644
 --- a/drivers/mailbox/Kconfig
 +++ b/drivers/mailbox/Kconfig
 @@ -152,7 +152,7 @@ config STI_MBOX
@@ -36,6 +34,3 @@ index 29f16f220384..719b25c766f9 100644
  	  with hardware for Inter-Processor Communication Controller (IPCC)
  	  between processors. Say Y here if you want to have this support.
  
--- 
-2.53.0
-

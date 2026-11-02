@@ -18,11 +18,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/stm/ltdc.h |  4 +++
  2 files changed, 77 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-index 7862216358e7..006e05393fe9 100644
 --- a/drivers/gpu/drm/stm/ltdc.c
 +++ b/drivers/gpu/drm/stm/ltdc.c
-@@ -2067,8 +2067,13 @@ static int ltdc_encoder_init(struct drm_device *ddev, struct drm_bridge *bridge)
+@@ -2067,8 +2067,13 @@ static int ltdc_encoder_init(struct drm_
  static int ltdc_get_caps(struct drm_device *ddev)
  {
  	struct ltdc_device *ldev = ddev->dev_private;
@@ -36,7 +34,7 @@ index 7862216358e7..006e05393fe9 100644
  
  	/*
  	 * at least 1 layer must be managed & the number of layers
-@@ -2078,6 +2083,59 @@ static int ltdc_get_caps(struct drm_device *ddev)
+@@ -2078,6 +2083,59 @@ static int ltdc_get_caps(struct drm_devi
  
  	ldev->caps.nb_layers = clamp((int)lcr, 1, LTDC_MAX_LAYER);
  
@@ -96,7 +94,7 @@ index 7862216358e7..006e05393fe9 100644
  	/* set data bus width */
  	regmap_read(ldev->regmap, LTDC_GC2R, &gc2r);
  	bus_width_log2 = (gc2r & GC2R_BW) >> 4;
-@@ -2157,7 +2215,7 @@ static int ltdc_get_caps(struct drm_device *ddev)
+@@ -2157,7 +2215,7 @@ static int ltdc_get_caps(struct drm_devi
  			ldev->caps.crtc_rotation = false;
  		ldev->caps.fifo_threshold = true;
  
@@ -105,7 +103,7 @@ index 7862216358e7..006e05393fe9 100644
  			/* read 1st register of layer's configuration */
  			regmap_read(ldev->regmap, LTDC_L1C1R + i * LAY_OFS, &lxc1r);
  
-@@ -2166,8 +2224,17 @@ static int ltdc_get_caps(struct drm_device *ddev)
+@@ -2166,8 +2224,17 @@ static int ltdc_get_caps(struct drm_devi
  			else
  				ldev->caps.plane_scaling[i] = false;
  		}
@@ -123,7 +121,7 @@ index 7862216358e7..006e05393fe9 100644
  		return -ENODEV;
  	}
  
-@@ -2391,11 +2458,16 @@ int ltdc_load(struct drm_device *ddev)
+@@ -2391,11 +2458,16 @@ err:
  
  void ltdc_unload(struct drm_device *ddev)
  {
@@ -140,8 +138,6 @@ index 7862216358e7..006e05393fe9 100644
  	pm_runtime_disable(ddev->dev);
  }
  
-diff --git a/drivers/gpu/drm/stm/ltdc.h b/drivers/gpu/drm/stm/ltdc.h
-index 37b7ce7afcec..86473a2235a1 100644
 --- a/drivers/gpu/drm/stm/ltdc.h
 +++ b/drivers/gpu/drm/stm/ltdc.h
 @@ -12,6 +12,9 @@
@@ -162,6 +158,3 @@ index 37b7ce7afcec..86473a2235a1 100644
  	bool plane_enabled[LTDC_MAX_LAYER];
  };
  
--- 
-2.53.0
-

@@ -16,8 +16,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  Documentation/devicetree/bindings/net/stm32-dwmac.yaml | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
-index 3b4f72a09308..88c63d08a426 100644
 --- a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
 +++ b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
 @@ -130,6 +130,8 @@ properties:
@@ -29,6 +27,3 @@ index 3b4f72a09308..88c63d08a426 100644
  required:
    - compatible
    - clocks
--- 
-2.53.0
-

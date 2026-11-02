@@ -16,8 +16,6 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  Documentation/devicetree/bindings/sound/st,stm32-sai.yaml | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/sound/st,stm32-sai.yaml b/Documentation/devicetree/bindings/sound/st,stm32-sai.yaml
-index 551edf39e766..7b1e4cb0b7e3 100644
 --- a/Documentation/devicetree/bindings/sound/st,stm32-sai.yaml
 +++ b/Documentation/devicetree/bindings/sound/st,stm32-sai.yaml
 @@ -129,6 +129,9 @@ patternProperties:
@@ -30,6 +28,3 @@ index 551edf39e766..7b1e4cb0b7e3 100644
        port:
          $ref: audio-graph-port.yaml#
          unevaluatedProperties: false
--- 
-2.53.0
-

@@ -28,8 +28,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  Documentation/devicetree/bindings/rng/st,stm32-rng.yaml | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml b/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml
-index 15c97c574064..62b35440ab1b 100644
 --- a/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml
 +++ b/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml
 @@ -53,6 +53,8 @@ properties:
@@ -41,6 +39,3 @@ index 15c97c574064..62b35440ab1b 100644
  required:
    - compatible
    - reg
--- 
-2.53.0
-

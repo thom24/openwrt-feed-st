@@ -23,11 +23,9 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  arch/arm/boot/dts/st/stm32mp157f-ev1.dts         | 15 +++++++++++++++
  3 files changed, 45 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
-index eb490d4160b5..fde8b51709ac 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
-@@ -87,6 +87,14 @@ &dcmi {
+@@ -87,6 +87,14 @@
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&dcmi_pins_a>;
  	pinctrl-1 = <&dcmi_sleep_pins_a>;
@@ -42,7 +40,7 @@ index eb490d4160b5..fde8b51709ac 100644
  
  	port {
  		dcmi_0: endpoint {
-@@ -349,6 +357,13 @@ &spi1 {
+@@ -349,6 +357,13 @@
  	status = "disabled";
  };
  
@@ -56,11 +54,9 @@ index eb490d4160b5..fde8b51709ac 100644
  &timers2 {
  	/* spare dmas for other usage (un-delete to enable pwm capture) */
  	/delete-property/dmas;
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-index 95b26eff8f51..f7574e9f5b2c 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-@@ -87,6 +87,14 @@ &dcmi {
+@@ -87,6 +87,14 @@
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&dcmi_pins_a>;
  	pinctrl-1 = <&dcmi_sleep_pins_a>;
@@ -75,7 +71,7 @@ index 95b26eff8f51..f7574e9f5b2c 100644
  
  	port {
  		dcmi_0: endpoint {
-@@ -350,6 +358,13 @@ &spi1 {
+@@ -350,6 +358,13 @@
  	status = "disabled";
  };
  
@@ -89,11 +85,9 @@ index 95b26eff8f51..f7574e9f5b2c 100644
  &timers2 {
  	/* spare dmas for other usage (un-delete to enable pwm capture) */
  	/delete-property/dmas;
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-index 4c0f592c2d57..fabb384fb61a 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-@@ -87,6 +87,14 @@ &dcmi {
+@@ -87,6 +87,14 @@
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&dcmi_pins_a>;
  	pinctrl-1 = <&dcmi_sleep_pins_a>;
@@ -108,7 +102,7 @@ index 4c0f592c2d57..fabb384fb61a 100644
  
  	port {
  		dcmi_0: endpoint {
-@@ -350,6 +358,13 @@ &spi1 {
+@@ -350,6 +358,13 @@
  	status = "disabled";
  };
  
@@ -122,6 +116,3 @@ index 4c0f592c2d57..fabb384fb61a 100644
  &timers2 {
  	/* spare dmas for other usage (un-delete to enable pwm capture) */
  	/delete-property/dmas;
--- 
-2.53.0
-

@@ -27,11 +27,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/input/touchscreen/edt-ft5x06.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/input/touchscreen/edt-ft5x06.c b/drivers/input/touchscreen/edt-ft5x06.c
-index f288e521d427..1ef02dd9038e 100644
 --- a/drivers/input/touchscreen/edt-ft5x06.c
 +++ b/drivers/input/touchscreen/edt-ft5x06.c
-@@ -1300,7 +1300,7 @@ static int edt_ft5x06_ts_probe(struct i2c_client *client)
+@@ -1300,7 +1300,7 @@ static int edt_ft5x06_ts_probe(struct i2
  
  	error = edt_ft5x06_ts_identify(client, tsdata);
  	if (error) {
@@ -40,6 +38,3 @@ index f288e521d427..1ef02dd9038e 100644
  		return error;
  	}
  
--- 
-2.53.0
-

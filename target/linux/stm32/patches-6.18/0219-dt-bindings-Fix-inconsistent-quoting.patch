@@ -53,8 +53,6 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  .../soc/tegra/nvidia,tegra20-pmc.yaml         | 12 +++++------
  23 files changed, 96 insertions(+), 95 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/altera/socfpga-clk-manager.yaml b/Documentation/devicetree/bindings/arm/altera/socfpga-clk-manager.yaml
-index a758f4bb2bb3..4683bd1293fa 100644
 --- a/Documentation/devicetree/bindings/arm/altera/socfpga-clk-manager.yaml
 +++ b/Documentation/devicetree/bindings/arm/altera/socfpga-clk-manager.yaml
 @@ -27,17 +27,17 @@ properties:
@@ -120,8 +118,6 @@ index a758f4bb2bb3..4683bd1293fa 100644
          const: 0
  
        clk-gate:
-diff --git a/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml b/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml
-index a9ba21144a56..13bb616249a1 100644
 --- a/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml
 +++ b/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml
 @@ -37,7 +37,7 @@ properties:
@@ -160,8 +156,6 @@ index a9ba21144a56..13bb616249a1 100644
  
  additionalProperties: false
  
-diff --git a/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml b/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
-index bee2dd4b29bf..73cccc0df424 100644
 --- a/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
 +++ b/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
 @@ -39,11 +39,11 @@ properties:
@@ -187,8 +181,6 @@ index bee2dd4b29bf..73cccc0df424 100644
  
  additionalProperties: false
  
-diff --git a/Documentation/devicetree/bindings/gpio/gpio-mxs.yaml b/Documentation/devicetree/bindings/gpio/gpio-mxs.yaml
-index aaf97124803f..fed1b06495ad 100644
 --- a/Documentation/devicetree/bindings/gpio/gpio-mxs.yaml
 +++ b/Documentation/devicetree/bindings/gpio/gpio-mxs.yaml
 @@ -28,6 +28,7 @@ properties:
@@ -241,8 +233,6 @@ index aaf97124803f..fed1b06495ad 100644
        - gpio-controller
  
      additionalProperties: false
-diff --git a/Documentation/devicetree/bindings/gpio/snps,dw-apb-gpio.yaml b/Documentation/devicetree/bindings/gpio/snps,dw-apb-gpio.yaml
-index ab2afc0e4153..bba6f5b6606f 100644
 --- a/Documentation/devicetree/bindings/gpio/snps,dw-apb-gpio.yaml
 +++ b/Documentation/devicetree/bindings/gpio/snps,dw-apb-gpio.yaml
 @@ -111,8 +111,8 @@ additionalProperties: false
@@ -256,8 +246,6 @@ index ab2afc0e4153..bba6f5b6606f 100644
  
  examples:
    - |
-diff --git a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
-index 312febeeb3bb..ee0b558bb866 100644
 --- a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
 +++ b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
 @@ -88,7 +88,7 @@ properties:
@@ -350,8 +338,6 @@ index 312febeeb3bb..ee0b558bb866 100644
  
  examples:
    - |
-diff --git a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
-index 615ed103b7e6..f40dc9048327 100644
 --- a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
 +++ b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
 @@ -187,10 +187,10 @@ allOf:
@@ -406,8 +392,6 @@ index 615ed103b7e6..f40dc9048327 100644
  
    - if:
        properties:
-diff --git a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
-index fe83b5cb1278..04d6473d666f 100644
 --- a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
 +++ b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
 @@ -142,7 +142,7 @@ patternProperties:
@@ -419,8 +403,6 @@ index fe83b5cb1278..04d6473d666f 100644
        - xlnx,ipi-id
  
  required:
-diff --git a/Documentation/devicetree/bindings/mfd/aspeed-lpc.yaml b/Documentation/devicetree/bindings/mfd/aspeed-lpc.yaml
-index f329223cec07..cbc3a2485a2f 100644
 --- a/Documentation/devicetree/bindings/mfd/aspeed-lpc.yaml
 +++ b/Documentation/devicetree/bindings/mfd/aspeed-lpc.yaml
 @@ -48,16 +48,16 @@ properties:
@@ -480,8 +462,6 @@ index f329223cec07..cbc3a2485a2f 100644
    - ranges
  
  additionalProperties:
-diff --git a/Documentation/devicetree/bindings/mfd/ti,twl.yaml b/Documentation/devicetree/bindings/mfd/ti,twl.yaml
-index 776b04e182cb..1611b1581a8e 100644
 --- a/Documentation/devicetree/bindings/mfd/ti,twl.yaml
 +++ b/Documentation/devicetree/bindings/mfd/ti,twl.yaml
 @@ -400,7 +400,7 @@ properties:
@@ -502,8 +482,6 @@ index 776b04e182cb..1611b1581a8e 100644
  
  examples:
    - |
-diff --git a/Documentation/devicetree/bindings/net/ethernet-switch.yaml b/Documentation/devicetree/bindings/net/ethernet-switch.yaml
-index b3b7e1a1b127..6bb68f7dbc7f 100644
 --- a/Documentation/devicetree/bindings/net/ethernet-switch.yaml
 +++ b/Documentation/devicetree/bindings/net/ethernet-switch.yaml
 @@ -35,14 +35,14 @@ allOf:
@@ -553,8 +531,6 @@ index b3b7e1a1b127..6bb68f7dbc7f 100644
              description: Ethernet switch ports
              $ref: ethernet-switch-port.yaml#
              unevaluatedProperties: false
-diff --git a/Documentation/devicetree/bindings/pci/plda,xpressrich3-axi-common.yaml b/Documentation/devicetree/bindings/pci/plda,xpressrich3-axi-common.yaml
-index 039eecdbd6aa..fe2e8beb5bab 100644
 --- a/Documentation/devicetree/bindings/pci/plda,xpressrich3-axi-common.yaml
 +++ b/Documentation/devicetree/bindings/pci/plda,xpressrich3-axi-common.yaml
 @@ -72,7 +72,7 @@ required:
@@ -566,8 +542,6 @@ index 039eecdbd6aa..fe2e8beb5bab 100644
    - interrupt-map-mask
    - interrupt-map
  
-diff --git a/Documentation/devicetree/bindings/phy/motorola,cpcap-usb-phy.yaml b/Documentation/devicetree/bindings/phy/motorola,cpcap-usb-phy.yaml
-index 0febd04a61f4..dd345cbd0a0b 100644
 --- a/Documentation/devicetree/bindings/phy/motorola,cpcap-usb-phy.yaml
 +++ b/Documentation/devicetree/bindings/phy/motorola,cpcap-usb-phy.yaml
 @@ -67,8 +67,8 @@ properties:
@@ -581,8 +555,6 @@ index 0febd04a61f4..dd345cbd0a0b 100644
  
  required:
    - compatible
-diff --git a/Documentation/devicetree/bindings/pinctrl/microchip,sparx5-sgpio.yaml b/Documentation/devicetree/bindings/pinctrl/microchip,sparx5-sgpio.yaml
-index 0df4e114fdd6..fa47732d7cef 100644
 --- a/Documentation/devicetree/bindings/pinctrl/microchip,sparx5-sgpio.yaml
 +++ b/Documentation/devicetree/bindings/pinctrl/microchip,sparx5-sgpio.yaml
 @@ -18,7 +18,7 @@ description: |
@@ -627,8 +599,6 @@ index 0df4e114fdd6..fa47732d7cef 100644
  
  examples:
    - |
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
-index 5e6dfcc3fe9b..6632bcd037ba 100644
 --- a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
 +++ b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
 @@ -424,13 +424,13 @@ allOf:
@@ -658,8 +628,6 @@ index 5e6dfcc3fe9b..6632bcd037ba 100644
  
        function:
          items:
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
-index 9364ae05f3e6..daf4c1c03712 100644
 --- a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
 +++ b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
 @@ -74,10 +74,10 @@ required:
@@ -684,8 +652,6 @@ index 9364ae05f3e6..daf4c1c03712 100644
  
        function:
          items:
-diff --git a/Documentation/devicetree/bindings/pinctrl/renesas,pfc.yaml b/Documentation/devicetree/bindings/pinctrl/renesas,pfc.yaml
-index cfe004573366..075f3abdfbec 100644
 --- a/Documentation/devicetree/bindings/pinctrl/renesas,pfc.yaml
 +++ b/Documentation/devicetree/bindings/pinctrl/renesas,pfc.yaml
 @@ -129,7 +129,7 @@ additionalProperties:
@@ -697,8 +663,6 @@ index cfe004573366..075f3abdfbec 100644
  
  examples:
    - |
-diff --git a/Documentation/devicetree/bindings/pinctrl/renesas,rza1-ports.yaml b/Documentation/devicetree/bindings/pinctrl/renesas,rza1-ports.yaml
-index 2bd7d47d0fdb..737eb4e14090 100644
 --- a/Documentation/devicetree/bindings/pinctrl/renesas,rza1-ports.yaml
 +++ b/Documentation/devicetree/bindings/pinctrl/renesas,rza1-ports.yaml
 @@ -118,7 +118,7 @@ additionalProperties:
@@ -710,8 +674,6 @@ index 2bd7d47d0fdb..737eb4e14090 100644
  
  examples:
    - |
-diff --git a/Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml
-index 5156d54b240b..00c05243b9a4 100644
 --- a/Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml
 +++ b/Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml
 @@ -135,7 +135,7 @@ additionalProperties:
@@ -723,8 +685,6 @@ index 5156d54b240b..00c05243b9a4 100644
  
  allOf:
    - $ref: pinctrl.yaml#
-diff --git a/Documentation/devicetree/bindings/pinctrl/renesas,rzv2m-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/renesas,rzv2m-pinctrl.yaml
-index 5fa5d31f8866..88b2fa5e684d 100644
 --- a/Documentation/devicetree/bindings/pinctrl/renesas,rzv2m-pinctrl.yaml
 +++ b/Documentation/devicetree/bindings/pinctrl/renesas,rzv2m-pinctrl.yaml
 @@ -88,7 +88,7 @@ additionalProperties:
@@ -736,8 +696,6 @@ index 5fa5d31f8866..88b2fa5e684d 100644
  
  allOf:
    - $ref: pinctrl.yaml#
-diff --git a/Documentation/devicetree/bindings/power/renesas,sysc-rmobile.yaml b/Documentation/devicetree/bindings/power/renesas,sysc-rmobile.yaml
-index fba6914ec40d..948a9da111df 100644
 --- a/Documentation/devicetree/bindings/power/renesas,sysc-rmobile.yaml
 +++ b/Documentation/devicetree/bindings/power/renesas,sysc-rmobile.yaml
 @@ -45,7 +45,7 @@ properties:
@@ -758,8 +716,6 @@ index fba6914ec40d..948a9da111df 100644
  
  examples:
    - |
-diff --git a/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml b/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
-index 2c7275c4503b..abf1adca0773 100644
 --- a/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
 +++ b/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
 @@ -57,7 +57,7 @@ properties:
@@ -798,8 +754,6 @@ index 2c7275c4503b..abf1adca0773 100644
  
      additionalProperties: false
  
-diff --git a/Documentation/devicetree/bindings/soc/tegra/nvidia,tegra20-pmc.yaml b/Documentation/devicetree/bindings/soc/tegra/nvidia,tegra20-pmc.yaml
-index 7140c312d898..f516960dbbef 100644
 --- a/Documentation/devicetree/bindings/soc/tegra/nvidia,tegra20-pmc.yaml
 +++ b/Documentation/devicetree/bindings/soc/tegra/nvidia,tegra20-pmc.yaml
 @@ -133,12 +133,12 @@ properties:
@@ -839,6 +793,3 @@ index 7140c312d898..f516960dbbef 100644
  
  examples:
    - |
--- 
-2.53.0
-

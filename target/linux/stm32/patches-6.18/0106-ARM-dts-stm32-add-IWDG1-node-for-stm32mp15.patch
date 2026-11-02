@@ -22,11 +22,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp151.dtsi | 9 +++++++++
  1 file changed, 9 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
-index ead2c0f0e69b..92346c32ece5 100644
 --- a/arch/arm/boot/dts/st/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
-@@ -416,6 +416,15 @@ usbphyc_port1: usb-phy@1 {
+@@ -416,6 +416,15 @@
  			};
  		};
  
@@ -42,6 +40,3 @@ index ead2c0f0e69b..92346c32ece5 100644
  		rtc: rtc@5c004000 {
  			compatible = "st,stm32mp1-rtc";
  			reg = <0x5c004000 0x400>;
--- 
-2.53.0
-

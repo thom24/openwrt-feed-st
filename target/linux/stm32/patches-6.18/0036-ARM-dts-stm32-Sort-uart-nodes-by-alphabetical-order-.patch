@@ -11,11 +11,9 @@ Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
  .../boot/dts/st/stm32mp13xx-dhcor-som.dtsi    | 56 +++++++++----------
  1 file changed, 28 insertions(+), 28 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp13xx-dhcor-som.dtsi b/arch/arm/boot/dts/st/stm32mp13xx-dhcor-som.dtsi
-index c18156807027..54ece71085c1 100644
 --- a/arch/arm/boot/dts/st/stm32mp13xx-dhcor-som.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp13xx-dhcor-som.dtsi
-@@ -241,34 +241,6 @@ flash0: flash@0 {
+@@ -241,34 +241,6 @@
  	};
  };
  
@@ -50,7 +48,7 @@ index c18156807027..54ece71085c1 100644
  /* SDIO WiFi */
  &sdmmc1 {
  	pinctrl-names = "default", "opendrain", "sleep";
-@@ -312,3 +284,31 @@ &sdmmc2 {
+@@ -312,3 +284,31 @@
  	vqmmc-supply = <&vdd>;
  	status = "okay";
  };
@@ -82,6 +80,3 @@ index c18156807027..54ece71085c1 100644
 +		shutdown-gpios = <&gpioi 2 GPIO_ACTIVE_HIGH>;
 +	};
 +};
--- 
-2.53.0
-

@@ -37,11 +37,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/mfd/stm32-lptimer.c | 39 +++++++++++++++++++++++++++++++------
  1 file changed, 33 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/mfd/stm32-lptimer.c b/drivers/mfd/stm32-lptimer.c
-index a15572347131..024206b6f11b 100644
 --- a/drivers/mfd/stm32-lptimer.c
 +++ b/drivers/mfd/stm32-lptimer.c
-@@ -95,28 +95,54 @@ static int stm32_lptimer_probe(struct platform_device *pdev)
+@@ -95,28 +95,54 @@ static int stm32_lptimer_probe(struct pl
  	if (IS_ERR(mmio))
  		return PTR_ERR(mmio);
  
@@ -102,7 +100,7 @@ index a15572347131..024206b6f11b 100644
  static const struct of_device_id stm32_lptimer_of_match[] = {
  	{ .compatible = "st,stm32-lptimer", },
  	{},
-@@ -128,6 +154,7 @@ static struct platform_driver stm32_lptimer_driver = {
+@@ -128,6 +154,7 @@ static struct platform_driver stm32_lpti
  	.driver = {
  		.name = "stm32-lptimer",
  		.of_match_table = stm32_lptimer_of_match,
@@ -110,6 +108,3 @@ index a15572347131..024206b6f11b 100644
  	},
  };
  module_platform_driver(stm32_lptimer_driver);
--- 
-2.53.0
-

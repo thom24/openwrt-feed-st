@@ -33,11 +33,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 24 ++++++++++++++++++++++++
  1 file changed, 24 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index e0540d699b59..8b8675e6bef1 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -206,6 +206,30 @@ timer {
+@@ -206,6 +206,30 @@
  		arm,no-tick-in-suspend;
  	};
  
@@ -68,6 +66,3 @@ index e0540d699b59..8b8675e6bef1 100644
  	soc@0 {
  		compatible = "simple-bus";
  		ranges = <0x0 0x0 0x0 0x0 0x80000000>;
--- 
-2.53.0
-

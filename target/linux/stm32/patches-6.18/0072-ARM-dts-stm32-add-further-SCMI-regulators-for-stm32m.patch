@@ -20,11 +20,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp135f-dk.dts | 12 ++++++++++++
  1 file changed, 12 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index 074945d381a5..984f49d635bb 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -439,6 +439,18 @@ &scmi_clk {
+@@ -439,6 +439,18 @@
  };
  
  &scmi_regu {
@@ -43,6 +41,3 @@ index 074945d381a5..984f49d635bb 100644
  	scmi_vdd_adc: regulator@a {
  		reg = <VOLTD_SCMI_STPMIC1_LDO1>;
  		regulator-name = "vdd_adc";
--- 
-2.53.0
-

@@ -19,8 +19,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  .../bindings/interrupt-controller/st,stm32-exti.yaml         | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml b/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml
-index b4bc1d4132ef..a17c3c19fb24 100644
 --- a/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml
 +++ b/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml
 @@ -47,6 +47,9 @@ properties:
@@ -49,6 +47,3 @@ index b4bc1d4132ef..a17c3c19fb24 100644
        required:
          - interrupts
  
--- 
-2.53.0
-

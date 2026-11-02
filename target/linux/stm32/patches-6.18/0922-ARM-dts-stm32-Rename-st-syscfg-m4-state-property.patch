@@ -19,11 +19,9 @@ Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
  arch/arm/boot/dts/st/stm32mp151.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
-index 373bac6fd0e4..e84e126112a2 100644
 --- a/arch/arm/boot/dts/st/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
-@@ -2404,7 +2404,7 @@ m4_rproc: m4@10000000 {
+@@ -2404,7 +2404,7 @@
  			st,syscfg-holdboot = <&rcc 0x10C 0x1>;
  			st,syscfg-pdds = <&pwr_mcu 0x0 0x1>;
  			st,syscfg-rsc-tbl = <&tamp 0x144 0xFFFFFFFF>;
@@ -32,6 +30,3 @@ index 373bac6fd0e4..e84e126112a2 100644
  			status = "disabled";
  		};
  	};
--- 
-2.53.0
-

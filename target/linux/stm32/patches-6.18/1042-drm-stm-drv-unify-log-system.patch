@@ -11,11 +11,9 @@ Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
  drivers/gpu/drm/stm/drv.c | 12 ++----------
  1 file changed, 2 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/drv.c b/drivers/gpu/drm/stm/drv.c
-index ab00d1a6140c..2baedd3e2077 100644
 --- a/drivers/gpu/drm/stm/drv.c
 +++ b/drivers/gpu/drm/stm/drv.c
-@@ -76,8 +76,6 @@ static int drv_load(struct drm_device *ddev)
+@@ -76,8 +76,6 @@ static int drv_load(struct drm_device *d
  	struct ltdc_device *ldev;
  	int ret;
  
@@ -24,7 +22,7 @@ index ab00d1a6140c..2baedd3e2077 100644
  	ldev = drmm_kzalloc(ddev, sizeof(*ldev), GFP_KERNEL);
  	if (!ldev)
  		return -ENOMEM;
-@@ -114,8 +112,6 @@ static int drv_load(struct drm_device *ddev)
+@@ -114,8 +112,6 @@ static int drv_load(struct drm_device *d
  
  static void drv_unload(struct drm_device *ddev)
  {
@@ -33,7 +31,7 @@ index ab00d1a6140c..2baedd3e2077 100644
  	drm_kms_helper_poll_fini(ddev);
  	drm_atomic_helper_shutdown(ddev);
  	ltdc_unload(ddev);
-@@ -162,7 +158,7 @@ static __maybe_unused int drv_runtime_suspend(struct device *dev)
+@@ -162,7 +158,7 @@ static __maybe_unused int drv_runtime_su
  {
  	struct drm_device *ddev = dev_get_drvdata(dev);
  
@@ -42,7 +40,7 @@ index ab00d1a6140c..2baedd3e2077 100644
  	ltdc_suspend(ddev);
  
  	return 0;
-@@ -172,7 +168,7 @@ static __maybe_unused int drv_runtime_resume(struct device *dev)
+@@ -172,7 +168,7 @@ static __maybe_unused int drv_runtime_re
  {
  	struct drm_device *ddev = dev_get_drvdata(dev);
  
@@ -51,7 +49,7 @@ index ab00d1a6140c..2baedd3e2077 100644
  	return ltdc_resume(ddev);
  }
  
-@@ -188,8 +184,6 @@ static int stm_drm_platform_probe(struct platform_device *pdev)
+@@ -188,8 +184,6 @@ static int stm_drm_platform_probe(struct
  	struct drm_device *ddev;
  	int ret;
  
@@ -60,7 +58,7 @@ index ab00d1a6140c..2baedd3e2077 100644
  	ret = aperture_remove_all_conflicting_devices(drv_driver.name);
  	if (ret)
  		return ret;
-@@ -224,8 +218,6 @@ static void stm_drm_platform_remove(struct platform_device *pdev)
+@@ -224,8 +218,6 @@ static void stm_drm_platform_remove(stru
  {
  	struct drm_device *ddev = platform_get_drvdata(pdev);
  
@@ -69,6 +67,3 @@ index ab00d1a6140c..2baedd3e2077 100644
  	drm_dev_unregister(ddev);
  	drv_unload(ddev);
  	drm_dev_put(ddev);
--- 
-2.53.0
-

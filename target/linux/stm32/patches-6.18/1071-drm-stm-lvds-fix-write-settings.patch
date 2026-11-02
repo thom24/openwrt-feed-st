@@ -15,11 +15,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/stm/lvds.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
-index 8383f48a4bef..bf241e19468c 100644
 --- a/drivers/gpu/drm/stm/lvds.c
 +++ b/drivers/gpu/drm/stm/lvds.c
-@@ -868,7 +868,7 @@ static void lvds_config_mode(struct stm_lvds *lvds)
+@@ -868,7 +868,7 @@ static void lvds_config_mode(struct stm_
  	}
  
  	/* Write config to registers */
@@ -28,6 +26,3 @@ index 8383f48a4bef..bf241e19468c 100644
  	lvds_write(lvds, LVDS_CDL1CR, lvds_cdl1cr);
  	lvds_write(lvds, LVDS_CDL2CR, lvds_cdl2cr);
  }
--- 
-2.53.0
-

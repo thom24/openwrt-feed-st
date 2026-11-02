@@ -19,8 +19,6 @@ Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
  3 files changed, 312 insertions(+)
  create mode 100644 drivers/mailbox/mailbox-client_cdev.c
 
-diff --git a/drivers/mailbox/Kconfig b/drivers/mailbox/Kconfig
-index 719b25c766f9..7c42fee68adb 100644
 --- a/drivers/mailbox/Kconfig
 +++ b/drivers/mailbox/Kconfig
 @@ -391,3 +391,13 @@ config RISCV_SBI_MPXY_MBOX
@@ -38,8 +36,6 @@ index 719b25c766f9..7c42fee68adb 100644
 +
 +	  It's safe to say N if you don't want to use this interface.
 \ No newline at end of file
-diff --git a/drivers/mailbox/Makefile b/drivers/mailbox/Makefile
-index 81820a4f5528..5370839d2b41 100644
 --- a/drivers/mailbox/Makefile
 +++ b/drivers/mailbox/Makefile
 @@ -82,3 +82,5 @@ obj-$(CONFIG_CIX_MBOX)	+= cix-mailbox.o
@@ -49,9 +45,6 @@ index 81820a4f5528..5370839d2b41 100644
 +
 +obj-$(CONFIG_MAILBOX_CDEV)	+= mailbox-client_cdev.o
 \ No newline at end of file
-diff --git a/drivers/mailbox/mailbox-client_cdev.c b/drivers/mailbox/mailbox-client_cdev.c
-new file mode 100644
-index 000000000000..876980ae1da0
 --- /dev/null
 +++ b/drivers/mailbox/mailbox-client_cdev.c
 @@ -0,0 +1,300 @@
@@ -355,6 +348,3 @@ index 000000000000..876980ae1da0
 +
 +MODULE_LICENSE("GPL");
 +MODULE_DESCRIPTION("A simple char driver for communication using a mailbox and a shared memory");
--- 
-2.53.0
-

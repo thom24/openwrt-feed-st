@@ -21,8 +21,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  Documentation/devicetree/bindings/mailbox/st,stm32-ipcc.yaml | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mailbox/st,stm32-ipcc.yaml b/Documentation/devicetree/bindings/mailbox/st,stm32-ipcc.yaml
-index 134fd223a02b..453911c20365 100644
 --- a/Documentation/devicetree/bindings/mailbox/st,stm32-ipcc.yaml
 +++ b/Documentation/devicetree/bindings/mailbox/st,stm32-ipcc.yaml
 @@ -26,6 +26,9 @@ properties:
@@ -35,6 +33,3 @@ index 134fd223a02b..453911c20365 100644
    interrupts:
      items:
        - description: rx channel occupied
--- 
-2.53.0
-

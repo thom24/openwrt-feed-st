@@ -17,11 +17,9 @@ Change-Id: I78c5b11685c393962379f7a92573d8ede2e5cffe
  drivers/usb/dwc2/platform.c | 36 ++++++++++++++++++++++--------------
  3 files changed, 37 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index e02e230319f0..b8ab5f08a2b2 100644
 --- a/drivers/usb/dwc2/core.h
 +++ b/drivers/usb/dwc2/core.h
-@@ -1437,6 +1437,7 @@ int stm32mp2_usb2phy_usb_chg_psy_register(struct dwc2_hsotg *hsotg);
+@@ -1437,6 +1437,7 @@ int stm32mp2_usb2phy_usb_chg_psy_registe
  #if IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) || \
  	IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)
  int dwc2_hsotg_remove(struct dwc2_hsotg *hsotg);
@@ -29,7 +27,7 @@ index e02e230319f0..b8ab5f08a2b2 100644
  int dwc2_hsotg_suspend(struct dwc2_hsotg *dwc2);
  int dwc2_hsotg_resume(struct dwc2_hsotg *dwc2);
  int dwc2_gadget_init(struct dwc2_hsotg *hsotg);
-@@ -1472,6 +1473,8 @@ static inline void dwc2_clear_fifo_map(struct dwc2_hsotg *hsotg)
+@@ -1472,6 +1473,8 @@ static inline void dwc2_clear_fifo_map(s
  #else
  static inline int dwc2_hsotg_remove(struct dwc2_hsotg *dwc2)
  { return 0; }
@@ -38,11 +36,9 @@ index e02e230319f0..b8ab5f08a2b2 100644
  static inline int dwc2_hsotg_suspend(struct dwc2_hsotg *dwc2)
  { return 0; }
  static inline int dwc2_hsotg_resume(struct dwc2_hsotg *dwc2)
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index aa69476ebcc2..ad1edd05b289 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -5246,6 +5246,18 @@ int dwc2_hsotg_remove(struct dwc2_hsotg *hsotg)
+@@ -5246,6 +5246,18 @@ int dwc2_hsotg_remove(struct dwc2_hsotg
  	return 0;
  }
  
@@ -61,11 +57,9 @@ index aa69476ebcc2..ad1edd05b289 100644
  int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
  {
  	unsigned long flags;
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index 278cc1b41478..e73800f171c0 100644
 --- a/drivers/usb/dwc2/platform.c
 +++ b/drivers/usb/dwc2/platform.c
-@@ -950,19 +950,26 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+@@ -950,20 +950,27 @@ static int __maybe_unused dwc2_suspend(s
  	if (is_device_mode) {
  		/*
  		 * Handle the case when bus has been suspended prior to platform suspend.
@@ -85,25 +79,26 @@ index 278cc1b41478..e73800f171c0 100644
 -			ret = dwc2_exit_partial_power_down(dwc2, 0, true);
 -			if (ret)
 -				dev_err(dwc2->dev, "exit power_down failed\n");
--		}
 +		if (!dwc2_is_device_connected(dwc2) || dwc2_gadget_can_poweroff_phy(dwc2)) {
 +			if (dwc2->in_ppd) {
 +				ret = dwc2_exit_partial_power_down(dwc2, 0, true);
 +				if (ret)
 +					dev_err(dwc2->dev, "exit power_down failed\n");
 +			}
++
++			if (dwc2->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
++			    dwc2->bus_suspended && !dwc2->params.no_clock_gating)
++				dwc2_gadget_exit_clock_gating(dwc2, 0);
+ 		}
  
 -		if (dwc2->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
 -		    dwc2->bus_suspended && !dwc2->params.no_clock_gating)
 -			dwc2_gadget_exit_clock_gating(dwc2, 0);
-+			if (dwc2->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
-+			    dwc2->bus_suspended && !dwc2->params.no_clock_gating)
-+				dwc2_gadget_exit_clock_gating(dwc2, 0);
-+		}
- 
+-
  		ret = dwc2_hsotg_suspend(dwc2);
  		if (ret)
-@@ -972,12 +979,13 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+ 			return ret;
+@@ -972,12 +979,13 @@ static int __maybe_unused dwc2_suspend(s
  	dwc2_drd_suspend(dwc2);
  
  	if (dwc2->ll_hw_enabled &&
@@ -119,7 +114,7 @@ index 278cc1b41478..e73800f171c0 100644
  		enable_irq_wake(dwc2->irq);
  
  	return ret;
-@@ -991,7 +999,7 @@ static int __maybe_unused dwc2_resume(struct device *dev)
+@@ -991,7 +999,7 @@ static int __maybe_unused dwc2_resume(st
  	if (!dwc2->ll_hw_enabled)
  		return 0;
  
@@ -128,6 +123,3 @@ index 278cc1b41478..e73800f171c0 100644
  		disable_irq_wake(dwc2->irq);
  
  	if (dwc2->phy_off_for_suspend && dwc2->ll_hw_enabled) {
--- 
-2.53.0
-

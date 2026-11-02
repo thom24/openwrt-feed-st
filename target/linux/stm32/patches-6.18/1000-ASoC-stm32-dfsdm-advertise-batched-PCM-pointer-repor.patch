@@ -27,8 +27,6 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  sound/soc/stm/stm32_adfsdm.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/stm/stm32_adfsdm.c b/sound/soc/stm/stm32_adfsdm.c
-index c914d1c46850..e036c5923753 100644
 --- a/sound/soc/stm/stm32_adfsdm.c
 +++ b/sound/soc/stm/stm32_adfsdm.c
 @@ -44,7 +44,7 @@ struct stm32_adfsdm_priv {
@@ -40,6 +38,3 @@ index c914d1c46850..e036c5923753 100644
  	.formats = SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FMTBIT_S32_LE,
  
  	.channels_min = 1,
--- 
-2.53.0
-

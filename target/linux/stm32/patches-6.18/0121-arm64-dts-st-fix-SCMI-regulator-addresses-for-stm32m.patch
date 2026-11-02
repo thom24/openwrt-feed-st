@@ -23,11 +23,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index 5e773a804a20..5fdbe4717ed8 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -189,7 +189,7 @@ scmi_vddio1: regulator@0 {
+@@ -189,7 +189,7 @@
  		regulator-min-microvolt = <1800000>;
  		regulator-max-microvolt = <3300000>;
  	};
@@ -36,6 +34,3 @@ index 5e773a804a20..5fdbe4717ed8 100644
  		reg = <VOLTD_SCMI_STPMIC2_LDO7>;
  		regulator-name = "vdd_sdcard";
  	};
--- 
-2.53.0
-

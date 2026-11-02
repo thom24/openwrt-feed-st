@@ -21,11 +21,9 @@ Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp157f-ed1.dts | 6 ++++++
  9 files changed, 54 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index e10e7437c88b..70ebbfbf1186 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -167,6 +167,12 @@ channel@12 {
+@@ -167,6 +167,12 @@
  	};
  };
  
@@ -38,11 +36,9 @@ index e10e7437c88b..70ebbfbf1186 100644
  &bsec {
  	bootph-all;
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157a-dk1.dts b/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
-index 03dc11d5feca..cdb4d7fac634 100644
 --- a/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
-@@ -21,6 +21,12 @@ optee@de000000 {
+@@ -21,6 +21,12 @@
  	};
  };
  
@@ -55,11 +51,9 @@ index 03dc11d5feca..cdb4d7fac634 100644
  &cpu0 {
  	clocks = <&scmi_clk CK_SCMI_MPU>;
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
-index 21bf9d477bd2..95581e94cbab 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
-@@ -21,6 +21,12 @@ optee@de000000 {
+@@ -21,6 +21,12 @@
  	};
  };
  
@@ -72,11 +66,9 @@ index 21bf9d477bd2..95581e94cbab 100644
  &cpu0 {
  	clocks = <&scmi_clk CK_SCMI_MPU>;
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1.dts b/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
-index bd29f93edfce..be1868375d3c 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
-@@ -21,6 +21,12 @@ optee@fe000000 {
+@@ -21,6 +21,12 @@
  	};
  };
  
@@ -89,11 +81,9 @@ index bd29f93edfce..be1868375d3c 100644
  &cpu0 {
  	clocks = <&scmi_clk CK_SCMI_MPU>;
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
-index 8c65fac10e49..092c7b6bbdb3 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
-@@ -21,6 +21,12 @@ optee@fe000000 {
+@@ -21,6 +21,12 @@
  	};
  };
  
@@ -106,11 +96,9 @@ index 8c65fac10e49..092c7b6bbdb3 100644
  &cpu0 {
  	clocks = <&scmi_clk CK_SCMI_MPU>;
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-dk1.dts b/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
-index 2baf19973998..11b331314342 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
-@@ -33,6 +33,12 @@ optee@de000000 {
+@@ -33,6 +33,12 @@
  	};
  };
  
@@ -123,11 +111,9 @@ index 2baf19973998..11b331314342 100644
  &cpu0 {
  	clocks = <&scmi_clk CK_SCMI_MPU>;
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
-index 34a5dc1e1af2..4e7aa43f306c 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
-@@ -138,6 +138,12 @@ channel@6 {
+@@ -138,6 +138,12 @@
  	};
  };
  
@@ -140,11 +126,9 @@ index 34a5dc1e1af2..4e7aa43f306c 100644
  &bsec {
  	bootph-all;
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
-index 701bc9ab7a4c..67a1fdbeae00 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
-@@ -39,6 +39,12 @@ wifi_pwrseq: wifi-pwrseq {
+@@ -39,6 +39,12 @@
  	};
  };
  
@@ -157,11 +141,9 @@ index 701bc9ab7a4c..67a1fdbeae00 100644
  &cpu0 {
  	clocks = <&scmi_clk CK_SCMI_MPU>;
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
-index 8a44c0123cc9..57ee633cb229 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
-@@ -138,6 +138,12 @@ channel@6 {
+@@ -138,6 +138,12 @@
  	};
  };
  
@@ -174,6 +156,3 @@ index 8a44c0123cc9..57ee633cb229 100644
  &bsec {
  	bootph-all;
  };
--- 
-2.53.0
-

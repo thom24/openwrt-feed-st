@@ -21,11 +21,9 @@ Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 10 ++++++++++
  1 file changed, 10 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index c23e36ce64d9..01b039709ab3 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -819,6 +819,16 @@ exti2: interrupt-controller@442d0000 {
+@@ -819,6 +819,16 @@
  				<&intc GIC_SPI 204 IRQ_TYPE_LEVEL_HIGH>;
  		};
  
@@ -42,6 +40,3 @@ index c23e36ce64d9..01b039709ab3 100644
  		tamp: tamp@46010000 {
  			compatible = "st,stm32-tamp", "syscon", "simple-mfd";
  			#address-cells = <1>;
--- 
-2.53.0
-

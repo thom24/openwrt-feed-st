@@ -29,11 +29,9 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/pwm/pwm-stm32.c | 13 +++++++++----
  1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/pwm/pwm-stm32.c b/drivers/pwm/pwm-stm32.c
-index 1a8a5554150c..64b14080c745 100644
 --- a/drivers/pwm/pwm-stm32.c
 +++ b/drivers/pwm/pwm-stm32.c
-@@ -390,14 +390,19 @@ static int stm32_pwm_write_waveform(struct pwm_chip *chip,
+@@ -390,14 +390,19 @@ static int stm32_pwm_write_waveform(stru
  			if (ret)
  				return ret;
  
@@ -57,6 +55,3 @@ index 1a8a5554150c..64b14080c745 100644
  		}
  
  	} else {
--- 
-2.53.0
-

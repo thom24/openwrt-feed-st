@@ -12,8 +12,6 @@ Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
  .../net/ethernet/stmicro/stmmac/dwmac-stm32.c | 51 ++++++++++++++++++-
  1 file changed, 50 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
-index 6c179911ef3f..c006b657a209 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
 @@ -14,6 +14,7 @@
@@ -32,7 +30,7 @@ index 6c179911ef3f..c006b657a209 100644
  	u32 speed;
  	const struct stm32_ops *ops;
  	struct device *dev;
-@@ -419,6 +421,16 @@ static int stm32_dwmac_parse_data(struct stm32_dwmac *dwmac,
+@@ -419,6 +421,16 @@ static int stm32_dwmac_parse_data(struct
  	if (IS_ERR(dwmac->regmap))
  		return PTR_ERR(dwmac->regmap);
  
@@ -49,7 +47,7 @@ index 6c179911ef3f..c006b657a209 100644
  	if (dwmac->ops->is_mp2)
  		return 0;
  
-@@ -518,6 +530,27 @@ static int stm32_dwmac_resume(struct device *dev, void *bsp_priv)
+@@ -518,6 +530,27 @@ static int stm32_dwmac_resume(struct dev
  	return stm32_dwmac_init(priv->plat);
  }
  
@@ -77,7 +75,7 @@ index 6c179911ef3f..c006b657a209 100644
  static int stm32_dwmac_probe(struct platform_device *pdev)
  {
  	struct plat_stmmacenet_data *plat_dat;
-@@ -572,12 +605,18 @@ static int stm32_dwmac_probe(struct platform_device *pdev)
+@@ -572,12 +605,18 @@ static int stm32_dwmac_probe(struct plat
  			goto err_clk_disable;
  	}
  
@@ -97,7 +95,7 @@ index 6c179911ef3f..c006b657a209 100644
  err_clk_disable_suspend:
  	if (dwmac->ops->clk_rx_enable_in_suspend)
  		clk_disable_unprepare(dwmac->clk_rx);
-@@ -610,16 +649,26 @@ static void stm32_dwmac_remove(struct platform_device *pdev)
+@@ -610,16 +649,26 @@ static void stm32_dwmac_remove(struct pl
  		dev_pm_clear_wake_irq(&pdev->dev);
  		device_init_wakeup(&pdev->dev, false);
  	}
@@ -124,6 +122,3 @@ index 6c179911ef3f..c006b657a209 100644
  }
  
  static struct stm32_ops stm32mcu_dwmac_data = {
--- 
-2.53.0
-

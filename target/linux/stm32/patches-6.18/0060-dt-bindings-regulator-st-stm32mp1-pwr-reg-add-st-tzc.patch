@@ -22,8 +22,6 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  .../bindings/regulator/st,stm32mp1-pwr-reg.yaml      | 12 ++++++++++++
  1 file changed, 12 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/regulator/st,stm32mp1-pwr-reg.yaml b/Documentation/devicetree/bindings/regulator/st,stm32mp1-pwr-reg.yaml
-index 3cb2dad18781..9e80d37f11bb 100644
 --- a/Documentation/devicetree/bindings/regulator/st,stm32mp1-pwr-reg.yaml
 +++ b/Documentation/devicetree/bindings/regulator/st,stm32mp1-pwr-reg.yaml
 @@ -27,6 +27,18 @@ properties:
@@ -45,6 +43,3 @@ index 3cb2dad18781..9e80d37f11bb 100644
  patternProperties:
    "^(reg11|reg18|usb33)$":
      type: object
--- 
-2.53.0
-

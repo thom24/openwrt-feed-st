@@ -16,11 +16,9 @@ Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
  arch/arm64/boot/dts/st/stm32mp231.dtsi | 54 ++++++++++++++++++++++++++
  1 file changed, 54 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index 3d90f2accaa1..33dbbee2da7a 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -288,6 +288,60 @@ ipcc1: mailbox@40490000 {
+@@ -288,6 +288,60 @@
  			status = "disabled";
  		};
  
@@ -81,6 +79,3 @@ index 3d90f2accaa1..33dbbee2da7a 100644
  		rifsc: bus@42080000 {
  			compatible = "st,stm32mp25-rifsc", "simple-bus";
  			reg = <0x42080000 0x1000>;
--- 
-2.53.0
-

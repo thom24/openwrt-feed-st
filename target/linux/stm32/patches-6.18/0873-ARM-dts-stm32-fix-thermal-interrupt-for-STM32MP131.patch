@@ -18,11 +18,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp131.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index 039f2c4230b1..9b9712ee20c4 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -1128,7 +1128,7 @@ timer {
+@@ -1128,7 +1128,7 @@
  		dts: thermal@50028000 {
  			compatible = "st,stm32-thermal";
  			reg = <0x50028000 0x100>;
@@ -31,6 +29,3 @@ index 039f2c4230b1..9b9712ee20c4 100644
  			clocks = <&rcc DTS>;
  			clock-names = "pclk";
  			#thermal-sensor-cells = <0>;
--- 
-2.53.0
-

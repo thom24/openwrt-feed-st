@@ -17,8 +17,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/panel/panel-himax-hx8394.c | 110 +++++++++++++++++++++
  1 file changed, 110 insertions(+)
 
-diff --git a/drivers/gpu/drm/panel/panel-himax-hx8394.c b/drivers/gpu/drm/panel/panel-himax-hx8394.c
-index c4d3e09a228d..777827a6dd75 100644
 --- a/drivers/gpu/drm/panel/panel-himax-hx8394.c
 +++ b/drivers/gpu/drm/panel/panel-himax-hx8394.c
 @@ -64,6 +64,15 @@
@@ -37,7 +35,7 @@ index c4d3e09a228d..777827a6dd75 100644
  struct hx8394 {
  	struct device *dev;
  	struct drm_panel panel;
-@@ -201,6 +210,106 @@ static const struct hx8394_panel_desc hsd060bhw4_desc = {
+@@ -201,6 +210,106 @@ static const struct hx8394_panel_desc hs
  	.init_sequence = hsd060bhw4_init_sequence,
  };
  
@@ -144,7 +142,7 @@ index c4d3e09a228d..777827a6dd75 100644
  static void powkiddy_x55_init_sequence(struct mipi_dsi_multi_context *dsi_ctx)
  {
  	/* 5.19.8 SETEXTC: Set extension command (B9h) */
-@@ -826,6 +935,7 @@ static const struct of_device_id hx8394_of_match[] = {
+@@ -826,6 +935,7 @@ static const struct of_device_id hx8394_
  	{ .compatible = "huiling,hl055fhav028c", .data = &hl055fhav028c_desc },
  	{ .compatible = "powkiddy,x55-panel", .data = &powkiddy_x55_desc },
  	{ .compatible = "microchip,ac40t08a-mipi-panel", .data = &mchp_ac40t08a_desc },
@@ -152,6 +150,3 @@ index c4d3e09a228d..777827a6dd75 100644
  	{ /* sentinel */ }
  };
  MODULE_DEVICE_TABLE(of, hx8394_of_match);
--- 
-2.53.0
-

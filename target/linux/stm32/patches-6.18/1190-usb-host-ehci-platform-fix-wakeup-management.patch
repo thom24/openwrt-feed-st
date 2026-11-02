@@ -26,11 +26,9 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@st.com>
  drivers/usb/host/ehci-platform.c | 11 ++++++++---
  1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/host/ehci-platform.c b/drivers/usb/host/ehci-platform.c
-index 5af6fead9f7b..a18b87cde639 100644
 --- a/drivers/usb/host/ehci-platform.c
 +++ b/drivers/usb/host/ehci-platform.c
-@@ -375,7 +375,9 @@ static int ehci_platform_probe(struct platform_device *dev)
+@@ -375,7 +375,9 @@ static int ehci_platform_probe(struct pl
  	if (err)
  		goto err_power;
  
@@ -41,7 +39,7 @@ index 5af6fead9f7b..a18b87cde639 100644
  	device_enable_async_suspend(hcd->self.controller);
  	platform_set_drvdata(dev, hcd);
  
-@@ -411,6 +413,9 @@ static void ehci_platform_remove(struct platform_device *dev)
+@@ -411,6 +413,9 @@ static void ehci_platform_remove(struct
  	if (priv->quirk_poll)
  		quirk_poll_end(priv);
  
@@ -51,7 +49,7 @@ index 5af6fead9f7b..a18b87cde639 100644
  	usb_remove_hcd(hcd);
  
  	if (pdata->power_off)
-@@ -433,7 +438,7 @@ static int __maybe_unused ehci_platform_suspend(struct device *dev)
+@@ -433,7 +438,7 @@ static int __maybe_unused ehci_platform_
  	struct usb_ehci_pdata *pdata = dev_get_platdata(dev);
  	struct platform_device *pdev = to_platform_device(dev);
  	struct ehci_platform_priv *priv = hcd_to_ehci_priv(hcd);
@@ -60,7 +58,7 @@ index 5af6fead9f7b..a18b87cde639 100644
  	int ret;
  
  	if (priv->quirk_poll)
-@@ -446,7 +451,7 @@ static int __maybe_unused ehci_platform_suspend(struct device *dev)
+@@ -446,7 +451,7 @@ static int __maybe_unused ehci_platform_
  	if (pdata->power_suspend)
  		pdata->power_suspend(pdev);
  
@@ -69,6 +67,3 @@ index 5af6fead9f7b..a18b87cde639 100644
  		enable_irq_wake(hcd->irq);
  
  	return ret;
--- 
-2.53.0
-

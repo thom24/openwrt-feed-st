@@ -22,9 +22,6 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  1 file changed, 120 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/usb/st,stm32-ucpd.yaml
 
-diff --git a/Documentation/devicetree/bindings/usb/st,stm32-ucpd.yaml b/Documentation/devicetree/bindings/usb/st,stm32-ucpd.yaml
-new file mode 100644
-index 000000000000..f29302824d44
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/usb/st,stm32-ucpd.yaml
 @@ -0,0 +1,120 @@
@@ -148,6 +145,3 @@ index 000000000000..f29302824d44
 +            };
 +        };
 +    };
--- 
-2.53.0
-

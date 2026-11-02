@@ -17,11 +17,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/stm/ltdc.c | 13 +++++++------
  1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-index 6712754153fb..5e44be06031a 100644
 --- a/drivers/gpu/drm/stm/ltdc.c
 +++ b/drivers/gpu/drm/stm/ltdc.c
-@@ -1069,6 +1069,7 @@ static void ltdc_crtc_atomic_enable(struct drm_crtc *crtc,
+@@ -1069,6 +1069,7 @@ static void ltdc_crtc_atomic_enable(stru
  	struct drm_encoder *encoder = NULL, *en_iter;
  	struct drm_bridge *bridge = NULL, *br_iter;
  	struct drm_display_mode *mode = &crtc->state->adjusted_mode;
@@ -29,7 +27,7 @@ index 6712754153fb..5e44be06031a 100644
  	u32 hsync, vsync, accum_hbp, accum_vbp, accum_act_w, accum_act_h;
  	u32 total_width, total_height;
  	u32 bus_formats = MEDIA_BUS_FMT_RGB888_1X24;
-@@ -1101,12 +1102,12 @@ static void ltdc_crtc_atomic_enable(struct drm_crtc *crtc,
+@@ -1101,12 +1102,12 @@ static void ltdc_crtc_atomic_enable(stru
  		drm_connector_list_iter_end(&iter);
  	}
  
@@ -48,6 +46,3 @@ index 6712754153fb..5e44be06031a 100644
  	}
  
  	if (encoder->encoder_type == DRM_MODE_ENCODER_LVDS) {
--- 
-2.53.0
-

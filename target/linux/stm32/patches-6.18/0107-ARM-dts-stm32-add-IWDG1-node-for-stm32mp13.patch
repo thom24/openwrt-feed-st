@@ -22,11 +22,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp131.dtsi | 9 +++++++++
  1 file changed, 9 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index 0c3cb23940b2..7120935c3849 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -1015,6 +1015,15 @@ iwdg2: watchdog@5a002000 {
+@@ -1015,6 +1015,15 @@
  			status = "disabled";
  		};
  
@@ -42,6 +40,3 @@ index 0c3cb23940b2..7120935c3849 100644
  		rtc: rtc@5c004000 {
  			compatible = "st,stm32mp1-rtc";
  			reg = <0x5c004000 0x400>;
--- 
-2.53.0
-

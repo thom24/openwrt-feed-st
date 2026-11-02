@@ -29,11 +29,9 @@ Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
  sound/soc/stm/stm32_i2s.c | 20 ++++++++++++++++++--
  1 file changed, 18 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/stm/stm32_i2s.c b/sound/soc/stm/stm32_i2s.c
-index 6ca21780f21d..d90f4f035c2b 100644
 --- a/sound/soc/stm/stm32_i2s.c
 +++ b/sound/soc/stm/stm32_i2s.c
-@@ -1107,7 +1107,7 @@ static const struct snd_soc_dai_ops stm32_i2s_pcm_dai_ops = {
+@@ -1107,7 +1107,7 @@ static const struct snd_soc_dai_ops stm3
  };
  
  static const struct snd_pcm_hardware stm32_i2s_pcm_hw = {
@@ -42,7 +40,7 @@ index 6ca21780f21d..d90f4f035c2b 100644
  	.buffer_bytes_max = 8 * PAGE_SIZE,
  	.period_bytes_min = 1024,
  	.period_bytes_max = 4 * PAGE_SIZE,
-@@ -1115,9 +1115,25 @@ static const struct snd_pcm_hardware stm32_i2s_pcm_hw = {
+@@ -1115,9 +1115,25 @@ static const struct snd_pcm_hardware stm
  	.periods_max = 8,
  };
  
@@ -69,6 +67,3 @@ index 6ca21780f21d..d90f4f035c2b 100644
  	.prealloc_buffer_size = PAGE_SIZE * 8,
  };
  
--- 
-2.53.0
-

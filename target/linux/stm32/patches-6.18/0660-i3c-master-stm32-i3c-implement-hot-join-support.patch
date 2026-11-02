@@ -26,8 +26,6 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/i3c/master/stm32-i3c.c | 54 ++++++++++++++++++++++++++++++++--
  1 file changed, 52 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/i3c/master/stm32-i3c.c b/drivers/i3c/master/stm32-i3c.c
-index 1cf17c3a7d54..3c4ea421ad05 100644
 --- a/drivers/i3c/master/stm32-i3c.c
 +++ b/drivers/i3c/master/stm32-i3c.c
 @@ -326,6 +326,8 @@ struct stm32_i3c_ddata {
@@ -39,7 +37,7 @@ index 1cf17c3a7d54..3c4ea421ad05 100644
  	u32 nslots; /* Number of I3C targets, I2C targets are not limited */
  	unsigned long *slots;
  	struct {
-@@ -353,6 +355,19 @@ static inline struct i3c_dev_desc *addr_to_i3c_dev_desc(struct i3c_master_contro
+@@ -353,6 +355,19 @@ static inline struct i3c_dev_desc *addr_
  	return NULL;
  }
  
@@ -59,7 +57,7 @@ index 1cf17c3a7d54..3c4ea421ad05 100644
  static void stm32_i3c_master_send_stop(struct stm32_i3c_ddata *ddata)
  {
  	u32 cr = FIELD_PREP(I3C_CR_MTYPE, MTYPE_I3C_SCL_STOP) | I3C_CR_MEND;
-@@ -854,8 +869,9 @@ static irqreturn_t stm32_i3c_irq_handler(int irq, void *dev_id)
+@@ -854,8 +869,9 @@ static irqreturn_t stm32_i3c_irq_handler
  	}
  
  	if (evr & I3C_EVR_HJF) {
@@ -71,7 +69,7 @@ index 1cf17c3a7d54..3c4ea421ad05 100644
  	}
  
  	if (evr & I3C_EVR_CRF) {
-@@ -1283,6 +1299,36 @@ static void stm32_i3c_master_bus_cleanup(struct i3c_master_controller *m)
+@@ -1283,6 +1299,36 @@ static void stm32_i3c_master_bus_cleanup
  	pm_runtime_put_autosuspend(ddata->dev);
  }
  
@@ -108,7 +106,7 @@ index 1cf17c3a7d54..3c4ea421ad05 100644
  static int stm32_i3c_master_get_slot(struct stm32_i3c_ddata *ddata)
  {
  	u32 slot;
-@@ -2066,6 +2112,8 @@ static const struct i3c_master_controller_ops stm32_i3c_master_ops = {
+@@ -2066,6 +2112,8 @@ static const struct i3c_master_controlle
  	.enable_ibi = stm32_i3c_master_enable_ibi,		/* Required if .request_ibi */
  	.disable_ibi = stm32_i3c_master_disable_ibi,		/* Required if .request_ibi */
  	.recycle_ibi_slot = stm32_i3c_master_recycle_ibi_slot,	/* Required if .request_ibi */
@@ -117,7 +115,7 @@ index 1cf17c3a7d54..3c4ea421ad05 100644
  };
  
  static int stm32_i3c_probe(struct platform_device *pdev)
-@@ -2119,6 +2167,7 @@ static int stm32_i3c_probe(struct platform_device *pdev)
+@@ -2119,6 +2167,7 @@ static int stm32_i3c_probe(struct platfo
  		return -ENOMEM;
  
  	ddata->dev = &pdev->dev;
@@ -125,7 +123,7 @@ index 1cf17c3a7d54..3c4ea421ad05 100644
  	platform_set_drvdata(pdev, ddata);
  
  	/* Read controller version before enabling autosuspend to ensure it is clocked */
-@@ -2156,6 +2205,7 @@ static void stm32_i3c_remove(struct platform_device *pdev)
+@@ -2156,6 +2205,7 @@ static void stm32_i3c_remove(struct plat
  {
  	struct stm32_i3c_ddata *ddata = platform_get_drvdata(pdev);
  
@@ -133,6 +131,3 @@ index 1cf17c3a7d54..3c4ea421ad05 100644
  	pm_runtime_get_sync(&pdev->dev);
  
  	i3c_master_unregister(&ddata->master);
--- 
-2.53.0
-

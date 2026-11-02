@@ -16,8 +16,6 @@ Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
  .../st/stm32/stm32-dcmipp/dcmipp-statcap.c    | 264 +++++++++++++++++-
  2 files changed, 250 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
-index 76122d17dbec..8020aa7d9270 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
 @@ -130,6 +130,7 @@ struct dcmipp_pipeline_config {
@@ -28,8 +26,6 @@ index 76122d17dbec..8020aa7d9270 100644
  };
  
  /**
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
-index edbe570ee3dd..c8e37e6e3f95 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-statcap.c
 @@ -15,13 +15,23 @@
@@ -113,7 +109,7 @@ index edbe570ee3dd..c8e37e6e3f95 100644
  	/*
  	 * indicate the current state of the capture stat machine,
  	 * must be updated at the end of the VSYNC processing
-@@ -216,14 +260,21 @@ static int dcmipp_statcap_start_streaming(struct vb2_queue *vq,
+@@ -216,14 +260,21 @@ static int dcmipp_statcap_start_streamin
  {
  	struct dcmipp_statcap_device *vcap = vb2_get_drv_priv(vq);
  	struct media_entity *entity = &vcap->vdev.entity;
@@ -135,7 +131,7 @@ index edbe570ee3dd..c8e37e6e3f95 100644
  	ret = pm_runtime_resume_and_get(vcap->dev);
  	if (ret < 0) {
  		dev_err(vcap->dev, "%s: Failed to start streaming, cannot get sync (%d)\n",
-@@ -268,6 +319,43 @@ static int dcmipp_statcap_start_streaming(struct vb2_queue *vq,
+@@ -268,6 +319,43 @@ static int dcmipp_statcap_start_streamin
  		goto err_media_pipeline_stop;
  	}
  
@@ -179,7 +175,7 @@ index edbe570ee3dd..c8e37e6e3f95 100644
  	return 0;
  
  err_media_pipeline_stop:
-@@ -280,10 +368,11 @@ static int dcmipp_statcap_start_streaming(struct vb2_queue *vq,
+@@ -280,10 +368,11 @@ err_buffer_done:
  	 * Return all buffers to vb2 in QUEUED state.
  	 * This will give ownership back to userspace
  	 */
@@ -192,7 +188,7 @@ index edbe570ee3dd..c8e37e6e3f95 100644
  	spin_unlock_irq(&vcap->irqlock);
  
  	return ret;
-@@ -317,6 +406,15 @@ static void dcmipp_statcap_stop_streaming(struct vb2_queue *vq)
+@@ -317,6 +406,15 @@ static void dcmipp_statcap_stop_streamin
  	/* Stop the media pipeline */
  	media_pipeline_stop(vcap->vdev.entity.pads);
  
@@ -208,7 +204,7 @@ index edbe570ee3dd..c8e37e6e3f95 100644
  	spin_lock_irq(&vcap->irqlock);
  
  	/* Return all queued buffers to vb2 in ERROR state */
-@@ -325,6 +423,16 @@ static void dcmipp_statcap_stop_streaming(struct vb2_queue *vq)
+@@ -325,6 +423,16 @@ static void dcmipp_statcap_stop_streamin
  		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
  	}
  	INIT_LIST_HEAD(&vcap->buffers);
@@ -225,7 +221,7 @@ index edbe570ee3dd..c8e37e6e3f95 100644
  
  	spin_unlock_irq(&vcap->irqlock);
  
-@@ -334,7 +442,10 @@ static void dcmipp_statcap_stop_streaming(struct vb2_queue *vq)
+@@ -334,7 +442,10 @@ static void dcmipp_statcap_stop_streamin
  static int dcmipp_statcap_buf_prepare(struct vb2_buffer *vb)
  {
  	struct dcmipp_statcap_device *vcap =  vb2_get_drv_priv(vb->vb2_queue);
@@ -236,7 +232,7 @@ index edbe570ee3dd..c8e37e6e3f95 100644
  
  	if (vb2_plane_size(vb, 0) < size) {
  		dev_err(vcap->dev, "%s data will not fit into plane (%lu < %lu)\n",
-@@ -344,6 +455,17 @@ static int dcmipp_statcap_buf_prepare(struct vb2_buffer *vb)
+@@ -344,6 +455,17 @@ static int dcmipp_statcap_buf_prepare(st
  
  	vb2_set_plane_payload(vb, 0, size);
  
@@ -254,7 +250,7 @@ index edbe570ee3dd..c8e37e6e3f95 100644
  	return 0;
  }
  
-@@ -353,8 +475,30 @@ static void dcmipp_statcap_buf_queue(struct vb2_buffer *vb2_buf)
+@@ -353,8 +475,30 @@ static void dcmipp_statcap_buf_queue(str
  	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb2_buf);
  	struct dcmipp_buf *buf = container_of(vbuf, struct dcmipp_buf, vb);
  
@@ -286,7 +282,7 @@ index edbe570ee3dd..c8e37e6e3f95 100644
  	spin_unlock_irq(&vcap->irqlock);
  }
  
-@@ -477,6 +621,7 @@ static int dcmipp_statcap_s_ctrl(struct v4l2_ctrl *ctrl)
+@@ -477,6 +621,7 @@ static int dcmipp_statcap_s_ctrl(struct
  			(region->width[0] << DCMIPP_P1STSZR_HSIZE_SHIFT) |
  			(region->height[0] << DCMIPP_P1STSZR_VSIZE_SHIFT) |
  			DCMIPP_P1STSZR_ENABLE);
@@ -294,7 +290,7 @@ index edbe570ee3dd..c8e37e6e3f95 100644
  		vcap->capture_state = COLD_START;
  		spin_unlock_irq(&vcap->irqlock);
  		break;
-@@ -569,6 +714,22 @@ void dcmipp_statcap_ent_release(struct dcmipp_ent_device *ved)
+@@ -569,6 +714,22 @@ void dcmipp_statcap_ent_release(struct d
  	vb2_video_unregister_device(&vcap->vdev);
  }
  
@@ -317,7 +313,7 @@ index edbe570ee3dd..c8e37e6e3f95 100644
  static void dcmipp_statcap_buffer_done(struct dcmipp_statcap_device *vcap,
  				       struct dcmipp_buf *dcmipp_buf)
  {
-@@ -777,6 +938,38 @@ static void dcmipp_statcap_update_local_buf(struct dcmipp_statcap_device *vcap)
+@@ -777,6 +938,38 @@ static void dcmipp_statcap_update_local_
  	}
  }
  
@@ -356,7 +352,7 @@ index edbe570ee3dd..c8e37e6e3f95 100644
  static irqreturn_t dcmipp_statcap_irq_thread(int irq, void *arg)
  {
  	struct dcmipp_statcap_device *vcap =
-@@ -789,17 +982,57 @@ static irqreturn_t dcmipp_statcap_irq_thread(int irq, void *arg)
+@@ -789,17 +982,57 @@ static irqreturn_t dcmipp_statcap_irq_th
  
  	spin_lock_irq(&vcap->irqlock);
  
@@ -423,7 +419,7 @@ index edbe570ee3dd..c8e37e6e3f95 100644
  	}
  
  	spin_unlock_irq(&vcap->irqlock);
-@@ -849,7 +1082,7 @@ dcmipp_statcap_ent_init(const char *entity_name, struct dcmipp_device *dcmipp)
+@@ -849,7 +1082,7 @@ dcmipp_statcap_ent_init(const char *enti
  	q->drv_priv = vcap;
  	q->buf_struct_size = sizeof(struct dcmipp_buf);
  	q->ops = &dcmipp_statcap_qops;
@@ -432,7 +428,7 @@ index edbe570ee3dd..c8e37e6e3f95 100644
  	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
  	q->min_queued_buffers = 1;
  	q->dev = dev;
-@@ -861,13 +1094,14 @@ dcmipp_statcap_ent_init(const char *entity_name, struct dcmipp_device *dcmipp)
+@@ -861,13 +1094,14 @@ dcmipp_statcap_ent_init(const char *enti
  		goto err_clean_m_ent;
  	}
  
@@ -449,6 +445,3 @@ index edbe570ee3dd..c8e37e6e3f95 100644
  	vcap->ved.thread_fn = dcmipp_statcap_irq_thread;
  	vcap->dev = dev;
  	vcap->regs = dcmipp->regs;
--- 
-2.53.0
-

@@ -41,8 +41,6 @@ Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
  3 files changed, 950 insertions(+)
  create mode 100644 drivers/phy/st/phy-stm32-usb2phy.c
 
-diff --git a/drivers/phy/st/Kconfig b/drivers/phy/st/Kconfig
-index 304614b6dabf..1d11903f03a7 100644
 --- a/drivers/phy/st/Kconfig
 +++ b/drivers/phy/st/Kconfig
 @@ -58,3 +58,14 @@ config PHY_STM32_USBPHYC
@@ -60,18 +58,13 @@ index 304614b6dabf..1d11903f03a7 100644
 +	  of STMicroelectronics STM32MP2 SoCs. STM32MP2 SoCs have 2 such PHY(s),
 +	  one for the Host Controller, one for the dual-role controller,
 +	  selected by separate syscfg offsets.
-diff --git a/drivers/phy/st/Makefile b/drivers/phy/st/Makefile
-index cb80e954ea9f..4945df5ed78a 100644
 --- a/drivers/phy/st/Makefile
 +++ b/drivers/phy/st/Makefile
-@@ -5,3 +5,4 @@ obj-$(CONFIG_PHY_ST_SPEAR1340_MIPHY)	+= phy-spear1340-miphy.o
+@@ -5,3 +5,4 @@ obj-$(CONFIG_PHY_ST_SPEAR1340_MIPHY)	+=
  obj-$(CONFIG_PHY_STIH407_USB)		+= phy-stih407-usb.o
  obj-$(CONFIG_PHY_STM32_COMBOPHY)	+= phy-stm32-combophy.o
  obj-$(CONFIG_PHY_STM32_USBPHYC) 	+= phy-stm32-usbphyc.o
 +obj-$(CONFIG_PHY_STM32_USB2PHY) 	+= phy-stm32-usb2phy.o
-diff --git a/drivers/phy/st/phy-stm32-usb2phy.c b/drivers/phy/st/phy-stm32-usb2phy.c
-new file mode 100644
-index 000000000000..15701aaf5b3f
 --- /dev/null
 +++ b/drivers/phy/st/phy-stm32-usb2phy.c
 @@ -0,0 +1,938 @@
@@ -1013,6 +1006,3 @@ index 000000000000..15701aaf5b3f
 +MODULE_AUTHOR("Pankaj Dev <pankaj.dev@st.com>");
 +MODULE_DESCRIPTION("STMicroelectronics Generic USB2PHY driver for stm32");
 +MODULE_LICENSE("GPL");
--- 
-2.53.0
-

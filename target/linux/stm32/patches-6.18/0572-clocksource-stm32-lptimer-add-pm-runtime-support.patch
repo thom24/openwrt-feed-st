@@ -16,8 +16,6 @@ Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
  drivers/clocksource/timer-stm32-lp.c | 30 ++++++++++++++++++----------
  1 file changed, 19 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/clocksource/timer-stm32-lp.c b/drivers/clocksource/timer-stm32-lp.c
-index 0beeb485a431..bc03e0b65d1b 100644
 --- a/drivers/clocksource/timer-stm32-lp.c
 +++ b/drivers/clocksource/timer-stm32-lp.c
 @@ -14,6 +14,7 @@
@@ -28,7 +26,7 @@ index 0beeb485a431..bc03e0b65d1b 100644
  #include <linux/pm_wakeirq.h>
  
  #define CFGR_PSC_OFFSET		9
-@@ -54,17 +55,8 @@ static int stm32mp25_clkevent_lp_set_evt(struct stm32_lp_private *priv, unsigned
+@@ -54,17 +55,8 @@ static int stm32mp25_clkevent_lp_set_evt
  	int ret;
  	u32 val;
  
@@ -48,7 +46,7 @@ index 0beeb485a431..bc03e0b65d1b 100644
  	/* set next event counter */
  	regmap_write(priv->reg, STM32_LPTIM_ARR, evt);
  	/* enable ARR interrupt */
-@@ -106,6 +98,14 @@ static int stm32_clkevent_lp_set_timer(unsigned long evt,
+@@ -106,6 +98,14 @@ static int stm32_clkevent_lp_set_timer(u
  	struct stm32_lp_private *priv = to_priv(clkevt);
  	int ret;
  
@@ -63,7 +61,7 @@ index 0beeb485a431..bc03e0b65d1b 100644
  	if (priv->version == STM32_LPTIM_VERR_23) {
  		ret = stm32mp25_clkevent_lp_set_evt(priv, evt);
  		if (ret)
-@@ -183,6 +183,8 @@ static void stm32_clkevent_lp_suspend(struct clock_event_device *clkevt)
+@@ -183,6 +183,8 @@ static void stm32_clkevent_lp_suspend(st
  
  	stm32_clkevent_lp_shutdown(clkevt);
  
@@ -72,7 +70,7 @@ index 0beeb485a431..bc03e0b65d1b 100644
  	/* balance clk_prepare_enable() from the probe */
  	clk_disable_unprepare(priv->clk);
  }
-@@ -262,6 +264,12 @@ static int stm32_clkevent_lp_probe(struct platform_device *pdev)
+@@ -262,6 +264,12 @@ static int stm32_clkevent_lp_probe(struc
  
  	stm32_clkevent_lp_set_prescaler(priv, &rate);
  
@@ -85,6 +83,3 @@ index 0beeb485a431..bc03e0b65d1b 100644
  	priv->dev = &pdev->dev;
  
  	stm32_clkevent_lp_init(priv, pdev->dev.parent->of_node, rate);
--- 
-2.53.0
-

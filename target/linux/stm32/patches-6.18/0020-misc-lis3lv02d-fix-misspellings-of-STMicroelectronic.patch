@@ -17,8 +17,6 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/569543
  drivers/misc/lis3lv02d/Makefile | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/misc/lis3lv02d/Kconfig b/drivers/misc/lis3lv02d/Kconfig
-index 9d546a42a563..835e5e50bde4 100644
 --- a/drivers/misc/lis3lv02d/Kconfig
 +++ b/drivers/misc/lis3lv02d/Kconfig
 @@ -1,6 +1,6 @@
@@ -29,8 +27,6 @@ index 9d546a42a563..835e5e50bde4 100644
  #
  
  config SENSORS_LIS3_SPI
-diff --git a/drivers/misc/lis3lv02d/Makefile b/drivers/misc/lis3lv02d/Makefile
-index 137e7020c127..bcf208439c64 100644
 --- a/drivers/misc/lis3lv02d/Makefile
 +++ b/drivers/misc/lis3lv02d/Makefile
 @@ -1,6 +1,6 @@
@@ -41,6 +37,3 @@ index 137e7020c127..bcf208439c64 100644
  #
  
  obj-$(CONFIG_SENSORS_LIS3LV02D) += lis3lv02d.o
--- 
-2.53.0
-

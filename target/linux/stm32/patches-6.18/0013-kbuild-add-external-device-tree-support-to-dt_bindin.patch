@@ -29,11 +29,9 @@ Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
  Makefile | 21 ++++++++++++++++++++-
  1 file changed, 20 insertions(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index ee2116a29a35..683b5d2b896a 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -1602,7 +1602,26 @@ dt_binding_check: dt_binding_schemas scripts_dtc
+@@ -1602,7 +1602,26 @@ dt_binding_check: dt_binding_schemas scr
  	$(Q)$(MAKE) $(build)=Documentation/devicetree/bindings $@
  
  dt_binding_schemas:
@@ -61,6 +59,3 @@ index ee2116a29a35..683b5d2b896a 100644
  
  PHONY += dt_compatible_check
  dt_compatible_check: dt_binding_schemas
--- 
-2.53.0
-

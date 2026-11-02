@@ -27,8 +27,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  sound/soc/stm/stm32_amdf.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/stm/stm32_amdf.c b/sound/soc/stm/stm32_amdf.c
-index 8db764e57029..30f097e05d65 100644
 --- a/sound/soc/stm/stm32_amdf.c
 +++ b/sound/soc/stm/stm32_amdf.c
 @@ -46,7 +46,7 @@ struct stm32_amdf_priv {
@@ -40,6 +38,3 @@ index 8db764e57029..30f097e05d65 100644
  	.formats = SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FMTBIT_S32_LE,
  
  	.channels_min = 1,
--- 
-2.53.0
-

@@ -12,11 +12,9 @@ Change-Id: Ic05e8b5e7cec1a6e34a52a655fea3feaf9ce2e71
  drivers/irqchip/irq-stm32mp-exti.c | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/irqchip/irq-stm32mp-exti.c b/drivers/irqchip/irq-stm32mp-exti.c
-index 40a7e77f212e..0f7aded2aa95 100644
 --- a/drivers/irqchip/irq-stm32mp-exti.c
 +++ b/drivers/irqchip/irq-stm32mp-exti.c
-@@ -476,10 +476,9 @@ static int stm32mp_exti_resume(struct device *dev)
+@@ -476,10 +476,9 @@ static int stm32mp_exti_resume(struct de
  	struct stm32mp_exti_chip_data *chip_data;
  	int i;
  
@@ -28,6 +26,3 @@ index 40a7e77f212e..0f7aded2aa95 100644
  		stm32mp_chip_resume(chip_data, chip_data->mask_cache);
  	}
  
--- 
-2.53.0
-

@@ -23,11 +23,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm/boot/dts/st/stm32mp157f-dk2.dts      |  39 +------
  2 files changed, 7 insertions(+), 139 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi
-index 1991d642e089..ab7b437055e0 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi
-@@ -22,11 +22,6 @@ arm_wdt: watchdog {
+@@ -22,11 +22,6 @@
  
  };
  
@@ -39,7 +37,7 @@ index 1991d642e089..ab7b437055e0 100644
  &cpu0 {
  	clocks = <&scmi_clk CK_SCMI_MPU>;
  };
-@@ -40,13 +35,6 @@ &cryp1 {
+@@ -40,13 +35,6 @@
  	resets = <&scmi_reset RST_SCMI_CRYP1>;
  };
  
@@ -53,7 +51,7 @@ index 1991d642e089..ab7b437055e0 100644
  &dsi {
  	phy-dsi-supply = <&scmi_reg18>;
  	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
-@@ -61,11 +49,9 @@ &hash1 {
+@@ -61,11 +49,9 @@
  	resets = <&scmi_reset RST_SCMI_HASH1>;
  };
  
@@ -68,7 +66,7 @@ index 1991d642e089..ab7b437055e0 100644
  };
  
  &iwdg2 {
-@@ -89,12 +75,6 @@ &optee {
+@@ -89,12 +75,6 @@
  	bootph-some-ram;
  };
  
@@ -81,7 +79,7 @@ index 1991d642e089..ab7b437055e0 100644
  &rcc {
  	compatible = "st,stm32mp1-rcc-secure", "syscon";
  	clock-names = "hse", "hsi", "csi", "lse", "lsi";
-@@ -117,84 +97,3 @@ &rtc {
+@@ -117,84 +97,3 @@
  &scmi {
  	bootph-some-ram;
  };
@@ -166,11 +164,9 @@ index 1991d642e089..ab7b437055e0 100644
 -&vrefbuf {
 -	vdda-supply = <&scmi_vdd>;
 -};
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
-index e893b42ab186..e1e51683f397 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
-@@ -50,7 +50,7 @@ panel@0 {
+@@ -50,7 +50,7 @@
  		compatible = "orisetech,otm8009a";
  		reg = <0>;
  		reset-gpios = <&gpioe 4 GPIO_ACTIVE_LOW>;
@@ -179,7 +175,7 @@ index e893b42ab186..e1e51683f397 100644
  
  		port {
  			panel_in: endpoint {
-@@ -85,23 +85,6 @@ touchscreen@38 {
+@@ -85,23 +85,6 @@
  	};
  };
  
@@ -203,7 +199,7 @@ index e893b42ab186..e1e51683f397 100644
  &ltdc {
  	bootph-some-ram;
  	status = "okay";
-@@ -137,7 +120,7 @@ &sdmmc2 {
+@@ -137,7 +120,7 @@
  	cap-sdio-irq;
  	st,neg-edge;
  	bus-width = <4>;
@@ -212,7 +208,7 @@ index e893b42ab186..e1e51683f397 100644
  	mmc-pwrseq = <&wifi_pwrseq>;
  	#address-cells = <1>;
  	#size-cells = <0>;
-@@ -164,21 +147,7 @@ bluetooth {
+@@ -164,21 +147,7 @@
  		shutdown-gpios = <&gpioz 6 GPIO_ACTIVE_HIGH>;
  		compatible = "brcm,bcm43438-bt";
  		max-speed = <3000000>;
@@ -236,6 +232,3 @@ index e893b42ab186..e1e51683f397 100644
 -	 */
 -	status = "disabled";
 -};
--- 
-2.53.0
-

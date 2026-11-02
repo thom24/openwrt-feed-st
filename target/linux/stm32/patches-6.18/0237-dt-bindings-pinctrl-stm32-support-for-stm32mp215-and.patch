@@ -14,8 +14,6 @@ Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
  include/dt-bindings/pinctrl/stm32-pinfunc.h                 | 3 +++
  2 files changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
-index 76d956b4a537..be545c1b926c 100644
 --- a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
 +++ b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
 @@ -27,6 +27,8 @@ properties:
@@ -45,8 +43,6 @@ index 76d956b4a537..be545c1b926c 100644
                  - st,stm32mp257-pinctrl
                  - st,stm32mp257-z-pinctrl
      then:
-diff --git a/include/dt-bindings/pinctrl/stm32-pinfunc.h b/include/dt-bindings/pinctrl/stm32-pinfunc.h
-index af3fd388329a..01bc8be78ef7 100644
 --- a/include/dt-bindings/pinctrl/stm32-pinfunc.h
 +++ b/include/dt-bindings/pinctrl/stm32-pinfunc.h
 @@ -41,6 +41,9 @@
@@ -59,6 +55,3 @@ index af3fd388329a..01bc8be78ef7 100644
  
  #endif /* _DT_BINDINGS_STM32_PINFUNC_H */
  
--- 
-2.53.0
-

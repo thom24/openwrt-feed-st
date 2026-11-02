@@ -19,8 +19,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/clk/stm32/clk-stm32mp21.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/stm32/clk-stm32mp21.c b/drivers/clk/stm32/clk-stm32mp21.c
-index 1e65403ac5b5..5c19310474da 100644
 --- a/drivers/clk/stm32/clk-stm32mp21.c
 +++ b/drivers/clk/stm32/clk-stm32mp21.c
 @@ -19,7 +19,7 @@
@@ -32,6 +30,3 @@ index 1e65403ac5b5..5c19310474da 100644
  
  /* Clock security definition */
  #define SECF_NONE		-1
--- 
-2.53.0
-

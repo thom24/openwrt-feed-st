@@ -23,11 +23,9 @@ Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 28 +++++++++++++++++++++++
  1 file changed, 28 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-index ca5ebee64cd6..85a80f9be89c 100644
 --- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-@@ -181,6 +181,34 @@ scmi_vddio1: regulator@0 {
+@@ -181,6 +181,34 @@
  		regulator-min-microvolt = <1800000>;
  		regulator-max-microvolt = <3300000>;
  	};
@@ -62,6 +60,3 @@ index ca5ebee64cd6..85a80f9be89c 100644
  	scmi_vdd_sdcard: regulator@17 {
  		reg = <VOLTD_SCMI_STPMIC2_LDO7>;
  		regulator-name = "vdd_sdcard";
--- 
-2.53.0
-

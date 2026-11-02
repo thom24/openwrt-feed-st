@@ -32,8 +32,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm/boot/compressed/head.S | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/boot/compressed/head.S b/arch/arm/boot/compressed/head.S
-index 9f406e9c0ea6..e4adfaf0411b 100644
 --- a/arch/arm/boot/compressed/head.S
 +++ b/arch/arm/boot/compressed/head.S
 @@ -886,6 +886,7 @@ __armv7_mmu_cache_on:
@@ -44,6 +42,3 @@ index 9f406e9c0ea6..e4adfaf0411b 100644
  		mrcne   p15, 0, r6, c2, c0, 2   @ read ttb control reg
  		orrne	r0, r0, #1		@ MMU enabled
  		movne	r1, #0xfffffffd		@ domain 0 = client
--- 
-2.53.0
-

@@ -22,8 +22,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  Documentation/devicetree/bindings/gpu/vivante,gc.yaml | 11 +++++++++++
  1 file changed, 11 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/gpu/vivante,gc.yaml b/Documentation/devicetree/bindings/gpu/vivante,gc.yaml
-index b1b10ea70ad9..49bc6287dd99 100644
 --- a/Documentation/devicetree/bindings/gpu/vivante,gc.yaml
 +++ b/Documentation/devicetree/bindings/gpu/vivante,gc.yaml
 @@ -47,8 +47,19 @@ properties:
@@ -46,6 +44,3 @@ index b1b10ea70ad9..49bc6287dd99 100644
  required:
    - compatible
    - reg
--- 
-2.53.0
-

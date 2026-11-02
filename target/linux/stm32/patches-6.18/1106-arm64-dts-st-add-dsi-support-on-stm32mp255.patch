@@ -14,11 +14,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp255.dtsi | 14 ++++++++++++++
  1 file changed, 14 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp255.dtsi b/arch/arm64/boot/dts/st/stm32mp255.dtsi
-index f76ddd9d6738..a6562a9db0a6 100644
 --- a/arch/arm64/boot/dts/st/stm32mp255.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp255.dtsi
-@@ -12,6 +12,20 @@ &ltdc {
+@@ -12,6 +12,20 @@
  };
  
  &rifsc {
@@ -39,6 +37,3 @@ index f76ddd9d6738..a6562a9db0a6 100644
  	lvds: lvds@48060000 {
  		compatible = "st,stm32mp255-lvds", "st,stm32mp25-lvds";
  		reg = <0x48060000 0x2000>;
--- 
-2.53.0
-

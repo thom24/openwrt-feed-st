@@ -22,8 +22,6 @@ Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
  drivers/char/hw_random/stm32-rng.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
-index 6e0fd88751e8..c38d8c91f18e 100644
 --- a/drivers/char/hw_random/stm32-rng.c
 +++ b/drivers/char/hw_random/stm32-rng.c
 @@ -37,7 +37,7 @@
@@ -35,6 +33,3 @@ index 6e0fd88751e8..c38d8c91f18e 100644
  
  #define RNG_DR			0x08
  
--- 
-2.53.0
-

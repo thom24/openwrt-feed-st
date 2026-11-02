@@ -15,11 +15,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm/boot/dts/st/stm32mp157f-dk2.dts         | 2 ++
  2 files changed, 4 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2-no-scmi.dts
-index 05fa2d962f25..251cd246da29 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-dk2-no-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-dk2-no-scmi.dts
-@@ -78,6 +78,8 @@ touchscreen@38 {
+@@ -78,6 +78,8 @@
  		interrupt-parent = <&gpiof>;
  		touchscreen-size-x = <480>;
  		touchscreen-size-y = <800>;
@@ -28,11 +26,9 @@ index 05fa2d962f25..251cd246da29 100644
  	};
  };
  
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
-index 670771e26e87..2826481d15f1 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
-@@ -158,6 +158,8 @@ touchscreen@38 {
+@@ -158,6 +158,8 @@
  		interrupt-parent = <&gpiof>;
  		touchscreen-size-x = <480>;
  		touchscreen-size-y = <800>;
@@ -41,6 +37,3 @@ index 670771e26e87..2826481d15f1 100644
  	};
  };
  
--- 
-2.53.0
-

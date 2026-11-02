@@ -29,11 +29,9 @@ Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
  sound/soc/stm/stm32_sai_sub.c | 24 ++++++++++++++++++++----
  1 file changed, 20 insertions(+), 4 deletions(-)
 
-diff --git a/sound/soc/stm/stm32_sai_sub.c b/sound/soc/stm/stm32_sai_sub.c
-index c2540383ab86..38a305a6615e 100644
 --- a/sound/soc/stm/stm32_sai_sub.c
 +++ b/sound/soc/stm/stm32_sai_sub.c
-@@ -1426,7 +1426,7 @@ static int stm32_sai_pcm_process_spdif(struct snd_pcm_substream *substream,
+@@ -1426,7 +1426,7 @@ static int stm32_sai_pcm_process_spdif(s
  
  /* No support of mmap in S/PDIF mode */
  static const struct snd_pcm_hardware stm32_sai_pcm_hw_spdif = {
@@ -42,7 +40,7 @@ index c2540383ab86..38a305a6615e 100644
  	.buffer_bytes_max = 8 * PAGE_SIZE,
  	.period_bytes_min = 1024,
  	.period_bytes_max = PAGE_SIZE,
-@@ -1435,7 +1435,7 @@ static const struct snd_pcm_hardware stm32_sai_pcm_hw_spdif = {
+@@ -1435,7 +1435,7 @@ static const struct snd_pcm_hardware stm
  };
  
  static const struct snd_pcm_hardware stm32_sai_pcm_hw = {
@@ -51,7 +49,7 @@ index c2540383ab86..38a305a6615e 100644
  	.buffer_bytes_max = 8 * PAGE_SIZE,
  	.period_bytes_min = 1024, /* 5ms at 48kHz */
  	.period_bytes_max = PAGE_SIZE,
-@@ -1477,14 +1477,30 @@ static struct snd_soc_dai_driver stm32_sai_capture_dai = {
+@@ -1477,14 +1477,30 @@ static struct snd_soc_dai_driver stm32_s
  		.ops = &stm32_sai_pcm_dai_ops2,
  };
  
@@ -84,6 +82,3 @@ index c2540383ab86..38a305a6615e 100644
  	.process = stm32_sai_pcm_process_spdif,
  };
  
--- 
-2.53.0
-

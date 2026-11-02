@@ -16,11 +16,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/usb/dwc2/gadget.c | 15 +++++++++++++++
  1 file changed, 15 insertions(+)
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index f18771b9387a..43fef60dcde8 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -3680,6 +3680,21 @@ void dwc2_hsotg_core_init_disconnected(struct dwc2_hsotg *hsotg,
+@@ -3680,6 +3680,21 @@ void dwc2_hsotg_core_init_disconnected(s
  
  void dwc2_hsotg_core_disconnect(struct dwc2_hsotg *hsotg)
  {
@@ -42,6 +40,3 @@ index f18771b9387a..43fef60dcde8 100644
  	/* set the soft-disconnect bit */
  	dwc2_set_bit(hsotg, DCTL, DCTL_SFTDISCON);
  }
--- 
-2.53.0
-

@@ -15,11 +15,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/stm/lvds.c | 15 +++++++++++----
  1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
-index 9fa707440c62..30d9429ea257 100644
 --- a/drivers/gpu/drm/stm/lvds.c
 +++ b/drivers/gpu/drm/stm/lvds.c
-@@ -557,14 +557,18 @@ static int lvds_pixel_clk_enable(struct clk_hw *hw)
+@@ -557,14 +557,18 @@ static int lvds_pixel_clk_enable(struct
  	struct drm_device *drm = lvds->lvds_bridge.dev;
  	struct lvds_phy_info *phy;
  	int ret;
@@ -40,7 +38,7 @@ index 9fa707440c62..30d9429ea257 100644
  
  		ret = lvds_pll_enable(lvds, phy);
  		if (ret) {
-@@ -575,10 +579,13 @@ static int lvds_pixel_clk_enable(struct clk_hw *hw)
+@@ -575,10 +579,13 @@ static int lvds_pixel_clk_enable(struct
  
  	if (lvds->primary) {
  		phy = lvds->primary;
@@ -56,6 +54,3 @@ index 9fa707440c62..30d9429ea257 100644
  
  		ret = lvds_pll_enable(lvds, phy);
  		if (ret) {
--- 
-2.53.0
-

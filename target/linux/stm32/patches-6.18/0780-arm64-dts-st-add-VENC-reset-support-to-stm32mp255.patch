@@ -19,11 +19,9 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp255.dtsi | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp255.dtsi b/arch/arm64/boot/dts/st/stm32mp255.dtsi
-index e706787c6457..f76ddd9d6738 100644
 --- a/arch/arm64/boot/dts/st/stm32mp255.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp255.dtsi
-@@ -37,6 +37,7 @@ vdec: vdec@480d0000 {
+@@ -37,6 +37,7 @@
  	venc: venc@480e0000 {
  		compatible = "st,stm32mp25-venc";
  		reg = <0x480e0000 0x800>;
@@ -31,6 +29,3 @@ index e706787c6457..f76ddd9d6738 100644
  		interrupts = <GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH>;
  		clocks = <&rcc CK_BUS_VENC>;
  		access-controllers = <&rifsc 90>;
--- 
-2.53.0
-

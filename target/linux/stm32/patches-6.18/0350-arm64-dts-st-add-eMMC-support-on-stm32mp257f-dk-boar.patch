@@ -17,11 +17,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 17 +++++++++++++++++
  1 file changed, 17 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index ff9921bab1de..25a62641b7e9 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -298,6 +298,23 @@ &sdmmc1 {
+@@ -298,6 +298,23 @@
  	status = "okay";
  };
  
@@ -45,6 +43,3 @@ index ff9921bab1de..25a62641b7e9 100644
  &syscfg {
  	bootph-all;
  };
--- 
-2.53.0
-

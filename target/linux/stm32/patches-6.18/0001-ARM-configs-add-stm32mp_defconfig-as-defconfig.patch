@@ -19,11 +19,9 @@ Tested-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  2 files changed, 1313 insertions(+)
  create mode 100644 arch/arm/configs/stm32mp_defconfig
 
-diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-index b7de4b6b284c..0918bf86352a 100644
 --- a/arch/arm/Makefile
 +++ b/arch/arm/Makefile
-@@ -28,6 +28,9 @@ KBUILD_CFLAGS	+= $(call cc-option,-mno-fdpic)
+@@ -28,6 +28,9 @@ KBUILD_CFLAGS	+= $(call cc-option,-mno-f
  # This should work on most of the modern platforms
  KBUILD_DEFCONFIG := multi_v7_defconfig
  
@@ -33,9 +31,6 @@ index b7de4b6b284c..0918bf86352a 100644
  # defines filename extension depending memory management type.
  ifeq ($(CONFIG_MMU),)
  MMUEXT		:= -nommu
-diff --git a/arch/arm/configs/stm32mp_defconfig b/arch/arm/configs/stm32mp_defconfig
-new file mode 100644
-index 000000000000..6756342dc56e
 --- /dev/null
 +++ b/arch/arm/configs/stm32mp_defconfig
 @@ -0,0 +1,1310 @@
@@ -1349,6 +1344,3 @@ index 000000000000..6756342dc56e
 +CONFIG_DEBUG_INFO_REDUCED=y
 +CONFIG_MAGIC_SYSRQ=y
 +CONFIG_DEBUG_FS=y
--- 
-2.53.0
-

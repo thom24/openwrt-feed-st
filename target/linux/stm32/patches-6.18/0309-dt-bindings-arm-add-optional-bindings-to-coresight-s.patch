@@ -25,8 +25,6 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/533816
  .../bindings/arm/arm,coresight-static-replicator.yaml      | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-static-replicator.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-static-replicator.yaml
-index b81851b26c74..0d4d1f0c55cd 100644
 --- a/Documentation/devicetree/bindings/arm/arm,coresight-static-replicator.yaml
 +++ b/Documentation/devicetree/bindings/arm/arm,coresight-static-replicator.yaml
 @@ -79,6 +79,13 @@ properties:
@@ -43,6 +41,3 @@ index b81851b26c74..0d4d1f0c55cd 100644
  required:
    - compatible
    - in-ports
--- 
-2.53.0
-

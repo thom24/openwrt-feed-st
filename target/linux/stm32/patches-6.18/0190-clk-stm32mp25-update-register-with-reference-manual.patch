@@ -20,8 +20,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/clk/stm32/stm32mp25_rcc.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/stm32/stm32mp25_rcc.h b/drivers/clk/stm32/stm32mp25_rcc.h
-index 687bc6a78627..421c74dadf8c 100644
 --- a/drivers/clk/stm32/stm32mp25_rcc.h
 +++ b/drivers/clk/stm32/stm32mp25_rcc.h
 @@ -319,7 +319,7 @@
@@ -33,6 +31,3 @@ index 687bc6a78627..421c74dadf8c 100644
  #define RCC_ETRCFGR				0x528
  #define RCC_GPIOACFGR				0x52C
  #define RCC_GPIOBCFGR				0x530
--- 
-2.53.0
-

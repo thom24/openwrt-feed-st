@@ -16,8 +16,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/panel/panel-raydium-rm68200.c | 30 ++++++++++++++-----
  1 file changed, 22 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-raydium-rm68200.c b/drivers/gpu/drm/panel/panel-raydium-rm68200.c
-index 29101baeb42d..ada4fa34914d 100644
 --- a/drivers/gpu/drm/panel/panel-raydium-rm68200.c
 +++ b/drivers/gpu/drm/panel/panel-raydium-rm68200.c
 @@ -77,7 +77,8 @@ struct rm68200 {
@@ -30,7 +28,7 @@ index 29101baeb42d..ada4fa34914d 100644
  };
  
  static const struct drm_display_mode default_mode = {
-@@ -266,7 +267,8 @@ static int rm68200_unprepare(struct drm_panel *panel)
+@@ -266,7 +267,8 @@ static int rm68200_unprepare(struct drm_
  		msleep(20);
  	}
  
@@ -40,7 +38,7 @@ index 29101baeb42d..ada4fa34914d 100644
  
  	return 0;
  }
-@@ -277,9 +279,16 @@ static int rm68200_prepare(struct drm_panel *panel)
+@@ -277,9 +279,16 @@ static int rm68200_prepare(struct drm_pa
  	struct mipi_dsi_device *dsi = to_mipi_dsi_device(ctx->dev);
  	int ret;
  
@@ -59,7 +57,7 @@ index 29101baeb42d..ada4fa34914d 100644
  		return ret;
  	}
  
-@@ -383,10 +392,15 @@ static int rm68200_probe(struct mipi_dsi_device *dsi)
+@@ -383,10 +392,15 @@ static int rm68200_probe(struct mipi_dsi
  			gpiod_direction_output(ctx->reset_gpio, 0);
  	}
  
@@ -79,6 +77,3 @@ index 29101baeb42d..ada4fa34914d 100644
  
  	mipi_dsi_set_drvdata(dsi, ctx);
  
--- 
-2.53.0
-

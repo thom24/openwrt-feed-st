@@ -16,11 +16,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 10 ++++++++--
  1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-index 2c8cff377549..b9bb96873a74 100644
 --- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
 +++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-@@ -973,6 +973,7 @@ static int adv7511_bridge_hdmi_write_infoframe(struct drm_bridge *bridge,
+@@ -973,6 +973,7 @@ static int adv7511_bridge_hdmi_write_inf
  					       const u8 *buffer, size_t len)
  {
  	struct adv7511 *adv7511 = bridge_to_adv7511(bridge);
@@ -28,7 +26,7 @@ index 2c8cff377549..b9bb96873a74 100644
  
  	switch (type) {
  	case HDMI_INFOFRAME_TYPE_AUDIO:
-@@ -996,8 +997,13 @@ static int adv7511_bridge_hdmi_write_infoframe(struct drm_bridge *bridge,
+@@ -996,8 +997,13 @@ static int adv7511_bridge_hdmi_write_inf
  				   BIT(6), BIT(6));
  
  		/* The AVI infoframe id is not configurable */
@@ -44,6 +42,3 @@ index 2c8cff377549..b9bb96873a74 100644
  
  		regmap_write(adv7511->regmap, ADV7511_REG_AUDIO_INFOFRAME_LENGTH, 0x2);
  		regmap_write(adv7511->regmap, ADV7511_REG_AUDIO_INFOFRAME(1), 0x1);
--- 
-2.53.0
-

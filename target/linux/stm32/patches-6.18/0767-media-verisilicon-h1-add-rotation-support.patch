@@ -26,8 +26,6 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/374018
  .../platform/verisilicon/hantro_h1_vp8_enc.c  | 24 +----------
  7 files changed, 85 insertions(+), 69 deletions(-)
 
-diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
-index 19295c41e7c4..025e99a81096 100644
 --- a/drivers/media/platform/verisilicon/hantro.h
 +++ b/drivers/media/platform/verisilicon/hantro.h
 @@ -240,6 +240,7 @@ struct hantro_dev {
@@ -46,7 +44,7 @@ index 19295c41e7c4..025e99a81096 100644
  
  	const struct hantro_codec_ops *codec_ops;
  	struct hantro_postproc_ctx postproc;
-@@ -523,5 +525,7 @@ int hanto_postproc_enum_framesizes(struct hantro_ctx *ctx,
+@@ -523,5 +525,7 @@ int hanto_postproc_enum_framesizes(struc
  
  void hantro_h1_set_axi_ctrl(struct hantro_dev *vpu, struct hantro_ctx *ctx);
  void hantro_h1_set_color_conv(struct hantro_dev *vpu, struct hantro_ctx *ctx);
@@ -54,11 +52,9 @@ index 19295c41e7c4..025e99a81096 100644
 +
  
  #endif /* HANTRO_H_ */
-diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
-index 2e576db2a279..3340eb03a9c0 100644
 --- a/drivers/media/platform/verisilicon/hantro_drv.c
 +++ b/drivers/media/platform/verisilicon/hantro_drv.c
-@@ -291,6 +291,37 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
+@@ -291,6 +291,37 @@ static int hantro_try_ctrl(struct v4l2_c
  	return 0;
  }
  
@@ -96,7 +92,7 @@ index 2e576db2a279..3340eb03a9c0 100644
  static int hantro_jpeg_s_ctrl(struct v4l2_ctrl *ctrl)
  {
  	struct hantro_ctx *ctx;
-@@ -392,6 +423,11 @@ static const struct v4l2_ctrl_ops hantro_ctrl_ops = {
+@@ -392,6 +423,11 @@ static const struct v4l2_ctrl_ops hantro
  	.try_ctrl = hantro_try_ctrl,
  };
  
@@ -108,7 +104,7 @@ index 2e576db2a279..3340eb03a9c0 100644
  static const struct v4l2_ctrl_ops hantro_jpeg_ctrl_ops = {
  	.s_ctrl = hantro_jpeg_s_ctrl,
  };
-@@ -627,7 +663,11 @@ static int hantro_ctrls_setup(struct hantro_dev *vpu,
+@@ -627,7 +663,11 @@ static int hantro_ctrls_setup(struct han
  {
  	int i, num_ctrls = ARRAY_SIZE(controls);
  
@@ -121,11 +117,9 @@ index 2e576db2a279..3340eb03a9c0 100644
  
  	for (i = 0; i < num_ctrls; i++) {
  		if (!(allowed_codecs & controls[i].codec))
-diff --git a/drivers/media/platform/verisilicon/hantro_h1.c b/drivers/media/platform/verisilicon/hantro_h1.c
-index 364a9d9ffce6..b5ae3d6250d6 100644
 --- a/drivers/media/platform/verisilicon/hantro_h1.c
 +++ b/drivers/media/platform/verisilicon/hantro_h1.c
-@@ -346,3 +346,40 @@ void hantro_h1_set_axi_ctrl(struct hantro_dev *vpu, struct hantro_ctx *ctx)
+@@ -346,3 +346,40 @@ void hantro_h1_set_axi_ctrl(struct hantr
  
  	vepu_write(vpu, reg, H1_REG_AXI_CTRL);
  }
@@ -166,11 +160,9 @@ index 364a9d9ffce6..b5ae3d6250d6 100644
 +		| H1_REG_IN_IMG_CTRL_ROTATION(hantro_rotation(ctx->rotation));
 +	vepu_write_relaxed(vpu, reg, H1_REG_IN_IMG_CTRL);
 +}
-diff --git a/drivers/media/platform/verisilicon/hantro_h1_h264_enc.c b/drivers/media/platform/verisilicon/hantro_h1_h264_enc.c
-index 02093f0a4a92..ef7e6a988a62 100644
 --- a/drivers/media/platform/verisilicon/hantro_h1_h264_enc.c
 +++ b/drivers/media/platform/verisilicon/hantro_h1_h264_enc.c
-@@ -223,28 +223,6 @@ static void hantro_h1_h264_enc_set_params(struct hantro_dev *vpu, struct hantro_
+@@ -223,28 +223,6 @@ static void hantro_h1_h264_enc_set_param
  	}
  }
  
@@ -199,7 +191,7 @@ index 02093f0a4a92..ef7e6a988a62 100644
  static void hantro_h1_h264_enc_set_buffers(struct hantro_dev *vpu, struct hantro_ctx *ctx,
  					   struct v4l2_ctrl_h264_encode_params *params)
  {
-@@ -397,7 +375,7 @@ int hantro_h1_h264_enc_run(struct hantro_ctx *ctx)
+@@ -397,7 +375,7 @@ int hantro_h1_h264_enc_run(struct hantro
  	vepu_write_relaxed(vpu, H1_REG_ENC_CTRL_ENC_MODE_H264, H1_REG_ENC_CTRL);
  
  	hantro_h1_h264_enc_set_params(vpu, ctx, params, rc->qp);
@@ -208,8 +200,6 @@ index 02093f0a4a92..ef7e6a988a62 100644
  	hantro_h1_h264_enc_set_buffers(vpu, ctx, params);
  
  	reg = H1_REG_DEVICE_CTRL_SCALE_OUTPUT_SWAP8
-diff --git a/drivers/media/platform/verisilicon/hantro_h1_jpeg_enc.c b/drivers/media/platform/verisilicon/hantro_h1_jpeg_enc.c
-index 87200ab5769e..764eed51c363 100644
 --- a/drivers/media/platform/verisilicon/hantro_h1_jpeg_enc.c
 +++ b/drivers/media/platform/verisilicon/hantro_h1_jpeg_enc.c
 @@ -15,28 +15,6 @@
@@ -241,8 +231,6 @@ index 87200ab5769e..764eed51c363 100644
  static void hantro_h1_jpeg_enc_set_buffers(struct hantro_dev *vpu,
  					   struct hantro_ctx *ctx,
  					   struct vb2_buffer *src_buf,
-diff --git a/drivers/media/platform/verisilicon/hantro_h1_regs.h b/drivers/media/platform/verisilicon/hantro_h1_regs.h
-index 95367833582f..2a75c0afd798 100644
 --- a/drivers/media/platform/verisilicon/hantro_h1_regs.h
 +++ b/drivers/media/platform/verisilicon/hantro_h1_regs.h
 @@ -61,6 +61,7 @@
@@ -253,11 +241,9 @@ index 95367833582f..2a75c0afd798 100644
  #define H1_REG_ENC_CTRL0				0x040
  #define    H1_REG_ENC_CTRL0_INIT_QP(x)			((x) << 26)
  #define    H1_REG_ENC_CTRL0_SLICE_ALPHA(x)		((x) << 22)
-diff --git a/drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c b/drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c
-index 99099205d791..aed507a876ab 100644
 --- a/drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c
 +++ b/drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c
-@@ -1013,28 +1013,6 @@ static inline size_t sw_hdr_size(struct hantro_ctx *ctx)
+@@ -1013,28 +1013,6 @@ static inline size_t sw_hdr_size(struct
  	return ctx->vp8_enc.boolenc.bytes_written + frame_tag_size(ctx);
  }
  
@@ -286,7 +272,7 @@ index 99099205d791..aed507a876ab 100644
  static void
  hantro_h1_vp8_enc_set_buffers(struct hantro_dev *vpu, struct hantro_ctx *ctx, u32 qp,
  			      struct v4l2_ctrl_vp8_encode_params *params)
-@@ -1450,7 +1428,7 @@ int hantro_h1_vp8_enc_run(struct hantro_ctx *ctx)
+@@ -1450,7 +1428,7 @@ int hantro_h1_vp8_enc_run(struct hantro_
  	vepu_write_relaxed(vpu, H1_REG_ENC_CTRL_ENC_MODE_VP8, H1_REG_ENC_CTRL);
  
  	hantro_h1_vp8_enc_set_params(vpu, ctx, qp, params);
@@ -295,6 +281,3 @@ index 99099205d791..aed507a876ab 100644
  	hantro_h1_vp8_enc_set_buffers(vpu, ctx, qp, params);
  
  	hantro_h1_set_color_conv(vpu, ctx);
--- 
-2.53.0
-

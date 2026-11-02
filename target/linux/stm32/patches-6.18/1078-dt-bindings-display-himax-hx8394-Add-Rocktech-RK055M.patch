@@ -15,8 +15,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  .../devicetree/bindings/display/panel/himax,hx8394.yaml         | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml b/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
-index 5725a587e35c..6a8bced68fbd 100644
 --- a/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
 +++ b/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
 @@ -23,6 +23,7 @@ properties:
@@ -35,6 +33,3 @@ index 5725a587e35c..6a8bced68fbd 100644
      then:
        required:
          - reset-gpios
--- 
-2.53.0
-

@@ -18,11 +18,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/pci/pcie/portdrv.h |   3 ++
  2 files changed, 82 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
-index a0991da48213..bce883fd1931 100644
 --- a/drivers/pci/pcie/portdrv.c
 +++ b/drivers/pci/pcie/portdrv.c
-@@ -51,10 +51,10 @@ static void release_pcie_device(struct device *dev)
+@@ -51,10 +51,10 @@ static void release_pcie_device(struct d
  
  /*
   * Fill in *pme, *aer, *dpc with the relevant Interrupt Message Numbers if
@@ -35,7 +33,7 @@ index a0991da48213..bce883fd1931 100644
  				u32 *pme, u32 *aer, u32 *dpc)
  {
  	u32 nvec = 0, pos;
-@@ -67,15 +67,14 @@ static int pcie_message_numbers(struct pci_dev *dev, int mask,
+@@ -67,15 +67,14 @@ static int pcie_message_numbers(struct p
  	 * 7.8.2, 7.10.10, 7.31.2.
  	 */
  
@@ -53,7 +51,7 @@ index a0991da48213..bce883fd1931 100644
  		u32 reg32;
  
  		pos = dev->aer_cap;
-@@ -88,7 +87,7 @@ static int pcie_message_numbers(struct pci_dev *dev, int mask,
+@@ -88,7 +87,7 @@ static int pcie_message_numbers(struct p
  	}
  #endif
  
@@ -62,7 +60,7 @@ index a0991da48213..bce883fd1931 100644
  		pos = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_DPC);
  		if (pos) {
  			pci_read_config_word(dev, pos + PCI_EXP_DPC_CAP,
-@@ -102,18 +101,18 @@ static int pcie_message_numbers(struct pci_dev *dev, int mask,
+@@ -102,18 +101,18 @@ static int pcie_message_numbers(struct p
  }
  
  /**
@@ -87,7 +85,7 @@ index a0991da48213..bce883fd1931 100644
  
  	/* Allocate the maximum possible number of MSI/MSI-X vectors */
  	nr_entries = pci_alloc_irq_vectors(dev, 1, PCIE_PORT_MAX_MSI_ENTRIES,
-@@ -122,7 +121,7 @@ static int pcie_port_enable_irq_vec(struct pci_dev *dev, int *irqs, int mask)
+@@ -122,7 +121,7 @@ static int pcie_port_enable_irq_vec(stru
  		return nr_entries;
  
  	/* See how many and which Interrupt Message Numbers we actually use */
@@ -96,7 +94,7 @@ index a0991da48213..bce883fd1931 100644
  	if (nvec > nr_entries) {
  		pci_free_irq_vectors(dev);
  		return -EIO;
-@@ -148,20 +147,79 @@ static int pcie_port_enable_irq_vec(struct pci_dev *dev, int *irqs, int mask)
+@@ -148,20 +147,79 @@ static int pcie_port_enable_irq_vec(stru
  			return nr_entries;
  	}
  
@@ -183,7 +181,7 @@ index a0991da48213..bce883fd1931 100644
  
  	return 0;
  }
-@@ -190,7 +248,7 @@ static int pcie_init_service_irqs(struct pci_dev *dev, int *irqs, int mask)
+@@ -190,7 +248,7 @@ static int pcie_init_service_irqs(struct
  		goto intx_irq;
  
  	/* Try to use MSI-X or MSI if supported */
@@ -192,8 +190,6 @@ index a0991da48213..bce883fd1931 100644
  		return 0;
  
  intx_irq:
-diff --git a/drivers/pci/pcie/portdrv.h b/drivers/pci/pcie/portdrv.h
-index bd29d1cc7b8b..fdad5ca0f583 100644
 --- a/drivers/pci/pcie/portdrv.h
 +++ b/drivers/pci/pcie/portdrv.h
 @@ -11,6 +11,9 @@
@@ -206,6 +202,3 @@ index bd29d1cc7b8b..fdad5ca0f583 100644
  /* Service Type */
  #define PCIE_PORT_SERVICE_PME_SHIFT	0	/* Power Management Event */
  #define PCIE_PORT_SERVICE_PME		(1 << PCIE_PORT_SERVICE_PME_SHIFT)
--- 
-2.53.0
-

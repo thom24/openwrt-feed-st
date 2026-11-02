@@ -17,11 +17,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp231.dtsi | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index 47a47398ed77..0b509f8bf8b4 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -57,6 +57,8 @@ optee: optee {
+@@ -57,6 +57,8 @@
  			method = "smc";
  			interrupt-parent = <&intc>;
  			interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
@@ -30,6 +28,3 @@ index 47a47398ed77..0b509f8bf8b4 100644
  		};
  
  		scmi: scmi {
--- 
-2.53.0
-

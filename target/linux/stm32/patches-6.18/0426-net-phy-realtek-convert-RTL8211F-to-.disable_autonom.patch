@@ -28,11 +28,9 @@ Domain-Review: Christophe ROULLIER <christophe.roullier@foss.st.com>
  drivers/net/phy/realtek/realtek_main.c | 6 ++++--
  1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/phy/realtek/realtek_main.c b/drivers/net/phy/realtek/realtek_main.c
-index d7e0d99a00b4..22da3275e9f2 100644
 --- a/drivers/net/phy/realtek/realtek_main.c
 +++ b/drivers/net/phy/realtek/realtek_main.c
-@@ -1303,7 +1303,7 @@ static int rtl8211f_config_aldps(struct phy_device *phydev)
+@@ -1303,7 +1303,7 @@ static int rtl8211f_config_aldps(struct
  	return phy_modify(phydev, RTL8211F_PHYCR1, mask, mask);
  }
  
@@ -41,7 +39,7 @@ index d7e0d99a00b4..22da3275e9f2 100644
  {
  	/* Disable PHY-mode EEE so LPI is passed to the MAC */
  	return phy_modify(phydev, RTL8211F_PHYCR2,
-@@ -1338,7 +1338,7 @@ static int rtl8211f_config_init(struct phy_device *phydev)
+@@ -1338,7 +1338,7 @@ static int rtl8211f_config_init(struct p
  		return ret;
  	}
  
@@ -50,7 +48,7 @@ index d7e0d99a00b4..22da3275e9f2 100644
  }
  
  static int rtl821x_suspend(struct phy_device *phydev)
-@@ -3908,6 +3908,7 @@ static struct phy_driver realtek_drvs[] = {
+@@ -3908,6 +3908,7 @@ static struct phy_driver realtek_drvs[]
  		.led_hw_is_supported = rtl8211x_led_hw_is_supported,
  		.led_hw_control_get = rtl8211f_led_hw_control_get,
  		.led_hw_control_set = rtl8211f_led_hw_control_set,
@@ -58,7 +56,7 @@ index d7e0d99a00b4..22da3275e9f2 100644
  	}, {
  		PHY_ID_MATCH_EXACT(RTL_8211FVD_PHYID),
  		.name		= "RTL8211F-VD Gigabit Ethernet",
-@@ -3921,6 +3922,7 @@ static struct phy_driver realtek_drvs[] = {
+@@ -3921,6 +3922,7 @@ static struct phy_driver realtek_drvs[]
  		.read_page	= rtl821x_read_page,
  		.write_page	= rtl821x_write_page,
  		.flags		= PHY_ALWAYS_CALL_SUSPEND,
@@ -66,6 +64,3 @@ index d7e0d99a00b4..22da3275e9f2 100644
  	}, {
  		.name		= "Generic FE-GE Realtek PHY",
  		.match_phy_device = rtlgen_match_phy_device,
--- 
-2.53.0
-

@@ -16,11 +16,9 @@ Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
  drivers/remoteproc/stm32_rproc.c | 48 ++++----------------------------
  1 file changed, 6 insertions(+), 42 deletions(-)
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index 2d15c25e339e..c09fdafc53f1 100644
 --- a/drivers/remoteproc/stm32_rproc.c
 +++ b/drivers/remoteproc/stm32_rproc.c
-@@ -778,32 +778,6 @@ static void stm32_rproc_kick(struct rproc *rproc, int vqid)
+@@ -778,32 +778,6 @@ static void stm32_rproc_kick(struct rpro
  	}
  }
  
@@ -53,7 +51,7 @@ index 2d15c25e339e..c09fdafc53f1 100644
  static struct resource_table *
  stm32_rproc_get_loaded_rsc_table(struct rproc *rproc, size_t *table_sz)
  {
-@@ -845,8 +819,7 @@ static int stm32_rproc_get_m4_info(struct rproc *rproc)
+@@ -845,8 +819,7 @@ static int stm32_rproc_get_m4_info(struc
  {
  	struct stm32_rproc *ddata = rproc->priv;
  	struct device *dev = rproc->dev.parent;
@@ -63,7 +61,7 @@ index 2d15c25e339e..c09fdafc53f1 100644
  	unsigned int state;
  	int ret;
  
-@@ -869,20 +842,16 @@ static int stm32_rproc_get_m4_info(struct rproc *rproc)
+@@ -869,20 +842,16 @@ static int stm32_rproc_get_m4_info(struc
  	rproc->state = RPROC_DETACHED;
  
  	/* Get the resource table information */
@@ -86,7 +84,7 @@ index 2d15c25e339e..c09fdafc53f1 100644
  	ddata->rsc_va = devm_ioremap_wc(dev, rsc_pa, RSC_TBL_SIZE);
  	if (IS_ERR_OR_NULL(ddata->rsc_va)) {
  		dev_err(dev, "Unable to map memory region: %pa+%x\n", &rsc_pa, RSC_TBL_SIZE);
-@@ -905,8 +874,7 @@ static int stm32_rproc_get_m33_info(struct rproc *rproc)
+@@ -905,8 +874,7 @@ static int stm32_rproc_get_m33_info(stru
  	struct stm32_rproc *ddata = rproc->priv;
  	struct device *dev = rproc->dev.parent;
  	unsigned int cm_state;
@@ -96,7 +94,7 @@ index 2d15c25e339e..c09fdafc53f1 100644
  	u32 size;
  	int ret;
  
-@@ -936,20 +904,16 @@ static int stm32_rproc_get_m33_info(struct rproc *rproc)
+@@ -936,20 +904,16 @@ static int stm32_rproc_get_m33_info(stru
  	}
  
  	/* Get the resource table information */
@@ -119,6 +117,3 @@ index 2d15c25e339e..c09fdafc53f1 100644
  	ddata->rsc_va = devm_ioremap_wc(dev, rsc_pa, RSC_TBL_SIZE);
  	if (IS_ERR_OR_NULL(ddata->rsc_va)) {
  		dev_err(dev, "Unable to map memory region: %pa+%x\n", &rsc_pa, RSC_TBL_SIZE);
--- 
-2.53.0
-

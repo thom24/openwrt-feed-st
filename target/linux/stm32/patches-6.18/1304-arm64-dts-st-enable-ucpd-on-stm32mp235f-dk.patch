@@ -22,11 +22,9 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 56 +++++++++--------------
  1 file changed, 21 insertions(+), 35 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-index 86a3d8817fe9..941d4e7f2d07 100644
 --- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-@@ -595,41 +595,6 @@ &m33_rproc {
+@@ -595,41 +595,6 @@
  	status = "okay";
  };
  
@@ -68,7 +66,7 @@ index 86a3d8817fe9..941d4e7f2d07 100644
  &optee {
  	bootph-all;
  };
-@@ -790,6 +755,26 @@ pwm3: pwm {
+@@ -790,6 +755,26 @@
  	};
  };
  
@@ -95,7 +93,7 @@ index 86a3d8817fe9..941d4e7f2d07 100644
  /* Bluetooth */
  &usart1 {
  	pinctrl-names = "default", "sleep", "idle";
-@@ -854,6 +839,7 @@ &usb3dr {
+@@ -854,6 +839,7 @@
  	status = "okay";
  
  	dwc3: usb@48300000 {
@@ -103,6 +101,3 @@ index 86a3d8817fe9..941d4e7f2d07 100644
  		usb-role-switch;
  		port {
  			dwc3_ep: endpoint {
--- 
-2.53.0
-

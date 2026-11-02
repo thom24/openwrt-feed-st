@@ -32,8 +32,6 @@ Signed-off-by: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
  drivers/char/hw_random/stm32-rng.c | 84 ++++++++++++++++++++++++------
  1 file changed, 67 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/char/hw_random/stm32-rng.c b/drivers/char/hw_random/stm32-rng.c
-index f5bfe54c01dc..083dcb10aa23 100644
 --- a/drivers/char/hw_random/stm32-rng.c
 +++ b/drivers/char/hw_random/stm32-rng.c
 @@ -21,16 +21,15 @@
@@ -100,7 +98,7 @@ index f5bfe54c01dc..083dcb10aa23 100644
   * 3. If SECS was set in step 1 (no auto-reset) wait for SECS to be
   * cleared by RNG. The random number generation is now back to normal.
   */
-@@ -124,10 +131,6 @@ static int stm32_rng_conceal_seed_error_cond_reset(struct stm32_rng_private *pri
+@@ -124,10 +131,6 @@ static int stm32_rng_conceal_seed_error_
  		return err;
  	}
  
@@ -111,7 +109,7 @@ index f5bfe54c01dc..083dcb10aa23 100644
  	err = readl_relaxed_poll_timeout_atomic(priv->base + RNG_SR, sr, !(sr & RNG_SR_SECS), 10,
  						100000);
  	if (err) {
-@@ -304,9 +307,10 @@ static int stm32_rng_init(struct hwrng *rng)
+@@ -304,9 +307,10 @@ static int stm32_rng_init(struct hwrng *
  	 */
  	if (priv->data->has_cond_reset && priv->data->cr) {
  		uint clock_div = stm32_rng_clock_freq_restrain(rng);
@@ -124,7 +122,7 @@ index f5bfe54c01dc..083dcb10aa23 100644
  		       (clock_div << RNG_CR_CLKDIV_SHIFT);
  		if (priv->ced)
  			reg &= ~RNG_CR_CED;
-@@ -356,18 +360,33 @@ static int stm32_rng_init(struct hwrng *rng)
+@@ -356,18 +360,33 @@ static int stm32_rng_init(struct hwrng *
  	err = readl_relaxed_poll_timeout_atomic(priv->base + RNG_SR, reg,
  						reg & RNG_SR_DRDY,
  						10, 100000);
@@ -161,7 +159,7 @@ index f5bfe54c01dc..083dcb10aa23 100644
  static int __maybe_unused stm32_rng_runtime_suspend(struct device *dev)
  {
  	struct stm32_rng_private *priv = dev_get_drvdata(dev);
-@@ -387,6 +406,10 @@ static int __maybe_unused stm32_rng_suspend(struct device *dev)
+@@ -387,6 +406,10 @@ static int __maybe_unused stm32_rng_susp
  	struct stm32_rng_private *priv = dev_get_drvdata(dev);
  	int err;
  
@@ -172,7 +170,7 @@ index f5bfe54c01dc..083dcb10aa23 100644
  	err = clk_bulk_prepare_enable(priv->data->nb_clock, priv->clk_bulk);
  	if (err)
  		return err;
-@@ -432,6 +455,10 @@ static int __maybe_unused stm32_rng_resume(struct device *dev)
+@@ -432,6 +455,10 @@ static int __maybe_unused stm32_rng_resu
  	int err;
  	u32 reg;
  
@@ -183,7 +181,7 @@ index f5bfe54c01dc..083dcb10aa23 100644
  	err = clk_bulk_prepare_enable(priv->data->nb_clock, priv->clk_bulk);
  	if (err)
  		return err;
-@@ -486,15 +513,27 @@ static const struct stm32_rng_data stm32mp25_rng_data = {
+@@ -486,15 +513,27 @@ static const struct stm32_rng_data stm32
  	.has_cond_reset = true,
  	.max_clock_rate = 48000000,
  	.nb_clock = 2,
@@ -211,18 +209,18 @@ index f5bfe54c01dc..083dcb10aa23 100644
  	.cr = 0x00F00D00,
  	.nscr = 0x2B5BB,
  	.htcr = 0x969D,
-@@ -511,6 +550,10 @@ static const struct of_device_id stm32_rng_match[] = {
- 		.compatible = "st,stm32mp25-rng",
+@@ -512,6 +551,10 @@ static const struct of_device_id stm32_r
  		.data = &stm32mp25_rng_data,
  	},
-+	{
+ 	{
 +		.compatible = "st,stm32mp21-rng",
 +		.data = &stm32mp21_rng_data,
 +	},
- 	{
++	{
  		.compatible = "st,stm32mp13-rng",
  		.data = &stm32mp13_rng_data,
-@@ -558,6 +601,7 @@ static int stm32_rng_probe(struct platform_device *ofdev)
+ 	},
+@@ -558,6 +601,7 @@ static int stm32_rng_probe(struct platfo
  
  	priv->rng.name = dev_driver_string(dev);
  	priv->rng.init = stm32_rng_init;
@@ -230,7 +228,7 @@ index f5bfe54c01dc..083dcb10aa23 100644
  	priv->rng.read = stm32_rng_read;
  	priv->rng.quality = 900;
  
-@@ -589,7 +633,13 @@ static int stm32_rng_probe(struct platform_device *ofdev)
+@@ -589,7 +633,13 @@ static int stm32_rng_probe(struct platfo
  	if (ret)
  		return ret;
  
@@ -245,6 +243,3 @@ index f5bfe54c01dc..083dcb10aa23 100644
  }
  
  static struct platform_driver stm32_rng_driver = {
--- 
-2.53.0
-

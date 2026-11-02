@@ -27,11 +27,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/tty/serial/stm32-usart.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index dcd3d24bdfe4..6992cfc4fcde 100644
 --- a/drivers/tty/serial/stm32-usart.c
 +++ b/drivers/tty/serial/stm32-usart.c
-@@ -1089,7 +1089,7 @@ static irqreturn_t stm32_usart_interrupt(int irq, void *ptr)
+@@ -1089,7 +1089,7 @@ static irqreturn_t stm32_usart_interrupt
  		if (stm32_port->clk_am)
  			stm32_usart_disable_am(stm32_port);
  
@@ -40,6 +38,3 @@ index dcd3d24bdfe4..6992cfc4fcde 100644
  
  		ret = IRQ_HANDLED;
  	}
--- 
-2.53.0
-

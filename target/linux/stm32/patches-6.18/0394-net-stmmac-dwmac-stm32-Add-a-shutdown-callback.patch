@@ -13,11 +13,9 @@ Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
  drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
-index 87d2ed9c85ac..fb06af039a9f 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
-@@ -758,6 +758,7 @@ MODULE_DEVICE_TABLE(of, stm32_dwmac_match);
+@@ -758,6 +758,7 @@ MODULE_DEVICE_TABLE(of, stm32_dwmac_matc
  static struct platform_driver stm32_dwmac_driver = {
  	.probe  = stm32_dwmac_probe,
  	.remove = stm32_dwmac_remove,
@@ -25,6 +23,3 @@ index 87d2ed9c85ac..fb06af039a9f 100644
  	.driver = {
  		.name           = "stm32-dwmac",
  #ifdef CONFIG_PM_SLEEP
--- 
-2.53.0
-

@@ -21,11 +21,9 @@ Tested-by: Christophe KERELLO <christophe.kerello@st.com>
  arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 30 ++++++++++++++++++++++
  1 file changed, 30 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-index 4c3a7ff931fe..0abd0398509d 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-@@ -560,6 +560,36 @@ &sdmmc1 {
+@@ -560,6 +560,36 @@
  	status = "okay";
  };
  
@@ -62,6 +60,3 @@ index 4c3a7ff931fe..0abd0398509d 100644
  &spi3 {
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&spi3_pins_a>;
--- 
-2.53.0
-

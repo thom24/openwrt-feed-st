@@ -14,8 +14,6 @@ Signed-off-by: Mark Brown <broonie@kernel.org>
  Documentation/devicetree/bindings/spi/st,stm32-spi.yaml | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-index ca880a226afa..472e92974714 100644
 --- a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
 +++ b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
 @@ -96,6 +96,9 @@ properties:
@@ -28,6 +26,3 @@ index ca880a226afa..472e92974714 100644
    access-controllers:
      minItems: 1
      maxItems: 2
--- 
-2.53.0
-

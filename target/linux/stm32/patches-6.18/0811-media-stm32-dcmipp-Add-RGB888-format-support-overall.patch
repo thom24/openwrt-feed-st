@@ -15,8 +15,6 @@ Signed-off-by: Hans Verkuil <hverkuil+cisco@kernel.org>
  drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c   | 4 ++++
  3 files changed, 7 insertions(+)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
-index e9cab99775bc..67f0dcdab9cb 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
 @@ -57,6 +57,7 @@ struct dcmipp_bytecap_pix_map {
@@ -27,8 +25,6 @@ index e9cab99775bc..67f0dcdab9cb 100644
  	PIXMAP_MBUS_PFMT(YUYV8_2X8, YUYV),
  	PIXMAP_MBUS_PFMT(YUYV8_1X16, YUYV),
  	PIXMAP_MBUS_PFMT(YVYU8_2X8, YVYU),
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-index ec1d773d5ad1..dde28ed288cd 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
 @@ -49,6 +49,8 @@ struct dcmipp_byteproc_pix_map {
@@ -40,8 +36,6 @@ index ec1d773d5ad1..dde28ed288cd 100644
  	PIXMAP_MBUS_BPP(YUYV8_2X8, 2),
  	PIXMAP_MBUS_BPP(YUYV8_1X16, 2),
  	PIXMAP_MBUS_BPP(YVYU8_2X8, 2),
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
-index 7e5311b67d7e..c44d664f6a0b 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
 @@ -19,6 +19,7 @@
@@ -52,7 +46,7 @@ index 7e5311b67d7e..c44d664f6a0b 100644
  #define DCMIPP_PRCR_FORMAT_RAW8		0x2a
  #define DCMIPP_PRCR_FORMAT_RAW10	0x2b
  #define DCMIPP_PRCR_FORMAT_RAW12	0x2c
-@@ -72,6 +73,9 @@ static const struct dcmipp_inp_pix_map dcmipp_inp_pix_map_list[] = {
+@@ -72,6 +73,9 @@ static const struct dcmipp_inp_pix_map d
  	PIXMAP_SINK_SRC_PRCR_SWAP(RGB565_2X8_LE, RGB565_2X8_LE, RGB565, 1, MIPI_CSI2_DT_RGB565),
  	PIXMAP_SINK_SRC_PRCR_SWAP(RGB565_2X8_BE, RGB565_2X8_LE, RGB565, 0, MIPI_CSI2_DT_RGB565),
  	PIXMAP_SINK_SRC_PRCR_SWAP(RGB565_1X16, RGB565_1X16, RGB565, 0, MIPI_CSI2_DT_RGB565),
@@ -62,6 +56,3 @@ index 7e5311b67d7e..c44d664f6a0b 100644
  	/* YUV422 */
  	PIXMAP_SINK_SRC_PRCR_SWAP(YUYV8_2X8, YUYV8_2X8, YUV422, 1, MIPI_CSI2_DT_YUV422_8B),
  	PIXMAP_SINK_SRC_PRCR_SWAP(YUYV8_1X16, YUYV8_1X16, YUV422, 0, MIPI_CSI2_DT_YUV422_8B),
--- 
-2.53.0
-

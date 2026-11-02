@@ -13,11 +13,9 @@ Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
  drivers/dma/stm32/stm32-dma3.c | 15 ++++++++-------
  1 file changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
-index d4b200b8131a..bb58c629525c 100644
 --- a/drivers/dma/stm32/stm32-dma3.c
 +++ b/drivers/dma/stm32/stm32-dma3.c
-@@ -1533,9 +1533,7 @@ static u32 stm32_dma3_get_ll_count(struct stm32_dma3_chan *chan, size_t len, boo
+@@ -1533,9 +1533,7 @@ static u32 stm32_dma3_get_ll_count(struc
  static void stm32_dma3_init_chan_config_for_memcpy(struct stm32_dma3_chan *chan,
  						   dma_addr_t dst, dma_addr_t src)
  {
@@ -28,7 +26,7 @@ index d4b200b8131a..bb58c629525c 100644
  
  	/* Initialize dt_config if channel not pre-configured through DT */
  	if (!(chan->config_set & STM32_DMA3_CFG_SET_DT)) {
-@@ -1545,12 +1543,15 @@ static void stm32_dma3_init_chan_config_for_memcpy(struct stm32_dma3_chan *chan,
+@@ -1545,12 +1543,15 @@ static void stm32_dma3_init_chan_config_
  		chan->dt_config.tr_conf |= FIELD_PREP(STM32_DMA3_DT_TCEM, CTR2_TCEM_CHANNEL);
  	}
  
@@ -48,6 +46,3 @@ index d4b200b8131a..bb58c629525c 100644
  		chan->dma_config.src_addr = src;
  		chan->dma_config.dst_addr = dst;
  	}
--- 
-2.53.0
-

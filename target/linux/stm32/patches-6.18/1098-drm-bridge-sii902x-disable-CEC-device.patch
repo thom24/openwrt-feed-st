@@ -25,8 +25,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/bridge/sii902x.c | 20 ++++++++++++++++++++
  1 file changed, 20 insertions(+)
 
-diff --git a/drivers/gpu/drm/bridge/sii902x.c b/drivers/gpu/drm/bridge/sii902x.c
-index a4be6fe8eaa9..8feccf4963e1 100644
 --- a/drivers/gpu/drm/bridge/sii902x.c
 +++ b/drivers/gpu/drm/bridge/sii902x.c
 @@ -171,6 +171,11 @@
@@ -41,7 +39,7 @@ index a4be6fe8eaa9..8feccf4963e1 100644
  struct sii902x {
  	struct i2c_client *i2c;
  	struct regmap *regmap;
-@@ -1154,6 +1159,13 @@ static int sii902x_init(struct sii902x *sii902x)
+@@ -1154,6 +1159,13 @@ static int sii902x_init(struct sii902x *
  {
  	struct device *dev = &sii902x->i2c->dev;
  	unsigned int status = 0;
@@ -55,7 +53,7 @@ index a4be6fe8eaa9..8feccf4963e1 100644
  	u8 chipid[4];
  	int ret;
  
-@@ -1176,6 +1188,14 @@ static int sii902x_init(struct sii902x *sii902x)
+@@ -1176,6 +1188,14 @@ static int sii902x_init(struct sii902x *
  		return -EINVAL;
  	}
  
@@ -70,6 +68,3 @@ index a4be6fe8eaa9..8feccf4963e1 100644
  	/* Clear all pending interrupts */
  	regmap_read(sii902x->regmap, SII902X_INT_STATUS, &status);
  	regmap_write(sii902x->regmap, SII902X_INT_STATUS, status);
--- 
-2.53.0
-

@@ -24,8 +24,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/input/touchscreen/edt-ft5x06.c | 28 +++++++++++++++++++++++++-
  1 file changed, 27 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/input/touchscreen/edt-ft5x06.c b/drivers/input/touchscreen/edt-ft5x06.c
-index 4efdb467b6c6..f288e521d427 100644
 --- a/drivers/input/touchscreen/edt-ft5x06.c
 +++ b/drivers/input/touchscreen/edt-ft5x06.c
 @@ -31,8 +31,9 @@
@@ -39,7 +37,7 @@ index 4efdb467b6c6..f288e521d427 100644
  
  #define WORK_REGISTER_THRESHOLD		0x00
  #define WORK_REGISTER_REPORT_RATE	0x08
-@@ -1142,13 +1143,38 @@ static int edt_ft5x06_ts_probe(struct i2c_client *client)
+@@ -1142,13 +1143,38 @@ static int edt_ft5x06_ts_probe(struct i2
  	const struct edt_i2c_chip_data *chip_data;
  	struct edt_ft5x06_ts_data *tsdata;
  	unsigned int val;
@@ -78,6 +76,3 @@ index 4efdb467b6c6..f288e521d427 100644
  	tsdata = devm_kzalloc(&client->dev, sizeof(*tsdata), GFP_KERNEL);
  	if (!tsdata) {
  		dev_err(&client->dev, "failed to allocate driver data.\n");
--- 
-2.53.0
-

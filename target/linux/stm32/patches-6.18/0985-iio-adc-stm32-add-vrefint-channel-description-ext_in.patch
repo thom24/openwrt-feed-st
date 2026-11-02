@@ -20,11 +20,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/iio/adc/stm32-adc.c | 30 +++++++++++++++++++++++++++++-
  1 file changed, 29 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iio/adc/stm32-adc.c b/drivers/iio/adc/stm32-adc.c
-index a0356f72a126..0e287f80f7bc 100644
 --- a/drivers/iio/adc/stm32-adc.c
 +++ b/drivers/iio/adc/stm32-adc.c
-@@ -2448,6 +2448,31 @@ static const struct iio_chan_spec_ext_info stm32_adc_ext_info[] = {
+@@ -2448,6 +2448,31 @@ static const struct iio_chan_spec_ext_in
  	{ }
  };
  
@@ -56,7 +54,7 @@ index a0356f72a126..0e287f80f7bc 100644
  static void stm32_adc_debugfs_init(struct iio_dev *indio_dev)
  {
  	struct stm32_adc *adc = iio_priv(indio_dev);
-@@ -2547,7 +2572,10 @@ static void stm32_adc_chan_init_one(struct iio_dev *indio_dev,
+@@ -2547,7 +2572,10 @@ static void stm32_adc_chan_init_one(stru
  	chan->scan_type.sign = 'u';
  	chan->scan_type.realbits = adc->cfg->adc_info->resolutions[adc->res];
  	chan->scan_type.storagebits = 16;
@@ -68,6 +66,3 @@ index a0356f72a126..0e287f80f7bc 100644
  
  	/* pre-build selected channels mask */
  	adc->pcsel |= BIT(chan->channel);
--- 
-2.53.0
-

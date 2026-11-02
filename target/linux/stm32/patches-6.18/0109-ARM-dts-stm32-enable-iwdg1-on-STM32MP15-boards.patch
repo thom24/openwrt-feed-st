@@ -18,11 +18,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi        | 6 ++++++
  2 files changed, 12 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
-index a3ae5fec6516..c6efca3d5015 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
-@@ -412,6 +412,12 @@ &ipcc {
+@@ -412,6 +412,12 @@
  	status = "okay";
  };
  
@@ -35,11 +33,9 @@ index a3ae5fec6516..c6efca3d5015 100644
  &iwdg2 {
  	timeout-sec = <32>;
  	bootph-all;
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-index 5c1c365e28fd..fd52b34b6349 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-@@ -545,6 +545,12 @@ &ipcc {
+@@ -545,6 +545,12 @@
  	status = "okay";
  };
  
@@ -52,6 +48,3 @@ index 5c1c365e28fd..fd52b34b6349 100644
  &iwdg2 {
  	timeout-sec = <32>;
  	bootph-all;
--- 
-2.53.0
-

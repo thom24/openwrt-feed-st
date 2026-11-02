@@ -15,11 +15,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp231.dtsi | 25 +++++++++++++++++++++++++
  1 file changed, 25 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index 3da4c610a071..d37ec7b6a7af 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -2680,4 +2680,29 @@ intc: interrupt-controller@4ac10000 {
+@@ -2680,4 +2680,29 @@
  			interrupt-controller;
  		};
  	};
@@ -49,6 +47,3 @@ index 3da4c610a071..d37ec7b6a7af 100644
 +		};
 +	};
  };
--- 
-2.53.0
-

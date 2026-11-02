@@ -19,11 +19,9 @@ Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
  drivers/pci/controller/dwc/pcie-stm32.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pci/controller/dwc/pcie-stm32.c b/drivers/pci/controller/dwc/pcie-stm32.c
-index 1be196d50883..295f70ce6311 100644
 --- a/drivers/pci/controller/dwc/pcie-stm32.c
 +++ b/drivers/pci/controller/dwc/pcie-stm32.c
-@@ -311,7 +311,7 @@ static int stm32_pcie_probe(struct platform_device *pdev)
+@@ -311,7 +311,7 @@ static int stm32_pcie_probe(struct platf
  		goto err_disable_clk;
  
  	if (stm32_pcie->wake_gpio)
@@ -32,7 +30,7 @@ index 1be196d50883..295f70ce6311 100644
  
  	return 0;
  
-@@ -330,7 +330,7 @@ static void stm32_pcie_remove(struct platform_device *pdev)
+@@ -330,7 +330,7 @@ static void stm32_pcie_remove(struct pla
  	struct dw_pcie_rp *pp = &stm32_pcie->pci.pp;
  
  	if (stm32_pcie->wake_gpio)
@@ -41,6 +39,3 @@ index 1be196d50883..295f70ce6311 100644
  
  	dw_pcie_host_deinit(pp);
  
--- 
-2.53.0
-

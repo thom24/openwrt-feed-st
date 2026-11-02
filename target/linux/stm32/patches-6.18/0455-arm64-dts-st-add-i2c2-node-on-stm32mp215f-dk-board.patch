@@ -20,11 +20,9 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  arch/arm64/boot/dts/st/stm32mp215f-dk.dts     |  9 +++++++++
  2 files changed, 26 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi
-index 05226343525f..ab739e6ba3d6 100644
 --- a/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi
-@@ -225,6 +225,23 @@ pins {
+@@ -225,6 +225,23 @@
  		};
  	};
  
@@ -48,11 +46,9 @@ index 05226343525f..ab739e6ba3d6 100644
  	usart2_pins_a: usart2-0 {
  		pins1 {
  			pinmux = <STM32_PINMUX('A', 4, AF6)>; /* USART2_TX */
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-index 35cb137ac8a5..d31165254e27 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-@@ -175,6 +175,15 @@ &gpioz {
+@@ -175,6 +175,15 @@
  	bootph-all;
  };
  
@@ -68,6 +64,3 @@ index 35cb137ac8a5..d31165254e27 100644
  &optee {
  	bootph-all;
  };
--- 
-2.53.0
-

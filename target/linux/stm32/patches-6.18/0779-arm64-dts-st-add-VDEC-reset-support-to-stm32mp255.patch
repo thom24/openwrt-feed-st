@@ -19,11 +19,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp255.dtsi | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp255.dtsi b/arch/arm64/boot/dts/st/stm32mp255.dtsi
-index 0dc1066959e6..e706787c6457 100644
 --- a/arch/arm64/boot/dts/st/stm32mp255.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp255.dtsi
-@@ -27,6 +27,7 @@ lvds: lvds@48060000 {
+@@ -27,6 +27,7 @@
  	vdec: vdec@480d0000 {
  		compatible = "st,stm32mp25-vdec";
  		reg = <0x480d0000 0x3c8>;
@@ -31,6 +29,3 @@ index 0dc1066959e6..e706787c6457 100644
  		interrupts = <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>;
  		clocks = <&rcc CK_BUS_VDEC>;
  		access-controllers = <&rifsc 89>;
--- 
-2.53.0
-

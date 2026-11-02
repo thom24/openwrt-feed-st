@@ -16,8 +16,6 @@ Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
  drivers/remoteproc/stm32_rproc.c | 172 ++++++++++++++++++-------------
  1 file changed, 102 insertions(+), 70 deletions(-)
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index e44b9f624a91..b4bedca49875 100644
 --- a/drivers/remoteproc/stm32_rproc.c
 +++ b/drivers/remoteproc/stm32_rproc.c
 @@ -12,6 +12,7 @@
@@ -94,7 +92,7 @@ index e44b9f624a91..b4bedca49875 100644
  }
  
  static const struct rproc_ops st_rproc_ops = {
-@@ -876,34 +841,81 @@ static const struct rproc_ops st_rproc_tee_ops = {
+@@ -876,34 +841,81 @@ static const struct rproc_ops st_rproc_t
  	.load		= stm32_rproc_tee_elf_load,
  };
  
@@ -123,7 +121,7 @@ index e44b9f624a91..b4bedca49875 100644
 +	/* check the Cortex-M state */
 +	if (!ddata->cm_state.map)
 +		 /* We couldn't get the coprocessor's state, assume it is not running */
-+		return 0;
+ 		return 0;
 +
 +	ret = regmap_read(ddata->cm_state.map, ddata->cm_state.reg, &state);
 +	if (ret)
@@ -139,11 +137,12 @@ index e44b9f624a91..b4bedca49875 100644
 +	if (ret) {
 +		dev_err(dev, "failed to read rsc tbl addr\n");
 +		return -EINVAL;
-+	}
-+
+ 	}
+ 
+-	return regmap_read(ddata->cm_state.map, ddata->cm_state.reg, state);
 +	if (!rsc_da)
 +		/* no rsc table */
- 		return 0;
++		return 0;
 +
 +	ret = stm32_rproc_da_to_pa(rproc, rsc_da, &rsc_pa);
 +	if (ret)
@@ -153,9 +152,8 @@ index e44b9f624a91..b4bedca49875 100644
 +	if (IS_ERR_OR_NULL(ddata->rsc_va)) {
 +		dev_err(dev, "Unable to map memory region: %pa+%x\n", &rsc_pa, RSC_TBL_SIZE);
 +		return -ENOMEM;
- 	}
- 
--	return regmap_read(ddata->cm_state.map, ddata->cm_state.reg, state);
++	}
++
 +	/*
 +	 * Assuming the resource table fits in 1kB is fair.
 +	 * Notice for the detach, that this 1 kB memory area has to be reserved in the coprocessor
@@ -194,7 +192,7 @@ index e44b9f624a91..b4bedca49875 100644
  		return 0;
  	}
  
-@@ -913,31 +925,54 @@ static int stm32_rproc_get_m33_status(struct stm32_rproc *ddata,
+@@ -913,31 +925,54 @@ static int stm32_rproc_get_m33_status(st
  
  	switch ((cm_state >> M33_STATE_FIELD_SHIFT) & M33_STATE_FIELD_MASK) {
  	case M33_STATE_OFF:
@@ -257,7 +255,7 @@ index e44b9f624a91..b4bedca49875 100644
  };
  
  static const struct of_device_id stm32_rproc_match[] = {
-@@ -1095,7 +1130,6 @@ static int stm32_rproc_probe(struct platform_device *pdev)
+@@ -1095,7 +1130,6 @@ static int stm32_rproc_probe(struct plat
  	struct tee_rproc *trproc = NULL;
  	const char *fw_name;
  	struct rproc *rproc;
@@ -265,7 +263,7 @@ index e44b9f624a91..b4bedca49875 100644
  	int ret;
  
  	desc = device_get_match_data(&pdev->dev);
-@@ -1151,12 +1185,10 @@ static int stm32_rproc_probe(struct platform_device *pdev)
+@@ -1151,12 +1185,10 @@ static int stm32_rproc_probe(struct plat
  	if (ret)
  		goto free_rproc;
  
@@ -279,6 +277,3 @@ index e44b9f624a91..b4bedca49875 100644
  
  	rproc->has_iommu = false;
  
--- 
-2.53.0
-

@@ -15,8 +15,6 @@ Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
  drivers/dma/stm32/stm32-dma3.c | 83 ++++++++++++++++++++++++++++------
  1 file changed, 69 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
-index f8504f4ecaaa..4815e9ce4fa5 100644
 --- a/drivers/dma/stm32/stm32-dma3.c
 +++ b/drivers/dma/stm32/stm32-dma3.c
 @@ -107,6 +107,7 @@ enum ccidcfgr_cid {
@@ -36,7 +34,7 @@ index f8504f4ecaaa..4815e9ce4fa5 100644
  };
  
  struct stm32_dma3_ddata {
-@@ -1106,6 +1109,32 @@ static int stm32_dma3_chan_suspend(struct stm32_dma3_chan *chan, bool susp)
+@@ -1106,6 +1109,32 @@ static int stm32_dma3_chan_suspend(struc
  	return ret;
  }
  
@@ -69,7 +67,7 @@ index f8504f4ecaaa..4815e9ce4fa5 100644
  static void stm32_dma3_chan_reset(struct stm32_dma3_chan *chan)
  {
  	struct stm32_dma3_ddata *ddata = to_stm32_dma3_ddata(chan);
-@@ -1144,7 +1173,7 @@ static void stm32_dma3_chan_set_residue(struct stm32_dma3_chan *chan,
+@@ -1144,7 +1173,7 @@ static void stm32_dma3_chan_set_residue(
  	struct stm32_dma3_ddata *ddata = to_stm32_dma3_ddata(chan);
  	struct device *dev = chan2dev(chan);
  	struct stm32_dma3_hwdesc *hwdesc;
@@ -78,7 +76,7 @@ index f8504f4ecaaa..4815e9ce4fa5 100644
  	bool pack_unpack;
  	int ret;
  
-@@ -1177,7 +1206,8 @@ static void stm32_dma3_chan_set_residue(struct stm32_dma3_chan *chan,
+@@ -1177,7 +1206,8 @@ static void stm32_dma3_chan_set_residue(
  	/* Read registers to have a snapshot */
  	cllr = readl_relaxed(ddata->base + STM32_DMA3_CLLR(chan->id));
  	cbr1 = readl_relaxed(ddata->base + STM32_DMA3_CBR1(chan->id));
@@ -88,7 +86,7 @@ index f8504f4ecaaa..4815e9ce4fa5 100644
  
  	/* Resume current transfer */
  	if (csr & CSR_SUSPF) {
-@@ -1197,12 +1227,17 @@ static void stm32_dma3_chan_set_residue(struct stm32_dma3_chan *chan,
+@@ -1197,12 +1227,17 @@ static void stm32_dma3_chan_set_residue(
  	}
  	curr_lli = ret;
  
@@ -111,7 +109,7 @@ index f8504f4ecaaa..4815e9ce4fa5 100644
  
  	/*
  	 * In case of PACKING (Destination burst length > Source burst length) or UNPACKING
-@@ -1254,16 +1289,16 @@ static int stm32_dma3_chan_stop(struct stm32_dma3_chan *chan)
+@@ -1254,16 +1289,16 @@ static int stm32_dma3_chan_stop(struct s
  	ccr = readl_relaxed(ddata->base + STM32_DMA3_CCR(chan->id));
  	writel_relaxed(ccr & ~(CCR_ALLIE | CCR_EN), ddata->base + STM32_DMA3_CCR(chan->id));
  
@@ -135,7 +133,7 @@ index f8504f4ecaaa..4815e9ce4fa5 100644
  	 */
  	stm32_dma3_chan_reset(chan);
  
-@@ -1386,6 +1421,15 @@ static int stm32_dma3_alloc_chan_resources(struct dma_chan *c)
+@@ -1386,6 +1421,15 @@ static int stm32_dma3_alloc_chan_resourc
  	struct stm32_dma3_ddata *ddata = to_stm32_dma3_ddata(chan);
  	int ret;
  
@@ -151,7 +149,7 @@ index f8504f4ecaaa..4815e9ce4fa5 100644
  	ret = pm_runtime_resume_and_get(ddata2dev(ddata));
  	if (ret < 0)
  		return ret;
-@@ -1435,6 +1479,7 @@ static void stm32_dma3_free_chan_resources(struct dma_chan *c)
+@@ -1435,6 +1479,7 @@ static void stm32_dma3_free_chan_resourc
  	/* Reset configuration */
  	memset(&chan->dt_config, 0, sizeof(chan->dt_config));
  	memset(&chan->dma_config, 0, sizeof(chan->dma_config));
@@ -159,7 +157,7 @@ index f8504f4ecaaa..4815e9ce4fa5 100644
  	chan->config_set = 0;
  }
  
-@@ -1741,6 +1786,14 @@ static int stm32_dma3_config(struct dma_chan *c, struct dma_slave_config *config
+@@ -1741,6 +1786,14 @@ static int stm32_dma3_config(struct dma_
  	struct stm32_dma3_chan *chan = to_stm32_dma3_chan(c);
  
  	memcpy(&chan->dma_config, config, sizeof(*config));
@@ -174,7 +172,7 @@ index f8504f4ecaaa..4815e9ce4fa5 100644
  	chan->config_set |= STM32_DMA3_CFG_SET_DMA;
  
  	return 0;
-@@ -2012,6 +2065,8 @@ static u32 stm32_dma3_check_rif(struct stm32_dma3_ddata *ddata)
+@@ -2012,6 +2065,8 @@ static u32 stm32_dma3_check_rif(struct s
  static struct stm32_dma3_pdata stm32mp21_pdata = {
  	.axi_max_burst_len = 16,
  	.axi_addr_remap_supported = true,
@@ -183,6 +181,3 @@ index f8504f4ecaaa..4815e9ce4fa5 100644
  };
  
  static struct stm32_dma3_pdata stm32mp25_pdata = {
--- 
-2.53.0
-

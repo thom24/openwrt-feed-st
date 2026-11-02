@@ -18,8 +18,6 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/401706
  drivers/pinctrl/pinctrl-stmfx.c | 19 +++++++++++++++++++
  1 file changed, 19 insertions(+)
 
-diff --git a/drivers/pinctrl/pinctrl-stmfx.c b/drivers/pinctrl/pinctrl-stmfx.c
-index 03ee13844b50..644a4de63f18 100644
 --- a/drivers/pinctrl/pinctrl-stmfx.c
 +++ b/drivers/pinctrl/pinctrl-stmfx.c
 @@ -6,6 +6,7 @@
@@ -30,7 +28,7 @@ index 03ee13844b50..644a4de63f18 100644
  #include <linux/interrupt.h>
  #include <linux/mfd/stmfx.h>
  #include <linux/module.h>
-@@ -605,6 +606,23 @@ static void stmfx_pinctrl_irq_print_chip(struct irq_data *d, struct seq_file *p)
+@@ -605,6 +606,23 @@ static void stmfx_pinctrl_irq_print_chip
  	seq_puts(p, dev_name(pctl->dev));
  }
  
@@ -54,7 +52,7 @@ index 03ee13844b50..644a4de63f18 100644
  static const struct irq_chip stmfx_pinctrl_irq_chip = {
  	.irq_mask = stmfx_pinctrl_irq_mask,
  	.irq_unmask = stmfx_pinctrl_irq_unmask,
-@@ -615,6 +633,7 @@ static const struct irq_chip stmfx_pinctrl_irq_chip = {
+@@ -615,6 +633,7 @@ static const struct irq_chip stmfx_pinct
  	.irq_release_resources = stmfx_gpio_irq_release_resources,
  	.irq_print_chip = stmfx_pinctrl_irq_print_chip,
  	.flags = IRQCHIP_IMMUTABLE,
@@ -62,6 +60,3 @@ index 03ee13844b50..644a4de63f18 100644
  };
  
  static int stmfx_pinctrl_gpio_function_enable(struct stmfx_pinctrl *pctl)
--- 
-2.53.0
-

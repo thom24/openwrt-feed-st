@@ -19,9 +19,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  2 files changed, 105 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/remoteproc/rproc-srm.yaml
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/rproc-srm.yaml b/Documentation/devicetree/bindings/remoteproc/rproc-srm.yaml
-new file mode 100644
-index 000000000000..f63afdb15079
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/remoteproc/rproc-srm.yaml
 @@ -0,0 +1,97 @@
@@ -122,8 +119,6 @@ index 000000000000..f63afdb15079
 +    };
 +
 +...
-diff --git a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
-index 6a1e6872d49b..aa63899c1406 100644
 --- a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
 +++ b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
 @@ -184,6 +184,13 @@ properties:
@@ -148,6 +143,3 @@ index 6a1e6872d49b..aa63899c1406 100644
  
  additionalProperties: false
  
--- 
-2.53.0
-

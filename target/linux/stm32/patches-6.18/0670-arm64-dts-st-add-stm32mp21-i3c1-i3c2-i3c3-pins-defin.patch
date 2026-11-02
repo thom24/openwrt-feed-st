@@ -23,15 +23,12 @@ Tested-by: Alain VOLMAT <alain.volmat@st.com>
  arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi | 105 ++++++++++++++++++
  1 file changed, 105 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi
-index f81617ec43d8..761025a7a09c 100644
 --- a/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi
-@@ -44,6 +44,111 @@ pins1 {
- 		};
+@@ -45,6 +45,111 @@
  	};
  
-+	/omit-if-no-ref/
+ 	/omit-if-no-ref/
 +	i3c1_pins_a: i3c1-0 {
 +		pins {
 +			pinmux = <STM32_PINMUX('G', 13, AF10)>, /* I3C1_SCL */
@@ -136,9 +133,7 @@ index f81617ec43d8..761025a7a09c 100644
 +		};
 +	};
 +
- 	/omit-if-no-ref/
++	/omit-if-no-ref/
  	rtc_rsvd_pins_a: rtc-rsvd-0 {
  		pins {
--- 
-2.53.0
-
+ 			pinmux = <STM32_PINMUX('C', 13, ANALOG)>; /* RTC_OUT1 */

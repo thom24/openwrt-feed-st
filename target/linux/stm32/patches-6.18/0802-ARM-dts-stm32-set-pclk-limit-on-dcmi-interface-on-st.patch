@@ -24,11 +24,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp157f-ev1.dts         | 2 ++
  3 files changed, 6 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
-index 4835f86f654d..eb490d4160b5 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
-@@ -96,6 +96,7 @@ dcmi_0: endpoint {
+@@ -96,6 +96,7 @@
  			hsync-active = <0>;
  			vsync-active = <0>;
  			pclk-sample = <1>;
@@ -36,7 +34,7 @@ index 4835f86f654d..eb490d4160b5 100644
  		};
  	};
  };
-@@ -199,6 +200,7 @@ ov5640_0: endpoint {
+@@ -199,6 +200,7 @@
  				hsync-active = <0>;
  				vsync-active = <0>;
  				pclk-sample = <1>;
@@ -44,11 +42,9 @@ index 4835f86f654d..eb490d4160b5 100644
  			};
  		};
  	};
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-index e419d4762b76..95b26eff8f51 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-@@ -96,6 +96,7 @@ dcmi_0: endpoint {
+@@ -96,6 +96,7 @@
  			hsync-active = <0>;
  			vsync-active = <0>;
  			pclk-sample = <1>;
@@ -56,7 +52,7 @@ index e419d4762b76..95b26eff8f51 100644
  		};
  	};
  };
-@@ -199,6 +200,7 @@ ov5640_0: endpoint {
+@@ -199,6 +200,7 @@
  				hsync-active = <0>;
  				vsync-active = <0>;
  				pclk-sample = <1>;
@@ -64,11 +60,9 @@ index e419d4762b76..95b26eff8f51 100644
  			};
  		};
  	};
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-index 8ab1d0730bb5..4c0f592c2d57 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-@@ -96,6 +96,7 @@ dcmi_0: endpoint {
+@@ -96,6 +96,7 @@
  			hsync-active = <0>;
  			vsync-active = <0>;
  			pclk-sample = <1>;
@@ -76,7 +70,7 @@ index 8ab1d0730bb5..4c0f592c2d57 100644
  		};
  	};
  };
-@@ -199,6 +200,7 @@ ov5640_0: endpoint {
+@@ -199,6 +200,7 @@
  				hsync-active = <0>;
  				vsync-active = <0>;
  				pclk-sample = <1>;
@@ -84,6 +78,3 @@ index 8ab1d0730bb5..4c0f592c2d57 100644
  			};
  		};
  	};
--- 
-2.53.0
-

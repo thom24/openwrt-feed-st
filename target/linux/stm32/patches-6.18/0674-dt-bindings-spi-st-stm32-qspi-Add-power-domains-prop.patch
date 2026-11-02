@@ -17,8 +17,6 @@ Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
  Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
-index 3f1a27efff80..ee57739b73b8 100644
 --- a/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
 +++ b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
 @@ -50,6 +50,9 @@ properties:
@@ -31,6 +29,3 @@ index 3f1a27efff80..ee57739b73b8 100644
  required:
    - compatible
    - reg
--- 
-2.53.0
-

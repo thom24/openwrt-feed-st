@@ -43,8 +43,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/crypto/stm32/stm32-cryp.c | 181 +++++++++++++++++++++++++++---
  1 file changed, 164 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/crypto/stm32/stm32-cryp.c b/drivers/crypto/stm32/stm32-cryp.c
-index 74164a8903f3..e90f9b8baae8 100644
 --- a/drivers/crypto/stm32/stm32-cryp.c
 +++ b/drivers/crypto/stm32/stm32-cryp.c
 @@ -45,6 +45,7 @@
@@ -74,7 +72,7 @@ index 74164a8903f3..e90f9b8baae8 100644
  	struct dma_chan         *dma_lch_in;
  	struct dma_chan         *dma_lch_out;
  	enum stm32_dma_mode     dma_mode;
-@@ -842,6 +848,64 @@ static int stm32_cryp_hw_init(struct stm32_cryp *cryp)
+@@ -842,6 +848,64 @@ static int stm32_cryp_hw_init(struct stm
  	return 0;
  }
  
@@ -139,7 +137,7 @@ index 74164a8903f3..e90f9b8baae8 100644
  static void stm32_cryp_finish_req(struct stm32_cryp *cryp, int err)
  {
  	if (!err && (is_gcm(cryp) || is_ccm(cryp)))
-@@ -932,14 +996,22 @@ static void stm32_cryp_dma_callback(void *param)
+@@ -932,14 +996,22 @@ static void stm32_cryp_dma_callback(void
  
  	reg = stm32_cryp_read(cryp, cryp->caps->cr);
  
@@ -167,7 +165,7 @@ index 74164a8903f3..e90f9b8baae8 100644
  	}
  
  	if (cryp->payload_in) {
-@@ -1430,12 +1502,12 @@ static enum stm32_dma_mode stm32_cryp_dma_check_sg(struct scatterlist *test_sg,
+@@ -1430,12 +1502,12 @@ static enum stm32_dma_mode stm32_cryp_dm
  
  	for_each_sg(test_sg, sg, sg_nents(test_sg), i) {
  		if (!IS_ALIGNED(sg->length, block_size) && !sg_is_last(sg))
@@ -183,7 +181,7 @@ index 74164a8903f3..e90f9b8baae8 100644
  			return DMA_NEED_SG_TRUNC;
  	}
  
-@@ -1461,29 +1533,80 @@ static enum stm32_dma_mode stm32_cryp_dma_check(struct stm32_cryp *cryp, struct
+@@ -1461,29 +1533,80 @@ static enum stm32_dma_mode stm32_cryp_dm
  	if (ret == NO_DMA)
  		return ret;
  
@@ -267,7 +265,7 @@ index 74164a8903f3..e90f9b8baae8 100644
  
  	*new_sg_len = 0;
  
-@@ -1492,9 +1615,11 @@ static int stm32_cryp_truncate_sg(struct scatterlist **new_sg, size_t *new_sg_le
+@@ -1492,9 +1615,11 @@ static int stm32_cryp_truncate_sg(struct
  		return 0;
  	}
  
@@ -282,7 +280,7 @@ index 74164a8903f3..e90f9b8baae8 100644
  
  	/* We allocate to much sg entry, but it is easier */
  	*new_sg = kmalloc_array((size_t)alloc_sg_len, sizeof(struct scatterlist), GFP_KERNEL);
-@@ -1555,6 +1680,27 @@ static int stm32_cryp_cipher_prepare(struct stm32_cryp *cryp, struct scatterlist
+@@ -1555,6 +1680,27 @@ static int stm32_cryp_cipher_prepare(str
  		if (is_ctr(cryp))
  			memset(cryp->last_ctr, 0, sizeof(cryp->last_ctr));
  
@@ -310,7 +308,7 @@ index 74164a8903f3..e90f9b8baae8 100644
  	} else if (cryp->dma_mode == DMA_NEED_SG_TRUNC) {
  
  		cryp->flags |= FLG_IN_OUT_DMA;
-@@ -1570,7 +1716,7 @@ static int stm32_cryp_cipher_prepare(struct stm32_cryp *cryp, struct scatterlist
+@@ -1570,7 +1716,7 @@ static int stm32_cryp_cipher_prepare(str
  			kfree(cryp->in_sg);
  			return ret;
  		}
@@ -319,7 +317,7 @@ index 74164a8903f3..e90f9b8baae8 100644
  		cryp->flags |= FLG_IN_OUT_DMA;
  
  		cryp->in_sg = in_sg;
-@@ -1618,7 +1764,7 @@ static int stm32_cryp_aead_prepare(struct stm32_cryp *cryp, struct scatterlist *
+@@ -1618,7 +1764,7 @@ static int stm32_cryp_aead_prepare(struc
  		return ret;
  
  	ret = stm32_cryp_dma_check_sg(cryp->header_sg, align_size, AES_BLOCK_SIZE);
@@ -328,7 +326,7 @@ index 74164a8903f3..e90f9b8baae8 100644
  		/* We cannot DMA the header */
  		kfree(cryp->header_sg);
  		cryp->header_sg = NULL;
-@@ -1647,7 +1793,8 @@ static int stm32_cryp_aead_prepare(struct stm32_cryp *cryp, struct scatterlist *
+@@ -1647,7 +1793,8 @@ static int stm32_cryp_aead_prepare(struc
  
  	ret = stm32_cryp_dma_check_sg(cryp->in_sg, align_size, AES_BLOCK_SIZE);
  	ret2 = stm32_cryp_dma_check_sg(cryp->out_sg, align_size, AES_BLOCK_SIZE);
@@ -338,6 +336,3 @@ index 74164a8903f3..e90f9b8baae8 100644
  		kfree(cryp->in_sg);
  		cryp->in_sg = NULL;
  
--- 
-2.53.0
-

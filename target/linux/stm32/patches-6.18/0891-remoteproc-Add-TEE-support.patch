@@ -21,8 +21,6 @@ Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
  create mode 100644 drivers/remoteproc/tee_remoteproc.c
  create mode 100644 include/linux/tee_remoteproc.h
 
-diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
-index eaa427e4e9ec..9307381bd74b 100644
 --- a/drivers/remoteproc/Kconfig
 +++ b/drivers/remoteproc/Kconfig
 @@ -397,6 +397,15 @@ config XLNX_R5_REMOTEPROC
@@ -41,11 +39,9 @@ index eaa427e4e9ec..9307381bd74b 100644
  endif # REMOTEPROC
  
  endmenu
-diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
-index 08705ef62bce..c11f3cbde86b 100644
 --- a/drivers/remoteproc/Makefile
 +++ b/drivers/remoteproc/Makefile
-@@ -37,6 +37,7 @@ obj-$(CONFIG_RCAR_REMOTEPROC)		+= rcar_rproc.o
+@@ -37,6 +37,7 @@ obj-$(CONFIG_RCAR_REMOTEPROC)		+= rcar_r
  obj-$(CONFIG_ST_REMOTEPROC)		+= st_remoteproc.o
  obj-$(CONFIG_ST_SLIM_REMOTEPROC)	+= st_slim_rproc.o
  obj-$(CONFIG_STM32_RPROC)		+= stm32_rproc.o
@@ -53,9 +49,6 @@ index 08705ef62bce..c11f3cbde86b 100644
  obj-$(CONFIG_TI_K3_DSP_REMOTEPROC)	+= ti_k3_dsp_remoteproc.o ti_k3_common.o
  obj-$(CONFIG_TI_K3_M4_REMOTEPROC)	+= ti_k3_m4_remoteproc.o ti_k3_common.o
  obj-$(CONFIG_TI_K3_R5_REMOTEPROC)	+= ti_k3_r5_remoteproc.o ti_k3_common.o
-diff --git a/drivers/remoteproc/tee_remoteproc.c b/drivers/remoteproc/tee_remoteproc.c
-new file mode 100644
-index 000000000000..fbdbd9a7bf97
 --- /dev/null
 +++ b/drivers/remoteproc/tee_remoteproc.c
 @@ -0,0 +1,393 @@
@@ -452,9 +445,6 @@ index 000000000000..fbdbd9a7bf97
 +
 +MODULE_DESCRIPTION(" TEE remote processor control driver");
 +MODULE_LICENSE("GPL");
-diff --git a/include/linux/tee_remoteproc.h b/include/linux/tee_remoteproc.h
-new file mode 100644
-index 000000000000..537d6dc3b858
 --- /dev/null
 +++ b/include/linux/tee_remoteproc.h
 @@ -0,0 +1,99 @@
@@ -557,6 +547,3 @@ index 000000000000..537d6dc3b858
 +
 +#endif /* CONFIG_TEE_REMOTEPROC */
 +#endif /* TEE_REMOTEPROC_H */
--- 
-2.53.0
-

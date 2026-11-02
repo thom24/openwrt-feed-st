@@ -17,11 +17,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/panel/panel-himax-hx8394.c | 10 +++++++++-
  1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-himax-hx8394.c b/drivers/gpu/drm/panel/panel-himax-hx8394.c
-index 777827a6dd75..07009024777c 100644
 --- a/drivers/gpu/drm/panel/panel-himax-hx8394.c
 +++ b/drivers/gpu/drm/panel/panel-himax-hx8394.c
-@@ -867,11 +867,19 @@ static int hx8394_probe(struct mipi_dsi_device *dsi)
+@@ -867,11 +867,19 @@ static int hx8394_probe(struct mipi_dsi_
  	if (IS_ERR(ctx))
  		return PTR_ERR(ctx);
  
@@ -42,6 +40,3 @@ index 777827a6dd75..07009024777c 100644
  	ret = of_drm_get_panel_orientation(dev->of_node, &ctx->orientation);
  	if (ret < 0) {
  		dev_err(dev, "%pOF: failed to get orientation %d\n", dev->of_node, ret);
--- 
-2.53.0
-

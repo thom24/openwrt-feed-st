@@ -26,8 +26,6 @@ Change-Id: I921ae7097b029ff68d5f90a2042f2725c89f816d
  drivers/media/platform/st/stm32/stm32-dcmi.c | 250 ++++++++++++++++---
  1 file changed, 220 insertions(+), 30 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
-index 0950d66567ab..eeb0199864dd 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmi.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
 @@ -15,6 +15,7 @@
@@ -64,7 +62,7 @@ index 0950d66567ab..eeb0199864dd 100644
  	u32				misr;
  	int				errors_count;
  	int				overrun_count;
-@@ -247,12 +259,22 @@ static int dcmi_start_dma(struct stm32_dcmi *dcmi,
+@@ -247,12 +259,22 @@ static int dcmi_start_dma(struct stm32_d
  			  struct dcmi_buf *buf)
  {
  	/* Push current DMA transaction in the pending queue */
@@ -87,7 +85,7 @@ index 0950d66567ab..eeb0199864dd 100644
  	dma_async_issue_pending(dcmi->dma_chan);
  
  	return 0;
-@@ -301,7 +323,9 @@ static void dcmi_set_crop(struct stm32_dcmi *dcmi)
+@@ -301,7 +323,9 @@ static void dcmi_set_crop(struct stm32_d
  
  static void dcmi_process_frame(struct stm32_dcmi *dcmi)
  {
@@ -98,7 +96,7 @@ index 0950d66567ab..eeb0199864dd 100644
  	enum dma_status status;
  	struct dcmi_buf *buf = dcmi->active;
  
-@@ -309,23 +333,36 @@ static void dcmi_process_frame(struct stm32_dcmi *dcmi)
+@@ -309,23 +333,36 @@ static void dcmi_process_frame(struct st
  		return;
  
  	/*
@@ -114,7 +112,11 @@ index 0950d66567ab..eeb0199864dd 100644
 +		spin_unlock_irq(&dcmi->irqlock);
 +		dmaengine_pause(dcmi->dma_chan);
 +		spin_lock_irq(&dcmi->irqlock);
-+
+ 
+-	spin_unlock_irq(&dcmi->irqlock);
+-	/* Drain DMA */
+-	dmaengine_synchronize(dcmi->dma_chan);
+-	spin_lock_irq(&dcmi->irqlock);
 +		do {
 +			status = dmaengine_tx_status(dcmi->mdma_chan, dcmi->mdma_cookie, &state);
 +			cpu_relax();
@@ -124,11 +126,6 @@ index 0950d66567ab..eeb0199864dd 100644
 +		status = dmaengine_tx_status(dcmi->dma_chan, dcmi->dma_cookie, &state);
 +	}
  
--	spin_unlock_irq(&dcmi->irqlock);
--	/* Drain DMA */
--	dmaengine_synchronize(dcmi->dma_chan);
--	spin_lock_irq(&dcmi->irqlock);
--
 -	/* Get DMA status and residue size */
 -	status = dmaengine_tx_status(dcmi->dma_chan, dcmi->dma_cookie, &state);
  	if (status != DMA_ERROR && state.residue < buf->size) {
@@ -148,7 +145,7 @@ index 0950d66567ab..eeb0199864dd 100644
  	} else {
  		dcmi->errors_count++;
  		dev_err(dcmi->dev, "%s: DMA error. status: 0x%x, residue: %d\n",
-@@ -336,6 +373,8 @@ static void dcmi_process_frame(struct stm32_dcmi *dcmi)
+@@ -336,6 +373,8 @@ static void dcmi_process_frame(struct st
  
  	/* Abort DMA operation */
  	dmaengine_terminate_async(dcmi->dma_chan);
@@ -157,7 +154,7 @@ index 0950d66567ab..eeb0199864dd 100644
  }
  
  static irqreturn_t dcmi_irq_thread(int irq, void *arg)
-@@ -354,13 +393,15 @@ static irqreturn_t dcmi_irq_thread(int irq, void *arg)
+@@ -354,13 +393,15 @@ static irqreturn_t dcmi_irq_thread(int i
  			dcmi->errors_count++;
  
  		dmaengine_terminate_async(dcmi->dma_chan);
@@ -174,7 +171,7 @@ index 0950d66567ab..eeb0199864dd 100644
  	if (dcmi->misr & IT_ERR)
  		dcmi->errors_count++;
  
-@@ -447,28 +488,70 @@ static int dcmi_buf_prepare(struct vb2_buffer *vb)
+@@ -447,28 +488,70 @@ static int dcmi_buf_prepare(struct vb2_b
  	vb2_set_plane_payload(vb, 0, size);
  
  	if (!buf->prepared) {
@@ -254,7 +251,7 @@ index 0950d66567ab..eeb0199864dd 100644
  			size -= bytes;
  		}
  
-@@ -480,6 +563,8 @@ static int dcmi_buf_prepare(struct vb2_buffer *vb)
+@@ -480,6 +563,8 @@ static int dcmi_buf_prepare(struct vb2_b
  							DMA_PREP_INTERRUPT);
  		if (!buf->dma_desc) {
  			dev_err(dcmi->dev, "%s: DMA dmaengine_prep_slave_sg failed\n", __func__);
@@ -263,7 +260,7 @@ index 0950d66567ab..eeb0199864dd 100644
  			sg_free_table(&buf->sgt);
  			return -EIO;
  		}
-@@ -489,10 +574,48 @@ static int dcmi_buf_prepare(struct vb2_buffer *vb)
+@@ -489,10 +574,48 @@ static int dcmi_buf_prepare(struct vb2_b
  		if (ret) {
  			dev_err(dcmi->dev, "%s: DMA dmaengine_desc_set_reuse failed\n", __func__);
  			dmaengine_desc_free(buf->dma_desc);
@@ -312,7 +309,7 @@ index 0950d66567ab..eeb0199864dd 100644
  		buf->prepared = true;
  
  		vb2_set_plane_payload(&buf->vb.vb2_buf, 0, buf->size);
-@@ -511,6 +634,14 @@ static void dcmi_buf_cleanup(struct vb2_buffer *vb)
+@@ -511,6 +634,14 @@ static void dcmi_buf_cleanup(struct vb2_
  	if (!buf->prepared)
  		return;
  
@@ -327,7 +324,7 @@ index 0950d66567ab..eeb0199864dd 100644
  	ret = dmaengine_desc_free(buf->dma_desc);
  	if (ret)
  		dev_err(dcmi->dev, "%s: Failed to free the mdma descriptor (0x%x)\n",
-@@ -816,6 +947,8 @@ static void dcmi_stop_streaming(struct vb2_queue *vq)
+@@ -816,6 +947,8 @@ static void dcmi_stop_streaming(struct v
  
  	/* Stop all pending DMA operations */
  	dmaengine_terminate_sync(dcmi->dma_chan);
@@ -336,7 +333,7 @@ index 0950d66567ab..eeb0199864dd 100644
  
  	pm_runtime_put(dcmi->dev);
  
-@@ -1824,9 +1957,9 @@ static int dcmi_probe(struct platform_device *pdev)
+@@ -1824,9 +1957,9 @@ static int dcmi_probe(struct platform_de
  	struct v4l2_fwnode_endpoint ep = { .bus_type = 0 };
  	struct stm32_dcmi *dcmi;
  	struct vb2_queue *q;
@@ -348,7 +345,7 @@ index 0950d66567ab..eeb0199864dd 100644
  	struct clk *mclk;
  	int ret = 0;
  
-@@ -1888,15 +2021,21 @@ static int dcmi_probe(struct platform_device *pdev)
+@@ -1888,15 +2021,21 @@ static int dcmi_probe(struct platform_de
  		return dev_err_probe(&pdev->dev, PTR_ERR(chan),
  				     "Failed to request DMA channel\n");
  
@@ -374,7 +371,7 @@ index 0950d66567ab..eeb0199864dd 100644
  
  	/* Configure DMA channel */
  	ret = dmaengine_slave_config(chan, &dma_config);
-@@ -1906,6 +2045,47 @@ static int dcmi_probe(struct platform_device *pdev)
+@@ -1906,6 +2045,47 @@ static int dcmi_probe(struct platform_de
  		goto err_dma_slave_config;
  	}
  
@@ -422,7 +419,7 @@ index 0950d66567ab..eeb0199864dd 100644
  	spin_lock_init(&dcmi->irqlock);
  	mutex_init(&dcmi->lock);
  	init_completion(&dcmi->complete);
-@@ -1915,6 +2095,7 @@ static int dcmi_probe(struct platform_device *pdev)
+@@ -1915,6 +2095,7 @@ static int dcmi_probe(struct platform_de
  	dcmi->mclk = mclk;
  	dcmi->state = STOPPED;
  	dcmi->dma_chan = chan;
@@ -430,7 +427,7 @@ index 0950d66567ab..eeb0199864dd 100644
  
  	q = &dcmi->queue;
  
-@@ -2024,8 +2205,13 @@ static int dcmi_probe(struct platform_device *pdev)
+@@ -2024,8 +2205,13 @@ err_device_unregister:
  	v4l2_device_unregister(&dcmi->v4l2_dev);
  err_media_device_cleanup:
  	media_device_cleanup(&dcmi->mdev);
@@ -444,7 +441,7 @@ index 0950d66567ab..eeb0199864dd 100644
  
  	return ret;
  }
-@@ -2043,6 +2229,10 @@ static void dcmi_remove(struct platform_device *pdev)
+@@ -2043,6 +2229,10 @@ static void dcmi_remove(struct platform_
  	media_device_cleanup(&dcmi->mdev);
  
  	dma_release_channel(dcmi->dma_chan);
@@ -455,6 +452,3 @@ index 0950d66567ab..eeb0199864dd 100644
  }
  
  static int dcmi_runtime_suspend(struct device *dev)
--- 
-2.53.0
-

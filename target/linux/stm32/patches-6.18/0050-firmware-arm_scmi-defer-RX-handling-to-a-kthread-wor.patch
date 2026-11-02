@@ -64,8 +64,6 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  .../firmware/arm_scmi/transports/mailbox.c    | 26 +++++++++++++++++--
  1 file changed, 24 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/firmware/arm_scmi/transports/mailbox.c b/drivers/firmware/arm_scmi/transports/mailbox.c
-index 308736c3ead9..3c51794efced 100644
 --- a/drivers/firmware/arm_scmi/transports/mailbox.c
 +++ b/drivers/firmware/arm_scmi/transports/mailbox.c
 @@ -13,6 +13,7 @@
@@ -97,7 +95,7 @@ index 308736c3ead9..3c51794efced 100644
  
  static struct scmi_transport_core_operations *core;
  
-@@ -51,6 +56,14 @@ static void tx_prepare(struct mbox_client *cl, void *m)
+@@ -51,6 +56,14 @@ static void tx_prepare(struct mbox_clien
  				smbox->io_ops->toio);
  }
  
@@ -112,7 +110,7 @@ index 308736c3ead9..3c51794efced 100644
  static void rx_callback(struct mbox_client *cl, void *m)
  {
  	struct scmi_mailbox *smbox = client_to_scmi_mailbox(cl);
-@@ -73,8 +86,14 @@ static void rx_callback(struct mbox_client *cl, void *m)
+@@ -73,8 +86,14 @@ static void rx_callback(struct mbox_clie
  		return;
  	}
  
@@ -129,7 +127,7 @@ index 308736c3ead9..3c51794efced 100644
  }
  
  static bool mailbox_chan_available(struct device_node *of_node, int idx)
-@@ -215,6 +234,8 @@ static int mailbox_chan_setup(struct scmi_chan_info *cinfo, struct device *dev,
+@@ -215,6 +234,8 @@ static int mailbox_chan_setup(struct scm
  	smbox->cinfo = cinfo;
  	mutex_init(&smbox->chan_lock);
  
@@ -138,7 +136,7 @@ index 308736c3ead9..3c51794efced 100644
  	smbox->chan = mbox_request_channel(cl, tx ? 0 : p2a_chan);
  	if (IS_ERR(smbox->chan)) {
  		ret = PTR_ERR(smbox->chan);
-@@ -266,6 +287,7 @@ static int mailbox_chan_free(int id, void *p, void *data)
+@@ -266,6 +287,7 @@ static int mailbox_chan_free(int id, voi
  	struct scmi_mailbox *smbox = cinfo->transport_info;
  
  	if (smbox && !IS_ERR(smbox->chan)) {
@@ -146,6 +144,3 @@ index 308736c3ead9..3c51794efced 100644
  		mbox_free_channel(smbox->chan);
  		mbox_free_channel(smbox->chan_receiver);
  		mbox_free_channel(smbox->chan_platform_receiver);
--- 
-2.53.0
-

@@ -16,11 +16,9 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index d49f41a12168..a196cb21cee9 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -358,7 +358,7 @@ dcmipp_0: endpoint {
+@@ -358,7 +358,7 @@
  
  &ddrperfm {
  	memory-channel = <&lpddr_channel>;
@@ -29,6 +27,3 @@ index d49f41a12168..a196cb21cee9 100644
  };
  
  &dsi {
--- 
-2.53.0
-

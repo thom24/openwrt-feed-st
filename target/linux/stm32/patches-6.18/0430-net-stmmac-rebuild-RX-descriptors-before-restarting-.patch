@@ -40,11 +40,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  .../net/ethernet/stmicro/stmmac/stmmac_main.c | 105 ++++++++++++++----
  1 file changed, 86 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index ef8c322465d2..6b96dee744c5 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -1485,6 +1485,17 @@ static int stmmac_init_rx_buffers(struct stmmac_priv *priv,
+@@ -1485,6 +1485,17 @@ static int stmmac_init_rx_buffers(struct
  		stmmac_set_desc_sec_addr(priv, p, buf->sec_addr, true);
  	}
  
@@ -62,11 +60,10 @@ index ef8c322465d2..6b96dee744c5 100644
  	buf->addr = page_pool_get_dma_addr(buf->page) + buf->page_offset;
  
  	stmmac_set_desc_addr(priv, p, buf->addr);
-@@ -1910,19 +1921,6 @@ static void dma_free_tx_skbufs(struct stmmac_priv *priv,
- 	}
+@@ -1911,19 +1922,6 @@ static void dma_free_tx_skbufs(struct st
  }
  
--/**
+ /**
 - * stmmac_free_tx_skbufs - free TX skb buffers
 - * @priv: private structure
 - */
@@ -79,10 +76,11 @@ index ef8c322465d2..6b96dee744c5 100644
 -		dma_free_tx_skbufs(priv, &priv->dma_conf, queue);
 -}
 -
- /**
+-/**
   * __free_dma_rx_desc_resources - free RX dma desc resources (per queue)
   * @priv: private structure
-@@ -7939,6 +7937,68 @@ static void stmmac_reset_rx_queue(struct stmmac_priv *priv, u32 queue)
+  * @dma_conf: structure to take the dma data
+@@ -7939,6 +7937,68 @@ static void stmmac_reset_rx_queue(struct
  	rx_q->dirty_rx = 0;
  }
  
@@ -189,6 +187,3 @@ index ef8c322465d2..6b96dee744c5 100644
  }
  EXPORT_SYMBOL_GPL(stmmac_resume);
  
--- 
-2.53.0
-

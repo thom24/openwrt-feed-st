@@ -34,11 +34,9 @@ Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
  arch/arm/boot/dts/st/stm32mp157f-ev1.dts         | 1 +
  3 files changed, 3 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
-index d699e9b18d08..de65fa46bb48 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
-@@ -632,6 +632,7 @@ sai2b_endpoint: endpoint {
+@@ -632,6 +632,7 @@
  				remote-endpoint = <&wm8994_rx_endpoint>;
  				dai-format = "i2s";
  				mclk-fs = <256>;
@@ -46,11 +44,9 @@ index d699e9b18d08..de65fa46bb48 100644
  			};
  		};
  	};
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-index 56aec6fa0787..b932a265c1c7 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-@@ -633,6 +633,7 @@ sai2b_endpoint: endpoint {
+@@ -633,6 +633,7 @@
  				remote-endpoint = <&wm8994_rx_endpoint>;
  				dai-format = "i2s";
  				mclk-fs = <256>;
@@ -58,11 +54,9 @@ index 56aec6fa0787..b932a265c1c7 100644
  			};
  		};
  	};
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-index f53fcff8c113..f7ab1a5e90e1 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-@@ -633,6 +633,7 @@ sai2b_endpoint: endpoint {
+@@ -633,6 +633,7 @@
  				remote-endpoint = <&wm8994_rx_endpoint>;
  				dai-format = "i2s";
  				mclk-fs = <256>;
@@ -70,6 +64,3 @@ index f53fcff8c113..f7ab1a5e90e1 100644
  			};
  		};
  	};
--- 
-2.53.0
-

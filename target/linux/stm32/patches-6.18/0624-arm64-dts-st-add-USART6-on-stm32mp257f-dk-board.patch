@@ -15,11 +15,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 10 ++++++++++
  1 file changed, 10 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index d74d06123b52..c1263a2521f6 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -22,6 +22,7 @@ / {
+@@ -22,6 +22,7 @@
  	aliases {
  		ethernet0 = &ethernet1;
  		serial0 = &usart2;
@@ -27,7 +25,7 @@ index d74d06123b52..c1263a2521f6 100644
  	};
  
  	chosen {
-@@ -424,3 +425,12 @@ pins2 {
+@@ -424,3 +425,12 @@
  		bootph-all;
  	};
  };
@@ -40,6 +38,3 @@ index d74d06123b52..c1263a2521f6 100644
 +	uart-has-rtscts;
 +	status = "disabled";
 +};
--- 
-2.53.0
-

@@ -22,11 +22,9 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/iio/adc/stm32-adc.c | 9 ++++++++-
  1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iio/adc/stm32-adc.c b/drivers/iio/adc/stm32-adc.c
-index 0e287f80f7bc..7f7b5f35cff9 100644
 --- a/drivers/iio/adc/stm32-adc.c
 +++ b/drivers/iio/adc/stm32-adc.c
-@@ -2135,7 +2135,14 @@ static irqreturn_t stm32_adc_isr(int irq, void *data)
+@@ -2135,7 +2135,14 @@ static irqreturn_t stm32_adc_isr(int irq
  			adc->bufi++;
  			if (adc->bufi >= adc->num_conv) {
  				stm32_adc_conv_irq_disable(adc);
@@ -42,6 +40,3 @@ index 0e287f80f7bc..7f7b5f35cff9 100644
  			}
  		} else {
  			complete(&adc->completion);
--- 
-2.53.0
-

@@ -21,8 +21,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/usb/dwc2/gadget.c    |  1 +
  3 files changed, 13 insertions(+)
 
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index b033a6aa04a3..e02e230319f0 100644
 --- a/drivers/usb/dwc2/core.h
 +++ b/drivers/usb/dwc2/core.h
 @@ -881,6 +881,7 @@ struct dwc2_hregs_backup {
@@ -41,11 +39,9 @@ index b033a6aa04a3..e02e230319f0 100644
  	unsigned int reset_phy_on_wake:1;
  	unsigned int need_phy_for_wake:1;
  	unsigned int phy_off_for_suspend:1;
-diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
-index ea7ce48693ce..ef9bd4fd8cff 100644
 --- a/drivers/usb/dwc2/core_intr.c
 +++ b/drivers/usb/dwc2/core_intr.c
-@@ -394,6 +394,7 @@ void dwc2_wakeup_from_lpm_l1(struct dwc2_hsotg *hsotg, bool remotewakeup)
+@@ -394,6 +394,7 @@ void dwc2_wakeup_from_lpm_l1(struct dwc2
  		}
  
  		/* Inform gadget to exit from L1 */
@@ -53,7 +49,7 @@ index ea7ce48693ce..ef9bd4fd8cff 100644
  		call_gadget(hsotg, resume);
  		/* Change to L0 state */
  		hsotg->lx_state = DWC2_L0;
-@@ -453,6 +454,7 @@ static void dwc2_handle_wakeup_detected_intr(struct dwc2_hsotg *hsotg)
+@@ -453,6 +454,7 @@ static void dwc2_handle_wakeup_detected_
  
  		/* Change to L0 state, also when no_clock_gating == true */
  		hsotg->lx_state = DWC2_L0;
@@ -61,7 +57,7 @@ index ea7ce48693ce..ef9bd4fd8cff 100644
  		call_gadget(hsotg, resume);
  	} else {
  		if (hsotg->lx_state == DWC2_L2) {
-@@ -593,6 +595,9 @@ static void dwc2_handle_usb_suspend_intr(struct dwc2_hsotg *hsotg)
+@@ -593,6 +595,9 @@ static void dwc2_handle_usb_suspend_intr
  			 */
  			hsotg->lx_state = DWC2_L2;
  
@@ -71,7 +67,7 @@ index ea7ce48693ce..ef9bd4fd8cff 100644
  			/* Call gadget suspend callback */
  			call_gadget(hsotg, suspend);
  		}
-@@ -669,6 +674,9 @@ static void dwc2_handle_lpm_intr(struct dwc2_hsotg *hsotg)
+@@ -669,6 +674,9 @@ static void dwc2_handle_lpm_intr(struct
  			dev_dbg(hsotg->dev,
  				"Core is in L1 sleep glpmcfg=%08x\n", glpmcfg);
  
@@ -81,7 +77,7 @@ index ea7ce48693ce..ef9bd4fd8cff 100644
  			/* Inform gadget that we are in L1 state */
  			call_gadget(hsotg, suspend);
  		}
-@@ -825,6 +833,8 @@ static int dwc2_handle_gpwrdn_intr(struct dwc2_hsotg *hsotg)
+@@ -825,6 +833,8 @@ static int dwc2_handle_gpwrdn_intr(struc
  				if (ret)
  					dev_err(hsotg->dev,
  						"exit hibernation failed.\n");
@@ -90,11 +86,9 @@ index ea7ce48693ce..ef9bd4fd8cff 100644
  				call_gadget(hsotg, resume);
  			} else {
  				ret = dwc2_exit_hibernation(hsotg, 1, 0, 1);
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 0e53296ac48c..e8db3f916de9 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -3400,6 +3400,7 @@ void dwc2_hsotg_disconnect(struct dwc2_hsotg *hsotg)
+@@ -3400,6 +3400,7 @@ void dwc2_hsotg_disconnect(struct dwc2_h
  	hsotg->lx_state = DWC2_L3;
  
  	usb_gadget_set_state(&hsotg->gadget, USB_STATE_NOTATTACHED);
@@ -102,6 +96,3 @@ index 0e53296ac48c..e8db3f916de9 100644
  }
  
  /**
--- 
-2.53.0
-

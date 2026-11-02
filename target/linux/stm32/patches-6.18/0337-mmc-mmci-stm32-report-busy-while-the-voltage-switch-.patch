@@ -40,11 +40,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/mmc/host/mmci_stm32_sdmmc.c | 22 ++++++++++++++++++++++
  3 files changed, 26 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mmc/host/mmci.c b/drivers/mmc/host/mmci.c
-index 834a80b47e9e..75950aee48e7 100644
 --- a/drivers/mmc/host/mmci.c
 +++ b/drivers/mmc/host/mmci.c
-@@ -375,7 +375,9 @@ static int mmci_card_busy(struct mmc_host *mmc)
+@@ -375,7 +375,9 @@ static int mmci_card_busy(struct mmc_hos
  	int busy = 0;
  
  	spin_lock_irqsave(&host->lock, flags);
@@ -55,8 +53,6 @@ index 834a80b47e9e..75950aee48e7 100644
  		busy = 1;
  	spin_unlock_irqrestore(&host->lock, flags);
  
-diff --git a/drivers/mmc/host/mmci.h b/drivers/mmc/host/mmci.h
-index 4d3647f9ec06..323e01cfdf67 100644
 --- a/drivers/mmc/host/mmci.h
 +++ b/drivers/mmc/host/mmci.h
 @@ -402,6 +402,7 @@ struct mmci_host_ops {
@@ -67,11 +63,9 @@ index 4d3647f9ec06..323e01cfdf67 100644
  	void (*pre_sig_volt_switch)(struct mmci_host *host);
  	int (*post_sig_volt_switch)(struct mmci_host *host, struct mmc_ios *ios);
  };
-diff --git a/drivers/mmc/host/mmci_stm32_sdmmc.c b/drivers/mmc/host/mmci_stm32_sdmmc.c
-index 3535a4ea2a95..b8e01fbdd821 100644
 --- a/drivers/mmc/host/mmci_stm32_sdmmc.c
 +++ b/drivers/mmc/host/mmci_stm32_sdmmc.c
-@@ -523,6 +523,27 @@ static bool sdmmc_busy_complete(struct mmci_host *host, struct mmc_command *cmd,
+@@ -523,6 +523,27 @@ complete:
  	return true;
  }
  
@@ -99,7 +93,7 @@ index 3535a4ea2a95..b8e01fbdd821 100644
  static int sdmmc_dlyb_mp15_enable(struct sdmmc_dlyb *dlyb)
  {
  	writel_relaxed(DLYB_CR_DEN, dlyb->base + DLYB_CR);
-@@ -760,6 +781,7 @@ static struct mmci_host_ops sdmmc_variant_ops = {
+@@ -760,6 +781,7 @@ static struct mmci_host_ops sdmmc_varian
  	.set_clkreg = mmci_sdmmc_set_clkreg,
  	.set_pwrreg = mmci_sdmmc_set_pwrreg,
  	.busy_complete = sdmmc_busy_complete,
@@ -107,6 +101,3 @@ index 3535a4ea2a95..b8e01fbdd821 100644
  	.pre_sig_volt_switch = sdmmc_pre_sig_volt_vswitch,
  	.post_sig_volt_switch = sdmmc_post_sig_volt_switch,
  };
--- 
-2.53.0
-

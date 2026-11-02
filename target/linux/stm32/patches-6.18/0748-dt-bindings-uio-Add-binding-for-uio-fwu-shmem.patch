@@ -34,9 +34,6 @@ Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
  1 file changed, 45 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/uio/uio-fwu-shmem.yaml
 
-diff --git a/Documentation/devicetree/bindings/uio/uio-fwu-shmem.yaml b/Documentation/devicetree/bindings/uio/uio-fwu-shmem.yaml
-new file mode 100644
-index 000000000000..755db0033198
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/uio/uio-fwu-shmem.yaml
 @@ -0,0 +1,45 @@
@@ -85,6 +82,3 @@ index 000000000000..755db0033198
 +            reg = <0x0 0x81300000 0x0 0x00a00000>;
 +        };
 +    };
--- 
-2.53.0
-

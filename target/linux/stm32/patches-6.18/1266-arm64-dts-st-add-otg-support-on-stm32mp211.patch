@@ -18,11 +18,9 @@ Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 22 ++++++++++++++++++++++
  1 file changed, 22 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index b286c4cf1303..c5774de01928 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -1858,6 +1858,28 @@ usbh_ehci: usb@482f0000 {
+@@ -1858,6 +1858,28 @@
  					wakeup-source;
  				};
  			};
@@ -51,6 +49,3 @@ index b286c4cf1303..c5774de01928 100644
  		};
  
  		risaf1: risaf@420a0000 {
--- 
-2.53.0
-

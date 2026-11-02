@@ -32,11 +32,9 @@ Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
  arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi           | 4 ----
  13 files changed, 58 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index 00906e864e79..039f2c4230b1 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -1268,13 +1268,6 @@ mdma: dma-controller@58000000 {
+@@ -1268,13 +1268,6 @@
  			dma-requests = <48>;
  		};
  
@@ -50,11 +48,9 @@ index 00906e864e79..039f2c4230b1 100644
  		usbh_ohci: usb@5800c000 {
  			compatible = "generic-ohci";
  			reg = <0x5800c000 0x1000>;
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index 070534e32a38..9ab233772b55 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -183,10 +183,6 @@ &bsec {
+@@ -183,10 +183,6 @@
  	bootph-all;
  };
  
@@ -65,11 +61,9 @@ index 070534e32a38..9ab233772b55 100644
  &cryp {
  	status = "okay";
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
-index 591f8e244793..7910951e24d9 100644
 --- a/arch/arm/boot/dts/st/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
-@@ -693,13 +693,6 @@ sdmmc2: mmc@58007000 {
+@@ -693,13 +693,6 @@
  			status = "disabled";
  		};
  
@@ -83,11 +77,9 @@ index 591f8e244793..7910951e24d9 100644
  		usbh_ohci: usb@5800c000 {
  			compatible = "generic-ohci";
  			reg = <0x5800c000 0x1000>;
-diff --git a/arch/arm/boot/dts/st/stm32mp153c-lxa-fairytux2.dtsi b/arch/arm/boot/dts/st/stm32mp153c-lxa-fairytux2.dtsi
-index 9eeb9d6b5eb0..3abb74d80c54 100644
 --- a/arch/arm/boot/dts/st/stm32mp153c-lxa-fairytux2.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp153c-lxa-fairytux2.dtsi
-@@ -98,10 +98,6 @@ reg_1v2: regulator-1v2 {
+@@ -98,10 +98,6 @@
  baseboard_eeprom: &sip_eeprom {
  };
  
@@ -98,11 +90,9 @@ index 9eeb9d6b5eb0..3abb74d80c54 100644
  &cryp1 {
  	status = "okay";
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
-index 4c8add531249..0937021b5272 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
-@@ -164,10 +164,6 @@ &cpu1 {
+@@ -164,10 +164,6 @@
  	cpu-supply = <&vddcore>;
  };
  
@@ -113,11 +103,9 @@ index 4c8add531249..0937021b5272 100644
  &cryp1 {
  	status = "okay";
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-emstamp-argon.dtsi b/arch/arm/boot/dts/st/stm32mp157c-emstamp-argon.dtsi
-index 4792004cab0c..a3c61ce91aa9 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-emstamp-argon.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp157c-emstamp-argon.dtsi
-@@ -131,10 +131,6 @@ channel@17 {
+@@ -131,10 +131,6 @@
  	};
  };
  
@@ -128,11 +116,9 @@ index 4792004cab0c..a3c61ce91aa9 100644
  &cryp1 {
  	status = "okay";
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-osd32mp1-red.dts b/arch/arm/boot/dts/st/stm32mp157c-osd32mp1-red.dts
-index b404ea3752d9..d8a99a67404c 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-osd32mp1-red.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-osd32mp1-red.dts
-@@ -37,10 +37,6 @@ led-0 {
+@@ -37,10 +37,6 @@
  	};
  };
  
@@ -143,11 +129,9 @@ index b404ea3752d9..d8a99a67404c 100644
  &dts {
  	status = "okay";
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
-index 236664a4e0d1..a816dd41e7a0 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
-@@ -158,10 +158,6 @@ &cpu1 {
+@@ -158,10 +158,6 @@
  	cpu-supply = <&vddcore>;
  };
  
@@ -158,11 +142,9 @@ index 236664a4e0d1..a816dd41e7a0 100644
  &cs_cti_cpu0 {
  	status = "okay";
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
-index afe30a397e91..0577ba174118 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
-@@ -158,10 +158,6 @@ &cpu1 {
+@@ -158,10 +158,6 @@
  	cpu-supply = <&vddcore>;
  };
  
@@ -173,11 +155,9 @@ index afe30a397e91..0577ba174118 100644
  &cryp1 {
  	clocks = <&scmi_clk CK_SCMI_CRYP1>;
  	resets = <&scmi_reset RST_SCMI_CRYP1>;
-diff --git a/arch/arm/boot/dts/st/stm32mp15xc-lxa-tac.dtsi b/arch/arm/boot/dts/st/stm32mp15xc-lxa-tac.dtsi
-index 154698f87b0e..1be461e21790 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xc-lxa-tac.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xc-lxa-tac.dtsi
-@@ -150,10 +150,6 @@ output-vuart {
+@@ -150,10 +150,6 @@
  baseboard_eeprom: &sip_eeprom {
  };
  
@@ -188,11 +168,9 @@ index 154698f87b0e..1be461e21790 100644
  &cryp1 {
  	status = "okay";
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-som.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-som.dtsi
-index 04e91d02cc28..88387e0748f7 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-som.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-som.dtsi
-@@ -107,10 +107,6 @@ &bsec {
+@@ -107,10 +107,6 @@
  	bootph-all;
  };
  
@@ -203,11 +181,9 @@ index 04e91d02cc28..88387e0748f7 100644
  &dac {
  	pinctrl-names = "default";
  	pinctrl-0 = <&dac_ch1_pins_a &dac_ch2_pins_a>;
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcor-som.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dhcor-som.dtsi
-index 3d469e29d41a..51aaaf3cfbea 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dhcor-som.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcor-som.dtsi
-@@ -87,10 +87,6 @@ &clk_csi {
+@@ -87,10 +87,6 @@
  	bootph-all;
  };
  
@@ -218,11 +194,9 @@ index 3d469e29d41a..51aaaf3cfbea 100644
  &dts {
  	status = "okay";
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-index 9db35dd19895..be815f858231 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-@@ -169,10 +169,6 @@ &cpu1 {
+@@ -169,10 +169,6 @@
  	cpu-supply = <&vddcore>;
  };
  
@@ -233,6 +207,3 @@ index 9db35dd19895..be815f858231 100644
  &cs_cti_cpu0 {
  	status = "okay";
  };
--- 
-2.53.0
-

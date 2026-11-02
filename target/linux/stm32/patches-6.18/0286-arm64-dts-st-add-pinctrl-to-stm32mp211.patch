@@ -10,11 +10,9 @@ Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 129 +++++++++++++++++++++++++
  1 file changed, 129 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index f7a52c6c86e8..d1bfd57ad795 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -396,6 +396,114 @@ syscfg: syscon@44230000 {
+@@ -396,6 +396,114 @@
  			reg = <0x44230000 0x0 0x10000>;
  		};
  
@@ -129,7 +127,7 @@ index f7a52c6c86e8..d1bfd57ad795 100644
  		exti2: interrupt-controller@442d0000 {
  			compatible = "st,stm32mp1-exti", "syscon";
  			reg = <0x442d0000 0x0 0x400>;
-@@ -458,6 +566,27 @@ exti2: interrupt-controller@442d0000 {
+@@ -458,6 +566,27 @@
  				<&intc GIC_SPI 204 IRQ_TYPE_LEVEL_HIGH>;
  		};
  
@@ -157,6 +155,3 @@ index f7a52c6c86e8..d1bfd57ad795 100644
  		intc: interrupt-controller@4ac10000 {
  			compatible = "arm,gic-400";
  			reg = <0x4ac10000 0x0 0x1000>,
--- 
-2.53.0
-

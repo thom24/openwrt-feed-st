@@ -28,11 +28,9 @@ Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
  include/linux/phy.h          | 14 ++++++++++++++
  2 files changed, 36 insertions(+)
 
-diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-index 673e31225a3f..4587bcf95b3e 100644
 --- a/drivers/net/phy/phy_device.c
 +++ b/drivers/net/phy/phy_device.c
-@@ -1539,6 +1539,14 @@ int phy_init_hw(struct phy_device *phydev)
+@@ -1539,6 +1539,14 @@ int phy_init_hw(struct phy_device *phyde
  			return ret;
  	}
  
@@ -47,7 +45,7 @@ index 673e31225a3f..4587bcf95b3e 100644
  	return 0;
  }
  EXPORT_SYMBOL(phy_init_hw);
-@@ -2984,6 +2992,20 @@ void phy_support_eee(struct phy_device *phydev)
+@@ -2984,6 +2992,20 @@ void phy_support_eee(struct phy_device *
  			phydev->eee_disabled_modes);
  	phydev->eee_cfg.tx_lpi_enabled = true;
  	phydev->eee_cfg.eee_enabled = true;
@@ -68,8 +66,6 @@ index 673e31225a3f..4587bcf95b3e 100644
  }
  EXPORT_SYMBOL(phy_support_eee);
  
-diff --git a/include/linux/phy.h b/include/linux/phy.h
-index 9006f01e1a34..3abfe286d165 100644
 --- a/include/linux/phy.h
 +++ b/include/linux/phy.h
 @@ -606,6 +606,8 @@ struct macsec_ops;
@@ -107,6 +103,3 @@ index 9006f01e1a34..3abfe286d165 100644
  	/* Get and Set PHY tunables */
  	/** @get_tunable: Return the value of a tunable */
  	int (*get_tunable)(struct phy_device *dev,
--- 
-2.53.0
-

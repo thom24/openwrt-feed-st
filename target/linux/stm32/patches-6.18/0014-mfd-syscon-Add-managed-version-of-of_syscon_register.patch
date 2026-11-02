@@ -22,8 +22,6 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  include/linux/mfd/syscon.h | 11 ++++++++++
  2 files changed, 55 insertions(+)
 
-diff --git a/drivers/mfd/syscon.c b/drivers/mfd/syscon.c
-index ae71a2710bed..0ad20c7da53c 100644
 --- a/drivers/mfd/syscon.c
 +++ b/drivers/mfd/syscon.c
 @@ -10,6 +10,7 @@
@@ -34,7 +32,7 @@ index ae71a2710bed..0ad20c7da53c 100644
  #include <linux/err.h>
  #include <linux/hwspinlock.h>
  #include <linux/list.h>
-@@ -241,6 +242,49 @@ int of_syscon_register_regmap(struct device_node *np, struct regmap *regmap)
+@@ -241,6 +242,49 @@ err_unlock:
  }
  EXPORT_SYMBOL_GPL(of_syscon_register_regmap);
  
@@ -84,8 +82,6 @@ index ae71a2710bed..0ad20c7da53c 100644
  /**
   * device_node_to_regmap() - Get or create a regmap for specified device node
   * @np: Device tree node
-diff --git a/include/linux/mfd/syscon.h b/include/linux/mfd/syscon.h
-index aad9c6b50463..853ce19f0141 100644
 --- a/include/linux/mfd/syscon.h
 +++ b/include/linux/mfd/syscon.h
 @@ -14,6 +14,7 @@
@@ -96,7 +92,7 @@ index aad9c6b50463..853ce19f0141 100644
  struct device_node;
  
  #ifdef CONFIG_MFD_SYSCON
-@@ -30,6 +31,9 @@ struct regmap *syscon_regmap_lookup_by_phandle_optional(struct device_node *np,
+@@ -30,6 +31,9 @@ struct regmap *syscon_regmap_lookup_by_p
  							const char *property);
  int of_syscon_register_regmap(struct device_node *np,
  			      struct regmap *regmap);
@@ -106,20 +102,17 @@ index aad9c6b50463..853ce19f0141 100644
  #else
  static inline struct regmap *device_node_to_regmap(struct device_node *np)
  {
-@@ -75,6 +79,13 @@ static inline int of_syscon_register_regmap(struct device_node *np,
+@@ -74,6 +78,13 @@ static inline int of_syscon_register_reg
+ {
  	return -EOPNOTSUPP;
  }
- 
++
 +static inline int devm_of_syscon_register_regmap(struct device *dev,
 +						 struct device_node *np,
 +						 struct regmap *regmap)
 +{
 +	return -EOPNOTSUPP;
 +}
-+
+ 
  #endif
  
- #endif /* __LINUX_MFD_SYSCON_H__ */
--- 
-2.53.0
-

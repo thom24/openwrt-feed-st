@@ -30,11 +30,9 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/usb/host/xhci-pci.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index b0377701a940..25c5ed9d4000 100644
 --- a/drivers/usb/host/xhci-pci.c
 +++ b/drivers/usb/host/xhci-pci.c
-@@ -475,7 +475,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+@@ -475,7 +475,8 @@ static void xhci_pci_quirks(struct devic
  		xhci->quirks |= XHCI_ASMEDIA_MODIFY_FLOWCONTROL;
  
  	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
@@ -44,6 +42,3 @@ index b0377701a940..25c5ed9d4000 100644
  		xhci->quirks |= XHCI_RESET_ON_RESUME;
  
  	if (pdev->vendor == PCI_VENDOR_ID_TI && pdev->device == 0x8241)
--- 
-2.53.0
-

@@ -19,8 +19,6 @@ Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
-index 31f52906c2f8..f6cea12367cf 100644
 --- a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
 +++ b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
 @@ -22,6 +22,7 @@ properties:
@@ -31,6 +29,3 @@ index 31f52906c2f8..f6cea12367cf 100644
                - st,stm32mp21-syscfg
                - st,stm32mp23-syscfg
                - st,stm32mp25-pwr
--- 
-2.53.0
-

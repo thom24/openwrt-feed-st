@@ -19,11 +19,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 9 +++++++++
  1 file changed, 9 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index df67b278878d..d13ee884925e 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -1772,6 +1772,15 @@ i3c3: i3c@46080000 {
+@@ -1772,6 +1772,15 @@
  				status = "disabled";
  			};
  
@@ -39,6 +37,3 @@ index df67b278878d..d13ee884925e 100644
  			sdmmc1: mmc@48220000 {
  				compatible = "st,stm32mp25-sdmmc2", "arm,pl18x", "arm,primecell";
  				reg = <0x48220000 0x0 0x400>, <0x44230400 0x0 0x8>;
--- 
-2.53.0
-

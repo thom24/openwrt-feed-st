@@ -19,11 +19,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi | 36 +++++++++++++++++++++++
  1 file changed, 36 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-index f9807e85e0e7..e8804b967d43 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-@@ -172,6 +172,42 @@ &crc1 {
+@@ -172,6 +172,42 @@
  	status = "okay";
  };
  
@@ -66,6 +64,3 @@ index f9807e85e0e7..e8804b967d43 100644
  &dbg_bus {
  	status = "okay";
  };
--- 
-2.53.0
-

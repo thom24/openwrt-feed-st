@@ -11,8 +11,6 @@ Change-Id: I82747ee8d877a310ca2fdc0cd34f11cfa98e24ff
  MAINTAINERS | 8 ++++++++
  1 file changed, 8 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index da54cc68d9e0..e50b1e16f1ac 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
 @@ -24403,6 +24403,14 @@ S:	Maintained
@@ -30,6 +28,3 @@ index da54cc68d9e0..e50b1e16f1ac 100644
  ST STPDDC60 DRIVER
  M:	Daniel Nilsson <daniel.nilsson@flex.com>
  L:	linux-hwmon@vger.kernel.org
--- 
-2.53.0
-

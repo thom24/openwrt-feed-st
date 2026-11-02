@@ -21,11 +21,9 @@ Change-Id: I2c85234884d93f667d01ef5db7d352db9e0f133c
  include/linux/remoteproc.h            | 13 +++++++++++++
  2 files changed, 36 insertions(+)
 
-diff --git a/drivers/remoteproc/remoteproc_sysfs.c b/drivers/remoteproc/remoteproc_sysfs.c
-index 925b0cdbe577..13176f2939be 100644
 --- a/drivers/remoteproc/remoteproc_sysfs.c
 +++ b/drivers/remoteproc/remoteproc_sysfs.c
-@@ -173,6 +173,17 @@ static const char * const rproc_state_string[] = {
+@@ -173,6 +173,17 @@ static const char * const rproc_state_st
  	[RPROC_LAST]		= "invalid",
  };
  
@@ -43,7 +41,7 @@ index 925b0cdbe577..13176f2939be 100644
  /* Expose the state of the remote processor via sysfs */
  static ssize_t state_show(struct device *dev, struct device_attribute *attr,
  			  char *buf)
-@@ -234,12 +245,24 @@ static umode_t rproc_is_visible(struct kobject *kobj, struct attribute *attr,
+@@ -234,12 +245,24 @@ static umode_t rproc_is_visible(struct k
  	return mode;
  }
  
@@ -68,15 +66,12 @@ index 925b0cdbe577..13176f2939be 100644
  	NULL
  };
  
-diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-index f0601e834bd6..9c0084b28f8a 100644
 --- a/include/linux/remoteproc.h
 +++ b/include/linux/remoteproc.h
-@@ -199,6 +199,18 @@ enum rproc_dump_mechanism {
- 	RPROC_COREDUMP_INLINE,
+@@ -200,6 +200,18 @@ enum rproc_dump_mechanism {
  };
  
-+/**
+ /**
 + * enum rproc_fw_format - firmware image format supported
 + * @RPROC_FW_ELF:    the firmware image must be in ELF format
 + * @RPROC_FW_TEE:    the firmware image must be in format that will be treated by the TEE
@@ -88,9 +83,10 @@ index f0601e834bd6..9c0084b28f8a 100644
 +	RPROC_FW_LAST,
 +};
 +
- /**
++/**
   * struct rproc_dump_segment - segment info from ELF header
   * @node:	list node related to the rproc segment list
+  * @da:		device address of the segment
 @@ -325,6 +337,7 @@ struct rproc {
  	u16 elf_machine;
  	struct cdev cdev;
@@ -99,6 +95,3 @@ index f0601e834bd6..9c0084b28f8a 100644
  	DECLARE_BITMAP(features, RPROC_MAX_FEATURES);
  };
  
--- 
-2.53.0
-

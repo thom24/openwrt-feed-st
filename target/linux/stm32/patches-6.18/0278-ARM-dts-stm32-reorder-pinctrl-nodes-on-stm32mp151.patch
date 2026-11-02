@@ -15,11 +15,9 @@ Change-Id: I12091a51654d1932b7043478bdb88d8c79b59afc
  arch/arm/boot/dts/st/stm32mp151.dtsi | 302 +++++++++++++--------------
  1 file changed, 149 insertions(+), 153 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
-index 1b3d946a0fcc..7308ff685d5b 100644
 --- a/arch/arm/boot/dts/st/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
-@@ -208,6 +208,135 @@ pwr_mcu: pwr_mcu@50001014 {
+@@ -208,6 +208,135 @@
  			reg = <0x50001014 0x4>;
  		};
  
@@ -155,7 +153,7 @@ index 1b3d946a0fcc..7308ff685d5b 100644
  		exti: interrupt-controller@5000d000 {
  			compatible = "st,stm32mp1-exti";
  			interrupt-controller;
-@@ -313,6 +442,26 @@ hdp: pinctrl@5002a000 {
+@@ -313,6 +442,26 @@
  			status = "disabled";
  		};
  
@@ -182,7 +180,7 @@ index 1b3d946a0fcc..7308ff685d5b 100644
  		mdma1: dma-controller@58000000 {
  			compatible = "st,stm32h7-mdma";
  			reg = <0x58000000 0x1000>;
-@@ -1910,159 +2059,6 @@ tamp: tamp@5c00a000 {
+@@ -1910,159 +2059,6 @@
  			compatible = "st,stm32-tamp", "syscon", "simple-mfd";
  			reg = <0x5c00a000 0x400>;
  		};
@@ -342,6 +340,3 @@ index 1b3d946a0fcc..7308ff685d5b 100644
  	};
  
  	mlahb: ahb {
--- 
-2.53.0
-

@@ -25,11 +25,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 196 ++++++++++++++++++++++
  1 file changed, 196 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-index 40f60bc4989e..0a51c29c1cf1 100644
 --- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-@@ -29,6 +29,17 @@ aliases {
+@@ -29,6 +29,17 @@
  
  	chosen {
  		stdout-path = "serial0:115200n8";
@@ -47,7 +45,7 @@ index 40f60bc4989e..0a51c29c1cf1 100644
  	};
  
  	clocks {
-@@ -37,6 +48,12 @@ clk_ext_camera: clk-ext-camera {
+@@ -37,6 +48,12 @@
  			compatible = "fixed-clock";
  			clock-frequency = <24000000>;
  		};
@@ -60,7 +58,7 @@ index 40f60bc4989e..0a51c29c1cf1 100644
  	};
  
  	gpio-keys {
-@@ -77,11 +94,63 @@ led-blue {
+@@ -77,11 +94,63 @@
  		};
  	};
  
@@ -124,7 +122,7 @@ index 40f60bc4989e..0a51c29c1cf1 100644
  	wifi_pwrseq: wifi-pwrseq {
  		compatible = "mmc-pwrseq-simple";
  		reset-gpios = <&gpiog 8 GPIO_ACTIVE_LOW>;
-@@ -194,6 +263,31 @@ dcmipp_0: endpoint {
+@@ -194,6 +263,31 @@
  	};
  };
  
@@ -156,7 +154,7 @@ index 40f60bc4989e..0a51c29c1cf1 100644
  &ethernet1 {
  	pinctrl-0 = <&eth1_rgmii_pins_b>;
  	pinctrl-1 = <&eth1_rgmii_sleep_pins_b>;
-@@ -307,6 +401,53 @@ imx335_ep: endpoint {
+@@ -307,6 +401,53 @@
  			};
  		};
  	};
@@ -210,7 +208,7 @@ index 40f60bc4989e..0a51c29c1cf1 100644
  };
  
  &i2c8 {
-@@ -334,6 +475,51 @@ &ipcc1 {
+@@ -334,6 +475,51 @@
  	status = "okay";
  };
  
@@ -262,7 +260,7 @@ index 40f60bc4989e..0a51c29c1cf1 100644
  &m33_rproc {
  	mboxes = <&ipcc1 0x100>, <&ipcc1 0x101>, <&ipcc1 2>;
  	mbox-names = "vq0", "vq1", "shutdown";
-@@ -513,6 +699,16 @@ &syscfg {
+@@ -513,6 +699,16 @@
  	bootph-all;
  };
  
@@ -279,6 +277,3 @@ index 40f60bc4989e..0a51c29c1cf1 100644
  /* Bluetooth */
  &usart1 {
  	pinctrl-names = "default", "sleep", "idle";
--- 
-2.53.0
-

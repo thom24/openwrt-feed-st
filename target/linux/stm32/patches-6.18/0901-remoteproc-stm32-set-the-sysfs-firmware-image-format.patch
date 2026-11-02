@@ -13,11 +13,9 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/268346
  drivers/remoteproc/stm32_rproc.c | 6 +++++-
  1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index f1f8d5a4a295..8a1beda33618 100644
 --- a/drivers/remoteproc/stm32_rproc.c
 +++ b/drivers/remoteproc/stm32_rproc.c
-@@ -977,8 +977,12 @@ static int stm32_rproc_probe(struct platform_device *pdev)
+@@ -977,8 +977,12 @@ static int stm32_rproc_probe(struct plat
  
  	ddata = rproc->priv;
  	ddata->trproc = trproc;
@@ -31,6 +29,3 @@ index f1f8d5a4a295..8a1beda33618 100644
  
  	rproc_coredump_set_elf_info(rproc, ELFCLASS32, EM_NONE);
  
--- 
-2.53.0
-

@@ -14,8 +14,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp235.dtsi | 34 ++++++++++++++++++++++++++
  1 file changed, 34 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp235.dtsi b/arch/arm64/boot/dts/st/stm32mp235.dtsi
-index c7a60c5eb955..d32711c3bebc 100644
 --- a/arch/arm64/boot/dts/st/stm32mp235.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp235.dtsi
 @@ -3,8 +3,30 @@
@@ -49,7 +47,7 @@ index c7a60c5eb955..d32711c3bebc 100644
  &ltdc {
  	compatible = "st,stm32mp255-ltdc";
  	clocks = <&rcc CK_KER_LTDC>, <&rcc CK_BUS_LTDC>, <&syscfg>, <&lvds>;
-@@ -134,4 +156,16 @@ vdec: vdec@480d0000 {
+@@ -134,4 +156,16 @@
  		access-controllers = <&rifsc 89>;
  		power-domains = <&d1_pd>;
  	};
@@ -66,6 +64,3 @@ index c7a60c5eb955..d32711c3bebc 100644
 +		#cooling-cells = <2>;
 +	};
  };
--- 
-2.53.0
-

@@ -15,11 +15,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/stm/ltdc.h |  1 -
  2 files changed, 7 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/drv.c b/drivers/gpu/drm/stm/drv.c
-index 84b51a6ebbfc..f2acc583c57f 100644
 --- a/drivers/gpu/drm/stm/drv.c
 +++ b/drivers/gpu/drm/stm/drv.c
-@@ -119,16 +119,14 @@ static void drv_unload(struct drm_device *ddev)
+@@ -119,16 +119,14 @@ static void drv_unload(struct drm_device
  static __maybe_unused int drv_suspend(struct device *dev)
  {
  	struct drm_device *ddev = dev_get_drvdata(dev);
@@ -41,7 +39,7 @@ index 84b51a6ebbfc..f2acc583c57f 100644
  	pm_runtime_force_suspend(dev);
  
  	return 0;
-@@ -137,20 +135,12 @@ static __maybe_unused int drv_suspend(struct device *dev)
+@@ -137,20 +135,12 @@ static __maybe_unused int drv_suspend(st
  static __maybe_unused int drv_resume(struct device *dev)
  {
  	struct drm_device *ddev = dev_get_drvdata(dev);
@@ -56,16 +54,14 @@ index 84b51a6ebbfc..f2acc583c57f 100644
 -	ret = drm_atomic_helper_resume(ddev, ldev->suspend_state);
 -	if (ret)
 -		pm_runtime_force_suspend(dev);
- 
--	ldev->suspend_state = NULL;
 -
+-	ldev->suspend_state = NULL;
+ 
 -	return ret;
 +	return drm_mode_config_helper_resume(ddev);
  }
  
  static __maybe_unused int drv_runtime_suspend(struct device *dev)
-diff --git a/drivers/gpu/drm/stm/ltdc.h b/drivers/gpu/drm/stm/ltdc.h
-index 2edb83252521..f8be26864f8d 100644
 --- a/drivers/gpu/drm/stm/ltdc.h
 +++ b/drivers/gpu/drm/stm/ltdc.h
 @@ -66,7 +66,6 @@ struct ltdc_device {
@@ -76,6 +72,3 @@ index 2edb83252521..f8be26864f8d 100644
  	int crc_skip_count;
  	bool crc_active;
  	bool vblank_active;
--- 
-2.53.0
-

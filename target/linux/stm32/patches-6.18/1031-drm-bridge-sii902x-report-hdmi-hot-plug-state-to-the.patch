@@ -25,8 +25,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/bridge/sii902x.c | 53 ++++++++++++++++++++++++++++++--
  1 file changed, 50 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/sii902x.c b/drivers/gpu/drm/bridge/sii902x.c
-index 1f0aba28ad1e..1c719c6f271c 100644
 --- a/drivers/gpu/drm/bridge/sii902x.c
 +++ b/drivers/gpu/drm/bridge/sii902x.c
 @@ -189,7 +189,10 @@ struct sii902x {
@@ -40,7 +38,7 @@ index 1f0aba28ad1e..1c719c6f271c 100644
  	} audio;
  };
  
-@@ -833,12 +836,49 @@ static int sii902x_audio_get_dai_id(struct snd_soc_component *component,
+@@ -833,12 +836,49 @@ static int sii902x_audio_get_dai_id(stru
  	return -EINVAL;
  }
  
@@ -90,7 +88,7 @@ index 1f0aba28ad1e..1c719c6f271c 100644
  };
  
  static int sii902x_audio_codec_init(struct sii902x *sii902x,
-@@ -940,10 +980,16 @@ static irqreturn_t sii902x_interrupt(int irq, void *data)
+@@ -940,10 +980,16 @@ static irqreturn_t sii902x_interrupt(int
  	mutex_unlock(&sii902x->mutex);
  
  	if ((status & SII902X_HOTPLUG_EVENT) && sii902x->bridge.dev) {
@@ -110,7 +108,7 @@ index 1f0aba28ad1e..1c719c6f271c 100644
  	}
  
  	return IRQ_HANDLED;
-@@ -1212,6 +1258,7 @@ static int sii902x_probe(struct i2c_client *client)
+@@ -1212,6 +1258,7 @@ static int sii902x_probe(struct i2c_clie
  	}
  
  	mutex_init(&sii902x->mutex);
@@ -118,6 +116,3 @@ index 1f0aba28ad1e..1c719c6f271c 100644
  
  	ret = devm_regulator_bulk_get_enable(dev, ARRAY_SIZE(supplies), supplies);
  	if (ret < 0)
--- 
-2.53.0
-

@@ -17,11 +17,9 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 12 ++++++++++++
  1 file changed, 12 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index d43e61e2ab0d..26ba43d0592a 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -210,6 +210,18 @@ &gpioz {
+@@ -210,6 +210,18 @@
  	bootph-all;
  };
  
@@ -40,6 +38,3 @@ index d43e61e2ab0d..26ba43d0592a 100644
  &i2c2 {
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&i2c2_pins_b>;
--- 
-2.53.0
-

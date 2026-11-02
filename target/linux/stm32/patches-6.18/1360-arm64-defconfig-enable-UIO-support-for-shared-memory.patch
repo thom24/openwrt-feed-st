@@ -24,8 +24,6 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/572028
  arch/arm64/configs/fragment-02-defconfig-addons.config | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/configs/fragment-02-defconfig-addons.config b/arch/arm64/configs/fragment-02-defconfig-addons.config
-index bd9ba2279aba..9d01ee2ee0b1 100644
 --- a/arch/arm64/configs/fragment-02-defconfig-addons.config
 +++ b/arch/arm64/configs/fragment-02-defconfig-addons.config
 @@ -105,6 +105,8 @@ CONFIG_TYPEC_ADC=m
@@ -37,6 +35,3 @@ index bd9ba2279aba..9d01ee2ee0b1 100644
  CONFIG_USB_CONFIGFS_F_UVC=y
  CONFIG_USB_DWC2=m
  CONFIG_USB_HIDDEV=y
--- 
-2.53.0
-

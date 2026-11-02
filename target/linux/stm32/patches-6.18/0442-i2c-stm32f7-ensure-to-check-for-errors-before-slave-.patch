@@ -20,11 +20,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/i2c/busses/i2c-stm32f7.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index 2247bd0bc5c9..2b2ba8186f60 100644
 --- a/drivers/i2c/busses/i2c-stm32f7.c
 +++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -1630,13 +1630,13 @@ static irqreturn_t stm32f7_i2c_isr_event_thread(int irq, void *data)
+@@ -1630,13 +1630,13 @@ static irqreturn_t stm32f7_i2c_isr_event
  
  	status = readl_relaxed(i2c_dev->base + STM32F7_I2C_ISR);
  
@@ -41,6 +39,3 @@ index 2247bd0bc5c9..2b2ba8186f60 100644
  	/* NACK received */
  	if (status & STM32F7_I2C_ISR_NACKF) {
  		dev_dbg(i2c_dev->dev, "<%s>: Receive NACK (addr %x)\n",
--- 
-2.53.0
-

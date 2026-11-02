@@ -20,11 +20,9 @@ Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
  4 files changed, 729 insertions(+)
  create mode 100644 drivers/nvmem/stm32-tamp-nvram.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 60ccaaccb437..ef0e4b29e123 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -24709,6 +24709,7 @@ M:	Siméon Marijon <simeon.marijon@foss.st.com>
+@@ -24709,6 +24709,7 @@ M:	Siméon Marijon <simeon.marijon@foss.
  L:	linux-stm32@st-md-mailman.stormreply.com (moderated for non-subscribers)
  S:	Maintained
  F:	Documentation/devicetree/bindings/nvmem/st,stm32-tamp-nvram.yaml
@@ -32,8 +30,6 @@ index 60ccaaccb437..ef0e4b29e123 100644
  
  STM32 TIMER/LPTIMER DRIVERS
  M:	Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
-index aac1b25219f4..233188fc6c8b 100644
 --- a/drivers/nvmem/Kconfig
 +++ b/drivers/nvmem/Kconfig
 @@ -407,6 +407,16 @@ config NVMEM_STM32_ROMEM
@@ -53,8 +49,6 @@ index aac1b25219f4..233188fc6c8b 100644
  config NVMEM_SUNPLUS_OCOTP
  	tristate "Sunplus SoC OTP support"
  	depends on SOC_SP7021 || COMPILE_TEST
-diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
-index b0bb3e166e80..7b87b794b3b9 100644
 --- a/drivers/nvmem/Makefile
 +++ b/drivers/nvmem/Makefile
 @@ -79,6 +79,8 @@ nvmem_sprd_efuse-y			:= sprd-efuse.o
@@ -66,9 +60,6 @@ index b0bb3e166e80..7b87b794b3b9 100644
  obj-$(CONFIG_NVMEM_SUNPLUS_OCOTP)	+= nvmem_sunplus_ocotp.o
  nvmem_sunplus_ocotp-y			:= sunplus-ocotp.o
  obj-$(CONFIG_NVMEM_SUNXI_SID)		+= nvmem_sunxi_sid.o
-diff --git a/drivers/nvmem/stm32-tamp-nvram.c b/drivers/nvmem/stm32-tamp-nvram.c
-new file mode 100644
-index 000000000000..bf3f20e86f14
 --- /dev/null
 +++ b/drivers/nvmem/stm32-tamp-nvram.c
 @@ -0,0 +1,716 @@
@@ -788,6 +779,3 @@ index 000000000000..bf3f20e86f14
 +MODULE_DESCRIPTION("STMicroelectronics STM32 NVMEM TAMP Backup registers");
 +MODULE_ALIAS("platform:nvmem-stm32-tamp-nvram");
 +MODULE_LICENSE("GPL");
--- 
-2.53.0
-

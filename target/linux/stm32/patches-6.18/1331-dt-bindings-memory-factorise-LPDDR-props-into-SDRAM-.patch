@@ -41,9 +41,6 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  delete mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml
  create mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,sdram-props.yaml
 
-diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml
-deleted file mode 100644
-index 30267ce70124..000000000000
 --- a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml
 +++ /dev/null
 @@ -1,74 +0,0 @@
@@ -121,8 +118,6 @@ index 30267ce70124..000000000000
 -      - 32
 -
 -additionalProperties: true
-diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml
-index a237bc259273..704bbc562528 100644
 --- a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml
 +++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml
 @@ -10,7 +10,7 @@ maintainers:
@@ -134,8 +129,6 @@ index a237bc259273..704bbc562528 100644
  
  properties:
    compatible:
-diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr3.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr3.yaml
-index e328a1195ba6..0d28df3d2bfa 100644
 --- a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr3.yaml
 +++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr3.yaml
 @@ -10,7 +10,7 @@ maintainers:
@@ -147,8 +140,6 @@ index e328a1195ba6..0d28df3d2bfa 100644
  
  properties:
    compatible:
-diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr4.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr4.yaml
-index a078892fecee..65aa07861453 100644
 --- a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr4.yaml
 +++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr4.yaml
 @@ -10,7 +10,7 @@ maintainers:
@@ -160,8 +151,6 @@ index a078892fecee..65aa07861453 100644
  
  properties:
    compatible:
-diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr5.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr5.yaml
-index e441dac5f154..cf5d5a8e94b3 100644
 --- a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr5.yaml
 +++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr5.yaml
 @@ -10,7 +10,7 @@ maintainers:
@@ -173,9 +162,6 @@ index e441dac5f154..cf5d5a8e94b3 100644
  
  properties:
    compatible:
-diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,sdram-props.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,sdram-props.yaml
-new file mode 100644
-index 000000000000..fedd66eeb9d5
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,sdram-props.yaml
 @@ -0,0 +1,94 @@
@@ -273,6 +259,3 @@ index 000000000000..fedd66eeb9d5
 +      - 32
 +
 +additionalProperties: true
--- 
-2.53.0
-

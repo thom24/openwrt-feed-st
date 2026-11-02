@@ -15,8 +15,6 @@ Change-Id: I4edc9d897075d6a6fd5932bd449c0fb22f9f4b10
  .../bindings/mfd/st,stm32-lptimer.yaml        | 20 ++++++++++++++-----
  1 file changed, 15 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml b/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml
-index 946e840e189d..517d88d6f56d 100644
 --- a/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml
 +++ b/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml
 @@ -23,7 +23,9 @@ properties:
@@ -74,6 +72,3 @@ index 946e840e189d..517d88d6f56d 100644
                - const: st,stm32-lptimer-trigger
            - items:
                - const: st,stm32-lptimer-trigger
--- 
-2.53.0
-

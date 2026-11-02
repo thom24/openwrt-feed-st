@@ -13,8 +13,6 @@ Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
  .../st/stm32/stm32-dcmipp/dcmipp-isp-params.c | 196 +++++++++++++++++-
  1 file changed, 192 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp-params.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp-params.c
-index ced1eeb41da7..45fd651bdd07 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp-params.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp-params.c
 @@ -37,6 +37,8 @@ struct dcmipp_isp_params_device {
@@ -26,7 +24,7 @@ index ced1eeb41da7..45fd651bdd07 100644
  	u32 sequence;
  
  	void __iomem *regs;
-@@ -96,6 +98,38 @@ static const struct v4l2_ioctl_ops dcmipp_isp_params_ioctl_ops = {
+@@ -96,6 +98,38 @@ static const struct v4l2_ioctl_ops dcmip
  	.vidioc_streamoff = vb2_ioctl_streamoff,
  };
  
@@ -65,7 +63,7 @@ index ced1eeb41da7..45fd651bdd07 100644
  /*
   * Stop the stream engine. Any remaining buffers in the stream queue are
   * dequeued and passed on to the vb2 framework marked as STATE_ERROR.
-@@ -117,9 +151,11 @@ static void dcmipp_isp_params_stop_streaming(struct vb2_queue *vq)
+@@ -117,9 +151,11 @@ static void dcmipp_isp_params_stop_strea
  	spin_unlock_irq(&vout->irqlock);
  }
  
@@ -78,7 +76,7 @@ index ced1eeb41da7..45fd651bdd07 100644
  	unsigned long size = sizeof(struct stm32_dcmipp_params_cfg);
  	struct stm32_dcmipp_params_cfg *params;
  
-@@ -127,7 +163,7 @@ static int dcmipp_isp_params_buf_prepare(struct vb2_buffer *vb)
+@@ -127,7 +163,7 @@ static int dcmipp_isp_params_buf_prepare
  		return -EINVAL;
  
  	params = (struct stm32_dcmipp_params_cfg *)vb2_plane_vaddr(vb, 0);
@@ -87,7 +85,7 @@ index ced1eeb41da7..45fd651bdd07 100644
  		return -EINVAL;
  
  	vb2_set_plane_payload(vb, 0, size);
-@@ -177,6 +213,7 @@ static int dcmipp_isp_params_buf_init(struct vb2_buffer *vb)
+@@ -177,6 +213,7 @@ static int dcmipp_isp_params_buf_init(st
  }
  
  static const struct vb2_ops dcmipp_isp_params_qops = {
@@ -95,7 +93,7 @@ index ced1eeb41da7..45fd651bdd07 100644
  	.stop_streaming		= dcmipp_isp_params_stop_streaming,
  	.buf_init		= dcmipp_isp_params_buf_init,
  	.buf_prepare		= dcmipp_isp_params_buf_prepare,
-@@ -444,10 +481,147 @@ dcmipp_isp_params_apply_ce(struct dcmipp_isp_params_device *vout,
+@@ -444,10 +481,147 @@ dcmipp_isp_params_apply_ce(struct dcmipp
  		  cfg->lum[8] << DCMIPP_P1CTCR3_LUM8_SHIFT);
  }
  
@@ -245,7 +243,7 @@ index ced1eeb41da7..45fd651bdd07 100644
  {
  	int ret;
  
-@@ -478,6 +652,16 @@ static int dcmipp_isp_params_validate(struct stm32_dcmipp_params_cfg *params)
+@@ -478,6 +652,16 @@ static int dcmipp_isp_params_validate(st
  		if (ret)
  			return ret;
  	}
@@ -262,7 +260,7 @@ index ced1eeb41da7..45fd651bdd07 100644
  
  	return 0;
  }
-@@ -498,6 +682,8 @@ dcmipp_isp_params_apply(struct dcmipp_isp_params_device *vout,
+@@ -498,6 +682,8 @@ dcmipp_isp_params_apply(struct dcmipp_is
  		dcmipp_isp_params_apply_cc(vout, &buf->ctrls.cc_cfg);
  	if (buf->module_cfg_update & STM32_DCMIPP_ISP_CE)
  		dcmipp_isp_params_apply_ce(vout, &buf->ctrls.ce_cfg);
@@ -271,7 +269,7 @@ index ced1eeb41da7..45fd651bdd07 100644
  }
  
  static irqreturn_t dcmipp_isp_params_irq_thread(int irq, void *arg)
-@@ -569,6 +755,8 @@ dcmipp_isp_params_ent_init(const char *entity_name,
+@@ -569,6 +755,8 @@ dcmipp_isp_params_ent_init(const char *e
  		goto err_free_vout;
  	}
  
@@ -280,6 +278,3 @@ index ced1eeb41da7..45fd651bdd07 100644
  	/* Initialize the media entity */
  	vout->vdev.entity.name = entity_name;
  	vout->vdev.entity.function = MEDIA_ENT_F_IO_V4L;
--- 
-2.53.0
-

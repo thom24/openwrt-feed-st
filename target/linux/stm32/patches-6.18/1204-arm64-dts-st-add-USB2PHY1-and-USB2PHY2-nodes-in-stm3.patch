@@ -21,11 +21,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 10 ++++++++++
  1 file changed, 10 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index 70dd48882b09..8fd351006975 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -956,3 +956,13 @@ &usart6 {
+@@ -956,3 +956,13 @@
  	uart-has-rtscts;
  	status = "disabled";
  };
@@ -39,6 +37,3 @@ index 70dd48882b09..8fd351006975 100644
 +	vdd33-supply = <&scmi_vdd3v3_usb>;
 +	status = "okay";
 +};
--- 
-2.53.0
-

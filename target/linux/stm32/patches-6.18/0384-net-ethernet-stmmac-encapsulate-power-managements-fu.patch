@@ -12,11 +12,9 @@ Change-Id: I94d6e73936e718bdf7b81c35bf439bc34380501b
  drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
-index c006b657a209..cf7269fad303 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
-@@ -718,7 +718,9 @@ static struct platform_driver stm32_dwmac_driver = {
+@@ -718,7 +718,9 @@ static struct platform_driver stm32_dwma
  	.remove = stm32_dwmac_remove,
  	.driver = {
  		.name           = "stm32-dwmac",
@@ -26,6 +24,3 @@ index c006b657a209..cf7269fad303 100644
  		.of_match_table = stm32_dwmac_match,
  	},
  };
--- 
-2.53.0
-

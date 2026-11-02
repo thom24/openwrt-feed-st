@@ -14,11 +14,9 @@ Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
  include/drm/drm_connector.h       | 14 +++++++
  3 files changed, 80 insertions(+)
 
-diff --git a/drivers/gpu/drm/drm_atomic_uapi.c b/drivers/gpu/drm/drm_atomic_uapi.c
-index 4fc5f9573184..7ac4dee7a16e 100644
 --- a/drivers/gpu/drm/drm_atomic_uapi.c
 +++ b/drivers/gpu/drm/drm_atomic_uapi.c
-@@ -750,6 +750,8 @@ static int drm_atomic_connector_set_property(struct drm_connector *connector,
+@@ -750,6 +750,8 @@ static int drm_atomic_connector_set_prop
  		state->content_type = val;
  	} else if (property == connector->scaling_mode_property) {
  		state->scaling_mode = val;
@@ -27,7 +25,7 @@ index 4fc5f9573184..7ac4dee7a16e 100644
  	} else if (property == config->content_protection_property) {
  		if (val == DRM_MODE_CONTENT_PROTECTION_ENABLED) {
  			drm_dbg_kms(dev, "only drivers can set CP Enabled\n");
-@@ -847,6 +849,8 @@ drm_atomic_connector_get_property(struct drm_connector *connector,
+@@ -847,6 +849,8 @@ drm_atomic_connector_get_property(struct
  		*val = state->colorspace;
  	} else if (property == connector->scaling_mode_property) {
  		*val = state->scaling_mode;
@@ -36,11 +34,9 @@ index 4fc5f9573184..7ac4dee7a16e 100644
  	} else if (property == config->hdr_output_metadata_property) {
  		*val = state->hdr_output_metadata ?
  			state->hdr_output_metadata->base.id : 0;
-diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
-index 0326b9adb5f1..7aa8f76c0284 100644
 --- a/drivers/gpu/drm/drm_connector.c
 +++ b/drivers/gpu/drm/drm_connector.c
-@@ -1212,6 +1212,12 @@ static const struct drm_prop_enum_list drm_scaling_mode_enum_list[] = {
+@@ -1212,6 +1212,12 @@ static const struct drm_prop_enum_list d
  	{ DRM_MODE_SCALE_ASPECT, "Full aspect" },
  };
  
@@ -53,11 +49,10 @@ index 0326b9adb5f1..7aa8f76c0284 100644
  static const struct drm_prop_enum_list drm_aspect_ratio_enum_list[] = {
  	{ DRM_MODE_PICTURE_ASPECT_NONE, "Automatic" },
  	{ DRM_MODE_PICTURE_ASPECT_4_3, "4:3" },
-@@ -2457,6 +2463,62 @@ int drm_connector_attach_scaling_mode_property(struct drm_connector *connector,
- }
+@@ -2458,6 +2464,62 @@ int drm_connector_attach_scaling_mode_pr
  EXPORT_SYMBOL(drm_connector_attach_scaling_mode_property);
  
-+/**
+ /**
 + * drm_connector_attach_dithering_property - attach atomic dithering property
 + * @connector: connector to attach dithering property on.
 + * @dithering_mask: or'ed mask of BIT(%DRM_MODE_DITHERING_\*).
@@ -113,40 +108,39 @@ index 0326b9adb5f1..7aa8f76c0284 100644
 +}
 +EXPORT_SYMBOL(drm_connector_attach_dithering_property);
 +
- /**
++/**
   * drm_mode_create_aspect_ratio_property - create aspect ratio property
   * @dev: DRM device
-diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
-index d5e6f4b832a7..c00a4bbd1c4c 100644
+  *
 --- a/include/drm/drm_connector.h
 +++ b/include/drm/drm_connector.h
-@@ -1094,6 +1094,12 @@ struct drm_connector_state {
- 	 */
+@@ -1095,6 +1095,12 @@ struct drm_connector_state {
  	unsigned int scaling_mode;
  
-+	/**
+ 	/**
 +	 * @dithering: Connector property to control the
 +	 * dithering.
 +	 */
 +	unsigned int dithering;
 +
- 	/**
++	/**
  	 * @content_protection: Connector property to request content
  	 * protection. This is most commonly used for HDCP.
-@@ -2043,6 +2049,12 @@ struct drm_connector {
  	 */
+@@ -2044,6 +2050,12 @@ struct drm_connector {
  	struct drm_property *scaling_mode_property;
  
-+	/**
+ 	/**
 +	 * @dithering_property: Optional atomic property to control the
 +	 * dithering.
 +	 */
 +	struct drm_property *dithering_property;
 +
- 	/**
++	/**
  	 * @vrr_capable_property: Optional property to help userspace
  	 * query hardware support for variable refresh rate on a connector.
-@@ -2446,6 +2458,8 @@ int drm_mode_create_scaling_mode_property(struct drm_device *dev);
+ 	 * connector. Drivers can add the property to a connector by
+@@ -2446,6 +2458,8 @@ int drm_mode_create_scaling_mode_propert
  int drm_connector_attach_content_type_property(struct drm_connector *dev);
  int drm_connector_attach_scaling_mode_property(struct drm_connector *connector,
  					       u32 scaling_mode_mask);
@@ -155,6 +149,3 @@ index d5e6f4b832a7..c00a4bbd1c4c 100644
  int drm_connector_attach_vrr_capable_property(
  		struct drm_connector *connector);
  int drm_connector_attach_broadcast_rgb_property(struct drm_connector *connector);
--- 
-2.53.0
-

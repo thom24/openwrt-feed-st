@@ -14,11 +14,9 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp251.dtsi | 5 ++++-
  1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index cc5b1c9a9bb9..f20a393880e9 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -2317,6 +2317,10 @@ pcie_rc: pcie@48400000 {
+@@ -2317,6 +2317,10 @@
  						<0 0 0 2 &intc 0 0 GIC_SPI 265 IRQ_TYPE_LEVEL_HIGH>,
  						<0 0 0 3 &intc 0 0 GIC_SPI 266 IRQ_TYPE_LEVEL_HIGH>,
  						<0 0 0 4 &intc 0 0 GIC_SPI 267 IRQ_TYPE_LEVEL_HIGH>;
@@ -29,7 +27,7 @@ index cc5b1c9a9bb9..f20a393880e9 100644
  				#address-cells = <3>;
  				#size-cells = <2>;
  				ranges = <0x02000000 0x0 0x10010000 0x10010000 0x0 0x7ff0000>,
-@@ -2324,7 +2328,6 @@ pcie_rc: pcie@48400000 {
+@@ -2324,7 +2328,6 @@
  				dma-ranges = <0x42000000 0x0 0x80000000 0x80000000 0x0 0x80000000>;
  				clocks = <&scmi_clk CK_SCMI_ICN_PCIE>;
  				resets = <&rcc PCIE_R>;
@@ -37,6 +35,3 @@ index cc5b1c9a9bb9..f20a393880e9 100644
  				access-controllers = <&rifsc 68>;
  				power-domains = <&d1_pd>;
  				status = "disabled";
--- 
-2.53.0
-
