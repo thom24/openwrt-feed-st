@@ -1,0 +1,45 @@
+From 7ba65c44e5740feccacfc3978d0b00caf98af679 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 23 Jun 2026 16:33:52 +0200
+Subject: [PATCH] ASoC: stm32: amdf: advertise batched PCM pointer reporting
+
+The STM32 AMDF PCM interface does not guarantee continuously advancing
+hardware pointer updates visible to ALSA userspace. The reported position
+may advance in batches rather than at burst granularity.
+
+Advertise SNDRV_PCM_INFO_BATCH so userspace is informed that the hardware
+pointer may only be updated periodically, for example once per period,
+instead of continuously.
+
+This makes the PCM hardware flags reflect the actual pointer reporting
+behavior more accurately.
+
+Change-Id: Idfceff3da7df5590fec2404aafd280be53094b00
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/582122
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ sound/soc/stm/stm32_amdf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sound/soc/stm/stm32_amdf.c b/sound/soc/stm/stm32_amdf.c
+index 8db764e57029..30f097e05d65 100644
+--- a/sound/soc/stm/stm32_amdf.c
++++ b/sound/soc/stm/stm32_amdf.c
+@@ -46,7 +46,7 @@ struct stm32_amdf_priv {
+ 
+ static const struct snd_pcm_hardware stm32_amdf_pcm_hw = {
+ 	.info = SNDRV_PCM_INFO_INTERLEAVED | SNDRV_PCM_INFO_BLOCK_TRANSFER |
+-		SNDRV_PCM_INFO_MMAP | SNDRV_PCM_INFO_PAUSE,
++		SNDRV_PCM_INFO_MMAP | SNDRV_PCM_INFO_PAUSE | SNDRV_PCM_INFO_BATCH,
+ 	.formats = SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FMTBIT_S32_LE,
+ 
+ 	.channels_min = 1,
+-- 
+2.53.0
+

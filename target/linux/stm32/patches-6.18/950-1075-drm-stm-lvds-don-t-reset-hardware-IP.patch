@@ -1,0 +1,58 @@
+From 3647c1751e8bce7fb1cd7a0a84188a7df5b63a73 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Fri, 13 Mar 2026 15:57:05 +0100
+Subject: [PATCH] drm/stm: lvds: don't reset hardware IP
+
+To obtain a continuous display after the probe, do not reset the LVDS bridge.
+
+Change-Id: Ie32087650059e78779f274fd69bccc104972d485
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+---
+ drivers/gpu/drm/stm/lvds.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
+index 30d9429ea257..02b9683b6d8f 100644
+--- a/drivers/gpu/drm/stm/lvds.c
++++ b/drivers/gpu/drm/stm/lvds.c
+@@ -1090,6 +1090,7 @@ static int lvds_probe(struct platform_device *pdev)
+ 	struct reset_control *rstc;
+ 	struct stm_lvds *lvds;
+ 	int ret, dual_link;
++	u32 cr;
+ 
+ 	dev_dbg(dev, "Probing LVDS driver...\n");
+ 
+@@ -1139,10 +1140,6 @@ static int lvds_probe(struct platform_device *pdev)
+ 		return  PTR_ERR(lvds->vdda18_supply);
+ 	}
+ 
+-	reset_control_assert(rstc);
+-	usleep_range(10, 20);
+-	reset_control_deassert(rstc);
+-
+ 	port1 = of_graph_get_port_by_id(dev->of_node, 1);
+ 	port2 = of_graph_get_port_by_id(dev->of_node, 2);
+ 	dual_link = drm_of_lvds_get_dual_link_pixel_order(port1, port2);
+@@ -1218,6 +1215,18 @@ static int lvds_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
++	/*
++	 * Check if the lvds has been activated by another software
++	 * component to determine if it needs to be reset.
++	 */
++	cr = lvds_read(lvds, LVDS_CR);
++
++	if (!(cr & CR_LVDSEN)) {
++		reset_control_assert(rstc);
++		usleep_range(10, 20);
++		reset_control_deassert(rstc);
++	}
++
+ 	lvds->lvds_bridge.of_node = dev->of_node;
+ 	lvds->hw_version = lvds_read(lvds, LVDS_VERR);
+ 
+-- 
+2.53.0
+

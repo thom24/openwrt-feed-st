@@ -1,0 +1,56 @@
+From 54b2d85e401f155f4d66fd19ca10b54bbc6a109b Mon Sep 17 00:00:00 2001
+From: Gwenael Treuveur <gwenael.treuveur@foss.st.com>
+Date: Mon, 20 May 2024 11:15:20 +0200
+Subject: [PATCH] arm64: dts: st: add m33_rproc support for stm32mp215f-dk
+ board
+
+Add M33_RPROC node for stm32mp215f-dk board.
+
+Change-Id: I0edfbf1c8943bb0cc15d4d7344e8d4846564fcbb
+Signed-off-by: Gwenael Treuveur <gwenael.treuveur@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/552530
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 44b8d59261b8..c1dd9319cb8a 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -78,6 +78,10 @@ wifi_pwrseq: wifi-pwrseq {
+ 	};
+ };
+ 
++&a35ss_syscfg {
++	status = "okay";
++};
++
+ &arm_wdt {
+ 	timeout-sec = <32>;
+ 	bootph-all;
+@@ -303,6 +307,16 @@ &ipcc1 {
+ 	status = "okay";
+ };
+ 
++&m33_rproc {
++	mboxes = <&ipcc1 0x0>, <&ipcc1 0x1>, <&ipcc1 2>;
++	mbox-names = "vq0", "vq1", "shutdown";
++	memory-region = <&cm33_cube_fw>, <&cm33_cube_data>,
++			<&ipc_shmem_1>, <&vdev0vring0>,
++			<&vdev0vring1>, <&vdev0buffer>;
++	st,syscfg-nsvtor = <&a35ss_syscfg 0x20a8 0xffffff80>;
++	status = "okay";
++};
++
+ &optee {
+ 	bootph-all;
+ };
+-- 
+2.53.0
+

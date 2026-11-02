@@ -1,0 +1,39 @@
+From a050ff5e0584992ebcd263a135e89281a6ee8412 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 22 Apr 2026 17:29:19 +0200
+Subject: [PATCH] ARM: dts: stm32: fix vdda supply for onboard hub on stm32mp15
+ DK boards
+
+stm32mp15 DK boards use Microchip USB2514 HUB. Since vdda supply has been
+added, the regulator framework wrongly associates the 'vdda' supply
+dedicated to ADC, so the wrong regulator is referenced.
+Only the 3v3 regulator is used to supply both the digital and the analog
+part of the HUB.
+
+Fixes: 673655f7944f ("usb: misc: onboard_dev: add vdda support for Microchip USB2514")
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ied3bbe33c8da25d6c4a1aebfe857baff595696fc
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/560373
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
+index d1f2f497abbf..cbf48ce0301e 100644
+--- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
+@@ -924,6 +924,7 @@ hub@1 {
+ 		compatible = "usb424,2514";
+ 		reg = <1>;
+ 		vdd-supply = <&v3v3>;
++		vdda-supply = <&v3v3>;
+ 	};
+ };
+ 
+-- 
+2.53.0
+

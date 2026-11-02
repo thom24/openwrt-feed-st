@@ -1,0 +1,95 @@
+From 0928fe3eedb159847cd002b01130f460042181f4 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Mon, 16 Feb 2026 09:20:44 +0100
+Subject: [PATCH] arm64: dts: st: include pinctrl to enable pins support on
+ stm32mp215f-dk
+
+Now that pinctrl is defined for STM32MP21, include it to stm32mp215f-dk,
+which embeds a STM32MP215FAN SoC.
+stm32mp21xxan-pinctrl.dtsi adds gpio banks support.
+stm32mp21-pinctrl.dtsi adds pin muxing support.
+
+Change-Id: Ib08448918bea2b186b09397f35ea98ef8de50211
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/536673
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 50 +++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 4cd93d382b6c..ef0bfb9723da 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -9,6 +9,8 @@
+ #include <dt-bindings/input/input.h>
+ #include "stm32mp215.dtsi"
+ #include "stm32mp21xf.dtsi"
++#include "stm32mp21-pinctrl.dtsi"
++#include "stm32mp21xxan-pinctrl.dtsi"
+ #include "stm32mp215f-dk-resmem.dtsi"
+ 
+ / {
+@@ -47,10 +49,58 @@ &arm_wdt {
+ 	status = "okay";
+ };
+ 
++&gpioa {
++	bootph-all;
++};
++
++&gpiob {
++	bootph-all;
++};
++
++&gpioc {
++	bootph-all;
++};
++
++&gpiod {
++	bootph-all;
++};
++
++&gpioe {
++	bootph-all;
++};
++
++&gpiof {
++	bootph-all;
++};
++
++&gpiog {
++	bootph-all;
++};
++
++&gpioh {
++	bootph-all;
++};
++
++&gpioi {
++	bootph-all;
++};
++
++&gpioz {
++	bootph-all;
++};
++
+ &optee {
+ 	bootph-all;
+ };
+ 
++&pinctrl {
++	bootph-all;
++};
++
++&pinctrl_z {
++	bootph-all;
++};
++
+ &psci {
+ 	bootph-all;
+ };
+-- 
+2.53.0
+

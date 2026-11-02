@@ -1,0 +1,56 @@
+From 72172761b873418a22a381a1dd1ea3e493e442ba Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Thu, 9 Apr 2026 15:48:33 +0200
+Subject: [PATCH] arm64: dts: st: add tcpp03 i2c1 node in stm32mp257f-ev1.dts
+
+tcpp03 controller uses i2c to access status and control registers,
+it is enabled by gpio and can be notified from vbus changes from FLGn pin.
+FLGn pin indicates ovp errors when in NORMAL mode.
+
+Change-Id: I0e77338fa1cd4c7915e51db769d5c8c6061c6503
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/581849
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+index 9eeff7fb1581..04ace9489bf0 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+@@ -440,6 +440,28 @@ &hpdma3 {
+ 	memory-region = <&hpdma3_lli>;
+ };
+ 
++&i2c1 {
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&i2c1_pins_a>;
++	pinctrl-1 = <&i2c1_sleep_pins_a>;
++	clock-frequency = <400000>;
++	status = "okay";
++	/* spare dmas for other usage */
++	/delete-property/dmas;
++	/delete-property/dma-names;
++
++	tcpp: typec@34 {
++		compatible = "st,tcpp03";
++		reg = <0x34>;
++		enable-gpios = <&gpiog 2 GPIO_ACTIVE_HIGH>;
++		interrupt-parent = <&gpiog>;
++		interrupts = <1 IRQ_TYPE_EDGE_FALLING>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&tcpp_flgn_pins_a>;
++		status = "okay";
++	};
++};
++
+ &i2c2 {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&i2c2_pins_a>;
+-- 
+2.53.0
+

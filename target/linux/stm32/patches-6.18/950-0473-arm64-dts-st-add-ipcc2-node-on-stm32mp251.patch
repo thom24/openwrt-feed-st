@@ -1,0 +1,47 @@
+From 136f386dc30e1c9b762c311a07b63b315002f2bd Mon Sep 17 00:00:00 2001
+From: Gwenael Treuveur <gwenael.treuveur@foss.st.com>
+Date: Wed, 28 Aug 2024 14:00:57 +0200
+Subject: [PATCH] arm64: dts: st: add ipcc2 node on stm32mp251
+
+Define ipcc2 node used by Cortex-M0.
+
+Change-Id: I84ffbeafa30826a36a9bc60a1ede1c8d654ca232
+Signed-off-by: Gwenael Treuveur <gwenael.treuveur@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/539859
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index bab8d08e0db8..063dad73b3e3 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -2483,6 +2483,19 @@ exti2: interrupt-controller@46230000 {
+ 				<&intc GIC_SPI 213 IRQ_TYPE_LEVEL_HIGH>;	/* EXTI_70 */
+ 		};
+ 
++		ipcc2: mailbox@46250000 {
++			compatible = "st,stm32mp1-ipcc";
++			#mbox-cells = <1>;
++			reg = <0x46250000 0x400>;
++			st,proc-id = <1>;
++			interrupts-extended = <&exti2 34 0>,
++					      <&intc GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "rx", "tx";
++			clocks = <&scmi_clk CK_SCMI_IPCC2>;
++			wakeup-source;
++			status = "disabled";
++		};
++
+ 		dbg_bus: bus@4a000000 {
+ 			compatible = "st,stm32mp251-dbg-bus";
+ 			#address-cells = <1>;
+-- 
+2.53.0
+

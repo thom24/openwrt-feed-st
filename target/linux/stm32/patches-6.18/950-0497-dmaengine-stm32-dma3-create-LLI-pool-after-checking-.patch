@@ -1,0 +1,48 @@
+From 93000fc8b5f97fe925f2157525045afd04264d93 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 28 Apr 2026 11:44:55 +0200
+Subject: [PATCH] dmaengine: stm32-dma3: create LLI pool after checking
+ reserved channels
+
+To avoid a potential gen_pool creation log when there is no channel
+available, move the LLI pool creation after checking reserved channels.
+
+Change-Id: Ib6c4eb9c2deb3e6908974ceea07ef40507005b06
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/564444
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ drivers/dma/stm32/stm32-dma3.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
+index 0f3acf494007..2ad2d74f7088 100644
+--- a/drivers/dma/stm32/stm32-dma3.c
++++ b/drivers/dma/stm32/stm32-dma3.c
+@@ -2236,10 +2236,6 @@ static int stm32_dma3_probe(struct platform_device *pdev)
+ 			goto err_clk_disable;
+ 	}
+ 
+-	ret = stm32_dma3_lli_pool_create(ddata);
+-	if (ret)
+-		goto err_clk_disable;
+-
+ 	ddata->chans = devm_kcalloc(&pdev->dev, ddata->dma_channels, sizeof(*ddata->chans),
+ 				    GFP_KERNEL);
+ 	if (!ddata->chans) {
+@@ -2256,6 +2252,10 @@ static int stm32_dma3_probe(struct platform_device *pdev)
+ 		goto err_clk_disable;
+ 	}
+ 
++	ret = stm32_dma3_lli_pool_create(ddata);
++	if (ret)
++		goto err_clk_disable;
++
+ 	/* G_FIFO_SIZE x=0..7 in HWCFGR3 and G_FIFO_SIZE x=8..15 in HWCFGR4 */
+ 	hwcfgr = readl_relaxed(ddata->base + STM32_DMA3_HWCFGR3);
+ 	hwcfgr |= ((u64)readl_relaxed(ddata->base + STM32_DMA3_HWCFGR4)) << 32;
+-- 
+2.53.0
+

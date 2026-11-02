@@ -1,0 +1,46 @@
+From 3cdb23f343beb0f84e36ace6ab8bb85be72999de Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Mon, 9 Mar 2026 17:36:41 +0100
+Subject: [PATCH] kbuild: look for dts files in the external DT folders
+
+For each folder present in KBUILD_EXTDTS, replicate the Makefile
+rule present just above, but with the search folder replaced by
+the folder from KBUILD_EXTDTS.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I94db8c89564bbb3b04bb44ad446a97c88aad29e0
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/544924
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Tested-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ scripts/Makefile.dtbs | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/scripts/Makefile.dtbs b/scripts/Makefile.dtbs
+index 05a45c53cae5..15d9207d8ad5 100644
+--- a/scripts/Makefile.dtbs
++++ b/scripts/Makefile.dtbs
+@@ -135,6 +135,17 @@ quiet_cmd_dtc = DTC $(quiet_dtb_check_tag) $@
+ $(obj)/%.dtb: $(obj)/%.dts $(DTC) $(DT_TMP_SCHEMA) FORCE
+ 	$(call if_changed_dep,dtc)
+ 
++ifneq ($(wildcard $(KBUILD_EXTDTS)),)
++
++define EXTDTS_TEMPLATE
++$$(obj)/%.dtb: $(1)/%.dts $$(DTC) $$(DT_TMP_SCHEMA) FORCE
++	$$(call if_changed_dep,dtc)
++endef
++
++$(foreach ext,$(wildcard $(KBUILD_EXTDTS)),$(eval $(call EXTDTS_TEMPLATE,$(ext))))
++
++endif
++
+ $(obj)/%.dtbo: $(src)/%.dtso $(DTC) FORCE
+ 	$(call if_changed_dep,dtc)
+ 
+-- 
+2.53.0
+

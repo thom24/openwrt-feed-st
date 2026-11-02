@@ -1,0 +1,67 @@
+From e1fb0c22055c7ce45359e70cdaac52c6c64bd199 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Mon, 31 Aug 2026 13:50:53 +0200
+Subject: [PATCH] ASoC: stm32: sai: fix sai_ck_min_rate computation when master
+ clock is used
+
+When set_sai_ck_rate() is called from stm32_sai_set_sysclk() with the
+master clock active, 'rate' is already the mclk frequency. The current
+assignment therefore produced an unreachable value in this case.
+Set sai_ck_min_rate = rate, when mclk is active.
+
+Keep the current assignment unchanged when mclk is inactive.
+
+Fixes: edea92770a3b ("ASoC: stm32: sai: skip useless iterations on kernel rate loop")
+Change-Id: I3119d290da7f532cd9593d5180a3e6c6e85417ad
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/605177
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ sound/soc/stm/stm32_sai_sub.c | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
+
+diff --git a/sound/soc/stm/stm32_sai_sub.c b/sound/soc/stm/stm32_sai_sub.c
+index 38a305a6615e..4c3d56e4d187 100644
+--- a/sound/soc/stm/stm32_sai_sub.c
++++ b/sound/soc/stm/stm32_sai_sub.c
+@@ -414,7 +414,8 @@ static int stm32_sai_set_parent_rate(struct stm32_sai_sub_data *sai,
+ 
+ 	/*
+ 	 * Set minimum and maximum expected kernel clock frequency
+-	 * - mclk on or spdif:
++	 * - mclk on: rate = mclk frequency
++	 * - mclk off (spdif):
+ 	 *   f_sai_ck = MCKDIV * mclk-fs * fs
+ 	 *   Here typical 256 ratio is assumed for mclk-fs
+ 	 * - mclk off:
+@@ -423,15 +424,20 @@ static int stm32_sai_set_parent_rate(struct stm32_sai_sub_data *sai,
+ 	 *   Set constraint MCKDIV * FRL <= 256, to ensure MCKDIV is in available range
+ 	 *   f_sai_ck = sai_ck_max_rate * pow_of_two(FRL) / 256
+ 	 */
+-	sai_ck_min_rate = rate * 256;
++	sai_ck_min_rate = rate;
+ 	if (!(rate % SAI_RATE_11K))
+ 		sai_ck_max_rate = SAI_MAX_SAMPLE_RATE_11K * 256;
+ 	else
+ 		sai_ck_max_rate = SAI_MAX_SAMPLE_RATE_8K * 256;
+ 
+-	if (!sai->sai_mclk && !STM_SAI_PROTOCOL_IS_SPDIF(sai)) {
+-		sai_ck_min_rate = rate * sai->fs_length;
+-		sai_ck_max_rate /= DIV_ROUND_CLOSEST(256, roundup_pow_of_two(sai->fs_length));
++	if (!sai->sai_mclk) {
++		if (STM_SAI_PROTOCOL_IS_SPDIF(sai)) {
++			sai_ck_min_rate = rate * 256;
++		} else {
++			sai_ck_min_rate = rate * sai->fs_length;
++			sai_ck_max_rate /= DIV_ROUND_CLOSEST(256,
++							     roundup_pow_of_two(sai->fs_length));
++		}
+ 	}
+ 
+ 	/*
+-- 
+2.53.0
+

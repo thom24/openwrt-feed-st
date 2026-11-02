@@ -1,0 +1,59 @@
+From 644afc86bc9b3224f5ae17b73cdf4b7990c1701f Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Fri, 15 May 2026 16:39:53 +0200
+Subject: [PATCH] dt-bindings: pinctrl: stm32-hdp: Add support for stm32mp231
+
+The ST reference manual RM0457 is shared between the devices
+stm32mp23x and stm32mp25x. In current revision 5, the manual does
+not report any differences between the two devices for what
+concerns the HDP pin muxing, even if it's evident that some of the
+signals have no sense for stm32mp23x, e.g. PCIe signals present
+while the interface is not available.
+
+Introduce the compatible 'st,stm32mp231-hdp' allowing the use of
+the same pin functions as for compatible 'st,stm32mp251-hdp'.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I41fb479a2007eb70a8f5223c528fff2a37885ed8
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/568319
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ .../devicetree/bindings/pinctrl/st,stm32-hdp.yaml          | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/pinctrl/st,stm32-hdp.yaml b/Documentation/devicetree/bindings/pinctrl/st,stm32-hdp.yaml
+index 8f8b4b68aaa3..7103f3a84903 100644
+--- a/Documentation/devicetree/bindings/pinctrl/st,stm32-hdp.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/st,stm32-hdp.yaml
+@@ -1,5 +1,5 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+-# Copyright (C) STMicroelectronics 2025.
++# Copyright (C) STMicroelectronics 2025-2026.
+ %YAML 1.2
+ ---
+ $id: http://devicetree.org/schemas/pinctrl/st,stm32-hdp.yaml#
+@@ -19,6 +19,7 @@ properties:
+     enum:
+       - st,stm32mp131-hdp
+       - st,stm32mp151-hdp
++      - st,stm32mp231-hdp
+       - st,stm32mp251-hdp
+ 
+   reg:
+@@ -129,7 +130,9 @@ allOf:
+       properties:
+         compatible:
+           contains:
+-            const: st,stm32mp251-hdp
++            enum:
++              - st,stm32mp231-hdp
++              - st,stm32mp251-hdp
+     then:
+       patternProperties:
+         "^hdp[0-7]-pins$":
+-- 
+2.53.0
+

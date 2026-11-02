@@ -1,0 +1,37 @@
+From c876576ffb4c2a045495546589a7043b5df4682a Mon Sep 17 00:00:00 2001
+From: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Date: Wed, 29 Apr 2026 17:32:29 +0200
+Subject: [PATCH] media: dt-bindings: add resets to STM32MP25 video codecs
+
+Add resets to STM32MP25 video codecs.
+
+Change-Id: I53798a5495aba978d0cc4b4692840ed9ec960915
+Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/562835
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ .../devicetree/bindings/media/st,stm32mp25-video-codec.yaml    | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml b/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml
+index d53d348d741c..fdc8325d5866 100644
+--- a/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml
++++ b/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml
+@@ -30,6 +30,9 @@ properties:
+   clocks:
+     maxItems: 1
+ 
++  resets:
++    maxItems: 1
++
+   access-controllers:
+     minItems: 1
+     maxItems: 2
+-- 
+2.53.0
+

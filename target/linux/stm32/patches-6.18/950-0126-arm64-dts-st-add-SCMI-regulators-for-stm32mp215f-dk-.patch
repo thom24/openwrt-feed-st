@@ -1,0 +1,63 @@
+From a22a98e08dc80867afe8b448d35d932e1d1ee014 Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Wed, 23 Sep 2026 09:59:02 +0200
+Subject: [PATCH] arm64: dts: st: add SCMI regulators for stm32mp215f-dk board
+
+Add SCMI-based regulator nodes:
+- vddcore (BUCK1)
+- vdd3v3_usb (LDO4)
+- vdd_flash (LDO5)
+- vdda_1v8 (LDO6)
+- v3v3 (GPO1)
+
+These regulators are provided through the SCMI voltage protocol
+and will be used by on-board peripherals.
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: I3e8b3efaef979455719c9f192f9e659b9ef2fb19
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/535887
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 95d7cadc0ca9..971a8cc193d3 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -67,6 +67,29 @@ &scmi_clk {
+ 	bootph-all;
+ };
+ 
++&scmi_regu {
++	scmi_vddcore: regulator@5 {
++		reg = <VOLTD_SCMI_STPMIC_BUCK1>;
++		regulator-name = "vddcore";
++	};
++	scmi_vdd3v3_usb: regulator@f {
++		reg = <VOLTD_SCMI_STPMIC_LDO4>;
++		regulator-name = "vdd3v3_usb";
++	};
++	scmi_vdd_flash: regulator@10 {
++		reg = <VOLTD_SCMI_STPMIC_LDO5>;
++		regulator-name = "vdd_flash";
++	};
++	scmi_vdda_1v8: regulator@11 {
++		reg = <VOLTD_SCMI_STPMIC_LDO6>;
++		regulator-name = "vdda_1v8";
++	};
++	scmi_v3v3: regulator@15 {
++		reg = <VOLTD_SCMI_STPMIC_GPO1>;
++		regulator-name = "v3v3";
++	};
++};
++
+ &scmi_reset {
+ 	bootph-all;
+ };
+-- 
+2.53.0
+

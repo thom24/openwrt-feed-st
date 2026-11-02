@@ -1,0 +1,42 @@
+From 0072e18222dab10abdb007ae894badc6fb680e8e Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Tue, 11 Jul 2023 17:16:50 +0200
+Subject: [PATCH] ARM: dts: stm32: add sram node within stm32mp151.dtsi
+
+Introduce the sram node in order to be used by drivers
+requiring SRAM memory space.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: Icf6587d90df41bef25451d97e3e9c22182c25fd0
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/537268
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ arch/arm/boot/dts/st/stm32mp151.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
+index b8374a93c6c7..ed8921703667 100644
+--- a/arch/arm/boot/dts/st/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
+@@ -155,6 +155,14 @@ soc {
+ 		interrupt-parent = <&intc>;
+ 		ranges;
+ 
++		sram4: sram@10050000 {
++			compatible = "mmio-sram";
++			reg = <0x10050000 0x10000>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0 0x10050000 0x10000>;
++		};
++
+ 		hsem: hwspinlock@4c000000 {
+ 			compatible = "st,stm32-hwspinlock";
+ 			#hwlock-cells = <2>;
+-- 
+2.53.0
+

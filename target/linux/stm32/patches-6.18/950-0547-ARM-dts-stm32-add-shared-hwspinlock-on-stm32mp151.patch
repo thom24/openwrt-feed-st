@@ -1,0 +1,50 @@
+From 939abcea08159305f0e38d0e402c546649017a8b Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Wed, 4 Mar 2026 12:05:53 +0100
+Subject: [PATCH] ARM: dts: stm32: add shared hwspinlock on stm32mp151
+
+Declare a shared hwspinlock to be used by all GPIO/pin controllers
+and by the IRQ controller driver.
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: Icbf1d6f7d3569878670896c4984f4ba02f371fda
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/543230
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp151.dtsi | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
+index 0c963cdf78e6..ba1ab59f6c83 100644
+--- a/arch/arm/boot/dts/st/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
+@@ -223,6 +223,7 @@ pinctrl: pinctrl@50002000 {
+ 			#size-cells = <1>;
+ 			ranges = <0 0x50002000 0xa400>;
+ 			interrupt-parent = <&exti>;
++			hwlocks = <&hsem 0 0>;
+ 
+ 			gpioa: gpio@50002000 {
+ 				reg = <0x0 0x400>;
+@@ -351,6 +352,8 @@ exti: interrupt-controller@5000d000 {
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
+ 			reg = <0x5000d000 0x400>;
++			hwlocks = <&hsem 1 0>;
++
+ 			interrupts-extended =
+ 				<&intc GIC_SPI 6   IRQ_TYPE_LEVEL_HIGH>,	/* EXTI_0 */
+ 				<&intc GIC_SPI 7   IRQ_TYPE_LEVEL_HIGH>,
+@@ -628,6 +631,7 @@ pinctrl_z: pinctrl@54004000 {
+ 			#size-cells = <1>;
+ 			ranges = <0 0x54004000 0x400>;
+ 			interrupt-parent = <&exti>;
++			hwlocks = <&hsem 0 1>;
+ 
+ 			gpioz: gpio@54004000 {
+ 				reg = <0 0x400>;
+-- 
+2.53.0
+

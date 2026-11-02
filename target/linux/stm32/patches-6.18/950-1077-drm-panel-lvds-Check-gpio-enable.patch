@@ -1,0 +1,50 @@
+From 779ee8ca1636386084d20e087181002e853f5324 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Thu, 31 Jul 2025 11:37:44 +0200
+Subject: [PATCH] drm/panel: lvds: Check gpio enable
+
+This fix allows you to check the status of the GPIO enable.
+This GPIO can be configured by another software layer.
+To maintain continuous display, it is best to enable the panel
+if it has already been started.
+
+Change-Id: I01c18ed40f01da23823b3c067fd975df576df674
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/479225
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/gpu/drm/panel/panel-lvds.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/panel/panel-lvds.c b/drivers/gpu/drm/panel/panel-lvds.c
+index feec2690cb82..a9ae80235f4a 100644
+--- a/drivers/gpu/drm/panel/panel-lvds.c
++++ b/drivers/gpu/drm/panel/panel-lvds.c
+@@ -198,7 +198,7 @@ static int panel_lvds_probe(struct platform_device *pdev)
+ 
+ 	/* Get GPIOs and backlight controller. */
+ 	lvds->enable_gpio = devm_gpiod_get_optional(lvds->dev, "enable",
+-						     GPIOD_OUT_LOW);
++						    GPIOD_ASIS);
+ 	if (IS_ERR(lvds->enable_gpio)) {
+ 		ret = PTR_ERR(lvds->enable_gpio);
+ 		dev_err(lvds->dev, "failed to request %s GPIO: %d\n",
+@@ -206,6 +206,14 @@ static int panel_lvds_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
++	if (lvds->enable_gpio) {
++		ret = gpiod_get_direction(lvds->enable_gpio);
++		if (ret != 0)
++			gpiod_direction_output(lvds->enable_gpio, 0);
++		else
++			gpiod_direction_output(lvds->enable_gpio, 1);
++	}
++
+ 	lvds->reset_gpio = devm_gpiod_get_optional(lvds->dev, "reset",
+ 						     GPIOD_OUT_HIGH);
+ 	if (IS_ERR(lvds->reset_gpio)) {
+-- 
+2.53.0
+

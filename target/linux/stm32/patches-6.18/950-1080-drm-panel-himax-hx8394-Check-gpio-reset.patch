@@ -1,0 +1,47 @@
+From e7ebd4fa8ba36b6460a21a4553ac39877238c416 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Tue, 29 Jul 2025 14:43:21 +0200
+Subject: [PATCH] drm/panel: himax-hx8394: Check gpio reset
+
+This fix allows you to check the status of the GPIO reset.
+This GPIO can be configured by another software layer.
+To maintain continuous display, it is best not to reset the panel
+if it has already been started.
+
+Change-Id: If676f2c42a7085df9ca354ecb4e16d210729d38e
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/479215
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/gpu/drm/panel/panel-himax-hx8394.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/panel/panel-himax-hx8394.c b/drivers/gpu/drm/panel/panel-himax-hx8394.c
+index 777827a6dd75..07009024777c 100644
+--- a/drivers/gpu/drm/panel/panel-himax-hx8394.c
++++ b/drivers/gpu/drm/panel/panel-himax-hx8394.c
+@@ -867,11 +867,19 @@ static int hx8394_probe(struct mipi_dsi_device *dsi)
+ 	if (IS_ERR(ctx))
+ 		return PTR_ERR(ctx);
+ 
+-	ctx->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
++	ctx->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_ASIS);
+ 	if (IS_ERR(ctx->reset_gpio))
+ 		return dev_err_probe(dev, PTR_ERR(ctx->reset_gpio),
+ 				     "Failed to get reset gpio\n");
+ 
++	if (ctx->reset_gpio) {
++		ret = gpiod_get_direction(ctx->reset_gpio);
++		if (ret != 0)
++			gpiod_direction_output(ctx->reset_gpio, 1);
++		else
++			gpiod_direction_output(ctx->reset_gpio, 0);
++	}
++
+ 	ret = of_drm_get_panel_orientation(dev->of_node, &ctx->orientation);
+ 	if (ret < 0) {
+ 		dev_err(dev, "%pOF: failed to get orientation %d\n", dev->of_node, ret);
+-- 
+2.53.0
+

@@ -1,0 +1,46 @@
+From 38692de4057440d21742f611468048f379379588 Mon Sep 17 00:00:00 2001
+From: Cheick TRAORE <cheick.traore-ext@st.com>
+Date: Thu, 23 May 2024 18:06:13 +0200
+Subject: [PATCH] mfd: stm32-timers: add support for stm32mp21
+
+Add support for STM32MP21 SoC using new compatible.
+
+Change-Id: I6f698c00775147c8f44ad88590a83a4d51acbf71
+Signed-off-by: Cheick TRAORE <cheick.traore-ext@st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/382221
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/mfd/stm32-timers.c       | 1 +
+ include/linux/mfd/stm32-timers.h | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/drivers/mfd/stm32-timers.c b/drivers/mfd/stm32-timers.c
+index b3dbc02aaf79..b57ea65c3694 100644
+--- a/drivers/mfd/stm32-timers.c
++++ b/drivers/mfd/stm32-timers.c
+@@ -349,6 +349,7 @@ static void stm32_timers_remove(struct platform_device *pdev)
+ 
+ static const struct of_device_id stm32_timers_of_match[] = {
+ 	{ .compatible = "st,stm32-timers", },
++	{ .compatible = "st,stm32mp21-timers", .data = (void *)STM32MP21_TIM_IPIDR },
+ 	{ .compatible = "st,stm32mp25-timers", .data = (void *)STM32MP25_TIM_IPIDR },
+ 	{ /* end node */ },
+ };
+diff --git a/include/linux/mfd/stm32-timers.h b/include/linux/mfd/stm32-timers.h
+index 23b0cae4a9f8..20ef06917a88 100644
+--- a/include/linux/mfd/stm32-timers.h
++++ b/include/linux/mfd/stm32-timers.h
+@@ -119,6 +119,7 @@
+ #define TIM_BDTR_BKF_MASK			0xF
+ #define TIM_BDTR_BKF_SHIFT(x)			(16 + (x) * 4)
+ 
++#define STM32MP21_TIM_IPIDR	0x00120002
+ #define STM32MP25_TIM_IPIDR	0x00120002
+ 
+ enum stm32_timers_dmas {
+-- 
+2.53.0
+

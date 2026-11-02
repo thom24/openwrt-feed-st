@@ -1,0 +1,56 @@
+From c9cfed44feb6f61986157fb3def11274a7c9c0b3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Wed, 18 Mar 2026 15:56:11 +0100
+Subject: [PATCH] arm64: dts: st: add rng1 and rng2 node on stm32mp211
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Support RNG1 and RNG2 node for STM32MP21
+
+Change-Id: Ibbe8a556ed9728586cb63a64f3fdd0c5281b8b5b
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/542226
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 43c80bae40e2..0552d31b2a4b 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -1102,6 +1102,28 @@ ospi1: spi@40430000 {
+ 				status = "disabled";
+ 			};
+ 
++			rng2: rng@42020000 {
++				compatible = "st,stm32mp21-rng";
++				reg = <0x42020000 0x0 0x400>;
++				clocks = <&clk_rcbsec>, <&rcc CK_BUS_RNG2>;
++				clock-names = "core", "bus";
++				resets = <&rcc RNG2_R>;
++				access-controllers = <&rifsc 93>;
++				power-domains = <&d1_pd>;
++				status = "disabled";
++			};
++
++			rng1: rng@42030800 {
++				compatible = "st,stm32mp21-rng";
++				reg = <0x42030800 0x0 0x400>;
++				clocks = <&clk_rcbsec>, <&rcc CK_BUS_RNG1>;
++				clock-names = "core", "bus";
++				resets = <&rcc RNG1_R>;
++				access-controllers = <&rifsc 92>;
++				power-domains = <&d1_pd>;
++				status = "disabled";
++			};
++
+ 			iwdg1: watchdog@44010000 {
+ 				compatible = "st,stm32mp1-iwdg";
+ 				reg = <0x44010000 0x0 0x400>;
+-- 
+2.53.0
+

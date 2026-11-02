@@ -1,0 +1,40 @@
+From bbb6bb1e7ec7e52f32e818b6b9933c57f519c5ed Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Mon, 30 Mar 2026 16:26:55 +0200
+Subject: [PATCH] arm64: dts: st: add wake-up button on stm32mp235f-dk board
+
+Adds wake-up button, that comes from OPTEE interrupt number ZERO.
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: I2557d6edc44196125e65aef92a9f646fd41a79fd
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/552079
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index 9820b4644663..304fc53d7733 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -43,6 +43,14 @@ button-user-2 {
+ 			gpios = <&gpioc 11 GPIO_ACTIVE_HIGH>;
+ 			status = "disabled";
+ 		};
++
++		button-wake-up {
++			label = "wake-up";
++			linux,code = <KEY_WAKEUP>;
++			interrupts-extended = <&optee 0>;
++			wakeup-source;
++			status = "okay";
++		};
+ 	};
+ 
+ 	gpio-leds {
+-- 
+2.53.0
+

@@ -1,0 +1,179 @@
+From c5de2c27b07e9f63600a88bdeeef912c23155da1 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Wed, 23 Sep 2026 12:19:11 +0200
+Subject: [PATCH] ARM: dts: stm32: enable arm-wdt on STM32MP1 ST boards
+
+Enable the arm_wdt on STM32MP1x boards. Set default timeout
+to 32 seconds.
+
+Change-Id: Iea2b010955f68a5f1cce146e06c0ccf4b14b247c
+Signed-off-by: Lionel Debieve <lionel.debieve@foss.st.com>
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dk.dts  | 6 ++++++
+ arch/arm/boot/dts/st/stm32mp157a-dk1.dts | 6 ++++++
+ arch/arm/boot/dts/st/stm32mp157c-dk2.dts | 6 ++++++
+ arch/arm/boot/dts/st/stm32mp157c-ed1.dts | 6 ++++++
+ arch/arm/boot/dts/st/stm32mp157c-ev1.dts | 6 ++++++
+ arch/arm/boot/dts/st/stm32mp157d-dk1.dts | 6 ++++++
+ arch/arm/boot/dts/st/stm32mp157d-ed1.dts | 6 ++++++
+ arch/arm/boot/dts/st/stm32mp157f-dk2.dts | 6 ++++++
+ arch/arm/boot/dts/st/stm32mp157f-ed1.dts | 6 ++++++
+ 9 files changed, 54 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+index e10e7437c88b..70ebbfbf1186 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+@@ -167,6 +167,12 @@ channel@12 {
+ 	};
+ };
+ 
++&arm_wdt {
++	timeout-sec = <32>;
++	bootph-all;
++	status = "okay";
++};
++
+ &bsec {
+ 	bootph-all;
+ };
+diff --git a/arch/arm/boot/dts/st/stm32mp157a-dk1.dts b/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
+index 03dc11d5feca..cdb4d7fac634 100644
+--- a/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
+@@ -21,6 +21,12 @@ optee@de000000 {
+ 	};
+ };
+ 
++&arm_wdt {
++	timeout-sec = <32>;
++	bootph-all;
++	status = "okay";
++};
++
+ &cpu0 {
+ 	clocks = <&scmi_clk CK_SCMI_MPU>;
+ };
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
+index 21bf9d477bd2..95581e94cbab 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
+@@ -21,6 +21,12 @@ optee@de000000 {
+ 	};
+ };
+ 
++&arm_wdt {
++	timeout-sec = <32>;
++	bootph-all;
++	status = "okay";
++};
++
+ &cpu0 {
+ 	clocks = <&scmi_clk CK_SCMI_MPU>;
+ };
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1.dts b/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
+index bd29f93edfce..be1868375d3c 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
+@@ -21,6 +21,12 @@ optee@fe000000 {
+ 	};
+ };
+ 
++&arm_wdt {
++	timeout-sec = <32>;
++	bootph-all;
++	status = "okay";
++};
++
+ &cpu0 {
+ 	clocks = <&scmi_clk CK_SCMI_MPU>;
+ };
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
+index 8c65fac10e49..092c7b6bbdb3 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
+@@ -21,6 +21,12 @@ optee@fe000000 {
+ 	};
+ };
+ 
++&arm_wdt {
++	timeout-sec = <32>;
++	bootph-all;
++	status = "okay";
++};
++
+ &cpu0 {
+ 	clocks = <&scmi_clk CK_SCMI_MPU>;
+ };
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-dk1.dts b/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
+index 2baf19973998..11b331314342 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
+@@ -33,6 +33,12 @@ optee@de000000 {
+ 	};
+ };
+ 
++&arm_wdt {
++	timeout-sec = <32>;
++	bootph-all;
++	status = "okay";
++};
++
+ &cpu0 {
+ 	clocks = <&scmi_clk CK_SCMI_MPU>;
+ };
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
+index 34a5dc1e1af2..4e7aa43f306c 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
+@@ -138,6 +138,12 @@ channel@6 {
+ 	};
+ };
+ 
++&arm_wdt {
++	timeout-sec = <32>;
++	bootph-all;
++	status = "okay";
++};
++
+ &bsec {
+ 	bootph-all;
+ };
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
+index 701bc9ab7a4c..67a1fdbeae00 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
+@@ -39,6 +39,12 @@ wifi_pwrseq: wifi-pwrseq {
+ 	};
+ };
+ 
++&arm_wdt {
++	timeout-sec = <32>;
++	bootph-all;
++	status = "okay";
++};
++
+ &cpu0 {
+ 	clocks = <&scmi_clk CK_SCMI_MPU>;
+ };
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
+index 8a44c0123cc9..57ee633cb229 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
+@@ -138,6 +138,12 @@ channel@6 {
+ 	};
+ };
+ 
++&arm_wdt {
++	timeout-sec = <32>;
++	bootph-all;
++	status = "okay";
++};
++
+ &bsec {
+ 	bootph-all;
+ };
+-- 
+2.53.0
+

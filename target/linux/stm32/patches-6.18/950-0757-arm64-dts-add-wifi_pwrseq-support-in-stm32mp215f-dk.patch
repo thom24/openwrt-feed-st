@@ -1,0 +1,47 @@
+From 0fd9ca42f55863bdd5bfcbbc238ebca975e58f1b Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Fri, 29 May 2026 18:36:04 +0200
+Subject: [PATCH] arm64: dts: add wifi_pwrseq support in stm32mp215f-dk
+
+SDMMC2 is available on M.2 connector. (to connect for example
+PCIE M.2 WLAN Module using SDIO. And need gpio to perform reset
+of Wifi
+
+Change-Id: I80770940698469f7b375df8101e8af432d4f082b
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/573042
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 181d2db67925..42d605d69757 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -60,6 +60,13 @@ memory@80000000 {
+ 		device_type = "memory";
+ 		reg = <0x0 0x80000000 0x0 0x80000000>;
+ 	};
++
++	wifi_pwrseq: wifi-pwrseq {
++		compatible = "mmc-pwrseq-simple";
++		reset-gpios = <&gpiob 2 GPIO_ACTIVE_LOW>;
++		clocks = <&rtc>;
++		clock-names = "ext_clock";
++	};
+ };
+ 
+ &arm_wdt {
+@@ -322,6 +329,7 @@ &sdmmc2 {
+ 	bus-width = <4>;
+ 	vmmc-supply = <&scmi_v3v3>;
+ 	vqmmc-supply = <&scmi_vddio2>;
++	mmc-pwrseq = <&wifi_pwrseq>;
+ 	sd-uhs-sdr12;
+ 	sd-uhs-sdr25;
+ 	sd-uhs-sdr50;
+-- 
+2.53.0
+

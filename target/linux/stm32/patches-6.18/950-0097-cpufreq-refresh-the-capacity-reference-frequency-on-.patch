@@ -1,0 +1,79 @@
+From ed1c0b1fbb4cb68abffcb6250cef4c5d38e67ae2 Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Wed, 29 Jul 2026 08:26:25 +0200
+Subject: [PATCH] cpufreq: refresh the capacity reference frequency on boost
+ changes
+
+capacity_freq_ref is frozen at CPUFREQ_CREATE_POLICY to the non-boost
+policy->cpuinfo.max_freq. It is read through arch_scale_freq_ref() by both
+the frequency invariance engine (as the scaling denominator) and the
+schedutil governor (get_capacity_ref_freq()).
+
+On platforms using software boost (cpufreq_boost_set_sw), such as STM32MP2
+with the SCMI cpufreq driver, the boost state is toggled at runtime and
+cpufreq_frequency_table_cpuinfo() recomputes policy->cpuinfo.max_freq to
+include or exclude the boost frequencies, but capacity_freq_ref is never
+refreshed. As a result schedutil keeps computing:
+
+    raw = map_util_freq(util, ref, max) = ref * util / max
+
+with ref pinned to the non-boost maximum and util bounded by max, so the
+requested frequency can never exceed the non-boost maximum and a boost OPP
+is unreachable regardless of load. The ondemand and performance governors
+are unaffected because they target policy->max directly.
+
+Call arch_set_freq_ref() from cpufreq_boost_set_sw() right after
+cpuinfo.max_freq has been recomputed, keeping the reference in sync with
+the reachable maximum. The reference is only raised while boost is enabled,
+so the capacity model is unchanged when boost is off.
+
+Assisted-by: GitHub-Copilot:Claude-Opus-4.8
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: Ia7eb3d199406926877e15c04d7c6f802fe20a367
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/592687
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/cpufreq/cpufreq.c | 7 +++++++
+ include/linux/cpufreq.h   | 7 +++++++
+ 2 files changed, 14 insertions(+)
+
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 1ed528e34bab..6196f840b739 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -2788,6 +2788,13 @@ int cpufreq_boost_set_sw(struct cpufreq_policy *policy, int state)
+ 		return ret;
+ 	}
+ 
++	/*
++	 * Keep the capacity reference frequency in sync with the reachable
++	 * maximum so that frequency invariance and the schedutil governor can
++	 * account for boost frequencies entering or leaving cpuinfo.max_freq.
++	 */
++	arch_set_freq_ref(policy->related_cpus, policy->cpuinfo.max_freq);
++
+ 	ret = freq_qos_update_request(policy->max_freq_req, policy->max);
+ 	if (ret < 0)
+ 		return ret;
+diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+index fd26b3a4aa28..129d36c6d668 100644
+--- a/include/linux/cpufreq.h
++++ b/include/linux/cpufreq.h
+@@ -1224,6 +1224,13 @@ void arch_set_freq_scale(const struct cpumask *cpus,
+ }
+ #endif
+ 
++#ifndef arch_set_freq_ref
++static __always_inline
++void arch_set_freq_ref(const struct cpumask *cpus, unsigned long max_freq)
++{
++}
++#endif
++
+ /* the following are really really optional */
+ extern struct freq_attr cpufreq_freq_attr_scaling_available_freqs;
+ extern struct freq_attr cpufreq_freq_attr_scaling_boost_freqs;
+-- 
+2.53.0
+

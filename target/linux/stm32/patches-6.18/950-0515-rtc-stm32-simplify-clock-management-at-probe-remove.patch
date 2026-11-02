@@ -1,0 +1,75 @@
+From 6fcb181e46b995fc29621451f392857fd6d8b58a Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Fri, 27 Mar 2026 18:59:07 +0100
+Subject: [PATCH] rtc: stm32: simplify clock management at probe/remove
+
+Use devm_clk_get_enabled() during probe(), thus simplifying both
+probe() and remove().
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I300354ea62fd0b2b9413b81220beec1142bd6c7e
+---
+ drivers/rtc/rtc-stm32.c | 25 +++----------------------
+ 1 file changed, 3 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/rtc/rtc-stm32.c b/drivers/rtc/rtc-stm32.c
+index 1f5ca88764c8..7357fc0624fe 100644
+--- a/drivers/rtc/rtc-stm32.c
++++ b/drivers/rtc/rtc-stm32.c
+@@ -1097,27 +1097,17 @@ static int stm32_rtc_probe(struct platform_device *pdev)
+ 
+ 	if (!rtc->data->has_pclk) {
+ 		rtc->pclk = NULL;
+-		rtc->rtc_ck = devm_clk_get(&pdev->dev, NULL);
++		rtc->rtc_ck = devm_clk_get_enabled(&pdev->dev, NULL);
+ 	} else {
+-		rtc->pclk = devm_clk_get(&pdev->dev, "pclk");
++		rtc->pclk = devm_clk_get_enabled(&pdev->dev, "pclk");
+ 		if (IS_ERR(rtc->pclk))
+ 			return dev_err_probe(&pdev->dev, PTR_ERR(rtc->pclk), "no pclk clock");
+ 
+-		rtc->rtc_ck = devm_clk_get(&pdev->dev, "rtc_ck");
++		rtc->rtc_ck = devm_clk_get_enabled(&pdev->dev, "rtc_ck");
+ 	}
+ 	if (IS_ERR(rtc->rtc_ck))
+ 		return dev_err_probe(&pdev->dev, PTR_ERR(rtc->rtc_ck), "no rtc_ck clock");
+ 
+-	if (rtc->data->has_pclk) {
+-		ret = clk_prepare_enable(rtc->pclk);
+-		if (ret)
+-			return ret;
+-	}
+-
+-	ret = clk_prepare_enable(rtc->rtc_ck);
+-	if (ret)
+-		goto err_no_rtc_ck;
+-
+ 	if (rtc->data->need_dbp)
+ 		regmap_update_bits(rtc->dbp, rtc->dbp_reg,
+ 				   rtc->dbp_mask, rtc->dbp_mask);
+@@ -1210,11 +1200,6 @@ static int stm32_rtc_probe(struct platform_device *pdev)
+ 	return 0;
+ 
+ err:
+-	clk_disable_unprepare(rtc->rtc_ck);
+-err_no_rtc_ck:
+-	if (rtc->data->has_pclk)
+-		clk_disable_unprepare(rtc->pclk);
+-
+ 	if (rtc->data->need_dbp)
+ 		regmap_update_bits(rtc->dbp, rtc->dbp_reg, rtc->dbp_mask, 0);
+ 
+@@ -1237,10 +1222,6 @@ static void stm32_rtc_remove(struct platform_device *pdev)
+ 	writel_relaxed(cr, rtc->base + regs->cr);
+ 	stm32_rtc_wpr_lock(rtc);
+ 
+-	clk_disable_unprepare(rtc->rtc_ck);
+-	if (rtc->data->has_pclk)
+-		clk_disable_unprepare(rtc->pclk);
+-
+ 	/* Enable backup domain write protection if needed */
+ 	if (rtc->data->need_dbp)
+ 		regmap_update_bits(rtc->dbp, rtc->dbp_reg, rtc->dbp_mask, 0);
+-- 
+2.53.0
+

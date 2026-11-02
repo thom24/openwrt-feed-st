@@ -1,0 +1,50 @@
+From e0cbb7ea84e341f9692e3bb4e8696e40b847f21d Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Mon, 3 Aug 2026 16:51:02 +0200
+Subject: [PATCH] arm64: dts: st: switch typec to dual role on stm32mp257f-ev1
+
+Switch USB Type-C connector to dual role mode, now that the tcpp and
+ucpd drivers supports it. IRQs may report Vbus change on TCPP when
+in LP mode on both edges, so change to both edges.
+When acting as a source, the board can deliver up to 1.5A.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I6bcc01cf62abab279a69de433e29ecb7d4273562
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/595965
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+index 6293416f74c8..8005063a3965 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+@@ -455,7 +455,7 @@ tcpp: typec@34 {
+ 		reg = <0x34>;
+ 		enable-gpios = <&gpiog 2 GPIO_ACTIVE_HIGH>;
+ 		interrupt-parent = <&gpiog>;
+-		interrupts = <1 IRQ_TYPE_EDGE_FALLING>;
++		interrupts = <1 IRQ_TYPE_EDGE_BOTH>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&tcpp_flgn_pins_a>;
+ 		status = "okay";
+@@ -975,9 +975,10 @@ &ucpd {
+ 	connector {
+ 		compatible = "usb-c-connector";
+ 		label = "USB-C";
+-		data-role = "device";
+-		power-role = "sink";
+-		typec-power-opmode = "default";
++		data-role = "dual";
++		power-role = "dual";
++		try-power-role = "sink";
++		typec-power-opmode = "1.5A";
+ 		pd-disable;
+ 		self-powered;
+ 		port {
+-- 
+2.53.0
+

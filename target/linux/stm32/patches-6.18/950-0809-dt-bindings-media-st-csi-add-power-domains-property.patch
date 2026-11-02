@@ -1,0 +1,42 @@
+From 3806730def9cd0da959ad6d986165c5998bed49a Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Fri, 19 Dec 2025 16:58:03 +0100
+Subject: [PATCH] dt-bindings: media: st: csi: add 'power-domains' property
+
+STM32 CSI may be in a power domain which is the case for the STM32MP2x
+based boards. Allow a single 'power-domains' entry for STM32 CSI.
+
+Change-Id: Ief9df8ae17c6ae60e3386fc8a379072a40ff5b79
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Link: https://lore.kernel.org/r/20251219-stm32-mp2x-dcmipp-csi-power-domain-v1-1-a6edb2aa8154@foss.st.com
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+(cherry picked from commit 9cdfabe2f2d1eed6e57d5b4fb18fb4719b6c565a)
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/566733
+Tested-by: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ Documentation/devicetree/bindings/media/st,stm32mp25-csi.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/media/st,stm32mp25-csi.yaml b/Documentation/devicetree/bindings/media/st,stm32mp25-csi.yaml
+index e9fa3cfea5d2..2ac7c9670c62 100644
+--- a/Documentation/devicetree/bindings/media/st,stm32mp25-csi.yaml
++++ b/Documentation/devicetree/bindings/media/st,stm32mp25-csi.yaml
+@@ -46,6 +46,9 @@ properties:
+     minItems: 1
+     maxItems: 2
+ 
++  power-domains:
++    maxItems: 1
++
+   ports:
+     $ref: /schemas/graph.yaml#/properties/ports
+ 
+-- 
+2.53.0
+

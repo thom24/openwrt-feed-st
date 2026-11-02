@@ -1,0 +1,32 @@
+From 2ef8e99cf53aec569e88cc785301fa29c3f1f092 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Wed, 8 Apr 2026 15:45:22 +0200
+Subject: [PATCH] arm64: configs: Enable pwm backlight in
+ fragment-02-defconfig-addons.config
+
+Enable CONFIG_BACKLIGHT_PWM in fragment-02-defconfig-addons.config.
+
+Change-Id: Ia639e84f210d982a89234c7e66c8c5cbf65b4cfd
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/555187
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/configs/fragment-02-defconfig-addons.config | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/configs/fragment-02-defconfig-addons.config b/arch/arm64/configs/fragment-02-defconfig-addons.config
+index 2778bfcb1bf5..c8a81894bfe3 100644
+--- a/arch/arm64/configs/fragment-02-defconfig-addons.config
++++ b/arch/arm64/configs/fragment-02-defconfig-addons.config
+@@ -1,6 +1,7 @@
+ #  ALPHABETICALLY SORTED: $LC_ALL=C sort fragment-02-defconfig-addons.config -o fragment-02-defconfig-addons.config
+ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+ CONFIG_BACKLIGHT_GPIO=m
++CONFIG_BACKLIGHT_PWM=m
+ CONFIG_BT_LE=y
+ CONFIG_CLK_STM32MP2_CA35SS=m
+ CONFIG_CORESIGHT_SOURCE_ETM4X=m
+-- 
+2.53.0
+

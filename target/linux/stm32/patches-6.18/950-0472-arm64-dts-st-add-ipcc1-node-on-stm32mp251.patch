@@ -1,0 +1,47 @@
+From 30e5fa615892fb06a8ab78bbd90617ed457f9fbb Mon Sep 17 00:00:00 2001
+From: Fabien Dessenne <fabien.dessenne@foss.st.com>
+Date: Wed, 1 Dec 2021 17:39:03 +0100
+Subject: [PATCH] arm64: dts: st: add ipcc1 node on stm32mp251
+
+Define the IPCC1 node to support the IPCC mailbox for communication
+between the Cortex-A35 and Cortex-M33
+
+Signed-off-by: Fabien Dessenne <fabien.dessenne@foss.st.com>
+Change-Id: I37a83656e0783965289f3a155b91879a9448a306
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/539858
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index c64c2f422601..bab8d08e0db8 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -296,6 +296,18 @@ hpdma3: dma-controller@40420000 {
+ 			#dma-cells = <3>;
+ 		};
+ 
++		ipcc1: mailbox@40490000 {
++			compatible = "st,stm32mp1-ipcc";
++			#mbox-cells = <1>;
++			reg = <0x40490000 0x400>;
++			st,proc-id = <0>;
++			interrupts = <GIC_SPI 171 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 172 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "rx", "tx";
++			clocks = <&scmi_clk CK_SCMI_IPCC1>;
++			status = "disabled";
++		};
++
+ 		ommanager: ommanager@40500000 {
+ 			compatible = "st,stm32mp25-omm";
+ 			reg = <0x40500000 0x400>, <0x60000000 0x10000000>;
+-- 
+2.53.0
+

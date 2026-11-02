@@ -1,0 +1,91 @@
+From 01cb49b14b339b5c3d08fb9c5b537b0027c4dff3 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Tue, 30 Sep 2025 09:44:47 +0200
+Subject: [PATCH] wifi: brcmfmac: Add support for the SDIO 4355/54590 device
+
+Add the SDIO ID and firmware matching for the 54590 device.
+Infineon chipset CYW54590 is MURATA 2BZ module. After discussion
+with Infineon support the chip id of CYW54590 is 4355/13.
+
+Change-Id: Id428dc2c6e0fa563dd6c2239d67870381517767b
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/495556
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/545099
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+---
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c | 7 +++++++
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c   | 2 ++
+ include/linux/mmc/sdio_ids.h                              | 2 ++
+ 3 files changed, 11 insertions(+)
+
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
+index 13952dfeb3e3..dce3e0e09e44 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
+@@ -46,6 +46,7 @@
+ #define SDIO_4373_FUNC2_BLOCKSIZE	256
+ #define SDIO_435X_FUNC2_BLOCKSIZE	256
+ #define SDIO_4329_FUNC2_BLOCKSIZE	128
++#define SDIO_89459_FUNC2_BLOCKSIZE	256
+ /* Maximum milliseconds to wait for F2 to come up */
+ #define SDIO_WAIT_F2RDY	3000
+ 
+@@ -922,6 +923,10 @@ int brcmf_sdiod_probe(struct brcmf_sdio_dev *sdiodev)
+ 	case SDIO_DEVICE_ID_BROADCOM_4329:
+ 		f2_blksz = SDIO_4329_FUNC2_BLOCKSIZE;
+ 		break;
++	case SDIO_DEVICE_ID_CYPRESS_54590:
++	case SDIO_DEVICE_ID_CYPRESS_54591:
++		f2_blksz = SDIO_89459_FUNC2_BLOCKSIZE;
++		break;
+ 	default:
+ 		break;
+ 	}
+@@ -1001,6 +1006,8 @@ static const struct sdio_device_id brcmf_sdmmc_ids[] = {
+ 	BRCMF_SDIO_DEVICE(SDIO_DEVICE_ID_BROADCOM_CYPRESS_43012, CYW),
+ 	BRCMF_SDIO_DEVICE(SDIO_DEVICE_ID_BROADCOM_CYPRESS_89359, CYW),
+ 	CYW_SDIO_DEVICE(SDIO_DEVICE_ID_BROADCOM_CYPRESS_43439, CYW),
++	CYW_SDIO_DEVICE(SDIO_DEVICE_ID_CYPRESS_54590, CYW),
++	CYW_SDIO_DEVICE(SDIO_DEVICE_ID_CYPRESS_54591, CYW),
+ 	{ /* end: all zeroes */ }
+ };
+ MODULE_DEVICE_TABLE(sdio, brcmf_sdmmc_ids);
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
+index a0e88dbaaebe..35e15773dfe0 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
+@@ -620,6 +620,7 @@ BRCMF_FW_CLM_DEF(43439, "brcmfmac43439-sdio");
+ BRCMF_FW_CLM_DEF(43455, "brcmfmac43455-sdio");
+ BRCMF_FW_DEF(43456, "brcmfmac43456-sdio");
+ BRCMF_FW_CLM_DEF(4354, "brcmfmac4354-sdio");
++BRCMF_FW_CLM_DEF(4355, "brcmfmac4355-sdio");
+ BRCMF_FW_CLM_DEF(4356, "brcmfmac4356-sdio");
+ BRCMF_FW_DEF(4359, "brcmfmac4359-sdio");
+ BRCMF_FW_CLM_DEF(4373, "brcmfmac4373-sdio");
+@@ -652,6 +653,7 @@ static const struct brcmf_firmware_mapping brcmf_sdio_fwnames[] = {
+ 	BRCMF_FW_ENTRY(BRCM_CC_4345_CHIP_ID, 0xFFFFFDC0, 43455),
+ 	BRCMF_FW_ENTRY(BRCM_CC_43454_CHIP_ID, 0x00000040, 43455),
+ 	BRCMF_FW_ENTRY(BRCM_CC_4354_CHIP_ID, 0xFFFFFFFF, 4354),
++	BRCMF_FW_ENTRY(BRCM_CC_4355_CHIP_ID, 0xFFFFFFFF, 4355),
+ 	BRCMF_FW_ENTRY(BRCM_CC_4356_CHIP_ID, 0xFFFFFFFF, 4356),
+ 	BRCMF_FW_ENTRY(BRCM_CC_4359_CHIP_ID, 0xFFFFFFFF, 4359),
+ 	BRCMF_FW_ENTRY(BRCM_CC_43751_CHIP_ID, 0xFFFFFFFF, 43752),
+diff --git a/include/linux/mmc/sdio_ids.h b/include/linux/mmc/sdio_ids.h
+index 673cbdf43453..4a66deefa98a 100644
+--- a/include/linux/mmc/sdio_ids.h
++++ b/include/linux/mmc/sdio_ids.h
+@@ -80,6 +80,8 @@
+ #define SDIO_DEVICE_ID_BROADCOM_43752		0xaae8
+ 
+ #define SDIO_VENDOR_ID_CYPRESS			0x04b4
++#define SDIO_DEVICE_ID_CYPRESS_54590		0xbd3a
++#define SDIO_DEVICE_ID_CYPRESS_54591		0xbd3b
+ #define SDIO_DEVICE_ID_BROADCOM_CYPRESS_43439	0xbd3d
+ 
+ #define SDIO_VENDOR_ID_MARVELL			0x02df
+-- 
+2.53.0
+

@@ -1,0 +1,36 @@
+From 7cd89c0a3b1000267c5ecea91e78a92480c889b2 Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Tue, 7 Apr 2026 14:23:31 +0200
+Subject: [PATCH] ARM: dts: stm32: fix thermal interrupt for STM32MP131
+
+The thermal sensor interrupt number for STM32MP131 was incorrectly set
+to 147. the correct interrupt line is 124.
+
+Change-Id: I85df384fc31d8b1b32a8b741afcfd1815b35d5c2
+Fixes: d5a79bf998dc ("ARM: dts: stm32: Add thermal support for STM32MP131")
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/554733
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp131.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
+index 039f2c4230b1..9b9712ee20c4 100644
+--- a/arch/arm/boot/dts/st/stm32mp131.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
+@@ -1128,7 +1128,7 @@ timer {
+ 		dts: thermal@50028000 {
+ 			compatible = "st,stm32-thermal";
+ 			reg = <0x50028000 0x100>;
+-			interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_HIGH>;
++			interrupts = <GIC_SPI 124 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&rcc DTS>;
+ 			clock-names = "pclk";
+ 			#thermal-sensor-cells = <0>;
+-- 
+2.53.0
+

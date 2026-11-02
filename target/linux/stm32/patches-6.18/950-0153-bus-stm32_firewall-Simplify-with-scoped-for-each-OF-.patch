@@ -1,0 +1,70 @@
+From 2ef3a978bc2a9f9a22fbd1033f0508ef0f3bfd5d Mon Sep 17 00:00:00 2001
+From: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Date: Mon, 5 Jan 2026 15:36:59 +0100
+Subject: [PATCH] bus: stm32_firewall: Simplify with scoped for each OF child
+ loop
+
+commit 256b4efd98b1dcbe80e817a67b17c07becb80969 upstream.
+
+Use scoped for-each loop when iterating over device nodes to make code a
+bit simpler.
+
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Tested-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Link: https://lore.kernel.org/r/20260105143657.383621-5-krzysztof.kozlowski@oss.qualcomm.com
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I9ea71a708bad99fcb8f8b628e9ab514f985169b1
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/574383
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ drivers/bus/stm32_firewall.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/bus/stm32_firewall.c b/drivers/bus/stm32_firewall.c
+index dbdbbe0f73e3..b8530161ec2d 100644
+--- a/drivers/bus/stm32_firewall.c
++++ b/drivers/bus/stm32_firewall.c
+@@ -283,7 +283,6 @@ EXPORT_SYMBOL_GPL(stm32_firewall_controller_unregister);
+ int stm32_firewall_populate_bus(struct stm32_firewall_controller *firewall_controller)
+ {
+ 	struct stm32_firewall *firewalls;
+-	struct device_node *child;
+ 	struct device *parent;
+ 	unsigned int i;
+ 	int len;
+@@ -293,25 +292,20 @@ int stm32_firewall_populate_bus(struct stm32_firewall_controller *firewall_contr
+ 
+ 	dev_dbg(parent, "Populating %s system bus\n", dev_name(firewall_controller->dev));
+ 
+-	for_each_available_child_of_node(dev_of_node(parent), child) {
++	for_each_available_child_of_node_scoped(dev_of_node(parent), child) {
+ 		/* The access-controllers property is mandatory for firewall bus devices */
+ 		len = of_count_phandle_with_args(child, "access-controllers",
+ 						 "#access-controller-cells");
+-		if (len <= 0) {
+-			of_node_put(child);
++		if (len <= 0)
+ 			return -EINVAL;
+-		}
+ 
+ 		firewalls = kcalloc(len, sizeof(*firewalls), GFP_KERNEL);
+-		if (!firewalls) {
+-			of_node_put(child);
++		if (!firewalls)
+ 			return -ENOMEM;
+-		}
+ 
+ 		err = stm32_firewall_get_firewall(child, firewalls, (unsigned int)len);
+ 		if (err) {
+ 			kfree(firewalls);
+-			of_node_put(child);
+ 			return err;
+ 		}
+ 
+-- 
+2.53.0
+

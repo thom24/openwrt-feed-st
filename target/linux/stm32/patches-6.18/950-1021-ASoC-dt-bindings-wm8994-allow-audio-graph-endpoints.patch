@@ -1,0 +1,46 @@
+From 4c6e13e898f62a39c22ddf73f625a7014ca86aff Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Tue, 12 May 2026 14:19:39 +0200
+Subject: [PATCH] ASoC: dt-bindings: wm8994: allow audio graph endpoints
+
+STM32MP2 device trees describe the WM8994 codec with audio graph
+endpoints under port/ports and reference them from the SAI endpoints.
+The binding does not currently allow these graph properties, so
+dtbs_check reports them as unevaluated even though they are part of the
+intended topology.
+
+Allow port and ports in the WM8994 schema so existing audio graph
+connections validate correctly.
+
+Change-Id: I37adf9a9c71586ee2b46852169b0447f75336cb4
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/567650
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ Documentation/devicetree/bindings/sound/wlf,wm8994.yaml | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/sound/wlf,wm8994.yaml b/Documentation/devicetree/bindings/sound/wlf,wm8994.yaml
+index 8f045de02850..ef13bd0e801d 100644
+--- a/Documentation/devicetree/bindings/sound/wlf,wm8994.yaml
++++ b/Documentation/devicetree/bindings/sound/wlf,wm8994.yaml
+@@ -71,6 +71,13 @@ properties:
+   '#sound-dai-cells':
+     const: 0
+ 
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++
++  port:
++    $ref: audio-graph-port.yaml#
++    unevaluatedProperties: false
++
+   wlf,gpio-cfg:
+     $ref: /schemas/types.yaml#/definitions/uint32-array
+     maxItems: 11
+-- 
+2.53.0
+

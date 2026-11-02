@@ -1,0 +1,41 @@
+From 589640f52f193478cee2a056ad1d36e959eeba41 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Tue, 24 Mar 2026 17:45:05 +0100
+Subject: [PATCH] arm64: configs: Enable MDF in
+ fragment-02-defconfig-addons.config
+
+Enable MDF in fragment-02-defconfig-addons.config.
+
+Change-Id: I1b63c5b429262c65a1289d73e8e8a12580b11277
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/550641
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ arch/arm64/configs/fragment-02-defconfig-addons.config | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm64/configs/fragment-02-defconfig-addons.config b/arch/arm64/configs/fragment-02-defconfig-addons.config
+index e8bf77a940e8..2778bfcb1bf5 100644
+--- a/arch/arm64/configs/fragment-02-defconfig-addons.config
++++ b/arch/arm64/configs/fragment-02-defconfig-addons.config
+@@ -73,6 +73,7 @@ CONFIG_SENSORS_MR75203=m
+ CONFIG_SFP=m
+ CONFIG_SMSC_PHY=y
+ CONFIG_SND_SOC_STM32_I2S=m
++CONFIG_SND_SOC_STM32_MDF=m
+ CONFIG_SND_SOC_STM32_SAI=m
+ CONFIG_SND_SOC_STM32_SPDIFRX=m
+ CONFIG_SND_SOC_WM8994=m
+@@ -88,6 +89,7 @@ CONFIG_STM32_I3C=m
+ CONFIG_STM32_IPCC=y
+ CONFIG_STM32_LPTIMER_CNT=m
+ CONFIG_STM32_M0_RPROC=m
++CONFIG_STM32_MDF_ADC=m
+ CONFIG_STM32_MDF_CORE=m
+ CONFIG_STM32_OMM=y
+ CONFIG_STM32_RPROC=m
+-- 
+2.53.0
+

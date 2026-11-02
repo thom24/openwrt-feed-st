@@ -1,0 +1,64 @@
+From 7f0b938889e543e2a43fb2ef7826744a10adcd4e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Wed, 30 Oct 2024 16:29:21 +0100
+Subject: [PATCH] ARM: dts: stm32: add sram[123] nodes on stm32mp131
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Add SRAM nodes with "mmio-sram" compatible in STM32MP131 SoC device
+tree.
+Those nodes describe the SRAM memory area (SRAM1 16kB, SRAM2 8kB, SRAM3
+8kB).
+
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: Ia507b3e1a4ef948a2fd89fec0da7e976ad37ea96
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/537879
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp131.dtsi | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
+index bf3fcf202dcc..ebde086199d0 100644
+--- a/arch/arm/boot/dts/st/stm32mp131.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
+@@ -149,6 +149,30 @@ soc {
+ 		interrupt-parent = <&intc>;
+ 		ranges;
+ 
++		sram1: sram@30000000 {
++			compatible = "mmio-sram";
++			reg = <0x30000000 0x4000>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0 0x30000000 0x4000>;
++		};
++
++		sram2: sram@30004000 {
++			compatible = "mmio-sram";
++			reg = <0x30004000 0x2000>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0 0x30004000 0x2000>;
++		};
++
++		sram3: sram@30006000 {
++			compatible = "mmio-sram";
++			reg = <0x30006000 0x2000>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0 0x30006000 0x2000>;
++		};
++
+ 		timers2: timer@40000000 {
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+-- 
+2.53.0
+

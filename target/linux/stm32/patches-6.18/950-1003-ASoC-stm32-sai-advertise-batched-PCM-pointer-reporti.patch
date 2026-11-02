@@ -1,0 +1,89 @@
+From ead6c3a8225a5e3783592beff39ffe07f639e390 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 23 Jun 2026 16:35:18 +0200
+Subject: [PATCH] ASoC: stm32: sai: advertise batched PCM pointer reporting
+
+On STM32 SAI, querying burst-accurate DMA residue can require extra DMA
+channel synchronization. For audio streams, especially on peripherals
+with small FIFOs, that additional latency in the pointer reporting path
+can lead to underruns or overruns.
+
+Request segment-level residue reporting in the DMA slave configuration
+and advertise SNDRV_PCM_INFO_BATCH so ALSA userspace is informed that the
+hardware pointer may advance in batches, typically once per period,
+rather than continuously.
+
+Apply this to both standard PCM mode and S/PDIF mode so the ALSA-visible
+pointer behavior matches the DMA reporting mode used by the driver.
+
+Change-Id: Iaabb7531d59deaa140b02de319a1369d6ea40c19
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/582124
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+---
+ sound/soc/stm/stm32_sai_sub.c | 24 ++++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
+
+diff --git a/sound/soc/stm/stm32_sai_sub.c b/sound/soc/stm/stm32_sai_sub.c
+index c2540383ab86..38a305a6615e 100644
+--- a/sound/soc/stm/stm32_sai_sub.c
++++ b/sound/soc/stm/stm32_sai_sub.c
+@@ -1426,7 +1426,7 @@ static int stm32_sai_pcm_process_spdif(struct snd_pcm_substream *substream,
+ 
+ /* No support of mmap in S/PDIF mode */
+ static const struct snd_pcm_hardware stm32_sai_pcm_hw_spdif = {
+-	.info = SNDRV_PCM_INFO_INTERLEAVED,
++	.info = SNDRV_PCM_INFO_INTERLEAVED | SNDRV_PCM_INFO_BATCH,
+ 	.buffer_bytes_max = 8 * PAGE_SIZE,
+ 	.period_bytes_min = 1024,
+ 	.period_bytes_max = PAGE_SIZE,
+@@ -1435,7 +1435,7 @@ static const struct snd_pcm_hardware stm32_sai_pcm_hw_spdif = {
+ };
+ 
+ static const struct snd_pcm_hardware stm32_sai_pcm_hw = {
+-	.info = SNDRV_PCM_INFO_INTERLEAVED | SNDRV_PCM_INFO_MMAP,
++	.info = SNDRV_PCM_INFO_INTERLEAVED | SNDRV_PCM_INFO_MMAP | SNDRV_PCM_INFO_BATCH,
+ 	.buffer_bytes_max = 8 * PAGE_SIZE,
+ 	.period_bytes_min = 1024, /* 5ms at 48kHz */
+ 	.period_bytes_max = PAGE_SIZE,
+@@ -1477,14 +1477,30 @@ static struct snd_soc_dai_driver stm32_sai_capture_dai = {
+ 		.ops = &stm32_sai_pcm_dai_ops2,
+ };
+ 
++static int stm32_sai_prepare_slave_config(struct snd_pcm_substream *substream,
++					  struct snd_pcm_hw_params *params,
++					  struct dma_slave_config *slave_config)
++{
++	int ret;
++
++	ret = snd_dmaengine_pcm_prepare_slave_config(substream, params, slave_config);
++	if (ret)
++		return ret;
++
++	/* Prefer DMA_RESIDUE_GRANULARITY_SEGMENT to avoid disruptive DMA synchronization */
++	slave_config->residue_granularity = DMA_RESIDUE_GRANULARITY_SEGMENT;
++
++	return 0;
++}
++
+ static const struct snd_dmaengine_pcm_config stm32_sai_pcm_config = {
+ 	.pcm_hardware = &stm32_sai_pcm_hw,
+-	.prepare_slave_config = snd_dmaengine_pcm_prepare_slave_config,
++	.prepare_slave_config = stm32_sai_prepare_slave_config,
+ };
+ 
+ static const struct snd_dmaengine_pcm_config stm32_sai_pcm_config_spdif = {
+ 	.pcm_hardware = &stm32_sai_pcm_hw_spdif,
+-	.prepare_slave_config = snd_dmaengine_pcm_prepare_slave_config,
++	.prepare_slave_config = stm32_sai_prepare_slave_config,
+ 	.process = stm32_sai_pcm_process_spdif,
+ };
+ 
+-- 
+2.53.0
+

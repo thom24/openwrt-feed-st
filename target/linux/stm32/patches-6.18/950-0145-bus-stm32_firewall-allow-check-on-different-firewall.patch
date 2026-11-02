@@ -1,0 +1,31 @@
+From 89ff2570d54e8416ec493ce8651aa6877cb9f5c8 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Fri, 23 Jan 2026 11:39:01 +0100
+Subject: [PATCH] bus: stm32_firewall: allow check on different firewall
+ controllers
+
+Current implementation restricts the check on the firewall controller
+being the bus parent. Change this by using the controller referenced
+in each firewall queries.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+---
+ drivers/bus/stm32_firewall.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/bus/stm32_firewall.c b/drivers/bus/stm32_firewall.c
+index 2fc9761dadec..2717754d811d 100644
+--- a/drivers/bus/stm32_firewall.c
++++ b/drivers/bus/stm32_firewall.c
+@@ -274,7 +274,7 @@ int stm32_firewall_populate_bus(struct stm32_firewall_controller *firewall_contr
+ 		}
+ 
+ 		for (i = 0; i < len; i++) {
+-			if (firewall_controller->grant_access(firewall_controller,
++			if (firewall_controller->grant_access(firewalls[i].firewall_ctrl,
+ 							      firewalls[i].firewall_id)) {
+ 				/*
+ 				 * Peripheral access not allowed or not defined.
+-- 
+2.53.0
+

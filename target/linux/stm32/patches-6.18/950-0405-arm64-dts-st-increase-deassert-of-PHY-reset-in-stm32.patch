@@ -1,0 +1,39 @@
+From af7fe513a951d9f05fb6e46f3fdf2724b6c0f137 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Fri, 30 Jan 2026 11:35:25 +0100
+Subject: [PATCH] arm64: dts: st: increase deassert of PHY reset in
+ stm32mp257f-ev1
+
+The RTL8211F has a PHYRSTB pin to reset the chip.
+For a complete PHY reset, this pin must be asserted low for
+at least 10ms for the internal regulator.
+Wait for at least 80ms (for internal circuits setting time) before
+accessing the PHY register.
+All registers will return to default values after a hardware reset
+
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Change-Id: I1970611b99a74933343b807e37fd28f4e4e9f72d
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/535371
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+index 6434874865a5..1966bdd564b9 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+@@ -278,7 +278,7 @@ phy0_eth2: ethernet-phy@1 {
+ 			compatible = "ethernet-phy-id001c.c916";
+ 			reg = <1>;
+ 			reset-assert-us = <10000>;
+-			reset-deassert-us = <300>;
++			reset-deassert-us = <80000>;
+ 			reset-gpios = <&gpiog 6 GPIO_ACTIVE_LOW>;
+ 		};
+ 	};
+-- 
+2.53.0
+

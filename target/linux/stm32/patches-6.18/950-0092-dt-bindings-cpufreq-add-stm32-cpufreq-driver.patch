@@ -1,0 +1,86 @@
+From 72a71d081f715690d97466d2ee25068dcff8f1f5 Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Fri, 27 Mar 2026 14:48:42 +0100
+Subject: [PATCH] dt-bindings: cpufreq: add stm32 cpufreq driver
+
+STM32 CPUFreq driver needs to read chip information from the SoC to list
+available OPPs.
+
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: Ic9015350591b595fd67f916a438ffc42ca3ffcc4
+---
+ .../bindings/cpufreq/stm32-cpufreq.txt        | 61 +++++++++++++++++++
+ 1 file changed, 61 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/cpufreq/stm32-cpufreq.txt
+
+diff --git a/Documentation/devicetree/bindings/cpufreq/stm32-cpufreq.txt b/Documentation/devicetree/bindings/cpufreq/stm32-cpufreq.txt
+new file mode 100644
+index 000000000000..7f03607c3c08
+--- /dev/null
++++ b/Documentation/devicetree/bindings/cpufreq/stm32-cpufreq.txt
+@@ -0,0 +1,61 @@
++STM32 CPUFreq and OPP bindings
++==============================
++
++STM32 CPUFreq driver needs to read chip information from the SoC to list
++available OPPs. Then it depends on cpufreq-dt bindings.
++
++Required properties:
++--------------------
++- clocks: Phandle to the cpu clock "cpu".
++- clocks-name: Should contain "cpu".
++- nvmem-cells: Phandle to nvmem cell that contains "cpu_speed_grade".
++- nvmem-cell-names: Must be "speed_grade".
++- operating-points-v2: Phandle to operating points table. See ../power/opp.txt
++  for more details.
++
++Optional properties:
++--------------------
++See cpufreq-dt.txt for optional properties.
++
++Examples:
++---------
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		cpu0: cpu@0 {
++			compatible = "arm,cortex-a7";
++			device_type = "cpu";
++			reg = <0>;
++			clocks = <&rcc CK_MPU>;
++			clock-names = "cpu";
++			operating-points-v2 = <&cpu0_opp_table>;
++			nvmem-cells = <&cpu_speed_grade>;
++			nvmem-cell-names = "speed_grade";
++		};
++
++		cpu1: cpu@1 {
++			compatible = "arm,cortex-a7";
++			device_type = "cpu";
++			reg = <1>;
++			clocks = <&rcc CK_MPU>;
++			clock-names = "cpu";
++			operating-points-v2 = <&cpu0_opp_table>;
++		};
++	};
++
++	cpu0_opp_table: cpu0-opp-table {
++		compatible = "operating-points-v2";
++		opp-shared;
++
++		opp-650000000 {
++			opp-hz = /bits/ 64 <650000000>;
++			opp-microvolt = <1200000>;
++			opp-supported-hw = <0x3>;
++		};
++		opp-800000000 {
++			opp-hz = /bits/ 64 <800000000>;
++			opp-microvolt = <1350000>;
++			opp-supported-hw = <0x2>;
++		};
++	};
+-- 
+2.53.0
+

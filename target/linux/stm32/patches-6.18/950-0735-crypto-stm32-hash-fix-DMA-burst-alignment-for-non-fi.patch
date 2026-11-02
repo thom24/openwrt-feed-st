@@ -1,0 +1,121 @@
+From 3671acb3a1d404125a1c4806cab1b094cd696788 Mon Sep 17 00:00:00 2001
+From: Mohamed Tabkioui <mohamed.tabkioui@st.com>
+Date: Wed, 24 Jun 2026 10:09:36 +0200
+Subject: [PATCH] crypto: stm32/hash - fix DMA burst alignment for non-final
+ transfers
+
+The DMA controller requires transfers to be a multiple of the
+burst size (16 bytes = 4 words x 4 bytes). The original code
+always subtracted 4 bytes (last_word) before the DMA transfer,
+which could produce a non-multiple-of-16 transfer length and
+cause a deadlock resulting in -ETIMEDOUT.
+
+Fix this by computing dma_len = ALIGN_DOWN(len - 4, 16) to
+ensure the DMA transfer length is always a multiple of 16 bytes.
+The remaining tail_len = len - dma_len bytes are written by CPU
+via writesl() after the DMA completes.
+
+Signed-off-by: Mohamed Tabkioui <mohamed.tabkioui@st.com>
+Change-Id: I18e0dcfc500ace12a7d1f752264ced12aba30939
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/581645
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/crypto/stm32/stm32-hash.c | 35 +++++++++++++++++++------------
+ 1 file changed, 22 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/crypto/stm32/stm32-hash.c b/drivers/crypto/stm32/stm32-hash.c
+index 68296c6587d8..5341f72aa3aa 100644
+--- a/drivers/crypto/stm32/stm32-hash.c
++++ b/drivers/crypto/stm32/stm32-hash.c
+@@ -359,7 +359,7 @@ static void stm32_hash_append_sg(struct stm32_hash_request_ctx *rctx)
+ 		count = min_t(size_t, count, state->blocklen - state->bufcnt);
+ 
+ 		if (count <= 0) {
+-			if ((rctx->sg->length == 0) && !sg_is_last(rctx->sg)) {
++			if (rctx->sg->length == 0 && !sg_is_last(rctx->sg)) {
+ 				rctx->sg = sg_next(rctx->sg);
+ 				continue;
+ 			} else {
+@@ -556,7 +556,6 @@ static int stm32_hash_xmit_dma(struct stm32_hash_dev *hdev,
+ 
+ 	stm32_hash_write(hdev, HASH_CR, reg);
+ 
+-
+ 	cookie = dmaengine_submit(in_desc);
+ 	err = dma_submit_error(cookie);
+ 	if (err)
+@@ -662,7 +661,9 @@ static int stm32_hash_dma_send(struct stm32_hash_dev *hdev)
+ 	unsigned int i, len = 0, bufcnt = 0;
+ 	bool final = hdev->flags & HASH_FLAGS_FINAL;
+ 	bool is_last = false;
+-	u32 last_word;
++	u32 tail_buf[4] = {0};
++	unsigned int tail_len = 0;
++	unsigned int dma_len = 0;
+ 
+ 	dev_dbg(hdev->dev, "%s total: %d bufcnt: %d final: %d\n",
+ 		__func__, rctx->total, rctx->state.bufcnt, final);
+@@ -685,10 +686,16 @@ static int stm32_hash_dma_send(struct stm32_hash_dev *hdev)
+ 
+ 		if (sg_is_last(sg) || (bufcnt + sg[0].length) >= rctx->total) {
+ 			if (!final) {
+-				/* Always manually put the last word of a non-final transfer. */
+-				len -= sizeof(u32);
+-				sg_pcopy_to_buffer(rctx->sg, rctx->nents, &last_word, 4, len);
+-				sg->length -= sizeof(u32);
++				/* Always manually put the last word + remaining bytes
++				 * not aligned with dma mode burst of a non-final transfer.
++				 * The DMA transfer length must be a multiple of 16 bytes.
++				 */
++				dma_len = ALIGN_DOWN(len - sizeof(u32), 16);
++				tail_len = len - dma_len;
++				sg_pcopy_to_buffer(rctx->sg, rctx->nents,
++						   tail_buf, tail_len, dma_len);
++				sg->length = dma_len;
++				len = dma_len;
+ 			} else {
+ 				/*
+ 				 * In Multiple DMA mode, DMA must be aborted before the final
+@@ -727,10 +734,13 @@ static int stm32_hash_dma_send(struct stm32_hash_dev *hdev)
+ 
+ 		err = stm32_hash_xmit_dma(hdev, sg, len, !is_last);
+ 
+-		/* The last word of a non final transfer is sent manually. */
++		/* Remaining bytes including the last word of a non final
++		 * transfer is sent manually.
++		 */
+ 		if (!final) {
+-			stm32_hash_write(hdev, HASH_DIN, last_word);
+-			len += sizeof(u32);
++			writesl(hdev->io_base + HASH_DIN,
++				tail_buf, tail_len / sizeof(u32));
++			len += tail_len;
+ 		}
+ 
+ 		bufcnt += sg[0].length;
+@@ -1082,9 +1092,9 @@ static int stm32_hash_one_request(struct crypto_engine *engine, void *areq)
+ 
+ 	/* If we have an IRQ, wait for that, else poll for completion */
+ 	if (err == -EINPROGRESS && hdev->polled) {
+-		if (stm32_hash_wait_busy(hdev))
++		if (stm32_hash_wait_busy(hdev)) {
+ 			err = -ETIMEDOUT;
+-		else {
++		} else {
+ 			hdev->flags |= HASH_FLAGS_OUTPUT_READY;
+ 			err = 0;
+ 		}
+@@ -1382,7 +1392,6 @@ static int stm32_hash_update(struct ahash_request *req)
+ 	if (!req->nbytes)
+ 		return 0;
+ 
+-
+ 	if (state->flags & HASH_FLAGS_CPU) {
+ 		rctx->total = req->nbytes;
+ 		rctx->sg = req->src;
+-- 
+2.53.0
+

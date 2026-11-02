@@ -1,0 +1,136 @@
+From 05b40e331bbbf753a657e81526ccdb991280acf5 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 22 Sep 2026 11:30:13 +0200
+Subject: [PATCH] ARM: dts: stm32: revert pwr regulators using scmi on
+ stm32mp15
+
+This reverts commit bcd6cc9ee13a5cb2c323b45f6b177e4296f9f164 and
+commit a34b42f8690ce2b8360971ca5b886786ee1781af.
+
+To ease the implementation of the PSCI support, no longer rely on SCMI for
+pwr regulators and keep backward compatibility with old bootloader DTs.
+
+Change-Id: Ic219cabf9829225e01a9d0584afd334932c0e5ed
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp15-scmi.dtsi      | 53 -------------------
+ arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dts |  1 -
+ arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dts |  1 -
+ .../arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi |  1 -
+ 4 files changed, 56 deletions(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp15-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp15-scmi.dtsi
+index 98552fe45d4e..aeedab8e5af9 100644
+--- a/arch/arm/boot/dts/st/stm32mp15-scmi.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp15-scmi.dtsi
+@@ -4,8 +4,6 @@
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+  */
+ 
+-#include <dt-bindings/regulator/st,stm32mp15-regulator.h>
+-
+ / {
+ 	firmware {
+ 		optee: optee {
+@@ -30,61 +28,10 @@ scmi_reset: protocol@16 {
+ 				reg = <0x16>;
+ 				#reset-cells = <1>;
+ 			};
+-
+-			scmi_voltd: protocol@17 {
+-				reg = <0x17>;
+-
+-				scmi_reguls: regulators {
+-					#address-cells = <1>;
+-					#size-cells = <0>;
+-
+-					scmi_reg11: regulator@0 {
+-						reg = <VOLTD_SCMI_REG11>;
+-						regulator-name = "reg11";
+-						regulator-min-microvolt = <1100000>;
+-						regulator-max-microvolt = <1100000>;
+-					};
+-
+-					scmi_reg18: regulator@1 {
+-						reg = <VOLTD_SCMI_REG18>;
+-						regulator-name = "reg18";
+-						regulator-min-microvolt = <1800000>;
+-						regulator-max-microvolt = <1800000>;
+-					};
+-
+-					scmi_usb33: regulator@2 {
+-						reg = <VOLTD_SCMI_USB33>;
+-						regulator-name = "usb33";
+-						regulator-min-microvolt = <3300000>;
+-						regulator-max-microvolt = <3300000>;
+-					};
+-				};
+-			};
+ 		};
+ 	};
+ };
+ 
+-&reg11 {
+-	status = "disabled";
+-};
+-
+-&reg18 {
+-	status = "disabled";
+-};
+-
+-&usb33 {
+-	status = "disabled";
+-};
+-
+-&usbotg_hs {
+-	usb33d-supply = <&scmi_usb33>;
+-};
+-
+-&usbphyc {
+-	vdda1v1-supply = <&scmi_reg11>;
+-	vdda1v8-supply = <&scmi_reg18>;
+-};
+-
+ /delete-node/ &clk_hse;
+ /delete-node/ &clk_hsi;
+ /delete-node/ &clk_lse;
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dts
+index 9019b5b0f204..3d970cb6de43 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dts
+@@ -35,7 +35,6 @@ &cryp1 {
+ };
+ 
+ &dsi {
+-	phy-dsi-supply = <&scmi_reg18>;
+ 	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
+ };
+ 
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dts
+index 6bf16f40625f..bc8cdd2215d2 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dts
+@@ -35,7 +35,6 @@ &cryp1 {
+ };
+ 
+ &dsi {
+-	phy-dsi-supply = <&scmi_reg18>;
+ 	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
+ };
+ 
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi
+index ab7b437055e0..ff49a2c493b7 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi
+@@ -36,7 +36,6 @@ &cryp1 {
+ };
+ 
+ &dsi {
+-	phy-dsi-supply = <&scmi_reg18>;
+ 	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
+ };
+ 
+-- 
+2.53.0
+

@@ -1,0 +1,109 @@
+From 542140d47cb9702440de1979c78e9a73949fa2f4 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Thu, 18 Jun 2026 08:54:23 +0200
+Subject: [PATCH] arm64: dts: st: enable ucpd on stm32mp257f-dk
+
+Add ucpd node to connect typec remote endpoint to ucpd driver instead of
+rpmsg connector to the m33 firmware.
+Only support peripheral mode in high speed.
+
+The board is self-powered, it shall be indicated in the DT.
+It also resolve initial condition: legacy Type-A->Type-C cable
+plugged upon boot isn't detected otherwise.
+
+Change-Id: I9d6836eed2a3b8e6925f5da2640d82d5d6371a28
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/581852
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 56 +++++++++--------------
+ 1 file changed, 21 insertions(+), 35 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index 9bb78998a689..a148e4621c8e 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -749,41 +749,6 @@ mdf_endpoint1: endpoint {
+ 	};
+ };
+ 
+-&mlahb {
+-	intc_rpmsg: interrupt-controller@1 {
+-		compatible = "rpmsg,intc";
+-		reg = <1 0>;
+-		#interrupt-cells = <1>;
+-		interrupt-controller;
+-	};
+-
+-	i2c_rpmsg: i2c@2 {
+-		compatible = "rpmsg,i2c-controller";
+-		reg = <2 0>;
+-		rpmsg,dev-id = "rpmsg_i2c";
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-		status = "okay";
+-
+-		typec@35 {
+-			compatible = "st,stm32mp25-typec";
+-			reg = <0x35>;
+-			interrupts-extended = <&intc_rpmsg 0>;
+-			status = "okay";
+-			connector {
+-				compatible = "usb-c-connector";
+-				label = "USB-C";
+-
+-				port {
+-					typec_ep: endpoint {
+-						remote-endpoint = <&dwc3_ep>;
+-					};
+-				};
+-			};
+-		};
+-	};
+-};
+-
+ &optee {
+ 	bootph-all;
+ };
+@@ -951,6 +916,26 @@ pwm3: pwm {
+ 	};
+ };
+ 
++&ucpd {
++	st,tcpp = <&tcpp>;
++	status = "okay";
++
++	connector {
++		compatible = "usb-c-connector";
++		label = "USB-C";
++		data-role = "device";
++		power-role = "sink";
++		typec-power-opmode = "default";
++		pd-disable;
++		self-powered;
++		port {
++			typec_ep: endpoint {
++				remote-endpoint = <&dwc3_ep>;
++			};
++		};
++	};
++};
++
+ /* Bluetooth */
+ &usart1 {
+ 	pinctrl-names = "default", "sleep", "idle";
+@@ -1017,6 +1002,7 @@ &usb3dr {
+ 	dwc3: usb@48300000 {
+ 		phys = <&usb2_phy2>, <&combophy PHY_TYPE_USB3>;
+ 		phy-names = "usb2-phy", "usb3-phy";
++		maximum-speed = "high-speed";
+ 		usb-role-switch;
+ 		port {
+ 			dwc3_ep: endpoint {
+-- 
+2.53.0
+

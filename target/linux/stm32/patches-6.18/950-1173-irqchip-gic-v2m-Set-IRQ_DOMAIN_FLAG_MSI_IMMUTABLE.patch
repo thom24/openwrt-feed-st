@@ -1,0 +1,36 @@
+From 448523b1d43c850b03469a71e36aad31d3cf0f55 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Fri, 17 Jul 2026 13:42:17 +0200
+Subject: [PATCH] irqchip/gic-v2m: Set IRQ_DOMAIN_FLAG_MSI_IMMUTABLE
+
+The GICv2m MSI domain uses a fixed MSI mapping that is not modified
+after initialisation.
+
+Set IRQ_DOMAIN_FLAG_MSI_IMMUTABLE to enable PCI endpoint doorbell support.
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: Iac9dbfcc4175a3836ddc027ffeba926790bc6090
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/589083
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/irqchip/irq-gic-v2m.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/irqchip/irq-gic-v2m.c b/drivers/irqchip/irq-gic-v2m.c
+index 8a3410c2b7b5..cc3a0b08e8c4 100644
+--- a/drivers/irqchip/irq-gic-v2m.c
++++ b/drivers/irqchip/irq-gic-v2m.c
+@@ -269,6 +269,7 @@ static __init int gicv2m_allocate_domains(struct irq_domain *parent)
+ 	struct irq_domain_info info = {
+ 		.ops		= &gicv2m_domain_ops,
+ 		.parent		= parent,
++		.domain_flags	= IRQ_DOMAIN_FLAG_MSI_IMMUTABLE,
+ 	};
+ 	struct v2m_data *v2m;
+ 
+-- 
+2.53.0
+

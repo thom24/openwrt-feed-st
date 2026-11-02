@@ -1,0 +1,139 @@
+From 44f9a9659d5d5de12e70219be4ab83abcfdf3676 Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Wed, 29 Jul 2026 08:26:14 +0200
+Subject: [PATCH] arch_topology: add topology_set_freq_ref() to update the
+ reference frequency
+
+The per-CPU capacity_freq_ref is set once at CPUFREQ_CREATE_POLICY to
+policy->cpuinfo.max_freq. It is read through arch_scale_freq_ref() by both
+the frequency invariance engine (as the scaling denominator, see the
+arch_set_freq_scale() call sites) and the schedutil governor
+(get_capacity_ref_freq()), so it is the single reference that ties
+utilization to frequency.
+
+On platforms using software boost (cpufreq_boost_set_sw), the boost state
+is toggled at runtime and cpufreq_frequency_table_cpuinfo() recomputes
+policy->cpuinfo.max_freq accordingly, but there is currently no way to keep
+capacity_freq_ref in sync with that reachable maximum.
+
+Add topology_set_freq_ref() to update capacity_freq_ref (and the
+frequency-invariance max ratio) for a set of CPUs, exposed as the
+arch_set_freq_ref() hook with a no-op fallback for architectures that do
+not track a reference frequency.
+
+No functional change: the new API has no caller yet.
+
+Assisted-by: GitHub-Copilot:Claude-Opus-4.8
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: I6f389366bea6b528da52d44d935cbcf8454d3a25
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/591796
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/include/asm/topology.h   |  1 +
+ arch/arm64/include/asm/topology.h |  1 +
+ arch/riscv/include/asm/topology.h |  1 +
+ drivers/base/arch_topology.c      | 31 +++++++++++++++++++++++++++++++
+ include/linux/arch_topology.h     |  1 +
+ 5 files changed, 35 insertions(+)
+
+diff --git a/arch/arm/include/asm/topology.h b/arch/arm/include/asm/topology.h
+index ad36b6570067..ebfaa2664706 100644
+--- a/arch/arm/include/asm/topology.h
++++ b/arch/arm/include/asm/topology.h
+@@ -11,6 +11,7 @@
+ #ifndef CONFIG_BL_SWITCHER
+ /* Replace task scheduler's default frequency-invariant accounting */
+ #define arch_set_freq_scale topology_set_freq_scale
++#define arch_set_freq_ref topology_set_freq_ref
+ #define arch_scale_freq_capacity topology_get_freq_scale
+ #define arch_scale_freq_invariant topology_scale_freq_invariant
+ #define arch_scale_freq_ref topology_get_freq_ref
+diff --git a/arch/arm64/include/asm/topology.h b/arch/arm64/include/asm/topology.h
+index 341174bf9106..e60f45e39407 100644
+--- a/arch/arm64/include/asm/topology.h
++++ b/arch/arm64/include/asm/topology.h
+@@ -22,6 +22,7 @@ void update_freq_counters_refs(void);
+ /* Replace task scheduler's default frequency-invariant accounting */
+ #define arch_scale_freq_tick topology_scale_freq_tick
+ #define arch_set_freq_scale topology_set_freq_scale
++#define arch_set_freq_ref topology_set_freq_ref
+ #define arch_scale_freq_capacity topology_get_freq_scale
+ #define arch_scale_freq_invariant topology_scale_freq_invariant
+ #define arch_scale_freq_ref topology_get_freq_ref
+diff --git a/arch/riscv/include/asm/topology.h b/arch/riscv/include/asm/topology.h
+index fe1a8bf6902d..92a0347a9ea8 100644
+--- a/arch/riscv/include/asm/topology.h
++++ b/arch/riscv/include/asm/topology.h
+@@ -11,6 +11,7 @@
+ /* Replace task scheduler's default frequency-invariant accounting */
+ #define arch_scale_freq_tick		topology_scale_freq_tick
+ #define arch_set_freq_scale		topology_set_freq_scale
++#define arch_set_freq_ref		topology_set_freq_ref
+ #define arch_scale_freq_capacity	topology_get_freq_scale
+ #define arch_scale_freq_invariant	topology_scale_freq_invariant
+ #define arch_scale_freq_ref		topology_get_freq_ref
+diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+index e1eff05bea4a..7af93c638d6a 100644
+--- a/drivers/base/arch_topology.c
++++ b/drivers/base/arch_topology.c
+@@ -379,6 +379,33 @@ static cpumask_var_t cpus_to_visit;
+ static void parsing_done_workfn(struct work_struct *work);
+ static DECLARE_WORK(parsing_done_work, parsing_done_workfn);
+ 
++/**
++ * topology_set_freq_ref() - Update the capacity reference frequency.
++ * @cpus: The CPUs for which the reference frequency has to be updated.
++ * @max_freq: The new maximum frequency (in kHz) reachable by @cpus.
++ *
++ * The capacity reference frequency is the frequency at which a CPU reaches its
++ * maximum capacity, and is used both for frequency invariance (as the scaling
++ * denominator) and by the schedutil governor to derive the target frequency.
++ * It is frozen at boot to the non-boost maximum, so it must be refreshed when
++ * the reachable maximum changes at runtime, e.g. when the cpufreq boost state
++ * is toggled and boost frequencies enter or leave cpuinfo.max_freq. Keeping it
++ * in sync allows the utilization-proportional governor to select boost OPPs.
++ */
++void topology_set_freq_ref(const struct cpumask *cpus, unsigned long max_freq)
++{
++	int cpu;
++
++	if (WARN_ON_ONCE(!max_freq))
++		return;
++
++	for_each_cpu(cpu, cpus) {
++		per_cpu(capacity_freq_ref, cpu) = max_freq;
++		freq_inv_set_max_ratio(cpu, (u64)max_freq * HZ_PER_KHZ);
++	}
++}
++EXPORT_SYMBOL_GPL(topology_set_freq_ref);
++
+ static int
+ init_cpu_capacity_callback(struct notifier_block *nb,
+ 			   unsigned long val,
+@@ -453,6 +480,10 @@ static void parsing_done_workfn(struct work_struct *work)
+ }
+ 
+ #else
++void topology_set_freq_ref(const struct cpumask *cpus, unsigned long max_freq)
++{
++}
++
+ core_initcall(free_raw_capacity);
+ #endif
+ 
+diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
+index d72d6e5aa200..1b4af01d3f6d 100644
+--- a/include/linux/arch_topology.h
++++ b/include/linux/arch_topology.h
+@@ -31,6 +31,7 @@ static inline unsigned long topology_get_freq_scale(int cpu)
+ 
+ void topology_set_freq_scale(const struct cpumask *cpus, unsigned long cur_freq,
+ 			     unsigned long max_freq);
++void topology_set_freq_ref(const struct cpumask *cpus, unsigned long max_freq);
+ bool topology_scale_freq_invariant(void);
+ 
+ enum scale_freq_source {
+-- 
+2.53.0
+

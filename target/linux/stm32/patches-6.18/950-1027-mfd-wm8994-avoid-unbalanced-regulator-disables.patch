@@ -1,0 +1,67 @@
+From c30b99ab9f5aedb212acdd43da9f9f5ecb3d6b75 Mon Sep 17 00:00:00 2001
+From: Christophe Kerello <christophe.kerello@foss.st.com>
+Date: Wed, 6 May 2026 09:48:17 +0200
+Subject: [PATCH] mfd: wm8994: avoid unbalanced regulator disables
+
+Since commit bca84a7b93fd ("PM: sleep: Use DPM_FLAG_SMART_SUSPEND
+conditionally"), the device can be marked active after a low-power
+transition. As a result, the runtime PM suspend callback may be invoked
+again and disable regulators that are already disabled, leading to an
+unbalanced regulator state.
+
+Avoid this by returning early from the PM suspend callback when the device
+is already suspended.
+
+Fixes: bca84a7b93fd ("PM: sleep: Use DPM_FLAG_SMART_SUSPEND conditionally")
+Change-Id: Ie6e85e182c08912faa2f922237569e7eda25241e
+Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/568659
+Tested-by: Christophe KERELLO <christophe.kerello@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ drivers/mfd/wm8994-core.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/mfd/wm8994-core.c b/drivers/mfd/wm8994-core.c
+index 70863ba179f4..9c077ed71d35 100644
+--- a/drivers/mfd/wm8994-core.c
++++ b/drivers/mfd/wm8994-core.c
+@@ -114,6 +114,9 @@ static int wm8994_suspend(struct device *dev)
+ 	struct wm8994 *wm8994 = dev_get_drvdata(dev);
+ 	int ret;
+ 
++	if (wm8994->suspended)
++		return 0;
++
+ 	/* Don't actually go through with the suspend if the CODEC is
+ 	 * still active for accessory detect. */
+ 	switch (wm8994->type) {
+@@ -161,9 +164,6 @@ static int wm8994_suspend(struct device *dev)
+ 	if (ret != 0)
+ 		dev_err(dev, "Failed to restore interrupt mask: %d\n", ret);
+ 
+-	regcache_cache_only(wm8994->regmap, true);
+-	wm8994->suspended = true;
+-
+ 	ret = regulator_bulk_disable(wm8994->num_supplies,
+ 				     wm8994->supplies);
+ 	if (ret != 0) {
+@@ -171,6 +171,9 @@ static int wm8994_suspend(struct device *dev)
+ 		return ret;
+ 	}
+ 
++	regcache_cache_only(wm8994->regmap, true);
++	wm8994->suspended = true;
++
+ 	return 0;
+ }
+ 
+-- 
+2.53.0
+

@@ -1,0 +1,41 @@
+From 045b9786f279c1f15230ca4873875f1d5228b71a Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Wed, 1 Jul 2026 15:34:36 +0200
+Subject: [PATCH] spi: stm32: correct error handling for sram_rx_buf
+
+Pointer sram_rx_buf should be checked instead of sram_pool
+when checking prior to calling the gen_poll_free since only
+having sram_pool does not necessarily means that a
+sram_rx_buf exists.
+
+Fixes: f4d8438e6a40 ("spi: stm32: fix sram pool free in probe error path")
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: I8893b0ec4473559cb39a1b468a7cb6280e4b25e7
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/583804
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/spi/spi-stm32.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
+index 9555545bfeb1..75d49cc27912 100644
+--- a/drivers/spi/spi-stm32.c
++++ b/drivers/spi/spi-stm32.c
+@@ -2572,7 +2572,7 @@ static int stm32_spi_probe(struct platform_device *pdev)
+ 	if (spi->mdma_rx)
+ 		dma_release_channel(spi->mdma_rx);
+ err_pool_free:
+-	if (spi->sram_pool)
++	if (spi->sram_rx_buf)
+ 		gen_pool_free(spi->sram_pool, (unsigned long)spi->sram_rx_buf,
+ 			      spi->sram_rx_buf_size);
+ 	if (spi->dma_rx)
+-- 
+2.53.0
+

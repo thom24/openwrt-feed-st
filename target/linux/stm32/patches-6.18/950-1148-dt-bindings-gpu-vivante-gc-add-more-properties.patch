@@ -1,0 +1,51 @@
+From 2f54720c3a01dcef32c166fd9754b45e067dff53 Mon Sep 17 00:00:00 2001
+From: Philippe Cornu <philippe.cornu@foss.st.com>
+Date: Tue, 5 May 2026 14:14:12 +0200
+Subject: [PATCH] dt-bindings: gpu: vivante,gc: add more properties
+
+On STM32MPx, the gpu uses the following optional extra property:
+* contiguous-area: gpu-dedicated memory area.
+
+On STM32MP2, the gpu uses following optional extra properties:
+* power-domains: the platform uses more than a single power domain.
+* power-domain-names: power domain names are required for "perf"
+  and scmi_devpd supports.
+* access-controllers: in case some firewall configuration needs
+  to be checked before accessing it.
+
+Change-Id: Icb094e8c65a10c3a57b001dd50b51680a07feda8
+Signed-off-by: Philippe Cornu <philippe.cornu@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/564753
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ Documentation/devicetree/bindings/gpu/vivante,gc.yaml | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/gpu/vivante,gc.yaml b/Documentation/devicetree/bindings/gpu/vivante,gc.yaml
+index b1b10ea70ad9..49bc6287dd99 100644
+--- a/Documentation/devicetree/bindings/gpu/vivante,gc.yaml
++++ b/Documentation/devicetree/bindings/gpu/vivante,gc.yaml
+@@ -47,8 +47,19 @@ properties:
+     maxItems: 1
+ 
+   power-domains:
++    minItems: 1
++    maxItems: 3
++
++  power-domain-names:
++    minItems: 1
++    maxItems: 3
++
++  access-controllers:
+     maxItems: 1
+ 
++  contiguous-area:
++    $ref: /schemas/types.yaml#/definitions/phandle
++
+ required:
+   - compatible
+   - reg
+-- 
+2.53.0
+

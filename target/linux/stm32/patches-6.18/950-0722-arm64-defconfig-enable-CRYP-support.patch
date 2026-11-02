@@ -1,0 +1,33 @@
+From d01685c2fe171d26cf0d8c4bff3598c2aab252dc Mon Sep 17 00:00:00 2001
+From: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Date: Thu, 8 Jun 2023 11:37:35 +0200
+Subject: [PATCH] arm64: defconfig: enable CRYP support
+
+Enable STM32 CRYP support on 64 bits platform.
+
+Signed-off-by: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Change-Id: I7da5c79123b0b2d03b9f555d4e210f86bc2142ff
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/545760
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ arch/arm64/configs/fragment-02-defconfig-addons.config | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/configs/fragment-02-defconfig-addons.config b/arch/arm64/configs/fragment-02-defconfig-addons.config
+index 4a8c07d4055d..dd3a52cc9642 100644
+--- a/arch/arm64/configs/fragment-02-defconfig-addons.config
++++ b/arch/arm64/configs/fragment-02-defconfig-addons.config
+@@ -6,6 +6,7 @@ CONFIG_CLK_STM32MP2_CA35SS=m
+ CONFIG_CORESIGHT_SOURCE_ETM4X=m
+ CONFIG_CPUFREQ_DT=m
+ CONFIG_CPU_IDLE_GOV_TEO=y
++CONFIG_CRYPTO_DEV_STM32_CRYP=m
+ CONFIG_DEVFREQ_GOV_USERSPACE=m
+ CONFIG_DRM=y
+ CONFIG_DRM_PANEL_RAYDIUM_RM68200=m
+-- 
+2.53.0
+

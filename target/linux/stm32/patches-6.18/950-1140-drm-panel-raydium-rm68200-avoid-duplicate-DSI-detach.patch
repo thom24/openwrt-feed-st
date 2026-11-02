@@ -1,0 +1,36 @@
+From d306752db835d8f8d3c7688e3323ee3ef1ed7c3b Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Thu, 1 Oct 2026 09:55:39 +0200
+Subject: [PATCH] drm/panel: raydium-rm68200: avoid duplicate DSI detach
+
+Check whether the DSI device is attached before detaching it
+during removal.
+This avoids calling mipi_dsi_detach() more than once.
+
+Assisted-by: GitHub-Copilot:GPT-5.6.Luna
+Change-Id: I429fdef0770777ff9849180b29a227f1851a3777
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/619700
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/gpu/drm/panel/panel-raydium-rm68200.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/panel/panel-raydium-rm68200.c b/drivers/gpu/drm/panel/panel-raydium-rm68200.c
+index ada4fa34914d..34935a9e6ace 100644
+--- a/drivers/gpu/drm/panel/panel-raydium-rm68200.c
++++ b/drivers/gpu/drm/panel/panel-raydium-rm68200.c
+@@ -432,7 +432,8 @@ static void rm68200_remove(struct mipi_dsi_device *dsi)
+ {
+ 	struct rm68200 *ctx = mipi_dsi_get_drvdata(dsi);
+ 
+-	mipi_dsi_detach(dsi);
++	if (dsi->attached)
++		mipi_dsi_detach(dsi);
+ 	drm_panel_remove(&ctx->panel);
+ }
+ 
+-- 
+2.53.0
+

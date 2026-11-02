@@ -1,0 +1,59 @@
+From 5b4220ded35726b37ba56ae88c8c6017fa9a8997 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Wed, 18 Feb 2026 15:30:55 +0100
+Subject: [PATCH] arm64: dts: st: enable RTC support with LSCO for WiFi/BT on
+ stm32mp235f-dk
+
+Enables the support of RTC on stm32mp235f-dk board and declare RTC as LSCO
+clock provider for Wifi/BT on this board.
+WiFi/BT module LPO_32 pin is wired to RTC OUT2_RMP pin.
+Add rtc_lsco_pins_a to the pinctrl property of the RTC node because RTC
+pinctrl has strict mode enabled. WiFi and Bluetooth drivers cannot both
+request it, as their probe order is not guaranteed to ensure LSCO is
+available during each probe.
+
+Change-Id: Ifd0ecb69d956d6faa91497d1843e62526dc55a93
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/538138
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index a0a9fdb8b8b0..a3ca78299fd4 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -74,6 +74,8 @@ memory@80000000 {
+ 	wifi_pwrseq: wifi-pwrseq {
+ 		compatible = "mmc-pwrseq-simple";
+ 		reset-gpios = <&gpiog 8 GPIO_ACTIVE_LOW>;
++		clocks = <&rtc>;
++		clock-names = "ext_clock";
+ 	};
+ };
+ 
+@@ -268,6 +270,18 @@ &rifsc {
+ 	bootph-all;
+ };
+ 
++&rtc {
++	#clock-cells = <0>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&rtc_rsvd_pins_a &rtc_lsco_pins_a>;
++	status = "okay";
++
++	rtc_lsco_pins_a: rtc-lsco-0 {
++		pins = "out2_rmp";
++		function = "lsco";
++	};
++};
++
+ &scmi {
+ 	bootph-all;
+ };
+-- 
+2.53.0
+

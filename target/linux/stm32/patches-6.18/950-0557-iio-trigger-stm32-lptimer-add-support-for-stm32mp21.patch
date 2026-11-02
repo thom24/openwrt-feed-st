@@ -1,0 +1,35 @@
+From 06bced51ba0f2ac25bb6fe3f4ae840907ae9e15c Mon Sep 17 00:00:00 2001
+From: Cheick TRAORE <cheick.traore-ext@st.com>
+Date: Wed, 6 May 2026 09:02:11 +0200
+Subject: [PATCH] iio: trigger: stm32-lptimer: add support for stm32mp21
+
+Add support for STM32MP21 SoC using new compatible. The output trigger
+list for stm32mp21 is the same as on stm32mp25.
+
+Change-Id: If7d1b4f17d8a90a716fcc1baba2fb674a4767a78
+Signed-off-by: Cheick TRAORE <cheick.traore-ext@st.com>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/564777
+Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/iio/trigger/stm32-lptimer-trigger.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/iio/trigger/stm32-lptimer-trigger.c b/drivers/iio/trigger/stm32-lptimer-trigger.c
+index c7bab18221c7..0b2125b62f1b 100644
+--- a/drivers/iio/trigger/stm32-lptimer-trigger.c
++++ b/drivers/iio/trigger/stm32-lptimer-trigger.c
+@@ -133,6 +133,7 @@ static int stm32_lptim_trigger_probe(struct platform_device *pdev)
+ 
+ static const struct of_device_id stm32_lptim_trig_of_match[] = {
+ 	{ .compatible = "st,stm32-lptimer-trigger", .data = &stm32mp15_lptim_cfg },
++	{ .compatible = "st,stm32mp21-lptimer-trigger", .data = &stm32mp25_lptim_cfg},
+ 	{ .compatible = "st,stm32mp25-lptimer-trigger", .data = &stm32mp25_lptim_cfg},
+ 	{ }
+ };
+-- 
+2.53.0
+

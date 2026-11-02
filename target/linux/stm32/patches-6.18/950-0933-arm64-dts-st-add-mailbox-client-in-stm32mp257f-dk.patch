@@ -1,0 +1,48 @@
+From f370c6b10cfc95baf3026ae3392f7cfa1483c36f Mon Sep 17 00:00:00 2001
+From: Gwenael Treuveur <gwenael.treuveur@foss.st.com>
+Date: Thu, 3 Oct 2024 09:32:08 +0200
+Subject: [PATCH] arm64: dts: st: add mailbox client in stm32mp257f-dk
+
+Add support of mailbox client node for Coprocessor communication.
+
+Change-Id: Iac529b88b2b5fefc6a35c762d19c927d6a62484c
+Signed-off-by: Gwenael Treuveur <gwenael.treuveur@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/408708
+Reviewed-by: Gwenael TREUVEUR <gwenael.treuveur@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Gwenael TREUVEUR <gwenael.treuveur@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/552513
+Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index bd1b6d004477..5d983af3e30c 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -99,6 +99,17 @@ &a35ss_syscfg {
+ 	status = "okay";
+ };
+ 
++&ahbsr {
++	mbox_client: mailbox-client@1 {
++		compatible = "mbox-cdev";
++		reg = <1 0>;
++		memory-region =  <&ipc_shmem_2>;
++		mboxes = <&ipcc2 0>;
++		mbox-names = "rx-tx";
++		status = "okay";
++	};
++};
++
+ &arm_wdt {
+ 	timeout-sec = <32>;
+ 	bootph-all;
+-- 
+2.53.0
+

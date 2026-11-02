@@ -1,0 +1,38 @@
+From 3da67ffd4d01c3c5faf8faf99d91125d2474dce1 Mon Sep 17 00:00:00 2001
+From: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Date: Wed, 29 Apr 2026 17:23:06 +0200
+Subject: [PATCH] media: dt-bindings: add power-domains to STM32MP25 video
+ codecs
+
+Add power-domains to STM32MP25 video codecs.
+
+Change-Id: I7522af2ac0edec1c8a4ba3a7a5c0f0880b0d06e1
+Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/562836
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ .../devicetree/bindings/media/st,stm32mp25-video-codec.yaml    | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml b/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml
+index 73726c65cfb9..d53d348d741c 100644
+--- a/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml
++++ b/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml
+@@ -34,6 +34,9 @@ properties:
+     minItems: 1
+     maxItems: 2
+ 
++  power-domains:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+-- 
+2.53.0
+

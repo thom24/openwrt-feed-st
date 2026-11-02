@@ -1,0 +1,36 @@
+From 382464b572b5132dccefc66d5f451da5e1977006 Mon Sep 17 00:00:00 2001
+From: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Date: Mon, 22 Aug 2022 10:20:58 +0200
+Subject: [PATCH] arm64: dts: st: add VDEC reset support to stm32mp255
+
+Add VDEC reset support to STM32MP255.
+
+Change-Id: If4b1999144d53bd872843b00ee1108e6a86384b3
+Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/533908
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Tested-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Domain-Review: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp255.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp255.dtsi b/arch/arm64/boot/dts/st/stm32mp255.dtsi
+index 0dc1066959e6..e706787c6457 100644
+--- a/arch/arm64/boot/dts/st/stm32mp255.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp255.dtsi
+@@ -27,6 +27,7 @@ lvds: lvds@48060000 {
+ 	vdec: vdec@480d0000 {
+ 		compatible = "st,stm32mp25-vdec";
+ 		reg = <0x480d0000 0x3c8>;
++		resets = <&rcc VDEC_R>;
+ 		interrupts = <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>;
+ 		clocks = <&rcc CK_BUS_VDEC>;
+ 		access-controllers = <&rifsc 89>;
+-- 
+2.53.0
+

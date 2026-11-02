@@ -1,0 +1,42 @@
+From 2f1f494e8ac8da7e0ff8ea824d57a30ff4df582f Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Thu, 18 Dec 2025 11:48:30 +0100
+Subject: [PATCH] ARM: dts: stm32: add spi1 sleep state pinctrl on
+ stm32mp157c-ev1
+
+Add the sleep state of the spi1 instance on stm32mp157c-ev1.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Link: https://lore.kernel.org/r/20251218-stm32-spi-enhancements-v2-4-3b69901ca9fe@foss.st.com
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+(cherry picked from commit 75048a8de01bbf790b1da94a31b10665db42e065)
+Change-Id: I7b2a4be470e942a1aabb1f963bb9de3a34c74988
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/537872
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
+index 0f4e391472f7..4835f86f654d 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
+@@ -341,8 +341,9 @@ &sdmmc3 {
+ };
+ 
+ &spi1 {
+-	pinctrl-names = "default";
++	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&spi1_pins_a>;
++	pinctrl-1 = <&spi1_sleep_pins_a>;
+ 	status = "disabled";
+ };
+ 
+-- 
+2.53.0
+

@@ -1,0 +1,67 @@
+From e34d893b789f218a3553bd0331c949e1a0e93da4 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Tue, 24 Mar 2026 17:04:15 +0100
+Subject: [PATCH] arm64: dts: st: add ltdc on stm32mp215
+
+The LCD-TFT Display Controller (LTDC) handles display composition
+and scaling. It provides a parallel digital RGB flow to be used by
+display interfaces.
+
+Change-Id: Idbd2b25d05804ff83400ec4798a4dbf9fcfa82ca
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/552093
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi |  2 +-
+ arch/arm64/boot/dts/st/stm32mp215.dtsi | 25 +++++++++++++++++++++++++
+ 2 files changed, 26 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index ae51822f65b3..e0540d699b59 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -2376,7 +2376,7 @@ intc: interrupt-controller@4ac10000 {
+ 		};
+ 	};
+ 
+-	soc@1 {
++	soc1: soc@1 {
+ 		compatible = "simple-bus";
+ 		ranges = <0x0 0x0 0x0 0x80000000>;
+ 		interrupt-parent = <&intc>;
+diff --git a/arch/arm64/boot/dts/st/stm32mp215.dtsi b/arch/arm64/boot/dts/st/stm32mp215.dtsi
+index eea861157931..210cc5be5eae 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp215.dtsi
+@@ -19,3 +19,28 @@ csi: csi@48020000 {
+ 		status = "disabled";
+ 	};
+ };
++
++&soc1 {
++	ltdc: display-controller@48010000 {
++		compatible = "st,stm32mp251-ltdc";
++		reg = <0x48010000 0x400>;
++		interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 142 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&rcc CK_KER_LTDC>, <&rcc CK_BUS_LTDC>;
++		clock-names = "lcd", "bus";
++		resets = <&rcc LTDC_R>;
++		power-domains = <&d1_pd>;
++		status = "disabled";
++		access-controllers = <&rifsc 80>;
++		access-controller-names = "cmn";
++
++		l1l2 {
++			access-controllers = <&rifsc 119>;
++			access-controller-names = "l1l2";
++		};
++		l3 {
++			access-controllers = <&rifsc 120>;
++			access-controller-names = "l3";
++		};
++	};
++};
+-- 
+2.53.0
+

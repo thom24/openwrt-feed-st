@@ -1,0 +1,42 @@
+From 4e3b2c71ecab4b461e6badc7a9e071b7764ac7cd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Tue, 21 May 2024 15:52:39 +0200
+Subject: [PATCH] arm64: dts: st: enable CRYP on stm32mp215f-dk
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+set CRYP1 status in stm32mp215f-dk device tree to okay.
+
+Change-Id: Iae9b2ad9505c7b360fdea71fec6faee89e0edaf8
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/381378
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/545759
+Tested-by: Thomas BOURGOIN <thomas.bourgoin@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Thomas BOURGOIN <thomas.bourgoin@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index d83a3b2ff8b8..8c7bcb9b0827 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -67,6 +67,10 @@ &arm_wdt {
+ 	status = "okay";
+ };
+ 
++&cryp1 {
++	status = "okay";
++};
++
+ &cs_cti0 {
+ 	status = "okay";
+ };
+-- 
+2.53.0
+

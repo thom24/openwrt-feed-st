@@ -1,0 +1,707 @@
+From 4b602fe89d2e01e85c1e7aa1ba91e13458ffa5d5 Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Wed, 23 Sep 2026 12:24:37 +0200
+Subject: [PATCH] ARM: dts: stm32: Add RCC SCMI clock support for STM32MP15
+
+Add support for RCC SCMI clocks in the STM32MP15 device tree.
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: I0f7d0e04a64e5bc05e466cf9adac05a3c5e6dc2e
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/532182
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Tested-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp157a-dk1.dts | 58 ++++++++++++++++++++++++
+ arch/arm/boot/dts/st/stm32mp157c-dk2.dts | 58 ++++++++++++++++++++++++
+ arch/arm/boot/dts/st/stm32mp157c-ed1.dts | 58 ++++++++++++++++++++++++
+ arch/arm/boot/dts/st/stm32mp157c-ev1.dts | 58 ++++++++++++++++++++++++
+ arch/arm/boot/dts/st/stm32mp157d-dk1.dts | 58 ++++++++++++++++++++++++
+ arch/arm/boot/dts/st/stm32mp157d-ed1.dts | 25 ++++++++++
+ arch/arm/boot/dts/st/stm32mp157f-dk2.dts | 58 ++++++++++++++++++++++++
+ arch/arm/boot/dts/st/stm32mp157f-ed1.dts | 25 ++++++++++
+ 8 files changed, 398 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157a-dk1.dts b/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
+index cdb4d7fac634..199a624c412d 100644
+--- a/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
+@@ -39,6 +39,50 @@ &dsi {
+ 	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
+ };
+ 
++&gpioa {
++	clocks = <&scmi_clk CK_SCMI_GPIOA>;
++};
++
++&gpiob {
++	clocks = <&scmi_clk CK_SCMI_GPIOB>;
++};
++
++&gpioc {
++	clocks = <&scmi_clk CK_SCMI_GPIOC>;
++};
++
++&gpiod {
++	clocks = <&scmi_clk CK_SCMI_GPIOD>;
++};
++
++&gpioe {
++	clocks = <&scmi_clk CK_SCMI_GPIOE>;
++};
++
++&gpiof {
++	clocks = <&scmi_clk CK_SCMI_GPIOF>;
++};
++
++&gpiog {
++	clocks = <&scmi_clk CK_SCMI_GPIOG>;
++};
++
++&gpioh {
++	clocks = <&scmi_clk CK_SCMI_GPIOH>;
++};
++
++&gpioi {
++	clocks = <&scmi_clk CK_SCMI_GPIOI>;
++};
++
++&gpioj {
++	clocks = <&scmi_clk CK_SCMI_GPIOJ>;
++};
++
++&gpiok {
++	clocks = <&scmi_clk CK_SCMI_GPIOK>;
++};
++
+ &gpioz {
+ 	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
+ };
+@@ -53,6 +97,11 @@ &i2c4 {
+ 	resets = <&scmi_reset RST_SCMI_I2C4>;
+ };
+ 
++&i2c6 {
++	clocks = <&scmi_clk CK_SCMI_I2C6>;
++	resets = <&scmi_reset RST_SCMI_I2C6>;
++};
++
+ &iwdg1 {
+ 	/* IWDG1 is secure and managed through arm_wdt */
+ 	status = "disabled";
+@@ -101,3 +150,12 @@ &rtc {
+ &scmi {
+ 	bootph-some-ram;
+ };
++
++&spi6 {
++	clocks = <&scmi_clk CK_SCMI_SPI6>;
++	resets = <&scmi_reset RST_SCMI_SPI6>;
++};
++
++&usart1 {
++	clocks = <&scmi_clk CK_SCMI_USART1>;
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
+index 95581e94cbab..68eb6b3c612c 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
+@@ -44,6 +44,50 @@ &dsi {
+ 	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
+ };
+ 
++&gpioa {
++	clocks = <&scmi_clk CK_SCMI_GPIOA>;
++};
++
++&gpiob {
++	clocks = <&scmi_clk CK_SCMI_GPIOB>;
++};
++
++&gpioc {
++	clocks = <&scmi_clk CK_SCMI_GPIOC>;
++};
++
++&gpiod {
++	clocks = <&scmi_clk CK_SCMI_GPIOD>;
++};
++
++&gpioe {
++	clocks = <&scmi_clk CK_SCMI_GPIOE>;
++};
++
++&gpiof {
++	clocks = <&scmi_clk CK_SCMI_GPIOF>;
++};
++
++&gpiog {
++	clocks = <&scmi_clk CK_SCMI_GPIOG>;
++};
++
++&gpioh {
++	clocks = <&scmi_clk CK_SCMI_GPIOH>;
++};
++
++&gpioi {
++	clocks = <&scmi_clk CK_SCMI_GPIOI>;
++};
++
++&gpioj {
++	clocks = <&scmi_clk CK_SCMI_GPIOJ>;
++};
++
++&gpiok {
++	clocks = <&scmi_clk CK_SCMI_GPIOK>;
++};
++
+ &gpioz {
+ 	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
+ };
+@@ -58,6 +102,11 @@ &i2c4 {
+ 	resets = <&scmi_reset RST_SCMI_I2C4>;
+ };
+ 
++&i2c6 {
++	clocks = <&scmi_clk CK_SCMI_I2C6>;
++	resets = <&scmi_reset RST_SCMI_I2C6>;
++};
++
+ &iwdg1 {
+ 	/* IWDG1 is secure and managed through arm_wdt */
+ 	status = "disabled";
+@@ -106,3 +155,12 @@ &rtc {
+ &scmi {
+ 	bootph-some-ram;
+ };
++
++&spi6 {
++	clocks = <&scmi_clk CK_SCMI_SPI6>;
++	resets = <&scmi_reset RST_SCMI_SPI6>;
++};
++
++&usart1 {
++	clocks = <&scmi_clk CK_SCMI_USART1>;
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1.dts b/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
+index be1868375d3c..bebae0f9f131 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
+@@ -44,6 +44,50 @@ &dsi {
+ 	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
+ };
+ 
++&gpioa {
++	clocks = <&scmi_clk CK_SCMI_GPIOA>;
++};
++
++&gpiob {
++	clocks = <&scmi_clk CK_SCMI_GPIOB>;
++};
++
++&gpioc {
++	clocks = <&scmi_clk CK_SCMI_GPIOC>;
++};
++
++&gpiod {
++	clocks = <&scmi_clk CK_SCMI_GPIOD>;
++};
++
++&gpioe {
++	clocks = <&scmi_clk CK_SCMI_GPIOE>;
++};
++
++&gpiof {
++	clocks = <&scmi_clk CK_SCMI_GPIOF>;
++};
++
++&gpiog {
++	clocks = <&scmi_clk CK_SCMI_GPIOG>;
++};
++
++&gpioh {
++	clocks = <&scmi_clk CK_SCMI_GPIOH>;
++};
++
++&gpioi {
++	clocks = <&scmi_clk CK_SCMI_GPIOI>;
++};
++
++&gpioj {
++	clocks = <&scmi_clk CK_SCMI_GPIOJ>;
++};
++
++&gpiok {
++	clocks = <&scmi_clk CK_SCMI_GPIOK>;
++};
++
+ &gpioz {
+ 	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
+ };
+@@ -58,6 +102,11 @@ &i2c4 {
+ 	resets = <&scmi_reset RST_SCMI_I2C4>;
+ };
+ 
++&i2c6 {
++	clocks = <&scmi_clk CK_SCMI_I2C6>;
++	resets = <&scmi_reset RST_SCMI_I2C6>;
++};
++
+ &iwdg1 {
+ 	/* IWDG1 is secure and managed through arm_wdt */
+ 	status = "disabled";
+@@ -106,3 +155,12 @@ &rtc {
+ &scmi {
+ 	bootph-some-ram;
+ };
++
++&spi6 {
++	clocks = <&scmi_clk CK_SCMI_SPI6>;
++	resets = <&scmi_reset RST_SCMI_SPI6>;
++};
++
++&usart1 {
++	clocks = <&scmi_clk CK_SCMI_USART1>;
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
+index 092c7b6bbdb3..16ccf45643fa 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
+@@ -44,6 +44,50 @@ &dsi {
+ 	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
+ };
+ 
++&gpioa {
++	clocks = <&scmi_clk CK_SCMI_GPIOA>;
++};
++
++&gpiob {
++	clocks = <&scmi_clk CK_SCMI_GPIOB>;
++};
++
++&gpioc {
++	clocks = <&scmi_clk CK_SCMI_GPIOC>;
++};
++
++&gpiod {
++	clocks = <&scmi_clk CK_SCMI_GPIOD>;
++};
++
++&gpioe {
++	clocks = <&scmi_clk CK_SCMI_GPIOE>;
++};
++
++&gpiof {
++	clocks = <&scmi_clk CK_SCMI_GPIOF>;
++};
++
++&gpiog {
++	clocks = <&scmi_clk CK_SCMI_GPIOG>;
++};
++
++&gpioh {
++	clocks = <&scmi_clk CK_SCMI_GPIOH>;
++};
++
++&gpioi {
++	clocks = <&scmi_clk CK_SCMI_GPIOI>;
++};
++
++&gpioj {
++	clocks = <&scmi_clk CK_SCMI_GPIOJ>;
++};
++
++&gpiok {
++	clocks = <&scmi_clk CK_SCMI_GPIOK>;
++};
++
+ &gpioz {
+ 	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
+ };
+@@ -58,6 +102,11 @@ &i2c4 {
+ 	resets = <&scmi_reset RST_SCMI_I2C4>;
+ };
+ 
++&i2c6 {
++	clocks = <&scmi_clk CK_SCMI_I2C6>;
++	resets = <&scmi_reset RST_SCMI_I2C6>;
++};
++
+ &iwdg1 {
+ 	/* IWDG1 is secure and managed through arm_wdt */
+ 	status = "disabled";
+@@ -110,3 +159,12 @@ &rtc {
+ &scmi {
+ 	bootph-some-ram;
+ };
++
++&spi6 {
++	clocks = <&scmi_clk CK_SCMI_SPI6>;
++	resets = <&scmi_reset RST_SCMI_SPI6>;
++};
++
++&usart1 {
++	clocks = <&scmi_clk CK_SCMI_USART1>;
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-dk1.dts b/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
+index 11b331314342..2f886fa3f327 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
+@@ -51,6 +51,50 @@ &dsi {
+ 	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
+ };
+ 
++&gpioa {
++	clocks = <&scmi_clk CK_SCMI_GPIOA>;
++};
++
++&gpiob {
++	clocks = <&scmi_clk CK_SCMI_GPIOB>;
++};
++
++&gpioc {
++	clocks = <&scmi_clk CK_SCMI_GPIOC>;
++};
++
++&gpiod {
++	clocks = <&scmi_clk CK_SCMI_GPIOD>;
++};
++
++&gpioe {
++	clocks = <&scmi_clk CK_SCMI_GPIOE>;
++};
++
++&gpiof {
++	clocks = <&scmi_clk CK_SCMI_GPIOF>;
++};
++
++&gpiog {
++	clocks = <&scmi_clk CK_SCMI_GPIOG>;
++};
++
++&gpioh {
++	clocks = <&scmi_clk CK_SCMI_GPIOH>;
++};
++
++&gpioi {
++	clocks = <&scmi_clk CK_SCMI_GPIOI>;
++};
++
++&gpioj {
++	clocks = <&scmi_clk CK_SCMI_GPIOJ>;
++};
++
++&gpiok {
++	clocks = <&scmi_clk CK_SCMI_GPIOK>;
++};
++
+ &gpioz {
+ 	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
+ };
+@@ -65,6 +109,11 @@ &i2c4 {
+ 	resets = <&scmi_reset RST_SCMI_I2C4>;
+ };
+ 
++&i2c6 {
++	clocks = <&scmi_clk CK_SCMI_I2C6>;
++	resets = <&scmi_reset RST_SCMI_I2C6>;
++};
++
+ &iwdg1 {
+ 	/* IWDG1 is secure and managed through arm_wdt */
+ 	status = "disabled";
+@@ -113,3 +162,12 @@ &rtc {
+ &scmi {
+ 	bootph-some-ram;
+ };
++
++&spi6 {
++	clocks = <&scmi_clk CK_SCMI_SPI6>;
++	resets = <&scmi_reset RST_SCMI_SPI6>;
++};
++
++&usart1 {
++	clocks = <&scmi_clk CK_SCMI_USART1>;
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
+index 4e7aa43f306c..97d1ba1d5142 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
+@@ -189,46 +189,57 @@ &etzpc {
+ 
+ &gpioa {
+ 	bootph-all;
++	clocks = <&scmi_clk CK_SCMI_GPIOA>;
+ };
+ 
+ &gpiob {
+ 	bootph-all;
++	clocks = <&scmi_clk CK_SCMI_GPIOB>;
+ };
+ 
+ &gpioc {
+ 	bootph-all;
++	clocks = <&scmi_clk CK_SCMI_GPIOC>;
+ };
+ 
+ &gpiod {
+ 	bootph-all;
++	clocks = <&scmi_clk CK_SCMI_GPIOD>;
+ };
+ 
+ &gpioe {
+ 	bootph-all;
++	clocks = <&scmi_clk CK_SCMI_GPIOE>;
+ };
+ 
+ &gpiof {
+ 	bootph-all;
++	clocks = <&scmi_clk CK_SCMI_GPIOF>;
+ };
+ 
+ &gpiog {
+ 	bootph-all;
++	clocks = <&scmi_clk CK_SCMI_GPIOG>;
+ };
+ 
+ &gpioh {
+ 	bootph-all;
++	clocks = <&scmi_clk CK_SCMI_GPIOH>;
+ };
+ 
+ &gpioi {
+ 	bootph-all;
++	clocks = <&scmi_clk CK_SCMI_GPIOI>;
+ };
+ 
+ &gpioj {
+ 	bootph-all;
++	clocks = <&scmi_clk CK_SCMI_GPIOJ>;
+ };
+ 
+ &gpiok {
+ 	bootph-all;
++	clocks = <&scmi_clk CK_SCMI_GPIOK>;
+ };
+ 
+ &gpioz {
+@@ -407,6 +418,11 @@ pins {
+ 	};
+ };
+ 
++&i2c6 {
++	clocks = <&scmi_clk CK_SCMI_I2C6>;
++	resets = <&scmi_reset RST_SCMI_I2C6>;
++};
++
+ &ipcc {
+ 	status = "okay";
+ };
+@@ -563,6 +579,11 @@ pins {
+ 	};
+ };
+ 
++&spi6 {
++	clocks = <&scmi_clk CK_SCMI_SPI6>;
++	resets = <&scmi_reset RST_SCMI_SPI6>;
++};
++
+ &timers6 {
+ 	status = "okay";
+ 	/* spare dmas for other usage */
+@@ -594,6 +615,10 @@ pins2 {
+ 	};
+ };
+ 
++&usart1 {
++	clocks = <&scmi_clk CK_SCMI_USART1>;
++};
++
+ &usbotg_hs {
+ 	vbus-supply = <&vbus_otg>;
+ };
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
+index 67a1fdbeae00..87bf6b9d7d7b 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
+@@ -87,6 +87,50 @@ &dsi_out {
+ 	remote-endpoint = <&panel_in>;
+ };
+ 
++&gpioa {
++	clocks = <&scmi_clk CK_SCMI_GPIOA>;
++};
++
++&gpiob {
++	clocks = <&scmi_clk CK_SCMI_GPIOB>;
++};
++
++&gpioc {
++	clocks = <&scmi_clk CK_SCMI_GPIOC>;
++};
++
++&gpiod {
++	clocks = <&scmi_clk CK_SCMI_GPIOD>;
++};
++
++&gpioe {
++	clocks = <&scmi_clk CK_SCMI_GPIOE>;
++};
++
++&gpiof {
++	clocks = <&scmi_clk CK_SCMI_GPIOF>;
++};
++
++&gpiog {
++	clocks = <&scmi_clk CK_SCMI_GPIOG>;
++};
++
++&gpioh {
++	clocks = <&scmi_clk CK_SCMI_GPIOH>;
++};
++
++&gpioi {
++	clocks = <&scmi_clk CK_SCMI_GPIOI>;
++};
++
++&gpioj {
++	clocks = <&scmi_clk CK_SCMI_GPIOJ>;
++};
++
++&gpiok {
++	clocks = <&scmi_clk CK_SCMI_GPIOK>;
++};
++
+ &gpioz {
+ 	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
+ };
+@@ -118,6 +162,11 @@ &i2c4 {
+ 	resets = <&scmi_reset RST_SCMI_I2C4>;
+ };
+ 
++&i2c6 {
++	clocks = <&scmi_clk CK_SCMI_I2C6>;
++	resets = <&scmi_reset RST_SCMI_I2C6>;
++};
++
+ &iwdg1 {
+ 	/* IWDG1 is secure and managed through arm_wdt */
+ 	status = "disabled";
+@@ -213,6 +262,15 @@ brcmf: wifi@1 {
+ 	};
+ };
+ 
++&spi6 {
++	clocks = <&scmi_clk CK_SCMI_SPI6>;
++	resets = <&scmi_reset RST_SCMI_SPI6>;
++};
++
++&usart1 {
++	clocks = <&scmi_clk CK_SCMI_USART1>;
++};
++
+ /* Bluetooth */
+ &usart2 {
+ 	pinctrl-names = "default", "sleep", "idle";
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
+index 57ee633cb229..0fc849a12d1a 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
+@@ -195,46 +195,57 @@ &etzpc {
+ 
+ &gpioa {
+ 	bootph-all;
++	clocks = <&scmi_clk CK_SCMI_GPIOA>;
+ };
+ 
+ &gpiob {
+ 	bootph-all;
++	clocks = <&scmi_clk CK_SCMI_GPIOB>;
+ };
+ 
+ &gpioc {
+ 	bootph-all;
++	clocks = <&scmi_clk CK_SCMI_GPIOC>;
+ };
+ 
+ &gpiod {
+ 	bootph-all;
++	clocks = <&scmi_clk CK_SCMI_GPIOD>;
+ };
+ 
+ &gpioe {
+ 	bootph-all;
++	clocks = <&scmi_clk CK_SCMI_GPIOE>;
+ };
+ 
+ &gpiof {
+ 	bootph-all;
++	clocks = <&scmi_clk CK_SCMI_GPIOF>;
+ };
+ 
+ &gpiog {
+ 	bootph-all;
++	clocks = <&scmi_clk CK_SCMI_GPIOG>;
+ };
+ 
+ &gpioh {
+ 	bootph-all;
++	clocks = <&scmi_clk CK_SCMI_GPIOH>;
+ };
+ 
+ &gpioi {
+ 	bootph-all;
++	clocks = <&scmi_clk CK_SCMI_GPIOI>;
+ };
+ 
+ &gpioj {
+ 	bootph-all;
++	clocks = <&scmi_clk CK_SCMI_GPIOJ>;
+ };
+ 
+ &gpiok {
+ 	bootph-all;
++	clocks = <&scmi_clk CK_SCMI_GPIOK>;
+ };
+ 
+ &gpioz {
+@@ -413,6 +424,11 @@ pins {
+ 	};
+ };
+ 
++&i2c6 {
++	clocks = <&scmi_clk CK_SCMI_I2C6>;
++	resets = <&scmi_reset RST_SCMI_I2C6>;
++};
++
+ &ipcc {
+ 	status = "okay";
+ };
+@@ -569,6 +585,11 @@ pins {
+ 	};
+ };
+ 
++&spi6 {
++	clocks = <&scmi_clk CK_SCMI_SPI6>;
++	resets = <&scmi_reset RST_SCMI_SPI6>;
++};
++
+ &timers6 {
+ 	status = "okay";
+ 	/* spare dmas for other usage */
+@@ -600,6 +621,10 @@ pins2 {
+ 	};
+ };
+ 
++&usart1 {
++	clocks = <&scmi_clk CK_SCMI_USART1>;
++};
++
+ &usbotg_hs {
+ 	vbus-supply = <&vbus_otg>;
+ };
+-- 
+2.53.0
+

@@ -1,0 +1,33 @@
+From 21a0b6be0bee1ef9c4feb84670ab4707bcddec56 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Mon, 15 Dec 2025 13:26:20 +0100
+Subject: [PATCH] spi: dt-bindings: st,stm32-spi: add 'power-domains' property
+
+STM32 SPI may be in a power domain which is the case for the STM32MP2x
+based boards. Allow a single 'power-domains' entry for STM32 SPI.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Link: https://patch.msgid.link/20251215-stm32-spi-mp2x-dt-updates-v1-1-464a5fd20f13@foss.st.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+(cherry picked from commit f4acea9eef704607d1a950909ce3a52a770d6be2)
+---
+ Documentation/devicetree/bindings/spi/st,stm32-spi.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
+index ca880a226afa..472e92974714 100644
+--- a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
++++ b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
+@@ -96,6 +96,9 @@ properties:
+       The region should be defined as child node of the AHB SRAM node
+       as per the generic bindings in Documentation/devicetree/bindings/sram/sram.yaml
+ 
++  power-domains:
++    maxItems: 1
++
+   access-controllers:
+     minItems: 1
+     maxItems: 2
+-- 
+2.53.0
+

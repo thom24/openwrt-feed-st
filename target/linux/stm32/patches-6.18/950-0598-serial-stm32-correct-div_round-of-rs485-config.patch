@@ -1,0 +1,42 @@
+From 62cd71ca8b289bddd77e712b370bf58a9e4b0349 Mon Sep 17 00:00:00 2001
+From: Valentin Caron <valentin.caron@foss.st.com>
+Date: Fri, 12 Apr 2024 14:33:55 +0200
+Subject: [PATCH] serial: stm32: correct div_round of rs485 config
+
+RS485 delays configured into USART hardware block should be "at least",
+delays asked by the serial framework with serial_rs485 structure.
+
+Use DIV_ROUND_UP() to guarantee theses values until the maximum that can
+support the hardware block.
+
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: I9c3df758948aea4391c04722c6e2b207d753f5e0
+---
+ drivers/tty/serial/stm32-usart.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index a8536073aa0a..8a99e2cad0f8 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -200,7 +200,7 @@ static void stm32_usart_config_reg_rs485(u32 *cr1, u32 *cr3, u32 delay_ADE,
+ 	else
+ 		rs485_deat_dedt = delay_ADE * baud * 16;
+ 
+-	rs485_deat_dedt = DIV_ROUND_CLOSEST(rs485_deat_dedt, 1000);
++	rs485_deat_dedt = DIV_ROUND_UP(rs485_deat_dedt, 1000);
+ 	rs485_deat_dedt = rs485_deat_dedt > rs485_deat_dedt_max ?
+ 			  rs485_deat_dedt_max : rs485_deat_dedt;
+ 	rs485_deat_dedt = (rs485_deat_dedt << USART_CR1_DEAT_SHIFT) &
+@@ -212,7 +212,7 @@ static void stm32_usart_config_reg_rs485(u32 *cr1, u32 *cr3, u32 delay_ADE,
+ 	else
+ 		rs485_deat_dedt = delay_DDE * baud * 16;
+ 
+-	rs485_deat_dedt = DIV_ROUND_CLOSEST(rs485_deat_dedt, 1000);
++	rs485_deat_dedt = DIV_ROUND_UP(rs485_deat_dedt, 1000);
+ 	rs485_deat_dedt = rs485_deat_dedt > rs485_deat_dedt_max ?
+ 			  rs485_deat_dedt_max : rs485_deat_dedt;
+ 	rs485_deat_dedt = (rs485_deat_dedt << USART_CR1_DEDT_SHIFT) &
+-- 
+2.53.0
+

@@ -1,0 +1,39 @@
+From 81e687b27cae26da91125820dab1c0cc8af685de Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Mon, 25 May 2026 11:47:13 +0200
+Subject: [PATCH] dt-bindings: perf: stm32-ddr-pmu: add support for stm32mp211
+ and stm32mp231
+
+Extend the list of supported compatibles to support stm32mp211 and
+stm32mp231.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: If2b3841df44d858200c21e60a5de2f90147c3096
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/571226
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ Documentation/devicetree/bindings/perf/st,stm32-ddr-pmu.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/perf/st,stm32-ddr-pmu.yaml b/Documentation/devicetree/bindings/perf/st,stm32-ddr-pmu.yaml
+index b56e6cc51894..0688a22929b6 100644
+--- a/Documentation/devicetree/bindings/perf/st,stm32-ddr-pmu.yaml
++++ b/Documentation/devicetree/bindings/perf/st,stm32-ddr-pmu.yaml
+@@ -20,6 +20,11 @@ properties:
+           - const: st,stm32mp131-ddr-pmu
+       - items:
+           - const: st,stm32mp251-ddr-pmu
++      - items:
++          - enum:
++              - st,stm32mp211-ddr-pmu
++              - st,stm32mp231-ddr-pmu
++          - const: st,stm32mp251-ddr-pmu
+ 
+   reg:
+     maxItems: 1
+-- 
+2.53.0
+

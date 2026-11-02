@@ -1,0 +1,123 @@
+From f5556993d0bc4c10d92b9081ba1bdada5ddc332f Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 23 Jun 2026 16:14:52 +0200
+Subject: [PATCH] dmaengine: add client preference for residue reporting
+ granularity
+
+Some DMA clients query transfer residue from hot paths where obtaining a
+burst-accurate value may be more expensive than the client can tolerate.
+
+On STM32 DMA3, for example, burst-level residue may require extra channel
+synchronization, while segment-level residue can be derived from the
+currently active linked-list item with significantly lower overhead.
+For latency-sensitive audio streams, especially those with small FIFOs,
+the extra synchronization can cause underruns or overruns.
+
+Add a client-configurable residue reporting preference to
+struct dma_slave_config so a DMA client can express whether coarse,
+non-disruptive residue reporting is acceptable.
+
+This patch only adds the configuration field and its documentation.
+The exact behavior remains DMA-engine specific: drivers may still select
+the effective reporting granularity according to their hardware
+capabilities and implementation constraints.
+
+Change-Id: I0f62c9e4813a65af4668cf98f5d4d40c2a663892
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/582119
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ include/linux/dmaengine.h | 58 +++++++++++++++++++++------------------
+ 1 file changed, 32 insertions(+), 26 deletions(-)
+
+diff --git a/include/linux/dmaengine.h b/include/linux/dmaengine.h
+index 99efe2b9b4ea..0277895f3260 100644
+--- a/include/linux/dmaengine.h
++++ b/include/linux/dmaengine.h
+@@ -393,6 +393,32 @@ enum dma_slave_buswidth {
+ 	DMA_SLAVE_BUSWIDTH_128_BYTES = 128,
+ };
+ 
++/**
++ * enum dma_residue_granularity - Granularity of the reported transfer residue
++ * @DMA_RESIDUE_GRANULARITY_DESCRIPTOR: Residue reporting is not supported. The
++ *  DMA channel is only able to tell whether a descriptor has been completed or
++ *  not, which means residue reporting is not supported by this channel. The
++ *  residue field of the dma_tx_state field will always be 0.
++ * @DMA_RESIDUE_GRANULARITY_SEGMENT: Residue is updated after each successfully
++ *  completed segment of the transfer (For cyclic transfers this is after each
++ *  period). This is typically implemented by having the hardware generate an
++ *  interrupt after each transferred segment and then the driver updates the
++ *  outstanding residue by the size of the segment. Another possibility is if
++ *  the hardware supports scatter-gather and the segment descriptor has a field
++ *  which gets set after the segment has been completed. The driver then counts
++ *  the number of segments without the flag set to compute the residue.
++ * @DMA_RESIDUE_GRANULARITY_BURST: Residue is updated after each transferred
++ *  burst. This is typically only supported if the hardware has a progress
++ *  register of some sort (E.g. a register with the current read/write address
++ *  or a register with the amount of bursts/beats/bytes that have been
++ *  transferred or still need to be transferred).
++ */
++enum dma_residue_granularity {
++	DMA_RESIDUE_GRANULARITY_DESCRIPTOR = 0,
++	DMA_RESIDUE_GRANULARITY_SEGMENT = 1,
++	DMA_RESIDUE_GRANULARITY_BURST = 2,
++};
++
+ /**
+  * struct dma_slave_config - dma slave channel runtime config
+  * @direction: whether the data shall go in or out on this slave
+@@ -428,6 +454,11 @@ enum dma_slave_buswidth {
+  * @device_fc: Flow Controller Settings. Only valid for slave channels. Fill
+  * with 'true' if peripheral should be flow controller. Direction will be
+  * selected at Runtime.
++ * @residue_granularity: Preferred residue reporting precision requested by the
++ * DMA client to match its latency/overhead constraints. A value of 0 means no
++ * explicit client preference was provided, and DMA drivers may keep their
++ * default residue reporting behavior. Clients that need a specific granularity
++ * should explicitly request it here.
+  * @peripheral_config: peripheral configuration for programming peripheral
+  * for dmaengine transfer
+  * @peripheral_size: peripheral configuration buffer size
+@@ -455,36 +486,11 @@ struct dma_slave_config {
+ 	u32 src_port_window_size;
+ 	u32 dst_port_window_size;
+ 	bool device_fc;
++	enum dma_residue_granularity residue_granularity;
+ 	void *peripheral_config;
+ 	size_t peripheral_size;
+ };
+ 
+-/**
+- * enum dma_residue_granularity - Granularity of the reported transfer residue
+- * @DMA_RESIDUE_GRANULARITY_DESCRIPTOR: Residue reporting is not support. The
+- *  DMA channel is only able to tell whether a descriptor has been completed or
+- *  not, which means residue reporting is not supported by this channel. The
+- *  residue field of the dma_tx_state field will always be 0.
+- * @DMA_RESIDUE_GRANULARITY_SEGMENT: Residue is updated after each successfully
+- *  completed segment of the transfer (For cyclic transfers this is after each
+- *  period). This is typically implemented by having the hardware generate an
+- *  interrupt after each transferred segment and then the drivers updates the
+- *  outstanding residue by the size of the segment. Another possibility is if
+- *  the hardware supports scatter-gather and the segment descriptor has a field
+- *  which gets set after the segment has been completed. The driver then counts
+- *  the number of segments without the flag set to compute the residue.
+- * @DMA_RESIDUE_GRANULARITY_BURST: Residue is updated after each transferred
+- *  burst. This is typically only supported if the hardware has a progress
+- *  register of some sort (E.g. a register with the current read/write address
+- *  or a register with the amount of bursts/beats/bytes that have been
+- *  transferred or still need to be transferred).
+- */
+-enum dma_residue_granularity {
+-	DMA_RESIDUE_GRANULARITY_DESCRIPTOR = 0,
+-	DMA_RESIDUE_GRANULARITY_SEGMENT = 1,
+-	DMA_RESIDUE_GRANULARITY_BURST = 2,
+-};
+-
+ /**
+  * struct dma_slave_caps - expose capabilities of a slave channel only
+  * @src_addr_widths: bit mask of src addr widths the channel supports.
+-- 
+2.53.0
+

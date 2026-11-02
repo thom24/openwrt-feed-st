@@ -1,0 +1,43 @@
+From e83f78ae9d066cb658247ee46ad25550add37f39 Mon Sep 17 00:00:00 2001
+From: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Date: Mon, 16 Jan 2023 14:52:42 +0100
+Subject: [PATCH] media: i2c: imx335: reinforce reset robustness
+
+Ensure that reset line is disabled when starting reset sequence.
+Increase waiting duration after reset to some ms to ensure that
+all is really reset before starting the i2c init sequence.
+
+Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: I2838f344870ba6688f92d198e17e33cadce54f8e
+---
+ drivers/media/i2c/imx335.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
+index c043df2f15fb..199838ff70f0 100644
+--- a/drivers/media/i2c/imx335.c
++++ b/drivers/media/i2c/imx335.c
+@@ -1117,6 +1117,8 @@ static int imx335_power_on(struct device *dev)
+ 		return ret;
+ 	}
+ 
++	gpiod_set_value_cansleep(imx335->reset_gpio, 1);
++
+ 	usleep_range(500, 550); /* Tlow */
+ 
+ 	gpiod_set_value_cansleep(imx335->reset_gpio, 0);
+@@ -1129,6 +1131,10 @@ static int imx335_power_on(struct device *dev)
+ 
+ 	usleep_range(20, 22); /* T4 */
+ 
++	/* TODO - is this still necessary ?? */
++	/* Ensure that all is stable after reset */
++	usleep_range(5000, 10000);
++
+ 	return 0;
+ 
+ error_reset:
+-- 
+2.53.0
+

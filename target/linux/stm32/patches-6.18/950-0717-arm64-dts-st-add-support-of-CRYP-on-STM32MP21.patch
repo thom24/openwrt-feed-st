@@ -1,0 +1,101 @@
+From eb2f76f7025c260808afdd1ca6dc1f5a3eba7030 Mon Sep 17 00:00:00 2001
+From: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Date: Thu, 12 Mar 2026 09:06:36 +0100
+Subject: [PATCH] arm64: dts: st: add support of CRYP on STM32MP21
+
+Add cryp1 and cryp2 node in stm32mp21xc.dtsi and in stm32mp21xf.dtsi.
+
+Signed-off-by: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Change-Id: Ibfb3e2523355052b9bb2af24fd9bd70a14974ab5
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/545755
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp21xc.dtsi | 35 +++++++++++++++++++++++++
+ arch/arm64/boot/dts/st/stm32mp21xf.dtsi | 29 +++++++++++++++++++-
+ 2 files changed, 63 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm64/boot/dts/st/stm32mp21xc.dtsi
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp21xc.dtsi b/arch/arm64/boot/dts/st/stm32mp21xc.dtsi
+new file mode 100644
+index 000000000000..2ada6d17992c
+--- /dev/null
++++ b/arch/arm64/boot/dts/st/stm32mp21xc.dtsi
+@@ -0,0 +1,35 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
++/*
++ * Copyright (C) STMicroelectronics 2026 - All Rights Reserved
++ * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
++ */
++
++&rifsc {
++	cryp1: crypto@42030000 {
++		compatible = "st,stm32mp1-cryp";
++		reg = <0x42030000 0x0 0x400>;
++		interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&rcc CK_BUS_CRYP1>;
++		resets = <&rcc CRYP1_R>;
++		dmas = <&hpdma 4 0x40 0x3021>,
++		       <&hpdma 5 0x43 0x3012>;
++		dma-names = "mem2cryp", "cryp2mem";
++		access-controllers = <&rifsc 98>;
++		power-domains = <&d1_pd>;
++		status = "disabled";
++	};
++
++	cryp2: crypto@42040000 {
++		compatible = "st,stm32mp1-cryp";
++		reg = <0x42040000 0x0 0x400>;
++		interrupts = <GIC_SPI 157 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&rcc CK_BUS_CRYP2>;
++		resets = <&rcc CRYP2_R>;
++		dmas = <&hpdma 108 0x40 0x3021>,
++		       <&hpdma 109 0x43 0x3012>;
++		dma-names = "mem2cryp", "cryp2mem";
++		access-controllers = <&rifsc 99>;
++		power-domains = <&d1_pd>;
++		status = "disabled";
++	};
++};
+diff --git a/arch/arm64/boot/dts/st/stm32mp21xf.dtsi b/arch/arm64/boot/dts/st/stm32mp21xf.dtsi
+index e33b00b424e1..8b24b2c49314 100644
+--- a/arch/arm64/boot/dts/st/stm32mp21xf.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp21xf.dtsi
+@@ -4,5 +4,32 @@
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+  */
+ 
+-/ {
++&rifsc {
++	cryp1: crypto@42030000 {
++		compatible = "st,stm32mp1-cryp";
++		reg = <0x42030000 0x0 0x400>;
++		interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&rcc CK_BUS_CRYP1>;
++		resets = <&rcc CRYP1_R>;
++		dmas = <&hpdma 4 0x40 0x3021>,
++		       <&hpdma 5 0x43 0x3012>;
++		dma-names = "mem2cryp", "cryp2mem";
++		access-controllers = <&rifsc 98>;
++		power-domains = <&d1_pd>;
++		status = "disabled";
++	};
++
++	cryp2: crypto@42040000 {
++		compatible = "st,stm32mp1-cryp";
++		reg = <0x42040000 0x0 0x400>;
++		interrupts = <GIC_SPI 157 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&rcc CK_BUS_CRYP2>;
++		resets = <&rcc CRYP2_R>;
++		dmas = <&hpdma 108 0x40 0x3021>,
++		       <&hpdma 109 0x43 0x3012>;
++		dma-names = "mem2cryp", "cryp2mem";
++		access-controllers = <&rifsc 99>;
++		power-domains = <&d1_pd>;
++		status = "disabled";
++	};
+ };
+-- 
+2.53.0
+

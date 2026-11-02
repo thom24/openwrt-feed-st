@@ -1,0 +1,38 @@
+From 442e1c627f0e652a0d82f9dae8135b08fd7fea30 Mon Sep 17 00:00:00 2001
+From: Gwenael Treuveur <gwenael.treuveur@foss.st.com>
+Date: Mon, 23 Feb 2026 11:40:55 +0100
+Subject: [PATCH] arm64: dts: st: add ipcc support for stm32mp215f-dk board
+
+Add IPCC node for stm32mp215f-dk board.
+
+Change-Id: Id8a9f2b90f756c4ee4c14677f294928b8de9b6fc
+Signed-off-by: Gwenael Treuveur <gwenael.treuveur@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/539864
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index d31165254e27..f934cafc9de1 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -184,6 +184,10 @@ &i2c2 {
+ 	status = "okay";
+ };
+ 
++&ipcc1 {
++	status = "okay";
++};
++
+ &optee {
+ 	bootph-all;
+ };
+-- 
+2.53.0
+

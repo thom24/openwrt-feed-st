@@ -1,0 +1,54 @@
+From f181b62133ad2581448360b33f4e475f8099079a Mon Sep 17 00:00:00 2001
+From: Etienne Carriere <etienne.carriere@foss.st.com>
+Date: Tue, 31 Mar 2026 17:03:14 +0200
+Subject: [PATCH] tee: optee: move SMC ABI macros definition
+
+Move definition of macros OPTEE_SCM_FUNCID_CALL_WITH_{RPC|REGD}_ARG
+to better reflect the function IDs order.
+
+Change-Id: I5ed5a58302afc1adc3ead0678c51b74fbc47a905
+Signed-off-by: Etienne Carriere <etienne.carriere@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/466079
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/552497
+Reviewed-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+Tested-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ drivers/tee/optee/optee_smc.h | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/tee/optee/optee_smc.h b/drivers/tee/optee/optee_smc.h
+index bb23135caef4..d2cdaaa7fbe2 100644
+--- a/drivers/tee/optee/optee_smc.h
++++ b/drivers/tee/optee/optee_smc.h
+@@ -454,6 +454,12 @@ struct optee_smc_disable_shm_cache_result {
+ #define OPTEE_SMC_IT_NOTIF_VALUE_VALID		BIT(0)
+ #define OPTEE_SMC_IT_NOTIF_VALUE_PENDING	BIT(1)
+ 
++/* See OPTEE_SMC_CALL_WITH_RPC_ARG above */
++#define OPTEE_SMC_FUNCID_CALL_WITH_RPC_ARG	18
++
++/* See OPTEE_SMC_CALL_WITH_REGD_ARG above */
++#define OPTEE_SMC_FUNCID_CALL_WITH_REGD_ARG	19
++
+ /*
+  * Notification that OP-TEE generates and interruption.
+  */
+@@ -465,11 +471,6 @@ struct optee_smc_disable_shm_cache_result {
+ #define OPTEE_SMC_SET_IT_NOTIF_MASK \
+ 	OPTEE_SMC_FAST_CALL_VAL(OPTEE_SMC_FUNCID_SET_IT_NOTIF_MASK)
+ 
+-/* See OPTEE_SMC_CALL_WITH_RPC_ARG above */
+-#define OPTEE_SMC_FUNCID_CALL_WITH_RPC_ARG	18
+-
+-/* See OPTEE_SMC_CALL_WITH_REGD_ARG above */
+-#define OPTEE_SMC_FUNCID_CALL_WITH_REGD_ARG	19
+ /*
+  * Get protected memory config
+  *
+-- 
+2.53.0
+

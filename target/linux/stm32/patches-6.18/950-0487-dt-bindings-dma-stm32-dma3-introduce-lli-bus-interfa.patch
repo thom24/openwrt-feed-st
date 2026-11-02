@@ -1,0 +1,50 @@
+From d2e8fc5052c8ff77a908434946d47a9655916c40 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 4 Nov 2025 11:20:21 +0100
+Subject: [PATCH] dt-bindings: dma: stm32-dma3: introduce lli-bus-interface
+ property
+
+STM32 DMA3 has up to two master ports: it always has port 0 and may have
+port 1. Depending on hardware configuration, ports can be AHB or AXI.
+Depending on where linked-list items are allocated or on port 0 usage,
+the user may want to use the second port if available.
+The lli-bus-interface property can be set to 0 to select port 0 or to 1
+to select port 1. If this property is not defined, port 0 is selected by
+default.
+
+Change-Id: Ife80514f0db50745eec3f805af97c64f5e3806d5
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+---
+ .../devicetree/bindings/dma/stm32/st,stm32-dma3.yaml     | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma3.yaml b/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma3.yaml
+index cb4d364ab29a..7c0056f9378a 100644
+--- a/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma3.yaml
++++ b/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma3.yaml
+@@ -48,6 +48,14 @@ properties:
+   resets:
+     maxItems: 1
+ 
++  lli-bus-interface:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [0, 1]
++    default: 0
++    description:
++      To select port 1 for fetching linked-list items (LLIs).
++      If not defined, port 0 is used by default.
++
+   memory-region:
+     maxItems: 1
+     description:
+@@ -157,6 +165,7 @@ examples:
+                    <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
+       clocks = <&rcc CK_BUS_HPDMA1>;
+       #dma-cells = <3>;
++      lli-bus-interface = <1>;
+       memory-region = <&dma_lli>;
+     };
+ ...
+-- 
+2.53.0
+

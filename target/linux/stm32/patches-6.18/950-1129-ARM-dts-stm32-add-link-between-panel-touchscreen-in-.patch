@@ -1,0 +1,64 @@
+From e5d2e2c4d608461fe2a5f3f4eccd145199654e78 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Fri, 9 Dec 2022 17:34:36 +0100
+Subject: [PATCH] ARM: dts: stm32: add link between panel & touchscreen in
+ stm32mp157x-dk2 board
+
+Make sure that panel is suspended after ft6x36 touchscreen and
+resumed before it.
+
+Change-Id: I41ae2eaf8ab4452b03a52b21226f5a0334c7e3bb
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/580548
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp157c-dk2-no-scmi.dts | 3 ++-
+ arch/arm/boot/dts/st/stm32mp157f-dk2.dts         | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2-no-scmi.dts
+index 251cd246da29..e5ab4cfc8f2d 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-dk2-no-scmi.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-dk2-no-scmi.dts
+@@ -42,7 +42,7 @@ &dsi {
+ 	#size-cells = <0>;
+ 	status = "okay";
+ 
+-	panel@0 {
++	panel: panel@0 {
+ 		compatible = "orisetech,otm8009a";
+ 		reg = <0>;
+ 		reset-gpios = <&gpioe 4 GPIO_ACTIVE_LOW>;
+@@ -80,6 +80,7 @@ touchscreen@38 {
+ 		touchscreen-size-y = <800>;
+ 		vcc-supply = <&v3v3>;
+ 		iovcc-supply = <&v3v3>;
++		panel = <&panel>;
+ 	};
+ };
+ 
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
+index 2826481d15f1..7c64ec78c94b 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
+@@ -68,7 +68,7 @@ &dsi {
+ 	#size-cells = <0>;
+ 	status = "okay";
+ 
+-	panel@0 {
++	panel: panel@0 {
+ 		compatible = "orisetech,otm8009a";
+ 		reg = <0>;
+ 		reset-gpios = <&gpioe 4 GPIO_ACTIVE_LOW>;
+@@ -160,6 +160,7 @@ touchscreen@38 {
+ 		touchscreen-size-y = <800>;
+ 		vcc-supply = <&v3v3>;
+ 		iovcc-supply = <&v3v3>;
++		panel = <&panel>;
+ 	};
+ };
+ 
+-- 
+2.53.0
+

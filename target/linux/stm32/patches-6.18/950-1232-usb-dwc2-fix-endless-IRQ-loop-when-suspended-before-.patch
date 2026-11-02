@@ -1,0 +1,38 @@
+From 48afef1ed1cd33af6ee86a0819cd6bad32f0e415 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Mon, 25 Nov 2024 14:29:13 +0100
+Subject: [PATCH] usb: dwc2: fix endless IRQ loop when suspended before session
+ end
+
+There may be a race, with suspend interrupt, that puts the controller
+into DWC2_L2 state, and enters clock gating. Then the session end irq
+is then asserted, the driver simply set lx_state = DWC2_L3, without
+exiting clock gating. Then the core may fall into interrupt loop,
+not being able to clear subsequent interrupt flags.
+
+So take care to exit clock gating, before setting DWC2_L3 state.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I99da2b9b8f9979b2ce4f7080ecfbaf5816ebff61
+---
+ drivers/usb/dwc2/core_intr.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
+index 90b969abcf7f..16a429327340 100644
+--- a/drivers/usb/dwc2/core_intr.c
++++ b/drivers/usb/dwc2/core_intr.c
+@@ -98,7 +98,9 @@ static void dwc2_handle_otg_intr(struct dwc2_hsotg *hsotg)
+ 		gotgctl = dwc2_readl(hsotg, GOTGCTL);
+ 
+ 		if (dwc2_is_device_mode(hsotg)) {
+-			if (hsotg->params.eusb2_disc) {
++			if (hsotg->params.eusb2_disc ||
++			    (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
++			     hsotg->bus_suspended && !hsotg->params.no_clock_gating)) {
+ 				/* Clear the Gate hclk. */
+ 				pcgctl = dwc2_readl(hsotg, PCGCTL);
+ 				pcgctl &= ~PCGCTL_GATEHCLK;
+-- 
+2.53.0
+

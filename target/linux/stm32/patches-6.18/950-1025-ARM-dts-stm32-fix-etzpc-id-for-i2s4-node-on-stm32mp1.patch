@@ -1,0 +1,36 @@
+From 4e17df43251af597b035bb9af3fd981bb60cddc2 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Wed, 15 Apr 2026 14:28:53 +0200
+Subject: [PATCH] ARM: dts: stm32: fix etzpc id for i2s4 node on stm32mp13
+
+Replace ETZPC id 13 (STM32MP1_ETZPC_STGENC_ID) in I2S4 node by
+id 18 (STM32MP1_ETZPC_SPI4_ID).
+
+Fixes: c83509527529 ("ARM: dts: stm32: put ETZPC as an access controller for STM32MP13x boards")
+Change-Id: Ic8207ed995f4749f910bb5d34cd7a6f326298b0f
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/568341
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp131.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
+index 88c2452b0172..db8e286f201b 100644
+--- a/arch/arm/boot/dts/st/stm32mp131.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
+@@ -1443,7 +1443,7 @@ i2s4: audio-controller@4c002000 {
+ 				dmas = <&dmamux1 83 0x400 0x01>,
+ 				       <&dmamux1 84 0x400 0x01>;
+ 				dma-names = "rx", "tx";
+-				access-controllers = <&etzpc 13>;
++				access-controllers = <&etzpc 18>;
+ 				status = "disabled";
+ 			};
+ 
+-- 
+2.53.0
+

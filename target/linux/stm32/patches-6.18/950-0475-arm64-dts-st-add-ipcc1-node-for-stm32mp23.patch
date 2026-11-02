@@ -1,0 +1,44 @@
+From 55a7704404bcd645f037f2e336d400b3f87fafe8 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Wed, 11 Feb 2026 17:35:54 +0100
+Subject: [PATCH] arm64: dts: st: add ipcc1 node for stm32mp23
+
+Add IPCC node for stm32mp23x platform.
+
+Change-Id: I2cba2616806a9d02f20088250f3eaa80a5de99ff
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/539861
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp231.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+index f0f61ee08b88..3c33bffdb0d8 100644
+--- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+@@ -276,6 +276,18 @@ hpdma3: dma-controller@40420000 {
+ 			#dma-cells = <3>;
+ 		};
+ 
++		ipcc1: mailbox@40490000 {
++			compatible = "st,stm32mp1-ipcc";
++			#mbox-cells = <1>;
++			reg = <0x40490000 0x400>;
++			st,proc-id = <0>;
++			interrupts = <GIC_SPI 171 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 172 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "rx", "tx";
++			clocks = <&scmi_clk CK_SCMI_IPCC1>;
++			status = "disabled";
++		};
++
+ 		rifsc: bus@42080000 {
+ 			compatible = "st,stm32mp25-rifsc", "simple-bus";
+ 			reg = <0x42080000 0x1000>;
+-- 
+2.53.0
+

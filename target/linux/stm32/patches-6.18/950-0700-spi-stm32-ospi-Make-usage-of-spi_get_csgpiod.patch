@@ -1,0 +1,28 @@
+From de114aa3e55d1ffc617559cb7dcd59cb42c34ce3 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Fri, 6 Mar 2026 11:22:33 +0100
+Subject: [PATCH] spi: stm32-ospi: Make usage of spi_get_csgpiod()
+
+Replace spi->cs_gpiod() by spi_get_csgpiod().
+
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+---
+ drivers/spi/spi-stm32-ospi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
+index 92e7c02254d4..bf8a76eaff8e 100644
+--- a/drivers/spi/spi-stm32-ospi.c
++++ b/drivers/spi/spi-stm32-ospi.c
+@@ -1402,7 +1402,7 @@ static int stm32_ospi_transfer_one_message(struct spi_controller *ctrl,
+ 	struct spi_transfer *transfer;
+ 	struct spi_device *spi = msg->spi;
+ 	struct spi_mem_op op;
+-	struct gpio_desc *cs_gpiod = spi->cs_gpiod[ffs(spi->cs_index_mask) - 1];
++	struct gpio_desc *cs_gpiod = spi_get_csgpiod(spi, 0);
+ 	int ret = 0;
+ 
+ 	if (!cs_gpiod)
+-- 
+2.53.0
+

@@ -1,0 +1,46 @@
+From fd31b19e901499847738090fc2625f25fe623d4b Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Mon, 1 Jun 2026 17:24:37 +0200
+Subject: [PATCH] PCI: stm32: don't enable wakeup by default
+
+The wakeup is enabled by default on the PCIe controller, even if no
+card or active wakeup source is plugged in. Choice is made to
+only enable wakeup capability, but keep it disabled by default.
+This allows to reach the deepest platform low power state, upon
+suspend request.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I4293b5c833bc2ba7ad0fd237133a19dc98262b5f
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/573373
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+---
+ drivers/pci/controller/dwc/pcie-stm32.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/pci/controller/dwc/pcie-stm32.c b/drivers/pci/controller/dwc/pcie-stm32.c
+index 1be196d50883..295f70ce6311 100644
+--- a/drivers/pci/controller/dwc/pcie-stm32.c
++++ b/drivers/pci/controller/dwc/pcie-stm32.c
+@@ -311,7 +311,7 @@ static int stm32_pcie_probe(struct platform_device *pdev)
+ 		goto err_disable_clk;
+ 
+ 	if (stm32_pcie->wake_gpio)
+-		device_init_wakeup(dev, true);
++		device_set_wakeup_capable(dev, true);
+ 
+ 	return 0;
+ 
+@@ -330,7 +330,7 @@ static void stm32_pcie_remove(struct platform_device *pdev)
+ 	struct dw_pcie_rp *pp = &stm32_pcie->pci.pp;
+ 
+ 	if (stm32_pcie->wake_gpio)
+-		device_init_wakeup(&pdev->dev, false);
++		device_set_wakeup_capable(&pdev->dev, false);
+ 
+ 	dw_pcie_host_deinit(pp);
+ 
+-- 
+2.53.0
+

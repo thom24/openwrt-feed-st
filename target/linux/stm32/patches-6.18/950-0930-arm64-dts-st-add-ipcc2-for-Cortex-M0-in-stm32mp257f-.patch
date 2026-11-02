@@ -1,0 +1,37 @@
+From 5b2493a72069c42eed479e7a0709a8d636f77aec Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Wed, 1 Apr 2026 18:36:19 +0200
+Subject: [PATCH] arm64: dts: st: add ipcc2 for Cortex-M0 in stm32mp257f-dk
+
+Add ipcc2 node used for Cortex-M0.
+
+Change-Id: I80d1fc3d2bf304756e92da3515b307c0e3c4c4e8
+Signed-off-by: Gwenael Treuveur <gwenael.treuveur@foss.st.com>
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/552518
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index 1e7f9e3debc6..468cc5eb5805 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -342,6 +342,10 @@ &ipcc1 {
+ 	status = "okay";
+ };
+ 
++&ipcc2 {
++	status = "okay";
++};
++
+ &m33_rproc {
+ 	mboxes = <&ipcc1 0x100>, <&ipcc1 0x101>, <&ipcc1 2>;
+ 	mbox-names = "vq0", "vq1", "shutdown";
+-- 
+2.53.0
+

@@ -1,0 +1,50 @@
+From 73873be2498058c1609a8ae2b7cca64455c5906b Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Thu, 18 Nov 2021 18:15:41 +0100
+Subject: [PATCH] usb: dwc2: hcd: fix a possible interrupt storm on stm32mp15
+
+On stm32mp15, upon resume from low power (stop) mode, a port interrupt
+storm may be seen before the hardware is accessible.
+The core is able to generate interrupts, when it is re-initialized
+in dwc2_hcd_resume(). So set the HCD_FLAG_HW_ACCESSIBLE flag before
+powering up the controller.
+
+Fixes: ef5e0eec4764 ("usb: dwc2: Add clock gating exiting flow by system resume")
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I6bdfd13c1a8919005e11c0217619ea8890fb2944
+---
+ drivers/usb/dwc2/hcd.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+index dab6d9f83128..2d9e9bbd2715 100644
+--- a/drivers/usb/dwc2/hcd.c
++++ b/drivers/usb/dwc2/hcd.c
+@@ -4458,6 +4458,12 @@ static int _dwc2_hcd_resume(struct usb_hcd *hcd)
+ 		set_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
+ 		break;
+ 	case DWC2_POWER_DOWN_PARAM_NONE:
++		/*
++		 * Set HW accessible bit before powering on the controller
++		 * since an interrupt may rise.
++		 */
++		set_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
++
+ 		/*
+ 		 * If not hibernation nor partial power down are supported,
+ 		 * port resume is done using the clock gating programming flow.
+@@ -4474,11 +4480,6 @@ static int _dwc2_hcd_resume(struct usb_hcd *hcd)
+ 		dwc2_hcd_reinit(hsotg);
+ 		spin_lock_irqsave(&hsotg->lock, flags);
+ 
+-		/*
+-		 * Set HW accessible bit before powering on the controller
+-		 * since an interrupt may rise.
+-		 */
+-		set_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
+ 		break;
+ 	default:
+ 		hsotg->lx_state = DWC2_L0;
+-- 
+2.53.0
+

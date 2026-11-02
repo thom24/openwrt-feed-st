@@ -1,0 +1,45 @@
+From c59050588fa82d37d073dbc2de487dece9112cd8 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Mon, 16 Feb 2026 09:21:05 +0100
+Subject: [PATCH] arm64: dts: st: add pinctrl properties for serial console on
+ stm32mp215f-dk
+
+USART2 is used as the serial console on the stm32mp215f-dk. Add pinctrl
+properties to properly manage USART2 for the serial console.
+
+Change-Id: I2d9cc5eb84448f7406798fae7208981227d769a5
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/536675
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index ef0bfb9723da..397f64b95645 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -154,5 +154,19 @@ &syscfg {
+ 
+ &usart2 {
+ 	bootph-all;
++	pinctrl-names = "default", "idle", "sleep";
++	pinctrl-0 = <&usart2_pins_a>;
++	pinctrl-1 = <&usart2_idle_pins_a>;
++	pinctrl-2 = <&usart2_sleep_pins_a>;
+ 	status = "okay";
+ };
++
++&usart2_pins_a {
++	bootph-all;
++	pins1 {
++		bootph-all;
++	};
++	pins2 {
++		bootph-all;
++	};
++};
+-- 
+2.53.0
+

@@ -1,0 +1,103 @@
+From b48bdaea6a27f0067762fe6a021896dfe04ffa21 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Fri, 24 Apr 2026 11:25:36 +0200
+Subject: [PATCH] arm64: dts: st: add GIC maintenance interrupt on stm32mp2
+
+Enable the GIC maintenance interrupt so virutal interrupt state
+can be serviced correctly on STM32MP2.
+
+Change-Id: I4b1c4f2261b4cff897ae9695adf54a81aca74239
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/560886
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 2 ++
+ arch/arm64/boot/dts/st/stm32mp231.dtsi | 2 ++
+ arch/arm64/boot/dts/st/stm32mp233.dtsi | 4 ++++
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 7 +++++--
+ arch/arm64/boot/dts/st/stm32mp253.dtsi | 4 ++++
+ 5 files changed, 17 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index c5774de01928..df67b278878d 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -2455,6 +2455,8 @@ intc: interrupt-controller@4ac10000 {
+ 			      <0x4ac60000 0x0 0x20000>;
+ 			#interrupt-cells = <3>;
+ 			interrupt-controller;
++			interrupt-parent = <&intc>;
++			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
+ 		};
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+index 10b653c5d141..c1b0050d9f3b 100644
+--- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+@@ -3040,6 +3040,8 @@ intc: interrupt-controller@4ac10000 {
+ 			      <0x4ac60000 0x20000>;
+ 			#interrupt-cells = <3>;
+ 			interrupt-controller;
++			interrupt-parent = <&intc>;
++			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
+ 		};
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/st/stm32mp233.dtsi b/arch/arm64/boot/dts/st/stm32mp233.dtsi
+index b62264b66278..4e52972c60c0 100644
+--- a/arch/arm64/boot/dts/st/stm32mp233.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp233.dtsi
+@@ -91,6 +91,10 @@ etm1_out_port: endpoint {
+ 	};
+ };
+ 
++&intc {
++	interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
++};
++
+ &optee {
+ 	interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
+ };
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index 46fa9a27ba6b..905dedfd3dfc 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -163,12 +163,15 @@ scmi_vdda18adc: regulator@7 {
+ 
+ 	intc: interrupt-controller@4ac00000 {
+ 		compatible = "arm,gic-400";
+-		#interrupt-cells = <3>;
+-		interrupt-controller;
+ 		reg = <0x0 0x4ac10000 0x0 0x1000>,
+ 		      <0x0 0x4ac20000 0x0 0x20000>,
+ 		      <0x0 0x4ac40000 0x0 0x20000>,
+ 		      <0x0 0x4ac60000 0x0 0x20000>;
++		#interrupt-cells = <3>;
++		interrupt-controller;
++		interrupt-parent = <&intc>;
++		interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
++
+ 		#address-cells = <2>;
+ 		#size-cells = <2>;
+ 		ranges;
+diff --git a/arch/arm64/boot/dts/st/stm32mp253.dtsi b/arch/arm64/boot/dts/st/stm32mp253.dtsi
+index a72bf9ef157f..7508d5226bc3 100644
+--- a/arch/arm64/boot/dts/st/stm32mp253.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp253.dtsi
+@@ -91,6 +91,10 @@ etm1_out_port: endpoint {
+ 	};
+ };
+ 
++&intc {
++	interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
++};
++
+ &optee {
+ 	interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
+ };
+-- 
+2.53.0
+

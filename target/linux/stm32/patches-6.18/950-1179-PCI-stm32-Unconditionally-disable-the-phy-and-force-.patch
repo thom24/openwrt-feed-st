@@ -1,0 +1,70 @@
+From 680bbb8253ae34e29cfc4606d1263baab9098ab4 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Thu, 23 Jul 2026 12:29:30 +0200
+Subject: [PATCH] PCI: stm32: Unconditionally disable the phy and force the
+ link down in suspend
+
+The generic DWC suspend path may leave the link active when ASPM L1 is
+enabled, assuming a low-latency wake-capable PCIe retention path.
+This breaks the PHY resume assumption that the link is down.
+Thus force the link down here and unconditionally disable the combophy.
+
+Fixes: 63a562b33a9c ("PCI: stm32: Add PCIe host support for STM32MP25")
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: If41f99bc07e42b4b2713e0a7b877d57096d046d6
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/591503
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/pci/controller/dwc/pcie-stm32.c | 22 ++++++++++++++--------
+ 1 file changed, 14 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/pci/controller/dwc/pcie-stm32.c b/drivers/pci/controller/dwc/pcie-stm32.c
+index 2e7a959391ff..cc8fabdfe95d 100644
+--- a/drivers/pci/controller/dwc/pcie-stm32.c
++++ b/drivers/pci/controller/dwc/pcie-stm32.c
+@@ -74,12 +74,20 @@ static int stm32_pcie_suspend_noirq(struct device *dev)
+ 	if (ret)
+ 		return ret;
+ 
++	/*
++	 * The generic DWC suspend path may leave the link active when ASPM L1 is
++	 * enabled, so force the link down here.
++	 */
++	if (!stm32_pcie->pci.suspended) {
++		dw_pcie_stop_link(&stm32_pcie->pci);
++		stm32_pcie->pci.suspended = true;
++	}
++
+ 	stm32_pcie_assert_perst(stm32_pcie);
+ 
+ 	clk_disable_unprepare(stm32_pcie->clk);
+ 
+-	if (!device_wakeup_path(dev))
+-		phy_exit(stm32_pcie->phy);
++	phy_exit(stm32_pcie->phy);
+ 
+ 	return pinctrl_pm_select_sleep_state(dev);
+ }
+@@ -100,12 +108,10 @@ static int stm32_pcie_resume_noirq(struct device *dev)
+ 		return ret;
+ 	}
+ 
+-	if (!device_wakeup_path(dev)) {
+-		ret = phy_init(stm32_pcie->phy);
+-		if (ret) {
+-			pinctrl_pm_select_default_state(dev);
+-			return ret;
+-		}
++	ret = phy_init(stm32_pcie->phy);
++	if (ret) {
++		pinctrl_pm_select_default_state(dev);
++		return ret;
+ 	}
+ 
+ 	ret = clk_prepare_enable(stm32_pcie->clk);
+-- 
+2.53.0
+

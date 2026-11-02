@@ -1,0 +1,90 @@
+From 77403eb865028fec003a479d2dd8f8048e2115d2 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Mon, 9 Dec 2024 11:48:54 +0100
+Subject: [PATCH] clocksource: stm32-lptimer: add pm runtime support
+
+Enable PM runtime support to report LP timer clocksource power state.
+On call to set_timer callback, the timer active state is set.
+The active state remains set as long as the system does not go to low
+power states.
+This has no incidence for LP timers which are not associated to a power
+domain.
+
+Change-Id: Ib7eeee47f2147ad71865742826e06816eb3c7edc
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+---
+ drivers/clocksource/timer-stm32-lp.c | 30 ++++++++++++++++++----------
+ 1 file changed, 19 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/clocksource/timer-stm32-lp.c b/drivers/clocksource/timer-stm32-lp.c
+index 0beeb485a431..bc03e0b65d1b 100644
+--- a/drivers/clocksource/timer-stm32-lp.c
++++ b/drivers/clocksource/timer-stm32-lp.c
+@@ -14,6 +14,7 @@
+ #include <linux/of_address.h>
+ #include <linux/of_irq.h>
+ #include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
+ #include <linux/pm_wakeirq.h>
+ 
+ #define CFGR_PSC_OFFSET		9
+@@ -54,17 +55,8 @@ static int stm32mp25_clkevent_lp_set_evt(struct stm32_lp_private *priv, unsigned
+ 	int ret;
+ 	u32 val;
+ 
+-	regmap_read(priv->reg, STM32_LPTIM_CR, &val);
+-	if (!FIELD_GET(STM32_LPTIM_ENABLE, val)) {
+-		/* Enable LPTIMER to be able to write into IER and ARR registers */
+-		regmap_write(priv->reg, STM32_LPTIM_CR, STM32_LPTIM_ENABLE);
+-		/*
+-		 * After setting the ENABLE bit, a delay of two counter clock cycles is needed
+-		 * before the LPTIM is actually enabled. For 32KHz rate, this makes approximately
+-		 * 62.5 micro-seconds, round it up.
+-		 */
+-		udelay(63);
+-	}
++	/* Enable LPTIMER to be able to write into IER and ARR registers */
++	regmap_write(priv->reg, STM32_LPTIM_CR, STM32_LPTIM_ENABLE);
+ 	/* set next event counter */
+ 	regmap_write(priv->reg, STM32_LPTIM_ARR, evt);
+ 	/* enable ARR interrupt */
+@@ -106,6 +98,14 @@ static int stm32_clkevent_lp_set_timer(unsigned long evt,
+ 	struct stm32_lp_private *priv = to_priv(clkevt);
+ 	int ret;
+ 
++	if (!pm_runtime_active(priv->dev)) {
++		ret = pm_runtime_resume_and_get(priv->dev);
++		if (ret) {
++			dev_err(priv->dev, "pm runtime get returned %d\n", ret);
++			return ret;
++		}
++	}
++
+ 	if (priv->version == STM32_LPTIM_VERR_23) {
+ 		ret = stm32mp25_clkevent_lp_set_evt(priv, evt);
+ 		if (ret)
+@@ -183,6 +183,8 @@ static void stm32_clkevent_lp_suspend(struct clock_event_device *clkevt)
+ 
+ 	stm32_clkevent_lp_shutdown(clkevt);
+ 
++	pm_runtime_put_sync_suspend(priv->dev);
++
+ 	/* balance clk_prepare_enable() from the probe */
+ 	clk_disable_unprepare(priv->clk);
+ }
+@@ -262,6 +264,12 @@ static int stm32_clkevent_lp_probe(struct platform_device *pdev)
+ 
+ 	stm32_clkevent_lp_set_prescaler(priv, &rate);
+ 
++	ret = devm_pm_runtime_enable(&pdev->dev);
++	if (ret)
++		return ret;
++
++	pm_runtime_irq_safe(&pdev->dev);
++
+ 	priv->dev = &pdev->dev;
+ 
+ 	stm32_clkevent_lp_init(priv, pdev->dev.parent->of_node, rate);
+-- 
+2.53.0
+

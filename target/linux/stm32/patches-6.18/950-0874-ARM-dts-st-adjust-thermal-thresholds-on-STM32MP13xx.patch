@@ -1,0 +1,149 @@
+From 4129fe7b23293787378672540c1f412457f8040f Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Mon, 24 Feb 2020 15:21:34 +0100
+Subject: [PATCH] ARM: dts: st: adjust thermal thresholds on STM32MP13xx
+
+Rules established by STMicroelectronics:
+-Tcritical = Tj - (sensor tolerance). With Tj the junction temperature.
+-Tlimitation = 90% of Tcritical.
+
+Which gives for STM32MP13 series:
+--------------------
+- STM32MP13xA, STM32MP13xC:     Tcritical = 125-5 = 120C
+- STM32MP13xD, STM32MP13xF:     Tcritical = 105-5 = 100C
+
+- STM32MP13xA, STM32MP13xC:     Tlimitation = NA
+                                (already at nominal voltage)
+- STM32MP13xD, STM32MP13xF:     Tlimitation = 90C
+
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: I821cca1a397230eef13228475115a2c6e60774ac
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/390964
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/551277
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp131.dtsi  | 15 ++++----------
+ arch/arm/boot/dts/st/stm32mp13xd.dtsi | 28 +++++++++++++++++++++++++++
+ arch/arm/boot/dts/st/stm32mp13xf.dtsi | 23 ++++++++++++++++++++++
+ 3 files changed, 55 insertions(+), 11 deletions(-)
+ create mode 100644 arch/arm/boot/dts/st/stm32mp13xd.dtsi
+
+diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
+index 9b9712ee20c4..88c2452b0172 100644
+--- a/arch/arm/boot/dts/st/stm32mp131.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
+@@ -8,6 +8,7 @@
+ #include <dt-bindings/clock/stm32mp13-clks.h>
+ #include <dt-bindings/regulator/st,stm32mp13-regulator.h>
+ #include <dt-bindings/reset/stm32mp13-resets.h>
++#include <dt-bindings/thermal/thermal.h>
+ 
+ / {
+ 	#address-cells = <1>;
+@@ -23,6 +24,7 @@ cpu0: cpu@0 {
+ 			reg = <0>;
+ 			power-domains = <&scmi_perf 0>;
+ 			power-domain-names = "perf";
++			#cooling-cells = <2>;
+ 		};
+ 	};
+ 
+@@ -124,21 +126,12 @@ cpu_thermal: cpu-thermal {
+ 			thermal-sensors = <&dts>;
+ 
+ 			trips {
+-				cpu_alert1: cpu-alert1 {
+-					temperature = <85000>;
+-					hysteresis = <0>;
+-					type = "passive";
+-				};
+-
+-				cpu-crit {
++				cpu_crit: cpu-crit0 {
+ 					temperature = <120000>;
+-					hysteresis = <0>;
++					hysteresis = <1000>;
+ 					type = "critical";
+ 				};
+ 			};
+-
+-			cooling-maps {
+-			};
+ 		};
+ 	};
+ 
+diff --git a/arch/arm/boot/dts/st/stm32mp13xd.dtsi b/arch/arm/boot/dts/st/stm32mp13xd.dtsi
+new file mode 100644
+index 000000000000..c71e528b06e8
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp13xd.dtsi
+@@ -0,0 +1,28 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
++/*
++ * Copyright (C) STMicroelectronics 2026 - All Rights Reserved
++ * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
++ */
++
++&cpu_thermal {
++	trips {
++		cpu_alert: cpu-alert0 {
++			temperature = <90000>;
++			hysteresis = <10000>;
++			type = "passive";
++		};
++
++		cpu_crit: cpu-crit0 {
++			temperature = <100000>;
++			hysteresis = <1000>;
++			type = "critical";
++		};
++	};
++
++	cooling-maps {
++		map0 {
++			trip = <&cpu_alert>;
++			cooling-device = <&cpu0 1 1>;
++		};
++	};
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp13xf.dtsi b/arch/arm/boot/dts/st/stm32mp13xf.dtsi
+index 015d214aa560..4cdfd99a9894 100644
+--- a/arch/arm/boot/dts/st/stm32mp13xf.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp13xf.dtsi
+@@ -4,6 +4,29 @@
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+  */
+ 
++&cpu_thermal {
++	trips {
++		cpu_alert: cpu-alert0 {
++			temperature = <90000>;
++			hysteresis = <10000>;
++			type = "passive";
++		};
++
++		cpu_crit: cpu-crit0 {
++			temperature = <100000>;
++			hysteresis = <1000>;
++			type = "critical";
++		};
++	};
++
++	cooling-maps {
++		map0 {
++			trip = <&cpu_alert>;
++			cooling-device = <&cpu0 1 1>;
++		};
++	};
++};
++
+ &etzpc {
+ 	cryp: crypto@54002000 {
+ 		compatible = "st,stm32mp1-cryp";
+-- 
+2.53.0
+

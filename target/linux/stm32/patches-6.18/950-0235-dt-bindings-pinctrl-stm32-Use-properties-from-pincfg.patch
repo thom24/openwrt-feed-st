@@ -1,0 +1,75 @@
+From 3045d4c94ea138440ea76a8b3ad474fbe4f3432b Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Mon, 13 Oct 2025 18:54:22 +0200
+Subject: [PATCH] dt-bindings: pinctrl: stm32: Use properties from
+ pincfg-node.yaml
+
+Don't re-declare the standard pincfg properties; take them from
+the default schema.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+---
+ .../bindings/pinctrl/st,stm32-pinctrl.yaml    | 27 ++++++++-----------
+ 1 file changed, 11 insertions(+), 16 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
+index 961161c2ab62..27c0dd7a8df0 100644
+--- a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
+@@ -151,6 +151,8 @@ patternProperties:
+           pinctrl group available on the machine. Each subnode will list the
+           pins it needs, and how they should be configured, with regard to muxer
+           configuration, pullups, drive, output high/low and output speed.
++        $ref: /schemas/pinctrl/pincfg-node.yaml
++
+         properties:
+           pinmux:
+             $ref: /schemas/types.yaml#/definitions/uint32-array
+@@ -195,26 +197,19 @@ patternProperties:
+                           pinmux = <STM32_PINMUX('A', 9, RSVD)>;
+                };
+ 
+-          bias-disable:
+-            type: boolean
++          bias-disable: true
+ 
+-          bias-pull-down:
+-            type: boolean
++          bias-pull-down: true
+ 
+-          bias-pull-up:
+-            type: boolean
++          bias-pull-up: true
+ 
+-          drive-push-pull:
+-            type: boolean
++          drive-push-pull: true
+ 
+-          drive-open-drain:
+-            type: boolean
++          drive-open-drain: true
+ 
+-          output-low:
+-            type: boolean
++          output-low: true
+ 
+-          output-high:
+-            type: boolean
++          output-high: true
+ 
+           slew-rate:
+             description: |
+@@ -222,8 +217,8 @@ patternProperties:
+               1: Medium speed
+               2: Fast speed
+               3: High speed
+-            $ref: /schemas/types.yaml#/definitions/uint32
+-            enum: [0, 1, 2, 3]
++            minimum: 0
++            maximum: 3
+ 
+         required:
+           - pinmux
+-- 
+2.53.0
+

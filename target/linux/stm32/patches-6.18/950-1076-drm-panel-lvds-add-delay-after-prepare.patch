@@ -1,0 +1,46 @@
+From f871630938834b9174f5e4b1b0144b1e500dc3cc Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Fri, 13 Mar 2026 16:20:16 +0100
+Subject: [PATCH] drm/panel: lvds: add delay after prepare
+
+Delays are missing to the panel lvds. Some graphical effects can be
+observed at the beginning of the display.
+
+Change-Id: I94eb3e8117c5b637be6c1a568c01d4f0cede9efe
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/441603
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/gpu/drm/panel/panel-lvds.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/gpu/drm/panel/panel-lvds.c b/drivers/gpu/drm/panel/panel-lvds.c
+index 46b07f38559f..feec2690cb82 100644
+--- a/drivers/gpu/drm/panel/panel-lvds.c
++++ b/drivers/gpu/drm/panel/panel-lvds.c
+@@ -8,6 +8,7 @@
+  * Contact: Laurent Pinchart (laurent.pinchart@ideasonboard.com)
+  */
+ 
++#include <linux/delay.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+@@ -76,6 +77,13 @@ static int panel_lvds_prepare(struct drm_panel *panel)
+ 	if (lvds->enable_gpio)
+ 		gpiod_set_value_cansleep(lvds->enable_gpio, 1);
+ 
++	/*
++	 * ETML070016NDHA LVDS panel requires at least 16ms and several VSD cycles
++	 * between enable regulators and first frame. The delay sets by defaults to 30ms,
++	 * device tree needs to be updated to add new properties for delays.
++	 */
++	msleep(30);
++
+ 	return 0;
+ }
+ 
+-- 
+2.53.0
+

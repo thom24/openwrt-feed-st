@@ -1,0 +1,51 @@
+From 94509d33dc69090bb97bb398b36c7dbc16551cb5 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Mon, 27 Feb 2023 15:46:00 +0100
+Subject: [PATCH] dt-bindings: media: st: dcmi: add DMA-MDMA chaining
+ properties
+
+Add properties update and new sram property necessary in order
+to enable the DMA-MDMA chaining.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: I93378c024d255bb2f3c26f813bdfcfd23fe78f01
+---
+ .../devicetree/bindings/media/st,stm32-dcmi.yaml      | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml b/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
+index 34147127192f..979360e9099e 100644
+--- a/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
++++ b/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
+@@ -27,11 +27,14 @@ properties:
+       - const: mclk
+ 
+   dmas:
+-    maxItems: 1
++    minItems: 1
++    maxItems: 2
+ 
+   dma-names:
+     items:
+       - const: tx
++      - const: mdma_tx
++    minItems: 1
+ 
+   resets:
+     maxItems: 1
+@@ -40,6 +43,12 @@ properties:
+     minItems: 1
+     maxItems: 2
+ 
++  sram:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      phandle to a reserved SRAM region which is used as temporary
++      storage memory between DMA and MDMA engines.
++
+   port:
+     $ref: /schemas/graph.yaml#/$defs/port-base
+     unevaluatedProperties: false
+-- 
+2.53.0
+

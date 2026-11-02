@@ -1,0 +1,194 @@
+From 8cb5185502e2a01370040daa9e4be4638b513fdc Mon Sep 17 00:00:00 2001
+From: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Date: Tue, 30 Jun 2026 16:55:02 +0200
+Subject: [PATCH] media: dcmipp: alternate interlaced support
+
+Add support of interlaced "alternate" content capture coming from
+a video device such as Renesas TW9992.
+The "alternate" interlaced content (V4L2_FIELD_ALTERNATE) sent by such
+device is composed of 2 half-height frames (even frames and odd frames
+alternated), so 2 VSYNC are needed to build a single full-height
+interlaced frame with both even and odd fields (V4L2_FIELD_INTERLACED).
+See official V4L2 documentation (1).
+This interlace mode is enabled when both conditions are met:
+ - the source subdevice pad is configured with V4L2_FIELD_ALTERNATE (2)
+ - the capture device format is set to V4L2_FIELD_INTERLACED (3)
+
+(1) https://www.kernel.org/doc/html/v6.18/userspace-api/media/v4l/
+field-order.html#field-order-top-field-first-transmitted
+(2) Setting "field:alternate" on subdev pads of media graph:
+media-ctl --set-v4l2 '"tw9992":0[fmt:UYVY8_1X16/720x576 field:alternate]'
+media-ctl --set-v4l2 '"csi":0[fmt:UYVY8_1X16/720x576 field:alternate]'
+media-ctl --set-v4l2 '"csi":1/0[fmt:UYVY8_1X16/720x576 field:alternate]'
+media-ctl --set-v4l2 '"input":2[fmt:UYVY8_1X16/720x576 field:alternate]'
+media-ctl --set-v4l2 '"isp":1[fmt:YUV8_1X24/720x576 field:alternate]'
+(3) Setting "interlace-mode=interleaved" on GStreamer v4l2src caps:
+gst-launch-1.0 v4l2src device=/dev/video1 ! "video/x-raw, width=720,\
+  height=576, format=YUY2,interlace-mode=interleaved" ! queue ! \
+  deinterlace mode=1 fields=1 ! queue ! autovideosink
+
+Change-Id: I8ee234aa25d6a34e13276980dcaa6adf0a4c97f8
+Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/606704
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Hugues FRUCHET <hugues.fruchet@st.com>
+---
+ .../st/stm32/stm32-dcmipp/dcmipp-capture.c    | 70 ++++++++++++++++++-
+ .../st/stm32/stm32-dcmipp/dcmipp-input.c      |  2 +-
+ .../st/stm32/stm32-dcmipp/dcmipp-isp.c        |  2 +-
+ .../st/stm32/stm32-dcmipp/dcmipp-pixelproc.c  |  2 +-
+ 4 files changed, 70 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
+index f4f26c71da1b..95e0d7320895 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
+@@ -240,6 +240,14 @@ struct dcmipp_capture_device {
+ 
+ 	u32 vsync_frame_refresh_cnt;
+ 	u32 frame_skip_ratio;
++
++	/*
++	 * alternate_to_interlaced : enabled when source sends V4L2_FIELD_ALTERNATE
++	 * and capture is set to V4L2_FIELD_INTERLACED.
++	 * field: current field parity (0:top/even, 1:bottom/odd).
++	 */
++	bool alternate_to_interlaced;
++	bool field;
+ };
+ 
+ static const struct dcmipp_capture_pix_map *
+@@ -437,6 +445,15 @@ static int dcmipp_capture_s_fmt_vid_cap(struct file *file, void *priv,
+ 
+ 	vcap->format = f->fmt.pix;
+ 
++	/*
++	 * Alternate to interlaced requires at least 2 buffers,
++	 * one for top and one for bottom field.
++	 * In addition, 2 extra buffers are needed to avoid starvation
++	 */
++	if (vcap->format.field == V4L2_FIELD_INTERLACED)
++		vcap->queue.min_queued_buffers =
++			min(vcap->queue.min_queued_buffers, 4);
++
+ 	return 0;
+ }
+ 
+@@ -667,6 +684,36 @@ static int dcmipp_capture_start_streaming(struct vb2_queue *vq,
+ 	if (ret)
+ 		goto err_media_pipeline_stop;
+ 
++	/*
++	 * Check if alternate to interlaced mode should be enabled:
++	 * source subdev must be sending V4L2_FIELD_ALTERNATE and capture
++	 * format must be set to V4L2_FIELD_INTERLACED.
++	 */
++	vcap->alternate_to_interlaced = false;
++	if (vcap->format.field == V4L2_FIELD_INTERLACED) {
++		struct v4l2_subdev_format source_fmt = {
++			.which = V4L2_SUBDEV_FORMAT_ACTIVE,
++		};
++		struct media_pad *pad;
++
++		pad = media_pad_remote_pad_first(&vcap->vdev.entity.pads[0]);
++		if (!pad || !is_media_entity_v4l2_subdev(pad->entity)) {
++			ret = -EINVAL;
++			v4l2_subdev_disable_streams(vcap->s_subdev,
++						    vcap->s_subdev_pad_nb, BIT_ULL(0));
++			goto err_media_pipeline_stop;
++		}
++		source_fmt.pad = pad->index;
++
++		ret = v4l2_subdev_call(vcap->s_subdev, pad, get_fmt,
++				       NULL, &source_fmt);
++		if (!ret &&
++		    source_fmt.format.field == V4L2_FIELD_ALTERNATE) {
++			vcap->alternate_to_interlaced = true;
++			dev_dbg(vcap->dev, "Alternate to interlaced mode enabled\n");
++		}
++	}
++
+ 	spin_lock_irq(&vcap->irqlock);
+ 
+ 	if (vcap->pipe_id != 0) {
+@@ -958,7 +1005,8 @@ static void dcmipp_buffer_done(struct dcmipp_capture_device *vcap,
+ 	vbuf = &buf->vb;
+ 
+ 	vbuf->sequence = vcap->sequence++;
+-	vbuf->field = V4L2_FIELD_NONE;
++	vbuf->field = vcap->alternate_to_interlaced ? V4L2_FIELD_INTERLACED :
++					 V4L2_FIELD_NONE;
+ 	vbuf->vb2_buf.timestamp = ktime_get_ns();
+ 	vb2_set_plane_payload(&vbuf->vb2_buf, 0, bytesused);
+ 	vb2_buffer_done(&vbuf->vb2_buf,
+@@ -1089,8 +1137,24 @@ static irqreturn_t dcmipp_capture_irq_thread(int irq, void *arg)
+ 		 */
+ 		if (--vcap->vsync_frame_refresh_cnt == 0) {
+ 			vcap->vsync_frame_refresh_cnt = vcap->frame_skip_ratio;
+-			swap(vcap->active, vcap->next);
+-			dcmipp_capture_set_next_frame_or_stop(vcap);
++
++			if (vcap->alternate_to_interlaced && !vcap->field) {
++				/*
++				 * Top/even field captured: keep the same
++				 * buffer but shift one line down to insert the
++				 * bottom/odd field into it.
++				 */
++				vcap->field = 1;
++				if (vcap->active)
++					reg_write(vcap, DCMIPP_PxPPM0AR1(vcap->pipe_id),
++						  vcap->active->addrs[0] +
++						  vcap->active->strides[0]);
++			} else {
++				/* Both fields done (or progressive): move on */
++				vcap->field = 0;
++				swap(vcap->active, vcap->next);
++				dcmipp_capture_set_next_frame_or_stop(vcap);
++			}
+ 		}
+ 	}
+ 
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
+index b8601ae74b1f..be24df2b761a 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
+@@ -268,7 +268,7 @@ static void dcmipp_inp_adjust_fmt(struct dcmipp_inp_device *inp,
+ 	fmt->height = clamp_t(u32, fmt->height, DCMIPP_FRAME_MIN_HEIGHT,
+ 			      DCMIPP_FRAME_MAX_HEIGHT);
+ 
+-	if (fmt->field == V4L2_FIELD_ANY || fmt->field == V4L2_FIELD_ALTERNATE)
++	if (fmt->field == V4L2_FIELD_ANY)
+ 		fmt->field = fmt_default.field;
+ 
+ 	dcmipp_colorimetry_clamp(fmt);
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
+index 73c858c7c0e5..f06642c6ddf8 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
+@@ -85,7 +85,7 @@ static void dcmipp_isp_adjust_fmt(struct v4l2_mbus_framefmt *fmt, u32 pad)
+ 	fmt->height = clamp_t(u32, fmt->height, DCMIPP_FRAME_MIN_HEIGHT,
+ 			      DCMIPP_PIXEL_FRAME_MAX_HEIGHT);
+ 
+-	if (fmt->field == V4L2_FIELD_ANY || fmt->field == V4L2_FIELD_ALTERNATE)
++	if (fmt->field == V4L2_FIELD_ANY)
+ 		fmt->field = V4L2_FIELD_NONE;
+ 
+ 	dcmipp_colorimetry_clamp(fmt);
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
+index 39bb6b0a84ba..32aa63782af5 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
+@@ -461,7 +461,7 @@ dcmipp_pixelproc_adjust_fmt(struct dcmipp_pixelproc_device *pixelproc,
+ 	fmt->height = clamp_t(u32, fmt->height, DCMIPP_FRAME_MIN_HEIGHT,
+ 			      DCMIPP_PIXEL_FRAME_MAX_HEIGHT);
+ 
+-	if (fmt->field == V4L2_FIELD_ANY || fmt->field == V4L2_FIELD_ALTERNATE)
++	if (fmt->field == V4L2_FIELD_ANY)
+ 		fmt->field = V4L2_FIELD_NONE;
+ 
+ 	dcmipp_colorimetry_clamp(fmt);
+-- 
+2.53.0
+

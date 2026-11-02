@@ -1,0 +1,40 @@
+From 1fa03afc2588b8d51a9ed3287cf0b78e0a4bfb4c Mon Sep 17 00:00:00 2001
+From: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Date: Wed, 17 Jun 2026 16:24:19 +0200
+Subject: [PATCH] arm64: configs: remove modules for crypto IP not present on
+ stm32 platforms
+
+Drop modules that are for crypto peripherals not usable on stm32
+platforms.
+
+Signed-off-by: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Change-Id: Ifeb42af2adbc1237c0d7ec118811db4c7a301fd7
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/579884
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/configs/stm32mp_defconfig | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/arch/arm64/configs/stm32mp_defconfig b/arch/arm64/configs/stm32mp_defconfig
+index ab78f741900f..67e0be5be86e 100644
+--- a/arch/arm64/configs/stm32mp_defconfig
++++ b/arch/arm64/configs/stm32mp_defconfig
+@@ -1692,12 +1692,6 @@ CONFIG_CRYPTO_SM3_ARM64_CE=m
+ CONFIG_CRYPTO_AES_ARM64_CE_BLK=y
+ CONFIG_CRYPTO_AES_ARM64_BS=m
+ CONFIG_CRYPTO_AES_ARM64_CE_CCM=y
+-CONFIG_CRYPTO_DEV_SUN8I_CE=m
+-CONFIG_CRYPTO_DEV_FSL_CAAM=m
+-CONFIG_CRYPTO_DEV_FSL_DPAA2_CAAM=m
+-CONFIG_CRYPTO_DEV_QCE=m
+-CONFIG_CRYPTO_DEV_QCOM_RNG=m
+-CONFIG_CRYPTO_DEV_TEGRA=m
+ CONFIG_CRYPTO_DEV_CCREE=m
+ CONFIG_CRYPTO_DEV_HISI_SEC2=m
+ CONFIG_CRYPTO_DEV_HISI_ZIP=m
+-- 
+2.53.0
+

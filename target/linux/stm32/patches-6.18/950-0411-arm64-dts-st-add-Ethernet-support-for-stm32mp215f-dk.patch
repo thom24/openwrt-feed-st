@@ -1,0 +1,65 @@
+From 542f9b92084a6b64691eb7cd6ab54d8ac6848c0a Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Fri, 30 Jan 2026 11:49:59 +0100
+Subject: [PATCH] arm64: dts: st: add Ethernet support for stm32mp215f-dk board
+
+Add Ethernet1 node for stm32mp215f-dk board.
+Ethernet RMII without crystal
+PHY used are SMSC (LAN8742A)
+
+Change-Id: I2d9430a65bbd3988bf4623cf1c5399c80b57a20b
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/535376
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 27 +++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 4175e8432f23..0fb1d18d9128 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -19,6 +19,7 @@ / {
+ 	compatible = "st,stm32mp215f-dk", "st,stm32mp215";
+ 
+ 	aliases {
++		ethernet0 = &ethernet1;
+ 		serial0 = &usart2;
+ 	};
+ 
+@@ -64,6 +65,32 @@ &arm_wdt {
+ 	status = "okay";
+ };
+ 
++&ethernet1 {
++	status = "okay";
++	pinctrl-0 = <&eth1_rmii_pins_a>;
++	pinctrl-1 = <&eth1_rmii_sleep_pins_a>;
++	pinctrl-names = "default", "sleep";
++	phy-mode = "rmii";
++	max-speed = <100>;
++	phy-handle = <&phy0_eth1>;
++	phy-supply = <&scmi_v3v3>;
++	st,ext-phyclk;
++
++	mdio {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		compatible = "snps,dwmac-mdio";
++
++		phy0_eth1: ethernet-phy@0 {
++			compatible = "ethernet-phy-id0007.c131";
++			reset-gpios =  <&gpioh 11 GPIO_ACTIVE_LOW>;
++			reset-assert-us = <1000>;
++			reset-deassert-us = <30000>;
++			reg = <0>;
++		};
++	};
++};
++
+ &gpioa {
+ 	bootph-all;
+ };
+-- 
+2.53.0
+

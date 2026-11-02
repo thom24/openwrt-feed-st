@@ -1,0 +1,59 @@
+From 7cd3b74dc29c1a223bcdd8e20a5f79ea2beeecc1 Mon Sep 17 00:00:00 2001
+From: Fabien Dessenne <fabien.dessenne@foss.st.com>
+Date: Thu, 8 Dec 2022 17:32:33 +0100
+Subject: [PATCH] media: v4l: add support of STM32 ISP average/bin controls
+
+Add the following ISP statistics controls:
+- average filter: control the average stat filter strategy
+- bin component: control the component source of the bin stat
+
+Change-Id: I18525f1e00f31a612ab340b71a71ed6c97bb7371
+Signed-off-by: Fabien Dessenne <fabien.dessenne@foss.st.com>
+---
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c |  2 ++
+ include/uapi/linux/v4l2-controls.h        | 16 ++++++++++++++++
+ 2 files changed, 18 insertions(+)
+
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+index 5e9070d97cb9..4155ada60b26 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+@@ -1165,6 +1165,8 @@ const char *v4l2_ctrl_get_name(u32 id)
+ 	case V4L2_CID_DEINTERLACING_MODE:	return "Deinterlacing Mode";
+ 	case V4L2_CID_DIGITAL_GAIN:		return "Digital Gain";
+ 	case V4L2_CID_ISP_STAT_REGION:		return "ISP Stat Region";
++	case V4L2_CID_ISP_STAT_AVG_FILTER:	return "ISP Stat Average Filter";
++	case V4L2_CID_ISP_STAT_BIN_COMP:	return "ISP Stat Bin Component";
+ 
+ 	/* DV controls */
+ 	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index 863fadd7b059..135b739ce1cb 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -1257,6 +1257,22 @@ struct v4l2_ctrl_isp_stat_region {
+ 	__u32 height[25];
+ };
+ 
++#define V4L2_CID_ISP_STAT_AVG_FILTER		(V4L2_CID_IMAGE_PROC_CLASS_BASE + 12)
++enum v4l2_isp_stat_avg_filter {
++	V4L2_STAT_AVG_FILTER_NONE	= 0,
++	V4L2_STAT_AVG_FILTER_EXCL16	= 1,
++	V4L2_STAT_AVG_FILTER_EXCL32	= 2,
++	V4L2_STAT_AVG_FILTER_EXCL64	= 3,
++};
++
++#define V4L2_CID_ISP_STAT_BIN_COMP		(V4L2_CID_IMAGE_PROC_CLASS_BASE + 13)
++enum v4l2_isp_stat_bin_comp {
++	V4L2_STAT_BIN_COMP_R		= 0,
++	V4L2_STAT_BIN_COMP_G		= 1,
++	V4L2_STAT_BIN_COMP_B		= 2,
++	V4L2_STAT_BIN_COMP_L		= 3,
++};
++
+ /*  DV-class control IDs defined by V4L2 */
+ #define V4L2_CID_DV_CLASS_BASE			(V4L2_CTRL_CLASS_DV | 0x900)
+ #define V4L2_CID_DV_CLASS			(V4L2_CTRL_CLASS_DV | 1)
+-- 
+2.53.0
+

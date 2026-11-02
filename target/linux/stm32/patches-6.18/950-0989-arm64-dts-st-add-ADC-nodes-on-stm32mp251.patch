@@ -1,0 +1,153 @@
+From cac8a2517479e61b0955330205557c7ded7139fb Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Mon, 15 May 2023 14:51:13 +0200
+Subject: [PATCH] arm64: dts: st: add ADC nodes on stm32mp251
+
+Add analog-to-digital converter support on STM32MP25 SoC. It has 3 ADCs,
+split into two blocks:
+- ADC12 (ADC1 & ADC2) are tightly coupled.
+- ADC3 is managed independently.
+Define internal voltage channels in the SOC dtsi file, exception made of
+vbat/4 channel (to avoid undesired load on it, in case no conversion is
+needed on this channel). Choice is let to board implementation (via DT)
+to define it.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: I4fed96941eb85049545699e87610419a517b5674
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/564540
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 115 +++++++++++++++++++++++++
+ 1 file changed, 115 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index 4b65347574f9..ef5890c2d870 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -1785,6 +1785,121 @@ filter7: filter@404 {
+ 				};
+ 			};
+ 
++			adc_12: adc@404e0000 {
++				compatible = "st,stm32mp25-adc-core";
++				reg = <0x404e0000 0x400>;
++				interrupts = <GIC_SPI 87 IRQ_TYPE_LEVEL_HIGH>,
++					<GIC_SPI 88 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&rcc CK_KER_ADC12>;
++				clock-names = "adc";
++				interrupt-controller;
++				#interrupt-cells = <1>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				power-domains = <&d1_pd>;
++				access-controllers = <&rifsc 58>;
++				status = "disabled";
++
++				adc1: adc@0 {
++					compatible = "st,stm32mp25-adc";
++					reg = <0x0>;
++					interrupt-parent = <&adc_12>;
++					interrupts = <0>;
++					dmas = <&hpdma 81 0x20 0x12>;
++					dma-names = "rx";
++					#io-channel-cells = <1>;
++					#address-cells = <1>;
++					#size-cells = <0>;
++					nvmem-cells = <&vrefint>;
++					nvmem-cell-names = "vrefint";
++					st,adc-trigger-sel = <0>;
++					status = "disabled";
++					channel@14 {
++						reg = <14>;
++						label = "vrefint";
++					};
++				};
++
++				adc2: adc@100 {
++					compatible = "st,stm32mp25-adc";
++					reg = <0x100>;
++					interrupt-parent = <&adc_12>;
++					interrupts = <1>;
++					dmas = <&hpdma 82 0x20 0x12>;
++					dma-names = "rx";
++					#io-channel-cells = <1>;
++					#address-cells = <1>;
++					#size-cells = <0>;
++					nvmem-cells = <&vrefint>;
++					nvmem-cell-names = "vrefint";
++					st,adc-trigger-sel = <0>;
++					status = "disabled";
++					channel@14 {
++						reg = <14>;
++						label = "vrefint";
++					};
++					channel@15 {
++						reg = <15>;
++						label = "vddcore";
++					};
++					channel@17 {
++						reg = <17>;
++						label = "vddcpu";
++					};
++					channel@18 {
++						reg = <18>;
++						label = "vddgpu";
++					};
++				};
++			};
++
++			adc_3: adc@404f0000 {
++				compatible = "st,stm32mp25-adc-core";
++				reg = <0x404f0000 0x400>;
++				interrupts = <GIC_SPI 89 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&rcc CK_KER_ADC3>;
++				clock-names = "adc";
++				interrupt-controller;
++				#interrupt-cells = <1>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				access-controllers = <&rifsc 59>;
++				power-domains = <&d1_pd>;
++				status = "disabled";
++
++				adc3: adc@0 {
++					compatible = "st,stm32mp25-adc";
++					reg = <0x0>;
++					interrupt-parent = <&adc_3>;
++					interrupts = <0>;
++					dmas = <&hpdma 83 0x20 0x12>;
++					dma-names = "rx";
++					#io-channel-cells = <1>;
++					#address-cells = <1>;
++					#size-cells = <0>;
++					nvmem-cells = <&vrefint>;
++					nvmem-cell-names = "vrefint";
++					st,adc-trigger-sel = <1>;
++					status = "disabled";
++					channel@14 {
++						reg = <14>;
++						label = "vrefint";
++					};
++					channel@15 {
++						reg = <15>;
++						label = "vddcore";
++					};
++					channel@17 {
++						reg = <17>;
++						label = "vddcpu";
++					};
++					channel@18 {
++						reg = <18>;
++						label = "vddgpu";
++					};
++				};
++			};
++
+ 			hash: hash@42010000 {
+ 				compatible = "st,stm32mp13-hash";
+ 				reg = <0x42010000 0x400>;
+-- 
+2.53.0
+

@@ -1,0 +1,72 @@
+From 39f9a8d5f9a7c68254df6834ea384ee78723be38 Mon Sep 17 00:00:00 2001
+From: Philippe Cornu <philippe.cornu@foss.st.com>
+Date: Tue, 5 May 2026 11:16:47 +0200
+Subject: [PATCH] arm64: dts: st: add gpu support on stm32mp255
+
+Add the gpu support on STM32MP255.
+
+Change-Id: I21cca4e59175bad8bd4ffe8179ddd0f2b199d424
+Signed-off-by: Philippe Cornu <philippe.cornu@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/564757
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp255.dtsi | 35 ++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp255.dtsi b/arch/arm64/boot/dts/st/stm32mp255.dtsi
+index b76097af7126..8c909ca6bb09 100644
+--- a/arch/arm64/boot/dts/st/stm32mp255.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp255.dtsi
+@@ -3,8 +3,30 @@
+  * Copyright (C) STMicroelectronics 2023 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+  */
++#include <dt-bindings/power/st,stm32mp25-power.h>
+ #include "stm32mp253.dtsi"
+ 
++/ {
++	thermal-zones {
++		cpu-thermal {
++			trips {
++				gpu_alert: gpu-alert {
++					temperature = <110000>;
++					hysteresis = <10000>;
++					type = "passive";
++				};
++			};
++
++			cooling-maps {
++				map1 {
++					trip = <&gpu_alert>;
++					cooling-device = <&gpu 1 6>;
++				};
++			};
++		};
++	};
++};
++
+ &ltdc {
+ 	compatible = "st,stm32mp255-ltdc";
+ 	clocks = <&rcc CK_KER_LTDC>, <&rcc CK_BUS_LTDC>, <&syscfg>, <&lvds>;
+@@ -144,4 +166,17 @@ venc: venc@480e0000 {
+ 		access-controllers = <&rifsc 90>;
+ 		power-domains = <&d1_pd>;
+ 	};
++
++	gpu: gpu@48280000 {
++		compatible = "vivante,gc";
++		reg = <0x48280000 0x800>;
++		interrupts = <GIC_SPI 183 IRQ_TYPE_LEVEL_HIGH>;
++		resets = <&rcc GPU_R>;
++		clock-names = "bus", "core";
++		clocks = <&rcc CK_BUS_GPU>, <&rcc CK_KER_GPU>;
++		power-domains = <&scmi_perf 1>, <&scmi_devpd PD_SCMI_GPU>, <&d1_pd>;
++		power-domain-names = "perf", "scmi_devpd", "d1_pd";
++		access-controllers = <&rifsc 79>;
++		#cooling-cells = <2>;
++	};
+ };
+-- 
+2.53.0
+

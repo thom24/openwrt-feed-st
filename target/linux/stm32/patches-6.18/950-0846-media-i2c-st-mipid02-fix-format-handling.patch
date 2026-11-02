@@ -1,0 +1,71 @@
+From ea0719923a916abfca5ff563a1e6ba13651805ff Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Tue, 31 Mar 2026 21:23:05 +0200
+Subject: [PATCH] media: i2c: st-mipid02: fix format handling
+
+Current set_fmt handling leads to improper behavior when setting
+the source pad format to a parallel format (aka 2X8 for example)
+since it checks the format against CSI formats.
+
+Correct this behavior by always reproducing the source format
+equal to the sink format, after simply updating the pixelformat
+code to be a parallel format.
+This match with the HW behavior since the bridge does not allow
+to set any source format.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: I4242829f4774f62329cb5cd485bfe0ecab0978d5
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/552601
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ drivers/media/i2c/st-mipid02.c | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/media/i2c/st-mipid02.c b/drivers/media/i2c/st-mipid02.c
+index 41ae25b0911f..a50894a74bbe 100644
+--- a/drivers/media/i2c/st-mipid02.c
++++ b/drivers/media/i2c/st-mipid02.c
+@@ -611,21 +611,25 @@ static int mipid02_set_fmt(struct v4l2_subdev *sd,
+ 		return -EINVAL;
+ 
+ 	pad_fmt = v4l2_subdev_state_get_format(sd_state, fmt->pad);
+-	fmt->format.code = get_fmt_code(fmt->format.code);
+ 
+-	/* code may need to be converted */
+-	if (fmt->pad == MIPID02_SOURCE)
++	/* In case of setting a source, simply make it same as sink */
++	if (fmt->pad == MIPID02_SOURCE) {
++		fmt->format = *v4l2_subdev_state_get_format(sd_state,
++							    MIPID02_SINK_0);
+ 		fmt->format.code = serial_to_parallel_code(fmt->format.code);
++		*pad_fmt = fmt->format;
++
++		return 0;
++	}
+ 
++	/* Check format is applicable */
++	fmt->format.code = get_fmt_code(fmt->format.code);
+ 	*pad_fmt = fmt->format;
+ 
+ 	/* Propagate the format to the source pad in case of sink pad update */
+-	if (fmt->pad == MIPID02_SINK_0) {
+-		pad_fmt = v4l2_subdev_state_get_format(sd_state,
+-						       MIPID02_SOURCE);
+-		*pad_fmt = fmt->format;
+-		pad_fmt->code = serial_to_parallel_code(fmt->format.code);
+-	}
++	pad_fmt = v4l2_subdev_state_get_format(sd_state, MIPID02_SOURCE);
++	*pad_fmt = fmt->format;
++	pad_fmt->code = serial_to_parallel_code(fmt->format.code);
+ 
+ 	return 0;
+ }
+-- 
+2.53.0
+

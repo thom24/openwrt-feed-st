@@ -1,0 +1,49 @@
+From d3a427d48543f53789a035f1ef1e9fce103c6e5c Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Wed, 12 Aug 2026 09:57:27 +0200
+Subject: [PATCH] drm/bridge: adv7511: override AVI infoframe for YUV input
+
+When the input colorspace is not RGB, force a predefined AVI infoframe
+payload instead of forwarding the generic buffer.
+This allows overriding AVI infoframe fields for YUV input paths while
+preserving the existing RGB behavior.
+
+Change-Id: I9c2115c59613991e373b34123ee6cc166798cbf5
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/598650
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+index 2c8cff377549..b9bb96873a74 100644
+--- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
++++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+@@ -973,6 +973,7 @@ static int adv7511_bridge_hdmi_write_infoframe(struct drm_bridge *bridge,
+ 					       const u8 *buffer, size_t len)
+ {
+ 	struct adv7511 *adv7511 = bridge_to_adv7511(bridge);
++	u8 avi_yuv_infoframe[] = {0x02, 0x0d, 0x4d, 0x22, 0x00, 0x00, 0x00, 0x00};
+ 
+ 	switch (type) {
+ 	case HDMI_INFOFRAME_TYPE_AUDIO:
+@@ -996,8 +997,13 @@ static int adv7511_bridge_hdmi_write_infoframe(struct drm_bridge *bridge,
+ 				   BIT(6), BIT(6));
+ 
+ 		/* The AVI infoframe id is not configurable */
+-		regmap_bulk_write(adv7511->regmap, ADV7511_REG_AVI_INFOFRAME_VERSION,
+-				  buffer + 1, len - 1);
++		if (!adv7511->rgb) {
++			regmap_bulk_write(adv7511->regmap, ADV7511_REG_AVI_INFOFRAME_VERSION,
++					  avi_yuv_infoframe, sizeof(avi_yuv_infoframe));
++		} else {
++			regmap_bulk_write(adv7511->regmap, ADV7511_REG_AVI_INFOFRAME_VERSION,
++					  buffer + 1, len - 1);
++		}
+ 
+ 		regmap_write(adv7511->regmap, ADV7511_REG_AUDIO_INFOFRAME_LENGTH, 0x2);
+ 		regmap_write(adv7511->regmap, ADV7511_REG_AUDIO_INFOFRAME(1), 0x1);
+-- 
+2.53.0
+

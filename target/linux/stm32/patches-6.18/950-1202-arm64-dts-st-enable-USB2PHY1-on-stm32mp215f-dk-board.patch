@@ -1,0 +1,36 @@
+From d7014c926baf8a6321d90cf8f94b47439fcdd99b Mon Sep 17 00:00:00 2001
+From: Ram Dayal <ram.dayal@st.com>
+Date: Wed, 14 Aug 2024 11:36:37 +0200
+Subject: [PATCH] arm64: dts: st: enable USB2PHY1 on stm32mp215f-dk board
+
+Add the USB2PHY1 node for the stm32mp215f-dk board used by USB OTG
+in peripheral mode.
+
+Change-Id: I55b537095d4a07db4ec8930aa30287c1c2d0a837
+Signed-off-by: Ram Dayal <ram.dayal@st.com>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/559881
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 9e5bd42713ed..459738c8ec27 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -621,3 +621,9 @@ &usart6 {
+ 	uart-has-rtscts;
+ 	status = "disabled";
+ };
++
++&usb2_phy2 {
++	vdda18-supply = <&scmi_vdda_1v8>;
++	vdd33-supply = <&scmi_vdd3v3_usb>;
++	status = "okay";
++};
+-- 
+2.53.0
+

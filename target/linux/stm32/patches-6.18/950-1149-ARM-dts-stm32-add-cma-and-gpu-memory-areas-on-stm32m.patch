@@ -1,0 +1,58 @@
+From 821a7658beb4d9e24d69cc1f2faadd873adb8589 Mon Sep 17 00:00:00 2001
+From: Philippe Cornu <philippe.cornu@foss.st.com>
+Date: Tue, 5 May 2026 14:59:01 +0200
+Subject: [PATCH] ARM: dts: stm32: add cma and gpu memory areas on
+ stm32mp15xx-dkx
+
+Both cma and gpu reserved memory regions are required
+on stm32mp15xx-dkx.
+
+Change-Id: I00b382eaac498bb01dc93d3f78002e2a2036e003
+Signed-off-by: Philippe Cornu <philippe.cornu@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/564754
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
+index be815f858231..d1f2f497abbf 100644
+--- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
+@@ -60,6 +60,20 @@ retram: retram@38000000 {
+ 			reg = <0x38000000 0x10000>;
+ 			no-map;
+ 		};
++
++		gpu_reserved: gpu@d4000000 {
++			reg = <0xd4000000 0x4000000>;
++			no-map;
++		};
++
++		/* global autoconfigured region for contiguous allocations */
++		linux,cma {
++			compatible = "shared-dma-pool";
++			reusable;
++			size = <0x8000000>;
++			alignment = <0x2000>;
++			linux,cma-default;
++		};
+ 	};
+ 
+ 	led {
+@@ -282,6 +296,10 @@ &gpioz {
+ 	bootph-all;
+ };
+ 
++&gpu {
++	contiguous-area = <&gpu_reserved>;
++};
++
+ &hash1 {
+ 	status = "okay";
+ };
+-- 
+2.53.0
+

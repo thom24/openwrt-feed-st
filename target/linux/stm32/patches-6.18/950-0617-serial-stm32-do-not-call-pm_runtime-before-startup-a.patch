@@ -1,0 +1,117 @@
+From 51b3d70424fd6a6730e63990c49ec66867501723 Mon Sep 17 00:00:00 2001
+From: Valentin Caron <valentin.caron@foss.st.com>
+Date: Fri, 20 Mar 2026 10:41:34 +0100
+Subject: [PATCH] serial: stm32: do not call pm_runtime before startup and
+ after shutdown
+
+The driver failed to call pm_runtime_resume before the shutdown
+routine because tty_port is uninitialized when shutdown is called.
+
+For example the bit USART_CR1_RXNEIE is correctly set during the
+runtime_suspend routine but if we close the port while the device is
+suspended: the runtime_resume returns immediately due to the
+!tty_port_initialized condition and the bit USART_CR1_RXNEIE is never
+cleared. That will cause issues at the next startup.
+
+To solve this, the !tty_port_initialized condition is removed and replaced
+by a boolean "started", which is active when the runtime routines can be
+done after port startup is complete.
+
+- After a probe the device is considered suspended
+- The startup calls a pm_get but the runtime_resume routine returns
+  immediately.
+- The startup calls a pm_put and the runtime_suspend routine is executed
+  normally as the driver has completed its startup function.
+- The shutdown calls a pm_get and the runtime_resume routine is executed
+  normally.
+- The shutdown calls a pm_put but the runtime_suspend routine returns
+  immediately.
+- The remove forces the device to suspended state.
+
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: I64a70d0711b5a1de4bdf8f955f4ea708224f8b6e
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/570585
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ drivers/tty/serial/stm32-usart.c | 14 ++++++++------
+ drivers/tty/serial/stm32-usart.h |  1 +
+ 2 files changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index 652aad6d2bb1..02bc28665f2e 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -1336,7 +1336,7 @@ static int stm32_usart_startup(struct uart_port *port)
+ 	u32 val;
+ 	int ret;
+ 
+-	pm_runtime_get(port->dev);
++	pm_runtime_get_sync(port->dev);
+ 
+ 	ret = request_irq(port->irq, stm32_usart_interrupt, 0, name, port);
+ 	if (ret)
+@@ -1365,6 +1365,8 @@ static int stm32_usart_startup(struct uart_port *port)
+ 	val = stm32_port->cr1_irq | USART_CR1_RE | BIT(cfg->uart_enable_bit);
+ 	stm32_usart_set_bits(port, ofs->cr1, val);
+ 
++	stm32_port->started = true;
++
+ out:
+ 	pm_runtime_put_sync_autosuspend(port->dev);
+ 
+@@ -1379,7 +1381,9 @@ static void stm32_usart_shutdown(struct uart_port *port)
+ 	u32 val, isr;
+ 	int ret;
+ 
+-	pm_runtime_get(port->dev);
++	pm_runtime_get_sync(port->dev);
++
++	stm32_port->started = false;
+ 
+ 	ret = readl_relaxed_poll_timeout(port->membase + ofs->isr,
+ 					 isr, (isr & USART_SR_TC),
+@@ -1419,8 +1423,7 @@ static void stm32_usart_shutdown(struct uart_port *port)
+ 
+ 	stm32_usart_clr_bits(port, ofs->cr1, val);
+ 
+-	pm_runtime_mark_last_busy(port->dev);
+-	pm_runtime_put_autosuspend(port->dev);
++	pm_runtime_put_sync_suspend(port->dev);
+ 
+ 	free_irq(port->irq, port);
+ }
+@@ -2213,7 +2216,6 @@ static void stm32_usart_serial_remove(struct platform_device *pdev)
+ 
+ 	pm_runtime_disable(&pdev->dev);
+ 	pm_runtime_set_suspended(&pdev->dev);
+-	pm_runtime_put_noidle(&pdev->dev);
+ 
+ 	stm32_usart_clr_bits(port, ofs->cr1, USART_CR1_PEIE);
+ 
+@@ -2405,7 +2407,7 @@ static int __maybe_unused stm32_usart_serial_en_wakeup(struct uart_port *port,
+ 	unsigned int size = 0;
+ 	unsigned long flags;
+ 
+-	if (!device_can_wakeup(port->dev) || !tty_port_initialized(tport))
++	if (!device_can_wakeup(port->dev) || !stm32_port->started)
+ 		return 0;
+ 
+ 	/*
+diff --git a/drivers/tty/serial/stm32-usart.h b/drivers/tty/serial/stm32-usart.h
+index fa89c515de9a..28eecc307b27 100644
+--- a/drivers/tty/serial/stm32-usart.h
++++ b/drivers/tty/serial/stm32-usart.h
+@@ -239,6 +239,7 @@ struct stm32_port {
+ 	unsigned int tx_dma_bytes;
+ 	bool tx_dma_busy;	 /* dma tx transaction in progress */
+ 	bool rx_dma_busy;	 /* dma rx transaction in progress */
++	bool started;		 /* to enable runtime_resume/suspend between startup and shutdown */
+ 	bool throttled;		 /* port throttled            */
+ 	bool hw_flow_control;
+ 	bool swap;		 /* swap RX & TX pins */
+-- 
+2.53.0
+

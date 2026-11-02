@@ -1,0 +1,74 @@
+From 43ba714ddee68e5317aa64f84ce1aaf6ce507300 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Fri, 19 Dec 2025 15:30:38 +0100
+Subject: [PATCH] media: stm32: dcmipp: add Y10-Y12-Y14 in all subdevs
+
+DCMIPP can handle Y8 to Y14 input formats however until now only
+Y8 was handled. Add support for Y10-Y12-Y14 in all relevant
+subdevs.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Hans Verkuil <hverkuil+cisco@kernel.org>
+(cherry picked from commit 0085da1315898ea27bcb323e456ca1d39d43e96a)
+---
+ .../media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c   | 3 +++
+ .../media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c  | 3 +++
+ drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c | 6 ++++++
+ 3 files changed, 12 insertions(+)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
+index 6d42517817fd..dcb791c56d4c 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
+@@ -67,6 +67,9 @@ static const struct dcmipp_bytecap_pix_map dcmipp_bytecap_pix_map_list[] = {
+ 	PIXMAP_MBUS_PFMT(VYUY8_2X8, VYUY),
+ 	PIXMAP_MBUS_PFMT(VYUY8_1X16, VYUY),
+ 	PIXMAP_MBUS_PFMT(Y8_1X8, GREY),
++	PIXMAP_MBUS_PFMT(Y10_1X10, Y10),
++	PIXMAP_MBUS_PFMT(Y12_1X12, Y12),
++	PIXMAP_MBUS_PFMT(Y14_1X14, Y14),
+ 	PIXMAP_MBUS_PFMT(SBGGR8_1X8, SBGGR8),
+ 	PIXMAP_MBUS_PFMT(SGBRG8_1X8, SGBRG8),
+ 	PIXMAP_MBUS_PFMT(SGRBG8_1X8, SGRBG8),
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
+index dde28ed288cd..f45a3027f8f3 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
+@@ -60,6 +60,9 @@ static const struct dcmipp_byteproc_pix_map dcmipp_byteproc_pix_map_list[] = {
+ 	PIXMAP_MBUS_BPP(VYUY8_2X8, 2),
+ 	PIXMAP_MBUS_BPP(VYUY8_1X16, 2),
+ 	PIXMAP_MBUS_BPP(Y8_1X8, 1),
++	PIXMAP_MBUS_BPP(Y10_1X10, 2),
++	PIXMAP_MBUS_BPP(Y12_1X12, 2),
++	PIXMAP_MBUS_BPP(Y14_1X14, 2),
+ 	PIXMAP_MBUS_BPP(SBGGR8_1X8, 1),
+ 	PIXMAP_MBUS_BPP(SGBRG8_1X8, 1),
+ 	PIXMAP_MBUS_BPP(SGRBG8_1X8, 1),
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
+index c44d664f6a0b..c4bc76909b1c 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
+@@ -25,6 +25,9 @@
+ #define DCMIPP_PRCR_FORMAT_RAW12	0x2c
+ #define DCMIPP_PRCR_FORMAT_RAW14	0x2d
+ #define DCMIPP_PRCR_FORMAT_G8		0x4a
++#define DCMIPP_PRCR_FORMAT_G10		0x4b
++#define DCMIPP_PRCR_FORMAT_G12		0x4c
++#define DCMIPP_PRCR_FORMAT_G14		0x4d
+ #define DCMIPP_PRCR_FORMAT_BYTE_STREAM	0x5a
+ #define DCMIPP_PRCR_ESS			BIT(4)
+ #define DCMIPP_PRCR_PCKPOL		BIT(5)
+@@ -89,6 +92,9 @@ static const struct dcmipp_inp_pix_map dcmipp_inp_pix_map_list[] = {
+ 	PIXMAP_SINK_SRC_PRCR_SWAP(VYUY8_1X16, VYUY8_1X16, YUV422, 0, MIPI_CSI2_DT_YUV422_8B),
+ 	/* GREY */
+ 	PIXMAP_SINK_SRC_PRCR_SWAP(Y8_1X8, Y8_1X8, G8, 0, MIPI_CSI2_DT_RAW8),
++	PIXMAP_SINK_SRC_PRCR_SWAP(Y10_1X10, Y10_1X10, G10, 0, MIPI_CSI2_DT_RAW10),
++	PIXMAP_SINK_SRC_PRCR_SWAP(Y12_1X12, Y12_1X12, G12, 0, MIPI_CSI2_DT_RAW12),
++	PIXMAP_SINK_SRC_PRCR_SWAP(Y14_1X14, Y14_1X14, G14, 0, MIPI_CSI2_DT_RAW14),
+ 	/* Raw Bayer */
+ 	PIXMAP_SINK_SRC_PRCR_SWAP(SBGGR8_1X8, SBGGR8_1X8, RAW8, 0, MIPI_CSI2_DT_RAW8),
+ 	PIXMAP_SINK_SRC_PRCR_SWAP(SGBRG8_1X8, SGBRG8_1X8, RAW8, 0, MIPI_CSI2_DT_RAW8),
+-- 
+2.53.0
+

@@ -1,0 +1,64 @@
+From 1e38606fdd9b7e64e268472510a6544beb65c27c Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Thu, 30 Jul 2026 15:47:11 +0200
+Subject: [PATCH] PCI: stm32: Fix PM runtime genpd callback
+
+pm_runtime_no_callbacks() prevents the runtime PM core from executing
+the genpd runtime callbacks. This prevents genpd from detecting idle
+notifications, and the system cannot enter PSCI OSI idle states.
+Thus remove the call to pm_runtime_no_callbacks().
+
+Additionally add a devm_pm_runtime_get_noidle() call to make sure the
+device is active when no device is attached, and use
+devm_pm_runtime_set_active_enabled() to enable PM.
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Fixes: 63a562b33a9c ("PCI: stm32: Add PCIe host support for STM32MP25")
+Change-Id: Ie7b482614a1c2456425ec546b553d60de9c3c1b5
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/593261
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/pci/controller/dwc/pcie-stm32.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/pci/controller/dwc/pcie-stm32.c b/drivers/pci/controller/dwc/pcie-stm32.c
+index 9330f1093980..2e7a959391ff 100644
+--- a/drivers/pci/controller/dwc/pcie-stm32.c
++++ b/drivers/pci/controller/dwc/pcie-stm32.c
+@@ -392,17 +392,15 @@ static int stm32_pcie_probe(struct platform_device *pdev)
+ 		goto err_remove_port;
+ 	}
+ 
+-	ret = pm_runtime_set_active(dev);
++	ret = devm_pm_runtime_set_active_enabled(dev);
+ 	if (ret < 0) {
+-		dev_err_probe(dev, ret, "Failed to activate runtime PM\n");
++		dev_err_probe(dev, ret, "Failed to enable runtime PM\n");
+ 		goto err_disable_clk;
+ 	}
+ 
+-	pm_runtime_no_callbacks(dev);
+-
+-	ret = devm_pm_runtime_enable(dev);
++	ret = devm_pm_runtime_get_noresume(dev);
+ 	if (ret < 0) {
+-		dev_err_probe(dev, ret, "Failed to enable runtime PM\n");
++		dev_err_probe(dev, ret, "Failed to get runtime PM\n");
+ 		goto err_disable_clk;
+ 	}
+ 
+@@ -440,8 +438,6 @@ static void stm32_pcie_remove(struct platform_device *pdev)
+ 	clk_disable_unprepare(stm32_pcie->clk);
+ 
+ 	stm32_remove_pcie_port(stm32_pcie);
+-
+-	pm_runtime_put_noidle(&pdev->dev);
+ }
+ 
+ static const struct of_device_id stm32_pcie_of_match[] = {
+-- 
+2.53.0
+

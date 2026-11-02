@@ -1,0 +1,45 @@
+From 08635bae3818bcf288d5f08f9619838962701b31 Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Mon, 30 Mar 2026 15:49:28 +0200
+Subject: [PATCH] arm64: dts: st: add moortec node on stm32mp251
+
+Add Moortec DTS sensor description on STM32MP251.
+
+Signed-off-by: Pascal Paillet <p.paillet@st.com>
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: I162541c15447f360fba7badb22f13fea07848733
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/552080
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index 5003f968e098..1240cf30f8ad 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -2089,6 +2089,18 @@ package-otp@1e8 {
+ 			};
+ 		};
+ 
++		dts: thermal-sensor@44070000 {
++			compatible = "moortec,mr75203";
++			reg = <0x44070000 0x80>,
++			      <0x44070080 0x180>,
++			      <0x44070200 0x200>,
++			      <0x44070400 0xc00>;
++			reg-names = "common", "ts", "pd", "vm";
++			clocks = <&rcc CK_KER_DTS>;
++			resets = <&rcc DTS_R>;
++			#thermal-sensor-cells = <1>;
++		};
++
+ 		hdp: pinctrl@44090000 {
+ 			compatible = "st,stm32mp251-hdp";
+ 			reg = <0x44090000 0x400>;
+-- 
+2.53.0
+

@@ -1,0 +1,45 @@
+From 98735656fd26694a835f8453d8457134f249d0a1 Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Date: Wed, 8 Apr 2026 16:59:06 +0200
+Subject: [PATCH] arm64: dts: st: use lptimer3 as tick broadcast source on
+ stm32mp257f-dk
+
+During the low power modes the generic ARM timer is deactivated, so the
+the tick broadcast is used, based on LPTIMER3 which is clocked by LSE on
+STMicroelectronics boards.
+
+Change-Id: Ieb05a281697e12ec134e4a8ece7e378d1df8b7c1
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/554831
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index ea822501020b..70dd48882b09 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -564,6 +564,15 @@ &ipcc2 {
+ 	status = "okay";
+ };
+ 
++/* use LPTIMER with tick broadcast for suspend mode */
++&lptimer3 {
++	clocks = <&rcc CK_LPTIM3_AM>;
++	status = "okay";
++	timer {
++		status = "okay";
++	};
++};
++
+ &ltdc {
+ 	bootph-some-ram;
+ 	status = "okay";
+-- 
+2.53.0
+

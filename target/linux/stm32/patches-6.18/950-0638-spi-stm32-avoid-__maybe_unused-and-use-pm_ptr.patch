@@ -1,0 +1,81 @@
+From 0333fcff00435c0b9c94aec6f9703324099b50e8 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Tue, 6 Jan 2026 13:14:20 +0100
+Subject: [PATCH] spi: stm32: avoid __maybe_unused and use pm_ptr
+
+Switch to usage of pm_ptr / SYSTEM_SLEEP_PM_OPS / RUNTIME_PM_OPS
+in order to avoid having to mark the pm related functions as
+__maybe_unused.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Link: https://patch.msgid.link/20260106-spi_st_maybe_unused_removal-v1-4-8f5ca7136e96@foss.st.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+(cherry picked from commit 75d208bddcca55ec31481420fbb4d6c9703ba195)
+---
+ drivers/spi/spi-stm32.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
+index 2e72c7f8c090..342756c57b35 100644
+--- a/drivers/spi/spi-stm32.c
++++ b/drivers/spi/spi-stm32.c
+@@ -2617,7 +2617,7 @@ static void stm32_spi_remove(struct platform_device *pdev)
+ 	pinctrl_pm_select_sleep_state(&pdev->dev);
+ }
+ 
+-static int __maybe_unused stm32_spi_runtime_suspend(struct device *dev)
++static int stm32_spi_runtime_suspend(struct device *dev)
+ {
+ 	struct spi_controller *ctrl = dev_get_drvdata(dev);
+ 	struct stm32_spi *spi = spi_controller_get_devdata(ctrl);
+@@ -2627,7 +2627,7 @@ static int __maybe_unused stm32_spi_runtime_suspend(struct device *dev)
+ 	return pinctrl_pm_select_sleep_state(dev);
+ }
+ 
+-static int __maybe_unused stm32_spi_runtime_resume(struct device *dev)
++static int stm32_spi_runtime_resume(struct device *dev)
+ {
+ 	struct spi_controller *ctrl = dev_get_drvdata(dev);
+ 	struct stm32_spi *spi = spi_controller_get_devdata(ctrl);
+@@ -2640,7 +2640,7 @@ static int __maybe_unused stm32_spi_runtime_resume(struct device *dev)
+ 	return clk_prepare_enable(spi->clk);
+ }
+ 
+-static int __maybe_unused stm32_spi_suspend(struct device *dev)
++static int stm32_spi_suspend(struct device *dev)
+ {
+ 	struct spi_controller *ctrl = dev_get_drvdata(dev);
+ 	int ret;
+@@ -2652,7 +2652,7 @@ static int __maybe_unused stm32_spi_suspend(struct device *dev)
+ 	return pm_runtime_force_suspend(dev);
+ }
+ 
+-static int __maybe_unused stm32_spi_resume(struct device *dev)
++static int stm32_spi_resume(struct device *dev)
+ {
+ 	struct spi_controller *ctrl = dev_get_drvdata(dev);
+ 	struct stm32_spi *spi = spi_controller_get_devdata(ctrl);
+@@ -2682,9 +2682,8 @@ static int __maybe_unused stm32_spi_resume(struct device *dev)
+ }
+ 
+ static const struct dev_pm_ops stm32_spi_pm_ops = {
+-	SET_SYSTEM_SLEEP_PM_OPS(stm32_spi_suspend, stm32_spi_resume)
+-	SET_RUNTIME_PM_OPS(stm32_spi_runtime_suspend,
+-			   stm32_spi_runtime_resume, NULL)
++	SYSTEM_SLEEP_PM_OPS(stm32_spi_suspend, stm32_spi_resume)
++	RUNTIME_PM_OPS(stm32_spi_runtime_suspend, stm32_spi_runtime_resume, NULL)
+ };
+ 
+ static struct platform_driver stm32_spi_driver = {
+@@ -2692,7 +2691,7 @@ static struct platform_driver stm32_spi_driver = {
+ 	.remove = stm32_spi_remove,
+ 	.driver = {
+ 		.name = DRIVER_NAME,
+-		.pm = &stm32_spi_pm_ops,
++		.pm = pm_ptr(&stm32_spi_pm_ops),
+ 		.of_match_table = stm32_spi_of_match,
+ 	},
+ };
+-- 
+2.53.0
+

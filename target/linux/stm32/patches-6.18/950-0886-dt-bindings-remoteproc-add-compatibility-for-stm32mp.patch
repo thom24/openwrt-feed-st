@@ -1,0 +1,115 @@
+From 3c822062574919354e1d223f5123824cabf03b65 Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Date: Wed, 2 Sep 2020 11:17:37 +0200
+Subject: [PATCH] dt-bindings: remoteproc: add compatibility for stm32mp25
+ platform support
+
+add the support of signed and non-signed firmware for the stm32MP25
+platforms
+
+Change-Id: I5bff9fc4479feee1571dbfe00cfa6a41bf4d0875
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+---
+ .../bindings/remoteproc/st,stm32-rproc.yaml   | 53 +++++++++++++++++--
+ 1 file changed, 49 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
+index f2042658a855..fbe3dbe2ddff 100644
+--- a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
+@@ -19,15 +19,17 @@ properties:
+     enum:
+       - st,stm32mp1-m4
+       - st,stm32mp1-m4-tee
++      - st,stm32mp2-m33
++      - st,stm32mp2-m33-tee
+     description:
+-      Use "st,stm32mp1-m4" for the Cortex-M4 coprocessor management by non-secure context
+-      Use "st,stm32mp1-m4-tee" for the Cortex-M4 coprocessor management by secure context
+-
++      Use "st,stm32mp1-m4" for the stm32mp15 Cortex-M4 coprocessor management by Linux
++      Use "st,stm32mp1-m4-tee" for the stm32mp15 Cortex-M4 coprocessor management by OPTEE
++      Use "st,stm32mp2-m33" for the stm32mp2 Cortex-M33 coprocessor management by Linux
++      Use "st,stm32mp2-m33-tee" for the stm32mp2 Cortex-M33 coprocessor management by OPTEE
+   reg:
+     description:
+       Address ranges of the RETRAM and MCU SRAM memories used by the remote
+       processor.
+-    maxItems: 3
+ 
+   resets:
+     minItems: 1
+@@ -63,6 +65,8 @@ properties:
+     description: Should contain the WWDG1 watchdog reset interrupt
+     maxItems: 1
+ 
++  interrupt-names: true
++
+   wakeup-source: true
+ 
+   mboxes:
+@@ -107,6 +111,23 @@ properties:
+       vrings, ...).
+       (see ../reserved-memory/reserved-memory.txt)
+ 
++  nvmem-cells:
++    minItems: 2
++
++  nvmem-cell-names:
++    items:
++      - const: rsc-tbl-addr
++      - const: rsc-tbl-size
++
++  st,syscfg-nsvtor:
++    description: NSVTOR register used to configure Cortex-M33 vector table.
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    items:
++      - items:
++          - description: Phandle of syscon block
++          - description: The offset of the NSVTOR register
++          - description: The field mask of the NSVTOR register
++
+   st,syscfg-pdds:
+     $ref: /schemas/types.yaml#/definitions/phandle-array
+     description: |
+@@ -153,6 +174,18 @@ required:
+   - reg
+ 
+ allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - st,stm32mp1-m4
++              - st,stm32mp1-m4-tee
++    then:
++      properties:
++        reg:
++          minItems: 3
++
+   - if:
+       properties:
+         compatible:
+@@ -186,6 +219,18 @@ allOf:
+         reset-names: false
+         resets: false
+ 
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - st,stm32mp2-m33
++              - st,stm32mp2-m33-tee
++    then:
++      properties:
++        reg:
++          minItems: 1
++
+ additionalProperties: false
+ 
+ examples:
+-- 
+2.53.0
+

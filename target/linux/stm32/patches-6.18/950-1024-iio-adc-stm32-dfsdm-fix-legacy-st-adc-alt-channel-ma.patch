@@ -1,0 +1,59 @@
+From 120d0346689009ca4c83e2d8e95b9f621a220a61 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Wed, 13 May 2026 14:42:52 +0200
+Subject: [PATCH] iio: adc: stm32-dfsdm: fix legacy st,adc-alt-channel
+ management
+
+The binding describes st,adc-alt-channel as a boolean property,
+and the generic channel parser already handles it that way.
+
+Update the legacy parser to treat a present valueless property as
+alt_si = 1 while keeping compatibility with the older indexed u32
+parsing.
+
+This keeps the legacy DT path aligned with the binding and with the
+current STM32 DFSDM device trees.
+
+Fixes: e2e6771c6462 ("IIO: ADC: add STM32 DFSDM sigma delta ADC support")
+Change-Id: I9188dbe1e6b6bd1bd32bc3f923ad2a4db95b624f
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/567654
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ drivers/iio/adc/stm32-dfsdm-adc.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/iio/adc/stm32-dfsdm-adc.c b/drivers/iio/adc/stm32-dfsdm-adc.c
+index 9664b9bd75d4..79c0f42d18e8 100644
+--- a/drivers/iio/adc/stm32-dfsdm-adc.c
++++ b/drivers/iio/adc/stm32-dfsdm-adc.c
+@@ -660,11 +660,18 @@ static int stm32_dfsdm_channel_parse_of(struct stm32_dfsdm *dfsdm,
+ 	}
+ 	df_ch->src = val;
+ 
+-	ret = of_property_read_u32_index(indio_dev->dev.of_node,
+-					 "st,adc-alt-channel", chan_idx,
+-					 &df_ch->alt_si);
+-	if (ret < 0)
+-		df_ch->alt_si = 0;
++	df_ch->alt_si = 0;
++	if (of_property_present(indio_dev->dev.of_node, "st,adc-alt-channel")) {
++		ret = of_property_read_u32_index(indio_dev->dev.of_node,
++						 "st,adc-alt-channel", chan_idx,
++						 &df_ch->alt_si);
++		if (ret < 0) {
++			if (ret == -ENODATA)
++				df_ch->alt_si = 1;
++			else
++				df_ch->alt_si = 0;
++		}
++	}
+ 
+ 	return 0;
+ }
+-- 
+2.53.0
+

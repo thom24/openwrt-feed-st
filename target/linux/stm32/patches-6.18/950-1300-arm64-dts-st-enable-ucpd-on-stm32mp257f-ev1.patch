@@ -1,0 +1,102 @@
+From 72e3ed7b2f2b34e80d7c50b8bcc87047fd1187af Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Wed, 29 Apr 2026 10:45:38 +0200
+Subject: [PATCH] arm64: dts: st: enable ucpd on stm32mp257f-ev1
+
+Add ucpd node to connect typec remote endpoint to ucpd driver instead of
+rpmsg connector to the m33 firmware
+
+The board is self-powered, it shall be indicated in the DT.
+It also resolve initial condition: legacy Type-A->Type-C cable
+plugged upon boot isn't detected otherwise.
+
+Change-Id: Iab7cc8f8f7b727da9067ced24ccae026a470deb5
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/581850
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 57 ++++++++--------------
+ 1 file changed, 20 insertions(+), 37 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+index 04ace9489bf0..6293416f74c8 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+@@ -714,43 +714,6 @@ &m_can3 {
+ 	status = "okay";
+ };
+ 
+-&mlahb {
+-	intc_rpmsg: interrupt-controller@1 {
+-		compatible = "rpmsg,intc";
+-		reg = <1 0>;
+-		#interrupt-cells = <1>;
+-		interrupt-controller;
+-		status = "okay";
+-	};
+-
+-	i2c_rpmsg: i2c@2 {
+-		compatible = "rpmsg,i2c-controller";
+-		reg = <2 0>;
+-		rpmsg,dev-id = "rpmsg_i2c";
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-		status = "okay";
+-
+-		typec@35 {
+-			compatible = "st,stm32mp25-typec";
+-			reg = <0x35>;
+-			interrupts-extended = <&intc_rpmsg 0>;
+-			status = "okay";
+-			connector {
+-				compatible = "usb-c-connector";
+-				label = "USB-C";
+-
+-				port {
+-					typec_ep: endpoint {
+-						remote-endpoint = <&dwc3_ep>;
+-					};
+-				};
+-			};
+-		};
+-	};
+-};
+-
+-
+ &ommanager {
+ 	memory-region = <&mm_ospi1>;
+ 	memory-region-names = "ospi1";
+@@ -1005,6 +968,26 @@ timer@11 {
+ 	};
+ };
+ 
++&ucpd {
++	st,tcpp = <&tcpp>;
++	status = "okay";
++
++	connector {
++		compatible = "usb-c-connector";
++		label = "USB-C";
++		data-role = "device";
++		power-role = "sink";
++		typec-power-opmode = "default";
++		pd-disable;
++		self-powered;
++		port {
++			typec_ep: endpoint {
++				remote-endpoint = <&dwc3_ep>;
++			};
++		};
++	};
++};
++
+ &usart2 {
+ 	pinctrl-names = "default", "idle", "sleep";
+ 	pinctrl-0 = <&usart2_pins_a>;
+-- 
+2.53.0
+

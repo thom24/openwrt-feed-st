@@ -1,0 +1,37 @@
+From 6305bd130de451ad450636b0498358c43fdab69e Mon Sep 17 00:00:00 2001
+From: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Date: Mon, 16 Mar 2026 10:18:59 +0100
+Subject: [PATCH] crypto: stm32/cryp - disable bottom half when finishing
+ request in stm32_cryp_aead_one_req
+
+The finalize operation in interrupt mode produce a produces a warn slowpath
+warning. The reason is the fact that bottom half must be disabled during
+this process.
+
+Change-Id: I7006890f0c76856ff4f897a4bf1879d1297ba8d2
+Signed-off-by: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/547574
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+---
+ drivers/crypto/stm32/stm32-cryp.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/crypto/stm32/stm32-cryp.c b/drivers/crypto/stm32/stm32-cryp.c
+index b0394ebbc0f2..52de3a530f5c 100644
+--- a/drivers/crypto/stm32/stm32-cryp.c
++++ b/drivers/crypto/stm32/stm32-cryp.c
+@@ -1943,7 +1943,9 @@ static int stm32_cryp_aead_one_req(struct crypto_engine *engine, void *areq)
+ 	if (!stm32_cryp_get_input_text_len(cryp) && !cryp->header_in &&
+ 	    !(cryp->flags & FLG_HEADER_DMA)) {
+ 		/* No input data to process: get tag and finish */
++		local_bh_disable();
+ 		stm32_cryp_finish_req(cryp, 0);
++		local_bh_enable();
+ 		return 0;
+ 	}
+ 
+-- 
+2.53.0
+

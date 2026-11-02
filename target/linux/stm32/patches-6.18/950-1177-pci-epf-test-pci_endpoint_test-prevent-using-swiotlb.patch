@@ -1,0 +1,128 @@
+From dd2d37c1b9d83f8f9462b45dc72509eb124cf2cb Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Wed, 29 Jul 2026 11:35:49 +0200
+Subject: [PATCH] pci-epf-test/pci_endpoint_test: prevent using swiotlb buffer
+ for large DMA tests
+
+pci-epf-test allocates dma transfer buffers with kzalloc() and maps them
+with dma_map_single(). On systems where DMA mappings are bounced through
+SWIOTLB, large buffers allocated from normal memory may fail with error:
+swiotlb buffer is full (sz: 262145 bytes, ...)
+
+Since single SWIOTLB mapping is limited to IO_TLB_SEGSIZE *
+IO_TLB_SIZE bytes (256 KiB with the default configuration), allocate DMA
+test buffers from the DMA zone when the requested transfer size exceeds
+the maximum SWIOTLB mapping size.
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I70ad8ee397ac87bb0ce01a1b69a008235c4037d9
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/592777
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/misc/pci_endpoint_test.c | 24 ++++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
+index e09d9a31c8d8..fe0159f6f0ef 100644
+--- a/drivers/misc/pci_endpoint_test.c
++++ b/drivers/misc/pci_endpoint_test.c
+@@ -18,6 +18,7 @@
+ #include <linux/mutex.h>
+ #include <linux/random.h>
+ #include <linux/slab.h>
++#include <linux/swiotlb.h>
+ #include <linux/uaccess.h>
+ #include <linux/pci.h>
+ #include <linux/pci_ids.h>
+@@ -130,6 +131,7 @@ struct pci_endpoint_test {
+ 	struct miscdevice miscdev;
+ 	enum pci_barno test_reg_bar;
+ 	size_t alignment;
++	u32 max_swiotlb_mapping;
+ 	u32 ep_caps;
+ 	const char *name;
+ };
+@@ -498,6 +500,7 @@ static int pci_endpoint_test_copy(struct pci_endpoint_test *test,
+ 	size_t offset;
+ 	size_t alignment = test->alignment;
+ 	int irq_type = test->irq_type;
++	bool use_dma_region;
+ 	u32 src_crc32;
+ 	u32 dst_crc32;
+ 	int ret;
+@@ -524,7 +527,10 @@ static int pci_endpoint_test_copy(struct pci_endpoint_test *test,
+ 		return -EINVAL;
+ 	}
+ 
+-	orig_src_addr = kzalloc(size + alignment, GFP_KERNEL);
++	use_dma_region = size + alignment > test->max_swiotlb_mapping;
++	orig_src_addr = kzalloc(size + alignment,
++				use_dma_region ? GFP_KERNEL | GFP_DMA : GFP_KERNEL);
++
+ 	if (!orig_src_addr) {
+ 		dev_err(dev, "Failed to allocate source buffer\n");
+ 		return -ENOMEM;
+@@ -556,7 +562,8 @@ static int pci_endpoint_test_copy(struct pci_endpoint_test *test,
+ 
+ 	src_crc32 = crc32_le(~0, src_addr, size);
+ 
+-	orig_dst_addr = kzalloc(size + alignment, GFP_KERNEL);
++	orig_dst_addr = kzalloc(size + alignment,
++				use_dma_region ? GFP_KERNEL | GFP_DMA : GFP_KERNEL);
+ 	if (!orig_dst_addr) {
+ 		dev_err(dev, "Failed to allocate destination address\n");
+ 		ret = -ENOMEM;
+@@ -631,6 +638,7 @@ static int pci_endpoint_test_write(struct pci_endpoint_test *test,
+ 	size_t offset;
+ 	size_t alignment = test->alignment;
+ 	int irq_type = test->irq_type;
++	bool use_dma_region;
+ 	size_t size;
+ 	u32 crc32;
+ 	int ret;
+@@ -657,7 +665,10 @@ static int pci_endpoint_test_write(struct pci_endpoint_test *test,
+ 		return -EINVAL;
+ 	}
+ 
+-	orig_addr = kzalloc(size + alignment, GFP_KERNEL);
++	use_dma_region = size + alignment > test->max_swiotlb_mapping;
++	orig_addr = kzalloc(size + alignment,
++			    use_dma_region ? GFP_KERNEL | GFP_DMA : GFP_KERNEL);
++
+ 	if (!orig_addr) {
+ 		dev_err(dev, "Failed to allocate address\n");
+ 		return -ENOMEM;
+@@ -728,6 +739,7 @@ static int pci_endpoint_test_read(struct pci_endpoint_test *test,
+ 	dma_addr_t orig_phys_addr;
+ 	size_t offset;
+ 	size_t alignment = test->alignment;
++	bool use_dma_region;
+ 	int irq_type = test->irq_type;
+ 	u32 crc32;
+ 	int ret;
+@@ -754,7 +766,10 @@ static int pci_endpoint_test_read(struct pci_endpoint_test *test,
+ 		return -EINVAL;
+ 	}
+ 
+-	orig_addr = kzalloc(size + alignment, GFP_KERNEL);
++	use_dma_region = size + alignment > test->max_swiotlb_mapping;
++	orig_addr = kzalloc(size + alignment,
++			    use_dma_region ? GFP_KERNEL | GFP_DMA : GFP_KERNEL);
++
+ 	if (!orig_addr) {
+ 		dev_err(dev, "Failed to allocate destination address\n");
+ 		return -ENOMEM;
+@@ -1087,6 +1102,7 @@ static int pci_endpoint_test_probe(struct pci_dev *pdev,
+ 	}
+ 
+ 	pci_endpoint_test_get_capabilities(test);
++	test->max_swiotlb_mapping = IO_TLB_SEGSIZE * IO_TLB_SIZE;
+ 
+ 	misc_device = &test->miscdev;
+ 	misc_device->minor = MISC_DYNAMIC_MINOR;
+-- 
+2.53.0
+

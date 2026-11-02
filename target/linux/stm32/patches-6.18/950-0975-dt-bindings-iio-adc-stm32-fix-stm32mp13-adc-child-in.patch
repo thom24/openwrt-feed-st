@@ -1,0 +1,45 @@
+From 2a3215f2c64cc7573d940f4426b73281b000563f Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Tue, 12 May 2026 17:28:52 +0200
+Subject: [PATCH] dt-bindings: iio: adc: stm32: fix stm32mp13 adc child
+ interrupt schema
+
+STM32MP13 ADC child nodes expose a single interrupt specifier through the
+local interrupt controller defined by the ADC core node.
+
+The binding currently models this as a plain scalar value, which does not
+match how dt-schema validates interrupt specifiers. Describe it as a
+single-cell interrupt tuple instead so the STM32MP13 ADC child nodes
+validate correctly.
+
+This fixes the spurious:
+
+  adc@0:interrupts:0: 0 was expected
+
+warning reported by check_dtbs on STM32MP135F device trees.
+
+Fixes: 6cafcdb19ee4 ("dt-bindings: iio: adc: stm32-adc: add stm32mp13 compatibles")
+Change-Id: I1ef0db54a80d94164b7680a28f4fe8033dcfbb17
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+---
+ Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
+index 8f5e9ea1ad8f..3aa4d35e3f67 100644
+--- a/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
+@@ -536,7 +536,9 @@ patternProperties:
+               const: 0x0
+ 
+             interrupts:
+-              const: 0
++              items:
++                - items:
++                    - const: 0
+ 
+             assigned-resolution-bits:
+               enum: [6, 8, 10, 12]
+-- 
+2.53.0
+

@@ -1,0 +1,74 @@
+From 9a15292e1c5fc8f6c4bd0a86fa57abda23d2beb0 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 3 Mar 2026 15:33:35 +0100
+Subject: [PATCH] ARM: dts: stm32: fix alignment issues in nodes of stm32mp131
+
+Since the ETZPC system bus was introduced, alignment issues have
+appeared in some nodes moved under the etzpc parent node.
+
+Change-Id: I79ea7139ccde6e94d9f8913c17c4b65f62968bce
+Fixes: a06b9560eb6c ("ARM: dts: stm32: add ETZPC as a system bus for STM32MP13x boards")
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/542938
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp131.dtsi | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
+index fd730aa37c22..f1ef92b18728 100644
+--- a/arch/arm/boot/dts/st/stm32mp131.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
+@@ -1122,7 +1122,7 @@ usart1: serial@4c000000 {
+ 				resets = <&rcc USART1_R>;
+ 				wakeup-source;
+ 				dmas = <&dmamux1 41 0x400 0x5>,
+-				<&dmamux1 42 0x400 0x1>;
++				       <&dmamux1 42 0x400 0x1>;
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&etzpc 16>;
+ 				status = "disabled";
+@@ -1136,7 +1136,7 @@ usart2: serial@4c001000 {
+ 				resets = <&rcc USART2_R>;
+ 				wakeup-source;
+ 				dmas = <&dmamux1 43 0x400 0x5>,
+-				<&dmamux1 44 0x400 0x1>;
++				       <&dmamux1 44 0x400 0x1>;
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&etzpc 17>;
+ 				status = "disabled";
+@@ -1148,7 +1148,7 @@ i2s4: audio-controller@4c002000 {
+ 				#sound-dai-cells = <0>;
+ 				interrupts = <GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>;
+ 				dmas = <&dmamux1 83 0x400 0x01>,
+-				<&dmamux1 84 0x400 0x01>;
++				       <&dmamux1 84 0x400 0x01>;
+ 				dma-names = "rx", "tx";
+ 				access-controllers = <&etzpc 13>;
+ 				status = "disabled";
+@@ -1341,9 +1341,9 @@ timers15: timer@4c00a000 {
+ 				clocks = <&rcc TIM15_K>;
+ 				clock-names = "int";
+ 				dmas = <&dmamux1 105 0x400 0x1>,
+-				<&dmamux1 106 0x400 0x1>,
+-				<&dmamux1 107 0x400 0x1>,
+-				<&dmamux1 108 0x400 0x1>;
++				       <&dmamux1 106 0x400 0x1>,
++				       <&dmamux1 107 0x400 0x1>,
++				       <&dmamux1 108 0x400 0x1>;
+ 				dma-names = "ch1", "up", "trig", "com";
+ 				access-controllers = <&etzpc 26>;
+ 				status = "disabled";
+@@ -1376,7 +1376,7 @@ timers16: timer@4c00b000 {
+ 				clocks = <&rcc TIM16_K>;
+ 				clock-names = "int";
+ 				dmas = <&dmamux1 109 0x400 0x1>,
+-				<&dmamux1 110 0x400 0x1>;
++				       <&dmamux1 110 0x400 0x1>;
+ 				dma-names = "ch1", "up";
+ 				access-controllers = <&etzpc 27>;
+ 				status = "disabled";
+-- 
+2.53.0
+

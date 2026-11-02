@@ -1,0 +1,47 @@
+From 7e8d417e65102171215ce5f06bdbfdaad8d5b408 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Wed, 9 Aug 2023 15:52:14 +0200
+Subject: [PATCH] ARM: dts: stm32: align exti and pinctrl nodes with new
+ bindings to stm32mp151
+
+Remove the property "st,syscfg" from pinctrl and the compatible
+"syscon" from EXTI.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: Id5f84f0359acd9d35816a21cf19890079cfee65c
+---
+ arch/arm/boot/dts/st/stm32mp151.dtsi | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
+index f9783e0844b2..1b3d946a0fcc 100644
+--- a/arch/arm/boot/dts/st/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
+@@ -209,7 +209,7 @@ pwr_mcu: pwr_mcu@50001014 {
+ 		};
+ 
+ 		exti: interrupt-controller@5000d000 {
+-			compatible = "st,stm32mp1-exti", "syscon";
++			compatible = "st,stm32mp1-exti";
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
+ 			reg = <0x5000d000 0x400>;
+@@ -1921,7 +1921,6 @@ pinctrl: pinctrl@50002000 {
+ 			compatible = "st,stm32mp157-pinctrl";
+ 			ranges = <0 0x50002000 0xa400>;
+ 			interrupt-parent = <&exti>;
+-			st,syscfg = <&exti 0x60 0xff>;
+ 
+ 			gpioa: gpio@50002000 {
+ 				gpio-controller;
+@@ -2051,7 +2050,6 @@ pinctrl_z: pinctrl@54004000 {
+ 			compatible = "st,stm32mp157-z-pinctrl";
+ 			ranges = <0 0x54004000 0x400>;
+ 			interrupt-parent = <&exti>;
+-			st,syscfg = <&exti 0x60 0xff>;
+ 
+ 			gpioz: gpio@54004000 {
+ 				gpio-controller;
+-- 
+2.53.0
+

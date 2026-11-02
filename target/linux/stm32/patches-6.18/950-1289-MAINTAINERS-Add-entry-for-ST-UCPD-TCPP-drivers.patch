@@ -1,0 +1,35 @@
+From 686fe64628950ddf92e812612ff04735fbc674fb Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Wed, 8 Jul 2026 07:30:19 +0200
+Subject: [PATCH] MAINTAINERS: Add entry for ST UCPD/TCPP drivers
+
+Add myself as STM32 UCPD and TCPP maintainer
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I82747ee8d877a310ca2fdc0cd34f11cfa98e24ff
+---
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index dc60ab54109f..2dad2688737b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -24374,6 +24374,14 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
+ F:	drivers/soc/st/stm32_syscon.c
+ 
++ST STM32 TYPEC UCPD DRIVERS
++M:	Christian Bruel <christian.bruel@foss.st.com>
++S:	Maintained
++F:	Documentation/devicetree/bindings/usb/st,stm32-ucpd.yaml
++F:	Documentation/devicetree/bindings/usb/st,tcpp.yaml
++F:	drivers/usb/typec/tcpm/st_tcpp.[ch]
++F:	drivers/usb/typec/tcpm/stm32_ucpd.c
++
+ ST STPDDC60 DRIVER
+ M:	Daniel Nilsson <daniel.nilsson@flex.com>
+ L:	linux-hwmon@vger.kernel.org
+-- 
+2.53.0
+

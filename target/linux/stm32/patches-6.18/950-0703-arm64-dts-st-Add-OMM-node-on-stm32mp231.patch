@@ -1,0 +1,86 @@
+From f1531519a0a11e7d764789b0aa2294d770ad0a30 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Fri, 10 Apr 2026 10:35:19 +0200
+Subject: [PATCH] arm64: dts: st: Add OMM node on stm32mp231
+
+Add Octo Memory Manager (OMM) entry on stm32mp231 and its two
+OSPI instance.
+
+Change-Id: I4144789319a2972393e7a028bd73d2acba5c1644
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/555772
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp231.dtsi | 54 ++++++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+index 3d90f2accaa1..33dbbee2da7a 100644
+--- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+@@ -288,6 +288,60 @@ ipcc1: mailbox@40490000 {
+ 			status = "disabled";
+ 		};
+ 
++		ommanager: ommanager@40500000 {
++			compatible = "st,stm32mp25-omm";
++			reg = <0x40500000 0x400>, <0x60000000 0x10000000>;
++			reg-names = "regs", "memory_map";
++			ranges = <0 0 0x40430000 0x400>,
++				 <1 0 0x40440000 0x400>;
++			clocks = <&rcc CK_BUS_OSPIIOM>,
++				 <&scmi_clk CK_SCMI_OSPI1>,
++				 <&scmi_clk CK_SCMI_OSPI2>;
++			clock-names = "omm", "ospi1", "ospi2";
++			resets = <&rcc OSPIIOM_R>,
++				 <&scmi_reset RST_SCMI_OSPI1>,
++				 <&scmi_reset RST_SCMI_OSPI2>;
++			reset-names = "omm", "ospi1", "ospi2";
++			access-controllers = <&rifsc 111>;
++			power-domains = <&d1_pd>;
++			#address-cells = <2>;
++			#size-cells = <1>;
++			st,syscfg-amcr = <&syscfg 0x2c00 0x7>;
++			status = "disabled";
++
++			ospi1: spi@0 {
++				compatible = "st,stm32mp25-ospi";
++				reg = <0 0 0x400>;
++				interrupts = <GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH>;
++				dmas = <&hpdma 2 0x62 0x3121>,
++				       <&hpdma 2 0x42 0x3112>;
++				dma-names = "tx", "rx";
++				clocks = <&scmi_clk CK_SCMI_OSPI1>;
++				resets = <&scmi_reset RST_SCMI_OSPI1>,
++					 <&scmi_reset RST_SCMI_OSPI1DLL>;
++				access-controllers = <&rifsc 74>;
++				power-domains = <&d1_pd>;
++				st,syscfg-dlyb = <&syscfg 0x1000>;
++				status = "disabled";
++			};
++
++			ospi2: spi@1 {
++				compatible = "st,stm32mp25-ospi";
++				reg = <1 0 0x400>;
++				interrupts = <GIC_SPI 164 IRQ_TYPE_LEVEL_HIGH>;
++				dmas = <&hpdma 3 0x62 0x3121>,
++				       <&hpdma 3 0x42 0x3112>;
++				dma-names = "tx", "rx";
++				clocks = <&scmi_clk CK_SCMI_OSPI2>;
++				resets = <&scmi_reset RST_SCMI_OSPI2>,
++					 <&scmi_reset RST_SCMI_OSPI2DLL>;
++				access-controllers = <&rifsc 75>;
++				power-domains = <&d1_pd>;
++				st,syscfg-dlyb = <&syscfg 0x1400>;
++				status = "disabled";
++			};
++		};
++
+ 		rifsc: bus@42080000 {
+ 			compatible = "st,stm32mp25-rifsc", "simple-bus";
+ 			reg = <0x42080000 0x1000>;
+-- 
+2.53.0
+

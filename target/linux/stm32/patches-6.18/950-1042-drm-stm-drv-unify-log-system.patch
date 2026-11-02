@@ -1,0 +1,74 @@
+From e51707081b198070c8755aa030963bf1a62bfed0 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Thu, 5 Mar 2026 16:09:52 +0100
+Subject: [PATCH] drm/stm: drv: unify log system
+
+DRM_ERROR and similar are deprecated.  Use drm_dev based logging.
+
+Change-Id: I850d5ce52b6ea81ed3305f82738fc1fd0b42f913
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+---
+ drivers/gpu/drm/stm/drv.c | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/gpu/drm/stm/drv.c b/drivers/gpu/drm/stm/drv.c
+index ab00d1a6140c..2baedd3e2077 100644
+--- a/drivers/gpu/drm/stm/drv.c
++++ b/drivers/gpu/drm/stm/drv.c
+@@ -76,8 +76,6 @@ static int drv_load(struct drm_device *ddev)
+ 	struct ltdc_device *ldev;
+ 	int ret;
+ 
+-	DRM_DEBUG("%s\n", __func__);
+-
+ 	ldev = drmm_kzalloc(ddev, sizeof(*ldev), GFP_KERNEL);
+ 	if (!ldev)
+ 		return -ENOMEM;
+@@ -114,8 +112,6 @@ static int drv_load(struct drm_device *ddev)
+ 
+ static void drv_unload(struct drm_device *ddev)
+ {
+-	DRM_DEBUG("%s\n", __func__);
+-
+ 	drm_kms_helper_poll_fini(ddev);
+ 	drm_atomic_helper_shutdown(ddev);
+ 	ltdc_unload(ddev);
+@@ -162,7 +158,7 @@ static __maybe_unused int drv_runtime_suspend(struct device *dev)
+ {
+ 	struct drm_device *ddev = dev_get_drvdata(dev);
+ 
+-	DRM_DEBUG_DRIVER("\n");
++	drm_dbg_driver(ddev, "\n");
+ 	ltdc_suspend(ddev);
+ 
+ 	return 0;
+@@ -172,7 +168,7 @@ static __maybe_unused int drv_runtime_resume(struct device *dev)
+ {
+ 	struct drm_device *ddev = dev_get_drvdata(dev);
+ 
+-	DRM_DEBUG_DRIVER("\n");
++	drm_dbg_driver(ddev, "\n");
+ 	return ltdc_resume(ddev);
+ }
+ 
+@@ -188,8 +184,6 @@ static int stm_drm_platform_probe(struct platform_device *pdev)
+ 	struct drm_device *ddev;
+ 	int ret;
+ 
+-	DRM_DEBUG("%s\n", __func__);
+-
+ 	ret = aperture_remove_all_conflicting_devices(drv_driver.name);
+ 	if (ret)
+ 		return ret;
+@@ -224,8 +218,6 @@ static void stm_drm_platform_remove(struct platform_device *pdev)
+ {
+ 	struct drm_device *ddev = platform_get_drvdata(pdev);
+ 
+-	DRM_DEBUG("%s\n", __func__);
+-
+ 	drm_dev_unregister(ddev);
+ 	drv_unload(ddev);
+ 	drm_dev_put(ddev);
+-- 
+2.53.0
+

@@ -1,0 +1,844 @@
+From 74823080fd981a816942ead4514f877fa4775dc0 Mon Sep 17 00:00:00 2001
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Date: Wed, 15 Oct 2025 18:12:35 -0500
+Subject: [PATCH] dt-bindings: Fix inconsistent quoting
+
+commit 01585d7470aa5b8990645919dfbc2179171caaf9 upstream.
+
+yamllint has gained a new check which checks for inconsistent quoting
+(mixed " and ' quotes within a file). Fix all the cases yamllint found
+so we can enable the check (once the check is in a release). As single
+quotes are (slightly) preferred, use them throughout the modified files
+even if double quotes are mostly used.
+
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Jonathan Cameron <jonathan.cameron@huawei.com>
+Acked-by: Andrew Jeffery <andrew@codeconstruct.com.au>
+Acked-by: Jassi Brar <jassisinghbrar@gmail.com>
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Acked-by: Lee Jones <lee@kernel.org>
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Link: https://patch.msgid.link/20251015232015.846282-1-robh@kernel.org
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I7c14b832a208357ad4249b669a7422c03807c585
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/571175
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ .../arm/altera/socfpga-clk-manager.yaml       | 20 +++++++++----------
+ .../bindings/clock/nvidia,tegra124-car.yaml   |  8 ++++----
+ .../bindings/clock/nvidia,tegra20-car.yaml    |  6 +++---
+ .../devicetree/bindings/gpio/gpio-mxs.yaml    | 13 ++++++------
+ .../bindings/gpio/snps,dw-apb-gpio.yaml       |  4 ++--
+ .../bindings/iio/temperature/adi,ltc2983.yaml | 20 +++++++++----------
+ .../mailbox/qcom,apcs-kpss-global.yaml        | 16 +++++++--------
+ .../mailbox/xlnx,zynqmp-ipi-mailbox.yaml      |  2 +-
+ .../devicetree/bindings/mfd/aspeed-lpc.yaml   | 16 +++++++--------
+ .../devicetree/bindings/mfd/ti,twl.yaml       |  4 ++--
+ .../bindings/net/ethernet-switch.yaml         | 16 +++++++--------
+ .../pci/plda,xpressrich3-axi-common.yaml      |  2 +-
+ .../bindings/phy/motorola,cpcap-usb-phy.yaml  |  4 ++--
+ .../pinctrl/microchip,sparx5-sgpio.yaml       | 12 +++++------
+ .../bindings/pinctrl/qcom,pmic-gpio.yaml      | 10 +++++-----
+ .../bindings/pinctrl/qcom,pmic-mpp.yaml       |  6 +++---
+ .../bindings/pinctrl/renesas,pfc.yaml         |  2 +-
+ .../bindings/pinctrl/renesas,rza1-ports.yaml  |  2 +-
+ .../pinctrl/renesas,rzg2l-pinctrl.yaml        |  2 +-
+ .../pinctrl/renesas,rzv2m-pinctrl.yaml        |  2 +-
+ .../bindings/power/renesas,sysc-rmobile.yaml  |  4 ++--
+ .../soc/microchip/atmel,at91rm9200-tcb.yaml   |  8 ++++----
+ .../soc/tegra/nvidia,tegra20-pmc.yaml         | 12 +++++------
+ 23 files changed, 96 insertions(+), 95 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/arm/altera/socfpga-clk-manager.yaml b/Documentation/devicetree/bindings/arm/altera/socfpga-clk-manager.yaml
+index a758f4bb2bb3..4683bd1293fa 100644
+--- a/Documentation/devicetree/bindings/arm/altera/socfpga-clk-manager.yaml
++++ b/Documentation/devicetree/bindings/arm/altera/socfpga-clk-manager.yaml
+@@ -27,17 +27,17 @@ properties:
+     additionalProperties: false
+ 
+     properties:
+-      "#address-cells":
++      '#address-cells':
+         const: 1
+ 
+-      "#size-cells":
++      '#size-cells':
+         const: 0
+ 
+     patternProperties:
+-      "^osc[0-9]$":
++      '^osc[0-9]$':
+         type: object
+ 
+-      "^[a-z0-9,_]+(clk|pll|clk_gate|clk_divided)(@[a-f0-9]+)?$":
++      '^[a-z0-9,_]+(clk|pll|clk_gate|clk_divided)(@[a-f0-9]+)?$':
+         type: object
+         $ref: '#/$defs/clock-props'
+         unevaluatedProperties: false
+@@ -58,14 +58,14 @@ properties:
+             minItems: 1
+             maxItems: 5
+ 
+-          "#address-cells":
++          '#address-cells':
+             const: 1
+ 
+-          "#size-cells":
++          '#size-cells':
+             const: 0
+ 
+         patternProperties:
+-          "^[a-z0-9,_]+(clk|pll)(@[a-f0-9]+)?$":
++          '^[a-z0-9,_]+(clk|pll)(@[a-f0-9]+)?$':
+             type: object
+             $ref: '#/$defs/clock-props'
+             unevaluatedProperties: false
+@@ -86,11 +86,11 @@ properties:
+             required:
+               - compatible
+               - clocks
+-              - "#clock-cells"
++              - '#clock-cells'
+ 
+         required:
+           - compatible
+-          - "#clock-cells"
++          - '#clock-cells'
+ 
+ required:
+   - compatible
+@@ -104,7 +104,7 @@ $defs:
+       reg:
+         maxItems: 1
+ 
+-      "#clock-cells":
++      '#clock-cells':
+         const: 0
+ 
+       clk-gate:
+diff --git a/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml b/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml
+index a9ba21144a56..13bb616249a1 100644
+--- a/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml
++++ b/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml
+@@ -37,7 +37,7 @@ properties:
+   '#clock-cells':
+     const: 1
+ 
+-  "#reset-cells":
++  '#reset-cells':
+     const: 1
+ 
+   nvidia,external-memory-controller:
+@@ -46,7 +46,7 @@ properties:
+       phandle of the external memory controller node
+ 
+ patternProperties:
+-  "^emc-timings-[0-9]+$":
++  '^emc-timings-[0-9]+$':
+     type: object
+     properties:
+       nvidia,ram-code:
+@@ -56,7 +56,7 @@ patternProperties:
+           this timing set is used for
+ 
+     patternProperties:
+-      "^timing-[0-9]+$":
++      '^timing-[0-9]+$':
+         type: object
+         properties:
+           clock-frequency:
+@@ -94,7 +94,7 @@ required:
+   - compatible
+   - reg
+   - '#clock-cells'
+-  - "#reset-cells"
++  - '#reset-cells'
+ 
+ additionalProperties: false
+ 
+diff --git a/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml b/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
+index bee2dd4b29bf..73cccc0df424 100644
+--- a/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
++++ b/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
+@@ -39,11 +39,11 @@ properties:
+   '#clock-cells':
+     const: 1
+ 
+-  "#reset-cells":
++  '#reset-cells':
+     const: 1
+ 
+ patternProperties:
+-  "^(sclk)|(pll-[cem])$":
++  '^(sclk)|(pll-[cem])$':
+     type: object
+     properties:
+       compatible:
+@@ -76,7 +76,7 @@ required:
+   - compatible
+   - reg
+   - '#clock-cells'
+-  - "#reset-cells"
++  - '#reset-cells'
+ 
+ additionalProperties: false
+ 
+diff --git a/Documentation/devicetree/bindings/gpio/gpio-mxs.yaml b/Documentation/devicetree/bindings/gpio/gpio-mxs.yaml
+index aaf97124803f..fed1b06495ad 100644
+--- a/Documentation/devicetree/bindings/gpio/gpio-mxs.yaml
++++ b/Documentation/devicetree/bindings/gpio/gpio-mxs.yaml
+@@ -28,6 +28,7 @@ properties:
+ 
+   '#address-cells':
+     const: 1
++
+   '#size-cells':
+     const: 0
+ 
+@@ -35,7 +36,7 @@ properties:
+     maxItems: 1
+ 
+ patternProperties:
+-  "^(?!gpio@)[^@]+@[0-9]+$":
++  '^(?!gpio@)[^@]+@[0-9]+$':
+     type: object
+     properties:
+       fsl,pinmux-ids:
+@@ -93,7 +94,7 @@ patternProperties:
+ 
+     additionalProperties: false
+ 
+-  "^gpio@[0-9]+$":
++  '^gpio@[0-9]+$':
+     type: object
+     properties:
+       compatible:
+@@ -110,10 +111,10 @@ patternProperties:
+ 
+       interrupt-controller: true
+ 
+-      "#interrupt-cells":
++      '#interrupt-cells':
+         const: 2
+ 
+-      "#gpio-cells":
++      '#gpio-cells':
+         const: 2
+ 
+       gpio-controller: true
+@@ -123,8 +124,8 @@ patternProperties:
+       - reg
+       - interrupts
+       - interrupt-controller
+-      - "#interrupt-cells"
+-      - "#gpio-cells"
++      - '#interrupt-cells'
++      - '#gpio-cells'
+       - gpio-controller
+ 
+     additionalProperties: false
+diff --git a/Documentation/devicetree/bindings/gpio/snps,dw-apb-gpio.yaml b/Documentation/devicetree/bindings/gpio/snps,dw-apb-gpio.yaml
+index ab2afc0e4153..bba6f5b6606f 100644
+--- a/Documentation/devicetree/bindings/gpio/snps,dw-apb-gpio.yaml
++++ b/Documentation/devicetree/bindings/gpio/snps,dw-apb-gpio.yaml
+@@ -111,8 +111,8 @@ additionalProperties: false
+ required:
+   - compatible
+   - reg
+-  - "#address-cells"
+-  - "#size-cells"
++  - '#address-cells'
++  - '#size-cells'
+ 
+ examples:
+   - |
+diff --git a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
+index 312febeeb3bb..ee0b558bb866 100644
+--- a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
++++ b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
+@@ -88,7 +88,7 @@ properties:
+     const: 0
+ 
+ patternProperties:
+-  "^thermocouple@":
++  '^thermocouple@':
+     $ref: '#/$defs/sensor-node'
+     unevaluatedProperties: false
+ 
+@@ -146,7 +146,7 @@ patternProperties:
+           required:
+             - adi,custom-thermocouple
+ 
+-  "^diode@":
++  '^diode@':
+     $ref: '#/$defs/sensor-node'
+     unevaluatedProperties: false
+ 
+@@ -191,7 +191,7 @@ patternProperties:
+         $ref: /schemas/types.yaml#/definitions/uint32
+         default: 0
+ 
+-  "^rtd@":
++  '^rtd@':
+     $ref: '#/$defs/sensor-node'
+     unevaluatedProperties: false
+     description: RTD sensor.
+@@ -280,7 +280,7 @@ patternProperties:
+               type: boolean
+ 
+           dependencies:
+-            adi,current-rotate: [ "adi,rsense-share" ]
++            adi,current-rotate: [ 'adi,rsense-share' ]
+ 
+       - if:
+           properties:
+@@ -290,7 +290,7 @@ patternProperties:
+           required:
+             - adi,custom-rtd
+ 
+-  "^thermistor@":
++  '^thermistor@':
+     $ref: '#/$defs/sensor-node'
+     unevaluatedProperties: false
+     description: Thermistor sensor.
+@@ -364,7 +364,7 @@ patternProperties:
+       - adi,rsense-handle
+ 
+     dependencies:
+-      adi,current-rotate: [ "adi,rsense-share" ]
++      adi,current-rotate: [ 'adi,rsense-share' ]
+ 
+     allOf:
+       - if:
+@@ -392,7 +392,7 @@ patternProperties:
+           required:
+             - adi,custom-thermistor
+ 
+-  "^adc@":
++  '^adc@':
+     $ref: '#/$defs/sensor-node'
+     unevaluatedProperties: false
+     description: Direct ADC sensor.
+@@ -407,7 +407,7 @@ patternProperties:
+         description: Whether the sensor is single-ended.
+         type: boolean
+ 
+-  "^temp@":
++  '^temp@':
+     $ref: '#/$defs/sensor-node'
+     unevaluatedProperties: false
+     description: Active analog temperature sensor.
+@@ -437,7 +437,7 @@ patternProperties:
+     required:
+       - adi,custom-temp
+ 
+-  "^rsense@":
++  '^rsense@':
+     $ref: '#/$defs/sensor-node'
+     unevaluatedProperties: false
+     description: Sense resistor sensor.
+@@ -476,7 +476,7 @@ allOf:
+               - adi,ltc2984
+     then:
+       patternProperties:
+-        "^temp@": false
++        '^temp@': false
+ 
+ examples:
+   - |
+diff --git a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
+index 615ed103b7e6..f40dc9048327 100644
+--- a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
++++ b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
+@@ -187,10 +187,10 @@ allOf:
+             enum:
+               - qcom,msm8916-apcs-kpss-global
+     then:
+-      $ref: "#/$defs/msm8916-apcs-clock-controller"
++      $ref: '#/$defs/msm8916-apcs-clock-controller'
+       properties:
+         clock-controller:
+-          $ref: "#/$defs/msm8916-apcs-clock-controller"
++          $ref: '#/$defs/msm8916-apcs-clock-controller'
+ 
+   - if:
+       properties:
+@@ -199,10 +199,10 @@ allOf:
+             enum:
+               - qcom,msm8939-apcs-kpss-global
+     then:
+-      $ref: "#/$defs/msm8939-apcs-clock-controller"
++      $ref: '#/$defs/msm8939-apcs-clock-controller'
+       properties:
+         clock-controller:
+-          $ref: "#/$defs/msm8939-apcs-clock-controller"
++          $ref: '#/$defs/msm8939-apcs-clock-controller'
+ 
+   - if:
+       properties:
+@@ -211,10 +211,10 @@ allOf:
+             enum:
+               - qcom,sdx55-apcs-gcc
+     then:
+-      $ref: "#/$defs/sdx55-apcs-clock-controller"
++      $ref: '#/$defs/sdx55-apcs-clock-controller'
+       properties:
+         clock-controller:
+-          $ref: "#/$defs/sdx55-apcs-clock-controller"
++          $ref: '#/$defs/sdx55-apcs-clock-controller'
+ 
+   - if:
+       properties:
+@@ -223,10 +223,10 @@ allOf:
+             enum:
+               - qcom,ipq6018-apcs-apps-global
+     then:
+-      $ref: "#/$defs/ipq6018-apcs-clock-controller"
++      $ref: '#/$defs/ipq6018-apcs-clock-controller'
+       properties:
+         clock-controller:
+-          $ref: "#/$defs/ipq6018-apcs-clock-controller"
++          $ref: '#/$defs/ipq6018-apcs-clock-controller'
+ 
+   - if:
+       properties:
+diff --git a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
+index fe83b5cb1278..04d6473d666f 100644
+--- a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
++++ b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
+@@ -142,7 +142,7 @@ patternProperties:
+       - compatible
+       - reg
+       - reg-names
+-      - "#mbox-cells"
++      - '#mbox-cells'
+       - xlnx,ipi-id
+ 
+ required:
+diff --git a/Documentation/devicetree/bindings/mfd/aspeed-lpc.yaml b/Documentation/devicetree/bindings/mfd/aspeed-lpc.yaml
+index f329223cec07..cbc3a2485a2f 100644
+--- a/Documentation/devicetree/bindings/mfd/aspeed-lpc.yaml
++++ b/Documentation/devicetree/bindings/mfd/aspeed-lpc.yaml
+@@ -48,16 +48,16 @@ properties:
+   reg:
+     maxItems: 1
+ 
+-  "#address-cells":
++  '#address-cells':
+     const: 1
+ 
+-  "#size-cells":
++  '#size-cells':
+     const: 1
+ 
+   ranges: true
+ 
+ patternProperties:
+-  "^lpc-ctrl@[0-9a-f]+$":
++  '^lpc-ctrl@[0-9a-f]+$':
+     type: object
+     additionalProperties: false
+ 
+@@ -92,7 +92,7 @@ patternProperties:
+       - compatible
+       - clocks
+ 
+-  "^reset-controller@[0-9a-f]+$":
++  '^reset-controller@[0-9a-f]+$':
+     type: object
+     additionalProperties: false
+ 
+@@ -118,7 +118,7 @@ patternProperties:
+       - compatible
+       - '#reset-cells'
+ 
+-  "^lpc-snoop@[0-9a-f]+$":
++  '^lpc-snoop@[0-9a-f]+$':
+     type: object
+     additionalProperties: false
+ 
+@@ -152,15 +152,15 @@ patternProperties:
+       - interrupts
+       - snoop-ports
+ 
+-  "^uart-routing@[0-9a-f]+$":
++  '^uart-routing@[0-9a-f]+$':
+     $ref: /schemas/soc/aspeed/uart-routing.yaml#
+     description: The UART routing control under LPC register space
+ 
+ required:
+   - compatible
+   - reg
+-  - "#address-cells"
+-  - "#size-cells"
++  - '#address-cells'
++  - '#size-cells'
+   - ranges
+ 
+ additionalProperties:
+diff --git a/Documentation/devicetree/bindings/mfd/ti,twl.yaml b/Documentation/devicetree/bindings/mfd/ti,twl.yaml
+index 776b04e182cb..1611b1581a8e 100644
+--- a/Documentation/devicetree/bindings/mfd/ti,twl.yaml
++++ b/Documentation/devicetree/bindings/mfd/ti,twl.yaml
+@@ -400,7 +400,7 @@ properties:
+       - '#pwm-cells'
+ 
+ patternProperties:
+-  "^regulator-":
++  '^regulator-':
+     type: object
+     unevaluatedProperties: false
+     $ref: /schemas/regulator/regulator.yaml
+@@ -429,7 +429,7 @@ required:
+   - reg
+   - interrupts
+   - interrupt-controller
+-  - "#interrupt-cells"
++  - '#interrupt-cells'
+ 
+ examples:
+   - |
+diff --git a/Documentation/devicetree/bindings/net/ethernet-switch.yaml b/Documentation/devicetree/bindings/net/ethernet-switch.yaml
+index b3b7e1a1b127..6bb68f7dbc7f 100644
+--- a/Documentation/devicetree/bindings/net/ethernet-switch.yaml
++++ b/Documentation/devicetree/bindings/net/ethernet-switch.yaml
+@@ -35,14 +35,14 @@ allOf:
+     then:
+       properties:
+         $nodename:
+-          pattern: "switch[0-3]@[0-3]+$"
++          pattern: 'switch[0-3]@[0-3]+$'
+     else:
+       properties:
+         $nodename:
+-          pattern: "^(ethernet-)?switch(@.*)?$"
++          pattern: '^(ethernet-)?switch(@.*)?$'
+ 
+ patternProperties:
+-  "^(ethernet-)?ports$":
++  '^(ethernet-)?ports$':
+     type: object
+     unevaluatedProperties: false
+ 
+@@ -53,13 +53,13 @@ patternProperties:
+         const: 0
+ 
+     patternProperties:
+-      "^(ethernet-)?port@[0-9a-f]+$":
++      '^(ethernet-)?port@[0-9a-f]+$':
+         type: object
+         description: Ethernet switch ports
+ 
+     required:
+-      - "#address-cells"
+-      - "#size-cells"
++      - '#address-cells'
++      - '#size-cells'
+ 
+ oneOf:
+   - required:
+@@ -75,9 +75,9 @@ $defs:
+     $ref: '#'
+ 
+     patternProperties:
+-      "^(ethernet-)?ports$":
++      '^(ethernet-)?ports$':
+         patternProperties:
+-          "^(ethernet-)?port@[0-9a-f]+$":
++          '^(ethernet-)?port@[0-9a-f]+$':
+             description: Ethernet switch ports
+             $ref: ethernet-switch-port.yaml#
+             unevaluatedProperties: false
+diff --git a/Documentation/devicetree/bindings/pci/plda,xpressrich3-axi-common.yaml b/Documentation/devicetree/bindings/pci/plda,xpressrich3-axi-common.yaml
+index 039eecdbd6aa..fe2e8beb5bab 100644
+--- a/Documentation/devicetree/bindings/pci/plda,xpressrich3-axi-common.yaml
++++ b/Documentation/devicetree/bindings/pci/plda,xpressrich3-axi-common.yaml
+@@ -72,7 +72,7 @@ required:
+   - reg-names
+   - interrupts
+   - msi-controller
+-  - "#interrupt-cells"
++  - '#interrupt-cells'
+   - interrupt-map-mask
+   - interrupt-map
+ 
+diff --git a/Documentation/devicetree/bindings/phy/motorola,cpcap-usb-phy.yaml b/Documentation/devicetree/bindings/phy/motorola,cpcap-usb-phy.yaml
+index 0febd04a61f4..dd345cbd0a0b 100644
+--- a/Documentation/devicetree/bindings/phy/motorola,cpcap-usb-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/motorola,cpcap-usb-phy.yaml
+@@ -67,8 +67,8 @@ properties:
+   mode-gpios:
+     description: Optional GPIOs for configuring alternate modes
+     items:
+-      - description: "mode selection GPIO #0"
+-      - description: "mode selection GPIO #1"
++      - description: mode selection GPIO#0
++      - description: mode selection GPIO#1
+ 
+ required:
+   - compatible
+diff --git a/Documentation/devicetree/bindings/pinctrl/microchip,sparx5-sgpio.yaml b/Documentation/devicetree/bindings/pinctrl/microchip,sparx5-sgpio.yaml
+index 0df4e114fdd6..fa47732d7cef 100644
+--- a/Documentation/devicetree/bindings/pinctrl/microchip,sparx5-sgpio.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/microchip,sparx5-sgpio.yaml
+@@ -18,7 +18,7 @@ description: |
+ 
+ properties:
+   $nodename:
+-    pattern: "^gpio@[0-9a-f]+$"
++    pattern: '^gpio@[0-9a-f]+$'
+ 
+   compatible:
+     enum:
+@@ -26,10 +26,10 @@ properties:
+       - mscc,ocelot-sgpio
+       - mscc,luton-sgpio
+ 
+-  "#address-cells":
++  '#address-cells':
+     const: 1
+ 
+-  "#size-cells":
++  '#size-cells':
+     const: 0
+ 
+   reg:
+@@ -76,7 +76,7 @@ properties:
+       - const: switch
+ 
+ patternProperties:
+-  "^gpio@[0-1]$":
++  '^gpio@[0-1]$':
+     type: object
+     properties:
+       compatible:
+@@ -132,8 +132,8 @@ required:
+   - reg
+   - clocks
+   - microchip,sgpio-port-ranges
+-  - "#address-cells"
+-  - "#size-cells"
++  - '#address-cells'
++  - '#size-cells'
+ 
+ examples:
+   - |
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
+index 5e6dfcc3fe9b..6632bcd037ba 100644
+--- a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
+@@ -424,13 +424,13 @@ allOf:
+ patternProperties:
+   '-state$':
+     oneOf:
+-      - $ref: "#/$defs/qcom-pmic-gpio-state"
++      - $ref: '#/$defs/qcom-pmic-gpio-state'
+       - patternProperties:
+-          "(pinconf|-pins)$":
+-            $ref: "#/$defs/qcom-pmic-gpio-state"
++          '(pinconf|-pins)$':
++            $ref: '#/$defs/qcom-pmic-gpio-state'
+         additionalProperties: false
+ 
+-  "-hog(-[0-9]+)?$":
++  '-hog(-[0-9]+)?$':
+     type: object
+     required:
+       - gpio-hog
+@@ -503,7 +503,7 @@ $defs:
+                  - gpio1-gpio12 for pmxr2230
+ 
+         items:
+-          pattern: "^gpio([0-9]+)$"
++          pattern: '^gpio([0-9]+)$'
+ 
+       function:
+         items:
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
+index 9364ae05f3e6..daf4c1c03712 100644
+--- a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
+@@ -74,10 +74,10 @@ required:
+ patternProperties:
+   '-state$':
+     oneOf:
+-      - $ref: "#/$defs/qcom-pmic-mpp-state"
++      - $ref: '#/$defs/qcom-pmic-mpp-state'
+       - patternProperties:
+           '-pins$':
+-            $ref: "#/$defs/qcom-pmic-mpp-state"
++            $ref: '#/$defs/qcom-pmic-mpp-state'
+         additionalProperties: false
+ 
+ $defs:
+@@ -100,7 +100,7 @@ $defs:
+                  - mpp1-mpp4 for pma8084
+ 
+         items:
+-          pattern: "^mpp([0-9]+)$"
++          pattern: '^mpp([0-9]+)$'
+ 
+       function:
+         items:
+diff --git a/Documentation/devicetree/bindings/pinctrl/renesas,pfc.yaml b/Documentation/devicetree/bindings/pinctrl/renesas,pfc.yaml
+index cfe004573366..075f3abdfbec 100644
+--- a/Documentation/devicetree/bindings/pinctrl/renesas,pfc.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/renesas,pfc.yaml
+@@ -129,7 +129,7 @@ additionalProperties:
+ 
+     - type: object
+       additionalProperties:
+-        $ref: "#/additionalProperties/anyOf/0"
++        $ref: '#/additionalProperties/anyOf/0'
+ 
+ examples:
+   - |
+diff --git a/Documentation/devicetree/bindings/pinctrl/renesas,rza1-ports.yaml b/Documentation/devicetree/bindings/pinctrl/renesas,rza1-ports.yaml
+index 2bd7d47d0fdb..737eb4e14090 100644
+--- a/Documentation/devicetree/bindings/pinctrl/renesas,rza1-ports.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/renesas,rza1-ports.yaml
+@@ -118,7 +118,7 @@ additionalProperties:
+ 
+     - type: object
+       additionalProperties:
+-        $ref: "#/additionalProperties/anyOf/0"
++        $ref: '#/additionalProperties/anyOf/0'
+ 
+ examples:
+   - |
+diff --git a/Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml
+index 5156d54b240b..00c05243b9a4 100644
+--- a/Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml
+@@ -135,7 +135,7 @@ additionalProperties:
+ 
+     - type: object
+       additionalProperties:
+-        $ref: "#/additionalProperties/anyOf/0"
++        $ref: '#/additionalProperties/anyOf/0'
+ 
+ allOf:
+   - $ref: pinctrl.yaml#
+diff --git a/Documentation/devicetree/bindings/pinctrl/renesas,rzv2m-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/renesas,rzv2m-pinctrl.yaml
+index 5fa5d31f8866..88b2fa5e684d 100644
+--- a/Documentation/devicetree/bindings/pinctrl/renesas,rzv2m-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/renesas,rzv2m-pinctrl.yaml
+@@ -88,7 +88,7 @@ additionalProperties:
+ 
+     - type: object
+       additionalProperties:
+-        $ref: "#/additionalProperties/anyOf/0"
++        $ref: '#/additionalProperties/anyOf/0'
+ 
+ allOf:
+   - $ref: pinctrl.yaml#
+diff --git a/Documentation/devicetree/bindings/power/renesas,sysc-rmobile.yaml b/Documentation/devicetree/bindings/power/renesas,sysc-rmobile.yaml
+index fba6914ec40d..948a9da111df 100644
+--- a/Documentation/devicetree/bindings/power/renesas,sysc-rmobile.yaml
++++ b/Documentation/devicetree/bindings/power/renesas,sysc-rmobile.yaml
+@@ -45,7 +45,7 @@ properties:
+         const: 0
+ 
+     additionalProperties:
+-      $ref: "#/$defs/pd-node"
++      $ref: '#/$defs/pd-node'
+ 
+ required:
+   - compatible
+@@ -83,7 +83,7 @@ $defs:
+       - '#power-domain-cells'
+ 
+     additionalProperties:
+-      $ref: "#/$defs/pd-node"
++      $ref: '#/$defs/pd-node'
+ 
+ examples:
+   - |
+diff --git a/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml b/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
+index 2c7275c4503b..abf1adca0773 100644
+--- a/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
++++ b/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
+@@ -57,7 +57,7 @@ properties:
+     const: 0
+ 
+ patternProperties:
+-  "^timer@[0-2]$":
++  '^timer@[0-2]$':
+     description: The timer block channels that are used as timers or counters.
+     type: object
+     additionalProperties: false
+@@ -80,7 +80,7 @@ patternProperties:
+       - compatible
+       - reg
+ 
+-  "^pwm@[0-2]$":
++  '^pwm@[0-2]$':
+     description: The timer block channels that are used as PWMs.
+     $ref: /schemas/pwm/pwm.yaml#
+     type: object
+@@ -92,7 +92,7 @@ patternProperties:
+           TCB channel to use for this PWM.
+         enum: [ 0, 1, 2 ]
+ 
+-      "#pwm-cells":
++      '#pwm-cells':
+         description:
+           The only third cell flag supported by this binding is
+           PWM_POLARITY_INVERTED.
+@@ -101,7 +101,7 @@ patternProperties:
+     required:
+       - compatible
+       - reg
+-      - "#pwm-cells"
++      - '#pwm-cells'
+ 
+     additionalProperties: false
+ 
+diff --git a/Documentation/devicetree/bindings/soc/tegra/nvidia,tegra20-pmc.yaml b/Documentation/devicetree/bindings/soc/tegra/nvidia,tegra20-pmc.yaml
+index 7140c312d898..f516960dbbef 100644
+--- a/Documentation/devicetree/bindings/soc/tegra/nvidia,tegra20-pmc.yaml
++++ b/Documentation/devicetree/bindings/soc/tegra/nvidia,tegra20-pmc.yaml
+@@ -133,12 +133,12 @@ properties:
+           property. The supported-hw is a bitfield indicating SoC speedo or
+           process ID mask.
+ 
+-      "#power-domain-cells":
++      '#power-domain-cells':
+         const: 0
+ 
+     required:
+       - operating-points-v2
+-      - "#power-domain-cells"
++      - '#power-domain-cells'
+ 
+   i2c-thermtrip:
+     type: object
+@@ -220,7 +220,7 @@ properties:
+         xusbc    USB Partition C               Tegra114/124/210
+ 
+     patternProperties:
+-      "^[a-z0-9]+$":
++      '^[a-z0-9]+$':
+         type: object
+         additionalProperties: false
+         properties:
+@@ -365,9 +365,9 @@ allOf:
+ additionalProperties: false
+ 
+ dependencies:
+-  nvidia,suspend-mode: ["nvidia,core-pwr-off-time", "nvidia,cpu-pwr-off-time"]
+-  nvidia,core-pwr-off-time: ["nvidia,core-pwr-good-time"]
+-  nvidia,cpu-pwr-off-time: ["nvidia,cpu-pwr-good-time"]
++  nvidia,suspend-mode: ['nvidia,core-pwr-off-time', 'nvidia,cpu-pwr-off-time']
++  nvidia,core-pwr-off-time: ['nvidia,core-pwr-good-time']
++  nvidia,cpu-pwr-off-time: ['nvidia,cpu-pwr-good-time']
+ 
+ examples:
+   - |
+-- 
+2.53.0
+

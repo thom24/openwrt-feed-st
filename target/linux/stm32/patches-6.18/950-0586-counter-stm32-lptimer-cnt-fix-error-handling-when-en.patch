@@ -1,0 +1,63 @@
+From 0fe717782e8431362c3665eae7239ad0f1a06c52 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Mon, 24 Feb 2025 17:03:06 +0100
+Subject: [PATCH] counter: stm32-lptimer-cnt: fix error handling when enabling
+
+In case the stm32_lptim_set_enable_state() fails to update CMP and ARR,
+a timeout error is raised, by regmap_read_poll_timeout. It may happen,
+when the lptimer runs on a slow clock, and the clock is gated only
+few times during the polling.
+
+Badly, when this happen, STM32_LPTIM_ENABLE in CR register has been set.
+So the 'enable' state in sysfs wrongly lies on the counter being
+correctly enabled, due to CR is read as one in stm32_lptim_is_enabled().
+
+To fix both issues:
+- enable the clock before writing CMP, ARR and polling ISR bits. It will
+avoid the possible timeout error.
+- clear the ENABLE bit in CR and disable the clock in the error path.
+
+Fixes: d8958824cf07 ("iio: counter: Add support for STM32 LPTimer")
+Change-Id: I24763b12160b82d5508a2d734332431d556002c6
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+---
+ drivers/counter/stm32-lptimer-cnt.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/counter/stm32-lptimer-cnt.c b/drivers/counter/stm32-lptimer-cnt.c
+index 79103ae016b5..9b064b3512be 100644
+--- a/drivers/counter/stm32-lptimer-cnt.c
++++ b/drivers/counter/stm32-lptimer-cnt.c
+@@ -62,7 +62,7 @@ static int stm32_lptim_set_enable_state(struct stm32_lptim_cnt *priv,
+ 		return 0;
+ 	}
+ 
+-	ret = clk_enable(priv->clk);
++	ret = pm_runtime_resume_and_get(priv->dev);
+ 	if (ret)
+ 		goto disable_cnt;
+ 
+@@ -87,11 +87,6 @@ static int stm32_lptim_set_enable_state(struct stm32_lptim_cnt *priv,
+ 	if (ret)
+ 		goto disable_clk;
+ 
+-	ret = pm_runtime_resume_and_get(priv->dev);
+-	if (ret < 0) {
+-		regmap_write(priv->regmap, STM32_LPTIM_CR, 0);
+-		return ret;
+-	}
+ 	priv->enabled = true;
+ 
+ 	/* Start LP timer in continuous mode */
+@@ -99,7 +94,7 @@ static int stm32_lptim_set_enable_state(struct stm32_lptim_cnt *priv,
+ 				  STM32_LPTIM_CNTSTRT, STM32_LPTIM_CNTSTRT);
+ 
+ disable_clk:
+-	clk_disable(priv->clk);
++	pm_runtime_put_sync_suspend(priv->dev);
+ disable_cnt:
+ 	regmap_write(priv->regmap, STM32_LPTIM_CR, 0);
+ 
+-- 
+2.53.0
+

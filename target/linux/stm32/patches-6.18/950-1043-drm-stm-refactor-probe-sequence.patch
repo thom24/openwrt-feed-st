@@ -1,0 +1,334 @@
+From 5f68b936866f1ced182686aee968e6a7665dc3f6 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Fri, 19 Jan 2024 13:15:11 +0100
+Subject: [PATCH] drm/stm: refactor probe sequence
+
+Add new functions ltdc_parse_device_tree & ltdc_get_clk
+
+Change-Id: Ifff004e49333208863f877e742307ffbe21ffacf
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+---
+ drivers/gpu/drm/stm/drv.c  |  43 ++++++++----
+ drivers/gpu/drm/stm/ltdc.c | 139 +++++++++++++++++++++----------------
+ drivers/gpu/drm/stm/ltdc.h |   6 +-
+ 3 files changed, 115 insertions(+), 73 deletions(-)
+
+diff --git a/drivers/gpu/drm/stm/drv.c b/drivers/gpu/drm/stm/drv.c
+index 2baedd3e2077..c092bcb32dcb 100644
+--- a/drivers/gpu/drm/stm/drv.c
++++ b/drivers/gpu/drm/stm/drv.c
+@@ -73,15 +73,8 @@ static const struct drm_driver drv_driver = {
+ static int drv_load(struct drm_device *ddev)
+ {
+ 	struct platform_device *pdev = to_platform_device(ddev->dev);
+-	struct ltdc_device *ldev;
+ 	int ret;
+ 
+-	ldev = drmm_kzalloc(ddev, sizeof(*ldev), GFP_KERNEL);
+-	if (!ldev)
+-		return -ENOMEM;
+-
+-	ddev->dev_private = (void *)ldev;
+-
+ 	ret = drmm_mode_config_init(ddev);
+ 	if (ret)
+ 		return ret;
+@@ -157,9 +150,10 @@ static __maybe_unused int drv_resume(struct device *dev)
+ static __maybe_unused int drv_runtime_suspend(struct device *dev)
+ {
+ 	struct drm_device *ddev = dev_get_drvdata(dev);
++	struct ltdc_device *ldev = ddev->dev_private;
+ 
+ 	drm_dbg_driver(ddev, "\n");
+-	ltdc_suspend(ddev);
++	ltdc_suspend(ldev);
+ 
+ 	return 0;
+ }
+@@ -167,9 +161,10 @@ static __maybe_unused int drv_runtime_suspend(struct device *dev)
+ static __maybe_unused int drv_runtime_resume(struct device *dev)
+ {
+ 	struct drm_device *ddev = dev_get_drvdata(dev);
++	struct ltdc_device *ldev = ddev->dev_private;
+ 
+ 	drm_dbg_driver(ddev, "\n");
+-	return ltdc_resume(ddev);
++	return ltdc_resume(ldev);
+ }
+ 
+ static const struct dev_pm_ops drv_pm_ops = {
+@@ -182,17 +177,39 @@ static int stm_drm_platform_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct drm_device *ddev;
++	struct ltdc_device *ldev;
+ 	int ret;
+ 
+-	ret = aperture_remove_all_conflicting_devices(drv_driver.name);
++	ldev = devm_kzalloc(dev, sizeof(*ldev), GFP_KERNEL);
++	if (!ldev)
++		return -ENOMEM;
++
++	ret = ltdc_parse_device_tree(dev);
++	if (ret)
++		return ret;
++
++	ret = ltdc_get_clk(dev, ldev);
++	if (ret)
++		return ret;
++
++	/* Resume device to enable the clocks */
++	ret = ltdc_resume(ldev);
+ 	if (ret)
+ 		return ret;
+ 
++	ret = aperture_remove_all_conflicting_devices(drv_driver.name);
++	if (ret)
++		goto err_suspend;
++
+ 	dma_set_coherent_mask(dev, DMA_BIT_MASK(32));
+ 
+ 	ddev = drm_dev_alloc(&drv_driver, dev);
+-	if (IS_ERR(ddev))
+-		return PTR_ERR(ddev);
++	if (IS_ERR(ddev)) {
++		ret =  PTR_ERR(ddev);
++		goto err_suspend;
++	}
++
++	ddev->dev_private = (void *)ldev;
+ 
+ 	ret = drv_load(ddev);
+ 	if (ret)
+@@ -210,6 +227,8 @@ static int stm_drm_platform_probe(struct platform_device *pdev)
+ 	drv_unload(ddev);
+ err_put:
+ 	drm_dev_put(ddev);
++err_suspend:
++	ltdc_suspend(ldev);
+ 
+ 	return ret;
+ }
+diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+index d1501e86a5b1..2949ae88f73b 100644
+--- a/drivers/gpu/drm/stm/ltdc.c
++++ b/drivers/gpu/drm/stm/ltdc.c
+@@ -1877,11 +1877,8 @@ static int ltdc_get_caps(struct drm_device *ddev)
+ 	return 0;
+ }
+ 
+-void ltdc_suspend(struct drm_device *ddev)
++void ltdc_suspend(struct ltdc_device *ldev)
+ {
+-	struct ltdc_device *ldev = ddev->dev_private;
+-
+-	drm_dbg_driver(ddev, "\n");
+ 	clk_disable_unprepare(ldev->pixel_clk);
+ 	if (ldev->bus_clk)
+ 		clk_disable_unprepare(ldev->bus_clk);
+@@ -1889,32 +1886,22 @@ void ltdc_suspend(struct drm_device *ddev)
+ 		clk_disable_unprepare(ldev->lvds_clk);
+ }
+ 
+-int ltdc_resume(struct drm_device *ddev)
++int ltdc_resume(struct ltdc_device *ldev)
+ {
+-	struct ltdc_device *ldev = ddev->dev_private;
+ 	int ret;
+ 
+-	drm_dbg_driver(ddev, "\n");
+-
+ 	ret = clk_prepare_enable(ldev->pixel_clk);
+-	if (ret) {
+-		drm_err(ddev, "failed to enable pixel clock (%d)\n", ret);
++	if (ret)
+ 		return ret;
+-	}
+ 
+ 	if (ldev->bus_clk) {
+-		ret = clk_prepare_enable(ldev->bus_clk);
+-		if (ret) {
+-			drm_err(ddev, "failed to enable bus clock (%d)\n", ret);
+-			return ret;
+-		}
++		ret =  clk_prepare_enable(ldev->bus_clk);
++		if (ret)
++			return -ENODEV;
+ 	}
+ 
+-	if (ldev->lvds_clk) {
++	if (ldev->lvds_clk)
+ 		ret = clk_prepare_enable(ldev->lvds_clk);
+-		if (ret)
+-			drm_err(ddev, "failed to prepare lvds clock\n");
+-	}
+ 
+ 	return ret;
+ }
+@@ -1939,31 +1926,6 @@ int ltdc_load(struct drm_device *ddev)
+ 	if (!nb_endpoints)
+ 		return -ENODEV;
+ 
+-	ldev->pixel_clk = devm_clk_get(dev, "lcd");
+-	if (IS_ERR(ldev->pixel_clk)) {
+-		if (PTR_ERR(ldev->pixel_clk) != -EPROBE_DEFER)
+-			drm_err(ddev, "Unable to get lcd clock\n");
+-		return PTR_ERR(ldev->pixel_clk);
+-	}
+-
+-	if (clk_prepare_enable(ldev->pixel_clk)) {
+-		drm_err(ddev, "Unable to prepare pixel clock\n");
+-		return -ENODEV;
+-	}
+-
+-	if (of_device_is_compatible(np, "st,stm32mp251-ltdc") ||
+-	    of_device_is_compatible(np, "st,stm32mp255-ltdc")) {
+-		ldev->bus_clk = devm_clk_get(dev, "bus");
+-		if (IS_ERR(ldev->bus_clk))
+-			return dev_err_probe(dev, PTR_ERR(ldev->bus_clk),
+-					     "Unable to get bus clock\n");
+-
+-		ret = clk_prepare_enable(ldev->bus_clk);
+-		if (ret) {
+-			drm_err(ddev, "Unable to prepare bus clock\n");
+-			return ret;
+-		}
+-	}
+ 
+ 	/* Get endpoints if any */
+ 	for (i = 0; i < nb_endpoints; i++) {
+@@ -1998,10 +1960,6 @@ int ltdc_load(struct drm_device *ddev)
+ 		}
+ 	}
+ 
+-	ldev->lvds_clk = devm_clk_get(dev, "lvds");
+-	if (IS_ERR(ldev->lvds_clk))
+-		ldev->lvds_clk = NULL;
+-
+ 	rstc = devm_reset_control_get_exclusive(dev, NULL);
+ 
+ 	mutex_init(&ldev->err_lock);
+@@ -2079,22 +2037,12 @@ int ltdc_load(struct drm_device *ddev)
+ 		goto err;
+ 	}
+ 
+-	clk_disable_unprepare(ldev->pixel_clk);
+-
+-	if (ldev->bus_clk)
+-		clk_disable_unprepare(ldev->bus_clk);
+-
+ 	pinctrl_pm_select_sleep_state(ddev->dev);
+ 
+ 	pm_runtime_enable(ddev->dev);
+ 
+ 	return 0;
+ err:
+-	clk_disable_unprepare(ldev->pixel_clk);
+-
+-	if (ldev->bus_clk)
+-		clk_disable_unprepare(ldev->bus_clk);
+-
+ 	return ret;
+ }
+ 
+@@ -2105,6 +2053,79 @@ void ltdc_unload(struct drm_device *ddev)
+ 	pm_runtime_disable(ddev->dev);
+ }
+ 
++int ltdc_parse_device_tree(struct device *dev)
++{
++	struct device_node *np = dev->of_node;
++	struct drm_bridge *bridge;
++	struct drm_panel *panel;
++	int i, nb_endpoints;
++	int ret = -ENODEV;
++
++	/* Get number of endpoints */
++	nb_endpoints = of_graph_get_endpoint_count(np);
++	if (!nb_endpoints)
++		return -ENODEV;
++
++	/* Get endpoints if any */
++	for (i = 0; i < nb_endpoints; i++) {
++		ret = drm_of_find_panel_or_bridge(np, 0, i, &panel, &bridge);
++
++		/*
++		 * If at least one endpoint is -ENODEV, continue probing,
++		 * else if at least one endpoint returned an error
++		 * (ie -EPROBE_DEFER) then stop probing.
++		 */
++		if (ret == -ENODEV)
++			continue;
++		else if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++
++int ltdc_get_clk(struct device *dev, struct ltdc_device *ldev)
++{
++	struct device_node *node;
++
++	ldev->pixel_clk = devm_clk_get(dev, "lcd");
++	if (IS_ERR(ldev->pixel_clk)) {
++		if (PTR_ERR(ldev->pixel_clk) != -EPROBE_DEFER)
++			dev_err_probe(dev, PTR_ERR(ldev->pixel_clk),
++				      "Unable to get lcd clock\n");
++		return PTR_ERR(ldev->pixel_clk);
++	}
++
++	if (of_device_is_compatible(dev->of_node, "st,stm32mp251-ltdc") ||
++	    of_device_is_compatible(dev->of_node, "st,stm32mp255-ltdc")) {
++		ldev->bus_clk = devm_clk_get(dev, "bus");
++		if (IS_ERR(ldev->bus_clk))
++			return dev_err_probe(dev, PTR_ERR(ldev->bus_clk),
++					     "Unable to get bus clock\n");
++	}
++
++	if (of_device_is_compatible(dev->of_node, "st,stm32mp255-ltdc")) {
++		/*
++		 * The lvds output clock is not available if the lvds is not probed.
++		 * This is a usual case, it is necessary to check the node to avoid
++		 * looking for a clock that will never be available.
++		 */
++		node = of_find_compatible_node(NULL, NULL, "st,stm32mp25-lvds");
++		if (!IS_ERR(node)) {
++			if (of_device_is_available(node)) {
++				ldev->lvds_clk = devm_clk_get(dev, "lvds");
++				if (IS_ERR(ldev->lvds_clk)) {
++					return dev_err_probe(dev, PTR_ERR(ldev->lvds_clk),
++							     "Unable to get lvds clock\n");
++				}
++			}
++			of_node_put(node);
++		}
++	}
++
++	return 0;
++}
++
+ MODULE_AUTHOR("Philippe Cornu <philippe.cornu@st.com>");
+ MODULE_AUTHOR("Yannick Fertre <yannick.fertre@st.com>");
+ MODULE_AUTHOR("Fabien Dessenne <fabien.dessenne@st.com>");
+diff --git a/drivers/gpu/drm/stm/ltdc.h b/drivers/gpu/drm/stm/ltdc.h
+index 17b51a7ce28e..349ea768a055 100644
+--- a/drivers/gpu/drm/stm/ltdc.h
++++ b/drivers/gpu/drm/stm/ltdc.h
+@@ -63,9 +63,11 @@ struct ltdc_device {
+ 	bool crc_active;
+ };
+ 
++int ltdc_parse_device_tree(struct device *dev);
++int ltdc_get_clk(struct device *dev, struct ltdc_device *ldev);
+ int ltdc_load(struct drm_device *ddev);
+ void ltdc_unload(struct drm_device *ddev);
+-void ltdc_suspend(struct drm_device *ddev);
+-int ltdc_resume(struct drm_device *ddev);
++void ltdc_suspend(struct ltdc_device *ldev);
++int ltdc_resume(struct ltdc_device *ldev);
+ 
+ #endif
+-- 
+2.53.0
+

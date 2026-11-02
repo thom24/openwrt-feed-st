@@ -1,0 +1,34 @@
+From 7eff5c338716ee1a1a27adb319ba5119e55e1d33 Mon Sep 17 00:00:00 2001
+From: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Date: Tue, 28 Apr 2026 09:51:12 +0200
+Subject: [PATCH] arm64: dts: st: add vdec D1 power domain to stm32mp235
+
+Add VDEC D1 power domain to STM32MP235.
+
+Change-Id: Ie1a8fbd5573bb9307e2cdf9ba2d5e8d10fcd3dc3
+Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/561963
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235.dtsi b/arch/arm64/boot/dts/st/stm32mp235.dtsi
+index 2719c088dd59..312c6eff9daf 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp235.dtsi
+@@ -12,5 +12,6 @@ vdec: vdec@480d0000 {
+ 		interrupts = <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>;
+ 		clocks = <&rcc CK_BUS_VDEC>;
+ 		access-controllers = <&rifsc 89>;
++		power-domains = <&d1_pd>;
+ 	};
+ };
+-- 
+2.53.0
+

@@ -1,0 +1,54 @@
+From 6c143d159abaaee50086304cd57b074fbbe034b5 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Tue, 12 May 2026 14:18:57 +0200
+Subject: [PATCH] ASoC: dt-bindings: wm8994: accept single mclk clock-name
+
+Some STM32MP2 boards wire the WM8994 codec with only MCLK2 exposed in DT.
+The binding currently requires the first and only clock name to be
+MCLK1, which makes those existing descriptions fail schema validation
+even though the hardware description is otherwise valid.
+
+Allow the single-clock case to use either MCLK1 or MCLK2, while keeping the
+two-clock form constrained to MCLK1 followed by MCLK2.
+
+This patch is closely linked to commit f506ba6392c0
+("ASoC: wm8994: add support of master clock providers")
+
+NOT UPSTREAMABLE
+
+Change-Id: Ifd7dde7ba71519c47901e4ed0858ceaecbb517bb
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/567651
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ .../devicetree/bindings/sound/wlf,wm8994.yaml         | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/sound/wlf,wm8994.yaml b/Documentation/devicetree/bindings/sound/wlf,wm8994.yaml
+index ef13bd0e801d..d732a6fc0c53 100644
+--- a/Documentation/devicetree/bindings/sound/wlf,wm8994.yaml
++++ b/Documentation/devicetree/bindings/sound/wlf,wm8994.yaml
+@@ -35,9 +35,14 @@ properties:
+ 
+   clock-names:
+     minItems: 1
+-    items:
+-      - const: MCLK1
+-      - const: MCLK2
++    oneOf:
++      - items:
++          - enum:
++              - MCLK1
++              - MCLK2
++      - items:
++          - const: MCLK1
++          - const: MCLK2
+ 
+   gpio-controller: true
+ 
+-- 
+2.53.0
+

@@ -1,0 +1,51 @@
+From 372b4db597551529c12e3cb36ba65d391d0346a3 Mon Sep 17 00:00:00 2001
+From: Philippe Cornu <philippe.cornu@foss.st.com>
+Date: Tue, 5 May 2026 11:20:08 +0200
+Subject: [PATCH] arm64: dts: st: enable gpu on stm32mp257f-dk and ev1 boards
+
+This patch enables the use of the GPU peripheral on stm32mp257f-dk
+and stm32mp257f-ev1 boards.
+
+Change-Id: I466b77bc1b112bcfd2f9307e5be68473025459b7
+Signed-off-by: Philippe Cornu <philippe.cornu@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/564759
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts  | 4 ++++
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 4 ++++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index e522c57be4c0..f1c5a9160634 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -417,6 +417,10 @@ &gpioz {
+ 	bootph-all;
+ };
+ 
++&gpu {
++	contiguous-area = <&gpu_reserved>;
++};
++
+ &hpdma {
+ 	memory-region = <&hpdma1_lli>;
+ };
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+index a13ed0286d8b..aec2214adfae 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+@@ -417,6 +417,10 @@ &gpioz {
+ 	bootph-all;
+ };
+ 
++&gpu {
++	contiguous-area = <&gpu_reserved>;
++};
++
+ &hpdma {
+ 	memory-region = <&hpdma1_lli>;
+ };
+-- 
+2.53.0
+

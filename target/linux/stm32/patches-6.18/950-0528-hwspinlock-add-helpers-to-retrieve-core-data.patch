@@ -1,0 +1,196 @@
+From 105ea5bb79a2be79ffde75861c2375e27ebdae18 Mon Sep 17 00:00:00 2001
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Date: Tue, 10 Mar 2026 08:55:18 +0100
+Subject: [PATCH] hwspinlock: add helpers to retrieve core data
+
+This is a first step to hide internal core structs from hwspinlock
+providers. It adds helper functions to retrieve the data needed by them.
+Because all users are only within the hwspinlock subsystem and the
+change there is trivial, conversion is included in this patch as well.
+
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+ drivers/hwspinlock/hwspinlock_core.c  | 12 ++++++++++++
+ drivers/hwspinlock/omap_hwspinlock.c  |  4 ++--
+ drivers/hwspinlock/qcom_hwspinlock.c  | 11 ++++++-----
+ drivers/hwspinlock/sprd_hwspinlock.c  |  6 +++---
+ drivers/hwspinlock/stm32_hwspinlock.c |  4 ++--
+ drivers/hwspinlock/sun6i_hwspinlock.c |  4 ++--
+ include/linux/hwspinlock.h            |  2 ++
+ 7 files changed, 29 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/hwspinlock/hwspinlock_core.c b/drivers/hwspinlock/hwspinlock_core.c
+index cc8e952a6772..2c9eceba7fe8 100644
+--- a/drivers/hwspinlock/hwspinlock_core.c
++++ b/drivers/hwspinlock/hwspinlock_core.c
+@@ -888,5 +888,17 @@ struct hwspinlock *devm_hwspin_lock_request_specific(struct device *dev,
+ }
+ EXPORT_SYMBOL_GPL(devm_hwspin_lock_request_specific);
+ 
++void *hwspin_lock_get_priv(struct hwspinlock *hwlock)
++{
++	return hwlock->priv;
++}
++EXPORT_SYMBOL_GPL(hwspin_lock_get_priv);
++
++struct device *hwspin_lock_get_dev(struct hwspinlock *hwlock)
++{
++	return hwlock->bank->dev;
++}
++EXPORT_SYMBOL_GPL(hwspin_lock_get_dev);
++
+ MODULE_DESCRIPTION("Hardware spinlock interface");
+ MODULE_AUTHOR("Ohad Ben-Cohen <ohad@wizery.com>");
+diff --git a/drivers/hwspinlock/omap_hwspinlock.c b/drivers/hwspinlock/omap_hwspinlock.c
+index 2d8de835bc24..d5114d393003 100644
+--- a/drivers/hwspinlock/omap_hwspinlock.c
++++ b/drivers/hwspinlock/omap_hwspinlock.c
+@@ -37,7 +37,7 @@
+ 
+ static int omap_hwspinlock_trylock(struct hwspinlock *lock)
+ {
+-	void __iomem *lock_addr = lock->priv;
++	void __iomem *lock_addr = hwspin_lock_get_priv(lock);
+ 
+ 	/* attempt to acquire the lock by reading its value */
+ 	return (SPINLOCK_NOTTAKEN == readl(lock_addr));
+@@ -45,7 +45,7 @@ static int omap_hwspinlock_trylock(struct hwspinlock *lock)
+ 
+ static void omap_hwspinlock_unlock(struct hwspinlock *lock)
+ {
+-	void __iomem *lock_addr = lock->priv;
++	void __iomem *lock_addr = hwspin_lock_get_priv(lock);
+ 
+ 	/* release the lock by writing 0 to it */
+ 	writel(SPINLOCK_NOTTAKEN, lock_addr);
+diff --git a/drivers/hwspinlock/qcom_hwspinlock.c b/drivers/hwspinlock/qcom_hwspinlock.c
+index 0390979fd765..7ff89c3e8c6b 100644
+--- a/drivers/hwspinlock/qcom_hwspinlock.c
++++ b/drivers/hwspinlock/qcom_hwspinlock.c
+@@ -27,7 +27,7 @@ struct qcom_hwspinlock_of_data {
+ 
+ static int qcom_hwspinlock_trylock(struct hwspinlock *lock)
+ {
+-	struct regmap_field *field = lock->priv;
++	struct regmap_field *field = hwspin_lock_get_priv(lock);
+ 	u32 lock_owner;
+ 	int ret;
+ 
+@@ -44,7 +44,7 @@ static int qcom_hwspinlock_trylock(struct hwspinlock *lock)
+ 
+ static void qcom_hwspinlock_unlock(struct hwspinlock *lock)
+ {
+-	struct regmap_field *field = lock->priv;
++	struct regmap_field *field = hwspin_lock_get_priv(lock);
+ 	u32 lock_owner;
+ 	int ret;
+ 
+@@ -66,13 +66,14 @@ static void qcom_hwspinlock_unlock(struct hwspinlock *lock)
+ 
+ static int qcom_hwspinlock_bust(struct hwspinlock *lock, unsigned int id)
+ {
+-	struct regmap_field *field = lock->priv;
++	struct regmap_field *field = hwspin_lock_get_priv(lock);
++	struct device *dev = hwspin_lock_get_dev(lock);
+ 	u32 owner;
+ 	int ret;
+ 
+ 	ret = regmap_field_read(field, &owner);
+ 	if (ret) {
+-		dev_err(lock->bank->dev, "unable to query spinlock owner\n");
++		dev_err(dev, "unable to query spinlock owner\n");
+ 		return ret;
+ 	}
+ 
+@@ -81,7 +82,7 @@ static int qcom_hwspinlock_bust(struct hwspinlock *lock, unsigned int id)
+ 
+ 	ret = regmap_field_write(field, 0);
+ 	if (ret) {
+-		dev_err(lock->bank->dev, "failed to bust spinlock\n");
++		dev_err(dev, "failed to bust spinlock\n");
+ 		return ret;
+ 	}
+ 
+diff --git a/drivers/hwspinlock/sprd_hwspinlock.c b/drivers/hwspinlock/sprd_hwspinlock.c
+index 22e2ffb91743..0d08efbdfb07 100644
+--- a/drivers/hwspinlock/sprd_hwspinlock.c
++++ b/drivers/hwspinlock/sprd_hwspinlock.c
+@@ -40,8 +40,8 @@ struct sprd_hwspinlock_dev {
+ static int sprd_hwspinlock_trylock(struct hwspinlock *lock)
+ {
+ 	struct sprd_hwspinlock_dev *sprd_hwlock =
+-		dev_get_drvdata(lock->bank->dev);
+-	void __iomem *addr = lock->priv;
++		dev_get_drvdata(hwspin_lock_get_dev(lock));
++	void __iomem *addr = hwspin_lock_get_priv(lock);
+ 	int user_id, lock_id;
+ 
+ 	if (!readl(addr))
+@@ -59,7 +59,7 @@ static int sprd_hwspinlock_trylock(struct hwspinlock *lock)
+ /* unlock the hardware spinlock */
+ static void sprd_hwspinlock_unlock(struct hwspinlock *lock)
+ {
+-	void __iomem *lock_addr = lock->priv;
++	void __iomem *lock_addr = hwspin_lock_get_priv(lock);
+ 
+ 	writel(HWSPINLOCK_NOTTAKEN, lock_addr);
+ }
+diff --git a/drivers/hwspinlock/stm32_hwspinlock.c b/drivers/hwspinlock/stm32_hwspinlock.c
+index bb5c7e5f7a80..1d75dc03f4ad 100644
+--- a/drivers/hwspinlock/stm32_hwspinlock.c
++++ b/drivers/hwspinlock/stm32_hwspinlock.c
+@@ -27,7 +27,7 @@ struct stm32_hwspinlock {
+ 
+ static int stm32_hwspinlock_trylock(struct hwspinlock *lock)
+ {
+-	void __iomem *lock_addr = lock->priv;
++	void __iomem *lock_addr = hwspin_lock_get_priv(lock);
+ 	u32 status;
+ 
+ 	writel(STM32_MUTEX_LOCK_BIT | STM32_MUTEX_COREID, lock_addr);
+@@ -38,7 +38,7 @@ static int stm32_hwspinlock_trylock(struct hwspinlock *lock)
+ 
+ static void stm32_hwspinlock_unlock(struct hwspinlock *lock)
+ {
+-	void __iomem *lock_addr = lock->priv;
++	void __iomem *lock_addr = hwspin_lock_get_priv(lock);
+ 
+ 	writel(STM32_MUTEX_COREID, lock_addr);
+ }
+diff --git a/drivers/hwspinlock/sun6i_hwspinlock.c b/drivers/hwspinlock/sun6i_hwspinlock.c
+index c2d314588046..8ff81cb5880a 100644
+--- a/drivers/hwspinlock/sun6i_hwspinlock.c
++++ b/drivers/hwspinlock/sun6i_hwspinlock.c
+@@ -62,14 +62,14 @@ static void sun6i_hwspinlock_debugfs_init(struct sun6i_hwspinlock_data *priv)
+ 
+ static int sun6i_hwspinlock_trylock(struct hwspinlock *lock)
+ {
+-	void __iomem *lock_addr = lock->priv;
++	void __iomem *lock_addr = hwspin_lock_get_priv(lock);
+ 
+ 	return (readl(lock_addr) == SPINLOCK_NOTTAKEN);
+ }
+ 
+ static void sun6i_hwspinlock_unlock(struct hwspinlock *lock)
+ {
+-	void __iomem *lock_addr = lock->priv;
++	void __iomem *lock_addr = hwspin_lock_get_priv(lock);
+ 
+ 	writel(SPINLOCK_NOTTAKEN, lock_addr);
+ }
+diff --git a/include/linux/hwspinlock.h b/include/linux/hwspinlock.h
+index 74b91244fe0e..dffa1dff7289 100644
+--- a/include/linux/hwspinlock.h
++++ b/include/linux/hwspinlock.h
+@@ -27,6 +27,8 @@ struct hwspinlock_ops;
+ 
+ #ifdef CONFIG_HWSPINLOCK
+ 
++void *hwspin_lock_get_priv(struct hwspinlock *hwlock);
++struct device *hwspin_lock_get_dev(struct hwspinlock *hwlock);
+ int hwspin_lock_register(struct hwspinlock_device *bank, struct device *dev,
+ 		const struct hwspinlock_ops *ops, int base_id, int num_locks);
+ int hwspin_lock_unregister(struct hwspinlock_device *bank);
+-- 
+2.53.0
+

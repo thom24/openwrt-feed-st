@@ -1,0 +1,44 @@
+From a1ed582f90124b561a1b2271aa0997bef9901b69 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Mon, 25 May 2026 11:50:29 +0200
+Subject: [PATCH] arm64: dts: st: add ddrperfm on stm32mp211
+
+The DDRPERFM is the DDR Performance Monitor embedded in STM32MP211 SoC.
+
+Keep the node disabled at SoC level as it requires the property
+`memory-channel` which is provided in board dtsi file.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: If390a4107a2618067804ddf821e422d721c50bb7
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/571227
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index df67b278878d..d13ee884925e 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -1772,6 +1772,15 @@ i3c3: i3c@46080000 {
+ 				status = "disabled";
+ 			};
+ 
++			ddrperfm: perf@480c0000 {
++				compatible = "st,stm32mp211-ddr-pmu", "st,stm32mp251-ddr-pmu";
++				reg = <0x480c0000 0x0 0x400>;
++				clocks = <&rcc CK_BUS_DDRPERFM>;
++				resets = <&rcc DDRPERFM_R>;
++				access-controllers = <&rifsc 67>;
++				status = "disabled";
++			};
++
+ 			sdmmc1: mmc@48220000 {
+ 				compatible = "st,stm32mp25-sdmmc2", "arm,pl18x", "arm,primecell";
+ 				reg = <0x48220000 0x0 0x400>, <0x44230400 0x0 0x8>;
+-- 
+2.53.0
+

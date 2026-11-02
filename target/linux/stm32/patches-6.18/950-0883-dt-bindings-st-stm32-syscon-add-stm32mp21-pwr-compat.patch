@@ -1,0 +1,36 @@
+From 9acf44697dee5a04f4ac8358abad6b6c22d13a8c Mon Sep 17 00:00:00 2001
+From: Valentin Caron <valentin.caron@foss.st.com>
+Date: Tue, 7 Apr 2026 09:38:58 +0200
+Subject: [PATCH] dt-bindings: st,stm32-syscon: add stm32mp21 pwr compatible
+
+Add stm32mp21 pwr compatible.
+
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: Ib569e7ad78e1902983445b40728b5af271be9d69
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/388369
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/552106
+Reviewed-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
+Tested-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
+index 31f52906c2f8..f6cea12367cf 100644
+--- a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
++++ b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
+@@ -22,6 +22,7 @@ properties:
+               - st,stm32f4-gcan
+               - st,stm32mp151-pwr-mcu
+               - st,stm32mp157-syscfg
++              - st,stm32mp21-pwr
+               - st,stm32mp21-syscfg
+               - st,stm32mp23-syscfg
+               - st,stm32mp25-pwr
+-- 
+2.53.0
+

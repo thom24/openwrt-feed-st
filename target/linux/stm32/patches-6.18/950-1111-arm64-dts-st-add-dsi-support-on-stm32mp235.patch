@@ -1,0 +1,43 @@
+From ce483b6c9ba8e9710f9ad98e2851ec4c57cd60a1 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Thu, 26 Mar 2026 15:57:41 +0100
+Subject: [PATCH] arm64: dts: st: add dsi support on stm32mp235
+
+This patch adds DSI support on stm32mp235.
+
+Change-Id: Ic401726da20059a0cb188d64467c0c28dbde917c
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/552098
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235.dtsi | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235.dtsi b/arch/arm64/boot/dts/st/stm32mp235.dtsi
+index e40119d632de..32af61b0d23a 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp235.dtsi
+@@ -12,6 +12,20 @@ &ltdc {
+ };
+ 
+ &rifsc {
++	dsi: dsi@48000000 {
++		compatible = "st,stm32mp255-dsi";
++		reg = <0x48000000 0x800>;
++		#clock-cells = <0>;
++		clocks = <&rcc CK_BUS_DSI>, <&rcc CK_KER_DSIPHY>,
++			 <&rcc CK_KER_LTDC>;
++		clock-names = "pclk", "ref", "px_clk";
++		resets = <&rcc DSI_R>;
++		reset-names = "apb";
++		access-controllers = <&rifsc 81>;
++		power-domains = <&d1_pd>;
++		status = "disabled";
++	};
++
+ 	lvds: lvds@48060000 {
+ 		compatible = "st,stm32mp255-lvds", "st,stm32mp25-lvds";
+ 		reg = <0x48060000 0x2000>;
+-- 
+2.53.0
+

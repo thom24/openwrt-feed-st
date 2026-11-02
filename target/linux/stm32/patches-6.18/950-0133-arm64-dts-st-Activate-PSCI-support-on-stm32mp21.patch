@@ -1,0 +1,89 @@
+From 16999ec7c825b37b5a94a8577c5c800c1f833868 Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Mon, 16 Feb 2026 10:43:51 +0100
+Subject: [PATCH] arm64: dts: st: Activate PSCI support on stm32mp21
+
+Add the PSCI idle state associated to the power domains.
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: Ib4e73b8edc731b496b1a9aa91135b6c2115b97d1
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/536977
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 50 ++++++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index bb7067f8299f..b39e51402d5b 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -19,6 +19,40 @@ cpu0: cpu@0 {
+ 			reg = <0>;
+ 			device_type = "cpu";
+ 			enable-method = "psci";
++			power-domains = <&cpu0_pd>;
++			power-domain-names = "psci";
++		};
++
++		idle-states {
++			entry-method = "psci";
++
++			cpu_pwrdn: cpu-power-down {
++
++				compatible = "arm,idle-state";
++				arm,psci-suspend-param = <0x00000002>;
++				local-timer-stop;
++				entry-latency-us = <150>;
++				exit-latency-us = <200>;
++				min-residency-us = <1000>;
++			};
++		};
++
++		domain-idle-states {
++			stop1: domain-stop1 {
++				compatible = "domain-idle-state";
++				arm,psci-suspend-param = <0x00000012>;
++				entry-latency-us = <300>;
++				exit-latency-us = <500>;
++				min-residency-us = <1500>;
++			};
++
++			lp_stop1: domain-lp-stop1 {
++				compatible = "domain-idle-state";
++				arm,psci-suspend-param = <0x0000022>;
++				entry-latency-us = <350>;
++				exit-latency-us = <600>;
++				min-residency-us = <2000>;
++			};
+ 		};
+ 	};
+ 
+@@ -104,6 +138,22 @@ scmi_vdda18adc: regulator@3 {
+ 	psci: psci {
+ 		compatible = "arm,psci-1.0";
+ 		method = "smc";
++
++		cpu0_pd: power-domain-cpu0 {
++			#power-domain-cells = <0>;
++			domain-idle-states = <&cpu_pwrdn>;
++			power-domains = <&cluster_pd>;
++		};
++
++		cluster_pd: power-domain-cluster {
++			#power-domain-cells = <0>;
++			domain-idle-states = <&stop1>, <&lp_stop1>;
++			power-domains = <&ret_pd>;
++		};
++
++		ret_pd: power-domain-retention {
++			#power-domain-cells = <0>;
++		};
+ 	};
+ 
+ 	timer {
+-- 
+2.53.0
+

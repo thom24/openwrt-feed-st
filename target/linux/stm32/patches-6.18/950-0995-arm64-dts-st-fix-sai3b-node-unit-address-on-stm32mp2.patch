@@ -1,0 +1,39 @@
+From 72acc0f5c7e9fc435fa3510478f060a07e7150b4 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Wed, 13 May 2026 09:54:10 +0200
+Subject: [PATCH] arm64: dts: st: fix sai3b node unit-address on stm32mp25
+
+Fix the SAI3B subnode name in the STM32MP251 device tree.
+
+The node was declared as audio-controller@502b0024 while it belongs to
+the SAI3 controller at 0x402b0000 and uses reg = <0x24 0x20>. Rename it
+to audio-controller@402b0024 so the unit-address matches the actual
+register mapping.
+
+Change-Id: I1aa48c5ede1259be2b43e45f1fbd711d70ea72e8
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/567231
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index ef5890c2d870..e21e9d6b6fa6 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -1457,7 +1457,7 @@ sai3a: audio-controller@402b0004 {
+ 					status = "disabled";
+ 				};
+ 
+-				sai3b: audio-controller@502b0024 {
++				sai3b: audio-controller@402b0024 {
+ 					compatible = "st,stm32-sai-sub-b";
+ 					reg = <0x24 0x20>;
+ 					#sound-dai-cells = <0>;
+-- 
+2.53.0
+

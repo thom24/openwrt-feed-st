@@ -1,0 +1,42 @@
+From 0bb0213534db663401096402eeb5caa96eed19fc Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Thu, 7 May 2026 14:25:42 +0200
+Subject: [PATCH] arm64: dts: st: Free iATU window used by I/O BAR on
+ stm32mp25.
+
+The MP25 has four iATU windows: three are used for I/O and memory BARs,
+and one is used for CFG accesses. With the addition of PME_Turn_Off
+support, enabled via the 'use_atu_msg' attribute, an extra window is
+required to map the MSG TLP region.
+
+Since I/O BARs are legacy and rarely used, drop their support and reuse
+the freed iATU entry for the PME message TLP.
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I52d2fbb33108d293520316d7674d1dcbb2b7cfe1
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/565057
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index 4c47172c86e1..11e3e24b094b 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -2319,8 +2319,7 @@ pcie_rc: pcie@48400000 {
+ 						<0 0 0 4 &intc 0 0 GIC_SPI 267 IRQ_TYPE_LEVEL_HIGH>;
+ 				#address-cells = <3>;
+ 				#size-cells = <2>;
+-				ranges = <0x01000000 0x0 0x00000000 0x10010000 0x0 0x10000>,
+-					 <0x02000000 0x0 0x10020000 0x10020000 0x0 0x7fe0000>,
++				ranges = <0x02000000 0x0 0x10010000 0x10010000 0x0 0x7ff0000>,
+ 					 <0x42000000 0x0 0x18000000 0x18000000 0x0 0x8000000>;
+ 				dma-ranges = <0x42000000 0x0 0x80000000 0x80000000 0x0 0x80000000>;
+ 				clocks = <&scmi_clk CK_SCMI_ICN_PCIE>;
+-- 
+2.53.0
+

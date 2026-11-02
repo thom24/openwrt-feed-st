@@ -1,0 +1,155 @@
+From 542b3c0eb82a854b3d59f20b45d2478a19f8114c Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Wed, 25 Mar 2026 17:24:13 +0100
+Subject: [PATCH] arm64: dts: st: enable audio on stm32mp257f-dk board
+
+Enable the sound card on STM32MP257F-DK board.
+
+Change-Id: I3d19787d0c0e9644aaf028f29fa59e39fb5291bc
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/550682
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 110 ++++++++++++++++++++++
+ 1 file changed, 110 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index 8d9b1f482cd5..07729d672f6a 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -44,6 +44,34 @@ clk_ext_camera: clk-ext-camera {
+ 		};
+ 	};
+ 
++	dmic0: dmic-0 {
++		compatible = "dmic-codec";
++		#sound-dai-cells = <0>;
++		sound-name-prefix = "dmic0";
++		vref-supply = <&scmi_v3v3>;
++		status = "okay";
++
++		port {
++			dmic0_endpoint: endpoint {
++				remote-endpoint = <&mdf_endpoint0>;
++			};
++		};
++	};
++
++	dmic1: dmic-1 {
++		compatible = "dmic-codec";
++		#sound-dai-cells = <0>;
++		sound-name-prefix = "dmic1";
++		vref-supply = <&scmi_v3v3>;
++		status = "okay";
++
++		port {
++			dmic1_endpoint: endpoint {
++				remote-endpoint = <&mdf_endpoint1>;
++			};
++		};
++	};
++
+ 	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+@@ -87,6 +115,13 @@ memory@80000000 {
+ 		reg = <0x0 0x80000000 0x1 0x0>;
+ 	};
+ 
++	sound {
++		compatible = "audio-graph-card";
++		label = "STM32MP25-DK";
++		dais = <&mdf1_port0 &mdf1_port1>;
++		status = "okay";
++	};
++
+ 	wifi_pwrseq: wifi-pwrseq {
+ 		compatible = "mmc-pwrseq-simple";
+ 		reset-gpios = <&gpiog 8 GPIO_ACTIVE_LOW>;
+@@ -391,6 +426,81 @@ &m33_rproc {
+ 	status = "okay";
+ };
+ 
++&mdf1 {
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&mdf_cck0_pins_a>;
++	pinctrl-1 = <&mdf_cck0_sleep_pins_a>;
++	#clock-cells = <1>;
++	clock-output-names = "cck0";
++	clock-frequency = <1536000>;
++	status = "okay";
++
++	sitf6: sitf@380 {
++		pinctrl-names = "default", "sleep";
++		pinctrl-0 = <&mdf_sdi6_pins_a>;
++		pinctrl-1 = <&mdf_sdi6_sleep_pins_a>;
++		st,sitf-mode = "spi";
++		clocks = <&mdf1 0>;
++		status = "okay";
++	};
++
++	filter0: filter@84  {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		st,cic-mode = <4>;
++		st,sitf = <&sitf6 0>;
++		st,hpf-filter-cutoff-bp = <625>;
++		status = "okay";
++
++		channel@0 {
++			reg = <0>;
++			label = "dmic_u53";
++		};
++
++		asoc_pdm0: mdf-dai {
++			compatible = "st,stm32mp25-mdf-dai";
++			#sound-dai-cells = <0>;
++			io-channels = <&filter0 0>;
++			power-domains = <&d1_pd>;
++			status = "okay";
++
++			mdf1_port0: port {
++				mdf_endpoint0: endpoint {
++					remote-endpoint = <&dmic0_endpoint>;
++				};
++			};
++		};
++	};
++
++	filter1: filter@104  {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		st,cic-mode = <4>;
++		st,sitf = <&sitf6 1>;
++		st,hpf-filter-cutoff-bp = <625>;
++		status = "okay";
++
++		channel@1 {
++			reg = <1>;
++			label = "dmic_u12";
++		};
++
++		asoc_pdm1: mdf-dai {
++			compatible = "st,stm32mp25-mdf-dai";
++			#sound-dai-cells = <0>;
++			io-channels = <&filter1 0>;
++			power-domains = <&d1_pd>;
++			status = "okay";
++
++			mdf1_port1: port {
++				mdf_endpoint1: endpoint {
++					remote-endpoint = <&dmic1_endpoint>;
++				};
++			};
++		};
++	};
++};
++
+ &mlahb {
+ 	intc_rpmsg: interrupt-controller@1 {
+ 		compatible = "rpmsg,intc";
+-- 
+2.53.0
+

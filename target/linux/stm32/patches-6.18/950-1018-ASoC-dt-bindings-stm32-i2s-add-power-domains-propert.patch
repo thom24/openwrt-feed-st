@@ -1,0 +1,35 @@
+From fd0123e75cdf1499508bf4694291e21487c9d51a Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Tue, 12 May 2026 10:42:03 +0200
+Subject: [PATCH] ASoC: dt-bindings: stm32-i2s: add power-domains property
+
+STM32 I2S may be in a power domain. Allow power domains on I2S nodes.
+
+Change-Id: Iaca48621ad179e67277f93934e838028af2f2b55
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/567647
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml b/Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml
+index b4f44f9c7c7d..e8c4d9465e23 100644
+--- a/Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml
++++ b/Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml
+@@ -57,6 +57,9 @@ properties:
+   resets:
+     maxItems: 1
+ 
++  power-domains:
++    maxItems: 1
++
+   "#clock-cells":
+     description: Configure the I2S device as MCLK clock provider.
+     const: 0
+-- 
+2.53.0
+

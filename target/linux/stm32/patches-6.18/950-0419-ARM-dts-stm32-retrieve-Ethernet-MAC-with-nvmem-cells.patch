@@ -1,0 +1,46 @@
+From a58f77c026618729f0e4e5c0a26afa02c9ff52db Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Mon, 20 Apr 2026 17:14:15 +0200
+Subject: [PATCH] ARM: dts: stm32: retrieve Ethernet @MAC with nvmem-cells on
+ stm32mp135f-dk
+
+MAC1 and MAC2 are fused on OTP (57/58), two mechanisms to retrieve them:
+- use "aliases": bootloader retrieve it and set "local-mac-address",
+which is used during probe to set MAC address
+- if "aliases" not set for ethernet, nvmem read directly OTP fused at
+probe to set MAC address
+
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Change-Id: Iad564edd07682d7ad6e7ef0e529987180d22c14e
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/559357
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dk.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+index d668f2e37f43..2b16f0c68be6 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+@@ -236,6 +236,8 @@ &ethernet1 {
+ 	max-speed = <100>;
+ 	phy-handle = <&phy0_eth1>;
+ 	st,phy-wol;
++	nvmem-cells = <&ethernet_mac1_address>;
++	nvmem-cell-names = "mac-address";
+ 
+ 	mdio {
+ 		#address-cells = <1>;
+@@ -262,6 +264,8 @@ &ethernet2 {
+ 	phy-handle = <&phy0_eth2>;
+ 	st,ext-phyclk;
+ 	phy-supply = <&scmi_v3v3_sw>;
++	nvmem-cells = <&ethernet_mac2_address>;
++	nvmem-cell-names = "mac-address";
+ 
+ 	mdio {
+ 		#address-cells = <1>;
+-- 
+2.53.0
+

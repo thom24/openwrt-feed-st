@@ -1,0 +1,42 @@
+From 38b48e0b5740d21ff52a54182d93ad88a58781c3 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Wed, 3 Jun 2026 15:27:06 +0200
+Subject: [PATCH] net: phy: realtek: apply rtl821x_probe/suspend/resume for
+ RTL8211E
+
+PHY will delay about 11.5ms to generate RXC clock when switching from
+power down to normal operation. Read/write registers would also cause RXC
+become unstable and stop for a while during this process. Realtek engineer
+suggests 15ms or more delay can workaround this issue.
+Without this delay we have sometime issue during phy reset on MP15-eval
+
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Change-Id: Id8a753f6cf30536d2d797ac0a8e29129632792e3
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/574279
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/net/phy/realtek/realtek_main.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/phy/realtek/realtek_main.c b/drivers/net/phy/realtek/realtek_main.c
+index 30caf9b086a7..5ed50baebfda 100644
+--- a/drivers/net/phy/realtek/realtek_main.c
++++ b/drivers/net/phy/realtek/realtek_main.c
+@@ -1805,11 +1805,12 @@ static struct phy_driver realtek_drvs[] = {
+ 	}, {
+ 		PHY_ID_MATCH_EXACT(0x001cc915),
+ 		.name		= "RTL8211E Gigabit Ethernet",
++		.probe		= rtl821x_probe,
+ 		.config_init	= &rtl8211e_config_init,
+ 		.config_intr	= &rtl8211e_config_intr,
+ 		.handle_interrupt = rtl821x_handle_interrupt,
+-		.suspend	= genphy_suspend,
+-		.resume		= genphy_resume,
++		.suspend	= rtl821x_suspend,
++		.resume		= rtl821x_resume,
+ 		.read_page	= rtl821x_read_page,
+ 		.write_page	= rtl821x_write_page,
+ 		.led_hw_is_supported = rtl8211x_led_hw_is_supported,
+-- 
+2.53.0
+

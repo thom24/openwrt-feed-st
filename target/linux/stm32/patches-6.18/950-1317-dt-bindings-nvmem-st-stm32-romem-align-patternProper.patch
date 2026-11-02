@@ -1,0 +1,46 @@
+From 041c7e1a154fdc10a2cdf9bf9cf17aee2d1230d9 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Fri, 28 Aug 2026 10:18:20 +0200
+Subject: [PATCH] dt-bindings: nvmem: st,stm32-romem: align patternProperties
+ regex on nvmem-deprecated-cells.yaml
+
+The patternProperties key only matched node names of the form
+"name@address" ("^.*@[0-9a-f]+$"). It did not match nodes using the
+extra unit-address index used to disambiguate cells sharing the same
+reg, e.g. "trim-rd-cc1@1e8,4", causing dtbs_check failures such as:
+
+efuse@44000000 (st,stm32mp25-bsec): Unevaluated properties are not
+allowed ('trim-rd-cc1@1e8,4', ...)
+
+Align the regex with the one used in nvmem-deprecated-cells.yaml
+("@[0-9a-f]+(,[0-7])?$") so both patternProperties definitions apply
+to the same set of node names.
+
+Signed-off-by: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ib2750902c61c8320efea0774d6db418a18f63948
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/590527
+Domain-Review: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+index 242468943390..16e00e50ff4e 100644
+--- a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
++++ b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+@@ -34,7 +34,7 @@ properties:
+     description: Phandle to a node describing non-secure OTP mirror area
+ 
+ patternProperties:
+-  "@[0-9a-f]+$":
++  "@[0-9a-f]+(,[0-7])?$":
+     type: object
+     $ref: layouts/fixed-cell.yaml
+     unevaluatedProperties: false
+-- 
+2.53.0
+

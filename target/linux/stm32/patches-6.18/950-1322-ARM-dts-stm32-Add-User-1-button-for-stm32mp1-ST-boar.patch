@@ -1,0 +1,136 @@
+From dd883e0eb15436e95fd074467189d3cbcb86c9ef Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Wed, 12 Aug 2026 18:33:01 +0200
+Subject: [PATCH] ARM: dts: stm32: Add "User-1" button for stm32mp1 ST boards
+
+Add button labeled "User-1" which is used by U-Boot to enter
+in STM32PROG mode if pressed during U-Boot start-up.
+
+Change-Id: I730df5b439715d3a2198ed864510c47e9e4b3a9a
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts | 11 +++++++++++
+ arch/arm/boot/dts/st/stm32mp157d-ed1.dts         | 11 +++++++++++
+ arch/arm/boot/dts/st/stm32mp157f-ed1.dts         | 11 +++++++++++
+ arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi        | 11 +++++++++++
+ 4 files changed, 44 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
+index baeac1e1f5a5..3b69e5588138 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
+@@ -10,6 +10,7 @@
+ #include "stm32mp15-pinctrl.dtsi"
+ #include "stm32mp15xxaa-pinctrl.dtsi"
+ #include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/linux-event-codes.h>
+ #include <dt-bindings/leds/common.h>
+ #include <dt-bindings/mfd/st,stpmic1.h>
+ 
+@@ -25,6 +26,16 @@ chosen {
+ 		stdout-path = "serial0:115200n8";
+ 	};
+ 
++	gpio-keys {
++		compatible = "gpio-keys";
++
++		button-user {
++			label = "User-1";
++			linux,code = <BTN_1>;
++			gpios = <&gpioa 14 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
++		};
++	};
++
+ 	memory@c0000000 {
+ 		device_type = "memory";
+ 		reg = <0xc0000000 0x40000000>;
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
+index 9b785cbc527f..1b667fd8a412 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
+@@ -11,6 +11,7 @@
+ #include "stm32mp15xxaa-pinctrl.dtsi"
+ #include "stm32mp15-scmi.dtsi"
+ #include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/linux-event-codes.h>
+ #include <dt-bindings/leds/common.h>
+ #include <dt-bindings/mfd/st,stpmic1.h>
+ 
+@@ -26,6 +27,16 @@ chosen {
+ 		stdout-path = "serial0:115200n8";
+ 	};
+ 
++	gpio-keys {
++		compatible = "gpio-keys";
++
++		button-user {
++			label = "User-1";
++			linux,code = <BTN_1>;
++			gpios = <&gpioa 14 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
++		};
++	};
++
+ 	memory@c0000000 {
+ 		device_type = "memory";
+ 		reg = <0xc0000000 0x40000000>;
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
+index 6f4c7930f5b0..f134aec36eea 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
+@@ -11,6 +11,7 @@
+ #include "stm32mp15xxaa-pinctrl.dtsi"
+ #include "stm32mp15-scmi.dtsi"
+ #include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/linux-event-codes.h>
+ #include <dt-bindings/leds/common.h>
+ #include <dt-bindings/mfd/st,stpmic1.h>
+ 
+@@ -26,6 +27,16 @@ chosen {
+ 		stdout-path = "serial0:115200n8";
+ 	};
+ 
++	gpio-keys {
++		compatible = "gpio-keys";
++
++		button-user {
++			label = "User-1";
++			linux,code = <BTN_1>;
++			gpios = <&gpioa 14 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
++		};
++	};
++
+ 	memory@c0000000 {
+ 		device_type = "memory";
+ 		reg = <0xc0000000 0x40000000>;
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
+index 598948dbb3d1..d8078f6fc092 100644
+--- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
+@@ -5,6 +5,7 @@
+  */
+ 
+ #include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/linux-event-codes.h>
+ #include <dt-bindings/leds/common.h>
+ #include <dt-bindings/mfd/st,stpmic1.h>
+ 
+@@ -16,6 +17,16 @@ aliases {
+ 		serial2 = &uart7;
+ 	};
+ 
++	gpio-keys {
++		compatible = "gpio-keys";
++
++		button-user {
++			label = "User-1";
++			linux,code = <BTN_1>;
++			gpios = <&gpioa 14 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
++		};
++	};
++
+ 	memory@c0000000 {
+ 		device_type = "memory";
+ 		reg = <0xc0000000 0x20000000>;
+-- 
+2.53.0
+

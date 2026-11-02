@@ -1,0 +1,37 @@
+From 110e893f80340d6775808695a557315e220d8c3a Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Mon, 9 Feb 2026 09:26:17 +0100
+Subject: [PATCH] clk: stm32: fix last clock binding index of STM32MP21
+
+Correct the definition of STM32MP21_LAST_CLK.
+This change ensures the last clock binding index accurately reflects
+the maximum clock value, preventing potential issues with clock
+enumeration.
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: I506655b2353b52b9d8845a889302362fc740df76
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/533805
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/clk/stm32/clk-stm32mp21.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/clk/stm32/clk-stm32mp21.c b/drivers/clk/stm32/clk-stm32mp21.c
+index 1e65403ac5b5..5c19310474da 100644
+--- a/drivers/clk/stm32/clk-stm32mp21.c
++++ b/drivers/clk/stm32/clk-stm32mp21.c
+@@ -19,7 +19,7 @@
+ #include <dt-bindings/reset/st,stm32mp21-rcc.h>
+ 
+ /* Max clock binding value */
+-#define STM32MP21_LAST_CLK	CK_SCMI_KER_ETR
++#define STM32MP21_LAST_CLK	(CK_KER_STM + 1)
+ 
+ /* Clock security definition */
+ #define SECF_NONE		-1
+-- 
+2.53.0
+

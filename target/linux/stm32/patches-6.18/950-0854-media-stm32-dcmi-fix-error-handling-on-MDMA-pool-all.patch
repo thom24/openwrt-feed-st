@@ -1,0 +1,46 @@
+From ef74ab8dc8a6be97a01e15f4a8effc73baf62eb0 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Tue, 21 Jul 2026 14:48:54 +0200
+Subject: [PATCH] media: stm32: dcmi: fix error handling on MDMA pool alloc
+ failure
+
+Properly return an error if of_gen_pool_get or gen_pool_dma_zalloc
+fails during the chained DMA probing.
+
+Fixes: 4fc20d8f3a71 ("media: stm32: dcmi: addition of DMA-MDMA chaining support")
+Change-Id: Ia835e133b72142cdcd52c49ab152a8b4f02c8558
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/590647
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/media/platform/st/stm32/stm32-dcmi.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
+index d7aaf21c4c81..9f952c7d3ec0 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmi.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
+@@ -2063,6 +2063,7 @@ static int dcmi_probe(struct platform_device *pdev)
+ 		dcmi->sram_pool = of_gen_pool_get(pdev->dev.of_node, "sram", 0);
+ 		if (!dcmi->sram_pool) {
+ 			dev_info(&pdev->dev, "No SRAM pool, can't use MDMA chaining\n");
++			ret = -ENOMEM;
+ 			goto err_dma_slave_config;
+ 		}
+ 
+@@ -2074,6 +2075,7 @@ static int dcmi_probe(struct platform_device *pdev)
+ 						     &dcmi->sram_dma_buf);
+ 		if (!dcmi->sram_buf) {
+ 			dev_err(dcmi->dev, "Failed to allocate from SRAM\n");
++			ret = -ENOMEM;
+ 			goto err_dma_slave_config;
+ 		}
+ 
+-- 
+2.53.0
+

@@ -1,0 +1,47 @@
+From fc2c9d3f9a2b76a9f7eef937b22b957f1c5a707a Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Mon, 3 Aug 2026 15:10:21 +0200
+Subject: [PATCH] iio: adc: stm32-adc: use nested trigger poll in threaded
+ context
+
+The ADC ISR currently calls iio_trigger_poll() when a buffered
+conversion sequence completes. This ISR may run in a threaded context (PREEMPT_RT flag or threadirqs param set), where iio_trigger_poll() is not the expected API.
+
+Select the trigger polling helper according to execution context:
+- keep iio_trigger_poll() in hard IRQ context
+- use iio_trigger_poll_nested() in threaded context
+
+Change-Id: I71a17814e93b5eb994f85f3996597234fc3a7008
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/597281
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/iio/adc/stm32-adc.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/iio/adc/stm32-adc.c b/drivers/iio/adc/stm32-adc.c
+index 7c91d9557ad9..a44a8a7242ee 100644
+--- a/drivers/iio/adc/stm32-adc.c
++++ b/drivers/iio/adc/stm32-adc.c
+@@ -2129,7 +2129,14 @@ static irqreturn_t stm32_adc_isr(int irq, void *data)
+ 			adc->bufi++;
+ 			if (adc->bufi >= adc->num_conv) {
+ 				stm32_adc_conv_irq_disable(adc);
+-				iio_trigger_poll(indio_dev->trig);
++				/*
++				 * iio_trigger_poll() must run from hard IRQ context, while
++				 * iio_trigger_poll_nested() is for threaded context.
++				 */
++				if (in_hardirq())
++					iio_trigger_poll(indio_dev->trig);
++				else
++					iio_trigger_poll_nested(indio_dev->trig);
+ 			}
+ 		} else {
+ 			complete(&adc->completion);
+-- 
+2.53.0
+

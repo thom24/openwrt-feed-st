@@ -1,0 +1,48 @@
+From 7724dadddec6dea169cbd14d8fb4fb2d67309de0 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Tue, 17 Mar 2026 10:45:22 +0100
+Subject: [PATCH] drm/panel: simple: Check gpio enable
+
+This fix allows you to check the status of the GPIO enable.
+This GPIO can be configured by another software layer.
+To maintain continuous display, it is best to enable the panel
+if it has already been started.
+
+Change-Id: I3330342d44a325aa3d7f7ecfdabc8f91daabc036
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/479220
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/gpu/drm/panel/panel-simple.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
+index ef1c4b9299ee..edd3ac7e70b6 100644
+--- a/drivers/gpu/drm/panel/panel-simple.c
++++ b/drivers/gpu/drm/panel/panel-simple.c
+@@ -687,12 +687,19 @@ static struct panel_simple *panel_simple_probe(struct device *dev)
+ 	if (IS_ERR(panel->supply))
+ 		return ERR_CAST(panel->supply);
+ 
+-	panel->enable_gpio = devm_gpiod_get_optional(dev, "enable",
+-						     GPIOD_OUT_LOW);
++	panel->enable_gpio = devm_gpiod_get_optional(dev, "enable", GPIOD_ASIS);
+ 	if (IS_ERR(panel->enable_gpio))
+ 		return dev_err_cast_probe(dev, panel->enable_gpio,
+ 					  "failed to request GPIO\n");
+ 
++	if (panel->enable_gpio) {
++		err = gpiod_get_direction(panel->enable_gpio);
++		if (err != 0)
++			gpiod_direction_output(panel->enable_gpio, 0);
++		else
++			gpiod_direction_output(panel->enable_gpio, 1);
++	}
++
+ 	err = of_drm_get_panel_orientation(dev->of_node, &panel->orientation);
+ 	if (err) {
+ 		dev_err(dev, "%pOF: failed to get orientation %d\n", dev->of_node, err);
+-- 
+2.53.0
+

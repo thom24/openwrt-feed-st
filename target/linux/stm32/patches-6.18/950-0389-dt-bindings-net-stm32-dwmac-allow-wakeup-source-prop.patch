@@ -1,0 +1,34 @@
+From 3e73ad4afb67c862da5469f608004cccd2715165 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Thu, 25 Jun 2026 08:26:46 +0200
+Subject: [PATCH] dt-bindings: net: stm32-dwmac: allow wakeup-source property
+
+Add the standard wakeup-source property to the stm32-dwmac schema.
+Without this, DT validation rejects STM32 dwmac nodes using
+wakeup-source for Ethernet wake-up capability.
+
+Change-Id: I709c1540b3cd87dbda75099c3fa0ca05cfa888e4
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/582357
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ Documentation/devicetree/bindings/net/stm32-dwmac.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
+index 3b4f72a09308..88c63d08a426 100644
+--- a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
++++ b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
+@@ -130,6 +130,8 @@ properties:
+       MAC.
+     type: boolean
+ 
++  wakeup-source: true
++
+ required:
+   - compatible
+   - clocks
+-- 
+2.53.0
+

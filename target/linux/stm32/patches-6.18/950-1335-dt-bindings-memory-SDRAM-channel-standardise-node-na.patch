@@ -1,0 +1,62 @@
+From bd09b7479f35c7c79f42511d609d4326fc0f19ad Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>
+Date: Tue, 18 Nov 2025 16:08:01 +0100
+Subject: [PATCH] dt-bindings: memory: SDRAM channel: standardise node name
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+commit 9805f2cfc883018f7bf84c84e3af3786c37dac7b upstream.
+
+Add a pattern for sdram channel node name.
+
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Signed-off-by: Clément Le Goffic <legoffic.clement@gmail.com>
+Link: https://patch.msgid.link/20251118-b4-ddr-bindings-v9-5-a033ac5144da@gmail.com
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I9d3c3b25f4b3ab25e7ce4dbde90b811fe7b8d34c
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/571208
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ .../memory-controllers/ddr/jedec,sdram-channel.yaml        | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,sdram-channel.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,sdram-channel.yaml
+index 866af40b654d..5cdd8ef45100 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,sdram-channel.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,sdram-channel.yaml
+@@ -17,6 +17,9 @@ maintainers:
+   - Julius Werner <jwerner@chromium.org>
+ 
+ properties:
++  $nodename:
++    pattern: "sdram-channel-[0-9]+$"
++
+   compatible:
+     enum:
+       - jedec,ddr4-channel
+@@ -118,7 +121,7 @@ additionalProperties: false
+ 
+ examples:
+   - |
+-    lpddr-channel0 {
++    sdram-channel-0 {
+       #address-cells = <1>;
+       #size-cells = <0>;
+       compatible = "jedec,lpddr3-channel";
+@@ -133,7 +136,7 @@ examples:
+       };
+     };
+ 
+-    lpddr-channel1 {
++    sdram-channel-1 {
+       #address-cells = <1>;
+       #size-cells = <0>;
+       compatible = "jedec,lpddr4-channel";
+-- 
+2.53.0
+

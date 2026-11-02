@@ -1,0 +1,45 @@
+From 4dd7e08aa0fa3f1be141cb4af3abede608835249 Mon Sep 17 00:00:00 2001
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Date: Fri, 19 Jun 2026 15:20:15 +0200
+Subject: [PATCH] remoteproc: stm32_rproc: Add a fallback method to get the
+ boot address
+
+On STM32MP2, the software must provide the ISR vector as the boot address
+of the Cortex-M33. The ISR vector table is retrieved by parsing the ELF
+file to find the .isr_vectors section.
+This method does not work with ELF files that IAR Embedded Workbench
+generates because the tool renames the sections.
+
+Add a fallback method that uses the ELF header entry point to find
+the boot address.
+
+Change-Id: I7b5ed3368ce6a30929fb9d2a1231311388f5ae28
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/580513
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ drivers/remoteproc/stm32_rproc.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
+index 0db90005e908..517167645b49 100644
+--- a/drivers/remoteproc/stm32_rproc.c
++++ b/drivers/remoteproc/stm32_rproc.c
+@@ -165,7 +165,8 @@ static u64 stm32_rproc_get_vect_table(struct rproc *rproc, const struct firmware
+ 		return elf_shdr_get_sh_addr(class, shdr);
+ 	}
+ 
+-	return 0;
++	/* The fallback is to get the entry point */
++	return rproc_elf_get_boot_addr(rproc, fw);
+ }
+ 
+ static int stm32_rproc_pa_to_da(struct rproc *rproc, phys_addr_t pa, u64 *da)
+-- 
+2.53.0
+

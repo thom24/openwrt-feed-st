@@ -1,0 +1,48 @@
+From ff54d3e927fa19b0dce7b4d6b21f75550f5b7b1a Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 22 Apr 2026 18:28:40 +0200
+Subject: [PATCH] usb: misc: onboard-hub: add support for Microchip USB2422
+
+Add support for the Microchip USB2422 USB2.0 Hub. It is similar to
+the USB2412. It provides two downstream ports. It is supplied by
+a single 3v3 power source, and provides a reset pin. So add the
+generic compatible, defined as "usbVID,PID", and reuse existing
+usb424_data.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ib39bc622fc12d0ad219fd8bfae55c3cb03bef595
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/560398
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/usb/misc/onboard_usb_dev.c | 1 +
+ drivers/usb/misc/onboard_usb_dev.h | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/drivers/usb/misc/onboard_usb_dev.c b/drivers/usb/misc/onboard_usb_dev.c
+index 41360a7591e5..1c8145b1a036 100644
+--- a/drivers/usb/misc/onboard_usb_dev.c
++++ b/drivers/usb/misc/onboard_usb_dev.c
+@@ -662,6 +662,7 @@ static const struct usb_device_id onboard_dev_id_table[] = {
+ 	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0610) }, /* Genesys Logic GL852G USB 2.0 HUB */
+ 	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0620) }, /* Genesys Logic GL3523 USB 3.1 HUB */
+ 	{ USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2412) }, /* USB2412 USB 2.0 HUB */
++	{ USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2422) }, /* USB2422 USB 2.0 HUB */
+ 	{ USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2514) }, /* USB2514B USB 2.0 HUB */
+ 	{ USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2517) }, /* USB2517 USB 2.0 HUB */
+ 	{ USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2744) }, /* USB5744 USB 2.0 HUB */
+diff --git a/drivers/usb/misc/onboard_usb_dev.h b/drivers/usb/misc/onboard_usb_dev.h
+index c1462be5526d..01b166748ed1 100644
+--- a/drivers/usb/misc/onboard_usb_dev.h
++++ b/drivers/usb/misc/onboard_usb_dev.h
+@@ -124,6 +124,7 @@ static const struct onboard_dev_pdata xmos_xvf3500_data = {
+ 
+ static const struct of_device_id onboard_dev_match[] = {
+ 	{ .compatible = "usb424,2412", .data = &microchip_usb424_data, },
++	{ .compatible = "usb424,2422", .data = &microchip_usb424_data, },
+ 	{ .compatible = "usb424,2514", .data = &microchip_usb2514_data, },
+ 	{ .compatible = "usb424,2517", .data = &microchip_usb424_data, },
+ 	{ .compatible = "usb424,2744", .data = &microchip_usb5744_data, },
+-- 
+2.53.0
+

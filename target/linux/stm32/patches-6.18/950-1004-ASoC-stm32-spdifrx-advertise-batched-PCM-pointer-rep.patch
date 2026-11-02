@@ -1,0 +1,78 @@
+From 5031be506db053da774ac63699e820ea688abd9d Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 23 Jun 2026 16:35:59 +0200
+Subject: [PATCH] ASoC: stm32: spdifrx: advertise batched PCM pointer reporting
+
+On STM32 SPDIFRX, obtaining burst-accurate DMA residue may require extra
+DMA channel synchronization in the pointer reporting path. For audio
+capture, a coarser but non-disruptive position update is preferable to a
+more precise position query that interferes with the running transfer.
+
+Request segment-level residue reporting in the DMA slave configuration
+and advertise SNDRV_PCM_INFO_BATCH so ALSA userspace is informed that the
+hardware pointer may advance in batches, typically once per period,
+rather than continuously.
+
+Advertising SNDRV_PCM_INFO_BATCH tells the ALSA core the position is
+period-granular and makes it skip the jiffies-based hardware pointer
+check, preventing false corrections and spurious XRUNs.
+
+This aligns the PCM hardware flags with the pointer reporting granularity
+used by the driver.
+
+Change-Id: I02147b41020bd3aeb6297c32f18c21aba7be1a34
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/582125
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+---
+ sound/soc/stm/stm32_spdifrx.c | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
+
+diff --git a/sound/soc/stm/stm32_spdifrx.c b/sound/soc/stm/stm32_spdifrx.c
+index 57b711c44278..a3355319401c 100644
+--- a/sound/soc/stm/stm32_spdifrx.c
++++ b/sound/soc/stm/stm32_spdifrx.c
+@@ -878,7 +878,7 @@ static struct snd_soc_dai_driver stm32_spdifrx_dai[] = {
+ };
+ 
+ static const struct snd_pcm_hardware stm32_spdifrx_pcm_hw = {
+-	.info = SNDRV_PCM_INFO_INTERLEAVED | SNDRV_PCM_INFO_MMAP,
++	.info = SNDRV_PCM_INFO_INTERLEAVED | SNDRV_PCM_INFO_MMAP | SNDRV_PCM_INFO_BATCH,
+ 	.buffer_bytes_max = 8 * PAGE_SIZE,
+ 	.period_bytes_min = 1024,
+ 	.period_bytes_max = 4 * PAGE_SIZE,
+@@ -891,9 +891,25 @@ static const struct snd_soc_component_driver stm32_spdifrx_component = {
+ 	.legacy_dai_naming = 1,
+ };
+ 
++static int stm32_spdifrx_prepare_slave_config(struct snd_pcm_substream *substream,
++					      struct snd_pcm_hw_params *params,
++					      struct dma_slave_config *slave_config)
++{
++	int ret;
++
++	ret = snd_dmaengine_pcm_prepare_slave_config(substream, params, slave_config);
++	if (ret)
++		return ret;
++
++	/* Prefer DMA_RESIDUE_GRANULARITY_SEGMENT to avoid disruptive DMA synchronization */
++	slave_config->residue_granularity = DMA_RESIDUE_GRANULARITY_SEGMENT;
++
++	return 0;
++}
++
+ static const struct snd_dmaengine_pcm_config stm32_spdifrx_pcm_config = {
+ 	.pcm_hardware = &stm32_spdifrx_pcm_hw,
+-	.prepare_slave_config = snd_dmaengine_pcm_prepare_slave_config,
++	.prepare_slave_config = stm32_spdifrx_prepare_slave_config,
+ };
+ 
+ static const struct of_device_id stm32_spdifrx_ids[] = {
+-- 
+2.53.0
+

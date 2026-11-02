@@ -1,0 +1,1763 @@
+From eab9fd29dad55427e68f6f4dae81b9ee2af03e69 Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Date: Mon, 14 Sep 2026 18:19:37 +0200
+Subject: [PATCH] ARM: dts: stm32: factorize SCMI impacts on STM32MP15 board
+
+Add STM32MP SOC scmi device tree files and factorize support of SCMI
+server for STM32MP15x family.
+
+Change-Id: I08de0f1f5c8514591c8f45c102b024c6f1802afe
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/612290
+Tested-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp15-scmi.dtsi      |  39 -----
+ arch/arm/boot/dts/st/stm32mp151-scmi.dtsi     | 152 ++++++++++++++++++
+ arch/arm/boot/dts/st/stm32mp153-scmi.dtsi     |  19 +++
+ arch/arm/boot/dts/st/stm32mp157-scmi.dtsi     |  11 ++
+ arch/arm/boot/dts/st/stm32mp157a-dk1.dts      | 132 +--------------
+ arch/arm/boot/dts/st/stm32mp157c-dk2.dts      | 139 +---------------
+ .../boot/dts/st/stm32mp157c-ed1-no-scmi.dts   |   2 +-
+ arch/arm/boot/dts/st/stm32mp157c-ed1.dts      | 139 +---------------
+ arch/arm/boot/dts/st/stm32mp157c-ev1.dts      | 143 +---------------
+ arch/arm/boot/dts/st/stm32mp157d-dk1.dts      | 132 +--------------
+ arch/arm/boot/dts/st/stm32mp157d-ed1.dts      |  70 +-------
+ arch/arm/boot/dts/st/stm32mp157d-ev1.dts      |   1 -
+ arch/arm/boot/dts/st/stm32mp157f-dk2.dts      | 130 +--------------
+ arch/arm/boot/dts/st/stm32mp157f-ed1.dts      |  80 +--------
+ arch/arm/boot/dts/st/stm32mp157f-ev1.dts      |   1 -
+ arch/arm/boot/dts/st/stm32mp15xc-scmi.dtsi    |  11 ++
+ arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi     |   2 +-
+ 17 files changed, 208 insertions(+), 995 deletions(-)
+ delete mode 100644 arch/arm/boot/dts/st/stm32mp15-scmi.dtsi
+ create mode 100644 arch/arm/boot/dts/st/stm32mp151-scmi.dtsi
+ create mode 100644 arch/arm/boot/dts/st/stm32mp153-scmi.dtsi
+ create mode 100644 arch/arm/boot/dts/st/stm32mp157-scmi.dtsi
+ create mode 100644 arch/arm/boot/dts/st/stm32mp15xc-scmi.dtsi
+
+diff --git a/arch/arm/boot/dts/st/stm32mp15-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp15-scmi.dtsi
+deleted file mode 100644
+index aeedab8e5af9..000000000000
+--- a/arch/arm/boot/dts/st/stm32mp15-scmi.dtsi
++++ /dev/null
+@@ -1,39 +0,0 @@
+-// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
+-/*
+- * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
+- * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+- */
+-
+-/ {
+-	firmware {
+-		optee: optee {
+-			compatible = "linaro,optee-tz";
+-			method = "smc";
+-			interrupt-parent = <&intc>;
+-			interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
+-		};
+-
+-		scmi: scmi {
+-			compatible = "linaro,scmi-optee";
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-			linaro,optee-channel-id = <0>;
+-
+-			scmi_clk: protocol@14 {
+-				reg = <0x14>;
+-				#clock-cells = <1>;
+-			};
+-
+-			scmi_reset: protocol@16 {
+-				reg = <0x16>;
+-				#reset-cells = <1>;
+-			};
+-		};
+-	};
+-};
+-
+-/delete-node/ &clk_hse;
+-/delete-node/ &clk_hsi;
+-/delete-node/ &clk_lse;
+-/delete-node/ &clk_lsi;
+-/delete-node/ &clk_csi;
+diff --git a/arch/arm/boot/dts/st/stm32mp151-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp151-scmi.dtsi
+new file mode 100644
+index 000000000000..945da268773d
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp151-scmi.dtsi
+@@ -0,0 +1,152 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
++ * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
++ */
++
++/ {
++	firmware {
++		optee: optee {
++			compatible = "linaro,optee-tz";
++			method = "smc";
++			interrupt-parent = <&intc>;
++			interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
++			interrupt-controller;
++			#interrupt-cells = <1>;
++			bootph-some-ram;
++		};
++
++		scmi: scmi {
++			compatible = "linaro,scmi-optee";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			linaro,optee-channel-id = <0>;
++			bootph-some-ram;
++
++			scmi_clk: protocol@14 {
++				reg = <0x14>;
++				#clock-cells = <1>;
++			};
++
++			scmi_reset: protocol@16 {
++				reg = <0x16>;
++				#reset-cells = <1>;
++			};
++		};
++	};
++};
++
++/delete-node/ &clk_hse;
++/delete-node/ &clk_hsi;
++/delete-node/ &clk_lse;
++/delete-node/ &clk_lsi;
++/delete-node/ &clk_csi;
++
++&gpioa {
++	clocks = <&scmi_clk CK_SCMI_GPIOA>;
++};
++
++&gpiob {
++	clocks = <&scmi_clk CK_SCMI_GPIOB>;
++};
++
++&gpioc {
++	clocks = <&scmi_clk CK_SCMI_GPIOC>;
++};
++
++&gpiod {
++	clocks = <&scmi_clk CK_SCMI_GPIOD>;
++};
++
++&gpioe {
++	clocks = <&scmi_clk CK_SCMI_GPIOE>;
++};
++
++&gpiof {
++	clocks = <&scmi_clk CK_SCMI_GPIOF>;
++};
++
++&gpiog {
++	clocks = <&scmi_clk CK_SCMI_GPIOG>;
++};
++
++&gpioh {
++	clocks = <&scmi_clk CK_SCMI_GPIOH>;
++};
++
++&gpioi {
++	clocks = <&scmi_clk CK_SCMI_GPIOI>;
++};
++
++&gpioj {
++	clocks = <&scmi_clk CK_SCMI_GPIOJ>;
++};
++
++&gpiok {
++	clocks = <&scmi_clk CK_SCMI_GPIOK>;
++};
++
++&gpioz {
++	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
++};
++
++&hash1 {
++	clocks = <&scmi_clk CK_SCMI_HASH1>;
++	resets = <&scmi_reset RST_SCMI_HASH1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
++};
++
++&i2c4 {
++	clocks = <&scmi_clk CK_SCMI_I2C4>;
++	resets = <&scmi_reset RST_SCMI_I2C4>;
++};
++
++&i2c6 {
++	clocks = <&scmi_clk CK_SCMI_I2C6>;
++	resets = <&scmi_reset RST_SCMI_I2C6>;
++};
++
++&iwdg2 {
++	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
++};
++
++&m4_rproc {
++	/delete-property/ st,syscfg-holdboot;
++
++	resets = <&scmi_reset RST_SCMI_MCU>,
++		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
++	reset-names = "mcu_rst", "hold_boot";
++};
++
++&mdma1 {
++	resets = <&scmi_reset RST_SCMI_MDMA>;
++};
++
++&rcc {
++	compatible = "st,stm32mp1-rcc-secure", "syscon";
++	clock-names = "hse", "hsi", "csi", "lse", "lsi";
++	clocks = <&scmi_clk CK_SCMI_HSE>,
++		 <&scmi_clk CK_SCMI_HSI>,
++		 <&scmi_clk CK_SCMI_CSI>,
++		 <&scmi_clk CK_SCMI_LSE>,
++		 <&scmi_clk CK_SCMI_LSI>;
++};
++
++&rng1 {
++	clocks = <&scmi_clk CK_SCMI_RNG1>;
++	resets = <&scmi_reset RST_SCMI_RNG1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
++};
++
++&rtc {
++	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
++};
++
++&spi6 {
++	clocks = <&scmi_clk CK_SCMI_SPI6>;
++	resets = <&scmi_reset RST_SCMI_SPI6>;
++};
++
++&usart1 {
++	clocks = <&scmi_clk CK_SCMI_USART1>;
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp153-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp153-scmi.dtsi
+new file mode 100644
+index 000000000000..da97b31ca122
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp153-scmi.dtsi
+@@ -0,0 +1,19 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
++/*
++ * Copyright (C) STMicroelectronics 2026 - All Rights Reserved
++ * Author: Patrick Delaunay <patrick.delaunay@foss.st.com> for STMicroelectronics.
++ */
++
++#include "stm32mp151-scmi.dtsi"
++
++&m_can1 {
++	clocks = <&scmi_clk CK_SCMI_HSE>, <&rcc FDCAN_K>;
++};
++
++&m_can2 {
++	clocks = <&scmi_clk CK_SCMI_HSE>, <&rcc FDCAN_K>;
++};
++
++&optee {
++	interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp157-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp157-scmi.dtsi
+new file mode 100644
+index 000000000000..72c2776d9f21
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp157-scmi.dtsi
+@@ -0,0 +1,11 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
++/*
++ * Copyright (C) STMicroelectronics 2026 - All Rights Reserved
++ * Author: Patrick Delaunay <patrick.delaunay@foss.st.com> for STMicroelectronics.
++ */
++
++#include "stm32mp153-scmi.dtsi"
++
++&dsi {
++	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp157a-dk1.dts b/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
+index 524bd234e7ba..7cc572bd9c40 100644
+--- a/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
+@@ -7,7 +7,7 @@
+ /dts-v1/;
+ 
+ #include "stm32mp157a-dk1-no-scmi.dts"
+-#include "stm32mp15-scmi.dtsi"
++#include "stm32mp157-scmi.dtsi"
+ 
+ / {
+ 	model = "STMicroelectronics STM32MP157A-DK1 Discovery Board";
+@@ -27,137 +27,7 @@ &arm_wdt {
+ 	status = "okay";
+ };
+ 
+-&cpu0 {
+-	clocks = <&scmi_clk CK_SCMI_MPU>;
+-};
+-
+-&cpu1 {
+-	clocks = <&scmi_clk CK_SCMI_MPU>;
+-};
+-
+-&dsi {
+-	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
+-};
+-
+-&gpioa {
+-	clocks = <&scmi_clk CK_SCMI_GPIOA>;
+-};
+-
+-&gpiob {
+-	clocks = <&scmi_clk CK_SCMI_GPIOB>;
+-};
+-
+-&gpioc {
+-	clocks = <&scmi_clk CK_SCMI_GPIOC>;
+-};
+-
+-&gpiod {
+-	clocks = <&scmi_clk CK_SCMI_GPIOD>;
+-};
+-
+-&gpioe {
+-	clocks = <&scmi_clk CK_SCMI_GPIOE>;
+-};
+-
+-&gpiof {
+-	clocks = <&scmi_clk CK_SCMI_GPIOF>;
+-};
+-
+-&gpiog {
+-	clocks = <&scmi_clk CK_SCMI_GPIOG>;
+-};
+-
+-&gpioh {
+-	clocks = <&scmi_clk CK_SCMI_GPIOH>;
+-};
+-
+-&gpioi {
+-	clocks = <&scmi_clk CK_SCMI_GPIOI>;
+-};
+-
+-&gpioj {
+-	clocks = <&scmi_clk CK_SCMI_GPIOJ>;
+-};
+-
+-&gpiok {
+-	clocks = <&scmi_clk CK_SCMI_GPIOK>;
+-};
+-
+-&gpioz {
+-	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
+-};
+-
+-&hash1 {
+-	clocks = <&scmi_clk CK_SCMI_HASH1>;
+-	resets = <&scmi_reset RST_SCMI_HASH1>;
+-	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+-};
+-
+-&i2c4 {
+-	clocks = <&scmi_clk CK_SCMI_I2C4>;
+-	resets = <&scmi_reset RST_SCMI_I2C4>;
+-};
+-
+-&i2c6 {
+-	clocks = <&scmi_clk CK_SCMI_I2C6>;
+-	resets = <&scmi_reset RST_SCMI_I2C6>;
+-};
+-
+ &iwdg1 {
+ 	/* IWDG1 is secure and managed through arm_wdt */
+ 	status = "disabled";
+ };
+-
+-&iwdg2 {
+-	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
+-};
+-
+-&m4_rproc {
+-	/delete-property/ st,syscfg-holdboot;
+-	resets = <&scmi_reset RST_SCMI_MCU>,
+-		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
+-	reset-names = "mcu_rst", "hold_boot";
+-};
+-
+-&mdma1 {
+-	resets = <&scmi_reset RST_SCMI_MDMA>;
+-};
+-
+-&optee {
+-	interrupt-parent = <&intc>;
+-	interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
+-	bootph-some-ram;
+-};
+-
+-&rcc {
+-	compatible = "st,stm32mp1-rcc-secure", "syscon";
+-	clock-names = "hse", "hsi", "csi", "lse", "lsi";
+-	clocks = <&scmi_clk CK_SCMI_HSE>,
+-		 <&scmi_clk CK_SCMI_HSI>,
+-		 <&scmi_clk CK_SCMI_CSI>,
+-		 <&scmi_clk CK_SCMI_LSE>,
+-		 <&scmi_clk CK_SCMI_LSI>;
+-};
+-
+-&rng1 {
+-	clocks = <&scmi_clk CK_SCMI_RNG1>;
+-	resets = <&scmi_reset RST_SCMI_RNG1>;
+-	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+-};
+-
+-&rtc {
+-	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
+-};
+-
+-&scmi {
+-	bootph-some-ram;
+-};
+-
+-&spi6 {
+-	clocks = <&scmi_clk CK_SCMI_SPI6>;
+-	resets = <&scmi_reset RST_SCMI_SPI6>;
+-};
+-
+-&usart1 {
+-	clocks = <&scmi_clk CK_SCMI_USART1>;
+-};
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
+index ae8b605ef438..c7ab06279431 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
+@@ -7,7 +7,8 @@
+ /dts-v1/;
+ 
+ #include "stm32mp157c-dk2-no-scmi.dts"
+-#include "stm32mp15-scmi.dtsi"
++#include "stm32mp157-scmi.dtsi"
++#include "stm32mp15xc-scmi.dtsi"
+ 
+ / {
+ 	model = "STMicroelectronics STM32MP157C-DK2 Discovery Board";
+@@ -27,143 +28,7 @@ &arm_wdt {
+ 	status = "okay";
+ };
+ 
+-&cpu0 {
+-	clocks = <&scmi_clk CK_SCMI_MPU>;
+-};
+-
+-&cpu1 {
+-	clocks = <&scmi_clk CK_SCMI_MPU>;
+-};
+-
+-&cryp1 {
+-	clocks = <&scmi_clk CK_SCMI_CRYP1>;
+-	resets = <&scmi_reset RST_SCMI_CRYP1>;
+-	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+-};
+-
+-&dsi {
+-	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
+-};
+-
+-&gpioa {
+-	clocks = <&scmi_clk CK_SCMI_GPIOA>;
+-};
+-
+-&gpiob {
+-	clocks = <&scmi_clk CK_SCMI_GPIOB>;
+-};
+-
+-&gpioc {
+-	clocks = <&scmi_clk CK_SCMI_GPIOC>;
+-};
+-
+-&gpiod {
+-	clocks = <&scmi_clk CK_SCMI_GPIOD>;
+-};
+-
+-&gpioe {
+-	clocks = <&scmi_clk CK_SCMI_GPIOE>;
+-};
+-
+-&gpiof {
+-	clocks = <&scmi_clk CK_SCMI_GPIOF>;
+-};
+-
+-&gpiog {
+-	clocks = <&scmi_clk CK_SCMI_GPIOG>;
+-};
+-
+-&gpioh {
+-	clocks = <&scmi_clk CK_SCMI_GPIOH>;
+-};
+-
+-&gpioi {
+-	clocks = <&scmi_clk CK_SCMI_GPIOI>;
+-};
+-
+-&gpioj {
+-	clocks = <&scmi_clk CK_SCMI_GPIOJ>;
+-};
+-
+-&gpiok {
+-	clocks = <&scmi_clk CK_SCMI_GPIOK>;
+-};
+-
+-&gpioz {
+-	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
+-};
+-
+-&hash1 {
+-	clocks = <&scmi_clk CK_SCMI_HASH1>;
+-	resets = <&scmi_reset RST_SCMI_HASH1>;
+-	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+-};
+-
+-&i2c4 {
+-	clocks = <&scmi_clk CK_SCMI_I2C4>;
+-	resets = <&scmi_reset RST_SCMI_I2C4>;
+-};
+-
+-&i2c6 {
+-	clocks = <&scmi_clk CK_SCMI_I2C6>;
+-	resets = <&scmi_reset RST_SCMI_I2C6>;
+-};
+-
+ &iwdg1 {
+ 	/* IWDG1 is secure and managed through arm_wdt */
+ 	status = "disabled";
+ };
+-
+-&iwdg2 {
+-	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
+-};
+-
+-&m4_rproc {
+-	/delete-property/ st,syscfg-holdboot;
+-	resets = <&scmi_reset RST_SCMI_MCU>,
+-		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
+-	reset-names = "mcu_rst", "hold_boot";
+-};
+-
+-&mdma1 {
+-	resets = <&scmi_reset RST_SCMI_MDMA>;
+-};
+-
+-&optee {
+-	interrupt-parent = <&intc>;
+-	interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
+-	bootph-some-ram;
+-};
+-
+-&rcc {
+-	compatible = "st,stm32mp1-rcc-secure", "syscon";
+-	clock-names = "hse", "hsi", "csi", "lse", "lsi";
+-	clocks = <&scmi_clk CK_SCMI_HSE>,
+-		 <&scmi_clk CK_SCMI_HSI>,
+-		 <&scmi_clk CK_SCMI_CSI>,
+-		 <&scmi_clk CK_SCMI_LSE>,
+-		 <&scmi_clk CK_SCMI_LSI>;
+-};
+-
+-&rng1 {
+-	clocks = <&scmi_clk CK_SCMI_RNG1>;
+-	resets = <&scmi_reset RST_SCMI_RNG1>;
+-	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+-};
+-
+-&rtc {
+-	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
+-};
+-
+-&scmi {
+-	bootph-some-ram;
+-};
+-
+-&spi6 {
+-	clocks = <&scmi_clk CK_SCMI_SPI6>;
+-	resets = <&scmi_reset RST_SCMI_SPI6>;
+-};
+-
+-&usart1 {
+-	clocks = <&scmi_clk CK_SCMI_USART1>;
+-};
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
+index 2508f871befc..ec719c751567 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
+@@ -337,7 +337,7 @@ &i2c4 {
+ 	/delete-property/dmas;
+ 	/delete-property/dma-names;
+ 
+-	pmic: stpmic@33 {
++	pmic@33 {
+ 		compatible = "st,stpmic1";
+ 		reg = <0x33>;
+ 		interrupts-extended = <&gpioa 0 IRQ_TYPE_EDGE_FALLING>;
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1.dts b/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
+index 4da559dc9b7e..110a99baced5 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
+@@ -7,7 +7,8 @@
+ /dts-v1/;
+ 
+ #include "stm32mp157c-ed1-no-scmi.dts"
+-#include "stm32mp15-scmi.dtsi"
++#include "stm32mp157-scmi.dtsi"
++#include "stm32mp15xc-scmi.dtsi"
+ 
+ / {
+ 	model = "STMicroelectronics STM32MP157C eval daughter";
+@@ -27,143 +28,7 @@ &arm_wdt {
+ 	status = "okay";
+ };
+ 
+-&cpu0 {
+-	clocks = <&scmi_clk CK_SCMI_MPU>;
+-};
+-
+-&cpu1 {
+-	clocks = <&scmi_clk CK_SCMI_MPU>;
+-};
+-
+-&cryp1 {
+-	clocks = <&scmi_clk CK_SCMI_CRYP1>;
+-	resets = <&scmi_reset RST_SCMI_CRYP1>;
+-	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+-};
+-
+-&dsi {
+-	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
+-};
+-
+-&gpioa {
+-	clocks = <&scmi_clk CK_SCMI_GPIOA>;
+-};
+-
+-&gpiob {
+-	clocks = <&scmi_clk CK_SCMI_GPIOB>;
+-};
+-
+-&gpioc {
+-	clocks = <&scmi_clk CK_SCMI_GPIOC>;
+-};
+-
+-&gpiod {
+-	clocks = <&scmi_clk CK_SCMI_GPIOD>;
+-};
+-
+-&gpioe {
+-	clocks = <&scmi_clk CK_SCMI_GPIOE>;
+-};
+-
+-&gpiof {
+-	clocks = <&scmi_clk CK_SCMI_GPIOF>;
+-};
+-
+-&gpiog {
+-	clocks = <&scmi_clk CK_SCMI_GPIOG>;
+-};
+-
+-&gpioh {
+-	clocks = <&scmi_clk CK_SCMI_GPIOH>;
+-};
+-
+-&gpioi {
+-	clocks = <&scmi_clk CK_SCMI_GPIOI>;
+-};
+-
+-&gpioj {
+-	clocks = <&scmi_clk CK_SCMI_GPIOJ>;
+-};
+-
+-&gpiok {
+-	clocks = <&scmi_clk CK_SCMI_GPIOK>;
+-};
+-
+-&gpioz {
+-	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
+-};
+-
+-&hash1 {
+-	clocks = <&scmi_clk CK_SCMI_HASH1>;
+-	resets = <&scmi_reset RST_SCMI_HASH1>;
+-	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+-};
+-
+-&i2c4 {
+-	clocks = <&scmi_clk CK_SCMI_I2C4>;
+-	resets = <&scmi_reset RST_SCMI_I2C4>;
+-};
+-
+-&i2c6 {
+-	clocks = <&scmi_clk CK_SCMI_I2C6>;
+-	resets = <&scmi_reset RST_SCMI_I2C6>;
+-};
+-
+ &iwdg1 {
+ 	/* IWDG1 is secure and managed through arm_wdt */
+ 	status = "disabled";
+ };
+-
+-&iwdg2 {
+-	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
+-};
+-
+-&m4_rproc {
+-	/delete-property/ st,syscfg-holdboot;
+-	resets = <&scmi_reset RST_SCMI_MCU>,
+-		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
+-	reset-names = "mcu_rst", "hold_boot";
+-};
+-
+-&mdma1 {
+-	resets = <&scmi_reset RST_SCMI_MDMA>;
+-};
+-
+-&optee {
+-	interrupt-parent = <&intc>;
+-	interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
+-	bootph-some-ram;
+-};
+-
+-&rcc {
+-	compatible = "st,stm32mp1-rcc-secure", "syscon";
+-	clock-names = "hse", "hsi", "csi", "lse", "lsi";
+-	clocks = <&scmi_clk CK_SCMI_HSE>,
+-		 <&scmi_clk CK_SCMI_HSI>,
+-		 <&scmi_clk CK_SCMI_CSI>,
+-		 <&scmi_clk CK_SCMI_LSE>,
+-		 <&scmi_clk CK_SCMI_LSI>;
+-};
+-
+-&rng1 {
+-	clocks = <&scmi_clk CK_SCMI_RNG1>;
+-	resets = <&scmi_reset RST_SCMI_RNG1>;
+-	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+-};
+-
+-&rtc {
+-	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
+-};
+-
+-&scmi {
+-	bootph-some-ram;
+-};
+-
+-&spi6 {
+-	clocks = <&scmi_clk CK_SCMI_SPI6>;
+-	resets = <&scmi_reset RST_SCMI_SPI6>;
+-};
+-
+-&usart1 {
+-	clocks = <&scmi_clk CK_SCMI_USART1>;
+-};
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
+index 053ff6a9cab1..5001ca74e766 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
+@@ -7,7 +7,8 @@
+ /dts-v1/;
+ 
+ #include "stm32mp157c-ev1-no-scmi.dts"
+-#include "stm32mp15-scmi.dtsi"
++#include "stm32mp157-scmi.dtsi"
++#include "stm32mp15xc-scmi.dtsi"
+ 
+ / {
+ 	model = "STMicroelectronics STM32MP157C eval daughter on eval mother";
+@@ -27,147 +28,7 @@ &arm_wdt {
+ 	status = "okay";
+ };
+ 
+-&cpu0 {
+-	clocks = <&scmi_clk CK_SCMI_MPU>;
+-};
+-
+-&cpu1 {
+-	clocks = <&scmi_clk CK_SCMI_MPU>;
+-};
+-
+-&cryp1 {
+-	clocks = <&scmi_clk CK_SCMI_CRYP1>;
+-	resets = <&scmi_reset RST_SCMI_CRYP1>;
+-	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+-};
+-
+-&dsi {
+-	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
+-};
+-
+-&gpioa {
+-	clocks = <&scmi_clk CK_SCMI_GPIOA>;
+-};
+-
+-&gpiob {
+-	clocks = <&scmi_clk CK_SCMI_GPIOB>;
+-};
+-
+-&gpioc {
+-	clocks = <&scmi_clk CK_SCMI_GPIOC>;
+-};
+-
+-&gpiod {
+-	clocks = <&scmi_clk CK_SCMI_GPIOD>;
+-};
+-
+-&gpioe {
+-	clocks = <&scmi_clk CK_SCMI_GPIOE>;
+-};
+-
+-&gpiof {
+-	clocks = <&scmi_clk CK_SCMI_GPIOF>;
+-};
+-
+-&gpiog {
+-	clocks = <&scmi_clk CK_SCMI_GPIOG>;
+-};
+-
+-&gpioh {
+-	clocks = <&scmi_clk CK_SCMI_GPIOH>;
+-};
+-
+-&gpioi {
+-	clocks = <&scmi_clk CK_SCMI_GPIOI>;
+-};
+-
+-&gpioj {
+-	clocks = <&scmi_clk CK_SCMI_GPIOJ>;
+-};
+-
+-&gpiok {
+-	clocks = <&scmi_clk CK_SCMI_GPIOK>;
+-};
+-
+-&gpioz {
+-	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
+-};
+-
+-&hash1 {
+-	clocks = <&scmi_clk CK_SCMI_HASH1>;
+-	resets = <&scmi_reset RST_SCMI_HASH1>;
+-	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+-};
+-
+-&i2c4 {
+-	clocks = <&scmi_clk CK_SCMI_I2C4>;
+-	resets = <&scmi_reset RST_SCMI_I2C4>;
+-};
+-
+-&i2c6 {
+-	clocks = <&scmi_clk CK_SCMI_I2C6>;
+-	resets = <&scmi_reset RST_SCMI_I2C6>;
+-};
+-
+ &iwdg1 {
+ 	/* IWDG1 is secure and managed through arm_wdt */
+ 	status = "disabled";
+ };
+-
+-&iwdg2 {
+-	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
+-};
+-
+-&m_can1 {
+-	clocks = <&scmi_clk CK_SCMI_HSE>, <&rcc FDCAN_K>;
+-};
+-
+-&m4_rproc {
+-	/delete-property/ st,syscfg-holdboot;
+-	resets = <&scmi_reset RST_SCMI_MCU>,
+-		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
+-	reset-names = "mcu_rst", "hold_boot";
+-};
+-
+-&mdma1 {
+-	resets = <&scmi_reset RST_SCMI_MDMA>;
+-};
+-
+-&optee {
+-	interrupt-parent = <&intc>;
+-	interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
+-	bootph-some-ram;
+-};
+-
+-&rcc {
+-	compatible = "st,stm32mp1-rcc-secure", "syscon";
+-	clock-names = "hse", "hsi", "csi", "lse", "lsi";
+-	clocks = <&scmi_clk CK_SCMI_HSE>,
+-		 <&scmi_clk CK_SCMI_HSI>,
+-		 <&scmi_clk CK_SCMI_CSI>,
+-		 <&scmi_clk CK_SCMI_LSE>,
+-		 <&scmi_clk CK_SCMI_LSI>;
+-};
+-
+-&rng1 {
+-	clocks = <&scmi_clk CK_SCMI_RNG1>;
+-	resets = <&scmi_reset RST_SCMI_RNG1>;
+-	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+-};
+-
+-&rtc {
+-	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
+-};
+-
+-&scmi {
+-	bootph-some-ram;
+-};
+-
+-&spi6 {
+-	clocks = <&scmi_clk CK_SCMI_SPI6>;
+-	resets = <&scmi_reset RST_SCMI_SPI6>;
+-};
+-
+-&usart1 {
+-	clocks = <&scmi_clk CK_SCMI_USART1>;
+-};
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-dk1.dts b/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
+index 039b27ce6fd6..b709b65360f0 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
+@@ -11,7 +11,7 @@
+ #include "stm32mp15-pinctrl.dtsi"
+ #include "stm32mp15xxac-pinctrl.dtsi"
+ #include "stm32mp15xx-dkx.dtsi"
+-#include "stm32mp15-scmi.dtsi"
++#include "stm32mp157-scmi.dtsi"
+ 
+ / {
+ 	model = "STMicroelectronics STM32MP157D-DK1 Discovery Board";
+@@ -39,137 +39,7 @@ &arm_wdt {
+ 	status = "okay";
+ };
+ 
+-&cpu0 {
+-	clocks = <&scmi_clk CK_SCMI_MPU>;
+-};
+-
+-&cpu1 {
+-	clocks = <&scmi_clk CK_SCMI_MPU>;
+-};
+-
+-&dsi {
+-	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
+-};
+-
+-&gpioa {
+-	clocks = <&scmi_clk CK_SCMI_GPIOA>;
+-};
+-
+-&gpiob {
+-	clocks = <&scmi_clk CK_SCMI_GPIOB>;
+-};
+-
+-&gpioc {
+-	clocks = <&scmi_clk CK_SCMI_GPIOC>;
+-};
+-
+-&gpiod {
+-	clocks = <&scmi_clk CK_SCMI_GPIOD>;
+-};
+-
+-&gpioe {
+-	clocks = <&scmi_clk CK_SCMI_GPIOE>;
+-};
+-
+-&gpiof {
+-	clocks = <&scmi_clk CK_SCMI_GPIOF>;
+-};
+-
+-&gpiog {
+-	clocks = <&scmi_clk CK_SCMI_GPIOG>;
+-};
+-
+-&gpioh {
+-	clocks = <&scmi_clk CK_SCMI_GPIOH>;
+-};
+-
+-&gpioi {
+-	clocks = <&scmi_clk CK_SCMI_GPIOI>;
+-};
+-
+-&gpioj {
+-	clocks = <&scmi_clk CK_SCMI_GPIOJ>;
+-};
+-
+-&gpiok {
+-	clocks = <&scmi_clk CK_SCMI_GPIOK>;
+-};
+-
+-&gpioz {
+-	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
+-};
+-
+-&hash1 {
+-	clocks = <&scmi_clk CK_SCMI_HASH1>;
+-	resets = <&scmi_reset RST_SCMI_HASH1>;
+-	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+-};
+-
+-&i2c4 {
+-	clocks = <&scmi_clk CK_SCMI_I2C4>;
+-	resets = <&scmi_reset RST_SCMI_I2C4>;
+-};
+-
+-&i2c6 {
+-	clocks = <&scmi_clk CK_SCMI_I2C6>;
+-	resets = <&scmi_reset RST_SCMI_I2C6>;
+-};
+-
+ &iwdg1 {
+ 	/* IWDG1 is secure and managed through arm_wdt */
+ 	status = "disabled";
+ };
+-
+-&iwdg2 {
+-	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
+-};
+-
+-&m4_rproc {
+-	/delete-property/ st,syscfg-holdboot;
+-	resets = <&scmi_reset RST_SCMI_MCU>,
+-		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
+-	reset-names = "mcu_rst", "hold_boot";
+-};
+-
+-&mdma1 {
+-	resets = <&scmi_reset RST_SCMI_MDMA>;
+-};
+-
+-&optee {
+-	interrupt-parent = <&intc>;
+-	interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
+-	bootph-some-ram;
+-};
+-
+-&rcc {
+-	compatible = "st,stm32mp1-rcc-secure", "syscon";
+-	clock-names = "hse", "hsi", "csi", "lse", "lsi";
+-	clocks = <&scmi_clk CK_SCMI_HSE>,
+-		 <&scmi_clk CK_SCMI_HSI>,
+-		 <&scmi_clk CK_SCMI_CSI>,
+-		 <&scmi_clk CK_SCMI_LSE>,
+-		 <&scmi_clk CK_SCMI_LSI>;
+-};
+-
+-&rng1 {
+-	clocks = <&scmi_clk CK_SCMI_RNG1>;
+-	resets = <&scmi_reset RST_SCMI_RNG1>;
+-	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+-};
+-
+-&rtc {
+-	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
+-};
+-
+-&scmi {
+-	bootph-some-ram;
+-};
+-
+-&spi6 {
+-	clocks = <&scmi_clk CK_SCMI_SPI6>;
+-	resets = <&scmi_reset RST_SCMI_SPI6>;
+-};
+-
+-&usart1 {
+-	clocks = <&scmi_clk CK_SCMI_USART1>;
+-};
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
+index 34c35ef452e4..0f17c0b2f96a 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
+@@ -9,7 +9,7 @@
+ #include "stm32mp15xd.dtsi"
+ #include "stm32mp15-pinctrl.dtsi"
+ #include "stm32mp15xxaa-pinctrl.dtsi"
+-#include "stm32mp15-scmi.dtsi"
++#include "stm32mp157-scmi.dtsi"
+ #include <dt-bindings/gpio/gpio.h>
+ #include <dt-bindings/input/linux-event-codes.h>
+ #include <dt-bindings/leds/common.h>
+@@ -187,12 +187,10 @@ &bsec {
+ };
+ 
+ &cpu0 {
+-	clocks = <&scmi_clk CK_SCMI_MPU>;
+ 	cpu-supply = <&vddcore>;
+ };
+ 
+ &cpu1 {
+-	clocks = <&scmi_clk CK_SCMI_MPU>;
+ 	cpu-supply = <&vddcore>;
+ };
+ 
+@@ -249,10 +247,6 @@ &dbg_bus {
+ 	status = "okay";
+ };
+ 
+-&dsi {
+-	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
+-};
+-
+ &dts {
+ 	status = "okay";
+ };
+@@ -263,62 +257,50 @@ &etzpc {
+ 
+ &gpioa {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOA>;
+ };
+ 
+ &gpiob {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOB>;
+ };
+ 
+ &gpioc {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOC>;
+ };
+ 
+ &gpiod {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOD>;
+ };
+ 
+ &gpioe {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOE>;
+ };
+ 
+ &gpiof {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOF>;
+ };
+ 
+ &gpiog {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOG>;
+ };
+ 
+ &gpioh {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOH>;
+ };
+ 
+ &gpioi {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOI>;
+ };
+ 
+ &gpioj {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOJ>;
+ };
+ 
+ &gpiok {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOK>;
+ };
+ 
+ &gpioz {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
+ };
+ 
+ &gpu {
+@@ -326,9 +308,6 @@ &gpu {
+ };
+ 
+ &hash1 {
+-	clocks = <&scmi_clk CK_SCMI_HASH1>;
+-	resets = <&scmi_reset RST_SCMI_HASH1>;
+-	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ 	status = "okay";
+ };
+ 
+@@ -497,27 +476,17 @@ pins {
+ 	};
+ };
+ 
+-&i2c6 {
+-	clocks = <&scmi_clk CK_SCMI_I2C6>;
+-	resets = <&scmi_reset RST_SCMI_I2C6>;
+-};
+-
+ &ipcc {
+ 	status = "okay";
+ };
+ 
+ &iwdg2 {
+-	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
+ 	timeout-sec = <32>;
+ 	bootph-all;
+ 	status = "okay";
+ };
+ 
+ &m4_rproc {
+-	/delete-property/ st,syscfg-holdboot;
+-	resets = <&scmi_reset RST_SCMI_MCU>,
+-		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
+-	reset-names = "mcu_rst", "hold_boot";
+ 	memory-region = <&retram>, <&mcuram>, <&mcuram2>, <&vdev0vring0>,
+ 			<&vdev0vring1>, <&vdev0buffer>;
+ 	mboxes = <&ipcc 0>, <&ipcc 1>, <&ipcc 2>, <&ipcc 3>;
+@@ -529,16 +498,6 @@ &m4_rproc {
+ 	status = "okay";
+ };
+ 
+-&mdma1 {
+-	resets = <&scmi_reset RST_SCMI_MDMA>;
+-};
+-
+-&optee {
+-	interrupt-parent = <&intc>;
+-	interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
+-	bootph-some-ram;
+-};
+-
+ &pinctrl {
+ 	bootph-all;
+ };
+@@ -558,31 +517,13 @@ &pwr_regulators {
+ };
+ 
+ &rcc {
+-	compatible = "st,stm32mp1-rcc-secure", "syscon";
+-	clock-names = "hse", "hsi", "csi", "lse", "lsi";
+-	clocks = <&scmi_clk CK_SCMI_HSE>,
+-		 <&scmi_clk CK_SCMI_HSI>,
+-		 <&scmi_clk CK_SCMI_CSI>,
+-		 <&scmi_clk CK_SCMI_LSE>,
+-		 <&scmi_clk CK_SCMI_LSI>;
+ 	bootph-all;
+ };
+ 
+-&rng1 {
+-	clocks = <&scmi_clk CK_SCMI_RNG1>;
+-	resets = <&scmi_reset RST_SCMI_RNG1>;
+-	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+-};
+-
+ &rtc {
+-	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
+ 	status = "okay";
+ };
+ 
+-&scmi {
+-	bootph-some-ram;
+-};
+-
+ &sdmmc1 {
+ 	pinctrl-names = "default", "opendrain", "sleep";
+ 	pinctrl-0 = <&sdmmc1_b4_pins_a &sdmmc1_dir_pins_a>;
+@@ -658,11 +599,6 @@ pins {
+ 	};
+ };
+ 
+-&spi6 {
+-	clocks = <&scmi_clk CK_SCMI_SPI6>;
+-	resets = <&scmi_reset RST_SCMI_SPI6>;
+-};
+-
+ &timers6 {
+ 	status = "okay";
+ 	/* spare dmas for other usage */
+@@ -694,10 +630,6 @@ pins2 {
+ 	};
+ };
+ 
+-&usart1 {
+-	clocks = <&scmi_clk CK_SCMI_USART1>;
+-};
+-
+ &usbotg_hs {
+ 	vbus-supply = <&vbus_otg>;
+ };
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+index 5dff509813d2..606aa6104da1 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+@@ -548,7 +548,6 @@ ltdc_ep0_out: endpoint {
+ };
+ 
+ &m_can1 {
+-	clocks = <&scmi_clk CK_SCMI_HSE>, <&rcc FDCAN_K>;
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&m_can1_pins_a>;
+ 	pinctrl-1 = <&m_can1_sleep_pins_a>;
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
+index 9d51bbcc3bf1..9725a2a9c55b 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
+@@ -11,7 +11,8 @@
+ #include "stm32mp15-pinctrl.dtsi"
+ #include "stm32mp15xxac-pinctrl.dtsi"
+ #include "stm32mp15xx-dkx.dtsi"
+-#include "stm32mp15-scmi.dtsi"
++#include "stm32mp157-scmi.dtsi"
++#include "stm32mp15xc-scmi.dtsi"
+ 
+ / {
+ 	model = "STMicroelectronics STM32MP157F-DK2 Discovery Board";
+@@ -56,23 +57,11 @@ &arm_wdt {
+ 	status = "okay";
+ };
+ 
+-&cpu0 {
+-	clocks = <&scmi_clk CK_SCMI_MPU>;
+-};
+-
+-&cpu1 {
+-	clocks = <&scmi_clk CK_SCMI_MPU>;
+-};
+-
+ &cryp1 {
+-	clocks = <&scmi_clk CK_SCMI_CRYP1>;
+-	resets = <&scmi_reset RST_SCMI_CRYP1>;
+-	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ 	status = "okay";
+ };
+ 
+ &dsi {
+-	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
+ 	#address-cells = <1>;
+ 	#size-cells = <0>;
+ 	status = "okay";
+@@ -99,60 +88,6 @@ &dsi_out {
+ 	remote-endpoint = <&panel_in>;
+ };
+ 
+-&gpioa {
+-	clocks = <&scmi_clk CK_SCMI_GPIOA>;
+-};
+-
+-&gpiob {
+-	clocks = <&scmi_clk CK_SCMI_GPIOB>;
+-};
+-
+-&gpioc {
+-	clocks = <&scmi_clk CK_SCMI_GPIOC>;
+-};
+-
+-&gpiod {
+-	clocks = <&scmi_clk CK_SCMI_GPIOD>;
+-};
+-
+-&gpioe {
+-	clocks = <&scmi_clk CK_SCMI_GPIOE>;
+-};
+-
+-&gpiof {
+-	clocks = <&scmi_clk CK_SCMI_GPIOF>;
+-};
+-
+-&gpiog {
+-	clocks = <&scmi_clk CK_SCMI_GPIOG>;
+-};
+-
+-&gpioh {
+-	clocks = <&scmi_clk CK_SCMI_GPIOH>;
+-};
+-
+-&gpioi {
+-	clocks = <&scmi_clk CK_SCMI_GPIOI>;
+-};
+-
+-&gpioj {
+-	clocks = <&scmi_clk CK_SCMI_GPIOJ>;
+-};
+-
+-&gpiok {
+-	clocks = <&scmi_clk CK_SCMI_GPIOK>;
+-};
+-
+-&gpioz {
+-	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
+-};
+-
+-&hash1 {
+-	clocks = <&scmi_clk CK_SCMI_HASH1>;
+-	resets = <&scmi_reset RST_SCMI_HASH1>;
+-	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+-};
+-
+ &hdp {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&hdp2_gpo &hdp2_pins_a>;
+@@ -173,25 +108,11 @@ touchscreen@38 {
+ 	};
+ };
+ 
+-&i2c4 {
+-	clocks = <&scmi_clk CK_SCMI_I2C4>;
+-	resets = <&scmi_reset RST_SCMI_I2C4>;
+-};
+-
+-&i2c6 {
+-	clocks = <&scmi_clk CK_SCMI_I2C6>;
+-	resets = <&scmi_reset RST_SCMI_I2C6>;
+-};
+-
+ &iwdg1 {
+ 	/* IWDG1 is secure and managed through arm_wdt */
+ 	status = "disabled";
+ };
+ 
+-&iwdg2 {
+-	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
+-};
+-
+ &ltdc {
+ 	bootph-some-ram;
+ 	status = "okay";
+@@ -207,41 +128,7 @@ ltdc_ep1_out: endpoint@1 {
+ 	};
+ };
+ 
+-&m4_rproc {
+-	/delete-property/ st,syscfg-holdboot;
+-	resets = <&scmi_reset RST_SCMI_MCU>,
+-		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
+-	reset-names = "mcu_rst", "hold_boot";
+-};
+-
+-&mdma1 {
+-	resets = <&scmi_reset RST_SCMI_MDMA>;
+-};
+-
+-&optee {
+-	interrupt-parent = <&intc>;
+-	interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
+-	bootph-some-ram;
+-};
+-
+-&rcc {
+-	compatible = "st,stm32mp1-rcc-secure", "syscon";
+-	clock-names = "hse", "hsi", "csi", "lse", "lsi";
+-	clocks = <&scmi_clk CK_SCMI_HSE>,
+-		 <&scmi_clk CK_SCMI_HSI>,
+-		 <&scmi_clk CK_SCMI_CSI>,
+-		 <&scmi_clk CK_SCMI_LSE>,
+-		 <&scmi_clk CK_SCMI_LSI>;
+-};
+-
+-&rng1 {
+-	clocks = <&scmi_clk CK_SCMI_RNG1>;
+-	resets = <&scmi_reset RST_SCMI_RNG1>;
+-	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+-};
+-
+ &rtc {
+-	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
+ 	#clock-cells = <0>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&rtc_rsvd_pins_a &rtc_lsco_pins_a>;
+@@ -252,10 +139,6 @@ rtc_lsco_pins_a: rtc-lsco-0 {
+ 	};
+ };
+ 
+-&scmi {
+-	bootph-some-ram;
+-};
+-
+ /* Wifi */
+ &sdmmc2 {
+ 	pinctrl-names = "default", "opendrain", "sleep";
+@@ -279,15 +162,6 @@ brcmf: wifi@1 {
+ 	};
+ };
+ 
+-&spi6 {
+-	clocks = <&scmi_clk CK_SCMI_SPI6>;
+-	resets = <&scmi_reset RST_SCMI_SPI6>;
+-};
+-
+-&usart1 {
+-	clocks = <&scmi_clk CK_SCMI_USART1>;
+-};
+-
+ /* Bluetooth */
+ &usart2 {
+ 	pinctrl-names = "default", "sleep", "idle";
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
+index e41336df8d2b..010d90d2429f 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
+@@ -9,7 +9,8 @@
+ #include "stm32mp15xf.dtsi"
+ #include "stm32mp15-pinctrl.dtsi"
+ #include "stm32mp15xxaa-pinctrl.dtsi"
+-#include "stm32mp15-scmi.dtsi"
++#include "stm32mp157-scmi.dtsi"
++#include "stm32mp15xc-scmi.dtsi"
+ #include <dt-bindings/gpio/gpio.h>
+ #include <dt-bindings/input/linux-event-codes.h>
+ #include <dt-bindings/leds/common.h>
+@@ -187,19 +188,14 @@ &bsec {
+ };
+ 
+ &cpu0 {
+-	clocks = <&scmi_clk CK_SCMI_MPU>;
+ 	cpu-supply = <&vddcore>;
+ };
+ 
+ &cpu1 {
+-	clocks = <&scmi_clk CK_SCMI_MPU>;
+ 	cpu-supply = <&vddcore>;
+ };
+ 
+ &cryp1 {
+-	clocks = <&scmi_clk CK_SCMI_CRYP1>;
+-	resets = <&scmi_reset RST_SCMI_CRYP1>;
+-	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ 	status = "okay";
+ };
+ 
+@@ -256,10 +252,6 @@ &dbg_bus {
+ 	status = "okay";
+ };
+ 
+-&dsi {
+-	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
+-};
+-
+ &dts {
+ 	status = "okay";
+ };
+@@ -270,62 +262,50 @@ &etzpc {
+ 
+ &gpioa {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOA>;
+ };
+ 
+ &gpiob {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOB>;
+ };
+ 
+ &gpioc {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOC>;
+ };
+ 
+ &gpiod {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOD>;
+ };
+ 
+ &gpioe {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOE>;
+ };
+ 
+ &gpiof {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOF>;
+ };
+ 
+ &gpiog {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOG>;
+ };
+ 
+ &gpioh {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOH>;
+ };
+ 
+ &gpioi {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOI>;
+ };
+ 
+ &gpioj {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOJ>;
+ };
+ 
+ &gpiok {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOK>;
+ };
+ 
+ &gpioz {
+ 	bootph-all;
+-	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
+ };
+ 
+ &gpu {
+@@ -333,9 +313,6 @@ &gpu {
+ };
+ 
+ &hash1 {
+-	clocks = <&scmi_clk CK_SCMI_HASH1>;
+-	resets = <&scmi_reset RST_SCMI_HASH1>;
+-	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+ 	status = "okay";
+ };
+ 
+@@ -504,27 +481,17 @@ pins {
+ 	};
+ };
+ 
+-&i2c6 {
+-	clocks = <&scmi_clk CK_SCMI_I2C6>;
+-	resets = <&scmi_reset RST_SCMI_I2C6>;
+-};
+-
+ &ipcc {
+ 	status = "okay";
+ };
+ 
+ &iwdg2 {
+-	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
+ 	timeout-sec = <32>;
+ 	bootph-all;
+ 	status = "okay";
+ };
+ 
+ &m4_rproc {
+-	/delete-property/ st,syscfg-holdboot;
+-	resets = <&scmi_reset RST_SCMI_MCU>,
+-		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
+-	reset-names = "mcu_rst", "hold_boot";
+ 	memory-region = <&retram>, <&mcuram>, <&mcuram2>, <&vdev0vring0>,
+ 			<&vdev0vring1>, <&vdev0buffer>;
+ 	mboxes = <&ipcc 0>, <&ipcc 1>, <&ipcc 2>, <&ipcc 3>;
+@@ -536,16 +503,6 @@ &m4_rproc {
+ 	status = "okay";
+ };
+ 
+-&mdma1 {
+-	resets = <&scmi_reset RST_SCMI_MDMA>;
+-};
+-
+-&optee {
+-	interrupt-parent = <&intc>;
+-	interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
+-	bootph-some-ram;
+-};
+-
+ &pinctrl {
+ 	bootph-all;
+ };
+@@ -558,38 +515,14 @@ &psci {
+ 	bootph-some-ram;
+ };
+ 
+-&pwr_regulators {
+-	vdd-supply = <&vdd>;
+-	vdd_3v3_usbfs-supply = <&vdd_usb>;
+-	bootph-all;
+-};
+-
+ &rcc {
+-	compatible = "st,stm32mp1-rcc-secure", "syscon";
+-	clock-names = "hse", "hsi", "csi", "lse", "lsi";
+-	clocks = <&scmi_clk CK_SCMI_HSE>,
+-		 <&scmi_clk CK_SCMI_HSI>,
+-		 <&scmi_clk CK_SCMI_CSI>,
+-		 <&scmi_clk CK_SCMI_LSE>,
+-		 <&scmi_clk CK_SCMI_LSI>;
+ 	bootph-all;
+ };
+ 
+-&rng1 {
+-	clocks = <&scmi_clk CK_SCMI_RNG1>;
+-	resets = <&scmi_reset RST_SCMI_RNG1>;
+-	post-init-providers = <&scmi_clk>, <&scmi_reset>;
+-};
+-
+ &rtc {
+-	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
+ 	status = "okay";
+ };
+ 
+-&scmi {
+-	bootph-some-ram;
+-};
+-
+ &sdmmc1 {
+ 	pinctrl-names = "default", "opendrain", "sleep";
+ 	pinctrl-0 = <&sdmmc1_b4_pins_a &sdmmc1_dir_pins_a>;
+@@ -665,11 +598,6 @@ pins {
+ 	};
+ };
+ 
+-&spi6 {
+-	clocks = <&scmi_clk CK_SCMI_SPI6>;
+-	resets = <&scmi_reset RST_SCMI_SPI6>;
+-};
+-
+ &timers6 {
+ 	status = "okay";
+ 	/* spare dmas for other usage */
+@@ -701,10 +629,6 @@ pins2 {
+ 	};
+ };
+ 
+-&usart1 {
+-	clocks = <&scmi_clk CK_SCMI_USART1>;
+-};
+-
+ &usbotg_hs {
+ 	vbus-supply = <&vbus_otg>;
+ };
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+index 30a8ddb70b76..9e5ca0e3312c 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+@@ -548,7 +548,6 @@ ltdc_ep0_out: endpoint {
+ };
+ 
+ &m_can1 {
+-	clocks = <&scmi_clk CK_SCMI_HSE>, <&rcc FDCAN_K>;
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&m_can1_pins_a>;
+ 	pinctrl-1 = <&m_can1_sleep_pins_a>;
+diff --git a/arch/arm/boot/dts/st/stm32mp15xc-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp15xc-scmi.dtsi
+new file mode 100644
+index 000000000000..e3ee5b055d7c
+--- /dev/null
++++ b/arch/arm/boot/dts/st/stm32mp15xc-scmi.dtsi
+@@ -0,0 +1,11 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
++/*
++ * Copyright (C) STMicroelectronics 2026 - All Rights Reserved
++ * Author: Patrick Delaunay <patrick.delaunay@foss.st.com> for STMicroelectronics.
++ */
++
++&cryp1 {
++	clocks = <&scmi_clk CK_SCMI_CRYP1>;
++	resets = <&scmi_reset RST_SCMI_CRYP1>;
++	post-init-providers = <&scmi_clk>, <&scmi_reset>;
++};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
+index 9c07b711497a..b89962f74b55 100644
+--- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
+@@ -442,7 +442,7 @@ con_usbotg_hs_ep: endpoint {
+ 		};
+ 	};
+ 
+-	pmic: stpmic@33 {
++	pmic@33 {
+ 		compatible = "st,stpmic1";
+ 		reg = <0x33>;
+ 		interrupts-extended = <&gpioa 0 IRQ_TYPE_EDGE_FALLING>;
+-- 
+2.53.0
+

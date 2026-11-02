@@ -1,0 +1,72 @@
+From 4c558428f687381d8d9b53b452e337006030d70f Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Thu, 13 Aug 2026 17:47:17 +0200
+Subject: [PATCH] ASoC: wm8994: fix pm_runtime_put misplaced call in probe
+
+In wm8994_component_probe(), pm_runtime_get_sync() is called to ensure
+the parent MFD device is active before reading the configuration registers.
+However, the matching pm_runtime_put() was placed immediately after those
+reads, before accessing remaining registers in the probe.
+
+After pm_runtime_put() the parent wm8994 MFD device is free to
+runtime-suspend at any time. Its runtime_suspend callback
+(wm8994_suspend) issues a software reset to the codec, disables the
+regulators.
+
+This creates a race: if the MFD suspends between the pm_runtime_put()
+and the subsequent register writes, the codec chip becomes unreachable
+on I2C (NACK -> -ENXIO on the first write, then -EBUSY on the
+following ones as the STM32 I2C controller enters bus recovery).
+
+Fix this by removing the early pm_runtime_put() and instead placing
+it after all direct register writes in the probe are complete.
+
+Also add the missing pm_runtime_put() in the err_irq error path,
+which was already unbalanced.
+
+Fixes: 27060b3c64a1 ("ASoC: wm8994: Unsuspend the device while reading GPIO statuses")
+Assisted-by: GitHub-Copilot:Claude:4.6-sonnet
+Change-Id: I101081bd0f59e333738fdc85ed1cd4deebf93091
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/599534
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ sound/soc/codecs/wm8994.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/sound/soc/codecs/wm8994.c b/sound/soc/codecs/wm8994.c
+index 674b0a25a2cf..ce466d502b4d 100644
+--- a/sound/soc/codecs/wm8994.c
++++ b/sound/soc/codecs/wm8994.c
+@@ -4434,8 +4434,6 @@ static int wm8994_component_probe(struct snd_soc_component *component)
+ 		wm8994->lrclk_shared[1] = 0;
+ 	}
+ 
+-	pm_runtime_put(component->dev);
+-
+ 	/* Latch volume update bits */
+ 	for (i = 0; i < ARRAY_SIZE(wm8994_vu_bits); i++)
+ 		snd_soc_component_update_bits(component, wm8994_vu_bits[i].reg,
+@@ -4614,6 +4612,8 @@ static int wm8994_component_probe(struct snd_soc_component *component)
+ 		break;
+ 	}
+ 
++	pm_runtime_put(component->dev);
++
+ 	return 0;
+ 
+ err_irq:
+@@ -4632,6 +4632,7 @@ static int wm8994_component_probe(struct snd_soc_component *component)
+ 	wm8994_free_irq(wm8994->wm8994, WM8994_IRQ_FIFOS_ERR, component);
+ 	wm8994_free_irq(wm8994->wm8994, WM8994_IRQ_TEMP_SHUT, component);
+ 	wm8994_free_irq(wm8994->wm8994, WM8994_IRQ_TEMP_WARN, component);
++	pm_runtime_put(component->dev);
+ 
+ 	return ret;
+ }
+-- 
+2.53.0
+

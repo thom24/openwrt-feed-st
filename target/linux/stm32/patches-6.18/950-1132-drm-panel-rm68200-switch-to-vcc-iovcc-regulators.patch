@@ -1,0 +1,84 @@
+From 0931f33d4c73b14861a9ec4832cf3764b2c5ccb4 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Mon, 22 Jun 2026 15:04:41 +0200
+Subject: [PATCH] drm/panel: rm68200: switch to vcc/iovcc regulators
+
+Use explicit vcc and iovcc regulator supplies required by the updated
+binding and board DTS.
+Remove the legacy single power regulator usage from the driver.
+
+Change-Id: Ic3d0d6999682d319f664b6c1d920d21360b76346
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/581018
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/gpu/drm/panel/panel-raydium-rm68200.c | 30 ++++++++++++++-----
+ 1 file changed, 22 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/gpu/drm/panel/panel-raydium-rm68200.c b/drivers/gpu/drm/panel/panel-raydium-rm68200.c
+index 29101baeb42d..ada4fa34914d 100644
+--- a/drivers/gpu/drm/panel/panel-raydium-rm68200.c
++++ b/drivers/gpu/drm/panel/panel-raydium-rm68200.c
+@@ -77,7 +77,8 @@ struct rm68200 {
+ 	struct device *dev;
+ 	struct drm_panel panel;
+ 	struct gpio_desc *reset_gpio;
+-	struct regulator *supply;
++	struct regulator *vcc;
++	struct regulator *iovcc;
+ };
+ 
+ static const struct drm_display_mode default_mode = {
+@@ -266,7 +267,8 @@ static int rm68200_unprepare(struct drm_panel *panel)
+ 		msleep(20);
+ 	}
+ 
+-	regulator_disable(ctx->supply);
++	regulator_disable(ctx->iovcc);
++	regulator_disable(ctx->vcc);
+ 
+ 	return 0;
+ }
+@@ -277,9 +279,16 @@ static int rm68200_prepare(struct drm_panel *panel)
+ 	struct mipi_dsi_device *dsi = to_mipi_dsi_device(ctx->dev);
+ 	int ret;
+ 
+-	ret = regulator_enable(ctx->supply);
++	ret = regulator_enable(ctx->vcc);
+ 	if (ret < 0) {
+-		dev_err(ctx->dev, "failed to enable supply: %d\n", ret);
++		dev_err(ctx->dev, "failed to enable vcc supply: %d\n", ret);
++		return ret;
++	}
++
++	ret = regulator_enable(ctx->iovcc);
++	if (ret < 0) {
++		dev_err(ctx->dev, "failed to enable iovcc supply: %d\n", ret);
++		regulator_disable(ctx->vcc);
+ 		return ret;
+ 	}
+ 
+@@ -383,10 +392,15 @@ static int rm68200_probe(struct mipi_dsi_device *dsi)
+ 			gpiod_direction_output(ctx->reset_gpio, 0);
+ 	}
+ 
+-	ctx->supply = devm_regulator_get(dev, "power");
+-	if (IS_ERR(ctx->supply))
+-		return dev_err_probe(dev, PTR_ERR(ctx->supply),
+-				     "cannot get regulator\n");
++	ctx->vcc = devm_regulator_get(dev, "vcc");
++	if (IS_ERR(ctx->vcc))
++		return dev_err_probe(dev, PTR_ERR(ctx->vcc),
++				     "cannot get vcc regulator\n");
++
++	ctx->iovcc = devm_regulator_get(dev, "iovcc");
++	if (IS_ERR(ctx->iovcc))
++		return dev_err_probe(dev, PTR_ERR(ctx->iovcc),
++				     "cannot get iovcc regulator\n");
+ 
+ 	mipi_dsi_set_drvdata(dsi, ctx);
+ 
+-- 
+2.53.0
+

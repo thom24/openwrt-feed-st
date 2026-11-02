@@ -1,0 +1,40 @@
+From 09ccdc4acb5852259a348147a11e6244ceb69cd4 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Fri, 29 May 2026 09:58:01 +0200
+Subject: [PATCH] arm64: dts: st: restrict linux,cma alloc-ranges on
+ stm32mp215f-dk
+
+On stm32mp215f-dk, linux,cma may be auto-placed at 0xf8000000 for a
+128 MiB pool. This can make the CMA range cross the DMA/DMA32 boundary
+(at 0xfffff000), and CMA activation then fails with:
+`cma: CMA area linux,cma could not be activated`.
+
+Reduce linux,cma alloc-ranges so the auto-placement window ends strictly
+below 0xfffff000, keeping the whole CMA area in a single zone.
+
+Change-Id: I97932cb7e0eab783096d472c07b153e06b3b74da
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/572548
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk-resmem.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk-resmem.dtsi b/arch/arm64/boot/dts/st/stm32mp215f-dk-resmem.dtsi
+index 6751508c4ade..733c73c4878f 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk-resmem.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk-resmem.dtsi
+@@ -152,7 +152,7 @@ ltdc_sec_layer: ltdc-sec-layer@ff800000 {
+ 		linux,cma {
+ 			compatible = "shared-dma-pool";
+ 			reusable;
+-			alloc-ranges = <0 0x80000000 0 0x80000000>;
++			alloc-ranges = <0 0x80000000 0 0x7fffe000>;
+ 			size = <0x0 0x8000000>;
+ 			alignment = <0x0 0x2000>;
+ 			linux,cma-default;
+-- 
+2.53.0
+

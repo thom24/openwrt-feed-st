@@ -1,0 +1,60 @@
+From 4a4a20f5c5aae461a7a14c98efeddbc9cd08c672 Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Date: Mon, 17 Jun 2024 19:21:53 +0200
+Subject: [PATCH] irqchip: stm32mp-exti: Add support of pm runtime
+
+Activate pm_runtime for the interrupts domains of the EXTI driver.
+The associated power domains can be switched OFF when no EXTI
+interrupt is requested.
+For information, the power domain is not used by the stm32
+pinctrl driver for the IRQ associated to the GPIO when GPIO irqchip
+ops are used directly (see stm32_gpio_irq_request_resources()).
+
+This patch still avoids to stop the RETENTION domain when EXTI1 is
+used for CPUIdle mode with PSCI OS initiated on STM32MP25 SoC,
+because the EXTI1 device is not functional in LPLV-Stop1 low power
+mode except for GPIO.
+
+Change-Id: Id40752cafc5b5082b8ffecabc23f9aca4b339cbd
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+---
+ drivers/irqchip/irq-stm32mp-exti.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/irqchip/irq-stm32mp-exti.c b/drivers/irqchip/irq-stm32mp-exti.c
+index 0cb13452fbeb..ff7228cc0fe2 100644
+--- a/drivers/irqchip/irq-stm32mp-exti.c
++++ b/drivers/irqchip/irq-stm32mp-exti.c
+@@ -19,6 +19,7 @@
+ #include <linux/of_irq.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm.h>
++#include <linux/pm_runtime.h>
+ 
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
+ 
+@@ -893,6 +894,8 @@ static int stm32mp_exti_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
++	irq_domain_set_pm_device(domain, dev);
++
+ 	host_data->dt_has_irqs_desc = of_property_present(np, "interrupts-extended");
+ 
+ 	wakeup_np = of_parse_phandle(np, "wakeup-parent", 0);
+@@ -931,8 +934,12 @@ static int stm32mp_exti_probe(struct platform_device *pdev)
+ 		ret = devm_add_action_or_reset(dev, stm32mp_exti_remove_irq, domain);
+ 		if (ret)
+ 			return ret;
++
++		irq_domain_set_pm_device(domain, dev);
+ 	}
+ 
++	devm_pm_runtime_enable(dev);
++
+ 	return 0;
+ }
+ 
+-- 
+2.53.0
+

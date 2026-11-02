@@ -1,0 +1,37 @@
+From 89d73039e4b06d36468251d865d2729c4017799b Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Tue, 11 Aug 2026 18:16:36 +0200
+Subject: [PATCH] ARM: dts: stm32: Remove button-user for stm32mp135f-dk board
+
+Remove button-user for stm32mp135f-dk as it uses the same gpio (GPIOA 13)
+than led-red.
+
+Change-Id: I073a57601cf1f1ea4e0e12666f1964ad03efce21
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/598607
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dk.dts | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+index 27a2af89f672..ac91026968a6 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+@@ -74,12 +74,6 @@ optee@dd000000 {
+ 	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+-		button-user {
+-			label = "User-PA13";
+-			linux,code = <BTN_1>;
+-			gpios = <&gpioa 13 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+-		};
+-
+ 		button-wakeup {
+ 			label = "wake-up";
+ 			linux,code = <KEY_WAKEUP>;
+-- 
+2.53.0
+

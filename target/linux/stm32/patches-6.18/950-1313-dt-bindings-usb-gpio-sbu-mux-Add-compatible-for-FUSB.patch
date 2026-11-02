@@ -1,0 +1,37 @@
+From a3fd98c7ca849804be7075232d949d96914d8cf0 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 26 Aug 2026 14:16:35 +0200
+Subject: [PATCH] dt-bindings: usb: gpio-sbu-mux: Add compatible for FUSB340
+
+Add a compatible for the FUSB340 GPIO-based 2:1 SuperSpeed switch
+with enable-gpios and select-gpios controls. The switch can be used
+in Type-C applications where a reversible cable requires a switch.
+
+Suggested-by: Marek Vasut <marex@nabladev.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://patch.msgid.link/20260826-usb-fusb340-v1-v3-1-11927682504d@foss.st.com
+Change-Id: I6180495a20a25b63488c3969673359b57282524d
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/598896
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml b/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
+index 793662f6f3bf..c0e60848d8ab 100644
+--- a/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
++++ b/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
+@@ -22,6 +22,7 @@ properties:
+           - nxp,cbdtu02043
+           - onnn,fsusb42
+           - onnn,fsusb43l10x
++          - onnn,fusb340
+           - pericom,pi3usb102
+           - ti,tmuxhs4212
+       - const: gpio-sbu-mux
+-- 
+2.53.0
+

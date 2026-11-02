@@ -1,0 +1,49 @@
+From 8201ca120cf1f4ba09d44e6032c3fb727d0cf08f Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Thu, 26 Mar 2026 15:55:39 +0100
+Subject: [PATCH] arm64: dts: st: add lvds support on stm32mp235
+
+The LVDS is used on STM32MP2 as a display interface.
+Add the LVDS node.
+
+Change-Id: I8f8b1039f49a4b40840af11e351c44b623d94b92
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/552097
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235.dtsi | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235.dtsi b/arch/arm64/boot/dts/st/stm32mp235.dtsi
+index 131333dfd70d..e40119d632de 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp235.dtsi
+@@ -5,7 +5,25 @@
+  */
+ #include "stm32mp233.dtsi"
+ 
++&ltdc {
++	compatible = "st,stm32mp255-ltdc";
++	clocks = <&rcc CK_KER_LTDC>, <&rcc CK_BUS_LTDC>, <&syscfg>, <&lvds>;
++	clock-names = "lcd", "bus", "ref", "lvds";
++};
++
+ &rifsc {
++	lvds: lvds@48060000 {
++		compatible = "st,stm32mp255-lvds", "st,stm32mp25-lvds";
++		reg = <0x48060000 0x2000>;
++		#clock-cells = <0>;
++		clocks = <&rcc CK_BUS_LVDS>, <&rcc CK_KER_LVDSPHY>;
++		clock-names = "pclk", "ref";
++		resets = <&rcc LVDS_R>;
++		access-controllers = <&rifsc 84>;
++		power-domains = <&d1_pd>;
++		status = "disabled";
++	};
++
+ 	vdec: vdec@480d0000 {
+ 		compatible = "st,stm32mp25-vdec";
+ 		reg = <0x480d0000 0x3c8>;
+-- 
+2.53.0
+

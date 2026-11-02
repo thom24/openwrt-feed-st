@@ -1,0 +1,159 @@
+From f79216fa6fcdad635608b4857228591b7f7b8e52 Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Wed, 10 Jun 2026 11:57:50 +0200
+Subject: [PATCH] dt-bindings: clock: stm32mp1-rcc: relax clocks schema for
+ STM32MP13
+
+STM32MP13 RCC bindings may include additional SCMI-derived clocks, but
+the schema currently limits clocks and clock-names to 5 entries.
+
+Split the schema conditionals to handle st,stm32mp13-rcc,
+st,stm32mp1-rcc-secure, and st,stm32mp1-rcc separately:
+- allow up to 50 clocks for STM32MP13
+- keep 5 oscillator clocks for the secure variant
+- keep 1 Ethernet RX reference clock for stm32mp1-rcc
+
+Also fix a typo in the binding description.
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: I6df5a01589ebc76e76dc85972b5ea9f2f25ea5ad
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/577237
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ .../bindings/clock/st,stm32mp1-rcc.yaml       | 101 +++++++++++-------
+ 1 file changed, 65 insertions(+), 36 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml b/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
+index e72f46e79b90..0d4a5db45b1b 100644
+--- a/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
++++ b/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
+@@ -28,8 +28,8 @@ description: |
+   =======================================
+ 
+   Device nodes should specify the reset channel required in their "resets"
+-  property, containing a phandle to the reset device node and an index specifying
+-  which channel to use.
++  property, containing a phandle to the reset device node and an index
++  specifying which channel to use.
+   The index is the bit number within the RCC registers bank, starting from RCC
+   base address.
+   It is calculated as: index = register_offset / 4 * 32 + bit_offset.
+@@ -63,11 +63,11 @@ properties:
+ 
+   clocks:
+     minItems: 1
+-    maxItems: 5
++    maxItems: 50
+ 
+   clock-names:
+     minItems: 1
+-    maxItems: 5
++    maxItems: 50
+ 
+   reg:
+     maxItems: 1
+@@ -78,38 +78,67 @@ required:
+   - compatible
+   - reg
+ 
+-if:
+-  properties:
+-    compatible:
+-      contains:
+-        enum:
+-          - st,stm32mp1-rcc-secure
+-          - st,stm32mp13-rcc
+-then:
+-  properties:
+-    clocks:
+-      description: Specifies oscillators.
+-      maxItems: 5
+-
+-    clock-names:
+-      items:
+-        - const: hse
+-        - const: hsi
+-        - const: csi
+-        - const: lse
+-        - const: lsi
+-  required:
+-    - clocks
+-    - clock-names
+-else:
+-  properties:
+-    clocks:
+-      description:
+-        Specifies the external RX clock for ethernet MAC.
+-      maxItems: 1
+-
+-    clock-names:
+-      const: ETH_RX_CLK/ETH_REF_CLK
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: st,stm32mp13-rcc
++    then:
++      properties:
++        clocks:
++          description: Specifies oscillators and SCMI-derived clocks.
++          minItems: 5
++          maxItems: 50
++
++        clock-names:
++          items:
++            - const: hse
++            - const: hsi
++            - const: csi
++            - const: lse
++            - const: lsi
++      required:
++        - clocks
++        - clock-names
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: st,stm32mp1-rcc-secure
++    then:
++      properties:
++        clocks:
++          description: Specifies oscillators.
++          minItems: 5
++          maxItems: 5
++
++        clock-names:
++          items:
++            - const: hse
++            - const: hsi
++            - const: csi
++            - const: lse
++            - const: lsi
++      required:
++        - clocks
++        - clock-names
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: st,stm32mp1-rcc
++    then:
++      properties:
++        clocks:
++          description:
++            Specifies the external RX clock for ethernet MAC.
++          maxItems: 1
++
++        clock-names:
++          const: ETH_RX_CLK/ETH_REF_CLK
+ 
+ additionalProperties: false
+ 
+-- 
+2.53.0
+

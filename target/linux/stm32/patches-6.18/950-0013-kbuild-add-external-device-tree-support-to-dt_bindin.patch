@@ -1,0 +1,66 @@
+From 152eb968fcb70845f143af836ad3532528f47ff4 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Mon, 4 May 2026 16:01:08 +0200
+Subject: [PATCH] kbuild: add external device tree support to
+ dt_binding_schemas target
+
+Compatible strings for external device trees are defined in a schema inside
+the external device tree directory.
+Support external device tree schema files when generating
+Documentation/devicetree/bindings/processed-schema.json.
+
+The external schema handling is hardened as follows:
+- copy external *.yaml files only for the schema build window
+- track copied files in a local list
+- always remove staged files via a trap on EXIT/INT/TERM
+
+This addresses the main failure mode where interrupted or failed
+dt_binding_schemas runs could leave external schema files behind in
+Documentation/devicetree/bindings/arm/stm32 and affect later builds.
+
+Change-Id: I6de673acb15e264b17449f5fca04ef0d6cb760e3
+Assisted-by: GitHub-Copilot:GPT-5.3-Codex
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/563930
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+---
+ Makefile | 21 ++++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index ac263928f0f3..8364330ba9a2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1574,7 +1574,26 @@ dt_binding_check: dt_binding_schemas scripts_dtc
+ 	$(Q)$(MAKE) $(build)=Documentation/devicetree/bindings $@
+ 
+ dt_binding_schemas:
+-	$(Q)$(MAKE) $(build)=Documentation/devicetree/bindings
++	$(Q)set -e; \
++	copy_list=""; \
++	cleanup_extdt_schemas() { \
++		for dst in $$copy_list; do \
++			rm -f "$$dst"; \
++		done; \
++	}; \
++	trap cleanup_extdt_schemas EXIT INT TERM; \
++	if [ $(KBUILD_EXTDTB) -ne 0 ]; then \
++		for extdts in $(wildcard $(KBUILD_EXTDTS)); do \
++			echo "Looking for schemas into $$extdts"; \
++			for yaml in "$$extdts"/*.yaml; do \
++				[ -e "$$yaml" ] || continue; \
++				dst="$(srctree)/Documentation/devicetree/bindings/arm/stm32/$$(basename "$$yaml")"; \
++				copy_list="$$copy_list $$dst"; \
++				cp "$$yaml" "$$dst"; \
++			done; \
++		done; \
++	fi; \
++	$(MAKE) $(build)=Documentation/devicetree/bindings
+ 
+ PHONY += dt_compatible_check
+ dt_compatible_check: dt_binding_schemas
+-- 
+2.53.0
+

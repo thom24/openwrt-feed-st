@@ -1,0 +1,39 @@
+From 80fc265307f41e0fff55fecf0d5218d15140812b Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Wed, 17 Jun 2026 09:45:22 +0200
+Subject: [PATCH] arm64: dts: st: Fix drive-open-drain on stm32mp25 PCIe AFMUX
+
+The CLKREQ pin configuration resets to the default
+AFMUX state after probe and when exiting low-power
+mode. Ensure that the open-drain pin configuration
+is always set regardless of the previous pin.
+Without this, CLKREQ# might not be detected making
+PCIe not clocked, and inaccessible.
+
+Fixes: 7e4479c9243d ("arm64: dts: st: add PCIe pinctrl entries in stm32mp25-pinctrl.dtsi")
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Change-Id: I7a126148aa65811d9e6a9661aa86aa78e597e89d
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/579515
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
+index b11f6bc6e321..7916d6c7b559 100644
+--- a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
+@@ -477,6 +477,7 @@ pins {
+ 	pcie_pins_a: pcie-0 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('J', 0, AF4)>;
++			drive-open-drain;
+ 			bias-disable;
+ 		};
+ 	};
+-- 
+2.53.0
+

@@ -1,0 +1,40 @@
+From a4384f5c78316b68a3dc5a3d3cb6d73e4f6e6910 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Thu, 19 Sep 2024 17:21:50 +0200
+Subject: [PATCH] dt-bindings: display: himax-hx8394: Add Rocktech
+ RK055MHD042A0 MIPI Display panel
+
+Add compatible string for the Rocktech's RK055MHD042A0 MIPI Display
+panel.This panel uses a Himax HX8394 display controller.
+
+Change-Id: Ia03b3e60bdf62180db2eb9edda68e25f14cf7188
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/418868
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ .../devicetree/bindings/display/panel/himax,hx8394.yaml         | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml b/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
+index 5725a587e35c..6a8bced68fbd 100644
+--- a/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
++++ b/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
+@@ -23,6 +23,7 @@ properties:
+               - hannstar,hsd060bhw4
+               - microchip,ac40t08a-mipi-panel
+               - powkiddy,x55-panel
++              - rocktech,rk055mhd042a0
+           - const: himax,hx8394
+       - items:
+           - enum:
+@@ -64,6 +65,7 @@ allOf:
+           compatible:
+             enum:
+               - microchip,ac40t08a-mipi-panel
++              - rocktech,rk055mhd042a0
+     then:
+       required:
+         - reset-gpios
+-- 
+2.53.0
+

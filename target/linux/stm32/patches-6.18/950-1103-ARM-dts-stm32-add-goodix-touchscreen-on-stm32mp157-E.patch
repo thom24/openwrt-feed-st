@@ -1,0 +1,161 @@
+From e97b638c3f263256f2d15af1fb9b759aa8b1a81c Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@st.com>
+Date: Mon, 28 Sep 2020 14:25:48 +0200
+Subject: [PATCH] ARM: dts: stm32: add goodix touchscreen on stm32mp157 EV
+ boards
+
+Enable goodix touchscreen on STM32MP157 EV boards.
+reset-gpios is shared with panel-dsi so not defined in this node.
+
+Change-Id: Ib412e539ef3314f7304ccf74b86002580e722246
+Signed-off-by: Yannick Fertre <yannick.fertre@st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/552086
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Yannick FERTRE <yannick.fertre@foss.st.com>
+Reviewed-by: Yannick FERTRE <yannick.fertre@foss.st.com>
+Domain-Review: Yannick FERTRE <yannick.fertre@foss.st.com>
+---
+ .../boot/dts/st/stm32mp157c-ev1-no-scmi.dts   | 21 ++++++++++++++++++-
+ arch/arm/boot/dts/st/stm32mp157d-ev1.dts      | 21 ++++++++++++++++++-
+ arch/arm/boot/dts/st/stm32mp157f-ev1.dts      | 21 ++++++++++++++++++-
+ 3 files changed, 60 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
+index de65fa46bb48..58ec4f76ebad 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
+@@ -331,7 +331,7 @@ &dsi {
+ 	#size-cells = <0>;
+ 	status = "okay";
+ 
+-	panel@0 {
++	panel_dsi: panel@0 {
+ 		compatible = "raydium,rm68200";
+ 		reg = <0>;
+ 		reset-gpios = <&gpiof 15 GPIO_ACTIVE_LOW>;
+@@ -488,12 +488,31 @@ stmfx_pinctrl: pinctrl {
+ 			#interrupt-cells = <2>;
+ 			gpio-ranges = <&stmfx_pinctrl 0 0 24>;
+ 
++			goodix_pins: goodix-pins {
++				pins = "gpio14";
++				bias-pull-down;
++			};
++
+ 			joystick_pins: joystick-pins {
+ 				pins = "gpio0", "gpio1", "gpio2", "gpio3", "gpio4";
+ 				bias-pull-down;
+ 			};
+ 		};
+ 	};
++
++	gt9147: goodix-ts@5d {
++		compatible = "goodix,gt9147";
++		reg = <0x5d>;
++		panel = <&panel_dsi>;
++		pinctrl-0 = <&goodix_pins>;
++		pinctrl-names = "default";
++		AVDD28-supply = <&v3v3>;
++		VDDIO-supply = <&v3v3>;
++		status = "okay";
++
++		interrupts = <14 IRQ_TYPE_EDGE_RISING>;
++		interrupt-parent = <&stmfx_pinctrl>;
++	};
+ };
+ 
+ &i2c5 {
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+index b932a265c1c7..21f50353bbb6 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+@@ -331,7 +331,7 @@ &dsi {
+ 	#size-cells = <0>;
+ 	status = "okay";
+ 
+-	panel@0 {
++	panel_dsi: panel@0 {
+ 		compatible = "raydium,rm68200";
+ 		reg = <0>;
+ 		reset-gpios = <&gpiof 15 GPIO_ACTIVE_LOW>;
+@@ -488,12 +488,31 @@ stmfx_pinctrl: pinctrl {
+ 			#interrupt-cells = <2>;
+ 			gpio-ranges = <&stmfx_pinctrl 0 0 24>;
+ 
++			goodix_pins: goodix-pins {
++				pins = "gpio14";
++				bias-pull-down;
++			};
++
+ 			joystick_pins: joystick-pins {
+ 				pins = "gpio0", "gpio1", "gpio2", "gpio3", "gpio4";
+ 				bias-pull-down;
+ 			};
+ 		};
+ 	};
++
++	gt9147: goodix-ts@5d {
++		compatible = "goodix,gt9147";
++		reg = <0x5d>;
++		panel = <&panel_dsi>;
++		pinctrl-0 = <&goodix_pins>;
++		pinctrl-names = "default";
++		AVDD28-supply = <&v3v3>;
++		VDDIO-supply = <&v3v3>;
++		status = "okay";
++
++		interrupts = <14 IRQ_TYPE_EDGE_RISING>;
++		interrupt-parent = <&stmfx_pinctrl>;
++	};
+ };
+ 
+ &i2c5 {
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+index f7ab1a5e90e1..51bb0e1eb09f 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+@@ -331,7 +331,7 @@ &dsi {
+ 	#size-cells = <0>;
+ 	status = "okay";
+ 
+-	panel@0 {
++	panel_dsi: panel@0 {
+ 		compatible = "raydium,rm68200";
+ 		reg = <0>;
+ 		reset-gpios = <&gpiof 15 GPIO_ACTIVE_LOW>;
+@@ -488,12 +488,31 @@ stmfx_pinctrl: pinctrl {
+ 			#interrupt-cells = <2>;
+ 			gpio-ranges = <&stmfx_pinctrl 0 0 24>;
+ 
++			goodix_pins: goodix-pins {
++				pins = "gpio14";
++				bias-pull-down;
++			};
++
+ 			joystick_pins: joystick-pins {
+ 				pins = "gpio0", "gpio1", "gpio2", "gpio3", "gpio4";
+ 				bias-pull-down;
+ 			};
+ 		};
+ 	};
++
++	gt9147: goodix-ts@5d {
++		compatible = "goodix,gt9147";
++		reg = <0x5d>;
++		panel = <&panel_dsi>;
++		pinctrl-0 = <&goodix_pins>;
++		pinctrl-names = "default";
++		AVDD28-supply = <&v3v3>;
++		VDDIO-supply = <&v3v3>;
++		status = "okay";
++
++		interrupts = <14 IRQ_TYPE_EDGE_RISING>;
++		interrupt-parent = <&stmfx_pinctrl>;
++	};
+ };
+ 
+ &i2c5 {
+-- 
+2.53.0
+

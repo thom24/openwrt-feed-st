@@ -1,0 +1,167 @@
+From 1450c7460e1d296050588ff2f35dee9547acf0ba Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Mon, 10 Feb 2025 13:53:22 +0100
+Subject: [PATCH] media: dcmipp: correct dcmipp min/max frame size handling
+
+The DCMIPP is able to handle frames up to 4094x4094 with minimum
+frame size of 16x2 pixels. Since dump pipe width is written in
+words, possible width can actually be up to 4 * 4094 pixels wide.
+By disabling the crop block it is also possible to reach higher
+frame size.
+
+Change-Id: Ic07cb37b0c86df80e996e5640347cf2008b9df5d
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+---
+ .../st/stm32/stm32-dcmipp/dcmipp-byteproc.c      |  4 ++--
+ .../st/stm32/stm32-dcmipp/dcmipp-capture.c       | 14 ++++++++++----
+ .../st/stm32/stm32-dcmipp/dcmipp-common.h        | 16 +++++++++++++---
+ .../st/stm32/stm32-dcmipp/dcmipp-input.c         |  4 ++--
+ .../platform/st/stm32/stm32-dcmipp/dcmipp-isp.c  |  4 ++--
+ .../st/stm32/stm32-dcmipp/dcmipp-pixelcommon.c   |  4 ++--
+ .../st/stm32/stm32-dcmipp/dcmipp-pixelproc.c     |  4 ++--
+ 7 files changed, 33 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
+index 580896fe190c..df8ed7350c29 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
+@@ -178,9 +178,9 @@ static void dcmipp_byteproc_adjust_fmt(struct v4l2_mbus_framefmt *fmt)
+ 		fmt->code = fmt_default.code;
+ 
+ 	fmt->width = clamp_t(u32, fmt->width, DCMIPP_FRAME_MIN_WIDTH,
+-			     DCMIPP_FRAME_MAX_WIDTH) & ~1;
++			     DCMIPP_FRAME_MAX_WIDTH);
+ 	fmt->height = clamp_t(u32, fmt->height, DCMIPP_FRAME_MIN_HEIGHT,
+-			      DCMIPP_FRAME_MAX_HEIGHT) & ~1;
++			      DCMIPP_FRAME_MAX_HEIGHT);
+ 
+ 	if (fmt->field == V4L2_FIELD_ANY || fmt->field == V4L2_FIELD_ALTERNATE)
+ 		fmt->field = fmt_default.field;
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
+index dd133c2e3af3..fb82beee05a3 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
+@@ -379,8 +379,12 @@ static int dcmipp_capture_try_fmt_vid_cap(struct file *file, void *priv,
+ 	in_w = format->width;
+ 	in_h = format->height;
+ 	v4l_bound_align_image(&format->width, DCMIPP_FRAME_MIN_WIDTH,
+-			      DCMIPP_FRAME_MAX_WIDTH, walign, &format->height,
+-			      DCMIPP_FRAME_MIN_HEIGHT, DCMIPP_FRAME_MAX_HEIGHT,
++			      vcap->pipe_id != 0 ?
++			      DCMIPP_PIXEL_FRAME_MAX_WIDTH : DCMIPP_FRAME_MAX_WIDTH,
++			      walign,
++			      &format->height, DCMIPP_FRAME_MIN_HEIGHT,
++			      vcap->pipe_id != 0 ?
++			      DCMIPP_PIXEL_FRAME_MAX_HEIGHT : DCMIPP_FRAME_MAX_HEIGHT,
+ 			      0, 0);
+ 	if (format->width != in_w || format->height != in_h)
+ 		dev_dbg(vcap->dev, "resolution updated: %dx%d -> %dx%d\n",
+@@ -490,9 +494,11 @@ static int dcmipp_capture_enum_framesizes(struct file *file, void *fh,
+ 
+ 	fsize->type = V4L2_FRMSIZE_TYPE_CONTINUOUS;
+ 	fsize->stepwise.min_width = DCMIPP_FRAME_MIN_WIDTH;
+-	fsize->stepwise.max_width = DCMIPP_FRAME_MAX_WIDTH;
++	fsize->stepwise.max_width = vcap->pipe_id != 0 ?
++				    DCMIPP_PIXEL_FRAME_MAX_WIDTH : DCMIPP_FRAME_MAX_WIDTH;
+ 	fsize->stepwise.min_height = DCMIPP_FRAME_MIN_HEIGHT;
+-	fsize->stepwise.max_height = DCMIPP_FRAME_MAX_HEIGHT;
++	fsize->stepwise.max_height = vcap->pipe_id != 0 ?
++				     DCMIPP_PIXEL_FRAME_MAX_HEIGHT : DCMIPP_FRAME_MAX_HEIGHT;
+ 	fsize->stepwise.step_width = 1;
+ 	fsize->stepwise.step_height = 1;
+ 
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
+index c0f7ed3acbfc..705cf608ab70 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
+@@ -19,10 +19,20 @@
+ 
+ #define DCMIPP_PDEV_NAME "dcmipp"
+ 
+-#define DCMIPP_FRAME_MAX_WIDTH 4096
+-#define DCMIPP_FRAME_MAX_HEIGHT 2160
+ #define DCMIPP_FRAME_MIN_WIDTH 16
+-#define DCMIPP_FRAME_MIN_HEIGHT 16
++#define DCMIPP_FRAME_MIN_HEIGHT 2
++
++/*
++ * Maximum frame size for input & byte pipe
++ * This is aligned with TPG maximum frame size,
++ * aligned to word access for the width
++ */
++#define DCMIPP_FRAME_MAX_WIDTH	16376
++#define DCMIPP_FRAME_MAX_HEIGHT	16383
++
++/* Maximum frame size for pixel pipes */
++#define DCMIPP_PIXEL_FRAME_MAX_WIDTH 4094
++#define DCMIPP_PIXEL_FRAME_MAX_HEIGHT 4094
+ 
+ #define DCMIPP_FMT_WIDTH_DEFAULT  640
+ #define DCMIPP_FMT_HEIGHT_DEFAULT 480
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
+index 82427c5d126e..b8601ae74b1f 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
+@@ -264,9 +264,9 @@ static void dcmipp_inp_adjust_fmt(struct dcmipp_inp_device *inp,
+ 		fmt->code = fmt_default.code;
+ 
+ 	fmt->width = clamp_t(u32, fmt->width, DCMIPP_FRAME_MIN_WIDTH,
+-			     DCMIPP_FRAME_MAX_WIDTH) & ~1;
++			     DCMIPP_FRAME_MAX_WIDTH);
+ 	fmt->height = clamp_t(u32, fmt->height, DCMIPP_FRAME_MIN_HEIGHT,
+-			      DCMIPP_FRAME_MAX_HEIGHT) & ~1;
++			      DCMIPP_FRAME_MAX_HEIGHT);
+ 
+ 	if (fmt->field == V4L2_FIELD_ANY || fmt->field == V4L2_FIELD_ALTERNATE)
+ 		fmt->field = fmt_default.field;
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
+index 98e40d65b8a4..ff75ddaad36c 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-isp.c
+@@ -81,9 +81,9 @@ static void dcmipp_isp_adjust_fmt(struct v4l2_mbus_framefmt *fmt, u32 pad)
+ 					  ISP_MEDIA_BUS_SINK_FMT_DEFAULT;
+ 
+ 	fmt->width = clamp_t(u32, fmt->width, DCMIPP_FRAME_MIN_WIDTH,
+-			     DCMIPP_FRAME_MAX_WIDTH) & ~1;
++			     DCMIPP_PIXEL_FRAME_MAX_WIDTH) & ~1;
+ 	fmt->height = clamp_t(u32, fmt->height, DCMIPP_FRAME_MIN_HEIGHT,
+-			      DCMIPP_FRAME_MAX_HEIGHT);
++			      DCMIPP_PIXEL_FRAME_MAX_HEIGHT);
+ 
+ 	if (fmt->field == V4L2_FIELD_ANY || fmt->field == V4L2_FIELD_ALTERNATE)
+ 		fmt->field = V4L2_FIELD_NONE;
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcommon.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcommon.c
+index 142463bee226..252b9f28dff6 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcommon.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelcommon.c
+@@ -130,9 +130,9 @@ int dcmipp_pixelpipe_enum_frame_size(unsigned int id,
+ 		return -EINVAL;
+ 
+ 	fse->min_width = DCMIPP_FRAME_MIN_WIDTH;
+-	fse->max_width = DCMIPP_FRAME_MAX_WIDTH;
++	fse->max_width = DCMIPP_PIXEL_FRAME_MAX_WIDTH;
+ 	fse->min_height = DCMIPP_FRAME_MIN_HEIGHT;
+-	fse->max_height = DCMIPP_FRAME_MAX_HEIGHT;
++	fse->max_height = DCMIPP_PIXEL_FRAME_MAX_HEIGHT;
+ 
+ 	return 0;
+ }
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
+index 9ba8878dea51..35c8af232fd0 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
+@@ -457,9 +457,9 @@ dcmipp_pixelproc_adjust_fmt(struct dcmipp_pixelproc_device *pixelproc,
+ 		fmt->code = PIXELPROC_MEDIA_BUS_FMT_DEFAULT;
+ 
+ 	fmt->width = clamp_t(u32, fmt->width, DCMIPP_FRAME_MIN_WIDTH,
+-			     DCMIPP_FRAME_MAX_WIDTH);
++			     DCMIPP_PIXEL_FRAME_MAX_WIDTH);
+ 	fmt->height = clamp_t(u32, fmt->height, DCMIPP_FRAME_MIN_HEIGHT,
+-			      DCMIPP_FRAME_MAX_HEIGHT);
++			      DCMIPP_PIXEL_FRAME_MAX_HEIGHT);
+ 
+ 	if (fmt->field == V4L2_FIELD_ANY || fmt->field == V4L2_FIELD_ALTERNATE)
+ 		fmt->field = V4L2_FIELD_NONE;
+-- 
+2.53.0
+

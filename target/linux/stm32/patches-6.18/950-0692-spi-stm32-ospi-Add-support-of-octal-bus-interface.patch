@@ -1,0 +1,130 @@
+From 812750b93bb966d2ac212563448a300392bd8049 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Thu, 16 Nov 2023 11:00:42 +0100
+Subject: [PATCH] spi: stm32-ospi: Add support of octal-bus interface
+
+OSPI interface can be used as a communication channel (up to 8 lines)
+with a device which is not a memory device.
+In this case, calibration can't be used, so max bus frequency
+mustn't be above to 50 MHz.
+
+Change-Id: I2e60946c6c9541230891ccb3c76f7eb8f3f23af3
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+---
+ drivers/spi/spi-stm32-ospi.c | 63 +++++++++++++++++++++++++++---------
+ 1 file changed, 47 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
+index f077debc292e..fac9e601c678 100644
+--- a/drivers/spi/spi-stm32-ospi.c
++++ b/drivers/spi/spi-stm32-ospi.c
+@@ -144,6 +144,7 @@ struct stm32_ospi_flash {
+ 	bool sample_later;
+ 	bool str_sample_later;
+ 	bool dtr_mode;
++	bool is_octal_bus;
+ };
+ 
+ struct stm32_ospi {
+@@ -1442,6 +1443,7 @@ static int stm32_ospi_setup(struct spi_device *spi)
+ 	struct spi_controller *ctrl = spi->controller;
+ 	struct stm32_ospi *ospi = spi_controller_get_devdata(ctrl);
+ 	void __iomem *regs_base = ospi->regs_base;
++	u32 bus_freq;
+ 	int ret;
+ 	u8 cs = spi->chip_select[ffs(spi->cs_index_mask) - 1];
+ 
+@@ -1474,30 +1476,52 @@ static int stm32_ospi_setup(struct spi_device *spi)
+ 	stm32_ospi_set_prescaler(ospi, flash->presc);
+ 
+ 	ospi->last_cs = cs;
+-	flash->is_str_calibration = true;
++	if (flash->is_octal_bus) {
++		if (gpiod_count(ospi->dev, "cs") == -ENOENT) {
++			dev_err(ospi->dev, "Can't find cs-gpio property in DT\n");
+ 
+-	ret = stm32_ospi_str_calibration(ospi);
+-	if (ret) {
+-		dev_info(ospi->dev, "Set flash frequency to a safe value (%d Hz)\n",
+-			 STM32_DLYB_FREQ_THRESHOLD);
++			ret = -EINVAL;
++			goto exit;
++		}
+ 
+-		/* Stop the DLL */
+-		stm32_ospi_dlyb_stop(ospi);
+-		flash->sample_later = false;
++		bus_freq = DIV_ROUND_UP(ospi->clk_rate, flash->presc + 1);
++		if (bus_freq > STM32_DLYB_FREQ_THRESHOLD) {
++			dev_err(ospi->dev, "Octal bus mode not supported above %d Hz)\n",
++				STM32_DLYB_FREQ_THRESHOLD);
+ 
+-		flash->presc = DIV_ROUND_UP(ospi->clk_rate,
+-					    STM32_DLYB_FREQ_THRESHOLD) - 1;
+-		stm32_ospi_set_prescaler(ospi, flash->presc);
++			ret = -EINVAL;
++			goto exit;
++		}
++	} else {
++		flash->is_str_calibration = true;
++
++		ret = stm32_ospi_str_calibration(ospi);
++		if (ret) {
++			ret = 0;
++
++			dev_info(ospi->dev, "Set flash frequency to a safe value (%d Hz)\n",
++				 STM32_DLYB_FREQ_THRESHOLD);
+ 
+-		flash->dcr_reg |= DCR1_DLYBYP;
+-		writel_relaxed(flash->dcr_reg, regs_base + OSPI_DCR1);
++			/* Stop the DLL */
++			stm32_ospi_dlyb_stop(ospi);
++			flash->sample_later = false;
++
++			flash->presc = DIV_ROUND_UP(ospi->clk_rate,
++						    STM32_DLYB_FREQ_THRESHOLD) - 1;
++			stm32_ospi_set_prescaler(ospi, flash->presc);
++
++			flash->dcr_reg |= DCR1_DLYBYP;
++			writel_relaxed(flash->dcr_reg, regs_base + OSPI_DCR1);
++		}
++
++		flash->is_str_calibration = false;
+ 	}
+ 
+-	flash->is_str_calibration = false;
++exit:
+ 	mutex_unlock(&ospi->lock);
+ 	pm_runtime_put_autosuspend(ospi->dev);
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static bool stm32_ospi_supports_mem_op(struct spi_mem *mem,
+@@ -1683,7 +1707,8 @@ static int stm32_ospi_probe(struct platform_device *pdev)
+ 	 */
+ 	for_each_available_child_of_node(dev->of_node, child) {
+ 		if (of_device_is_compatible(child, "jedec,spi-nor") ||
+-		    of_device_is_compatible(child, "spi-nand"))
++		    of_device_is_compatible(child, "spi-nand") ||
++		    of_device_is_compatible(child, "st,octal-bus"))
+ 			spi_flash_count++;
+ 	}
+ 
+@@ -1773,6 +1798,12 @@ static int stm32_ospi_probe(struct platform_device *pdev)
+ 
+ 			flash->is_spi_nor = true;
+ 		}
++
++		if (of_device_is_compatible(child, "st,octal-bus")) {
++			struct stm32_ospi_flash *flash = &ospi->flash[cs];
++
++			flash->is_octal_bus = true;
++		}
+ 	}
+ 
+ 	ret = spi_register_controller(ctrl);
+-- 
+2.53.0
+

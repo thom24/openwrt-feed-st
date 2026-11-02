@@ -1,0 +1,38 @@
+From 435abbd2714f9e89e1cd04761f6c78ad11fa1d37 Mon Sep 17 00:00:00 2001
+From: Pascal Paillet <p.paillet@foss.st.com>
+Date: Mon, 26 Jan 2026 11:14:52 +0100
+Subject: [PATCH] dt-bindings: update STM32MP25 regulator bindings
+
+Update STM32MP25 regulator bindings to add GPO regulators.
+
+Change-Id: I484c953f545423fcb3e17e8c1e98fc8f6d9a85cc
+Signed-off-by: Pascal Paillet <p.paillet@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/472300
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Tested-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ include/dt-bindings/regulator/st,stm32mp25-regulator.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/include/dt-bindings/regulator/st,stm32mp25-regulator.h b/include/dt-bindings/regulator/st,stm32mp25-regulator.h
+index 3c3d30911dd0..ab18cd7d5c07 100644
+--- a/include/dt-bindings/regulator/st,stm32mp25-regulator.h
++++ b/include/dt-bindings/regulator/st,stm32mp25-regulator.h
+@@ -45,4 +45,11 @@
+ #define VOLTD_SCMI_REGU3		29
+ #define VOLTD_SCMI_REGU4		30
+ 
++/* GPO controls */
++#define VOLTD_SCMI_STPMIC_GPO1		31
++#define VOLTD_SCMI_STPMIC_GPO2		32
++#define VOLTD_SCMI_STPMIC_GPO3		33
++#define VOLTD_SCMI_STPMIC_GPO4		34
++#define VOLTD_SCMI_STPMIC_GPO5		35
++
+ #endif /*__DT_BINDINGS_REGULATOR_ST_STM32MP25_REGULATOR_H */
+-- 
+2.53.0
+

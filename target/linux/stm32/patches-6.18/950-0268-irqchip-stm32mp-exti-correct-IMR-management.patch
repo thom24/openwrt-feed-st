@@ -1,0 +1,148 @@
+From 468c8b28dd9e16fbbebcb5b489ef3e7d4a7c5d34 Mon Sep 17 00:00:00 2001
+From: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Date: Wed, 5 Feb 2025 11:15:14 +0100
+Subject: [PATCH] irqchip: stm32mp-exti: correct IMR management
+
+Correct IMR management to avoid side effect with secure world
+if the associated BIT is not protected by RIF, no more read IMR register
+but just update the bit managed by Linux driver in:
+- stm32mp_exti_set_bit() and stm32mp_exti_clr_bit() to update mask_cache
+- stm32mp_chip_suspend() and stm32mp_chip_resume() to
+  manage the EXTI interruptions in IMR (unmask in RUN, wakeup in SUSPEND)
+- remove the flag IRQCHIP_MASK_ON_SUSPEND, as wakeup source configuration
+  facility is managed in EXTI driver with stm32mp_exti_set_wake()
+  and chip_data->wake_active
+
+This patch avoid issue with CPUIdle, based on PSCI OS initiated,
+on STM32MP25 SoC: the active lp-timer 3 irq (not wake-up) are not
+correctly restored after resume.
+
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Change-Id: I3e88a46ab846331cb47da0c9c02c0736b2214caf
+---
+ drivers/irqchip/irq-stm32mp-exti.c | 36 +++++++++++++++++++-----------
+ 1 file changed, 23 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/irqchip/irq-stm32mp-exti.c b/drivers/irqchip/irq-stm32mp-exti.c
+index 30c413384a1e..61ce67d7fe47 100644
+--- a/drivers/irqchip/irq-stm32mp-exti.c
++++ b/drivers/irqchip/irq-stm32mp-exti.c
+@@ -283,12 +283,17 @@ static void stm32mp_chip_suspend(struct stm32mp_exti_chip_data *chip_data)
+ {
+ 	const struct stm32mp_exti_bank *bank = chip_data->reg_bank;
+ 	void __iomem *base = chip_data->host_data->base;
++	u32 val;
+ 
+ 	/* save rtsr, ftsr registers */
+ 	chip_data->rtsr_cache = readl_relaxed(base + bank->rtsr_ofst);
+ 	chip_data->ftsr_cache = readl_relaxed(base + bank->ftsr_ofst);
+ 
+-	writel_relaxed(chip_data->wake_active, base + bank->imr_ofst);
++	/* mask active and set wakeup, preserve bits set by secure world */
++	val = readl_relaxed(base + bank->imr_ofst);
++	val &= ~chip_data->mask_cache;
++	val |= chip_data->wake_active;
++	writel_relaxed(val, base + bank->imr_ofst);
+ 
+ 	/* wakeup for IRQ power domain for S2IDLE */
+ 	if (chip_data->wake_active)
+@@ -299,12 +304,17 @@ static void stm32mp_chip_resume(struct stm32mp_exti_chip_data *chip_data)
+ {
+ 	const struct stm32mp_exti_bank *bank = chip_data->reg_bank;
+ 	void __iomem *base = chip_data->host_data->base;
++	u32 val;
+ 
+ 	/* restore rtsr, ftsr, registers */
+ 	writel_relaxed(chip_data->rtsr_cache, base + bank->rtsr_ofst);
+ 	writel_relaxed(chip_data->ftsr_cache, base + bank->ftsr_ofst);
+ 
+-	writel_relaxed(chip_data->mask_cache, base + bank->imr_ofst);
++	/* mask wakeup and set active, preserve bits set by secure world */
++	val = readl_relaxed(base + bank->imr_ofst);
++	val &= ~chip_data->wake_active;
++	val |= chip_data->mask_cache;
++	writel_relaxed(val, base + bank->imr_ofst);
+ }
+ 
+ /* directly set the target bit without reading first. */
+@@ -321,26 +331,28 @@ static inline u32 stm32mp_exti_set_bit(struct irq_data *d, u32 reg)
+ {
+ 	struct stm32mp_exti_chip_data *chip_data = irq_data_get_irq_chip_data(d);
+ 	void __iomem *base = chip_data->host_data->base;
+-	u32 val;
++	u32 val, mask;
+ 
++	mask = BIT(d->hwirq % IRQS_PER_BANK);
+ 	val = readl_relaxed(base + reg);
+-	val |= BIT(d->hwirq % IRQS_PER_BANK);
++	val |= mask;
+ 	writel_relaxed(val, base + reg);
+ 
+-	return val;
++	return mask;
+ }
+ 
+ static inline u32 stm32mp_exti_clr_bit(struct irq_data *d, u32 reg)
+ {
+ 	struct stm32mp_exti_chip_data *chip_data = irq_data_get_irq_chip_data(d);
+ 	void __iomem *base = chip_data->host_data->base;
+-	u32 val;
++	u32 val, mask;
+ 
++	mask = BIT(d->hwirq % IRQS_PER_BANK);
+ 	val = readl_relaxed(base + reg);
+-	val &= ~BIT(d->hwirq % IRQS_PER_BANK);
++	val &= ~mask;
+ 	writel_relaxed(val, base + reg);
+ 
+-	return val;
++	return mask;
+ }
+ 
+ static void stm32mp_exti_eoi(struct irq_data *d)
+@@ -353,7 +365,7 @@ static void stm32mp_exti_eoi(struct irq_data *d)
+ 	stm32mp_exti_write_bit(d, bank->rpr_ofst);
+ 	stm32mp_exti_write_bit(d, bank->fpr_ofst);
+ 
+-	chip_data->mask_cache = stm32mp_exti_set_bit(d, bank->imr_ofst);
++	chip_data->mask_cache |= stm32mp_exti_set_bit(d, bank->imr_ofst);
+ 
+ 	raw_spin_unlock(&chip_data->rlock);
+ 
+@@ -366,7 +378,7 @@ static void stm32mp_exti_mask(struct irq_data *d)
+ 	const struct stm32mp_exti_bank *bank = chip_data->reg_bank;
+ 
+ 	raw_spin_lock(&chip_data->rlock);
+-	chip_data->mask_cache = stm32mp_exti_clr_bit(d, bank->imr_ofst);
++	chip_data->mask_cache &= ~stm32mp_exti_clr_bit(d, bank->imr_ofst);
+ 	raw_spin_unlock(&chip_data->rlock);
+ 
+ 	irq_chip_mask_parent(d);
+@@ -378,7 +390,7 @@ static void stm32mp_exti_unmask(struct irq_data *d)
+ 	const struct stm32mp_exti_bank *bank = chip_data->reg_bank;
+ 
+ 	raw_spin_lock(&chip_data->rlock);
+-	chip_data->mask_cache = stm32mp_exti_set_bit(d, bank->imr_ofst);
++	chip_data->mask_cache |= stm32mp_exti_set_bit(d, bank->imr_ofst);
+ 	raw_spin_unlock(&chip_data->rlock);
+ 
+ 	irq_chip_unmask_parent(d);
+@@ -507,7 +519,6 @@ static struct irq_chip stm32mp_exti_chip = {
+ 	.irq_retrigger		= stm32mp_exti_retrigger,
+ 	.irq_set_type		= stm32mp_exti_set_type,
+ 	.irq_set_wake		= stm32mp_exti_set_wake,
+-	.flags			= IRQCHIP_MASK_ON_SUSPEND,
+ 	.irq_set_affinity	= IS_ENABLED(CONFIG_SMP) ? irq_chip_set_affinity_parent : NULL,
+ };
+ 
+@@ -522,7 +533,6 @@ static struct irq_chip stm32mp_exti_chip_direct = {
+ 	.irq_retrigger		= irq_chip_retrigger_hierarchy,
+ 	.irq_set_type		= irq_chip_set_type_parent,
+ 	.irq_set_wake		= stm32mp_exti_set_wake,
+-	.flags			= IRQCHIP_MASK_ON_SUSPEND,
+ 	.irq_set_affinity	= IS_ENABLED(CONFIG_SMP) ? irq_chip_set_affinity_parent : NULL,
+ };
+ 
+-- 
+2.53.0
+

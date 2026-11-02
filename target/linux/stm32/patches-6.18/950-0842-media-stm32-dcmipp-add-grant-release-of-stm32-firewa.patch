@@ -1,0 +1,102 @@
+From 8159be2ab558a4a85254a119f9c09e360115f672 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Tue, 2 Jul 2024 19:37:59 +0200
+Subject: [PATCH] media: stm32: dcmipp: add grant/release of stm32 firewall
+
+If applicable, ensure that stm32 firewall is properly configured
+prior to accessing to DCMIPP registers.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: Ie662eb1de711d12371ec0aa0acbfb2c2afa67c42
+---
+ .../st/stm32/stm32-dcmipp/dcmipp-common.h     |  3 +++
+ .../st/stm32/stm32-dcmipp/dcmipp-core.c       | 26 +++++++++++++++++++
+ 2 files changed, 29 insertions(+)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
+index b123d4ee90a4..6981636def01 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
+@@ -11,6 +11,7 @@
+ #ifndef _DCMIPP_COMMON_H_
+ #define _DCMIPP_COMMON_H_
+ 
++#include <linux/bus/stm32_firewall_device.h>
+ #include <linux/interrupt.h>
+ #include <linux/slab.h>
+ #include <media/media-device.h>
+@@ -92,6 +93,8 @@ struct dcmipp_device {
+ 	struct dcmipp_ent_device	**entity;
+ 
+ 	struct v4l2_async_notifier	notifier;
++
++	struct stm32_firewall		firewall;
+ };
+ 
+ #define DCMIPP_ENT_LINK(src, srcpad, sink, sinkpad, link_flags) {	\
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
+index 6ccf97743894..872a6513aca0 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
+@@ -8,6 +8,7 @@
+  *          for STMicroelectronics.
+  */
+ 
++#include <linux/bus/stm32_firewall_device.h>
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/init.h>
+@@ -580,11 +581,29 @@ static int dcmipp_probe(struct platform_device *pdev)
+ 	if (!dcmipp->entity)
+ 		return -ENOMEM;
+ 
++	/* Get stm32 firewall information */
++	ret = stm32_firewall_get_firewall(pdev->dev.of_node, &dcmipp->firewall, 1);
++	if (ret)
++		return ret;
++
++	if (dcmipp->firewall.firewall_id != 0) {
++		ret = stm32_firewall_grant_access_by_id(&dcmipp->firewall,
++							dcmipp->firewall.firewall_id);
++		if (ret) {
++			dev_err(&pdev->dev, "stm32 firewall grant error:%d\n",
++				ret);
++			return ret;
++		}
++	}
++
+ 	/* Register the v4l2 struct */
+ 	ret = v4l2_device_register(&pdev->dev, &dcmipp->v4l2_dev);
+ 	if (ret) {
+ 		dev_err(&pdev->dev,
+ 			"v4l2 device register failed (err=%d)\n", ret);
++		if (dcmipp->firewall.firewall_id != 0)
++			stm32_firewall_release_access_by_id(&dcmipp->firewall,
++							    dcmipp->firewall.firewall_id);
+ 		return ret;
+ 	}
+ 
+@@ -603,6 +622,9 @@ static int dcmipp_probe(struct platform_device *pdev)
+ 	if (ret) {
+ 		media_device_cleanup(&dcmipp->mdev);
+ 		v4l2_device_unregister(&dcmipp->v4l2_dev);
++		if (dcmipp->firewall.firewall_id != 0)
++			stm32_firewall_release_access_by_id(&dcmipp->firewall,
++							    dcmipp->firewall.firewall_id);
+ 		return ret;
+ 	}
+ 
+@@ -630,6 +652,10 @@ static void dcmipp_remove(struct platform_device *pdev)
+ 	media_device_cleanup(&dcmipp->mdev);
+ 
+ 	v4l2_device_unregister(&dcmipp->v4l2_dev);
++
++	if (dcmipp->firewall.firewall_id != 0)
++		stm32_firewall_release_access_by_id(&dcmipp->firewall,
++						    dcmipp->firewall.firewall_id);
+ }
+ 
+ static int dcmipp_runtime_suspend(struct device *dev)
+-- 
+2.53.0
+

@@ -1,0 +1,67 @@
+From 8a807789164fe5c0b73a32e74655fced87190e5c Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Wed, 25 Mar 2026 14:57:04 +0100
+Subject: [PATCH] arm64: dts: st: add mdf pinmux nodes in
+ stm32mp21-pinctrl.dtsi
+
+Add mdf pinmux nodes in stm32mp21-pinctrl.dtsi
+
+Change-Id: I9f7358ec33a75e573b1cfdb354a85e26f74dded5
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/550640
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi | 34 +++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi
+index e464e8918d20..1f1c226a3721 100644
+--- a/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp21-pinctrl.dtsi
+@@ -149,6 +149,40 @@ pins {
+ 		};
+ 	};
+ 
++	/omit-if-no-ref/
++	mdf_cck0_pins_a: mdf-cck0-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('F', 3, AF5)>; /* MDF1_CCK0 */
++			slew-rate = <1>;
++			drive-push-pull;
++			bias-disable;
++		};
++	};
++
++	/omit-if-no-ref/
++	mdf_cck0_sleep_pins_a: mdf-cck0-sleep-0 {
++		pins {
++			pinmux = <STM32_PINMUX('F', 3, ANALOG)>; /* MDF1_CCK0 */
++		};
++	};
++
++	/omit-if-no-ref/
++	mdf_sdi3_pins_a: mdf-sdi3-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('B', 3, AF5)>; /* MDF1_SDI3 */
++			slew-rate = <1>;
++			drive-push-pull;
++			bias-disable;
++		};
++	};
++
++	/omit-if-no-ref/
++	mdf_sdi3_sleep_pins_a: mdf-sdi3-sleep-0 {
++		pins {
++			pinmux = <STM32_PINMUX('B', 3, ANALOG)>; /* MDF1_SDI3 */
++		};
++	};
++
+ 	/omit-if-no-ref/
+ 	rtc_rsvd_pins_a: rtc-rsvd-0 {
+ 		pins {
+-- 
+2.53.0
+

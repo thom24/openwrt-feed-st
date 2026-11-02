@@ -1,0 +1,80 @@
+From 0869c657d15b486d361f36971670c22b2fd77480 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Mon, 8 Dec 2025 08:29:08 +0100
+Subject: [PATCH] spi: stm32-ospi: Set DMA maxburst dynamically
+
+Set src_maxburst and dst_maxburst dynamically from DMA
+capabilities.
+
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Link: https://patch.msgid.link/20251208-upstream_qspi_ospi_updates-v2-1-62526c9467dc@foss.st.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+(cherry picked from commit e35a7607e05d59d35e937b80532ae93d1dd2493f)
+---
+ drivers/spi/spi-stm32-ospi.c | 27 ++++++++++++++++++++++-----
+ 1 file changed, 22 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
+index 2988ff288ff0..74da57eee020 100644
+--- a/drivers/spi/spi-stm32-ospi.c
++++ b/drivers/spi/spi-stm32-ospi.c
+@@ -278,10 +278,19 @@ static irqreturn_t stm32_ospi_irq(int irq, void *dev_id)
+ 	return IRQ_HANDLED;
+ }
+ 
+-static void stm32_ospi_dma_setup(struct stm32_ospi *ospi,
+-			 struct dma_slave_config *dma_cfg)
++static int stm32_ospi_dma_setup(struct stm32_ospi *ospi,
++				struct dma_slave_config *dma_cfg)
+ {
++	struct dma_slave_caps caps;
++	int ret = 0;
++
+ 	if (dma_cfg && ospi->dma_chrx) {
++		ret = dma_get_slave_caps(ospi->dma_chrx, &caps);
++		if (ret)
++			return ret;
++
++		dma_cfg->src_maxburst = caps.max_burst / dma_cfg->src_addr_width;
++
+ 		if (dmaengine_slave_config(ospi->dma_chrx, dma_cfg)) {
+ 			dev_err(ospi->dev, "dma rx config failed\n");
+ 			dma_release_channel(ospi->dma_chrx);
+@@ -290,6 +299,12 @@ static void stm32_ospi_dma_setup(struct stm32_ospi *ospi,
+ 	}
+ 
+ 	if (dma_cfg && ospi->dma_chtx) {
++		ret = dma_get_slave_caps(ospi->dma_chtx, &caps);
++		if (ret)
++			return ret;
++
++		dma_cfg->dst_maxburst = caps.max_burst / dma_cfg->dst_addr_width;
++
+ 		if (dmaengine_slave_config(ospi->dma_chtx, dma_cfg)) {
+ 			dev_err(ospi->dev, "dma tx config failed\n");
+ 			dma_release_channel(ospi->dma_chtx);
+@@ -298,6 +313,8 @@ static void stm32_ospi_dma_setup(struct stm32_ospi *ospi,
+ 	}
+ 
+ 	init_completion(&ospi->dma_completion);
++
++	return ret;
+ }
+ 
+ static int stm32_ospi_tx_mm(struct stm32_ospi *ospi,
+@@ -899,9 +916,9 @@ static int stm32_ospi_probe(struct platform_device *pdev)
+ 	dma_cfg.dst_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
+ 	dma_cfg.src_addr = ospi->regs_phys_base + OSPI_DR;
+ 	dma_cfg.dst_addr = ospi->regs_phys_base + OSPI_DR;
+-	dma_cfg.src_maxburst = 4;
+-	dma_cfg.dst_maxburst = 4;
+-	stm32_ospi_dma_setup(ospi, &dma_cfg);
++	ret = stm32_ospi_dma_setup(ospi, &dma_cfg);
++	if (ret)
++		return ret;
+ 
+ 	mutex_init(&ospi->lock);
+ 
+-- 
+2.53.0
+

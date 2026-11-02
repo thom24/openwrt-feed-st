@@ -1,0 +1,37 @@
+From 7aa5d96b6bcb9fe7bae86197165adab9fe86ceec Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Tue, 12 May 2026 11:53:24 +0200
+Subject: [PATCH] ASoC: dt-bindings: dmic-codec: allow audio graph port
+
+Extend the generic dmic-codec binding to allow a port node described by
+audio-graph-port.yaml, so dtbs validation accepts that topology.
+
+Change-Id: Ie31596e89819cf36c0fd67b495954d184aa0d850
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/567649
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ Documentation/devicetree/bindings/sound/dmic-codec.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/sound/dmic-codec.yaml b/Documentation/devicetree/bindings/sound/dmic-codec.yaml
+index cc3c84dd4c26..83c23e029ea4 100644
+--- a/Documentation/devicetree/bindings/sound/dmic-codec.yaml
++++ b/Documentation/devicetree/bindings/sound/dmic-codec.yaml
+@@ -39,6 +39,10 @@ properties:
+   wakeup-delay-ms:
+     description: Delay (in ms) after enabling the DMIC
+ 
++  port:
++    $ref: audio-graph-port.yaml#
++    unevaluatedProperties: false
++
+ required:
+   - compatible
+ 
+-- 
+2.53.0
+

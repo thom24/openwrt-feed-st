@@ -1,0 +1,33 @@
+From 7316a001fd88defc80395c66615133fce3a3e263 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Tue, 28 Apr 2026 15:31:46 +0200
+Subject: [PATCH] drm/panel: simple: Add bus_flags for RK043FN78H panel
+
+Bus_flags field is missing to the panel description & generate
+a warning during the probe.
+
+Change-Id: I3330342d44a325aa3d7f7ecfdabc8f91daabc036
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/562011
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/gpu/drm/panel/panel-simple.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
+index edd3ac7e70b6..decb1bb19c13 100644
+--- a/drivers/gpu/drm/panel/panel-simple.c
++++ b/drivers/gpu/drm/panel/panel-simple.c
+@@ -4104,6 +4104,8 @@ static const struct panel_desc rocktech_rk043fn48h = {
+ 		.width = 95,
+ 		.height = 54,
+ 	},
++	.bus_flags = DRM_BUS_FLAG_DE_HIGH |
++		     DRM_BUS_FLAG_PIXDATA_DRIVE_POSEDGE,
+ 	.bus_format = MEDIA_BUS_FMT_RGB888_1X24,
+ 	.connector_type = DRM_MODE_CONNECTOR_DPI,
+ };
+-- 
+2.53.0
+

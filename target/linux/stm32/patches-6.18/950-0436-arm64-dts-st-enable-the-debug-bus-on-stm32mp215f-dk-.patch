@@ -1,0 +1,38 @@
+From 189b69549007ddc8994404522200884cffd6f495 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Wed, 9 Jul 2025 14:37:16 +0200
+Subject: [PATCH] arm64: dts: st: enable the debug bus on stm32mp215f-dk board
+
+On stm32mp215f-dk board, enable the debug bus so we always try to probe
+the debug peripherals, if the debug configuration allows it.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I0c9eefa2b8f33b7e6631b723c9243fbf53a77641
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/568317
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 0fb1d18d9128..15ffc3bfa3c8 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -65,6 +65,10 @@ &arm_wdt {
+ 	status = "okay";
+ };
+ 
++&dbg_bus {
++	status = "okay";
++};
++
+ &ethernet1 {
+ 	status = "okay";
+ 	pinctrl-0 = <&eth1_rmii_pins_a>;
+-- 
+2.53.0
+

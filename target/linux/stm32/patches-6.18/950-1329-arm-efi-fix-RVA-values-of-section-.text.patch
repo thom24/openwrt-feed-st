@@ -1,0 +1,58 @@
+From 8461eb84588f3bbf20b0b61d88ad4da32656b5fd Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Wed, 29 Jul 2026 15:21:59 +0200
+Subject: [PATCH] arm/efi: fix RVA values of section ".text"
+
+The section .text in the PE image incorrectly embeds  absolute
+addresses in place of the required Relative Virtual Addresses
+(RVA), which are addresses relative to the base load address of
+the PE image.
+
+With the current code, the generated zImage could cause an EFI
+loader, like U-Boot, to run out of memory while trying to allocate
+memory at least of size
+	__efi_start + __pecoff_code_size
+to load the ".text" section.
+To prevent the issue, the TEXT_START address has to be forced to
+zero while creating zImage by
+	arch/arm/boot/compressed/Makefile
+
+Using a non-zero TEXT_START is helpful while debugging the kernel
+decompressor, in order to have all the symbols pointing to the
+correct memory addresses.
+
+Align the arm EFI header code with the similar code in arm64, riscv
+and loongarch by correctly computing the RVA as
+	__efi_start - start
+using the value already provided by the symbol 'start_offset'.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I718da10b62a00f9a23df4ab646118dc307eda9e3
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/593575
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/compressed/efi-header.S | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/compressed/efi-header.S b/arch/arm/boot/compressed/efi-header.S
+index 65a3025c0e13..0d8abbc06199 100644
+--- a/arch/arm/boot/compressed/efi-header.S
++++ b/arch/arm/boot/compressed/efi-header.S
+@@ -104,9 +104,9 @@ extra_header_fields:
+ section_table:
+ 		.ascii	".text\0\0\0"
+ 		.long	__pecoff_code_size		@ VirtualSize
+-		.long	__efi_start			@ VirtualAddress
++		.long	start_offset			@ VirtualAddress
+ 		.long	__pecoff_code_size		@ SizeOfRawData
+-		.long	__efi_start			@ PointerToRawData
++		.long	start_offset			@ PointerToRawData
+ 		.long	0				@ PointerToRelocations
+ 		.long	0				@ PointerToLineNumbers
+ 		.short	0				@ NumberOfRelocations
+-- 
+2.53.0
+

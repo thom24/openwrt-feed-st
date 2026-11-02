@@ -1,0 +1,77 @@
+From 320488e2d098ca7a02e70148c13f66246db17d0c Mon Sep 17 00:00:00 2001
+From: Cheick Traore <cheick.traore@foss.st.com>
+Date: Thu, 14 Nov 2024 10:57:53 +0100
+Subject: [PATCH] arm64: dts: stm32: Manage display brightness using pwm on
+ STM32MP257F-DK
+
+Change panel_backlight compatible to use pwm_backlight driver
+compatible. The pwm source is TIM3_CH2 (channel number start at 0)
+channel in not inverted polarity mode (0). Add brightness level and
+default brightness value.
+Also add TIM3_CH2 (on PI7) pinout.
+
+Change-Id: Ie500401543dc98f6793554993dbc60b089fe8c7d
+Signed-off-by: Cheick Traore <cheick.traore@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/554834
+Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi | 17 +++++++++++++++++
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts     | 10 ++++++++++
+ 2 files changed, 27 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
+index 52b26f50d705..b11f6bc6e321 100644
+--- a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
+@@ -496,6 +496,23 @@ pins {
+ 		};
+ 	};
+ 
++	/omit-if-no-ref/
++	pwm3_ch2_pins_a: pwm3-ch2-0 {
++		pins {
++			pinmux = <STM32_PINMUX('I', 7, AF8)>; /* TIM3_CH2 */
++			bias-pull-down;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++	};
++
++	/omit-if-no-ref/
++	pwm3_ch2_sleep_pins_a: pwm3-ch2-sleep-0 {
++		pins {
++			pinmux = <STM32_PINMUX('I', 7, ANALOG)>; /* TIM3_CH2 */
++		};
++	};
++
+ 	/omit-if-no-ref/
+ 	pwm3_pins_a: pwm3-0 {
+ 		pins {
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index 07729d672f6a..4cf17da3ca45 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -676,6 +676,16 @@ &syscfg {
+ 	bootph-all;
+ };
+ 
++&timers3 {
++	status = "okay";
++	pwm3: pwm {
++		pinctrl-0 = <&pwm3_ch2_pins_a>;
++		pinctrl-1 = <&pwm3_ch2_sleep_pins_a>;
++		pinctrl-names = "default", "sleep";
++		status = "okay";
++	};
++};
++
+ /* Bluetooth */
+ &usart1 {
+ 	pinctrl-names = "default", "sleep", "idle";
+-- 
+2.53.0
+

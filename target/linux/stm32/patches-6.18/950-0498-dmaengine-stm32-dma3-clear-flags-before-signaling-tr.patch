@@ -1,0 +1,80 @@
+From 54a6f24312854481c63acea37457ff247e1dfc18 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 16 Dec 2025 11:25:46 +0100
+Subject: [PATCH] dmaengine: stm32-dma3: clear flags before signaling transfer
+ completion
+
+On a Transfer Complete event, a new transfer can be started.
+In the stm32_dma3_chan_start() function, flags are currently cleared
+before enabling the DMA channel.
+The new transfer could finish while the end of stm32_dma3_chan_irq() is
+executing, clearing the new transfer's Transfer Complete flag without
+properly handling the end of the transfer, which may lead to a timeout.
+
+Clear the flags before handling completion to make sure that
+if stm32_dma3_chan_complete() starts an ultra-fast transfer,
+we do not accidentally clear its TCF flag at the end.
+This reordering is also safe for the other handled interrupt conditions,
+since csr contains the channel status and is used to select the handling
+path.
+This also avoids redundant clearing of the flags in
+stm32_dma3_chan_start().
+
+Change-Id: Ie9b293e4e5a5e3f600f1c33d5114433fb9c9a1e8
+Signed-off-by: Jerome Audu <jerome.audu@st.com>
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/582621
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/dma/stm32/stm32-dma3.c | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
+index 2ad2d74f7088..b128e2291829 100644
+--- a/drivers/dma/stm32/stm32-dma3.c
++++ b/drivers/dma/stm32/stm32-dma3.c
+@@ -1344,7 +1344,7 @@ static irqreturn_t stm32_dma3_chan_irq(int irq, void *devid)
+ {
+ 	struct stm32_dma3_chan *chan = devid;
+ 	struct stm32_dma3_ddata *ddata = to_stm32_dma3_ddata(chan);
+-	u32 misr, csr, ccr;
++	u32 misr, csr, ccr, cfcr;
+ 
+ 	spin_lock(&chan->vchan.lock);
+ 
+@@ -1357,6 +1357,14 @@ static irqreturn_t stm32_dma3_chan_irq(int irq, void *devid)
+ 	csr = readl_relaxed(ddata->base + STM32_DMA3_CSR(chan->id));
+ 	ccr = readl_relaxed(ddata->base + STM32_DMA3_CCR(chan->id)) & CCR_ALLIE;
+ 
++	/*
++	 * Half Transfer Interrupt may be disabled but Half Transfer Flag can be set,
++	 * ensure HTF flag to be cleared, with other flags.
++	 */
++	cfcr = csr & (ccr | CCR_HTIE);
++	if (cfcr)
++		writel_relaxed(cfcr, ddata->base + STM32_DMA3_CFCR(chan->id));
++
+ 	if (csr & CSR_TCF && ccr & CCR_TCIE) {
+ 		if (chan->swdesc->cyclic)
+ 			vchan_cyclic_callback(&chan->swdesc->vdesc);
+@@ -1386,15 +1394,6 @@ static irqreturn_t stm32_dma3_chan_irq(int irq, void *devid)
+ 		stm32_dma3_chan_reset(chan);
+ 	}
+ 
+-	/*
+-	 * Half Transfer Interrupt may be disabled but Half Transfer Flag can be set,
+-	 * ensure HTF flag to be cleared, with other flags.
+-	 */
+-	csr &= (ccr | CCR_HTIE);
+-
+-	if (csr)
+-		writel_relaxed(csr, ddata->base + STM32_DMA3_CFCR(chan->id));
+-
+ 	spin_unlock(&chan->vchan.lock);
+ 
+ 	return IRQ_HANDLED;
+-- 
+2.53.0
+

@@ -1,0 +1,127 @@
+From 3ccd7f276f9ec469eabb6b2a0011f88c7e6e5be7 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Thu, 23 Feb 2023 18:55:32 +0100
+Subject: [PATCH] ARM: dts: stm32: enable DCMI DMA-MDMA chaining on
+ stm32mp157x-ev1.dts
+
+Enable the DMA-MDMA chaining for the dcmi (camera capture)
+in order to be able to achieve higher resolution.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: I6d73513b0919cac73a6dfaa81b276e0533ae7f82
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/537269
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts | 15 +++++++++++++++
+ arch/arm/boot/dts/st/stm32mp157d-ev1.dts         | 15 +++++++++++++++
+ arch/arm/boot/dts/st/stm32mp157f-ev1.dts         | 15 +++++++++++++++
+ 3 files changed, 45 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
+index eb490d4160b5..fde8b51709ac 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
+@@ -87,6 +87,14 @@ &dcmi {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&dcmi_pins_a>;
+ 	pinctrl-1 = <&dcmi_sleep_pins_a>;
++	/*
++	 * Enable DMA-MDMA chaining by adding a SRAM pool and
++	 * a MDMA channel
++	 */
++	sram = <&dcmi_pool>;
++
++	dmas = <&dmamux1 75 0x400 0x01>, <&mdma1 0 0x3 0x1200000a 0 0>;
++	dma-names = "tx", "mdma_tx";
+ 
+ 	port {
+ 		dcmi_0: endpoint {
+@@ -349,6 +357,13 @@ &spi1 {
+ 	status = "disabled";
+ };
+ 
++&sram4 {
++	dcmi_pool: dcmi-sram@0 {
++		reg = <0x0 0x8000>;
++		pool;
++	};
++};
++
+ &timers2 {
+ 	/* spare dmas for other usage (un-delete to enable pwm capture) */
+ 	/delete-property/dmas;
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+index 95b26eff8f51..f7574e9f5b2c 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+@@ -87,6 +87,14 @@ &dcmi {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&dcmi_pins_a>;
+ 	pinctrl-1 = <&dcmi_sleep_pins_a>;
++	/*
++	 * Enable DMA-MDMA chaining by adding a SRAM pool and
++	 * a MDMA channel
++	 */
++	sram = <&dcmi_pool>;
++
++	dmas = <&dmamux1 75 0x400 0x01>, <&mdma1 0 0x3 0x1200000a 0 0>;
++	dma-names = "tx", "mdma_tx";
+ 
+ 	port {
+ 		dcmi_0: endpoint {
+@@ -350,6 +358,13 @@ &spi1 {
+ 	status = "disabled";
+ };
+ 
++&sram4 {
++	dcmi_pool: dcmi-sram@0 {
++		reg = <0x0 0x8000>;
++		pool;
++	};
++};
++
+ &timers2 {
+ 	/* spare dmas for other usage (un-delete to enable pwm capture) */
+ 	/delete-property/dmas;
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+index 4c0f592c2d57..fabb384fb61a 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+@@ -87,6 +87,14 @@ &dcmi {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&dcmi_pins_a>;
+ 	pinctrl-1 = <&dcmi_sleep_pins_a>;
++	/*
++	 * Enable DMA-MDMA chaining by adding a SRAM pool and
++	 * a MDMA channel
++	 */
++	sram = <&dcmi_pool>;
++
++	dmas = <&dmamux1 75 0x400 0x01>, <&mdma1 0 0x3 0x1200000a 0 0>;
++	dma-names = "tx", "mdma_tx";
+ 
+ 	port {
+ 		dcmi_0: endpoint {
+@@ -350,6 +358,13 @@ &spi1 {
+ 	status = "disabled";
+ };
+ 
++&sram4 {
++	dcmi_pool: dcmi-sram@0 {
++		reg = <0x0 0x8000>;
++		pool;
++	};
++};
++
+ &timers2 {
+ 	/* spare dmas for other usage (un-delete to enable pwm capture) */
+ 	/delete-property/dmas;
+-- 
+2.53.0
+

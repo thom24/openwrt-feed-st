@@ -1,0 +1,149 @@
+From f07dd234afb46a9f68f85649bc281cbb51d2ecb8 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Mon, 27 May 2024 14:10:05 +0200
+Subject: [PATCH] arm64: dts: st: add Ethernet nodes for stm32mp21
+
+Ethernet instance is based on GMAC SNPS IP
+GMAC IP version is SNPS 5.23.
+
+Change-Id: I0917825fb81f1f4e3aa08db23052335103665cc2
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/383312
+Reviewed-by: Gwenael TREUVEUR <gwenael.treuveur@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/535373
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 57 ++++++++++++++++++++++++++
+ arch/arm64/boot/dts/st/stm32mp213.dtsi | 50 ++++++++++++++++++++++
+ 2 files changed, 107 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 5511ffc6bdc4..1d45c80697d0 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -748,4 +748,61 @@ intc: interrupt-controller@4ac10000 {
+ 			interrupt-controller;
+ 		};
+ 	};
++
++	soc@1 {
++		compatible = "simple-bus";
++		ranges = <0x0 0x0 0x0 0x80000000>;
++		interrupt-parent = <&intc>;
++		#address-cells = <1>;
++		#size-cells = <1>;
++
++		ethernet1: ethernet@482c0000 {
++			compatible = "st,stm32mp25-dwmac", "snps,dwmac-5.20";
++			reg = <0x482c0000 0x4000>;
++			reg-names = "stmmaceth";
++			interrupts-extended = <&intc GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "macirq";
++			clock-names = "stmmaceth",
++				      "mac-clk-tx",
++				      "mac-clk-rx",
++				      "ptp_ref",
++				      "ethstp",
++				      "eth-ck";
++			clocks = <&rcc CK_ETH1_MAC>,
++				 <&rcc CK_ETH1_TX>,
++				 <&rcc CK_ETH1_RX>,
++				 <&rcc CK_KER_ETH1PTP>,
++				 <&rcc CK_ETH1_STP>,
++				 <&rcc CK_KER_ETH1>;
++			st,syscon = <&syscfg 0x3000>;
++			snps,mixed-burst;
++			snps,pbl = <2>;
++			snps,axi-config = <&stmmac_axi_config_1>;
++			snps,tso;
++			access-controllers = <&rifsc 60>;
++			status = "disabled";
++			snps,mtl-rx-config = <&mtl_rx_setup_1>;
++			snps,mtl-tx-config = <&mtl_tx_setup_1>;
++
++			stmmac_axi_config_1: stmmac-axi-config {
++				snps,wr_osr_lmt = <0x7>;
++				snps,rd_osr_lmt = <0x7>;
++				snps,blen = <0 0 0 0 16 8 4>;
++			};
++
++			mtl_rx_setup_1: rx-queues-config {
++				snps,rx-queues-to-use = <2>;
++				queue0 {};
++				queue1 {};
++			};
++
++			mtl_tx_setup_1: tx-queues-config {
++				snps,tx-queues-to-use = <4>;
++				queue0 {};
++				queue1 {};
++				queue2 {};
++				queue3 {};
++			};
++		};
++	};
+ };
+diff --git a/arch/arm64/boot/dts/st/stm32mp213.dtsi b/arch/arm64/boot/dts/st/stm32mp213.dtsi
+index fdd2dc432edd..98dc8c14751f 100644
+--- a/arch/arm64/boot/dts/st/stm32mp213.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp213.dtsi
+@@ -6,4 +6,54 @@
+ #include "stm32mp211.dtsi"
+ 
+ / {
++	soc@1 {
++		ethernet2: ethernet@482d0000 {
++			compatible = "st,stm32mp25-dwmac", "snps,dwmac-5.20";
++			reg = <0x482d0000 0x4000>;
++			reg-names = "stmmaceth";
++			interrupts-extended = <&intc GIC_SPI 120 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "macirq";
++			clock-names = "stmmaceth",
++				      "mac-clk-tx",
++				      "mac-clk-rx",
++				      "ptp_ref",
++				      "ethstp",
++				      "eth-ck";
++			clocks = <&rcc CK_ETH2_MAC>,
++				 <&rcc CK_ETH2_TX>,
++				 <&rcc CK_ETH2_RX>,
++				 <&rcc CK_KER_ETH2PTP>,
++				 <&rcc CK_ETH2_STP>,
++				 <&rcc CK_KER_ETH2>;
++			st,syscon = <&syscfg 0x3400>;
++			snps,mixed-burst;
++			snps,pbl = <2>;
++			snps,axi-config = <&stmmac_axi_config_2>;
++			snps,tso;
++			access-controllers = <&rifsc 61>;
++			status = "disabled";
++			snps,mtl-rx-config = <&mtl_rx_setup_2>;
++			snps,mtl-tx-config = <&mtl_tx_setup_2>;
++
++			stmmac_axi_config_2: stmmac-axi-config {
++				snps,wr_osr_lmt = <0x7>;
++				snps,rd_osr_lmt = <0x7>;
++				snps,blen = <0 0 0 0 16 8 4>;
++			};
++
++			mtl_rx_setup_2: rx-queues-config {
++				snps,rx-queues-to-use = <2>;
++				queue0 {};
++				queue1 {};
++			};
++
++			mtl_tx_setup_2: tx-queues-config {
++				snps,tx-queues-to-use = <4>;
++				queue0 {};
++				queue1 {};
++				queue2 {};
++				queue3 {};
++			};
++		};
++	};
+ };
+-- 
+2.53.0
+

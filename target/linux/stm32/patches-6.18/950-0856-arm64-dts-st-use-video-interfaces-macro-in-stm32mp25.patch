@@ -1,0 +1,56 @@
+From 311c957193ed4928e1388398577bc65a692c347e Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Thu, 19 Feb 2026 18:41:56 +0100
+Subject: [PATCH] arm64: dts: st: use video-interfaces macro in
+ stm32mp257f-ev1.dts
+
+Use the macro MEDIA_BUS_TYPE_CSI2_DPHY for bus-type device-tree
+property.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: I5fd79a2e36b6de9b086a2efc8a91f9f97c96caaf
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/539590
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+index 07b8a381a804..68022289733a 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+@@ -8,6 +8,7 @@
+ 
+ #include <dt-bindings/gpio/gpio.h>
+ #include <dt-bindings/input/input.h>
++#include <dt-bindings/media/video-interfaces.h>
+ #include <dt-bindings/regulator/st,stm32mp25-regulator.h>
+ #include "stm32mp257.dtsi"
+ #include "stm32mp25xf.dtsi"
+@@ -217,7 +218,7 @@ port@0 {
+ 			csi_sink: endpoint {
+ 				remote-endpoint = <&imx335_ep>;
+ 				data-lanes = <1 2>;
+-				bus-type = <4>;
++				bus-type = <MEDIA_BUS_TYPE_CSI2_DPHY>;
+ 			};
+ 		};
+ 		port@1 {
+@@ -238,7 +239,7 @@ &dcmipp {
+ 	port {
+ 		dcmipp_0: endpoint {
+ 			remote-endpoint = <&csi_source>;
+-			bus-type = <4>;
++			bus-type = <MEDIA_BUS_TYPE_CSI2_DPHY>;
+ 		};
+ 	};
+ };
+-- 
+2.53.0
+

@@ -1,0 +1,325 @@
+From afd7cc2e4c8a0fb8f749714086a142b4b22105ee Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Fri, 13 Feb 2026 11:44:05 +0100
+Subject: [PATCH] arm64: dts: st: fix power-domain labels DT coding style in
+ STM32MP25
+
+Update STM32MP25 power domain labels to comply with the Device Tree
+coding style requirement. that labels use only lowercase letters,
+digits and underscore.
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: Ifb15e475e2f5ee856862a6cdb68406eaa9fe8660
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/535999
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 62 +++++++++++++-------------
+ arch/arm64/boot/dts/st/stm32mp253.dtsi |  6 +--
+ arch/arm64/boot/dts/st/stm32mp255.dtsi |  2 +-
+ 3 files changed, 35 insertions(+), 35 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index b2395ffd549f..f55a2ac8bd75 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -22,7 +22,7 @@ cpu0: cpu@0 {
+ 			device_type = "cpu";
+ 			reg = <0>;
+ 			enable-method = "psci";
+-			power-domains = <&CPU_PD0>;
++			power-domains = <&cpu0_pd>;
+ 			power-domain-names = "psci";
+ 		};
+ 	};
+@@ -145,17 +145,17 @@ psci: psci {
+ 		compatible = "arm,psci-1.0";
+ 		method = "smc";
+ 
+-		CPU_PD0: power-domain-cpu0 {
++		cpu0_pd: power-domain-cpu0 {
+ 			#power-domain-cells = <0>;
+-			power-domains = <&CLUSTER_PD>;
++			power-domains = <&cluster_pd>;
+ 		};
+ 
+-		CLUSTER_PD: power-domain-cluster {
++		cluster_pd: power-domain-cluster {
+ 			#power-domain-cells = <0>;
+-			power-domains = <&RET_PD>;
++			power-domains = <&ret_pd>;
+ 		};
+ 
+-		RET_PD: power-domain-retention {
++		ret_pd: power-domain-retention {
+ 			#power-domain-cells = <0>;
+ 		};
+ 	};
+@@ -261,7 +261,7 @@ ommanager: ommanager@40500000 {
+ 				 <&scmi_reset RST_SCMI_OSPI2>;
+ 			reset-names = "omm", "ospi1", "ospi2";
+ 			access-controllers = <&rifsc 111>;
+-			power-domains = <&CLUSTER_PD>;
++			power-domains = <&cluster_pd>;
+ 			#address-cells = <2>;
+ 			#size-cells = <1>;
+ 			st,syscfg-amcr = <&syscfg 0x2c00 0x7>;
+@@ -278,7 +278,7 @@ ospi1: spi@0 {
+ 				resets = <&scmi_reset RST_SCMI_OSPI1>,
+ 					 <&scmi_reset RST_SCMI_OSPI1DLL>;
+ 				access-controllers = <&rifsc 74>;
+-				power-domains = <&CLUSTER_PD>;
++				power-domains = <&cluster_pd>;
+ 				st,syscfg-dlyb = <&syscfg 0x1000>;
+ 				status = "disabled";
+ 			};
+@@ -294,7 +294,7 @@ ospi2: spi@1 {
+ 				resets = <&scmi_reset RST_SCMI_OSPI2>,
+ 					 <&scmi_reset RST_SCMI_OSPI2DLL>;
+ 				access-controllers = <&rifsc 75>;
+-				power-domains = <&CLUSTER_PD>;
++				power-domains = <&cluster_pd>;
+ 				st,syscfg-dlyb = <&syscfg 0x1400>;
+ 				status = "disabled";
+ 			};
+@@ -318,7 +318,7 @@ timers2: timer@40000000 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				access-controllers = <&rifsc 1>;
+-				power-domains = <&CLUSTER_PD>;
++				power-domains = <&cluster_pd>;
+ 				status = "disabled";
+ 
+ 				counter {
+@@ -349,7 +349,7 @@ timers3: timer@40010000 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				access-controllers = <&rifsc 2>;
+-				power-domains = <&CLUSTER_PD>;
++				power-domains = <&cluster_pd>;
+ 				status = "disabled";
+ 
+ 				counter {
+@@ -380,7 +380,7 @@ timers4: timer@40020000 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				access-controllers = <&rifsc 3>;
+-				power-domains = <&CLUSTER_PD>;
++				power-domains = <&cluster_pd>;
+ 				status = "disabled";
+ 
+ 				counter {
+@@ -411,7 +411,7 @@ timers5: timer@40030000 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				access-controllers = <&rifsc 4>;
+-				power-domains = <&CLUSTER_PD>;
++				power-domains = <&cluster_pd>;
+ 				status = "disabled";
+ 
+ 				counter {
+@@ -442,7 +442,7 @@ timers6: timer@40040000 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				access-controllers = <&rifsc 5>;
+-				power-domains = <&CLUSTER_PD>;
++				power-domains = <&cluster_pd>;
+ 				status = "disabled";
+ 
+ 				counter {
+@@ -467,7 +467,7 @@ timers7: timer@40050000 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				access-controllers = <&rifsc 6>;
+-				power-domains = <&CLUSTER_PD>;
++				power-domains = <&cluster_pd>;
+ 				status = "disabled";
+ 
+ 				counter {
+@@ -492,7 +492,7 @@ timers12: timer@40060000 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				access-controllers = <&rifsc 10>;
+-				power-domains = <&CLUSTER_PD>;
++				power-domains = <&cluster_pd>;
+ 				status = "disabled";
+ 
+ 				counter {
+@@ -523,7 +523,7 @@ timers13: timer@40070000 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				access-controllers = <&rifsc 11>;
+-				power-domains = <&CLUSTER_PD>;
++				power-domains = <&cluster_pd>;
+ 				status = "disabled";
+ 
+ 				counter {
+@@ -554,7 +554,7 @@ timers14: timer@40080000 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				access-controllers = <&rifsc 12>;
+-				power-domains = <&CLUSTER_PD>;
++				power-domains = <&cluster_pd>;
+ 				status = "disabled";
+ 
+ 				counter {
+@@ -584,7 +584,7 @@ lptimer1: timer@40090000 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				access-controllers = <&rifsc 17>;
+-				power-domains = <&RET_PD>;
++				power-domains = <&ret_pd>;
+ 				wakeup-source;
+ 				status = "disabled";
+ 
+@@ -620,7 +620,7 @@ lptimer2: timer@400a0000 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				access-controllers = <&rifsc 18>;
+-				power-domains = <&RET_PD>;
++				power-domains = <&ret_pd>;
+ 				wakeup-source;
+ 				status = "disabled";
+ 
+@@ -891,7 +891,7 @@ timers10: timer@401c0000 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				access-controllers = <&rifsc 8>;
+-				power-domains = <&CLUSTER_PD>;
++				power-domains = <&cluster_pd>;
+ 				status = "disabled";
+ 
+ 				counter {
+@@ -922,7 +922,7 @@ timers11: timer@401d0000 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				access-controllers = <&rifsc 9>;
+-				power-domains = <&CLUSTER_PD>;
++				power-domains = <&cluster_pd>;
+ 				status = "disabled";
+ 
+ 				counter {
+@@ -956,7 +956,7 @@ timers1: timer@40200000 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				access-controllers = <&rifsc 0>;
+-				power-domains = <&CLUSTER_PD>;
++				power-domains = <&cluster_pd>;
+ 				status = "disabled";
+ 
+ 				counter {
+@@ -990,7 +990,7 @@ timers8: timer@40210000 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				access-controllers = <&rifsc 7>;
+-				power-domains = <&CLUSTER_PD>;
++				power-domains = <&cluster_pd>;
+ 				status = "disabled";
+ 
+ 				counter {
+@@ -1078,7 +1078,7 @@ timers15: timer@40250000 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				access-controllers = <&rifsc 13>;
+-				power-domains = <&CLUSTER_PD>;
++				power-domains = <&cluster_pd>;
+ 				status = "disabled";
+ 
+ 				counter {
+@@ -1109,7 +1109,7 @@ timers16: timer@40260000 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				access-controllers = <&rifsc 14>;
+-				power-domains = <&CLUSTER_PD>;
++				power-domains = <&cluster_pd>;
+ 				status = "disabled";
+ 
+ 				counter {
+@@ -1140,7 +1140,7 @@ timers17: timer@40270000 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				access-controllers = <&rifsc 15>;
+-				power-domains = <&CLUSTER_PD>;
++				power-domains = <&cluster_pd>;
+ 				status = "disabled";
+ 
+ 				counter {
+@@ -1303,7 +1303,7 @@ timers20: timer@40320000 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				access-controllers = <&rifsc 16>;
+-				power-domains = <&CLUSTER_PD>;
++				power-domains = <&cluster_pd>;
+ 				status = "disabled";
+ 
+ 				counter {
+@@ -1614,7 +1614,7 @@ combophy: phy@480c0000 {
+ 				resets = <&rcc USB3PCIEPHY_R>;
+ 				reset-names = "phy";
+ 				access-controllers = <&rifsc 67>;
+-				power-domains = <&CLUSTER_PD>;
++				power-domains = <&cluster_pd>;
+ 				wakeup-source;
+ 				interrupts-extended = <&exti1 45 IRQ_TYPE_EDGE_FALLING>;
+ 				status = "disabled";
+@@ -1695,7 +1695,7 @@ pcie_ep: pcie-ep@48400000 {
+ 				resets = <&rcc PCIE_R>;
+ 				phys = <&combophy PHY_TYPE_PCIE>;
+ 				access-controllers = <&rifsc 68>;
+-				power-domains = <&CLUSTER_PD>;
++				power-domains = <&cluster_pd>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -1721,7 +1721,7 @@ pcie_rc: pcie@48400000 {
+ 				resets = <&rcc PCIE_R>;
+ 				msi-parent = <&v2m0>;
+ 				access-controllers = <&rifsc 68>;
+-				power-domains = <&CLUSTER_PD>;
++				power-domains = <&cluster_pd>;
+ 				status = "disabled";
+ 
+ 				pcie@0,0 {
+diff --git a/arch/arm64/boot/dts/st/stm32mp253.dtsi b/arch/arm64/boot/dts/st/stm32mp253.dtsi
+index eeceb086252b..b93f0aa89299 100644
+--- a/arch/arm64/boot/dts/st/stm32mp253.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp253.dtsi
+@@ -12,7 +12,7 @@ cpu1: cpu@1 {
+ 			device_type = "cpu";
+ 			reg = <1>;
+ 			enable-method = "psci";
+-			power-domains = <&CPU_PD1>;
++			power-domains = <&cpu1_pd>;
+ 			power-domain-names = "psci";
+ 		};
+ 	};
+@@ -24,9 +24,9 @@ arm-pmu {
+ 	};
+ 
+ 	psci {
+-		CPU_PD1: power-domain-cpu1 {
++		cpu1_pd: power-domain-cpu1 {
+ 			#power-domain-cells = <0>;
+-			power-domains = <&CLUSTER_PD>;
++			power-domains = <&cluster_pd>;
+ 		};
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/st/stm32mp255.dtsi b/arch/arm64/boot/dts/st/stm32mp255.dtsi
+index 3ba4e6166586..92cada71a0e8 100644
+--- a/arch/arm64/boot/dts/st/stm32mp255.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp255.dtsi
+@@ -20,7 +20,7 @@ lvds: lvds@48060000 {
+ 		clock-names = "pclk", "ref";
+ 		resets = <&rcc LVDS_R>;
+ 		access-controllers = <&rifsc 84>;
+-		power-domains = <&CLUSTER_PD>;
++		power-domains = <&cluster_pd>;
+ 		status = "disabled";
+ 	};
+ 
+-- 
+2.53.0
+

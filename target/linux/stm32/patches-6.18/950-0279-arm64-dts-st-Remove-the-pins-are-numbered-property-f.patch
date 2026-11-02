@@ -1,0 +1,41 @@
+From 97b1bec492c54384d7f3a607361a2d26e986f126 Mon Sep 17 00:00:00 2001
+From: Cheick TRAORE <cheick.traore-ext@st.com>
+Date: Mon, 8 Apr 2024 11:15:58 +0200
+Subject: [PATCH] arm64: dts: st: Remove the pins-are-numbered property from
+ stm32mp251
+
+Remove the deprecated property "pins-are-numbered" from pinctrl and
+pinctrl_z nodes of stm32mp251 soc to ensure to be conform with the
+upstream series of the link below.
+
+Link: https://lore.kernel.org/all/20221129023401.278780-1-bero@baylibre.com/
+Fixes: 5d30d03aaf78 ("arm64: dts: st: introduce stm32mp25 SoCs family")
+Change-Id: I6549a0a6c1cd10a031cfbe2bb26a4dba937b9d8b
+Signed-off-by: Cheick TRAORE <cheick.traore-ext@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index 9bf50a711738..e13cfd3088b7 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -2067,7 +2067,6 @@ pinctrl: pinctrl@44240000 {
+ 			ranges = <0 0x44240000 0xa0400>;
+ 			interrupt-parent = <&exti1>;
+ 			st,syscfg = <&exti1 0x60 0xff>;
+-			pins-are-numbered;
+ 
+ 			gpioa: gpio@44240000 {
+ 				gpio-controller;
+@@ -2208,7 +2207,6 @@ pinctrl_z: pinctrl@46200000 {
+ 			ranges = <0 0x46200000 0x400>;
+ 			interrupt-parent = <&exti1>;
+ 			st,syscfg = <&exti1 0x60 0xff>;
+-			pins-are-numbered;
+ 
+ 			gpioz: gpio@46200000 {
+ 				gpio-controller;
+-- 
+2.53.0
+

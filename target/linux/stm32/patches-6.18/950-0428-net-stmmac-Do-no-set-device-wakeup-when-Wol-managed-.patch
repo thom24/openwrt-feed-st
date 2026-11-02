@@ -1,0 +1,33 @@
+From 881d985c68d35f4d3829cdb2ade59ba67de61450 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Tue, 24 Mar 2026 11:04:25 +0100
+Subject: [PATCH] net: stmmac: Do no set device wakeup when Wol managed by PHY
+
+when WoL is managed by PHY do not set device_set_wakeup_enable
+in MAC side.
+
+Change-Id: I662715f0255519419b29b0c3cf07432213113fb1
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/597398
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c
+index 81d4039e1c08..3fc4a262f596 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c
+@@ -755,9 +755,6 @@ static int stmmac_set_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
+ 
+ 	if (!priv->plat->pmt) {
+ 		int ret = phylink_ethtool_set_wol(priv->phylink, wol);
+-
+-		if (!ret)
+-			device_set_wakeup_enable(priv->device, !!wol->wolopts);
+ 		return ret;
+ 	}
+ 
+-- 
+2.53.0
+

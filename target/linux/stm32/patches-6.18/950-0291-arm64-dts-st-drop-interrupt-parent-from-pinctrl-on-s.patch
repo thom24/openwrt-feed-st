@@ -1,0 +1,37 @@
+From 0694cd8dc7ba8dec4912c306528d59a74f2891da Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Mon, 29 Sep 2025 16:04:36 +0200
+Subject: [PATCH] arm64: dts: st: drop interrupt parent from pinctrl on
+ stm32mp251
+
+By using the property 'interrupts-extended', there is no need to
+specify the interrupt parent.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index d2e62e5c4362..1f7f6098bcbe 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -2065,7 +2065,6 @@ pinctrl: pinctrl@44240000 {
+ 			#size-cells = <1>;
+ 			compatible = "st,stm32mp257-pinctrl";
+ 			ranges = <0 0x44240000 0xa0400>;
+-			interrupt-parent = <&exti1>;
+ 			interrupts-extended =
+ 				<&exti1  0 0>, <&exti1  1 0>, <&exti1  2 0>, <&exti1  3 0>,
+ 				<&exti1  4 0>, <&exti1  5 0>, <&exti1  6 0>, <&exti1  7 0>,
+@@ -2213,7 +2212,6 @@ pinctrl_z: pinctrl@46200000 {
+ 			#size-cells = <1>;
+ 			compatible = "st,stm32mp257-z-pinctrl";
+ 			ranges = <0 0x46200000 0x400>;
+-			interrupt-parent = <&exti1>;
+ 			interrupts-extended =
+ 				<&exti1  0 0>, <&exti1  1 0>, <&exti1  2 0>, <&exti1  3 0>,
+ 				<&exti1  4 0>, <&exti1  5 0>, <&exti1  6 0>, <&exti1  7 0>,
+-- 
+2.53.0
+

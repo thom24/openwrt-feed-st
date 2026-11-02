@@ -1,0 +1,47 @@
+From ca88c1913a238eb5f4620c069225fa235ff5ea88 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Fri, 22 May 2026 18:13:13 +0200
+Subject: [PATCH] drivers: bus: stm32_dbg_bus: add support for ddrperfm
+ peripheral
+
+On STM32MP23x and STM32MP25x the access of DDRPERFM peripheral is
+controlled through the debug bus.
+
+Add support for querying DDRPERFM access.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: Idc7c8266ae5a8935ccd6c3312cde1bbcca828bcd
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/571211
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/bus/stm32_dbg_bus.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/bus/stm32_dbg_bus.c b/drivers/bus/stm32_dbg_bus.c
+index b91734bb7dee..47ed94731cd9 100644
+--- a/drivers/bus/stm32_dbg_bus.c
++++ b/drivers/bus/stm32_dbg_bus.c
+@@ -21,6 +21,7 @@
+ enum stm32_dbg_profile {
+ 	PERIPHERAL_DBG_PROFILE	= 0,
+ 	HDP_DBG_PROFILE		= 1,
++	DDRPERFM_DBG_PROFILE	= 2,
+ };
+ 
+ enum stm32_dbg_pta_command {
+@@ -82,7 +83,8 @@ static int stm32_dbg_bus_grant_access(struct stm32_firewall_controller *ctrl, u3
+ 	u32 session_id;
+ 	int ret;
+ 
+-	if (dbg_profile != PERIPHERAL_DBG_PROFILE && dbg_profile != HDP_DBG_PROFILE)
++	if (dbg_profile != PERIPHERAL_DBG_PROFILE && dbg_profile != HDP_DBG_PROFILE &&
++	    dbg_profile != DDRPERFM_DBG_PROFILE)
+ 		return -EOPNOTSUPP;
+ 
+ 	ret = stm32_dbg_pta_open_session(&session_id);
+-- 
+2.53.0
+

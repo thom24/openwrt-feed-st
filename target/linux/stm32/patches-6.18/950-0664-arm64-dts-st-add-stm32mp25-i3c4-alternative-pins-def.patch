@@ -1,0 +1,75 @@
+From 150c92f06ad759be9d4c3d1a9efffd1c8da8ffef Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Mon, 28 Jul 2025 10:56:58 +0200
+Subject: [PATCH] arm64: dts: st: add stm32mp25 i3c4 alternative pins
+ definitions
+
+STM32 I3C requires 3 states of pinctrl: init, default and sleep.
+Init state is needed when enabling the controller, to avoid generating an
+unexpected frame (I3C-211213 erratum).
+
+These alternative pins for i3c4 are expected to be used on stm32mp257f-dk,
+stm32mp235f-dk and optionally on stm32mp257f-ev1 (conflict with SPI8),
+because compare to the previous ones (pin_a), there is no external pull-up
+on the boards.
+
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Change-Id: Ibfd31c3a9a816fdae8d5aea74a134bad7d98d5ea
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/545082
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
+index f54b787d0cfb..e70c0cea4206 100644
+--- a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
+@@ -872,6 +872,41 @@ pins {
+ 		};
+ 	};
+ 
++	/omit-if-no-ref/
++	i3c4_pins_b: i3c4-1 {
++		pins {
++			pinmux = <STM32_PINMUX('Z', 1, AF11)>, /* I3C4_SCL */
++				 <STM32_PINMUX('Z', 0, AF11)>; /* I3C4_SDA */
++			drive-push-pull;
++			bias-disable;
++			slew-rate = <3>;
++		};
++	};
++
++	/omit-if-no-ref/
++	i3c4_init_pins_b: i3c4-init-1 {
++		pins1 {
++			pinmux = <STM32_PINMUX('Z', 1, AF11)>; /* I3C4_SCL */
++			drive-push-pull;
++			bias-disable;
++			slew-rate = <1>;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('Z', 0, AF11)>; /* I3C4_SDA */
++			drive-push-pull;
++			bias-pull-up;
++			slew-rate = <1>;
++		};
++	};
++
++	/omit-if-no-ref/
++	i3c4_sleep_pins_b: i3c4-sleep-1 {
++		pins {
++			pinmux = <STM32_PINMUX('Z', 1, ANALOG)>, /* I3C4_SCL */
++				 <STM32_PINMUX('Z', 0, ANALOG)>; /* I3C4_SDA */
++		};
++	};
++
+ 	/omit-if-no-ref/
+ 	lpuart1_pins_a: lpuart1-0 {
+ 		pins1 {
+-- 
+2.53.0
+

@@ -1,0 +1,67 @@
+From ae167be0a91226df3a178c14323044c68dc99d78 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Fri, 19 Dec 2025 15:30:37 +0100
+Subject: [PATCH] media: stm32: dcmipp: Add RGB888 format support overall
+
+Add entries within several subdevs in order to handle RGB888 format.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Hans Verkuil <hverkuil+cisco@kernel.org>
+(cherry picked from commit f29f8bfcb0555801e22e29acd2c83c3d3ee9d20d)
+---
+ drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c | 1 +
+ .../media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c    | 2 ++
+ drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c   | 4 ++++
+ 3 files changed, 7 insertions(+)
+
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
+index b18e273ef4a3..6d42517817fd 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
+@@ -57,6 +57,7 @@ struct dcmipp_bytecap_pix_map {
+ static const struct dcmipp_bytecap_pix_map dcmipp_bytecap_pix_map_list[] = {
+ 	PIXMAP_MBUS_PFMT(RGB565_2X8_LE, RGB565),
+ 	PIXMAP_MBUS_PFMT(RGB565_1X16, RGB565),
++	PIXMAP_MBUS_PFMT(RGB888_1X24, RGB24),
+ 	PIXMAP_MBUS_PFMT(YUYV8_2X8, YUYV),
+ 	PIXMAP_MBUS_PFMT(YUYV8_1X16, YUYV),
+ 	PIXMAP_MBUS_PFMT(YVYU8_2X8, YVYU),
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
+index ec1d773d5ad1..dde28ed288cd 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
+@@ -49,6 +49,8 @@ struct dcmipp_byteproc_pix_map {
+ static const struct dcmipp_byteproc_pix_map dcmipp_byteproc_pix_map_list[] = {
+ 	PIXMAP_MBUS_BPP(RGB565_2X8_LE, 2),
+ 	PIXMAP_MBUS_BPP(RGB565_1X16, 2),
++	PIXMAP_MBUS_BPP(RGB888_3X8, 3),
++	PIXMAP_MBUS_BPP(RGB888_1X24, 3),
+ 	PIXMAP_MBUS_BPP(YUYV8_2X8, 2),
+ 	PIXMAP_MBUS_BPP(YUYV8_1X16, 2),
+ 	PIXMAP_MBUS_BPP(YVYU8_2X8, 2),
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
+index 7e5311b67d7e..c44d664f6a0b 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
+@@ -19,6 +19,7 @@
+ #define DCMIPP_PRCR_FORMAT_SHIFT	16
+ #define DCMIPP_PRCR_FORMAT_YUV422	0x1e
+ #define DCMIPP_PRCR_FORMAT_RGB565	0x22
++#define DCMIPP_PRCR_FORMAT_RGB888	0x24
+ #define DCMIPP_PRCR_FORMAT_RAW8		0x2a
+ #define DCMIPP_PRCR_FORMAT_RAW10	0x2b
+ #define DCMIPP_PRCR_FORMAT_RAW12	0x2c
+@@ -72,6 +73,9 @@ static const struct dcmipp_inp_pix_map dcmipp_inp_pix_map_list[] = {
+ 	PIXMAP_SINK_SRC_PRCR_SWAP(RGB565_2X8_LE, RGB565_2X8_LE, RGB565, 1, MIPI_CSI2_DT_RGB565),
+ 	PIXMAP_SINK_SRC_PRCR_SWAP(RGB565_2X8_BE, RGB565_2X8_LE, RGB565, 0, MIPI_CSI2_DT_RGB565),
+ 	PIXMAP_SINK_SRC_PRCR_SWAP(RGB565_1X16, RGB565_1X16, RGB565, 0, MIPI_CSI2_DT_RGB565),
++	/* RGB888 */
++	PIXMAP_SINK_SRC_PRCR_SWAP(RGB888_3X8, RGB888_3X8, RGB888, 0, MIPI_CSI2_DT_RGB888),
++	PIXMAP_SINK_SRC_PRCR_SWAP(RGB888_1X24, RGB888_1X24, RGB888, 0, MIPI_CSI2_DT_RGB888),
+ 	/* YUV422 */
+ 	PIXMAP_SINK_SRC_PRCR_SWAP(YUYV8_2X8, YUYV8_2X8, YUV422, 1, MIPI_CSI2_DT_YUV422_8B),
+ 	PIXMAP_SINK_SRC_PRCR_SWAP(YUYV8_1X16, YUYV8_1X16, YUV422, 0, MIPI_CSI2_DT_YUV422_8B),
+-- 
+2.53.0
+

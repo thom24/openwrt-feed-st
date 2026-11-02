@@ -1,0 +1,54 @@
+From 5abced3eac0d66fbe83d9d4dc6150ea9e37b6186 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Tue, 14 Apr 2026 15:50:15 +0200
+Subject: [PATCH] arm64: dts: st: add bsec support on stm32mp21
+
+Add bsec support on stm32mp21, add sub-nodes to describe:
+ _ part_number cell.
+ _ package cell.
+ _ vrefint calibration cell.
+
+Change-Id: Iba572431baf259b0439f145ff96d834a1f3804e8
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/557488
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 37eafa07005a..1a887d14a841 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -1556,6 +1556,26 @@ risab5: risab@42130000 {
+ 			st,mem-map = <0x0a040000 0x20000>;
+ 		};
+ 
++		bsec: efuse@44000000 {
++			compatible = "st,stm32mp25-bsec";
++			reg = <0x44000000 0x0 0x1000>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++
++			part_number_otp@24 {
++				reg = <0x24 0x4>;
++			};
++
++			vrefint: vrefin-cal@1b8 {
++				reg = <0x1b8 0x2>;
++			};
++
++			package_otp@1e8 {
++				reg = <0x1e8 0x1>;
++				bits = <0 3>;
++			};
++		};
++
+ 		dts: thermal-sensor@44070000 {
+ 			compatible = "moortec,mr75203";
+ 			reg = <0x44070000 0x0 0x80>,
+-- 
+2.53.0
+

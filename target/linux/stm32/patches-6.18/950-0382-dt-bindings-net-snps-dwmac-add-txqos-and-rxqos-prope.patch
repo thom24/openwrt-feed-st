@@ -1,0 +1,45 @@
+From c06d87e7ae333c79d8a9638127215b0d12e59491 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Mon, 4 May 2026 17:20:21 +0200
+Subject: [PATCH] dt-bindings: net: snps,dwmac: add txqos and rxqos properties
+
+Used to drive priority of output signals for all transactions
+of DMA Tx/Rx Channel
+
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+Change-Id: I21036fb4e7d97b688ab614a548e3e73069f90ac0
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/563663
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ .../devicetree/bindings/net/snps,dwmac.yaml        | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+index 31a34b9bf93d..e97c4b777441 100644
+--- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
++++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+@@ -476,6 +476,20 @@ properties:
+     $ref: /schemas/types.yaml#/definitions/uint32
+     enum: [1, 2, 4, 8, 16, 32]
+ 
++  snps,txqos:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Tx QoS used to drive priority of output signals for all
++      transactions of DMA Tx Channel. Value of Transmit QoS is
++      value between 0 and 15. (15 is best priority)
++
++  snps,rxqos:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Rx QoS used to drive priority of output signals for all
++      transactions of DMA Rx Channel. Value of Receive QoS is
++      value between 0 and 15. (15 is best priority)
++
+   snps,no-pbl-x8:
+     $ref: /schemas/types.yaml#/definitions/flag
+     description:
+-- 
+2.53.0
+

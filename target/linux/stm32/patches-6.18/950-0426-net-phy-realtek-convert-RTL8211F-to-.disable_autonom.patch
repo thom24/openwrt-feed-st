@@ -1,0 +1,73 @@
+From 653edc43ea5c28a0e3a7d987ea75e8fb8d1d0875 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Thu, 9 Jul 2026 14:38:18 +0200
+Subject: [PATCH] net: phy: realtek: convert RTL8211F to
+ .disable_autonomous_eee
+
+The RTL8211F previously unconditionally disabled PHY-mode EEE in
+config_init. Convert this to use the new .disable_autonomous_eee
+callback so it is only disabled when the MAC indicates EEE support
+via phy_support_eee().
+
+This preserves PHY-autonomous EEE for MACs that do not support EEE,
+while still disabling it when the MAC manages LPI.
+
+Change-Id: I9ae53f21b228cfa3dfb0a7e0351ded30dc39c8c0
+Signed-off-by: Nicolai Buchwitz <nb@tipi-net.de>
+Link: https://patch.msgid.link/20260406-devel-autonomous-eee-v1-3-b335e7143711@tipi-net.de
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+(backported and slightly adapted for v6.18)
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/591245
+Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
+Domain-Review: Christophe ROULLIER <christophe.roullier@foss.st.com>
+---
+ drivers/net/phy/realtek/realtek_main.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/phy/realtek/realtek_main.c b/drivers/net/phy/realtek/realtek_main.c
+index 5ed50baebfda..927eff2824d0 100644
+--- a/drivers/net/phy/realtek/realtek_main.c
++++ b/drivers/net/phy/realtek/realtek_main.c
+@@ -662,9 +662,8 @@ static int rtl8211f_config_aldps(struct phy_device *phydev)
+ 				mask, mask);
+ }
+ 
+-static int rtl8211f_config_phy_eee(struct phy_device *phydev)
++static int rtl8211f_disable_autonomous_eee(struct phy_device *phydev)
+ {
+-	/* Disable PHY-mode EEE so LPI is passed to the MAC */
+ 	return phy_modify_paged(phydev, RTL8211F_PHYCR_PAGE, RTL8211F_PHYCR2,
+ 				RTL8211F_PHYCR2_PHY_EEE_ENABLE, 0);
+ }
+@@ -697,7 +696,7 @@ static int rtl8211f_config_init(struct phy_device *phydev)
+ 		return ret;
+ 	}
+ 
+-	return rtl8211f_config_phy_eee(phydev);
++	return 0;
+ }
+ 
+ static int rtl821x_suspend(struct phy_device *phydev)
+@@ -1834,6 +1833,7 @@ static struct phy_driver realtek_drvs[] = {
+ 		.led_hw_is_supported = rtl8211x_led_hw_is_supported,
+ 		.led_hw_control_get = rtl8211f_led_hw_control_get,
+ 		.led_hw_control_set = rtl8211f_led_hw_control_set,
++		.disable_autonomous_eee = rtl8211f_disable_autonomous_eee,
+ 	}, {
+ 		PHY_ID_MATCH_EXACT(RTL_8211FVD_PHYID),
+ 		.name		= "RTL8211F-VD Gigabit Ethernet",
+@@ -1847,6 +1847,7 @@ static struct phy_driver realtek_drvs[] = {
+ 		.read_page	= rtl821x_read_page,
+ 		.write_page	= rtl821x_write_page,
+ 		.flags		= PHY_ALWAYS_CALL_SUSPEND,
++		.disable_autonomous_eee = rtl8211f_disable_autonomous_eee,
+ 	}, {
+ 		.name		= "Generic FE-GE Realtek PHY",
+ 		.match_phy_device = rtlgen_match_phy_device,
+-- 
+2.53.0
+

@@ -1,0 +1,39 @@
+From f020c79ceb204e91043da7627fcf280033bf2f50 Mon Sep 17 00:00:00 2001
+From: Valentin Caron <valentin.caron@foss.st.com>
+Date: Wed, 1 Apr 2026 15:50:25 +0200
+Subject: [PATCH] serial: stm32: spin_lock around
+ stm32_usart_rx_dma_start_or_resume()
+
+To protect the DMA RX resource, we add a spin lock around the
+stm32_usart_rx_dma_start_or_resume() because it can run concurrently
+with the stm32_usart_receive_chars() function.
+
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: Ib4317afe3f9d04e8adfccf2657de9d6c6148f705
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/570586
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/tty/serial/stm32-usart.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index 02bc28665f2e..dcd3d24bdfe4 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -2456,8 +2456,10 @@ static int __maybe_unused stm32_usart_serial_en_wakeup(struct uart_port *port,
+ 			stm32_usart_set_bits(port, ofs->cr3, USART_CR3_DMAT);
+ 
+ 		if (stm32_port->rx_ch) {
++			spin_lock_irqsave(&port->lock, flags);
+ 			stm32_usart_set_bits(port, ofs->cr3, USART_CR3_DMAR);
+ 			ret = stm32_usart_rx_dma_start_or_resume(port);
++			spin_unlock_irqrestore(&port->lock, flags);
+ 			if (ret)
+ 				return ret;
+ 		}
+-- 
+2.53.0
+

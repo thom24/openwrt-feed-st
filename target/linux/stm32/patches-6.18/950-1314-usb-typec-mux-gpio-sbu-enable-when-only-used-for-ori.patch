@@ -1,0 +1,75 @@
+From 05562679d7680cf3ee10eea0940e5fed529c13fb Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 26 Aug 2026 14:16:36 +0200
+Subject: [PATCH] usb: typec: mux: gpio-sbu: enable when only used for
+ orientation
+
+When used as orientation-switch only (no mode-switch, e.g. no altmode),
+the optional enable gpio remains disabled.
+Enable it from the switch_set() routine, in this case, when the
+orientation is set and the enable-gpios property has been provided.
+Move enable GPIO configuration after the swapped configuration has
+been done, to avoid possible glitches in case both signals are changed.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://patch.msgid.link/20260826-usb-fusb340-v1-v3-2-11927682504d@foss.st.com
+Change-Id: Ie3228cba2c920e614c4ab63e0fc606f198d6c9c0
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/598897
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+---
+ drivers/usb/typec/mux/gpio-sbu-mux.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/typec/mux/gpio-sbu-mux.c b/drivers/usb/typec/mux/gpio-sbu-mux.c
+index 1834f1a2dd9d..b1aa976aca24 100644
+--- a/drivers/usb/typec/mux/gpio-sbu-mux.c
++++ b/drivers/usb/typec/mux/gpio-sbu-mux.c
+@@ -17,6 +17,7 @@ struct gpio_sbu_mux {
+ 
+ 	struct typec_switch_dev *sw;
+ 	struct typec_mux_dev *mux;
++	bool mode_switch;
+ 
+ 	struct mutex lock; /* protect enabled and swapped */
+ 	bool enabled;
+@@ -40,19 +41,24 @@ static int gpio_sbu_switch_set(struct typec_switch_dev *sw,
+ 		enabled = false;
+ 		break;
+ 	case TYPEC_ORIENTATION_NORMAL:
++		if (!sbu_mux->mode_switch)
++			enabled = true;
+ 		swapped = false;
+ 		break;
+ 	case TYPEC_ORIENTATION_REVERSE:
++		if (!sbu_mux->mode_switch)
++			enabled = true;
+ 		swapped = true;
+ 		break;
+ 	}
+ 
+-	if (enabled != sbu_mux->enabled)
+-		gpiod_set_value_cansleep(sbu_mux->enable_gpio, enabled);
+-
+ 	if (swapped != sbu_mux->swapped)
+ 		gpiod_set_value_cansleep(sbu_mux->select_gpio, swapped);
+ 
++	/* If both enabled and swapped transition, set enable GPIO after to avoid glitches */
++	if (enabled != sbu_mux->enabled)
++		gpiod_set_value_cansleep(sbu_mux->enable_gpio, enabled);
++
+ 	sbu_mux->enabled = enabled;
+ 	sbu_mux->swapped = swapped;
+ 
+@@ -120,6 +126,7 @@ static int gpio_sbu_mux_probe(struct platform_device *pdev)
+ 	sw_desc.fwnode = dev_fwnode(dev);
+ 	sw_desc.set = gpio_sbu_switch_set;
+ 
++	sbu_mux->mode_switch = device_property_read_bool(dev, "mode-switch");
+ 	sbu_mux->sw = typec_switch_register(dev, &sw_desc);
+ 	if (IS_ERR(sbu_mux->sw))
+ 		return dev_err_probe(dev, PTR_ERR(sbu_mux->sw),
+-- 
+2.53.0
+

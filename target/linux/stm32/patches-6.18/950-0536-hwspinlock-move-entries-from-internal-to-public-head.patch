@@ -1,0 +1,189 @@
+From ca238c00d5b112f4cff114b5dada153c98bdc47d Mon Sep 17 00:00:00 2001
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Date: Tue, 10 Mar 2026 08:55:26 +0100
+Subject: [PATCH] hwspinlock: move entries from internal to public header
+
+Providers need the ops-structure and the hwlock_to_id-function. Move
+these entries to the public header. With this change, all providers are
+also updated to use the public header only. The internal header is now
+used by the core only.
+
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+ drivers/hwspinlock/hwspinlock_core.c     |  8 +++++++
+ drivers/hwspinlock/hwspinlock_internal.h | 29 ------------------------
+ drivers/hwspinlock/omap_hwspinlock.c     |  2 --
+ drivers/hwspinlock/qcom_hwspinlock.c     |  2 --
+ drivers/hwspinlock/sprd_hwspinlock.c     |  2 --
+ drivers/hwspinlock/stm32_hwspinlock.c    |  2 --
+ drivers/hwspinlock/sun6i_hwspinlock.c    |  2 --
+ include/linux/hwspinlock.h               | 23 +++++++++++++++++++
+ 8 files changed, 31 insertions(+), 39 deletions(-)
+
+diff --git a/drivers/hwspinlock/hwspinlock_core.c b/drivers/hwspinlock/hwspinlock_core.c
+index a7610ba755b4..e0227d027cf2 100644
+--- a/drivers/hwspinlock/hwspinlock_core.c
++++ b/drivers/hwspinlock/hwspinlock_core.c
+@@ -915,5 +915,13 @@ struct device *hwspin_lock_get_dev(struct hwspinlock *hwlock)
+ }
+ EXPORT_SYMBOL_GPL(hwspin_lock_get_dev);
+ 
++int hwlock_to_id(struct hwspinlock *hwlock)
++{
++	int local_id = hwlock - &hwlock->bank->lock[0];
++
++	return hwlock->bank->base_id + local_id;
++}
++EXPORT_SYMBOL_GPL(hwlock_to_id);
++
+ MODULE_DESCRIPTION("Hardware spinlock interface");
+ MODULE_AUTHOR("Ohad Ben-Cohen <ohad@wizery.com>");
+diff --git a/drivers/hwspinlock/hwspinlock_internal.h b/drivers/hwspinlock/hwspinlock_internal.h
+index 3c835d96bf86..20ae531fc389 100644
+--- a/drivers/hwspinlock/hwspinlock_internal.h
++++ b/drivers/hwspinlock/hwspinlock_internal.h
+@@ -15,28 +15,6 @@
+ 
+ struct hwspinlock_device;
+ 
+-/**
+- * struct hwspinlock_ops - platform-specific hwspinlock handlers
+- *
+- * @trylock:	make a single attempt to take the lock. returns 0 on
+- *		failure and true on success. may _not_ sleep.
+- * @unlock:	release the lock. always succeed. may _not_ sleep.
+- * @bust:	optional, platform-specific bust handler, called by hwspinlock
+- *		core to bust a specific lock.
+- * @relax:	optional, platform-specific relax handler, called by hwspinlock
+- *		core while spinning on a lock, between two successive
+- *		invocations of @trylock. may _not_ sleep.
+- * @init_priv:	optional, callback used when registering the hwspinlock device.
+- *		Its return value will be used to fill the per-lock 'priv' data.
+- */
+-struct hwspinlock_ops {
+-	int (*trylock)(struct hwspinlock *lock);
+-	void (*unlock)(struct hwspinlock *lock);
+-	int (*bust)(struct hwspinlock *lock, unsigned int id);
+-	void (*relax)(struct hwspinlock *lock);
+-	void *(*init_priv)(int local_id, void *init_data);
+-};
+-
+ /**
+  * struct hwspinlock - this struct represents a single hwspinlock instance
+  * @bank: the hwspinlock_device structure which owns this lock
+@@ -65,11 +43,4 @@ struct hwspinlock_device {
+ 	struct hwspinlock lock[];
+ };
+ 
+-static inline int hwlock_to_id(struct hwspinlock *hwlock)
+-{
+-	int local_id = hwlock - &hwlock->bank->lock[0];
+-
+-	return hwlock->bank->base_id + local_id;
+-}
+-
+ #endif /* __HWSPINLOCK_HWSPINLOCK_H */
+diff --git a/drivers/hwspinlock/omap_hwspinlock.c b/drivers/hwspinlock/omap_hwspinlock.c
+index e9982f6e5078..e8fa0db33542 100644
+--- a/drivers/hwspinlock/omap_hwspinlock.c
++++ b/drivers/hwspinlock/omap_hwspinlock.c
+@@ -23,8 +23,6 @@
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+ 
+-#include "hwspinlock_internal.h"
+-
+ /* Spinlock register offsets */
+ #define SYSSTATUS_OFFSET		0x0014
+ #define LOCK_BASE_OFFSET		0x0800
+diff --git a/drivers/hwspinlock/qcom_hwspinlock.c b/drivers/hwspinlock/qcom_hwspinlock.c
+index e2836d6728e8..22cc6f9003df 100644
+--- a/drivers/hwspinlock/qcom_hwspinlock.c
++++ b/drivers/hwspinlock/qcom_hwspinlock.c
+@@ -14,8 +14,6 @@
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ 
+-#include "hwspinlock_internal.h"
+-
+ #define QCOM_MUTEX_APPS_PROC_ID	1
+ #define QCOM_MUTEX_NUM_LOCKS	32
+ 
+diff --git a/drivers/hwspinlock/sprd_hwspinlock.c b/drivers/hwspinlock/sprd_hwspinlock.c
+index bbae37e25243..0f4fc622e3cd 100644
+--- a/drivers/hwspinlock/sprd_hwspinlock.c
++++ b/drivers/hwspinlock/sprd_hwspinlock.c
+@@ -15,8 +15,6 @@
+ #include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ 
+-#include "hwspinlock_internal.h"
+-
+ /* hwspinlock registers definition */
+ #define HWSPINLOCK_RECCTRL		0x4
+ #define HWSPINLOCK_MASTERID(_X_)	(0x80 + 0x4 * (_X_))
+diff --git a/drivers/hwspinlock/stm32_hwspinlock.c b/drivers/hwspinlock/stm32_hwspinlock.c
+index ed937bc26bf5..8eafe1a74b1b 100644
+--- a/drivers/hwspinlock/stm32_hwspinlock.c
++++ b/drivers/hwspinlock/stm32_hwspinlock.c
+@@ -14,8 +14,6 @@
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ 
+-#include "hwspinlock_internal.h"
+-
+ #define STM32_MUTEX_COREID	BIT(8)
+ #define STM32_MUTEX_LOCK_BIT	BIT(31)
+ #define STM32_MUTEX_NUM_LOCKS	32
+diff --git a/drivers/hwspinlock/sun6i_hwspinlock.c b/drivers/hwspinlock/sun6i_hwspinlock.c
+index 8bbed23af5f4..145d284c5ab5 100644
+--- a/drivers/hwspinlock/sun6i_hwspinlock.c
++++ b/drivers/hwspinlock/sun6i_hwspinlock.c
+@@ -17,8 +17,6 @@
+ #include <linux/spinlock.h>
+ #include <linux/types.h>
+ 
+-#include "hwspinlock_internal.h"
+-
+ #define DRIVER_NAME		"sun6i_hwspinlock"
+ 
+ #define SPINLOCK_BASE_ID	0 /* there is only one hwspinlock device per SoC */
+diff --git a/include/linux/hwspinlock.h b/include/linux/hwspinlock.h
+index 58733cda7a9a..4f5b6932712e 100644
+--- a/include/linux/hwspinlock.h
++++ b/include/linux/hwspinlock.h
+@@ -27,8 +27,31 @@ struct hwspinlock_ops;
+ 
+ #ifdef CONFIG_HWSPINLOCK
+ 
++/**
++ * struct hwspinlock_ops - platform-specific hwspinlock handlers
++ *
++ * @trylock:	make a single attempt to take the lock. returns 0 on
++ *		failure and true on success. may _not_ sleep.
++ * @unlock:	release the lock. always succeed. may _not_ sleep.
++ * @bust:	optional, platform-specific bust handler, called by hwspinlock
++ *		core to bust a specific lock.
++ * @relax:	optional, platform-specific relax handler, called by hwspinlock
++ *		core while spinning on a lock, between two successive
++ *		invocations of @trylock. may _not_ sleep.
++ * @init_priv:	optional, callback used when registering the hwspinlock device.
++ *		Its return value will be used to fill the per-lock 'priv' data.
++ */
++struct hwspinlock_ops {
++	int (*trylock)(struct hwspinlock *lock);
++	void (*unlock)(struct hwspinlock *lock);
++	int (*bust)(struct hwspinlock *lock, unsigned int id);
++	void (*relax)(struct hwspinlock *lock);
++	void *(*init_priv)(int local_id, void *init_data);
++};
++
+ void *hwspin_lock_get_priv(struct hwspinlock *hwlock);
+ struct device *hwspin_lock_get_dev(struct hwspinlock *hwlock);
++int hwlock_to_id(struct hwspinlock *hwlock);
+ struct hwspinlock_device *hwspin_lock_register(struct device *dev, const struct hwspinlock_ops *ops,
+ 					       int base_id, int num_locks, void *init_data);
+ int hwspin_lock_unregister(struct hwspinlock_device *bank);
+-- 
+2.53.0
+

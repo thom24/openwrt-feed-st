@@ -1,0 +1,35 @@
+From 09e81d48fb94dbdf00dfb7b8e07a4bfe206f7fee Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Fri, 17 Apr 2026 17:01:35 +0200
+Subject: [PATCH] arm64: dts: st: enable otg on stm32mp215f-dk board
+
+Enable the USB OTG on stm32mp215f-dk board. The board is self-powered
+and can be used in peripheral mode.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Icf95a1b3a6f303e932d982d6c79e90c20b8cf939
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/572754
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+index 459738c8ec27..35f50a7d24b5 100644
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -627,3 +627,10 @@ &usb2_phy2 {
+ 	vdd33-supply = <&scmi_vdd3v3_usb>;
+ 	status = "okay";
+ };
++
++&usbotg_hs {
++	role-switch-default-mode = "peripheral";
++	dr_mode = "peripheral";
++	usb-role-switch;
++	status = "okay";
++};
+-- 
+2.53.0
+

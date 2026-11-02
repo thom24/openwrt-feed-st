@@ -1,0 +1,57 @@
+From 947921e697e593c93d06a074c048a37240b2223f Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Fri, 5 Jun 2026 18:14:08 +0200
+Subject: [PATCH] ARM: dts: stm32: enable iwdg1 on STM32MP15 boards
+
+When iwdg1 is non-secure, if it is started, it needs to be pinged by
+Linux kernel. Enable iwdg1 on STM32MP15 boards.
+
+Change-Id: I54e654b2c7ce2fba72c3ec79e85f4a8cc8cb8dc1
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/575611
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
+Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts | 6 ++++++
+ arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi        | 6 ++++++
+ 2 files changed, 12 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
+index a3ae5fec6516..c6efca3d5015 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
+@@ -412,6 +412,12 @@ &ipcc {
+ 	status = "okay";
+ };
+ 
++&iwdg1 {
++	timeout-sec = <32>;
++	bootph-all;
++	status = "okay";
++};
++
+ &iwdg2 {
+ 	timeout-sec = <32>;
+ 	bootph-all;
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
+index 5c1c365e28fd..fd52b34b6349 100644
+--- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
+@@ -545,6 +545,12 @@ &ipcc {
+ 	status = "okay";
+ };
+ 
++&iwdg1 {
++	timeout-sec = <32>;
++	bootph-all;
++	status = "okay";
++};
++
+ &iwdg2 {
+ 	timeout-sec = <32>;
+ 	bootph-all;
+-- 
+2.53.0
+

@@ -1,0 +1,56 @@
+From e43ea7330580ec5fa4f4aa891efc2256bb881154 Mon Sep 17 00:00:00 2001
+From: Rahul Kumar <rahul.kumar05@st.com>
+Date: Fri, 24 May 2024 14:42:17 +0530
+Subject: [PATCH] arm64: dts: st: add otg support on stm32mp211
+
+Add support for USB OTG HS controller, on STM32MP211 SoCs.
+It's based on DWC2 controller.
+The OTG controller can be wakeup through USB2PHY2.
+
+Change-Id: Iaf8f12516e01f7cb46bc5e8692c74d0dc76265c4
+Signed-off-by: Rahul Kumar <rahul.kumar05@st.com>
+Co-developed-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/572753
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index b286c4cf1303..c5774de01928 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -1858,6 +1858,28 @@ usbh_ehci: usb@482f0000 {
+ 					wakeup-source;
+ 				};
+ 			};
++
++			usbotg_hs: usb@48300000 {
++				compatible = "st,stm32mp21-hsotg", "snps,dwc2";
++				reg = <0x48300000 0x0 0x10000>;
++				clocks = <&rcc CK_BUS_OTG>, <&usb2_phy2 0>;
++				clock-names = "otg", "utmi";
++				resets = <&rcc OTG_R>;
++				reset-names = "dwc2";
++				interrupts = <GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH>;
++				access-controllers = <&rifsc 66>;
++				g-rx-fifo-size = <512>;
++				g-np-tx-fifo-size = <64>;
++				g-tx-fifo-size = <512 512 16 16 16 16 16 16>;
++				dr_mode = "otg";
++				otg-rev = <0x200>;
++				phys = <&usb2_phy2>;
++				phy-names = "usb2-phy";
++				st,syscfg = <&syscfg 0x2824>;
++				power-domains = <&d1_pd>;
++				wakeup-source;
++				status = "disabled";
++			};
+ 		};
+ 
+ 		risaf1: risaf@420a0000 {
+-- 
+2.53.0
+

@@ -1,0 +1,138 @@
+From 9f37f3cfc793a67b3bfeb347f0226a6bffedeb99 Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Mon, 15 Jun 2026 10:11:09 +0200
+Subject: [PATCH] ARM: dts: stm32: set system-clock-direction-out on stm32mp15
+ mclk-fs links
+
+'commit 5725bce709db ("ASoC: simple-card-utils:
+Unify clock direction by clk_direction")'
+introduced a change in sysclk direction management.
+
+On STM32MP15 audio graph links using mclk-fs, the CPU DAI must advertise
+MCLK output direction so ASoC calls set_sysclk() with CLOCK_OUT.
+Without this property some links keep CLOCK_IN as default, which can
+lead to invalid master clock configuration and wrong divider settings.
+
+system-clock-direction-out is only relevant when the SAI or I2S instance
+is the MCLK provider (#clock-cells set, master clock output). In that
+case the direction must be CLOCK_OUT so that set_sysclk() programs and
+enables the SAI/I2S master clock.
+
+For SAI or I2S nodes that are not MCLK providers (MCLK consumer or no
+master clock output), mclk-fs may still be present in the endpoint: it
+is consumed by the machine driver (audio-graph-card) to compute the
+MCLK frequency (rate x mclk-fs) and to configure the codec through
+set_sysclk(). In this case system-clock-direction-out is not needed:
+the SAI/I2S keeps the default CLOCK_IN direction and its set_sysclk()
+does not drive any master clock. Adding it would wrongly request
+CLOCK_OUT and could conflict with the actual MCLK provider.
+
+Add system-clock-direction-out only to STM32MP endpoints whose SAI or
+I2S instance is the MCLK provider.
+
+Change-Id: I3f51a4ee03f6f41109b23fa53fad97349f3ee96d
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/578807
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+---
+ arch/arm/boot/dts/st/stm32mp151c-plyaqm.dts                 | 1 +
+ arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts            | 1 +
+ arch/arm/boot/dts/st/stm32mp157c-phycore-stm32mp15-som.dtsi | 1 +
+ arch/arm/boot/dts/st/stm32mp157d-ev1.dts                    | 1 +
+ arch/arm/boot/dts/st/stm32mp157f-ev1.dts                    | 1 +
+ arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2.dtsi            | 1 +
+ arch/arm/boot/dts/st/stm32mp15xx-dhcor-avenger96.dtsi       | 1 +
+ 7 files changed, 7 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp151c-plyaqm.dts b/arch/arm/boot/dts/st/stm32mp151c-plyaqm.dts
+index 5d219a448763..658f5f4ec212 100644
+--- a/arch/arm/boot/dts/st/stm32mp151c-plyaqm.dts
++++ b/arch/arm/boot/dts/st/stm32mp151c-plyaqm.dts
+@@ -241,6 +241,7 @@ i2s1_port: port {
+ 		i2s1_endpoint: endpoint {
+ 			dai-format = "i2s";
+ 			mclk-fs = <256>;
++			system-clock-direction-out;
+ 			remote-endpoint = <&codec_endpoint>;
+ 		};
+ 	};
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
+index f0d70b1b0424..d699e9b18d08 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
+@@ -616,6 +616,7 @@ sai2a_endpoint: endpoint {
+ 				remote-endpoint = <&wm8994_tx_endpoint>;
+ 				dai-format = "i2s";
+ 				mclk-fs = <256>;
++				system-clock-direction-out;
+ 			};
+ 		};
+ 	};
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-phycore-stm32mp15-som.dtsi b/arch/arm/boot/dts/st/stm32mp157c-phycore-stm32mp15-som.dtsi
+index 370b2afbf15b..c363b6e2feac 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-phycore-stm32mp15-som.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp157c-phycore-stm32mp15-som.dtsi
+@@ -462,6 +462,7 @@ sai2a_port: port {
+ 		sai2a_endpoint: endpoint {
+ 			remote-endpoint = <&tlv320_rx_endpoint>;
+ 			mclk-fs = <256>;
++			system-clock-direction-out;
+ 			dai-tdm-slot-num = <2>;
+ 			dai-tdm-slot-width = <16>;
+ 		};
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+index a09f0edb2c93..56aec6fa0787 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+@@ -617,6 +617,7 @@ sai2a_endpoint: endpoint {
+ 				remote-endpoint = <&wm8994_tx_endpoint>;
+ 				dai-format = "i2s";
+ 				mclk-fs = <256>;
++				system-clock-direction-out;
+ 			};
+ 		};
+ 	};
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+index 67eeba0cc25c..f53fcff8c113 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+@@ -617,6 +617,7 @@ sai2a_endpoint: endpoint {
+ 				remote-endpoint = <&wm8994_tx_endpoint>;
+ 				dai-format = "i2s";
+ 				mclk-fs = <256>;
++				system-clock-direction-out;
+ 			};
+ 		};
+ 	};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2.dtsi
+index 4be74ae3089c..92b0da293146 100644
+--- a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2.dtsi
+@@ -235,6 +235,7 @@ sai2a_endpoint: endpoint {
+ 				dai-tdm-slot-width = <16>;
+ 				frame-master;
+ 				mclk-fs = <256>;
++				system-clock-direction-out;
+ 			};
+ 		};
+ 	};
+diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcor-avenger96.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dhcor-avenger96.dtsi
+index e7e2203ab11a..7d6b5740a815 100644
+--- a/arch/arm/boot/dts/st/stm32mp15xx-dhcor-avenger96.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcor-avenger96.dtsi
+@@ -385,6 +385,7 @@ sai2a_endpoint: endpoint {
+ 				remote-endpoint = <&adv7513_i2s0>;
+ 				dai-format = "i2s";
+ 				mclk-fs = <256>;
++				system-clock-direction-out;
+ 			};
+ 		};
+ 	};
+-- 
+2.53.0
+

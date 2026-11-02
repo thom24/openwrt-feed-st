@@ -1,0 +1,48 @@
+From 943e9ea4a85d1510169f058c78c7bcc3a70d7a5f Mon Sep 17 00:00:00 2001
+From: bui duc phuc <phucduc.bui@gmail.com>
+Date: Fri, 7 Aug 2026 15:04:47 +0700
+Subject: [PATCH] watchdog: stm32_iwdg: Propagate errors from optional IRQ
+ lookup
+
+commit 553edb793e5be81a0d9bdb7b5aa2f9f1e0eb237b upstream
+
+platform_get_irq_optional() returns a positive IRQ number on success or
+a negative error code on failure. For an optional IRQ, -ENXIO indicates
+that no IRQ is available, while other errors should be propagated.
+
+Propagate errors such as -EPROBE_DEFER and -EINVAL instead of continuing
+probe without the IRQ.
+
+Signed-off-by: bui duc phuc <phucduc.bui@gmail.com>
+Link: https://lore.kernel.org/r/20260807080447.35479-2-phucduc.bui@gmail.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: I9945821ae690799e3d21c3ee64f462cc08a8bc29
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/601442
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/watchdog/stm32_iwdg.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/watchdog/stm32_iwdg.c b/drivers/watchdog/stm32_iwdg.c
+index 456e1222510d..ce3e1f96ef50 100644
+--- a/drivers/watchdog/stm32_iwdg.c
++++ b/drivers/watchdog/stm32_iwdg.c
+@@ -321,8 +321,11 @@ static int stm32_iwdg_irq_init(struct platform_device *pdev,
+ 		return 0;
+ 
+ 	irq = platform_get_irq_optional(pdev, 0);
+-	if (irq <= 0)
++	if (irq < 0) {
++		if (irq != -ENXIO)
++			return irq;
+ 		return 0;
++	}
+ 
+ 	if (of_property_read_bool(np, "wakeup-source")) {
+ 		ret = devm_device_init_wakeup(dev);
+-- 
+2.53.0
+

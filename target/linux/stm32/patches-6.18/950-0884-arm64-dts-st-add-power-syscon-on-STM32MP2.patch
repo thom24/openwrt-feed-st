@@ -1,0 +1,73 @@
+From a291bbc558cf2925f08c28ad4cd24e2e68f72083 Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Tue, 17 Feb 2026 11:28:34 +0100
+Subject: [PATCH] arm64: dts: st: add power syscon on STM32MP2
+
+The Cortex-M33 management needs this node as the
+PWR_CPU2D2SR register is used to determine the Cortex-M33 state.
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: I364eeae682d80313cf263a6433f56e21bbd4a7b2
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/537358
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 5 +++++
+ arch/arm64/boot/dts/st/stm32mp231.dtsi | 5 +++++
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 5 +++++
+ 3 files changed, 15 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index 239e3e43d12f..13c9dc6d3c2b 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -1574,6 +1574,11 @@ rcc: clock-controller@44200000 {
+ 			access-controllers = <&rifsc 156>;
+ 		};
+ 
++		pwr: syscon@44210000 {
++			compatible = "st,stm32mp21-pwr", "syscon";
++			reg = <0x44210000 0x0 0x0400>;
++		};
++
+ 		exti1: interrupt-controller@44220000 {
+ 			compatible = "st,stm32mp1-exti";
+ 			reg = <0x44220000 0x0 0x400>;
+diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+index 1868eb609f42..3da4c610a071 100644
+--- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+@@ -1963,6 +1963,11 @@ rcc: clock-controller@44200000 {
+ 			access-controllers = <&rifsc 156>;
+ 		};
+ 
++		pwr: syscon@44210000 {
++			compatible = "st,stm32mp25-pwr", "syscon";
++			reg = <0x44210000 0x0400>;
++		};
++
+ 		exti1: interrupt-controller@44220000 {
+ 			compatible = "st,stm32mp1-exti";
+ 			reg = <0x44220000 0x400>;
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index 9040a88de343..a6405f568098 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -2244,6 +2244,11 @@ rcc: clock-controller@44200000 {
+ 			access-controllers = <&rifsc 156>;
+ 		};
+ 
++		pwr: syscon@44210000 {
++			compatible = "st,stm32mp25-pwr", "syscon";
++			reg = <0x44210000 0x0400>;
++		};
++
+ 		exti1: interrupt-controller@44220000 {
+ 			compatible = "st,stm32mp1-exti";
+ 			interrupt-controller;
+-- 
+2.53.0
+

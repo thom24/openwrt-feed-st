@@ -1,0 +1,129 @@
+From cc6c02223166bcb9baa64f407cf69331308ebcfd Mon Sep 17 00:00:00 2001
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Date: Tue, 18 Nov 2025 15:35:40 -0600
+Subject: [PATCH] dt-bindings: mfd: fsl,mc13xxx: Fix LEDs node schema
+
+[ Upstream commit 1759a0392f345689e155196c42f1db28a222618d ]
+
+The 'leds' node is missing constraints on additional properties. It is
+mixing 'leds' node and child node properties as well as missing some
+properties. Add the 'led@' child nodes and the missing properties.
+
+Fixes: 1160f9f88be2 ("dt-bindings: mfd: fsl,mc13xxx: Convert txt to DT schema")
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+Link: https://patch.msgid.link/20251118213541.43812-1-robh@kernel.org
+Signed-off-by: Lee Jones <lee@kernel.org>
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: Ief36583f4cd7996e50aa3af9e7c0fd1c66a03ac1
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/546458
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ .../devicetree/bindings/mfd/fsl,mc13xxx.yaml  | 74 +++++++++++--------
+ 1 file changed, 43 insertions(+), 31 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/mfd/fsl,mc13xxx.yaml b/Documentation/devicetree/bindings/mfd/fsl,mc13xxx.yaml
+index d2886f2686a8..cfa69f1f380a 100644
+--- a/Documentation/devicetree/bindings/mfd/fsl,mc13xxx.yaml
++++ b/Documentation/devicetree/bindings/mfd/fsl,mc13xxx.yaml
+@@ -93,38 +93,14 @@ properties:
+ 
+   leds:
+     type: object
+-    $ref: /schemas/leds/common.yaml#
++    additionalProperties: false
+ 
+     properties:
+-      reg:
+-        description: |
+-          One of
+-          MC13783 LED IDs
+-            0: Main display
+-            1: AUX display
+-            2: Keypad
+-            3: Red 1
+-            4: Green 1
+-            5: Blue 1
+-            6: Red 2
+-            7: Green 2
+-            8: Blue 2
+-            9: Red 3
+-            10: Green 3
+-            11: Blue 3
+-
+-          MC13892 LED IDs
+-            0: Main display
+-            1: AUX display
+-            2: Keypad
+-            3: Red
+-            4: Green
+-            5: Blue
+-
+-          MC34708 LED IDs
+-            0: Charger Red
+-            1: Charger Green
+-        maxItems: 1
++      '#address-cells':
++        const: 1
++
++      '#size-cells':
++        const: 0
+ 
+       led-control:
+         $ref: /schemas/types.yaml#/definitions/uint32-array
+@@ -132,6 +108,42 @@ properties:
+           Setting for LED-Control register array length depends on model,
+           mc13783: 6, mc13892: 4, mc34708: 1
+ 
++    patternProperties:
++      '^led@[0-9a-b]$':
++        $ref: /schemas/leds/common.yaml#
++        unevaluatedProperties: false
++
++        properties:
++          reg:
++            description: |
++              One of
++              MC13783 LED IDs
++                0: Main display
++                1: AUX display
++                2: Keypad
++                3: Red 1
++                4: Green 1
++                5: Blue 1
++                6: Red 2
++                7: Green 2
++                8: Blue 2
++                9: Red 3
++                10: Green 3
++                11: Blue 3
++
++              MC13892 LED IDs
++                0: Main display
++                1: AUX display
++                2: Keypad
++                3: Red
++                4: Green
++                5: Blue
++
++              MC34708 LED IDs
++                0: Charger Red
++                1: Charger Green
++            maxItems: 1
++
+   regulators:
+     type: object
+ 
+@@ -262,7 +274,7 @@ examples:
+                 #size-cells = <0>;
+                 led-control = <0x000 0x000 0x0e0 0x000>;
+ 
+-                sysled@3 {
++                led@3 {
+                     reg = <3>;
+                     label = "system:red:live";
+                     linux,default-trigger = "heartbeat";
+-- 
+2.53.0
+

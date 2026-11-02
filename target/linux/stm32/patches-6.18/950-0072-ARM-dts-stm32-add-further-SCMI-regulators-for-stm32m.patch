@@ -1,0 +1,48 @@
+From ee8e6c630fe8a8673476f7d2eea03a3303eaaabc Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Fri, 13 Feb 2026 14:39:31 +0100
+Subject: [PATCH] ARM: dts: stm32: add further SCMI regulators for
+ stm32mp135f-dk board
+
+Add SCMI-based regulator nodes:
+- vddcpu (BUCK1)
+- vdd (BUCK3)
+- vddcore (BUCK)
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: Ia4339dec01f31dec5bd1a55fcff63d3c85a24d36
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/536254
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp135f-dk.dts | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+index 074945d381a5..984f49d635bb 100644
+--- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
+@@ -439,6 +439,18 @@ &scmi_clk {
+ };
+ 
+ &scmi_regu {
++	scmi_vddcpu: regulator@6 {
++		reg = <VOLTD_SCMI_STPMIC1_BUCK1>;
++		regulator-name = "vddcpu";
++	};
++	scmi_vdd: regulator@8 {
++		reg = <VOLTD_SCMI_STPMIC1_BUCK3>;
++		regulator-name = "vdd";
++	};
++	scmi_vddcore: regulator@9 {
++		reg = <VOLTD_SCMI_STPMIC1_BUCK4>;
++		regulator-name = "vddcore";
++	};
+ 	scmi_vdd_adc: regulator@a {
+ 		reg = <VOLTD_SCMI_STPMIC1_LDO1>;
+ 		regulator-name = "vdd_adc";
+-- 
+2.53.0
+

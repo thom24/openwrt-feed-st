@@ -1,0 +1,47 @@
+From 57a60d70565fbb4912f518e4c261888473cd43ac Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Tue, 2 Jul 2024 19:06:07 +0200
+Subject: [PATCH] arm64: dts: st: add dcmipp node on stm32mp211
+
+Add the dcmipp node in stm32mp211.dtsi
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: Ib002b00bdb2d4282dbfc5268112acf2ed71be0a0
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/539588
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp211.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+index c25052672e3d..d5a08b15a350 100644
+--- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
+@@ -1949,6 +1949,18 @@ soc@1 {
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+ 
++		dcmipp: dcmipp@48030000 {
++			compatible = "st,stm32mp25-dcmipp";
++			reg = <0x48030000 0x1000>;
++			interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH>;
++			resets = <&rcc DCMIPP_R>;
++			clocks = <&rcc CK_BUS_DCMIPP>, <&rcc CK_KER_CSI>;
++			clock-names = "kclk", "mclk";
++			access-controllers = <&rifsc 87>;
++			power-domains = <&d1_pd>;
++			status = "disabled";
++		};
++
+ 		ethernet1: ethernet@482c0000 {
+ 			compatible = "st,stm32mp25-dwmac", "snps,dwmac-5.20";
+ 			reg = <0x482c0000 0x4000>;
+-- 
+2.53.0
+

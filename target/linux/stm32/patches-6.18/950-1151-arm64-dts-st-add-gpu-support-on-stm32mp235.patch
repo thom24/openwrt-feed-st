@@ -1,0 +1,71 @@
+From 419fa7ee574cd054354d309358b8ab3a3c0e25a0 Mon Sep 17 00:00:00 2001
+From: Philippe Cornu <philippe.cornu@foss.st.com>
+Date: Thu, 7 May 2026 10:01:46 +0200
+Subject: [PATCH] arm64: dts: st: add gpu support on stm32mp235
+
+Add the gpu support on STM32MP235.
+
+Change-Id: Ib4ae93fe7d2c54a0c8decfb2d804b1735fc8a3b0
+Signed-off-by: Philippe Cornu <philippe.cornu@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/564756
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235.dtsi | 34 ++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235.dtsi b/arch/arm64/boot/dts/st/stm32mp235.dtsi
+index c7a60c5eb955..d32711c3bebc 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp235.dtsi
+@@ -3,8 +3,30 @@
+  * Copyright (C) STMicroelectronics 2025 - All Rights Reserved
+  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+  */
++#include <dt-bindings/power/st,stm32mp25-power.h>
+ #include "stm32mp233.dtsi"
+ 
++/ {
++	thermal-zones {
++		cpu-thermal {
++			trips {
++				gpu_alert: gpu-alert {
++					temperature = <110000>;
++					hysteresis = <10000>;
++					type = "passive";
++				};
++			};
++
++			cooling-maps {
++				map1 {
++					trip = <&gpu_alert>;
++					cooling-device = <&gpu 1 6>;
++				};
++			};
++		};
++	};
++};
++
+ &ltdc {
+ 	compatible = "st,stm32mp255-ltdc";
+ 	clocks = <&rcc CK_KER_LTDC>, <&rcc CK_BUS_LTDC>, <&syscfg>, <&lvds>;
+@@ -134,4 +156,16 @@ vdec: vdec@480d0000 {
+ 		access-controllers = <&rifsc 89>;
+ 		power-domains = <&d1_pd>;
+ 	};
++
++	gpu: gpu@48280000 {
++		compatible = "vivante,gc";
++		reg = <0x48280000 0x800>;
++		interrupts = <GIC_SPI 183 IRQ_TYPE_LEVEL_HIGH>;
++		resets = <&rcc GPU_R>;
++		clock-names = "bus", "core";
++		clocks = <&rcc CK_BUS_GPU>, <&rcc CK_KER_GPU>;
++		power-domains = <&scmi_devpd PD_SCMI_GPU>, <&d1_pd>;
++		access-controllers = <&rifsc 79>;
++		#cooling-cells = <2>;
++	};
+ };
+-- 
+2.53.0
+

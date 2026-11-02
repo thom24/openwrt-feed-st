@@ -1,0 +1,36 @@
+From a136a6c51708d90aa3ecf02a6f1c1e605dd016d4 Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Date: Thu, 11 Jun 2026 16:53:49 +0200
+Subject: [PATCH] dt-bindings: spi: st,stm32-qspi: Add power-domains property
+
+STM32 QSPI may be in a power domain. Allow a single 'power-domains'
+entry for STM32 QSPI.
+
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Change-Id: I4cce3adc5dcba643f9fa8a744b5542e64c712032
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/577907
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
+---
+ Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
+index 3f1a27efff80..ee57739b73b8 100644
+--- a/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
++++ b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
+@@ -50,6 +50,9 @@ properties:
+     minItems: 1
+     maxItems: 2
+ 
++  power-domains:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+-- 
+2.53.0
+

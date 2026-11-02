@@ -1,0 +1,75 @@
+From 2a6b071ab44ab68f0968fd095468f17f85b441d6 Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 10 Mar 2026 17:10:09 +0100
+Subject: [PATCH] arm64: dts: st: Add LPUART1 pins in the stm32mp25-pinctrl
+
+Add LPUART1 pins to be used on stm32mp257f-ev1.
+
+Change-Id: I6f42d77925eb8cf828a87efeedafe4737d5639d9
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/545342
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi | 44 +++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
+index 7ff0392938c4..aebdec5f6735 100644
+--- a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
+@@ -813,6 +813,50 @@ pins {
+ 		};
+ 	};
+ 
++	/omit-if-no-ref/
++	lpuart1_pins_a: lpuart1-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('Z', 7, AF6)>, /* LPUART1_TX */
++				 <STM32_PINMUX('Z', 5, AF6)>; /* LPUART1_RTS */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('Z', 8, AF6)>, /* LPUART1_RX */
++				 <STM32_PINMUX('Z', 6, AF6)>; /* LPUART1_CTS_NSS */
++			bias-pull-up;
++		};
++	};
++
++	/omit-if-no-ref/
++	lpuart1_idle_pins_a: lpuart1-idle-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('Z', 7, ANALOG)>, /* LPUART1_TX */
++				 <STM32_PINMUX('Z', 6, ANALOG)>; /* LPUART1_CTS_NSS */
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('Z', 5, AF6)>; /* LPUART1_RTS */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++		pins3 {
++			pinmux = <STM32_PINMUX('Z', 8, AF6)>; /* LPUART1_RX */
++			bias-pull-up;
++		};
++	};
++
++	/omit-if-no-ref/
++	lpuart1_sleep_pins_a: lpuart1-sleep-0 {
++		pins {
++			pinmux = <STM32_PINMUX('Z', 7, ANALOG)>, /* LPUART1_TX */
++				 <STM32_PINMUX('Z', 5, ANALOG)>, /* LPUART1_RTS */
++				 <STM32_PINMUX('Z', 6, ANALOG)>, /* LPUART1_CTS_NSS */
++				 <STM32_PINMUX('Z', 8, ANALOG)>; /* LPUART1_RX */
++		};
++	};
++
+ 	/omit-if-no-ref/
+ 	spi8_pins_a: spi8-0 {
+ 		pins1 {
+-- 
+2.53.0
+

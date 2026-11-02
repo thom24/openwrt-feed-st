@@ -1,0 +1,112 @@
+From d7d9f8fcc3d4ccbaf82f3d73b6f9968f9a0f1a8b Mon Sep 17 00:00:00 2001
+From: Christophe Kerello <christophe.kerello@foss.st.com>
+Date: Tue, 29 Sep 2026 18:41:20 +0200
+Subject: [PATCH] mmc: mmci: stm32: report busy while the voltage switch is
+ on-going
+
+The SDMMC hardware samples SDMMC_D0 only at the end of the command
+response and a second time two SDMMC_CK cycles later. Some SD cards pull
+SDMMC_D0 low after that window, so BUSYD0 is never set even though the
+line stays low until the end of the voltage switch procedure.
+
+mmci_card_busy() then reports the card as not busy, and the core
+considers that the card did not acknowledge CMD11: it returns -EAGAIN and
+power cycles the card, which prevents any UHS mode from being used with
+such cards.
+
+Add a card_busy callback to mmci_host_ops and implement it for the STM32
+variant: while the voltage switch procedure is on-going, that is while
+VSWITCHEN is set between pre_sig_volt_switch() and post_sig_volt_switch(),
+report the card as busy even when the busy state was not sampled on
+SDMMC_D0.
+
+A card which really fails the procedure is still detected, by the VSWEND
+poll of sdmmc_post_sig_volt_switch(): whether the card never drives
+SDMMC_D0 low or never releases it, the hardware does not complete the
+switch, the poll times out and the core falls back to 3.3V signaling.
+
+Change-Id: I9365fc9944e3c75de48578888d909f345229b24e
+Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+Assisted-by: GitHub-Copilot:Claude-Opus-5
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/619288
+Tested-by: Christophe KERELLO <christophe.kerello@st.com>
+Reviewed-by: Christophe KERELLO <christophe.kerello@st.com>
+Domain-Review: Christophe KERELLO <christophe.kerello@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ drivers/mmc/host/mmci.c             |  4 +++-
+ drivers/mmc/host/mmci.h             |  1 +
+ drivers/mmc/host/mmci_stm32_sdmmc.c | 22 ++++++++++++++++++++++
+ 3 files changed, 26 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/mmc/host/mmci.c b/drivers/mmc/host/mmci.c
+index 9bbdedc1ae84..338af1d7f7be 100644
+--- a/drivers/mmc/host/mmci.c
++++ b/drivers/mmc/host/mmci.c
+@@ -375,7 +375,9 @@ static int mmci_card_busy(struct mmc_host *mmc)
+ 	int busy = 0;
+ 
+ 	spin_lock_irqsave(&host->lock, flags);
+-	if (readl(host->base + MMCISTATUS) & host->variant->busy_detect_flag)
++	if (host->ops && host->ops->card_busy)
++		busy = host->ops->card_busy(host);
++	else if (readl(host->base + MMCISTATUS) & host->variant->busy_detect_flag)
+ 		busy = 1;
+ 	spin_unlock_irqrestore(&host->lock, flags);
+ 
+diff --git a/drivers/mmc/host/mmci.h b/drivers/mmc/host/mmci.h
+index 4d3647f9ec06..323e01cfdf67 100644
+--- a/drivers/mmc/host/mmci.h
++++ b/drivers/mmc/host/mmci.h
+@@ -402,6 +402,7 @@ struct mmci_host_ops {
+ 	void (*set_clkreg)(struct mmci_host *host, unsigned int desired);
+ 	void (*set_pwrreg)(struct mmci_host *host, unsigned int pwr);
+ 	bool (*busy_complete)(struct mmci_host *host, struct mmc_command *cmd, u32 status, u32 err_msk);
++	int (*card_busy)(struct mmci_host *host);
+ 	void (*pre_sig_volt_switch)(struct mmci_host *host);
+ 	int (*post_sig_volt_switch)(struct mmci_host *host, struct mmc_ios *ios);
+ };
+diff --git a/drivers/mmc/host/mmci_stm32_sdmmc.c b/drivers/mmc/host/mmci_stm32_sdmmc.c
+index 3535a4ea2a95..b8e01fbdd821 100644
+--- a/drivers/mmc/host/mmci_stm32_sdmmc.c
++++ b/drivers/mmc/host/mmci_stm32_sdmmc.c
+@@ -523,6 +523,27 @@ static bool sdmmc_busy_complete(struct mmci_host *host, struct mmc_command *cmd,
+ 	return true;
+ }
+ 
++static int sdmmc_card_busy(struct mmci_host *host)
++{
++	u32 status = readl_relaxed(host->base + MMCISTATUS);
++
++	if (status & MCI_STM32_BUSYD0)
++		return 1;
++
++	/*
++	 * SDMMC_D0 is only sampled by the hardware at the end of the command
++	 * response and a second time two SDMMC_CK cycles later. A card pulling
++	 * SDMMC_D0 low after that window is not seen, even though the line
++	 * stays low until the end of the voltage switch procedure. Report the
++	 * card as busy while this procedure is on-going, ie while VSWITCHEN is
++	 * set between pre_sig_volt_switch() and post_sig_volt_switch().
++	 */
++	if (host->pwr_reg & MCI_STM32_VSWITCHEN)
++		return 1;
++
++	return 0;
++}
++
+ static int sdmmc_dlyb_mp15_enable(struct sdmmc_dlyb *dlyb)
+ {
+ 	writel_relaxed(DLYB_CR_DEN, dlyb->base + DLYB_CR);
+@@ -760,6 +781,7 @@ static struct mmci_host_ops sdmmc_variant_ops = {
+ 	.set_clkreg = mmci_sdmmc_set_clkreg,
+ 	.set_pwrreg = mmci_sdmmc_set_pwrreg,
+ 	.busy_complete = sdmmc_busy_complete,
++	.card_busy = sdmmc_card_busy,
+ 	.pre_sig_volt_switch = sdmmc_pre_sig_volt_vswitch,
+ 	.post_sig_volt_switch = sdmmc_post_sig_volt_switch,
+ };
+-- 
+2.53.0
+

@@ -1,0 +1,63 @@
+From ec6ecc9c8c58129a7a17df8b5de045174cc6f394 Mon Sep 17 00:00:00 2001
+From: Christian Bruel <christian.bruel@foss.st.com>
+Date: Tue, 21 Apr 2026 13:34:52 +0200
+Subject: [PATCH] PCI: stm32: Fix suspend/resume DWC calls
+
+Since we now use the DWC common suspend/resume method, we advertise low
+power by sending a PME_Turn_Off message. dw_pcie_suspend_noirq() fails
+because the MSG TLP was not reserved.
+Thus set use_atu_msg to use the generic dw_pcie_host_request_msg_tlp_res()
+
+Furthermore, the DWC suspend flow polls LTSSM in dw_pcie_suspend_noirq()
+after sending PME_Turn_Off.
+
+This is not safe: once PME_Turn_Off has been sent, reading the LTSSM status
+register may hang the system.
+In addition, STM32 PCIe does not support L2/L3 Ready, so the poll is not
+meaningful here. Thus set skip_l23_ready to skip polling the L2/L3 Acks.
+
+Similar issue was addressed on imx6 platform:
+https://patch.msgid.link/20260114083300.3689672-2-hongxing.zhu@nxp.com
+
+Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
+Fixes: 63a562b33a9c ("PCI: stm32: Add PCIe host support for STM32MP25")
+Change-Id: I8ab33b7efd211834a8d9fe2c736f5100bf65b683
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/588926
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
+---
+ drivers/pci/controller/dwc/pcie-stm32.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/pci/controller/dwc/pcie-stm32.c b/drivers/pci/controller/dwc/pcie-stm32.c
+index 96a5fb893af4..1be196d50883 100644
+--- a/drivers/pci/controller/dwc/pcie-stm32.c
++++ b/drivers/pci/controller/dwc/pcie-stm32.c
+@@ -112,7 +112,11 @@ static int stm32_pcie_resume_noirq(struct device *dev)
+ 	stm32_pcie_deassert_perst(stm32_pcie);
+ 
+ 	ret = dw_pcie_resume_noirq(&stm32_pcie->pci);
+-	if (ret)
++	/*
++	 * Ignore timeout, without link we still need the controller clock
++	 * to access dbi registers.
++	 */
++	if (ret && ret != -ETIMEDOUT)
+ 		goto err_disable_clk;
+ 
+ 	pinctrl_pm_select_default_state(dev);
+@@ -299,6 +303,9 @@ static int stm32_pcie_probe(struct platform_device *pdev)
+ 		goto err_disable_clk;
+ 	}
+ 
++	stm32_pcie->pci.pp.use_atu_msg = true;
++	stm32_pcie->pci.pp.skip_l23_ready = true;
++
+ 	ret = dw_pcie_host_init(&stm32_pcie->pci.pp);
+ 	if (ret)
+ 		goto err_disable_clk;
+-- 
+2.53.0
+

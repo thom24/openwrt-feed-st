@@ -1,0 +1,51 @@
+From 207e6cf60ce7c0092e5ffbf296166b7863b25770 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maxime=20M=C3=A9r=C3=A9?= <maxime.mere@foss.st.com>
+Date: Fri, 2 Feb 2024 17:13:51 +0100
+Subject: [PATCH] crypto: stm32/hash - fix negative size in DMA scatterwalk
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+There is an issue in stm32_hash_prepare_request(). While building the
+aligned sglist used by the DMA engine, a negative size can be passed to
+scatterwalk_map_and_copy(), which in turn results in an invalid pointer
+being computed.
+
+The problem is caused by an optimization in stm32_hash_prepare_request()
+that tries to speed up alignment of the input data. This optimization is
+not compatible with the omap_sham_copy_sgs() implementation and can lead
+to the negative size being computed.
+
+Dropping this unnecessary optimization fixes the issue.
+
+Change-Id: Ie0c58c08909c1e5f02753916a3f663cb98cd4a93
+Signed-off-by: Maxime Méré <maxime.mere@foss.st.com>
+---
+ drivers/crypto/stm32/stm32-hash.c | 11 -----------
+ 1 file changed, 11 deletions(-)
+
+diff --git a/drivers/crypto/stm32/stm32-hash.c b/drivers/crypto/stm32/stm32-hash.c
+index a4436728b0db..96510c3ff1d4 100644
+--- a/drivers/crypto/stm32/stm32-hash.c
++++ b/drivers/crypto/stm32/stm32-hash.c
+@@ -1288,17 +1288,6 @@ static int stm32_hash_prepare_request(struct ahash_request *req)
+ 
+ 	rctx->total = nbytes;
+ 
+-	if (update && req->nbytes && (!IS_ALIGNED(state->bufcnt, bs))) {
+-		int len = bs - state->bufcnt % bs;
+-
+-		if (len > req->nbytes)
+-			len = req->nbytes;
+-		scatterwalk_map_and_copy(state->buffer + state->bufcnt, req->src,
+-					 0, len, 0);
+-		state->bufcnt += len;
+-		rctx->offset = len;
+-	}
+-
+ 	/* copy buffer in a temporary one that is used for sg alignment */
+ 	if (state->bufcnt)
+ 		memcpy(hdev->xmit_buf, state->buffer, state->bufcnt);
+-- 
+2.53.0
+

@@ -1,0 +1,65 @@
+From cecdb44ec006b0b7682a9c87fdf76d74a42c872b Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 22 Apr 2026 17:12:19 +0200
+Subject: [PATCH] ARM: dts: stm32: fix vdda supply for onboard hub on
+ stm32mp157x-ev1
+
+stm32mp157x-ev1 uses Microchip USB2514 HUB. Since vdda supply has been
+added, the regulator framework wrongly associates the 'vdda' supply
+dedicated to ADC, so the wrong regulator is referenced.
+Only the 3v3 regulator is used to supply both the digital and the analog
+part of the HUB.
+
+Fixes: 673655f7944f ("usb: misc: onboard_dev: add vdda support for Microchip USB2514")
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Idbdf459cfc2ae61a6f893e66452caf68e7d6f055
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/560371
+Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts | 1 +
+ arch/arm/boot/dts/st/stm32mp157d-ev1.dts         | 1 +
+ arch/arm/boot/dts/st/stm32mp157f-ev1.dts         | 1 +
+ 3 files changed, 3 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
+index 8fb8a29f7f29..640c16e69ed6 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
+@@ -815,6 +815,7 @@ hub@1 {
+ 		compatible = "usb424,2514";
+ 		reg = <1>;
+ 		vdd-supply = <&v3v3>;
++		vdda-supply = <&v3v3>;
+ 	};
+ };
+ 
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+index eb49109adee7..5dff509813d2 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
+@@ -816,6 +816,7 @@ hub@1 {
+ 		compatible = "usb424,2514";
+ 		reg = <1>;
+ 		vdd-supply = <&v3v3>;
++		vdda-supply = <&v3v3>;
+ 	};
+ };
+ 
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+index 2d6ae39105a5..30a8ddb70b76 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
+@@ -816,6 +816,7 @@ hub@1 {
+ 		compatible = "usb424,2514";
+ 		reg = <1>;
+ 		vdd-supply = <&v3v3>;
++		vdda-supply = <&v3v3>;
+ 	};
+ };
+ 
+-- 
+2.53.0
+

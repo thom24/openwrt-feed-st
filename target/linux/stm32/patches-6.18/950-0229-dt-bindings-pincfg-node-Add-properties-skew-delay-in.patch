@@ -1,0 +1,45 @@
+From 81a02c05ac49f58740249b37ee755ced6c58a102 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Mon, 4 Nov 2024 18:20:38 +0100
+Subject: [PATCH] dt-bindings: pincfg-node: Add properties
+ 'skew-delay-{in,out}put-ps'
+
+Add the properties 'skew-delay-input-ps' and 'skew-delay-output-ps'
+to specify independent skew delay value for the two pin's directions.
+Make the new properties unavailable when the existing property
+'skew-delay' is selected.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+---
+ .../bindings/pinctrl/pincfg-node.yaml           | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/pinctrl/pincfg-node.yaml b/Documentation/devicetree/bindings/pinctrl/pincfg-node.yaml
+index cbfcf215e571..d1bc389e0a6d 100644
+--- a/Documentation/devicetree/bindings/pinctrl/pincfg-node.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/pincfg-node.yaml
+@@ -153,4 +153,21 @@ properties:
+       pin. Typically indicates how many double-inverters are
+       used to delay the signal.
+ 
++  skew-delay-input-ps:
++    description:
++      this affects the expected clock skew in ps on an input pin.
++
++  skew-delay-output-ps:
++    description:
++      this affects the expected delay in ps before latching a value to
++      an output pin.
++
++if:
++  required:
++    - skew-delay
++then:
++  properties:
++    skew-delay-input-ps: false
++    skew-delay-output-ps: false
++
+ additionalProperties: true
+-- 
+2.53.0
+

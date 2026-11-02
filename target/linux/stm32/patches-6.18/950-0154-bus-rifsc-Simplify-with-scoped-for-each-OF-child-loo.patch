@@ -1,0 +1,64 @@
+From 26fa281987f03909315ea77b21531c27726245b1 Mon Sep 17 00:00:00 2001
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+Date: Mon, 5 Jan 2026 15:36:59 +0100
+Subject: [PATCH] bus: rifsc: Simplify with scoped for each OF child loop
+
+Use scoped for-each loop when iterating over device nodes to make code a
+bit simpler.
+This implicitly fixes a missing of_node_put() at the end of the loop.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Change-Id: Ic03ae1d1bb200654ac85a17d94098e69eea4f323
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/574384
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ drivers/bus/stm32_rifsc.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/bus/stm32_rifsc.c b/drivers/bus/stm32_rifsc.c
+index b4a70857464c..2cf65274c27c 100644
+--- a/drivers/bus/stm32_rifsc.c
++++ b/drivers/bus/stm32_rifsc.c
+@@ -747,7 +747,6 @@ static void stm32_rifsc_unpriv_by_id(struct stm32_firewall_controller *ctrl, u32
+ static int stm32_rifsc_populate_bus(struct stm32_firewall_controller *ctrl)
+ {
+ 	struct stm32_firewall *firewalls;
+-	struct device_node *child;
+ 	struct device *parent;
+ 	unsigned int i;
+ 	int len;
+@@ -757,25 +756,20 @@ static int stm32_rifsc_populate_bus(struct stm32_firewall_controller *ctrl)
+ 
+ 	dev_dbg(parent, "Populating %s system bus\n", dev_name(ctrl->dev));
+ 
+-	for_each_available_child_of_node(dev_of_node(parent), child) {
++	for_each_available_child_of_node_scoped(dev_of_node(parent), child) {
+ 		/* The access-controllers property is mandatory for firewall bus devices */
+ 		len = of_count_phandle_with_args(child, "access-controllers",
+ 						 "#access-controller-cells");
+-		if (len <= 0) {
+-			of_node_put(child);
++		if (len <= 0)
+ 			return -EINVAL;
+-		}
+ 
+ 		firewalls = kcalloc(len, sizeof(*firewalls), GFP_KERNEL);
+-		if (!firewalls) {
+-			of_node_put(child);
++		if (!firewalls)
+ 			return -ENOMEM;
+-		}
+ 
+ 		err = stm32_firewall_get_firewall(child, firewalls, (unsigned int)len);
+ 		if (err) {
+ 			kfree(firewalls);
+-			of_node_put(child);
+ 			return err;
+ 		}
+ 
+-- 
+2.53.0
+

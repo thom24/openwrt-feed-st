@@ -1,0 +1,45 @@
+From 08e92d89f1dc6f0a3128d8be49c03f77a5125ecc Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Tue, 24 Feb 2026 15:07:03 +0100
+Subject: [PATCH] arm64: dts: st: add memory-region in HPDMA nodes on
+ stm32mp235f-dk board
+
+Linked-List Items (LLI) can be allocated in internal RAM defined under
+the reserved-memory node.
+
+Change-Id: I56990412fa29670104927183a000b87ef8cc9472
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/540271
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+index 65e7a099f213..a0a9fdb8b8b0 100644
+--- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
+@@ -202,6 +202,18 @@ &gpioz {
+ 	bootph-all;
+ };
+ 
++&hpdma {
++	memory-region = <&hpdma1_lli>;
++};
++
++&hpdma2 {
++	memory-region = <&hpdma2_lli>;
++};
++
++&hpdma3 {
++	memory-region = <&hpdma3_lli>;
++};
++
+ &i2c2 {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&i2c2_pins_b>;
+-- 
+2.53.0
+

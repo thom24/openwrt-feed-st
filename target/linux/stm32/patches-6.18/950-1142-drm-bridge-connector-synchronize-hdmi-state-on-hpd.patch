@@ -1,0 +1,39 @@
+From de1e845929c2aad0ed9720db9e1149e4910dbbbb Mon Sep 17 00:00:00 2001
+From: Olivier Moysan <olivier.moysan@foss.st.com>
+Date: Thu, 17 Sep 2026 11:00:03 +0200
+Subject: [PATCH] drm/bridge: connector: synchronize hdmi state on hpd
+
+The bridge connector HPD callback only updates the connector status and
+emits a hotplug event. Unlike the detect path, it does not update the HDMI
+state, leaving the EDID, ELD and audio plug state stale after an HPD event.
+Call the HDMI hotplug helper for connectors backed by an HDMI bridge.
+
+Change-Id: I32df6f4e76fcba343cd8199c676a7b3d5af574e8
+Assisted-by: GitHub-Copilot:GPT:5.6-Sol
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/613145
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Yannick FERTRE <yannick.fertre@foss.st.com>
+---
+ drivers/gpu/drm/display/drm_bridge_connector.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/gpu/drm/display/drm_bridge_connector.c b/drivers/gpu/drm/display/drm_bridge_connector.c
+index baacd21e7341..ca2611a9f809 100644
+--- a/drivers/gpu/drm/display/drm_bridge_connector.c
++++ b/drivers/gpu/drm/display/drm_bridge_connector.c
+@@ -156,6 +156,10 @@ static void drm_bridge_connector_handle_hpd(struct drm_bridge_connector *drm_bri
+ 	connector->status = status;
+ 	mutex_unlock(&dev->mode_config.mutex);
+ 
++	/* Keep HDMI EDID/ELD and audio plug state synchronized with HPD. */
++	if (drm_bridge_connector->bridge_hdmi)
++		drm_atomic_helper_connector_hdmi_hotplug(connector, status);
++
+ 	drm_bridge_connector_hpd_notify(connector, status);
+ 
+ 	drm_kms_helper_connector_hotplug_event(connector);
+-- 
+2.53.0
+

@@ -1,0 +1,138 @@
+From 860666b3ab922fc7e3bc4b5915f392f0707a8642 Mon Sep 17 00:00:00 2001
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Thu, 19 Feb 2026 18:33:04 +0100
+Subject: [PATCH] arm64: dts: st: add imx335/csi/dcmipp nodes on stm32mp257f-dk
+
+Add all nodes necessary for the imx335 camera capture via csi / dcmipp
+on stm32mp257f discovery board.
+
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Change-Id: I9829ecdaed7ece772ba580c210b9ceed89c2f4bd
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/539593
+Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Tested-by: Alain VOLMAT <alain.volmat@st.com>
+Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
+Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 70 +++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+index 5c2ba3d04c95..76dcf3c056e8 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+@@ -9,6 +9,7 @@
+ #include <dt-bindings/gpio/gpio.h>
+ #include <dt-bindings/input/input.h>
+ #include <dt-bindings/leds/common.h>
++#include <dt-bindings/media/video-interfaces.h>
+ #include "stm32mp257.dtsi"
+ #include "stm32mp25xf.dtsi"
+ #include "stm32mp25-pinctrl.dtsi"
+@@ -30,6 +31,14 @@ chosen {
+ 		stdout-path = "serial0:115200n8";
+ 	};
+ 
++	clocks {
++		clk_ext_camera: clk-ext-camera {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++			clock-frequency = <24000000>;
++		};
++	};
++
+ 	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+@@ -143,10 +152,44 @@ &cs_tpiu {
+ 	status = "okay";
+ };
+ 
++&csi {
++	vdd-supply =  <&scmi_vddcore>;
++	vdda18-supply = <&scmi_v1v8>;
++	status = "okay";
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		port@0 {
++			reg = <0>;
++			csi_sink: endpoint {
++				remote-endpoint = <&imx335_ep>;
++				data-lanes = <1 2>;
++				bus-type = <MEDIA_BUS_TYPE_CSI2_DPHY>;
++			};
++		};
++		port@1 {
++			reg = <1>;
++			csi_source: endpoint {
++				remote-endpoint = <&dcmipp_0>;
++			};
++		};
++	};
++};
++
+ &dbg_bus {
+ 	status = "okay";
+ };
+ 
++&dcmipp {
++	status = "okay";
++	port {
++		dcmipp_0: endpoint {
++			remote-endpoint = <&csi_source>;
++			bus-type = <MEDIA_BUS_TYPE_CSI2_DPHY>;
++		};
++	};
++};
++
+ &ethernet1 {
+ 	pinctrl-0 = <&eth1_rgmii_pins_b>;
+ 	pinctrl-1 = <&eth1_rgmii_sleep_pins_b>;
+@@ -176,6 +219,13 @@ &gpioa {
+ 
+ &gpiob {
+ 	bootph-all;
++	/* Enable the IMX335 power line */
++	imx335-en-hog {
++		gpio-hog;
++		gpios = <11 GPIO_ACTIVE_HIGH>;
++		output-high;
++		line-name = "imx335_en";
++	};
+ };
+ 
+ &gpioc {
+@@ -241,6 +291,26 @@ &i2c2 {
+ 	/* spare dmas for other usage */
+ 	/delete-property/dmas;
+ 	/delete-property/dma-names;
++
++	imx335: camera@1a {
++		compatible = "sony,imx335";
++		reg = <0x1a>;
++		clocks = <&clk_ext_camera>;
++		avdd-supply = <&scmi_v3v3>;
++		ovdd-supply = <&scmi_v3v3>;
++		dvdd-supply = <&scmi_v3v3>;
++		reset-gpios = <&gpiob 1 (GPIO_ACTIVE_LOW | GPIO_PUSH_PULL)>;
++		status = "okay";
++
++		port {
++			imx335_ep: endpoint {
++				remote-endpoint = <&csi_sink>;
++				clock-lanes = <0>;
++				data-lanes = <1 2>;
++				link-frequencies = /bits/ 64 <594000000>;
++			};
++		};
++	};
+ };
+ 
+ &i2c8 {
+-- 
+2.53.0
+

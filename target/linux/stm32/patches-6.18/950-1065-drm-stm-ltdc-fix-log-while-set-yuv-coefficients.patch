@@ -1,0 +1,30 @@
+From 5c0b084e8943ecd0a29effa492335b073f9eb190 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Fri, 13 Mar 2026 11:24:35 +0100
+Subject: [PATCH] drm/stm: ltdc: fix log while set yuv coefficients
+
+Fix log to avoid always a log error when user set a plane with a yuv
+color format.
+
+Change-Id: Id66f86cf78b46d070ce3ba80e9e8e91f52dbe935
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+---
+ drivers/gpu/drm/stm/ltdc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+index 7f1f21422caa..9a114779e6bb 100644
+--- a/drivers/gpu/drm/stm/ltdc.c
++++ b/drivers/gpu/drm/stm/ltdc.c
+@@ -742,7 +742,7 @@ static inline void ltdc_set_ycbcr_coeffs(struct drm_plane *plane)
+ 		ran = DRM_COLOR_YCBCR_LIMITED_RANGE;
+ 	}
+ 
+-	drm_err(plane->dev, "Color encoding=%d, range=%d\n", enc, ran);
++	drm_dbg_driver(plane->dev, "Color encoding=%d, range=%d\n", enc, ran);
+ 	regmap_write(ldev->regmap, LTDC_L1CYR0R + lofs,
+ 		     ltdc_ycbcr2rgb_coeffs[enc][ran][0]);
+ 	regmap_write(ldev->regmap, LTDC_L1CYR1R + lofs,
+-- 
+2.53.0
+

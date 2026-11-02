@@ -1,0 +1,338 @@
+From 0f073ce55b16a010075459219fbf2251b218567c Mon Sep 17 00:00:00 2001
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Date: Mon, 3 Nov 2025 14:08:40 +0100
+Subject: [PATCH] dmaengine: stm32-dma3: use genalloc/genpool for LLIs with
+ reserved memory
+
+Internal memory could be reserved for Linked-List Items (LLI). Use
+genalloc/genpool subsystem to manage this reserved memory.
+
+Keep dma_pool implementation as fallback in case there is no gen_pool or
+not enough room for the full Linked-List allocation.
+
+Pool creation is moved into stm32_dma3_probe() instead of
+stm32_dma3_alloc_chan_resources() to have only one pool creation per dma
+controller, instead of per channel. [dma|gen]_pool are managed in
+stm32_dma3_ddata structure (no more in stm32_dma3_chan structure).
+
+Introduce stm32_dma3_lli_pool_create() function. It first checks for
+reserved memory node. If it is available, then it creates a gen_pool.
+It creates also a dma_pool. If there is no gen_pool or not enough room
+in gen_pool, or if allocation from gen_pool crosses 64KB boundary, the
+full linked-list is allocated from dma_pool.
+
+Introduce stm32_dma3_lli_pool_dma_alloc/free() functions, to allocate the
+LLIs, and free them from the right pool.
+
+Change-Id: Ic914a18b82ffb3618da816e266e3073cf9c205b5
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+---
+ drivers/dma/stm32/Kconfig      |   1 +
+ drivers/dma/stm32/stm32-dma3.c | 198 +++++++++++++++++++++++++++------
+ 2 files changed, 166 insertions(+), 33 deletions(-)
+
+diff --git a/drivers/dma/stm32/Kconfig b/drivers/dma/stm32/Kconfig
+index 4d8d8063133b..27a36ebdda6e 100644
+--- a/drivers/dma/stm32/Kconfig
++++ b/drivers/dma/stm32/Kconfig
+@@ -38,6 +38,7 @@ config STM32_DMA3
+ 	tristate "STMicroelectronics STM32 DMA3 support"
+ 	select DMA_ENGINE
+ 	select DMA_VIRTUAL_CHANNELS
++	select GENERIC_ALLOCATOR
+ 	help
+ 	  Enable support for the on-chip DMA3 controller on STMicroelectronics
+ 	  STM32 platforms.
+diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
+index c534ccc6a624..b152009498be 100644
+--- a/drivers/dma/stm32/stm32-dma3.c
++++ b/drivers/dma/stm32/stm32-dma3.c
+@@ -11,11 +11,13 @@
+ #include <linux/dma-mapping.h>
+ #include <linux/dmaengine.h>
+ #include <linux/dmapool.h>
++#include <linux/genalloc.h>
+ #include <linux/init.h>
+ #include <linux/iopoll.h>
+ #include <linux/list.h>
+ #include <linux/module.h>
+ #include <linux/of_dma.h>
++#include <linux/of_reserved_mem.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/reset.h>
+@@ -294,7 +296,6 @@ struct stm32_dma3_chan {
+ 	struct stm32_dma3_dt_conf dt_config;
+ 	struct dma_slave_config dma_config;
+ 	u8 config_set;
+-	struct dma_pool *lli_pool;
+ 	struct stm32_dma3_swdesc *swdesc;
+ 	enum ctr2_tcem tcem;
+ 	u32 dma_status;
+@@ -313,6 +314,8 @@ struct stm32_dma3_ddata {
+ 	u32 dma_requests;
+ 	enum stm32_dma3_port_data_width ports_max_dw[2];
+ 	u32 axi_max_burst_len;
++	struct gen_pool *gen_pool;
++	struct dma_pool *dma_pool;
+ };
+ 
+ static inline struct stm32_dma3_ddata *to_stm32_dma3_ddata(struct stm32_dma3_chan *chan)
+@@ -401,11 +404,158 @@ static void stm32_dma3_chan_dump_hwdesc(struct stm32_dma3_chan *chan,
+ 	}
+ }
+ 
++static int stm32_dma3_lli_pool_create(struct stm32_dma3_ddata *ddata)
++{
++	struct device *dev = ddata2dev(ddata);
++	struct resource res;
++	void *rmem_va;
++	int ret;
++
++	/* Check if a dedicated pool is specified in device tree for Linked-List Items */
++	ret = of_reserved_mem_region_to_resource(dev->of_node, 0, &res);
++	if (ret)
++		goto no_dedicated_pool;
++
++	ddata->gen_pool = devm_gen_pool_create(dev, ilog2(sizeof(struct stm32_dma3_hwdesc)),
++					       dev_to_node(dev), dev_name(dev));
++	if (IS_ERR(ddata->gen_pool)) {
++		ret = PTR_ERR(ddata->gen_pool);
++		goto err_gen_pool;
++	}
++
++	rmem_va = devm_ioremap_resource(dev, &res);
++	if (IS_ERR(rmem_va))
++		ret = PTR_ERR(rmem_va);
++	else
++		ret = gen_pool_add_virt(ddata->gen_pool, (unsigned long)rmem_va,
++					res.start, resource_size(&res), dev_to_node(dev));
++
++err_gen_pool:
++	if (ret) {
++		ddata->gen_pool = NULL; /* devres holds the original pool pointer, if any */
++		dev_err_probe(dev, ret,
++			      "failed to create LLI gen_pool from reserved memory %s at %pR\n",
++			      res.name, &res);
++	}
++
++no_dedicated_pool:
++	/* Fallback pool */
++	ddata->dma_pool = dmam_pool_create(dev_name(dev), dev, sizeof(struct stm32_dma3_hwdesc),
++					   __alignof__(struct stm32_dma3_hwdesc), SZ_64K);
++	if (!ddata->dma_pool)
++		return dev_err_probe(dev, -ENOMEM, "failed to create LLI dma_pool\n");
++
++	if (ddata->gen_pool)
++		dev_dbg(dev, "LLI gen_pool %s at %pR (%zuKiB)\n",
++			res.name, &res, gen_pool_size(ddata->gen_pool) / SZ_1K);
++	dev_dbg(dev, "LLI %sdma_pool in DDR\n", ddata->gen_pool ? "fallback " : "");
++
++	return 0;
++}
++
++static void stm32_dma3_lli_pool_dma_free(struct stm32_dma3_ddata *ddata, struct stm32_dma3_lli lli)
++{
++	unsigned long addr = (unsigned long)lli.hwdesc;
++	size_t size = sizeof(struct stm32_dma3_hwdesc);
++
++	if (ddata->gen_pool && gen_pool_has_addr(ddata->gen_pool, addr, size))
++		gen_pool_free(ddata->gen_pool, addr, size);
++	else
++		dma_pool_free(ddata->dma_pool, lli.hwdesc, lli.hwdesc_addr);
++}
++
++static int stm32_dma3_lli_pool_dma_alloc(struct stm32_dma3_ddata *ddata, struct stm32_dma3_lli *lli,
++					 u32 count)
++{
++	struct device *dev = ddata2dev(ddata);
++	size_t avail, needed;
++	dma_addr_t base_addr = 0;
++	int i, last_alloc_idx = -1;
++
++	/* Fallback to dma_pool if no gen_pool */
++	if (!ddata->gen_pool)
++		goto from_dma_pool;
++
++	/* Check if there is enough room in gen_pool, otherwise fallback to dma_pool */
++	needed = count * STM32_DMA3_DESC_SIZE;
++	avail = gen_pool_avail(ddata->gen_pool);
++	if (avail < needed) {
++		dev_dbg(dev, "Not enough room in gen_pool (avail=%zu, need=%zu)\n", avail, needed);
++		goto from_dma_pool;
++	}
++
++	/* Allocate LLIs in gen_pool */
++	for (i = 0, last_alloc_idx = -1; i < count; i++) {
++		lli[i].hwdesc = gen_pool_dma_zalloc_align(ddata->gen_pool,
++							  sizeof(struct stm32_dma3_hwdesc),
++							  &lli[i].hwdesc_addr,
++							  __alignof__(struct stm32_dma3_hwdesc));
++		if (!lli[i].hwdesc)
++			goto from_dma_pool;
++
++		last_alloc_idx = i;
++
++		if (i == 0) {
++			base_addr = lli[0].hwdesc_addr & CLBAR_LBA;
++			continue;
++		}
++
++		/* Ensure the linked-list doesn't cross the 64KB addressable space */
++		if (base_addr != (lli[i].hwdesc_addr & CLBAR_LBA)) {
++			dev_dbg(dev, "64KB boundary crossed: %pad\n", &lli[i].hwdesc_addr);
++			goto from_dma_pool;
++		}
++	}
++
++	return 0;
++
++from_dma_pool:
++	if (ddata->gen_pool) {
++		dev_dbg(dev, "gen_pool fallback to dma_pool\n");
++
++		/* Free any allocated LLIs from gen_pool */
++		while (last_alloc_idx >= 0)
++			stm32_dma3_lli_pool_dma_free(ddata, lli[last_alloc_idx--]);
++	}
++
++	/* Allocate LLIs in dma_pool (created with SZ_64K boundary) */
++	for (i = 0, last_alloc_idx = -1; i < count; i++) {
++		lli[i].hwdesc = dma_pool_zalloc(ddata->dma_pool, GFP_NOWAIT, &lli[i].hwdesc_addr);
++		if (!lli[i].hwdesc)
++			goto err_pool_free;
++
++		last_alloc_idx = i;
++
++		if (i == 0) {
++			base_addr = lli[0].hwdesc_addr & CLBAR_LBA;
++			continue;
++		}
++
++		/*
++		 * dma_pool boundary=SZ_64K only guarantees that one allocation does not span a 64KB
++		 * boundary. It does not guarantee that all allocations of a given linked-list land
++		 * in the same 64KB address window required by CLBAR/CLLR addressing.
++		 */
++		if (base_addr != (lli[i].hwdesc_addr & CLBAR_LBA)) {
++			dev_dbg(dev, "64KB boundary crossed: %pad\n", &lli[i].hwdesc_addr);
++			goto err_pool_free;
++		}
++	}
++
++	return 0;
++
++err_pool_free:
++	while (last_alloc_idx >= 0)
++		stm32_dma3_lli_pool_dma_free(ddata, lli[last_alloc_idx--]);
++
++	return -ENOMEM;
++}
++
+ static struct stm32_dma3_swdesc *stm32_dma3_chan_desc_alloc(struct stm32_dma3_chan *chan, u32 count)
+ {
+ 	struct stm32_dma3_ddata *ddata = to_stm32_dma3_ddata(chan);
+ 	struct stm32_dma3_swdesc *swdesc;
+-	int i;
++	int ret;
+ 
+ 	/*
+ 	 * If the memory to be allocated for the number of hwdesc is greater than the maximum
+@@ -421,11 +571,12 @@ static struct stm32_dma3_swdesc *stm32_dma3_chan_desc_alloc(struct stm32_dma3_ch
+ 		return NULL;
+ 	swdesc->lli_size = count;
+ 
+-	for (i = 0; i < count; i++) {
+-		swdesc->lli[i].hwdesc = dma_pool_zalloc(chan->lli_pool, GFP_NOWAIT,
+-							&swdesc->lli[i].hwdesc_addr);
+-		if (!swdesc->lli[i].hwdesc)
+-			goto err_pool_free;
++	/* Allocate the whole LL in the same pool so that the LL base address is the same */
++	ret = stm32_dma3_lli_pool_dma_alloc(ddata, swdesc->lli, count);
++	if (ret) {
++		dev_err(chan2dev(chan), "Failed to alloc descriptors\n");
++		kfree(swdesc);
++		return NULL;
+ 	}
+ 	swdesc->ccr = 0;
+ 
+@@ -437,23 +588,16 @@ static struct stm32_dma3_swdesc *stm32_dma3_chan_desc_alloc(struct stm32_dma3_ch
+ 	swdesc->ccr &= ~CCR_LAP;
+ 
+ 	return swdesc;
+-
+-err_pool_free:
+-	dev_err(chan2dev(chan), "Failed to alloc descriptors\n");
+-	while (--i >= 0)
+-		dma_pool_free(chan->lli_pool, swdesc->lli[i].hwdesc, swdesc->lli[i].hwdesc_addr);
+-	kfree(swdesc);
+-
+-	return NULL;
+ }
+ 
+ static void stm32_dma3_chan_desc_free(struct stm32_dma3_chan *chan,
+ 				      struct stm32_dma3_swdesc *swdesc)
+ {
++	struct stm32_dma3_ddata *ddata = to_stm32_dma3_ddata(chan);
+ 	int i;
+ 
+ 	for (i = 0; i < swdesc->lli_size; i++)
+-		dma_pool_free(chan->lli_pool, swdesc->lli[i].hwdesc, swdesc->lli[i].hwdesc_addr);
++		stm32_dma3_lli_pool_dma_free(ddata, swdesc->lli[i]);
+ 
+ 	kfree(swdesc);
+ }
+@@ -1127,28 +1271,15 @@ static int stm32_dma3_alloc_chan_resources(struct dma_chan *c)
+ 		goto err_put_sync;
+ 	}
+ 
+-	chan->lli_pool = dmam_pool_create(dev_name(&c->dev->device), c->device->dev,
+-					  sizeof(struct stm32_dma3_hwdesc),
+-					  __alignof__(struct stm32_dma3_hwdesc), SZ_64K);
+-	if (!chan->lli_pool) {
+-		dev_err(chan2dev(chan), "Failed to create LLI pool\n");
+-		ret = -ENOMEM;
+-		goto err_put_sync;
+-	}
+-
+ 	/* Take the channel semaphore */
+ 	if (chan->semaphore_mode) {
+ 		ret = stm32_dma3_get_chan_sem(chan);
+ 		if (ret)
+-			goto err_pool_destroy;
++			goto err_put_sync;
+ 	}
+ 
+ 	return 0;
+ 
+-err_pool_destroy:
+-	dmam_pool_destroy(chan->lli_pool);
+-	chan->lli_pool = NULL;
+-
+ err_put_sync:
+ 	pm_runtime_put_sync(ddata2dev(ddata));
+ 
+@@ -1169,9 +1300,6 @@ static void stm32_dma3_free_chan_resources(struct dma_chan *c)
+ 
+ 	vchan_free_chan_resources(to_virt_chan(c));
+ 
+-	dmam_pool_destroy(chan->lli_pool);
+-	chan->lli_pool = NULL;
+-
+ 	/* Release the channel semaphore */
+ 	if (chan->semaphore_mode)
+ 		stm32_dma3_put_chan_sem(chan);
+@@ -1835,6 +1963,10 @@ static int stm32_dma3_probe(struct platform_device *pdev)
+ 			ddata->axi_max_burst_len);
+ 	}
+ 
++	ret = stm32_dma3_lli_pool_create(ddata);
++	if (ret)
++		goto err_clk_disable;
++
+ 	ddata->chans = devm_kcalloc(&pdev->dev, ddata->dma_channels, sizeof(*ddata->chans),
+ 				    GFP_KERNEL);
+ 	if (!ddata->chans) {
+-- 
+2.53.0
+

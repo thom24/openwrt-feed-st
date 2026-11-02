@@ -1,0 +1,83 @@
+From 164cd218b1e19936fc58ac20e150dd93baf3cf1a Mon Sep 17 00:00:00 2001
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Date: Mon, 30 Mar 2026 16:07:15 +0200
+Subject: [PATCH] arm64: dts: st: add thermal zone description on stm32mp23
+
+Add thermal zone description on STM32MP23.
+
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Change-Id: I7e110fd608f1881ea25405f45ca14312770c2a61
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/552082
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp231.dtsi | 44 ++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+index 36e00f2c65c0..1868eb609f42 100644
+--- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
+@@ -24,6 +24,7 @@ cpu0: cpu@0 {
+ 			enable-method = "psci";
+ 			power-domains = <&cpu0_pd>, <&scmi_perf 0>;
+ 			power-domain-names = "psci", "perf";
++			#cooling-cells = <2>;
+ 		};
+ 
+ 		idle-states {
+@@ -187,6 +188,49 @@ ret_pd: power-domain-retention {
+ 		};
+ 	};
+ 
++	thermal-zones {
++		cpu-thermal {
++			polling-delay-passive = <250>;
++			polling-delay = <1000>;
++			thermal-sensors = <&dts 1>;
++
++			trips {
++				cpu_alert: cpu-alert {
++					temperature = <110000>;
++					hysteresis = <10000>;
++					type = "passive";
++				};
++
++				cpu-crit {
++					temperature = <122000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++			};
++
++			cooling-maps {
++				map0 {
++					trip = <&cpu_alert>;
++					cooling-device = <&cpu0 1 1>;
++				};
++			};
++		};
++
++		soc-thermal {
++			polling-delay-passive = <250>;
++			polling-delay = <1000>;
++			thermal-sensors = <&dts 0>;
++
++			trips {
++				soc-crit {
++					temperature = <122000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++			};
++		};
++	};
++
+ 	timer {
+ 		compatible = "arm,armv8-timer";
+ 		interrupt-parent = <&intc>;
+-- 
+2.53.0
+

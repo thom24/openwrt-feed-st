@@ -1,0 +1,50 @@
+From 5cddb741c2f92e177944b72db63affb990b8665b Mon Sep 17 00:00:00 2001
+From: Valentin Caron <valentin.caron@foss.st.com>
+Date: Tue, 17 Feb 2026 14:01:24 +0100
+Subject: [PATCH] ARM: dts: st: add SCMI performance support on STM32MP13
+
+Update the device-tree to add support for scmi performance
+on cpu0. This leads to enable cpu-freq on the CPU.
+
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Change-Id: Ie7a7563f0f22fe65651bc830e0a780e815ca9e2b
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/476940
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/537470
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+Tested-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Reviewed-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp131.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
+index 0cf0ab5db1c8..ae43ef75b07e 100644
+--- a/arch/arm/boot/dts/st/stm32mp131.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
+@@ -20,6 +20,8 @@ cpu0: cpu@0 {
+ 			compatible = "arm,cortex-a7";
+ 			device_type = "cpu";
+ 			reg = <0>;
++			power-domains = <&scmi_perf 0>;
++			power-domain-names = "perf";
+ 		};
+ 	};
+ 
+@@ -44,6 +46,11 @@ scmi: scmi {
+ 			#size-cells = <0>;
+ 			linaro,optee-channel-id = <0>;
+ 
++			scmi_perf: protocol@13 {
++				reg = <0x13>;
++				#power-domain-cells = <1>;
++			};
++
+ 			scmi_clk: protocol@14 {
+ 				reg = <0x14>;
+ 				#clock-cells = <1>;
+-- 
+2.53.0
+

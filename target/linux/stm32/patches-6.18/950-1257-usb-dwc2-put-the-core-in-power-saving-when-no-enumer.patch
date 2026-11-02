@@ -1,0 +1,153 @@
+From 7e509c3390e4a6ffeb0cf7d72b673722c1e29453 Mon Sep 17 00:00:00 2001
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Date: Wed, 26 Nov 2025 19:08:42 +0100
+Subject: [PATCH] usb: dwc2: put the core in power saving when no enumeration
+
+When the enumeration doesn't complete, the suspend irq lets the
+core active (ignore suspend request during enumeration) indefinitely.
+
+The enumeration normally ends at some point, within connect timings
+range. Allow to put the core in one of the power saving modes, once
+passed the timeout.
+
+It addresses several case:
+- Bus Powered: with USBCV "Suspend current Powered state" test,
+  e.g. no reset (so no enumeration within connect timing), the
+  suspended state must be reached.
+- Self-powered: the gadget driver gets started by user,
+  without a cable plugged. It prevents to suspend the controller
+  as no enumeration is expected within connect timings.
+- Self-powered: the cable gets disconnected. The suspend interrupt,
+  is ignored before a possible future enumeration. This timeout
+  allows to reach low power state after connect timing has expired.
+
+The timeout gets canceled, when the enumeration completes.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Change-Id: Ifdedc2458198a77379c67a7956ac6c58e049d771
+---
+ drivers/usb/dwc2/core.h      |  1 +
+ drivers/usb/dwc2/core_intr.c | 13 +++++++++++++
+ drivers/usb/dwc2/gadget.c    | 26 ++++++++++++++++++++++++--
+ drivers/usb/dwc2/platform.c  |  3 ++-
+ 4 files changed, 40 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+index f4aa974774b7..2169002bd597 100644
+--- a/drivers/usb/dwc2/core.h
++++ b/drivers/usb/dwc2/core.h
+@@ -1110,6 +1110,7 @@ struct dwc2_hsotg {
+ 	struct workqueue_struct *wq_gadget;
+ 	struct work_struct wf_otg;
+ 	struct delayed_work dw_gsetup;
++	struct delayed_work dw_enumtimeout;
+ 	struct timer_list wkp_timer;
+ 	enum dwc2_lx_state lx_state;
+ 	struct dwc2_gregs_backup gr_backup;
+diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
+index 405fe99a34e9..f3ef9cefbdbc 100644
+--- a/drivers/usb/dwc2/core_intr.c
++++ b/drivers/usb/dwc2/core_intr.c
+@@ -557,6 +557,19 @@ static void dwc2_handle_usb_suspend_intr(struct dwc2_hsotg *hsotg)
+ 		if (!dwc2_is_device_connected(hsotg)) {
+ 			dev_dbg(hsotg->dev,
+ 				"ignore suspend request before enumeration\n");
++			/*
++			 * Connect timing: timeout to put the controller in low power, in
++			 * case the enumeration doesn't complete. Typical cases are:
++			 * - Self-powered: the gadget driver gets started by user,
++			 *   without a cable plugged. It prevents to suspend the controller,
++			 *   as no enumeration is expected within connect timings.
++			 * - Bus Powered: with USBCV "Suspend current Powered state" test,
++			 *   e.g. no reset (so no enumeration within connect timing), the
++			 *   suspended state must be reached.
++			 */
++			if (hsotg->wq_gadget)
++				queue_delayed_work(hsotg->wq_gadget, &hsotg->dw_enumtimeout,
++						   msecs_to_jiffies(2000));
+ 			return;
+ 		}
+ 		if (dsts & DSTS_SUSPSTS) {
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 590d7ebba876..86badd051b6b 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -3254,6 +3254,20 @@ static void dwc2_hsotg_epint(struct dwc2_hsotg *hsotg, unsigned int idx,
+ 	}
+ }
+ 
++static void dwc2_gadget_enum_timeout(struct work_struct *work)
++{
++	struct dwc2_hsotg *hsotg = container_of(work, struct dwc2_hsotg, dw_enumtimeout.work);
++	unsigned long flags;
++
++	dev_dbg(hsotg->dev, "%s enumeration timeout\n",  __func__);
++
++	spin_lock_irqsave(&hsotg->lock, flags);
++	dwc2_gadget_enter_lp(hsotg);
++	hsotg->suspended_from = hsotg->gadget.state;
++	usb_gadget_set_state(&hsotg->gadget, USB_STATE_SUSPENDED);
++	spin_unlock_irqrestore(&hsotg->lock, flags);
++}
++
+ /**
+  * dwc2_hsotg_irq_enumdone - Handle EnumDone interrupt (enumeration done)
+  * @hsotg: The device state.
+@@ -3703,9 +3717,14 @@ void dwc2_hsotg_core_disconnect(struct dwc2_hsotg *hsotg)
+ 
+ void dwc2_hsotg_core_connect(struct dwc2_hsotg *hsotg)
+ {
+-	/* remove the soft-disconnect and let's go */
+-	if (!hsotg->role_sw || (dwc2_readl(hsotg, GOTGCTL) & GOTGCTL_BSESVLD))
++	if (!hsotg->role_sw || (dwc2_readl(hsotg, GOTGCTL) & GOTGCTL_BSESVLD)) {
++		/* remove the soft-disconnect and let's go */
+ 		dwc2_clear_bit(hsotg, DCTL, DCTL_SFTDISCON);
++	} else {
++		/* Delayed power saving, if not connected: role_sw can exit from lp later */
++		queue_delayed_work(hsotg->wq_gadget, &hsotg->dw_enumtimeout,
++				   msecs_to_jiffies(2000));
++	}
+ }
+ 
+ /**
+@@ -3878,6 +3897,8 @@ static irqreturn_t dwc2_hsotg_irq(int irq, void *pw)
+ 	if (gintsts & GINTSTS_ENUMDONE) {
+ 		dwc2_writel(hsotg, GINTSTS_ENUMDONE, GINTSTS);
+ 
++		cancel_delayed_work(&hsotg->dw_enumtimeout);
++
+ 		dwc2_hsotg_irq_enumdone(hsotg);
+ 	}
+ 
+@@ -5250,6 +5271,7 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
+ 		return -ENOMEM;
+ 	}
+ 	INIT_DELAYED_WORK(&hsotg->dw_gsetup, dwc2_gadget_setup_timeout);
++	INIT_DELAYED_WORK(&hsotg->dw_enumtimeout, dwc2_gadget_enum_timeout);
+ 
+ 	/* setup endpoint information */
+ 
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index 821e607c8349..8b8481ba4a27 100644
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -975,6 +975,7 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+ 
+ 	is_device_mode = dwc2_is_device_mode(dwc2);
+ 	if (is_device_mode) {
++		bool valid_session = !!(dwc2_readl(dwc2, GOTGCTL) & GOTGCTL_BSESVLD);
+ 		/*
+ 		 * Handle the case when bus has been suspended prior to platform suspend.
+ 		 * - When the lx_state is DWC2_L2, the HOST has suspended the bus. So the
+@@ -986,7 +987,7 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+ 		 * suspended/disconnected. Then, temporarily exit the low power mode (clock
+ 		 * gating, ppd), so the gadget can be suspended and resumed later on.
+ 		 */
+-		if (!dwc2_is_device_connected(dwc2) || dwc2_gadget_can_poweroff_phy(dwc2)) {
++		if (!valid_session || dwc2_gadget_can_poweroff_phy(dwc2)) {
+ 			if (dwc2->in_ppd) {
+ 				ret = dwc2_exit_partial_power_down(dwc2, 0, true);
+ 				if (ret)
+-- 
+2.53.0
+

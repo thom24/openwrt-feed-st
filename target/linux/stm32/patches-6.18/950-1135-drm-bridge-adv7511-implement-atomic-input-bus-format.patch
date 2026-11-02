@@ -1,0 +1,123 @@
+From 2d83a3e3c16658f32ec4538e4d91edf2ae2e1816 Mon Sep 17 00:00:00 2001
+From: Yannick Fertre <yannick.fertre@foss.st.com>
+Date: Wed, 12 Aug 2026 08:30:21 +0200
+Subject: [PATCH] drm/bridge: adv7511: implement atomic input bus format
+ selection
+
+Implement atomic_get_input_bus_fmts() to advertise the bridge input format
+according to the configured ADV7511 input colorspace:
+- RGB -> MEDIA_BUS_FMT_RGB888_1X24
+- YUV422 -> MEDIA_BUS_FMT_YUYV8_1X16
+- YUV444 -> MEDIA_BUS_FMT_YUV8_1X24
+
+Also initialize input_colorspace to RGB by default at probe time.
+
+Change-Id: Ifeaf87b5bb7c3088104a28ea5fbc4808ca3d03f3
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/598603
+ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+---
+ drivers/gpu/drm/bridge/adv7511/adv7511.h     |  1 +
+ drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 45 ++++++++++++++++++++
+ 2 files changed, 46 insertions(+)
+
+diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511.h b/drivers/gpu/drm/bridge/adv7511/adv7511.h
+index b2e36c669e14..329d72ab0715 100644
+--- a/drivers/gpu/drm/bridge/adv7511/adv7511.h
++++ b/drivers/gpu/drm/bridge/adv7511/adv7511.h
+@@ -375,6 +375,7 @@ struct adv7511 {
+ 	enum adv7511_sync_polarity vsync_polarity;
+ 	enum adv7511_sync_polarity hsync_polarity;
+ 	bool rgb;
++	enum hdmi_colorspace input_colorspace;
+ 
+ 	struct gpio_desc *gpio_pd;
+ 
+diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+index 431e89e7560c..2c8cff377549 100644
+--- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
++++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+@@ -8,6 +8,7 @@
+ #include <linux/clk.h>
+ #include <linux/device.h>
+ #include <linux/gpio/consumer.h>
++#include <linux/media-bus-format.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/slab.h>
+@@ -300,6 +301,7 @@ static void adv7511_set_link_config(struct adv7511 *adv7511,
+ 	adv7511->hsync_polarity = config->hsync_polarity;
+ 	adv7511->vsync_polarity = config->vsync_polarity;
+ 	adv7511->rgb = config->input_colorspace == HDMI_COLORSPACE_RGB;
++	adv7511->input_colorspace = config->input_colorspace;
+ }
+ 
+ static void __adv7511_power_on(struct adv7511 *adv7511)
+@@ -883,6 +885,47 @@ static int adv7511_bridge_attach(struct drm_bridge *bridge,
+ 	return ret;
+ }
+ 
++static u32 *adv7511_bridge_atomic_get_input_bus_fmts(struct drm_bridge *bridge,
++						     struct drm_bridge_state *bridge_state,
++						     struct drm_crtc_state *crtc_state,
++						     struct drm_connector_state *conn_state,
++						     u32 output_fmt,
++						     unsigned int *num_input_fmts)
++{
++	struct adv7511 *adv = bridge_to_adv7511(bridge);
++	u32 input_fmt;
++	u32 *input_fmts;
++
++	switch (adv->input_colorspace) {
++	case HDMI_COLORSPACE_YUV422:
++		input_fmt = MEDIA_BUS_FMT_YUYV8_1X16;
++		break;
++	case HDMI_COLORSPACE_YUV444:
++		input_fmt = MEDIA_BUS_FMT_YUV8_1X24;
++		break;
++	case HDMI_COLORSPACE_RGB:
++	default:
++		input_fmt = MEDIA_BUS_FMT_RGB888_1X24;
++		break;
++	}
++
++	if (output_fmt != MEDIA_BUS_FMT_FIXED && output_fmt != input_fmt) {
++		*num_input_fmts = 0;
++		return NULL;
++	}
++
++	input_fmts = kmalloc(sizeof(*input_fmts), GFP_KERNEL);
++	if (!input_fmts) {
++		*num_input_fmts = 0;
++		return NULL;
++	}
++
++	input_fmts[0] = input_fmt;
++	*num_input_fmts = 1;
++
++	return input_fmts;
++}
++
+ static enum drm_connector_status
+ adv7511_bridge_detect(struct drm_bridge *bridge, struct drm_connector *connector)
+ {
+@@ -988,6 +1031,7 @@ static int adv7511_bridge_hdmi_write_infoframe(struct drm_bridge *bridge,
+ static const struct drm_bridge_funcs adv7511_bridge_funcs = {
+ 	.mode_valid = adv7511_bridge_mode_valid,
+ 	.mode_fixup = adv7511_bridge_mode_fixup,
++	.atomic_get_input_bus_fmts = adv7511_bridge_atomic_get_input_bus_fmts,
+ 	.attach = adv7511_bridge_attach,
+ 	.detect = adv7511_bridge_detect,
+ 	.edid_read = adv7511_bridge_edid_read,
+@@ -1232,6 +1276,7 @@ static int adv7511_probe(struct i2c_client *i2c)
+ 	adv7511->powered = false;
+ 	adv7511->status = connector_status_disconnected;
+ 	adv7511->info = i2c_get_match_data(i2c);
++	adv7511->input_colorspace = HDMI_COLORSPACE_RGB;
+ 
+ 	memset(&link_config, 0, sizeof(link_config));
+ 
+-- 
+2.53.0
+

@@ -1,0 +1,30 @@
+From 8ee1c46643b9df72a4e6115f079f9f9be9c73539 Mon Sep 17 00:00:00 2001
+From: Christophe Roullier <christophe.roullier@foss.st.com>
+Date: Wed, 27 Sep 2023 17:25:19 +0200
+Subject: [PATCH] dt-bindings: net: add phy-supply property for stm32
+
+Phandle to a regulator that provides power to the PHY. This
+regulator will be managed during the PHY power on/off sequence.
+
+Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
+---
+ Documentation/devicetree/bindings/net/stm32-dwmac.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
+index 987254900d0d..0c7eb1ccadd4 100644
+--- a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
++++ b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
+@@ -99,6 +99,9 @@ properties:
+       encompases the glue register, the offset of the control register and
+       the mask to set bitfield in control register
+ 
++  phy-supply:
++    description: PHY regulator
++
+   st,ext-phyclk:
+     description:
+       set this property in RMII mode when you have PHY without crystal 50MHz and want to
+-- 
+2.53.0
+

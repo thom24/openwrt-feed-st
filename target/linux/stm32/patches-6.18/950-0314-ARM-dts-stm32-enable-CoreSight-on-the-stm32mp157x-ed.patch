@@ -1,0 +1,166 @@
+From d55813f2205f7db6b73bb436cf9e0b3e83fd2c74 Mon Sep 17 00:00:00 2001
+From: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Date: Fri, 30 Jan 2026 14:23:23 +0100
+Subject: [PATCH] ARM: dts: stm32: enable CoreSight on the stm32mp157x-ed1
+ boards
+
+Enable CoreSight peripherals on the stm32mp157x-ed1 boards.
+
+Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Change-Id: Iefa33bbf64ae8be11f83a04d83fc6816c2a8e061
+Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/530870
+Reviewed-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
+Tested-by: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Domain-Review: Gatien CHEVALLIER <gatien.chevallier@st.com>
+Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+---
+ .../boot/dts/st/stm32mp157c-ed1-no-scmi.dts   | 36 +++++++++++++++++++
+ arch/arm/boot/dts/st/stm32mp157d-ed1.dts      | 36 +++++++++++++++++++
+ arch/arm/boot/dts/st/stm32mp157f-ed1.dts      | 36 +++++++++++++++++++
+ 3 files changed, 108 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
+index 57a30227f82c..cc3bd6c513b4 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
+@@ -172,6 +172,42 @@ &cryp1 {
+ 	status = "okay";
+ };
+ 
++&cs_cti_cpu0 {
++	status = "okay";
++};
++
++&cs_cti_cpu1 {
++	status = "okay";
++};
++
++&cs_cti_trace {
++	status = "okay";
++};
++
++&cs_etf {
++	status = "okay";
++};
++
++&cs_etm0 {
++	status = "okay";
++};
++
++&cs_etm1 {
++	status = "okay";
++};
++
++&cs_funnel {
++	status = "okay";
++};
++
++&cs_stm {
++	status = "okay";
++};
++
++&cs_tpiu {
++	status = "okay";
++};
++
+ &dac {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&dac_ch1_pins_a &dac_ch2_pins_a>;
+diff --git a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
+index 23050709e78a..c01e99f827c0 100644
+--- a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
+@@ -162,6 +162,42 @@ &crc1 {
+ 	status = "okay";
+ };
+ 
++&cs_cti_cpu0 {
++	status = "okay";
++};
++
++&cs_cti_cpu1 {
++	status = "okay";
++};
++
++&cs_cti_trace {
++	status = "okay";
++};
++
++&cs_etf {
++	status = "okay";
++};
++
++&cs_etm0 {
++	status = "okay";
++};
++
++&cs_etm1 {
++	status = "okay";
++};
++
++&cs_funnel {
++	status = "okay";
++};
++
++&cs_stm {
++	status = "okay";
++};
++
++&cs_tpiu {
++	status = "okay";
++};
++
+ &dac {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&dac_ch1_pins_a &dac_ch2_pins_a>;
+diff --git a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
+index 7904563a0794..e9bda619b010 100644
+--- a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
+@@ -168,6 +168,42 @@ &cryp1 {
+ 	status = "okay";
+ };
+ 
++&cs_cti_cpu0 {
++	status = "okay";
++};
++
++&cs_cti_cpu1 {
++	status = "okay";
++};
++
++&cs_cti_trace {
++	status = "okay";
++};
++
++&cs_etf {
++	status = "okay";
++};
++
++&cs_etm0 {
++	status = "okay";
++};
++
++&cs_etm1 {
++	status = "okay";
++};
++
++&cs_funnel {
++	status = "okay";
++};
++
++&cs_stm {
++	status = "okay";
++};
++
++&cs_tpiu {
++	status = "okay";
++};
++
+ &dac {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&dac_ch1_pins_a &dac_ch2_pins_a>;
+-- 
+2.53.0
+
