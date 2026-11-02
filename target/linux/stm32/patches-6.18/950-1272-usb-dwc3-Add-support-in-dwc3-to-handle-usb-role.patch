@@ -23,7 +23,7 @@ Change-Id: I45c1c8d00af3b64d760a5b381dd6c91b29337b35
  3 files changed, 40 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index a1f99c3b5f37..2e3ae35c92bb 100644
+index f0a9bb5754a3..02d1af0f8353 100644
 --- a/drivers/usb/dwc3/core.c
 +++ b/drivers/usb/dwc3/core.c
 @@ -182,8 +182,27 @@ static void __dwc3_set_mode(struct work_struct *work)
@@ -98,10 +98,10 @@ index a1f99c3b5f37..2e3ae35c92bb 100644
  
  	queue_work(system_freezable_wq, &dwc->drd_work);
 diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index a35b3db1f9f3..022fc315a766 100644
+index 7d310c56fe08..8850153227be 100644
 --- a/drivers/usb/dwc3/core.h
 +++ b/drivers/usb/dwc3/core.h
-@@ -1239,6 +1239,7 @@ struct dwc3 {
+@@ -1258,6 +1258,7 @@ struct dwc3 {
  	enum usb_dr_mode	dr_mode;
  	u32			current_dr_role;
  	u32			desired_dr_role;
@@ -109,7 +109,7 @@ index a35b3db1f9f3..022fc315a766 100644
  	struct extcon_dev	*edev;
  	struct notifier_block	edev_nb;
  	enum usb_phy_interface	hsphy_mode;
-@@ -1582,7 +1583,9 @@ struct dwc3_gadget_ep_cmd_params {
+@@ -1605,7 +1606,9 @@ struct dwc3_gadget_ep_cmd_params {
  
  /* prototypes */
  void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode, bool ignore_susphy);

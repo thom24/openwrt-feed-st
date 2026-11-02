@@ -18,7 +18,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  1 file changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
-index ef1c4b9299ee..edd3ac7e70b6 100644
+index 878a5dc7748f..1a1525ef1cb8 100644
 --- a/drivers/gpu/drm/panel/panel-simple.c
 +++ b/drivers/gpu/drm/panel/panel-simple.c
 @@ -687,12 +687,19 @@ static struct panel_simple *panel_simple_probe(struct device *dev)

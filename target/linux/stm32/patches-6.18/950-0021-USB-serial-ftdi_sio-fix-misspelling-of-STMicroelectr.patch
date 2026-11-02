@@ -16,10 +16,10 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_sio_ids.h
-index 6c76cfebfd0e..c0ce6e052b85 100644
+index 9c83c17853c8..d531bece3558 100644
 --- a/drivers/usb/serial/ftdi_sio_ids.h
 +++ b/drivers/usb/serial/ftdi_sio_ids.h
-@@ -1368,7 +1368,7 @@
+@@ -1373,7 +1373,7 @@
  #define WHT_PID			0x0004 /* Wireless Handheld Terminal */
  
  /*

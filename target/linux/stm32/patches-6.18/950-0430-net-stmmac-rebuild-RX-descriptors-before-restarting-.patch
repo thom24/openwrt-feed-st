@@ -37,42 +37,32 @@ Tested-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
 Domain-Review: Christophe ROULLIER <christophe.roullier@foss.st.com>
 ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
 ---
- .../net/ethernet/stmicro/stmmac/stmmac_main.c | 110 +++++++++++++-----
- 1 file changed, 84 insertions(+), 26 deletions(-)
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 105 ++++++++++++++----
+ 1 file changed, 86 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index a8b3f91be9ce..7e86bdb69e9d 100644
+index ef8c322465d2..6b96dee744c5 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -1480,18 +1480,20 @@ static int stmmac_init_rx_buffers(struct stmmac_priv *priv,
- 		buf->page_offset = stmmac_rx_offset(priv);
+@@ -1485,6 +1485,17 @@ static int stmmac_init_rx_buffers(struct stmmac_priv *priv,
+ 		stmmac_set_desc_sec_addr(priv, p, buf->sec_addr, true);
  	}
  
--	if (priv->sph && !buf->sec_page) {
--		buf->sec_page = page_pool_alloc_pages(rx_q->page_pool, gfp);
--		if (!buf->sec_page)
--			return -ENOMEM;
--
-+	if (priv->sph) {
++	if (stmmac_rx_check_buf2_cap(priv)) {
 +		if (!buf->sec_page) {
 +			buf->sec_page = page_pool_alloc_pages(rx_q->page_pool,
 +							      gfp);
 +			if (!buf->sec_page)
 +				return -ENOMEM;
 +		}
- 		buf->sec_addr = page_pool_get_dma_addr(buf->sec_page);
--		stmmac_set_desc_sec_addr(priv, p, buf->sec_addr, true);
- 	} else {
- 		buf->sec_page = NULL;
--		stmmac_set_desc_sec_addr(priv, p, buf->sec_addr, false);
- 	}
- 
-+	stmmac_set_desc_sec_addr(priv, p, buf->sec_addr, (bool)priv->sph);
++		buf->sec_addr = page_pool_get_dma_addr(buf->sec_page);
++		stmmac_set_desc_sec_addr(priv, p, buf->sec_addr, true);
++	}
 +
  	buf->addr = page_pool_get_dma_addr(buf->page) + buf->page_offset;
  
  	stmmac_set_desc_addr(priv, p, buf->addr);
-@@ -1917,19 +1919,6 @@ static void dma_free_tx_skbufs(struct stmmac_priv *priv,
+@@ -1910,19 +1921,6 @@ static void dma_free_tx_skbufs(struct stmmac_priv *priv,
  	}
  }
  
@@ -92,7 +82,7 @@ index a8b3f91be9ce..7e86bdb69e9d 100644
  /**
   * __free_dma_rx_desc_resources - free RX dma desc resources (per queue)
   * @priv: private structure
-@@ -7831,6 +7820,68 @@ static void stmmac_reset_rx_queue(struct stmmac_priv *priv, u32 queue)
+@@ -7939,6 +7937,68 @@ static void stmmac_reset_rx_queue(struct stmmac_priv *priv, u32 queue)
  	rx_q->dirty_rx = 0;
  }
  
@@ -161,7 +151,7 @@ index a8b3f91be9ce..7e86bdb69e9d 100644
  static void stmmac_reset_tx_queue(struct stmmac_priv *priv, u32 queue)
  {
  	struct stmmac_tx_queue *tx_q = &priv->dma_conf.tx_queue[queue];
-@@ -7919,17 +7970,19 @@ int stmmac_resume(struct device *dev)
+@@ -8027,17 +8087,19 @@ int stmmac_resume(struct device *dev)
  
  	mutex_lock(&priv->lock);
  
@@ -187,7 +177,7 @@ index a8b3f91be9ce..7e86bdb69e9d 100644
  	}
  
  	stmmac_init_timestamping(priv);
-@@ -7959,6 +8012,11 @@ int stmmac_resume(struct device *dev)
+@@ -8067,6 +8129,11 @@ int stmmac_resume(struct device *dev)
  	netif_device_attach(ndev);
  
  	return 0;

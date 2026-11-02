@@ -17,7 +17,7 @@ Change-Id: I23a999e0e51251e65c606a40da7010c82d989705
  1 file changed, 45 insertions(+), 33 deletions(-)
 
 diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
-index 787c5d778db2..0874974bbad4 100644
+index de58174c77b7..7969fa72c44f 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmi.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
 @@ -113,6 +113,7 @@ struct dcmi_buf {

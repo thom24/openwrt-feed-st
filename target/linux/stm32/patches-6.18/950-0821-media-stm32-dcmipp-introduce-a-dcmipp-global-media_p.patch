@@ -16,7 +16,7 @@ Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
-index 0b1d1fbda5d6..2fb34cac89c6 100644
+index 5b7e58d06465..9cfcf1c9adb1 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
 @@ -125,7 +125,6 @@ struct dcmipp_bytecap_device {
@@ -27,7 +27,7 @@ index 0b1d1fbda5d6..2fb34cac89c6 100644
  	struct v4l2_subdev *s_subdev;
  	u32 s_subdev_pad_nb;
  
-@@ -408,7 +407,7 @@ static int dcmipp_bytecap_start_streaming(struct vb2_queue *vq,
+@@ -410,7 +409,7 @@ static int dcmipp_bytecap_start_streaming(struct vb2_queue *vq,
  		goto err_buffer_done;
  	}
  

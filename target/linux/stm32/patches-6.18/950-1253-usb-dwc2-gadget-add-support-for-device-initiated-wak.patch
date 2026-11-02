@@ -35,7 +35,7 @@ index 4dffedffe07d..3fd2bffa78ab 100644
  	struct dwc2_hsotg_ep *eps_out[MAX_EPS_CHANNELS];
  #endif /* CONFIG_USB_DWC2_PERIPHERAL || CONFIG_USB_DWC2_DUAL_ROLE */
 diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index d512ea04a0d6..6a51a8d11645 100644
+index a37d3f8aa55b..96be9018bcbb 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
 @@ -3397,6 +3397,7 @@ void dwc2_hsotg_disconnect(struct dwc2_hsotg *hsotg)
@@ -115,7 +115,7 @@ index d512ea04a0d6..6a51a8d11645 100644
  /**
   * dwc2_hsotg_set_selfpowered - set if device is self/bus powered
   * @gadget: The usb gadget state
-@@ -4915,6 +4971,7 @@ static void dwc2_gadget_set_speed(struct usb_gadget *g, enum usb_device_speed sp
+@@ -4923,6 +4979,7 @@ static void dwc2_gadget_set_speed(struct usb_gadget *g, enum usb_device_speed sp
  
  static const struct usb_gadget_ops dwc2_hsotg_gadget_ops = {
  	.get_frame	= dwc2_hsotg_gadget_getframe,
@@ -123,7 +123,7 @@ index d512ea04a0d6..6a51a8d11645 100644
  	.set_selfpowered	= dwc2_hsotg_set_selfpowered,
  	.udc_start		= dwc2_hsotg_udc_start,
  	.udc_stop		= dwc2_hsotg_udc_stop,
-@@ -4922,6 +4979,7 @@ static const struct usb_gadget_ops dwc2_hsotg_gadget_ops = {
+@@ -4930,6 +4987,7 @@ static const struct usb_gadget_ops dwc2_hsotg_gadget_ops = {
  	.udc_set_speed		= dwc2_gadget_set_speed,
  	.vbus_session		= dwc2_hsotg_vbus_session,
  	.vbus_draw		= dwc2_hsotg_vbus_draw,
@@ -131,7 +131,7 @@ index d512ea04a0d6..6a51a8d11645 100644
  };
  
  /**
-@@ -5140,6 +5198,7 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
+@@ -5148,6 +5206,7 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
  	hsotg->gadget.name = dev_name(dev);
  	hsotg->gadget.otg_caps = &hsotg->params.otg_caps;
  	hsotg->remote_wakeup_allowed = 0;
@@ -139,7 +139,7 @@ index d512ea04a0d6..6a51a8d11645 100644
  
  	if (hsotg->params.lpm)
  		hsotg->gadget.lpm_capable = true;
-@@ -5243,7 +5302,7 @@ bool dwc2_gadget_can_poweroff_phy(struct dwc2_hsotg *hsotg)
+@@ -5251,7 +5310,7 @@ bool dwc2_gadget_can_poweroff_phy(struct dwc2_hsotg *hsotg)
  	if (!dwc2_is_device_mode(hsotg))
  		return false;
  
@@ -148,7 +148,7 @@ index d512ea04a0d6..6a51a8d11645 100644
  		return false;
  
  	/* In device mode, but not a wakeup source: can poweroff the PHY */
-@@ -5917,7 +5976,8 @@ void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
+@@ -5925,7 +5984,8 @@ void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
  	if (rem_wakeup) {
  		/* Set Remote Wakeup Signaling */
  		dctl = dwc2_readl(hsotg, DCTL);

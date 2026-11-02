@@ -58,7 +58,7 @@ index b7056b8f8a22..8fbcd2c77728 100644
  	enum dwc2_lx_state lx_state;
  	struct dwc2_gregs_backup gr_backup;
 diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index a4356c2978ca..0ad15b7ff6fd 100644
+index 7af106713cdd..000fc9e0f6f4 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
 @@ -3031,6 +3031,19 @@ static void dwc2_gadget_handle_nak(struct dwc2_hsotg_ep *hs_ep)
@@ -121,7 +121,7 @@ index a4356c2978ca..0ad15b7ff6fd 100644
  			/*
  			 * this is the notification we've received a
  			 * setup packet. In non-DMA mode we'd get this
-@@ -5105,6 +5125,13 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
+@@ -5114,6 +5134,13 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
  		return -EINVAL;
  	}
  
@@ -135,7 +135,7 @@ index a4356c2978ca..0ad15b7ff6fd 100644
  	/* setup endpoint information */
  
  	INIT_LIST_HEAD(&hsotg->gadget.ep_list);
-@@ -5116,6 +5143,7 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
+@@ -5125,6 +5152,7 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
  						     GFP_KERNEL);
  	if (!hsotg->ctrl_req) {
  		dev_err(dev, "failed to allocate ctrl req\n");
@@ -143,7 +143,7 @@ index a4356c2978ca..0ad15b7ff6fd 100644
  		return -ENOMEM;
  	}
  
-@@ -5144,6 +5172,9 @@ int dwc2_hsotg_remove(struct dwc2_hsotg *hsotg)
+@@ -5153,6 +5181,9 @@ int dwc2_hsotg_remove(struct dwc2_hsotg *hsotg)
  	usb_del_gadget_udc(&hsotg->gadget);
  	dwc2_hsotg_ep_free_request(&hsotg->eps_out[0]->ep, hsotg->ctrl_req);
  

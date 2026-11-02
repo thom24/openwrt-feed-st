@@ -18,10 +18,10 @@ Domain-Review: Hugues FRUCHET <hugues.fruchet@st.com>
  1 file changed, 40 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
-index 46631ad356f9..831630a2b0d4 100644
+index 9e4de0c7ec7c..bb9f8affe39f 100644
 --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
 +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
-@@ -777,6 +777,44 @@ static int vidioc_encoder_cmd(struct file *file, void *priv,
+@@ -781,6 +781,44 @@ static int vidioc_encoder_cmd(struct file *file, void *priv,
  	return 0;
  }
  
@@ -66,7 +66,7 @@ index 46631ad356f9..831630a2b0d4 100644
  const struct v4l2_ioctl_ops hantro_ioctl_ops = {
  	.vidioc_querycap = vidioc_querycap,
  	.vidioc_enum_framesizes = vidioc_enum_framesizes,
-@@ -808,8 +846,8 @@ const struct v4l2_ioctl_ops hantro_ioctl_ops = {
+@@ -812,8 +850,8 @@ const struct v4l2_ioctl_ops hantro_ioctl_ops = {
  	.vidioc_g_selection = vidioc_g_selection,
  	.vidioc_s_selection = vidioc_s_selection,
  

@@ -39,7 +39,7 @@ index 265791fbe87f..761e65d06756 100644
  #define DWC2_CORE_REV_2_72a     0x4f54272a
  #define DWC2_CORE_REV_2_80a	0x4f54280a
 diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 61d24cbf8f08..bc78af5046bc 100644
+index ee7551031a15..d3f3895a95c8 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
 @@ -3449,6 +3449,19 @@ void dwc2_hsotg_core_init_disconnected(struct dwc2_hsotg *hsotg,

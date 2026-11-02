@@ -125,10 +125,10 @@ index 3c4ea421ad05..2895cf69c03c 100644
  
  static int stm32_i3c_probe(struct platform_device *pdev)
 diff --git a/include/linux/i3c/master.h b/include/linux/i3c/master.h
-index c52a82dd79a6..f256216599fc 100644
+index df0132048a10..d7fc7f35fcad 100644
 --- a/include/linux/i3c/master.h
 +++ b/include/linux/i3c/master.h
-@@ -259,6 +259,7 @@ struct i3c_device {
+@@ -262,6 +262,7 @@ struct i3c_device {
  #define I3C_BUS_THIGH_MIXED_MAX_NS	41
  #define I3C_BUS_TIDLE_MIN_NS		200000
  #define I3C_BUS_TLOW_OD_MIN_NS		200

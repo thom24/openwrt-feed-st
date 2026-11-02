@@ -45,7 +45,7 @@ index f21dc423b74a..aca5b714ca60 100644
  				status = "disabled";
  			};
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index c11f363c9c6d..4a54155628d2 100644
+index ed2e32f3bf28..d9fe386b351f 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -2606,7 +2606,7 @@ nand-controller@4,0 {

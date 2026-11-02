@@ -12,10 +12,10 @@ Change-Id: I8c0dfd7d2267ba9c92080ba8e83ded220725c3dd
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/clk/stm32/clk-stm32mp25.c b/drivers/clk/stm32/clk-stm32mp25.c
-index 5743e7ea9a9c..105490c319e2 100644
+index 575677df65ee..fd169fcd47eb 100644
 --- a/drivers/clk/stm32/clk-stm32mp25.c
 +++ b/drivers/clk/stm32/clk-stm32mp25.c
-@@ -1952,6 +1952,7 @@ static struct clk_stm32_clock_data stm32mp25_clock_data = {
+@@ -1953,6 +1953,7 @@ static struct clk_stm32_clock_data stm32mp25_clock_data = {
  static struct clk_stm32_reset_data stm32mp25_reset_data = {
  	.reset_lines	= stm32mp25_reset_cfg,
  	.nr_lines	= ARRAY_SIZE(stm32mp25_reset_cfg),

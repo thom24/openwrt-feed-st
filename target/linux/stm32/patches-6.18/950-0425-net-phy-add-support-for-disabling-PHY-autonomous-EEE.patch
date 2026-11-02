@@ -29,10 +29,10 @@ Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
  2 files changed, 36 insertions(+)
 
 diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-index 24ef124ecb79..4cd0dae9e6e0 100644
+index 673e31225a3f..4587bcf95b3e 100644
 --- a/drivers/net/phy/phy_device.c
 +++ b/drivers/net/phy/phy_device.c
-@@ -1413,6 +1413,14 @@ int phy_init_hw(struct phy_device *phydev)
+@@ -1539,6 +1539,14 @@ int phy_init_hw(struct phy_device *phydev)
  			return ret;
  	}
  
@@ -47,7 +47,7 @@ index 24ef124ecb79..4cd0dae9e6e0 100644
  	return 0;
  }
  EXPORT_SYMBOL(phy_init_hw);
-@@ -2830,6 +2838,20 @@ void phy_support_eee(struct phy_device *phydev)
+@@ -2984,6 +2992,20 @@ void phy_support_eee(struct phy_device *phydev)
  			phydev->eee_disabled_modes);
  	phydev->eee_cfg.tx_lpi_enabled = true;
  	phydev->eee_cfg.eee_enabled = true;
@@ -69,10 +69,10 @@ index 24ef124ecb79..4cd0dae9e6e0 100644
  EXPORT_SYMBOL(phy_support_eee);
  
 diff --git a/include/linux/phy.h b/include/linux/phy.h
-index 0bc00a4cceb2..e2e79cd25105 100644
+index 9006f01e1a34..3abfe286d165 100644
 --- a/include/linux/phy.h
 +++ b/include/linux/phy.h
-@@ -587,6 +587,8 @@ struct macsec_ops;
+@@ -606,6 +606,8 @@ struct macsec_ops;
   * @advertising_eee: Currently advertised EEE linkmodes
   * @enable_tx_lpi: When True, MAC should transmit LPI to PHY
   * @eee_active: phylib private state, indicating that EEE has been negotiated
@@ -81,7 +81,7 @@ index 0bc00a4cceb2..e2e79cd25105 100644
   * @eee_cfg: User configuration of EEE
   * @lp_advertising: Current link partner advertised linkmodes
   * @host_interfaces: PHY interface modes supported by host
-@@ -710,6 +712,7 @@ struct phy_device {
+@@ -729,6 +731,7 @@ struct phy_device {
  	__ETHTOOL_DECLARE_LINK_MODE_MASK(eee_disabled_modes);
  	bool enable_tx_lpi;
  	bool eee_active;
@@ -89,7 +89,7 @@ index 0bc00a4cceb2..e2e79cd25105 100644
  	struct eee_config eee_cfg;
  
  	/* Host supported PHY interface types. Should be ignored if empty. */
-@@ -1161,6 +1164,17 @@ struct phy_driver {
+@@ -1186,6 +1189,17 @@ struct phy_driver {
  	void (*get_stats)(struct phy_device *dev,
  			  struct ethtool_stats *stats, u64 *data);
  

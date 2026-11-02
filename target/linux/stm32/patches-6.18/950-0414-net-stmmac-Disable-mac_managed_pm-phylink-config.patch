@@ -27,10 +27,10 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/572631
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index cf8d0c21388f..a8b3f91be9ce 100644
+index cacac1dedea1..ef8c322465d2 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -1203,7 +1203,7 @@ static int stmmac_phy_setup(struct stmmac_priv *priv)
+@@ -1189,7 +1189,7 @@ static int stmmac_phy_setup(struct stmmac_priv *priv)
  
  	config->dev = &priv->dev->dev;
  	config->type = PHYLINK_NETDEV;

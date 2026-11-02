@@ -21,10 +21,10 @@ Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
  create mode 100644 drivers/nvmem/stm32-tamp-nvram.c
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 87e1a2665d6c..deedd1840325 100644
+index 60ccaaccb437..ef0e4b29e123 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -24680,6 +24680,7 @@ M:	Siméon Marijon <simeon.marijon@foss.st.com>
+@@ -24709,6 +24709,7 @@ M:	Siméon Marijon <simeon.marijon@foss.st.com>
  L:	linux-stm32@st-md-mailman.stormreply.com (moderated for non-subscribers)
  S:	Maintained
  F:	Documentation/devicetree/bindings/nvmem/st,stm32-tamp-nvram.yaml
@@ -33,10 +33,10 @@ index 87e1a2665d6c..deedd1840325 100644
  STM32 TIMER/LPTIMER DRIVERS
  M:	Fabrice Gasnier <fabrice.gasnier@foss.st.com>
 diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
-index 11b098705ec6..fd4ae28a6b65 100644
+index aac1b25219f4..233188fc6c8b 100644
 --- a/drivers/nvmem/Kconfig
 +++ b/drivers/nvmem/Kconfig
-@@ -395,6 +395,16 @@ config NVMEM_STM32_ROMEM
+@@ -407,6 +407,16 @@ config NVMEM_STM32_ROMEM
  	  This driver can also be built as a module. If so, the module
  	  will be called nvmem-stm32-romem.
  
@@ -54,10 +54,10 @@ index 11b098705ec6..fd4ae28a6b65 100644
  	tristate "Sunplus SoC OTP support"
  	depends on SOC_SP7021 || COMPILE_TEST
 diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
-index 70a4464dcb1e..0a695419b7f4 100644
+index b0bb3e166e80..7b87b794b3b9 100644
 --- a/drivers/nvmem/Makefile
 +++ b/drivers/nvmem/Makefile
-@@ -77,6 +77,8 @@ nvmem_sprd_efuse-y			:= sprd-efuse.o
+@@ -79,6 +79,8 @@ nvmem_sprd_efuse-y			:= sprd-efuse.o
  obj-$(CONFIG_NVMEM_STM32_ROMEM)		+= nvmem_stm32_romem.o
  nvmem_stm32_romem-y 			:= stm32-romem.o
  nvmem_stm32_romem-$(CONFIG_NVMEM_STM32_BSEC_OPTEE_TA) += stm32-bsec-optee-ta.o

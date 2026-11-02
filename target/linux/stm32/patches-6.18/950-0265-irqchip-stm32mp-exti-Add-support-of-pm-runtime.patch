@@ -22,7 +22,7 @@ Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/drivers/irqchip/irq-stm32mp-exti.c b/drivers/irqchip/irq-stm32mp-exti.c
-index 0cb13452fbeb..ff7228cc0fe2 100644
+index 0f7aded2aa95..4d743fde5004 100644
 --- a/drivers/irqchip/irq-stm32mp-exti.c
 +++ b/drivers/irqchip/irq-stm32mp-exti.c
 @@ -19,6 +19,7 @@

@@ -377,7 +377,7 @@ index 16ba6bc7fb64..73f34a2ae45b 100644
  }
  
 diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 86badd051b6b..cb99b81f950f 100644
+index 874f1312584b..aaae0cc26d47 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
 @@ -3254,6 +3254,23 @@ static void dwc2_hsotg_epint(struct dwc2_hsotg *hsotg, unsigned int idx,
@@ -509,7 +509,7 @@ index 86badd051b6b..cb99b81f950f 100644
  	if (hsotg->params.stm32_has_batt_chg_det && is_on) {
  		ret = stm32mp2_usb2phy_batt_chg_det(hsotg);
  		if (ret)
-@@ -4927,12 +4951,7 @@ static int dwc2_hsotg_vbus_session(struct usb_gadget *gadget, int is_active)
+@@ -4935,12 +4959,7 @@ static int dwc2_hsotg_vbus_session(struct usb_gadget *gadget, int is_active)
  	 * If controller is in partial power down state, it must exit from
  	 * that state before being initialized / de-initialized
  	 */
@@ -523,7 +523,7 @@ index 86badd051b6b..cb99b81f950f 100644
  
  	if (is_active) {
  		hsotg->op_state = OTG_STATE_B_PERIPHERAL;
-@@ -5198,6 +5217,8 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
+@@ -5206,6 +5225,8 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
  	int epnum;
  	int ret;
  
@@ -532,7 +532,7 @@ index 86badd051b6b..cb99b81f950f 100644
  	/* Dump fifo information */
  	dev_dbg(dev, "NonPeriodic TXFIFO size: %d\n",
  		hsotg->params.g_np_tx_fifo_size);
-@@ -5336,7 +5357,7 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
+@@ -5344,7 +5365,7 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
  	unsigned long flags;
  
  	if ((hsotg->remote_wakeup_allowed || device_may_wakeup(&hsotg->gadget.dev)) &&
@@ -541,7 +541,7 @@ index 86badd051b6b..cb99b81f950f 100644
  		/*
  		 * The bus has been suspended by the HOST, and the remote
  		 * wakeup has been enabled. So don't suspend gadget or it
-@@ -5397,6 +5418,8 @@ int dwc2_hsotg_resume(struct dwc2_hsotg *hsotg)
+@@ -5405,6 +5426,8 @@ int dwc2_hsotg_resume(struct dwc2_hsotg *hsotg)
  			 hsotg->driver->driver.name);
  
  		spin_lock_irqsave(&hsotg->lock, flags);
@@ -550,7 +550,7 @@ index 86badd051b6b..cb99b81f950f 100644
  		dwc2_hsotg_core_init_disconnected(hsotg, false);
  		if (hsotg->enabled) {
  			/* Enable ACG feature in device mode,if supported */
-@@ -5891,6 +5914,16 @@ int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+@@ -5899,6 +5922,16 @@ int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
  
  	dev_dbg(hsotg->dev, "Exiting device partial Power Down started.\n");
  
@@ -567,7 +567,7 @@ index 86badd051b6b..cb99b81f950f 100644
  	pcgcctl = dwc2_readl(hsotg, PCGCTL);
  	pcgcctl &= ~PCGCTL_STOPPCLK;
  	dwc2_writel(hsotg, pcgcctl, PCGCTL);
-@@ -5983,6 +6016,15 @@ void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
+@@ -5991,6 +6024,15 @@ void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
  
  	dev_dbg(hsotg->dev, "Exiting device clock gating.\n");
  
@@ -583,7 +583,7 @@ index 86badd051b6b..cb99b81f950f 100644
  	/* Clear the Gate hclk. */
  	pcgctl = dwc2_readl(hsotg, PCGCTL);
  	pcgctl &= ~PCGCTL_GATEHCLK;
-@@ -6017,12 +6059,15 @@ void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
+@@ -6025,12 +6067,15 @@ void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
   */
  int dwc2_gadget_enter_lp(struct dwc2_hsotg *hsotg)
  {
@@ -599,7 +599,7 @@ index 86badd051b6b..cb99b81f950f 100644
  			dev_err(hsotg->dev, "enter hibernation failed %d\n", ret);
  			return ret;
  		}
-@@ -6031,6 +6076,7 @@ int dwc2_gadget_enter_lp(struct dwc2_hsotg *hsotg)
+@@ -6039,6 +6084,7 @@ int dwc2_gadget_enter_lp(struct dwc2_hsotg *hsotg)
  	case DWC2_POWER_DOWN_PARAM_PARTIAL:
  		ret = dwc2_gadget_enter_partial_power_down(hsotg);
  		if (ret) {
@@ -607,7 +607,7 @@ index 86badd051b6b..cb99b81f950f 100644
  			dev_err(hsotg->dev, "enter partial_power_down failed %d\n", ret);
  			return ret;
  		}
-@@ -6044,6 +6090,7 @@ int dwc2_gadget_enter_lp(struct dwc2_hsotg *hsotg)
+@@ -6052,6 +6098,7 @@ int dwc2_gadget_enter_lp(struct dwc2_hsotg *hsotg)
  		if (!hsotg->params.no_clock_gating)
  			dwc2_gadget_enter_clock_gating(hsotg);
  	}
@@ -616,7 +616,7 @@ index 86badd051b6b..cb99b81f950f 100644
  	/* Core hasn't been put into one of the power saving modes: simply return */
  	if (!(hsotg->bus_suspended || hsotg->in_ppd || hsotg->hibernated))
 diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index f427f2330732..27c2aafc2a26 100644
+index 12533a57f96f..b01d8f55c57c 100644
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
 @@ -3316,9 +3316,10 @@ int dwc2_port_suspend(struct dwc2_hsotg *hsotg, u16 windex)
@@ -656,7 +656,7 @@ index f427f2330732..27c2aafc2a26 100644
  
  skip_power_saving:
  	hsotg->lx_state = DWC2_L2;
-@@ -5819,6 +5823,15 @@ int dwc2_host_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+@@ -5818,6 +5822,15 @@ int dwc2_host_exit_partial_power_down(struct dwc2_hsotg *hsotg,
  
  	dev_dbg(hsotg->dev, "Exiting host partial power down started.\n");
  
@@ -672,7 +672,7 @@ index f427f2330732..27c2aafc2a26 100644
  	pcgcctl = dwc2_readl(hsotg, PCGCTL);
  	pcgcctl &= ~PCGCTL_STOPPCLK;
  	dwc2_writel(hsotg, pcgcctl, PCGCTL);
-@@ -5935,6 +5948,15 @@ void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg, int flags)
+@@ -5934,6 +5947,15 @@ void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg, int flags)
  
  	dev_dbg(hsotg->dev, "Exiting host clock gating.\n");
  

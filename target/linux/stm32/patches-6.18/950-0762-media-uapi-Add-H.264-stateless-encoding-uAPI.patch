@@ -24,10 +24,10 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  4 files changed, 150 insertions(+)
 
 diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-index 035233e1bf65..772554f7e885 100644
+index f58d92eb136f..172d2c27a764 100644
 --- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
 +++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-@@ -863,6 +863,48 @@ static int validate_av1_sequence(struct v4l2_ctrl_av1_sequence *s)
+@@ -883,6 +883,48 @@ static int validate_av1_sequence(struct v4l2_ctrl_av1_sequence *s)
  	return 0;
  }
  
@@ -76,7 +76,7 @@ index 035233e1bf65..772554f7e885 100644
  /*
   * Compound controls validation requires setting unused fields/flags to zero
   * in order to properly detect unchanged controls with v4l2_ctrl_type_op_equal's
-@@ -1259,6 +1301,12 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
+@@ -1321,6 +1363,12 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
  			return -EINVAL;
  		break;
  
@@ -89,7 +89,7 @@ index 035233e1bf65..772554f7e885 100644
  	default:
  		return -EINVAL;
  	}
-@@ -1971,6 +2019,12 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
+@@ -2033,6 +2081,12 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
  	case V4L2_CTRL_TYPE_VP8_ENCODE_PARAMS:
  		elem_size = sizeof(struct v4l2_ctrl_vp8_encode_params);
  		break;

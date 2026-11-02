@@ -200,7 +200,7 @@ index f7b2f6a8bd90..a267e79190af 100644
  	spin_unlock_irqrestore(&hsotg->lock, flags);
  
 diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 64e4bcfe4932..679cac066400 100644
+index 2715de3553a7..9507f78fc9a7 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
 @@ -3533,12 +3533,22 @@ void dwc2_hsotg_core_init_disconnected(struct dwc2_hsotg *hsotg,
@@ -233,7 +233,7 @@ index 64e4bcfe4932..679cac066400 100644
  	if (!using_desc_dma(hsotg))
  		intmsk |= GINTSTS_INCOMPL_SOIN | GINTSTS_INCOMPL_SOOUT;
 diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index efabd3064a39..00f2f80fe72d 100644
+index c1d8d10ba2b5..04cc115d628b 100644
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
 @@ -50,15 +50,24 @@ static void dwc2_enable_common_interrupts(struct dwc2_hsotg *hsotg)

@@ -76,10 +76,10 @@ index 000000000000..ccdbcce6d037
 +        };
 +    };
 diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index f1d1882009ba..cd66ba9c995b 100644
+index a9cf85fd6fbe..1a23295013d4 100644
 --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
 +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -1365,6 +1365,8 @@ patternProperties:
+@@ -1367,6 +1367,8 @@ patternProperties:
      description: Shenzhen Roofull Technology Co, Ltd
    "^roseapplepi,.*":
      description: RoseapplePi.org

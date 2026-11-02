@@ -24,10 +24,10 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  2 files changed, 25 insertions(+)
 
 diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index e1ca6e7bbe55..6bf9c98d5356 100644
+index d568f01d04f2..0d461b1ab985 100644
 --- a/drivers/usb/typec/tcpm/tcpm.c
 +++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -7987,6 +7987,29 @@ void tcpm_unregister_port(struct tcpm_port *port)
+@@ -8008,6 +8008,29 @@ void tcpm_unregister_port(struct tcpm_port *port)
  }
  EXPORT_SYMBOL_GPL(tcpm_unregister_port);
  

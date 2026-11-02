@@ -28,7 +28,7 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  1 file changed, 44 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 1240cf30f8ad..9040a88de343 100644
+index 5afe670fa056..4b96c46538db 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -25,6 +25,7 @@ cpu0: cpu@0 {

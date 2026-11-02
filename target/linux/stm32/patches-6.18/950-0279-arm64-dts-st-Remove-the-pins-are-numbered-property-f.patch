@@ -17,7 +17,7 @@ Signed-off-by: Cheick TRAORE <cheick.traore-ext@st.com>
  1 file changed, 2 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 9bf50a711738..e13cfd3088b7 100644
+index 8eb883b60408..012b75690b6a 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -2067,7 +2067,6 @@ pinctrl: pinctrl@44240000 {

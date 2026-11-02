@@ -36,7 +36,7 @@ index 88e214d395ab..a6658d836122 100644
  				bits = <0 3>;
  			};
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index a8e6e0f77b83..ec5db00b9d72 100644
+index e4e6f9f818d8..3ec6b7dc085e 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -1739,11 +1739,11 @@ bsec: efuse@44000000 {

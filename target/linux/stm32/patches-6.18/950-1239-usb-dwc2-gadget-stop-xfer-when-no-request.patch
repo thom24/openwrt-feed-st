@@ -41,7 +41,7 @@ Domain-Review: Ram DAYAL <ram.dayal@st.com>
  1 file changed, 27 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 0ad15b7ff6fd..64e4bcfe4932 100644
+index 000fc9e0f6f4..2715de3553a7 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
 @@ -1735,6 +1735,9 @@ static struct dwc2_hsotg_req *get_ep_head(struct dwc2_hsotg_ep *hs_ep)

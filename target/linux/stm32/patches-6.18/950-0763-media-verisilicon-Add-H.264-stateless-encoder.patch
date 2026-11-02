@@ -39,7 +39,7 @@ index d1bbf055b595..f21f31d0aaf8 100644
  		hantro_g1_h264_dec.o \
  		hantro_g1_mpeg2_dec.o \
 diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
-index 74e012417f68..327d846968f9 100644
+index 9e0d4bf2b925..0cad5c4b6ab9 100644
 --- a/drivers/media/platform/verisilicon/hantro.h
 +++ b/drivers/media/platform/verisilicon/hantro.h
 @@ -33,6 +33,7 @@ struct hantro_postproc_ops;
@@ -50,7 +50,7 @@ index 74e012417f68..327d846968f9 100644
  #define HANTRO_ENCODERS		0x0000ffff
  #define HANTRO_MPEG2_DECODER	BIT(16)
  #define HANTRO_VP8_DECODER	BIT(17)
-@@ -115,6 +116,7 @@ struct hantro_variant {
+@@ -117,6 +118,7 @@ struct hantro_variant {
   * @HANTRO_MODE_VP9_DEC: VP9 decoder.
   * @HANTRO_MODE_AV1_DEC: AV1 decoder
   * @HANTRO_MODE_VP8_ENC: VP8 encoder.
@@ -58,7 +58,7 @@ index 74e012417f68..327d846968f9 100644
   */
  enum hantro_codec_mode {
  	HANTRO_MODE_NONE = -1,
-@@ -126,6 +128,7 @@ enum hantro_codec_mode {
+@@ -128,6 +130,7 @@ enum hantro_codec_mode {
  	HANTRO_MODE_VP9_DEC,
  	HANTRO_MODE_AV1_DEC,
  	HANTRO_MODE_VP8_ENC,
@@ -66,7 +66,7 @@ index 74e012417f68..327d846968f9 100644
  };
  
  /*
-@@ -278,6 +281,7 @@ struct hantro_ctx {
+@@ -280,6 +283,7 @@ struct hantro_ctx {
  		struct hantro_vp9_dec_hw_ctx vp9_dec;
  		struct hantro_av1_dec_hw_ctx av1_dec;
  		struct hantro_vp8_enc_hw_ctx vp8_enc;
@@ -75,10 +75,10 @@ index 74e012417f68..327d846968f9 100644
  };
  
 diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
-index 0faed0401a22..f77337349a11 100644
+index d908ec65755f..2e576db2a279 100644
 --- a/drivers/media/platform/verisilicon/hantro_drv.c
 +++ b/drivers/media/platform/verisilicon/hantro_drv.c
-@@ -460,6 +460,16 @@ static const struct hantro_ctrl controls[] = {
+@@ -461,6 +461,16 @@ static const struct hantro_ctrl controls[] = {
  			.step = 1,
  			.def = 0,
  		},

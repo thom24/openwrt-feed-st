@@ -67,28 +67,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
 Tested-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
 Domain-Review: Christophe ROULLIER <christophe.roullier@foss.st.com>
 Reviewed-by: Christophe ROULLIER <christophe.roullier@foss.st.com>
----
- net/core/page_pool.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index b775b6305fb7..049680ad48f6 100644
---- a/net/core/page_pool.c
-+++ b/net/core/page_pool.c
-@@ -482,6 +482,13 @@ static int page_pool_register_dma_index(struct page_pool *pool,
- 	if (unlikely(!PP_DMA_INDEX_BITS))
- 		goto out;
- 
-+	/*
-+	 * Drivers request GFP flags according to both the current context and
-+	 * the device constraints, but the XArray entry itself is by no mean
-+	 * used by the device, so remove zone/policy flags.
-+	 */
-+	gfp &= ~(__GFP_DMA | __GFP_DMA32 | __GFP_HIGHMEM | __GFP_COMP);
-+
- 	if (in_softirq())
- 		err = xa_alloc(&pool->dma_mapped, &id, netmem_to_page(netmem),
- 			       PP_DMA_INDEX_LIMIT, gfp);
 -- 
 2.53.0
 

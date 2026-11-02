@@ -16,7 +16,7 @@ Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
  3 files changed, 18 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
-index f4b962867dc2..1b7edf0d2938 100644
+index aa895eb90997..9c76dbe89eb7 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
 @@ -110,12 +110,6 @@ struct dcmipp_buf {
@@ -32,7 +32,7 @@ index f4b962867dc2..1b7edf0d2938 100644
  struct dcmipp_bytecap_device {
  	struct dcmipp_ent_device ved;
  	struct video_device vdev;
-@@ -797,9 +791,12 @@ static irqreturn_t dcmipp_bytecap_irq_callback(int irq, void *arg)
+@@ -799,9 +793,12 @@ static irqreturn_t dcmipp_bytecap_irq_callback(int irq, void *arg)
  {
  	struct dcmipp_bytecap_device *vcap =
  			container_of(arg, struct dcmipp_bytecap_device, ved);

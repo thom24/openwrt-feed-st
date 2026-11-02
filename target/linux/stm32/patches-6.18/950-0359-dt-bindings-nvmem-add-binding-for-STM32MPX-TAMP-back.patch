@@ -79,10 +79,10 @@ index 000000000000..4af40a706d01
 +      };
 +    };
 diff --git a/MAINTAINERS b/MAINTAINERS
-index c8bb457eb1af..87e1a2665d6c 100644
+index d7f226ec2d3b..60ccaaccb437 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -24675,6 +24675,12 @@ M:	Gatien Chevallier <gatien.chevallier@foss.st.com>
+@@ -24704,6 +24704,12 @@ M:	Gatien Chevallier <gatien.chevallier@foss.st.com>
  S:	Maintained
  F:	Documentation/devicetree/bindings/soc/st/*rif*
  

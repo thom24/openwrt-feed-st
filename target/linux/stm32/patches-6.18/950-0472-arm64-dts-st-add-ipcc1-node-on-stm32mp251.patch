@@ -20,7 +20,7 @@ Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
  1 file changed, 12 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index c64c2f422601..bab8d08e0db8 100644
+index d2c2a6657017..3ff67e373fa2 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -296,6 +296,18 @@ hpdma3: dma-controller@40420000 {

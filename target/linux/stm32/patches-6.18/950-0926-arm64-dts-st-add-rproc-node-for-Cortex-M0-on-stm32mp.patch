@@ -18,7 +18,7 @@ Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
  1 file changed, 22 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 7cff43d75037..5076847c6e70 100644
+index d125f427d980..9606d083e6f1 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -3009,4 +3009,26 @@ m33_rproc: m33@0 {

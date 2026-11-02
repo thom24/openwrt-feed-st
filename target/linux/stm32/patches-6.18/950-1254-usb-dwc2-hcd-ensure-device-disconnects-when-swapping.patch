@@ -20,7 +20,7 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index 13ccf68e8a38..59eda815dc6e 100644
+index e6a24ecc21d9..234c7ce59bc3 100644
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
 @@ -1816,7 +1816,8 @@ void dwc2_hcd_disconnect(struct dwc2_hsotg *hsotg, bool force)

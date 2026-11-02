@@ -19,10 +19,10 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/573692
  1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-index 26b08e3dbd1d..15ceb5e87a66 100644
+index dcbe9f1e6969..c8cea668da44 100644
 --- a/drivers/net/phy/phy_device.c
 +++ b/drivers/net/phy/phy_device.c
-@@ -370,7 +370,7 @@ static __maybe_unused int mdio_bus_phy_suspend(struct device *dev)
+@@ -381,7 +381,7 @@ static __maybe_unused int mdio_bus_phy_suspend(struct device *dev)
  static __maybe_unused int mdio_bus_phy_resume(struct device *dev)
  {
  	struct phy_device *phydev = to_phy_device(dev);
@@ -31,7 +31,7 @@ index 26b08e3dbd1d..15ceb5e87a66 100644
  
  	if (phydev->mac_managed_pm)
  		return 0;
-@@ -380,6 +380,10 @@ static __maybe_unused int mdio_bus_phy_resume(struct device *dev)
+@@ -391,6 +391,10 @@ static __maybe_unused int mdio_bus_phy_resume(struct device *dev)
  
  	phydev->suspended_by_mdio_bus = 0;
  

@@ -25,7 +25,7 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  1 file changed, 24 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/clk/clk-scmi.c b/drivers/clk/clk-scmi.c
-index 6b286ea6f121..2b6b29cfceca 100644
+index b6a12f3bc123..e661030e47d8 100644
 --- a/drivers/clk/clk-scmi.c
 +++ b/drivers/clk/clk-scmi.c
 @@ -54,33 +54,44 @@ static unsigned long scmi_clk_recalc_rate(struct clk_hw *hw,
@@ -85,7 +85,7 @@ index 6b286ea6f121..2b6b29cfceca 100644
 +
  	ftmp = req->rate - fmin;
  	ftmp += clk->info->range.step_size - 1; /* to round up */
- 	do_div(ftmp, clk->info->range.step_size);
+ 	ftmp = div64_ul(ftmp, clk->info->range.step_size);
 -- 
 2.53.0
 

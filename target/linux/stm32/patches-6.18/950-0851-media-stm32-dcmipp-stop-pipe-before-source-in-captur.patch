@@ -21,10 +21,10 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  1 file changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
-index 2d3cfcbcb2e1..f4f26c71da1b 100644
+index 34ee4cc17f45..956437195c46 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
-@@ -749,14 +749,6 @@ static void dcmipp_capture_stop_streaming(struct vb2_queue *vq)
+@@ -751,14 +751,6 @@ static void dcmipp_capture_stop_streaming(struct vb2_queue *vq)
  	int ret;
  	u32 status;
  
@@ -39,7 +39,7 @@ index 2d3cfcbcb2e1..f4f26c71da1b 100644
  	/* Disable interruptions */
  	spin_lock(&vcap->vdev.v4l2_dev->lock);
  	reg_clear(vcap, DCMIPP_CMIER, DCMIPP_CMIER_PxALL(vcap->pipe_id));
-@@ -780,6 +772,14 @@ static void dcmipp_capture_stop_streaming(struct vb2_queue *vq)
+@@ -782,6 +774,14 @@ static void dcmipp_capture_stop_streaming(struct vb2_queue *vq)
  	/* Clear any pending interrupts */
  	reg_write(vcap, DCMIPP_CMFCR, DCMIPP_CMIER_PxALL(vcap->pipe_id));
  

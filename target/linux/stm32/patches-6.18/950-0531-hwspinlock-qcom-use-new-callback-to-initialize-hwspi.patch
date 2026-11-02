@@ -10,11 +10,11 @@ Remove superfluous setting of drvdata while here.
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 Acked-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 ---
- drivers/hwspinlock/qcom_hwspinlock.c | 45 ++++++++++++++++------------
- 1 file changed, 26 insertions(+), 19 deletions(-)
+ drivers/hwspinlock/qcom_hwspinlock.c | 42 +++++++++++++++++-----------
+ 1 file changed, 26 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/hwspinlock/qcom_hwspinlock.c b/drivers/hwspinlock/qcom_hwspinlock.c
-index 7960a4972eab..73b280988109 100644
+index 812e15dee9a0..73b280988109 100644
 --- a/drivers/hwspinlock/qcom_hwspinlock.c
 +++ b/drivers/hwspinlock/qcom_hwspinlock.c
 @@ -25,6 +25,13 @@ struct qcom_hwspinlock_of_data {
@@ -55,13 +55,12 @@ index 7960a4972eab..73b280988109 100644
  };
  
  static const struct regmap_config sfpb_mutex_config = {
-@@ -202,17 +222,14 @@ static struct regmap *qcom_hwspinlock_probe_mmio(struct platform_device *pdev,
+@@ -202,16 +222,14 @@ static struct regmap *qcom_hwspinlock_probe_mmio(struct platform_device *pdev,
  
  static int qcom_hwspinlock_probe(struct platform_device *pdev)
  {
 +	struct qcom_hwspinlock_priv_init_data init;
  	struct hwspinlock_device *bank;
--	struct reg_field field;
  	struct regmap *regmap;
  	size_t array_size;
 -	u32 stride;
@@ -76,16 +75,14 @@ index 7960a4972eab..73b280988109 100644
  
  	if (IS_ERR(regmap))
  		return PTR_ERR(regmap);
-@@ -222,21 +239,11 @@ static int qcom_hwspinlock_probe(struct platform_device *pdev)
+@@ -221,19 +239,11 @@ static int qcom_hwspinlock_probe(struct platform_device *pdev)
  	if (!bank)
  		return -ENOMEM;
  
 -	platform_set_drvdata(pdev, bank);
 -
 -	for (i = 0; i < QCOM_MUTEX_NUM_LOCKS; i++) {
--		field.reg = base + i * stride;
--		field.lsb = 0;
--		field.msb = 31;
+-		struct reg_field field = REG_FIELD(base + i * stride, 0, 31);
 -
 -		bank->lock[i].priv = devm_regmap_field_alloc(&pdev->dev,
 -							     regmap, field);

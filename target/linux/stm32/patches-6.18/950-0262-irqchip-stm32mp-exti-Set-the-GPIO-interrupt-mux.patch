@@ -24,7 +24,7 @@ Change-Id: I1a2d066065a24ba249f882653274735575177c79
  1 file changed, 153 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/irqchip/irq-stm32mp-exti.c b/drivers/irqchip/irq-stm32mp-exti.c
-index 1ba2907bb649..143cdd977d00 100644
+index cd5ef481053c..f3eb616f3d1c 100644
 --- a/drivers/irqchip/irq-stm32mp-exti.c
 +++ b/drivers/irqchip/irq-stm32mp-exti.c
 @@ -5,6 +5,7 @@
@@ -35,17 +35,15 @@ index 1ba2907bb649..143cdd977d00 100644
  #include <linux/bitops.h>
  #include <linux/hwspinlock.h>
  #include <linux/interrupt.h>
-@@ -23,8 +24,17 @@
+@@ -25,6 +26,15 @@
  
- #define IRQS_PER_BANK			32
+ #define HWSPNLCK_TIMEOUT_MS		1
  
 +#define STM32MP_GPIO_IRQ_LINES		16
 +
 +/* to receive bank_ioport_nr from GPIO in struct irq_fwspec::param[1] */
 +#define STM32MP_GPIO_BANK_MASK		GENMASK(23, 16)
 +
- #define HWSPNLCK_TIMEOUT		1000 /* usec */
- 
 +#define EXTI_CR(n)			(0x060 + ((n) / 4) * 4)
 +#define EXTI_CR_SHIFT(n)		(((n) % 4) * 8)
 +#define EXTI_CR_MASK(n)			(GENMASK(7, 0) << EXTI_CR_SHIFT(n))

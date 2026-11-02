@@ -39,18 +39,18 @@ Reviewed-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
  3 files changed, 73 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
-index b728d4ce9191..22ac71428ec7 100644
+index ed2f9bd7b959..344f40182a10 100644
 --- a/drivers/tee/optee/optee_private.h
 +++ b/drivers/tee/optee/optee_private.h
-@@ -243,6 +243,7 @@ struct optee_ops {
-  * @scan_bus_done	flag if device registation was already done.
-  * @scan_bus_work	workq to scan optee bus and register optee drivers
-  * @itr_notif		True if OP-TEE offers interrupt notification
-+ * @noirq_enabled	True if OP-TEE invokes in PM_NOIRQ context
+@@ -251,6 +251,7 @@ struct optee_ops {
+  *				bus and register RPMB dependent optee drivers
+  * @revision:			OP-TEE OS revision
+  * @itr_notif:		True if OP-TEE offers interrupt notification
++ * @noirq_enabled:	True if OP-TEE invokes in PM_NOIRQ context
   */
  struct optee {
  	struct tee_device *supp_teedev;
-@@ -269,6 +270,7 @@ struct optee {
+@@ -277,6 +278,7 @@ struct optee {
  	struct work_struct scan_bus_work;
  	struct work_struct rpmb_scan_bus_work;
  	bool itr_notif;
@@ -104,7 +104,7 @@ index d2cdaaa7fbe2..c4c4f2ce2a8e 100644
   * Get protected memory config
   *
 diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
-index 52732f7dbc65..bcb4b1de0e1e 100644
+index bbb4ad948ef4..16f17dfe877b 100644
 --- a/drivers/tee/optee/smc_abi.c
 +++ b/drivers/tee/optee/smc_abi.c
 @@ -926,7 +926,11 @@ static int optee_smc_do_call_with_arg(struct tee_context *ctx,
@@ -176,7 +176,7 @@ index 52732f7dbc65..bcb4b1de0e1e 100644
  static int optee_probe(struct platform_device *pdev)
  {
  	optee_invoke_fn *invoke_fn;
-@@ -2160,6 +2198,7 @@ static struct platform_driver optee_driver = {
+@@ -2159,6 +2197,7 @@ static struct platform_driver optee_driver = {
  	.driver = {
  		.name = "optee",
  		.of_match_table = optee_dt_match,

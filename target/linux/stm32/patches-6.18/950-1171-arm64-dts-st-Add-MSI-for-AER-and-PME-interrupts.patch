@@ -15,7 +15,7 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 11e3e24b094b..c13328f297a3 100644
+index cc5b1c9a9bb9..f20a393880e9 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -2317,6 +2317,10 @@ pcie_rc: pcie@48400000 {

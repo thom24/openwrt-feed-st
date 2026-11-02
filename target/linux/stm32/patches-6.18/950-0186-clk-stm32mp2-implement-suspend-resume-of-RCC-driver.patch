@@ -114,18 +114,18 @@ index e921c25a929c..3d360e93303b 100644
  
  struct clk_hw *clk_stm32_mux_register(struct device *dev,
 diff --git a/drivers/clk/stm32/clk-stm32mp21.c b/drivers/clk/stm32/clk-stm32mp21.c
-index c8a37b716bd5..8cd8c727c4ee 100644
+index bdb17419908c..a23d933cb21b 100644
 --- a/drivers/clk/stm32/clk-stm32mp21.c
 +++ b/drivers/clk/stm32/clk-stm32mp21.c
-@@ -5,6 +5,7 @@
-  */
+@@ -6,6 +6,7 @@
  
+ #include <linux/bitfield.h>
  #include <linux/bus/stm32_firewall_device.h>
 +#include <linux/clk.h>
  #include <linux/clk-provider.h>
  #include <linux/io.h>
  #include <linux/platform_device.h>
-@@ -1569,6 +1570,26 @@ static int stm32mp21_rcc_clocks_probe(struct platform_device *pdev)
+@@ -1570,6 +1571,26 @@ static int stm32mp21_rcc_clocks_probe(struct platform_device *pdev)
  	return stm32_rcc_init(dev, stm32mp21_match_data, base);
  }
  
@@ -153,18 +153,18 @@ index c8a37b716bd5..8cd8c727c4ee 100644
  	.driver	= {
  		.name = "stm32mp21_rcc",
 diff --git a/drivers/clk/stm32/clk-stm32mp25.c b/drivers/clk/stm32/clk-stm32mp25.c
-index 52f0e8a12926..5743e7ea9a9c 100644
+index eb0bc918ecee..575677df65ee 100644
 --- a/drivers/clk/stm32/clk-stm32mp25.c
 +++ b/drivers/clk/stm32/clk-stm32mp25.c
-@@ -5,6 +5,7 @@
-  */
+@@ -6,6 +6,7 @@
  
+ #include <linux/bitfield.h>
  #include <linux/bus/stm32_firewall_device.h>
 +#include <linux/clk.h>
  #include <linux/clk-provider.h>
  #include <linux/io.h>
  #include <linux/platform_device.h>
-@@ -1985,10 +1986,31 @@ static int stm32mp25_rcc_clocks_probe(struct platform_device *pdev)
+@@ -1986,10 +1987,31 @@ static int stm32mp25_rcc_clocks_probe(struct platform_device *pdev)
  	return stm32_rcc_init(dev, stm32mp25_match_data, base);
  }
  

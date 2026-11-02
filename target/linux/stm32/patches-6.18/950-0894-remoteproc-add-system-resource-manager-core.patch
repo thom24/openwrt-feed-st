@@ -52,7 +52,7 @@ index 5c226fa076d6..eac5ed8fb4fa 100644
 +The resources handled by the SRM are defined in the DeviceTree: please read
 +Documentation/devicetree/bindings/remoteproc/rproc-srm.txt for details.
 diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
-index 09eaa146c2b7..3debd6c5ebd1 100644
+index 9307381bd74b..930685e2548e 100644
 --- a/drivers/remoteproc/Kconfig
 +++ b/drivers/remoteproc/Kconfig
 @@ -23,6 +23,14 @@ config REMOTEPROC_CDEV
@@ -71,7 +71,7 @@ index 09eaa146c2b7..3debd6c5ebd1 100644
  	tristate "i.MX remoteproc support"
  	depends on ARCH_MXC
 diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
-index fabb887a52ea..6960b8a03e0f 100644
+index c11f3cbde86b..a9c59cd4ea3f 100644
 --- a/drivers/remoteproc/Makefile
 +++ b/drivers/remoteproc/Makefile
 @@ -11,6 +11,7 @@ remoteproc-y				+= remoteproc_sysfs.o

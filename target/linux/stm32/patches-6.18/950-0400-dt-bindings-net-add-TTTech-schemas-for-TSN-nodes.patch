@@ -219,10 +219,10 @@ index 000000000000..c06eefc68745
 +
 +...
 diff --git a/MAINTAINERS b/MAINTAINERS
-index deedd1840325..96158ec32b64 100644
+index ef0e4b29e123..a699b7b7c7aa 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -24703,6 +24703,13 @@ S:	Orphan
+@@ -24732,6 +24732,13 @@ S:	Orphan
  F:	Documentation/networking/device_drivers/ethernet/stmicro/
  F:	drivers/net/ethernet/stmicro/stmmac/
  

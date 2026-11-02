@@ -19,7 +19,7 @@ Change-Id: I688796f4ab196f36691aaa812ca54cf91a63b721
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/tee/optee/call.c b/drivers/tee/optee/call.c
-index c7800ffedbb5..b725e004a538 100644
+index 1c0454d41fcb..0ea87631cd35 100644
 --- a/drivers/tee/optee/call.c
 +++ b/drivers/tee/optee/call.c
 @@ -531,10 +531,10 @@ int optee_invoke_func_helper(struct tee_context *ctx,

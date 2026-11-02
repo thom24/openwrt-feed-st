@@ -104,7 +104,7 @@ index f3ef9cefbdbc..3a15c2ee7968 100644
  			/*
  			 * If we've got this quirk then the PHY is stuck upon
 diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index 31f577838ff8..f427f2330732 100644
+index 91359125d715..12533a57f96f 100644
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
 @@ -1756,6 +1756,25 @@ void dwc2_hcd_disconnect(struct dwc2_hsotg *hsotg, bool force)
@@ -133,7 +133,7 @@ index 31f577838ff8..f427f2330732 100644
  	/*
  	 * Shutdown any transfers in process by clearing the Tx FIFO Empty
  	 * interrupt mask and status bits and disabling subsequent host
-@@ -5783,7 +5802,8 @@ static int dwc2_host_enter_partial_power_down(struct dwc2_hsotg *hsotg)
+@@ -5782,7 +5801,8 @@ static int dwc2_host_enter_partial_power_down(struct dwc2_hsotg *hsotg)
   * power down.
   *
   * @hsotg: Programming view of the DWC_otg controller
@@ -143,7 +143,7 @@ index 31f577838ff8..f427f2330732 100644
   * @restore: indicates whether need to restore the registers or not.
   *
   * Return: non-zero if failed to exit host partial power down.
-@@ -5791,7 +5811,7 @@ static int dwc2_host_enter_partial_power_down(struct dwc2_hsotg *hsotg)
+@@ -5790,7 +5810,7 @@ static int dwc2_host_enter_partial_power_down(struct dwc2_hsotg *hsotg)
   * This function is for exiting from Host mode partial power down.
   */
  int dwc2_host_exit_partial_power_down(struct dwc2_hsotg *hsotg,
@@ -152,7 +152,7 @@ index 31f577838ff8..f427f2330732 100644
  {
  	u32 pcgcctl;
  	int ret = 0;
-@@ -5820,6 +5840,14 @@ int dwc2_host_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+@@ -5819,6 +5839,14 @@ int dwc2_host_exit_partial_power_down(struct dwc2_hsotg *hsotg,
  			return ret;
  	}
  
@@ -167,7 +167,7 @@ index 31f577838ff8..f427f2330732 100644
  	/* Drive resume signaling and exit suspend mode on the port. */
  	hprt0 = dwc2_read_hprt0(hsotg);
  	hprt0 |= HPRT0_RES;
-@@ -5827,14 +5855,14 @@ int dwc2_host_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+@@ -5826,14 +5854,14 @@ int dwc2_host_exit_partial_power_down(struct dwc2_hsotg *hsotg,
  	dwc2_writel(hsotg, hprt0, HPRT0);
  	udelay(5);
  
@@ -184,7 +184,7 @@ index 31f577838ff8..f427f2330732 100644
  		/* Turn on the port power bit. */
  		hprt0 = dwc2_read_hprt0(hsotg);
  		hprt0 |= HPRT0_PWR;
-@@ -5847,6 +5875,7 @@ int dwc2_host_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+@@ -5846,6 +5874,7 @@ int dwc2_host_exit_partial_power_down(struct dwc2_hsotg *hsotg,
  			  jiffies + msecs_to_jiffies(71));
  	}
  
@@ -192,7 +192,7 @@ index 31f577838ff8..f427f2330732 100644
  	/* Set lx_state to and in_ppd to 0 as here core exits from suspend. */
  	hsotg->in_ppd = 0;
  	hsotg->lx_state = DWC2_L0;
-@@ -5894,11 +5923,12 @@ static void dwc2_host_enter_clock_gating(struct dwc2_hsotg *hsotg)
+@@ -5893,11 +5922,12 @@ static void dwc2_host_enter_clock_gating(struct dwc2_hsotg *hsotg)
   * dwc2_host_exit_clock_gating() - Exit controller from clock gating.
   *
   * @hsotg: Programming view of the DWC_otg controller
@@ -207,7 +207,7 @@ index 31f577838ff8..f427f2330732 100644
  {
  	u32 hprt0;
  	u32 pcgctl;
-@@ -5917,6 +5947,16 @@ void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
+@@ -5916,6 +5946,16 @@ void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
  	dwc2_writel(hsotg, pcgctl, PCGCTL);
  	udelay(5);
  
@@ -224,7 +224,7 @@ index 31f577838ff8..f427f2330732 100644
  	/* Drive resume signaling and exit suspend mode on the port. */
  	hprt0 = dwc2_read_hprt0(hsotg);
  	hprt0 |= HPRT0_RES;
-@@ -5924,7 +5964,7 @@ void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
+@@ -5923,7 +5963,7 @@ void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
  	dwc2_writel(hsotg, hprt0, HPRT0);
  	udelay(5);
  
@@ -233,7 +233,7 @@ index 31f577838ff8..f427f2330732 100644
  		/* In case of port resume need to wait for 40 ms */
  		msleep(USB_RESUME_TIMEOUT);
  
-@@ -5935,7 +5975,7 @@ void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
+@@ -5934,7 +5974,7 @@ void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
  
  		hsotg->bus_suspended = false;
  		hsotg->lx_state = DWC2_L0;

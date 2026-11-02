@@ -20,7 +20,7 @@ Tested-by: Alain VOLMAT <alain.volmat@st.com>
  1 file changed, 8 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index fd0e5c857d74..34951f9fe67a 100644
+index bc98a07e17fb..bb5b5b48041c 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -842,6 +842,7 @@ i2c1: i2c@40120000 {

@@ -14,10 +14,10 @@ Change-Id: Ie91da1c560866637b65ef214298615ef270ef82c
  1 file changed, 7 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
-index 13762861b769..619b0d981211 100644
+index 200b49812791..00a86f3720a9 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmi.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
-@@ -2092,7 +2092,7 @@ static void dcmi_remove(struct platform_device *pdev)
+@@ -2093,7 +2093,7 @@ static void dcmi_remove(struct platform_device *pdev)
  	dma_release_channel(dcmi->dma_chan);
  }
  
@@ -26,7 +26,7 @@ index 13762861b769..619b0d981211 100644
  {
  	struct stm32_dcmi *dcmi = dev_get_drvdata(dev);
  
-@@ -2101,7 +2101,7 @@ static __maybe_unused int dcmi_runtime_suspend(struct device *dev)
+@@ -2102,7 +2102,7 @@ static __maybe_unused int dcmi_runtime_suspend(struct device *dev)
  	return 0;
  }
  
@@ -35,7 +35,7 @@ index 13762861b769..619b0d981211 100644
  {
  	struct stm32_dcmi *dcmi = dev_get_drvdata(dev);
  	int ret;
-@@ -2113,7 +2113,7 @@ static __maybe_unused int dcmi_runtime_resume(struct device *dev)
+@@ -2114,7 +2114,7 @@ static __maybe_unused int dcmi_runtime_resume(struct device *dev)
  	return ret;
  }
  
@@ -44,7 +44,7 @@ index 13762861b769..619b0d981211 100644
  {
  	/* disable clock */
  	pm_runtime_force_suspend(dev);
-@@ -2124,7 +2124,7 @@ static __maybe_unused int dcmi_suspend(struct device *dev)
+@@ -2125,7 +2125,7 @@ static __maybe_unused int dcmi_suspend(struct device *dev)
  	return 0;
  }
  
@@ -53,7 +53,7 @@ index 13762861b769..619b0d981211 100644
  {
  	/* restore pinctl default state */
  	pinctrl_pm_select_default_state(dev);
-@@ -2136,9 +2136,8 @@ static __maybe_unused int dcmi_resume(struct device *dev)
+@@ -2137,9 +2137,8 @@ static __maybe_unused int dcmi_resume(struct device *dev)
  }
  
  static const struct dev_pm_ops dcmi_pm_ops = {
@@ -65,7 +65,7 @@ index 13762861b769..619b0d981211 100644
  };
  
  static struct platform_driver stm32_dcmi_driver = {
-@@ -2147,7 +2146,7 @@ static struct platform_driver stm32_dcmi_driver = {
+@@ -2148,7 +2147,7 @@ static struct platform_driver stm32_dcmi_driver = {
  	.driver		= {
  		.name = DRV_NAME,
  		.of_match_table = of_match_ptr(stm32_dcmi_of_match),

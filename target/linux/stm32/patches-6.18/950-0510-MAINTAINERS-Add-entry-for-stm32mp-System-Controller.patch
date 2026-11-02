@@ -20,10 +20,10 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  1 file changed, 6 insertions(+)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 96158ec32b64..2dccf814a055 100644
+index a699b7b7c7aa..f9e76205a037 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -24363,6 +24363,12 @@ L:	linux-spi@vger.kernel.org
+@@ -24392,6 +24392,12 @@ L:	linux-spi@vger.kernel.org
  S:	Maintained
  F:	drivers/spi/spi-stm32.c
  

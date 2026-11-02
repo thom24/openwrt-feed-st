@@ -12,7 +12,7 @@ Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
  1 file changed, 9 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/irqchip/irq-stm32mp-exti.c b/drivers/irqchip/irq-stm32mp-exti.c
-index 9e091434a501..30c413384a1e 100644
+index 29a7c68b4c44..5c31030124da 100644
 --- a/drivers/irqchip/irq-stm32mp-exti.c
 +++ b/drivers/irqchip/irq-stm32mp-exti.c
 @@ -279,7 +279,7 @@ static int stm32mp_exti_convert_type(struct irq_data *d, unsigned int type, u32

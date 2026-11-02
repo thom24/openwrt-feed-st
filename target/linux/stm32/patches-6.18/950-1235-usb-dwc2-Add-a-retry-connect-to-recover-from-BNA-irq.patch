@@ -61,7 +61,7 @@ index 4d067be48b36..b7056b8f8a22 100644
  	struct dwc2_hsotg_ep *eps_in[MAX_EPS_CHANNELS];
  	struct dwc2_hsotg_ep *eps_out[MAX_EPS_CHANNELS];
 diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index bc78af5046bc..ed911014c53f 100644
+index d3f3895a95c8..faf275e5aa50 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
 @@ -3118,6 +3118,8 @@ static void dwc2_hsotg_epint(struct dwc2_hsotg *hsotg, unsigned int idx,

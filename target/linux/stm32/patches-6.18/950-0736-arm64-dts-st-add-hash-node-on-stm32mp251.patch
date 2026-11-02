@@ -22,7 +22,7 @@ Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
  1 file changed, 13 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 4a54155628d2..002e16f59245 100644
+index d9fe386b351f..6d578281e206 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -1583,6 +1583,19 @@ uart8: serial@40380000 {

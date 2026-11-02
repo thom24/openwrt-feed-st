@@ -14,7 +14,7 @@ Change-Id: I7e1ffaefa8aa4a4ac83b180ff63ccf9580c50bd0
  1 file changed, 4 deletions(-)
 
 diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
-index 6ca0ffcd97a3..97683daf179d 100644
+index 9efa6a8df150..0950d66567ab 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmi.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
 @@ -717,10 +717,6 @@ static int dcmi_start_streaming(struct vb2_queue *vq, unsigned int count)

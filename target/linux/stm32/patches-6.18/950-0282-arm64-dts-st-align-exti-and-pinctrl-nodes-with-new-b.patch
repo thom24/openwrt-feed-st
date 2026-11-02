@@ -14,7 +14,7 @@ Change-Id: Ia70b0afa00e82b524f18d2eb2e5637cbec98b651
  1 file changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 1be807f6b834..d2e62e5c4362 100644
+index e4bb57b0b4c5..ecca2bb7219b 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -1961,7 +1961,7 @@ rcc: clock-controller@44200000 {

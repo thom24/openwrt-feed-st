@@ -22,10 +22,10 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  1 file changed, 14 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/mailbox/mailbox.c b/drivers/mailbox/mailbox.c
-index 60866e8417c9..8130bbdda376 100644
+index 0f2019aadc21..74c2f323f91a 100644
 --- a/drivers/mailbox/mailbox.c
 +++ b/drivers/mailbox/mailbox.c
-@@ -323,7 +323,7 @@ static int __mbox_bind_client(struct mbox_chan *chan, struct mbox_client *cl)
+@@ -327,7 +327,7 @@ static int __mbox_bind_client(struct mbox_chan *chan, struct mbox_client *cl)
  		chan->cl = cl;
  		init_completion(&chan->tx_complete);
  
@@ -34,7 +34,7 @@ index 60866e8417c9..8130bbdda376 100644
  			chan->txdone_method = TXDONE_BY_ACK;
  	}
  
-@@ -461,6 +461,16 @@ struct mbox_chan *mbox_request_channel_byname(struct mbox_client *cl,
+@@ -465,6 +465,16 @@ struct mbox_chan *mbox_request_channel_byname(struct mbox_client *cl,
  }
  EXPORT_SYMBOL_GPL(mbox_request_channel_byname);
  
@@ -51,7 +51,7 @@ index 60866e8417c9..8130bbdda376 100644
  /**
   * mbox_free_channel - The client relinquishes control of a mailbox
   *			channel by this call.
-@@ -478,8 +488,8 @@ void mbox_free_channel(struct mbox_chan *chan)
+@@ -482,8 +492,8 @@ void mbox_free_channel(struct mbox_chan *chan)
  	scoped_guard(spinlock_irqsave, &chan->lock) {
  		chan->cl = NULL;
  		chan->active_req = MBOX_NO_MSG;
@@ -62,7 +62,7 @@ index 60866e8417c9..8130bbdda376 100644
  	}
  
  	module_put(chan->mbox->dev->driver->owner);
-@@ -508,12 +518,7 @@ int mbox_controller_register(struct mbox_controller *mbox)
+@@ -512,12 +522,7 @@ int mbox_controller_register(struct mbox_controller *mbox)
  	if (!mbox || !mbox->dev || !mbox->ops || !mbox->chans || !mbox->num_chans)
  		return -EINVAL;
  

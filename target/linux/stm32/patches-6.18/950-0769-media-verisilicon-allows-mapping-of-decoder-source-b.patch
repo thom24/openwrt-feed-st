@@ -18,10 +18,10 @@ Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
-index bc981cb2a7a7..b6766f9267b3 100644
+index 3340eb03a9c0..560841e237d1 100644
 --- a/drivers/media/platform/verisilicon/hantro_drv.c
 +++ b/drivers/media/platform/verisilicon/hantro_drv.c
-@@ -220,6 +220,13 @@ queue_init(void *priv, struct vb2_queue *src_vq, struct vb2_queue *dst_vq)
+@@ -221,6 +221,13 @@ queue_init(void *priv, struct vb2_queue *src_vq, struct vb2_queue *dst_vq)
  	 */
  	src_vq->dma_attrs = DMA_ATTR_ALLOC_SINGLE_PAGES |
  			    DMA_ATTR_NO_KERNEL_MAPPING;

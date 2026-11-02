@@ -23,10 +23,10 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 2dad2688737b..a9955ec0f7fc 100644
+index e50b1e16f1ac..2e35d3af2711 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -24321,6 +24321,13 @@ S:	Maintained
+@@ -24350,6 +24350,13 @@ S:	Maintained
  F:	Documentation/devicetree/bindings/power/supply/st,stc3117.yaml
  F:	drivers/power/supply/stc3117_fuel_gauge.c
  

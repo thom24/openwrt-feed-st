@@ -24,10 +24,10 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@st.com>
  3 files changed, 22 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index e11a8818af74..114a5d0df5a0 100644
+index 4f198351ca9b..7ffceefce1df 100644
 --- a/drivers/usb/core/hcd.c
 +++ b/drivers/usb/core/hcd.c
-@@ -2284,7 +2284,8 @@ int hcd_bus_suspend(struct usb_device *rhdev, pm_message_t msg)
+@@ -2286,7 +2286,8 @@ int hcd_bus_suspend(struct usb_device *rhdev, pm_message_t msg)
  
  		if (!PMSG_IS_AUTO(msg))
  			usb_phy_roothub_suspend(hcd->self.sysdev,
@@ -37,7 +37,7 @@ index e11a8818af74..114a5d0df5a0 100644
  
  		/* Did we race with a root-hub wakeup event? */
  		if (rhdev->do_remote_wakeup) {
-@@ -2325,7 +2326,8 @@ int hcd_bus_resume(struct usb_device *rhdev, pm_message_t msg)
+@@ -2327,7 +2328,8 @@ int hcd_bus_resume(struct usb_device *rhdev, pm_message_t msg)
  
  	if (!PMSG_IS_AUTO(msg)) {
  		status = usb_phy_roothub_resume(hcd->self.sysdev,
@@ -47,7 +47,7 @@ index e11a8818af74..114a5d0df5a0 100644
  		if (status)
  			return status;
  	}
-@@ -2370,7 +2372,8 @@ int hcd_bus_resume(struct usb_device *rhdev, pm_message_t msg)
+@@ -2372,7 +2374,8 @@ int hcd_bus_resume(struct usb_device *rhdev, pm_message_t msg)
  		}
  	} else {
  		hcd->state = old_state;

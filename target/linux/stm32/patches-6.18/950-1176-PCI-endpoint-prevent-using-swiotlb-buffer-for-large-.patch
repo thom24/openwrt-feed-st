@@ -26,7 +26,7 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  1 file changed, 9 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-index 9bc6d283eae2..7053abf944d0 100644
+index 97e003782216..7d6a25168c6b 100644
 --- a/drivers/pci/endpoint/functions/pci-epf-test.c
 +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
 @@ -10,6 +10,7 @@

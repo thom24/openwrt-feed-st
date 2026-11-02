@@ -20,7 +20,7 @@ Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
  7 files changed, 29 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/hwspinlock/hwspinlock_core.c b/drivers/hwspinlock/hwspinlock_core.c
-index cc8e952a6772..2c9eceba7fe8 100644
+index a509b73da190..8a98b586c9c8 100644
 --- a/drivers/hwspinlock/hwspinlock_core.c
 +++ b/drivers/hwspinlock/hwspinlock_core.c
 @@ -888,5 +888,17 @@ struct hwspinlock *devm_hwspin_lock_request_specific(struct device *dev,
@@ -64,7 +64,7 @@ index 2d8de835bc24..d5114d393003 100644
  	/* release the lock by writing 0 to it */
  	writel(SPINLOCK_NOTTAKEN, lock_addr);
 diff --git a/drivers/hwspinlock/qcom_hwspinlock.c b/drivers/hwspinlock/qcom_hwspinlock.c
-index 0390979fd765..7ff89c3e8c6b 100644
+index 712003a4640c..4b31ab2dc177 100644
 --- a/drivers/hwspinlock/qcom_hwspinlock.c
 +++ b/drivers/hwspinlock/qcom_hwspinlock.c
 @@ -27,7 +27,7 @@ struct qcom_hwspinlock_of_data {

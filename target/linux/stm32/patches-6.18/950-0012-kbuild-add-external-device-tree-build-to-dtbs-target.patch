@@ -51,10 +51,10 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  1 file changed, 36 insertions(+), 3 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 9c16001ccdcd..ac263928f0f3 100644
+index f15dd2fcb7ae..ee2116a29a35 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -1488,17 +1488,50 @@ ifneq ($(wildcard $(srctree)/arch/$(SRCARCH)/boot/dts/),)
+@@ -1516,17 +1516,50 @@ ifneq ($(wildcard $(srctree)/arch/$(SRCARCH)/boot/dts/),)
  dtstree := arch/$(SRCARCH)/boot/dts
  endif
  

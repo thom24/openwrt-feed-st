@@ -16,7 +16,7 @@ Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
  .../st/stm32/stm32-dcmipp/dcmipp-common.h     |   4 +-
  .../st/stm32/stm32-dcmipp/dcmipp-core.c       |   8 +-
  4 files changed, 101 insertions(+), 101 deletions(-)
- rename drivers/media/platform/st/stm32/stm32-dcmipp/{dcmipp-bytecap.c => dcmipp-capture.c} (85%)
+ rename drivers/media/platform/st/stm32/stm32-dcmipp/{dcmipp-bytecap.c => dcmipp-capture.c} (86%)
 
 diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/Makefile b/drivers/media/platform/st/stm32/stm32-dcmipp/Makefile
 index 7178934bb116..e35d45a0aca2 100644
@@ -30,10 +30,10 @@ index 7178934bb116..e35d45a0aca2 100644
  
  obj-$(CONFIG_VIDEO_STM32_DCMIPP) += stm32-dcmipp.o
 diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
-similarity index 85%
+similarity index 86%
 rename from drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
 rename to drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
-index f44c4ae7b83e..dd133c2e3af3 100644
+index 1a8ad6d51485..4e17a5103ba3 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
 @@ -95,7 +95,7 @@
@@ -276,7 +276,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  	 */
  	if (!vcap->s_subdev) {
  		pad = media_pad_remote_pad_first(&vcap->vdev.entity.pads[0]);
-@@ -613,8 +613,8 @@ static int dcmipp_bytecap_start_streaming(struct vb2_queue *vq,
+@@ -615,8 +615,8 @@ static int dcmipp_bytecap_start_streaming(struct vb2_queue *vq,
  	spin_lock_irq(&vcap->irqlock);
  
  	if (vcap->pipe_id != 0) {
@@ -287,7 +287,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  		unsigned int ppcr = 0;
  
  		/*
-@@ -663,14 +663,14 @@ static int dcmipp_bytecap_start_streaming(struct vb2_queue *vq,
+@@ -665,14 +665,14 @@ static int dcmipp_bytecap_start_streaming(struct vb2_queue *vq,
  	 * Return all buffers to vb2 in QUEUED state.
  	 * This will give ownership back to userspace
  	 */
@@ -304,7 +304,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  {
  	struct device *dev = vcap->dev;
  
-@@ -686,9 +686,9 @@ static void dcmipp_dump_status(struct dcmipp_bytecap_device *vcap)
+@@ -688,9 +688,9 @@ static void dcmipp_dump_status(struct dcmipp_bytecap_device *vcap)
   * Stop the stream engine. Any remaining buffers in the stream queue are
   * dequeued and passed on to the vb2 framework marked as STATE_ERROR.
   */
@@ -316,7 +316,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  	int ret;
  	u32 status;
  
-@@ -726,7 +726,7 @@ static void dcmipp_bytecap_stop_streaming(struct vb2_queue *vq)
+@@ -728,7 +728,7 @@ static void dcmipp_bytecap_stop_streaming(struct vb2_queue *vq)
  	spin_lock_irq(&vcap->irqlock);
  
  	/* Return all queued buffers to vb2 in ERROR state */
@@ -325,7 +325,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  	INIT_LIST_HEAD(&vcap->buffers);
  
  	vcap->active = NULL;
-@@ -746,9 +746,9 @@ static void dcmipp_bytecap_stop_streaming(struct vb2_queue *vq)
+@@ -748,9 +748,9 @@ static void dcmipp_bytecap_stop_streaming(struct vb2_queue *vq)
  			 vcap->count.underrun, vcap->count.buffers);
  }
  
@@ -337,7 +337,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
  	struct dcmipp_buf *buf = container_of(vbuf, struct dcmipp_buf, vb);
  	struct v4l2_pix_format *format = &vcap->format;
-@@ -800,9 +800,9 @@ static int dcmipp_bytecap_buf_prepare(struct vb2_buffer *vb)
+@@ -802,9 +802,9 @@ static int dcmipp_bytecap_buf_prepare(struct vb2_buffer *vb)
  	return 0;
  }
  
@@ -349,7 +349,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  		vb2_get_drv_priv(vb2_buf->vb2_queue);
  	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb2_buf);
  	struct dcmipp_buf *buf = container_of(vbuf, struct dcmipp_buf, vb);
-@@ -826,13 +826,13 @@ static void dcmipp_bytecap_buf_queue(struct vb2_buffer *vb2_buf)
+@@ -828,13 +828,13 @@ static void dcmipp_bytecap_buf_queue(struct vb2_buffer *vb2_buf)
  	spin_unlock_irq(&vcap->irqlock);
  }
  
@@ -365,7 +365,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  	unsigned int size;
  
  	size = vcap->format.sizeimage;
-@@ -850,7 +850,7 @@ static int dcmipp_bytecap_queue_setup(struct vb2_queue *vq,
+@@ -852,7 +852,7 @@ static int dcmipp_bytecap_queue_setup(struct vb2_queue *vq,
  	return 0;
  }
  
@@ -374,7 +374,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  {
  	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
  	struct dcmipp_buf *buf = container_of(vbuf, struct dcmipp_buf, vb);
-@@ -860,19 +860,19 @@ static int dcmipp_bytecap_buf_init(struct vb2_buffer *vb)
+@@ -862,19 +862,19 @@ static int dcmipp_bytecap_buf_init(struct vb2_buffer *vb)
  	return 0;
  }
  
@@ -404,7 +404,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  
  	dcmipp_pads_cleanup(vcap->ved.pads);
  	mutex_destroy(&vcap->lock);
-@@ -880,16 +880,16 @@ static void dcmipp_bytecap_release(struct video_device *vdev)
+@@ -882,16 +882,16 @@ static void dcmipp_bytecap_release(struct video_device *vdev)
  	kfree(vcap);
  }
  
@@ -425,7 +425,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  			       struct dcmipp_buf *buf,
  			       size_t bytesused,
  			       int err)
-@@ -913,7 +913,7 @@ static void dcmipp_buffer_done(struct dcmipp_bytecap_device *vcap,
+@@ -915,7 +915,7 @@ static void dcmipp_buffer_done(struct dcmipp_bytecap_device *vcap,
  
  /* irqlock must be held */
  static void
@@ -434,7 +434,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  {
  	if (!vcap->next && list_is_singular(&vcap->buffers)) {
  		/*
-@@ -951,7 +951,7 @@ dcmipp_bytecap_set_next_frame_or_stop(struct dcmipp_bytecap_device *vcap)
+@@ -953,7 +953,7 @@ dcmipp_bytecap_set_next_frame_or_stop(struct dcmipp_bytecap_device *vcap)
  }
  
  /* irqlock must be held */
@@ -443,7 +443,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  					 size_t bytesused)
  {
  	int err = 0;
-@@ -977,10 +977,10 @@ static void dcmipp_bytecap_process_frame(struct dcmipp_bytecap_device *vcap,
+@@ -979,10 +979,10 @@ static void dcmipp_bytecap_process_frame(struct dcmipp_bytecap_device *vcap,
  	vcap->active = NULL;
  }
  
@@ -457,7 +457,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  	u32 cmsr2_pxframef;
  	u32 cmsr2_pxvsyncf;
  	u32 cmsr2_pxovrf;
-@@ -1010,7 +1010,7 @@ static irqreturn_t dcmipp_bytecap_irq_thread(int irq, void *arg)
+@@ -1012,7 +1012,7 @@ static irqreturn_t dcmipp_bytecap_irq_thread(int irq, void *arg)
  			bytesused = reg_read(vcap, DCMIPP_P0DCCNTR);
  		else
  			bytesused = vcap->format.sizeimage;
@@ -466,7 +466,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  	}
  
  	if (vcap->cmsr2 & cmsr2_pxvsyncf) {
-@@ -1030,7 +1030,7 @@ static irqreturn_t dcmipp_bytecap_irq_thread(int irq, void *arg)
+@@ -1032,7 +1032,7 @@ static irqreturn_t dcmipp_bytecap_irq_thread(int irq, void *arg)
  		 * active (but not used) buffer and put it back into next.
  		 */
  		swap(vcap->active, vcap->next);
@@ -475,7 +475,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  	}
  
  out:
-@@ -1038,10 +1038,10 @@ static irqreturn_t dcmipp_bytecap_irq_thread(int irq, void *arg)
+@@ -1040,10 +1040,10 @@ static irqreturn_t dcmipp_bytecap_irq_thread(int irq, void *arg)
  	return IRQ_HANDLED;
  }
  
@@ -489,7 +489,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  	struct dcmipp_ent_device *ved = arg;
  
  	/* Store interrupt status register */
-@@ -1056,12 +1056,12 @@ static irqreturn_t dcmipp_bytecap_irq_callback(int irq, void *arg)
+@@ -1058,12 +1058,12 @@ static irqreturn_t dcmipp_bytecap_irq_callback(int irq, void *arg)
  	return IRQ_WAKE_THREAD;
  }
  
@@ -505,7 +505,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  	struct v4l2_subdev *source_sd =
  		media_entity_to_v4l2_subdev(link->source->entity);
  	struct v4l2_subdev_format source_fmt = {
-@@ -1117,8 +1117,8 @@ static int dcmipp_bytecap_link_validate(struct media_link *link)
+@@ -1119,8 +1119,8 @@ static int dcmipp_bytecap_link_validate(struct media_link *link)
  	return 0;
  }
  
@@ -516,7 +516,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  };
  
  static int dcmipp_name_to_pipe_id(const char *name)
-@@ -1133,17 +1133,17 @@ static int dcmipp_name_to_pipe_id(const char *name)
+@@ -1135,17 +1135,17 @@ static int dcmipp_name_to_pipe_id(const char *name)
  		return -EINVAL;
  }
  
@@ -537,7 +537,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  	vcap = kzalloc(sizeof(*vcap), GFP_KERNEL);
  	if (!vcap)
  		return ERR_PTR(-ENOMEM);
-@@ -1158,11 +1158,11 @@ struct dcmipp_ent_device *dcmipp_bytecap_ent_init(const char *entity_name,
+@@ -1160,11 +1160,11 @@ struct dcmipp_ent_device *dcmipp_bytecap_ent_init(const char *entity_name,
  
  	/* Initialize supported format table format */
  	if (vcap->pipe_id == 0) {
@@ -553,7 +553,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  	}
  
  	/* Allocate the pads */
-@@ -1177,7 +1177,7 @@ struct dcmipp_ent_device *dcmipp_bytecap_ent_init(const char *entity_name,
+@@ -1179,7 +1179,7 @@ struct dcmipp_ent_device *dcmipp_bytecap_ent_init(const char *entity_name,
  	/* Initialize the media entity */
  	vcap->vdev.entity.name = entity_name;
  	vcap->vdev.entity.function = MEDIA_ENT_F_IO_V4L;
@@ -562,7 +562,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  	ret = media_entity_pads_init(&vcap->vdev.entity, 1, vcap->ved.pads);
  	if (ret)
  		goto err_clean_pads;
-@@ -1192,7 +1192,7 @@ struct dcmipp_ent_device *dcmipp_bytecap_ent_init(const char *entity_name,
+@@ -1194,7 +1194,7 @@ struct dcmipp_ent_device *dcmipp_bytecap_ent_init(const char *entity_name,
  	q->lock = &vcap->lock;
  	q->drv_priv = vcap;
  	q->buf_struct_size = sizeof(struct dcmipp_buf);
@@ -571,7 +571,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  	q->mem_ops = &vb2_dma_contig_memops;
  	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
  	q->min_queued_buffers = 1;
-@@ -1221,8 +1221,8 @@ struct dcmipp_ent_device *dcmipp_bytecap_ent_init(const char *entity_name,
+@@ -1223,8 +1223,8 @@ struct dcmipp_ent_device *dcmipp_bytecap_ent_init(const char *entity_name,
  
  	/* Fill the dcmipp_ent_device struct */
  	vcap->ved.ent = &vcap->vdev.entity;
@@ -582,7 +582,7 @@ index f44c4ae7b83e..dd133c2e3af3 100644
  	vcap->dev = dev;
  	vcap->regs = dcmipp->regs;
  
-@@ -1230,9 +1230,9 @@ struct dcmipp_ent_device *dcmipp_bytecap_ent_init(const char *entity_name,
+@@ -1232,9 +1232,9 @@ struct dcmipp_ent_device *dcmipp_bytecap_ent_init(const char *entity_name,
  	vdev = &vcap->vdev;
  	vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING |
  			    V4L2_CAP_IO_MC;

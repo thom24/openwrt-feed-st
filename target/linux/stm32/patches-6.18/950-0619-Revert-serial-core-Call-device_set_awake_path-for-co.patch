@@ -32,10 +32,10 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  1 file changed, 1 deletion(-)
 
 diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index ca72454b3eb0..4ab621c6184f 100644
+index 593f15213b72..b2ec23847c68 100644
 --- a/drivers/tty/serial/serial_core.c
 +++ b/drivers/tty/serial/serial_core.c
-@@ -2341,7 +2341,6 @@ int uart_suspend_port(struct uart_driver *drv, struct uart_port *uport)
+@@ -2354,7 +2354,6 @@ int uart_suspend_port(struct uart_driver *drv, struct uart_port *uport)
  			guard(uart_port_lock_irq)(uport);
  			uport->ops->stop_rx(uport);
  		}

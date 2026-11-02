@@ -22,7 +22,7 @@ Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
  1 file changed, 356 insertions(+), 61 deletions(-)
 
 diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
-index 2fb34cac89c6..f44c4ae7b83e 100644
+index 9cfcf1c9adb1..1a8ad6d51485 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
 @@ -25,27 +25,82 @@
@@ -423,7 +423,7 @@ index 2fb34cac89c6..f44c4ae7b83e 100644
  }
  
  static void dcmipp_bytecap_all_buffers_done(struct dcmipp_bytecap_device *vcap,
-@@ -421,8 +612,25 @@ static int dcmipp_bytecap_start_streaming(struct vb2_queue *vq,
+@@ -423,8 +614,25 @@ static int dcmipp_bytecap_start_streaming(struct vb2_queue *vq,
  
  	spin_lock_irq(&vcap->irqlock);
  
@@ -450,7 +450,7 @@ index 2fb34cac89c6..f44c4ae7b83e 100644
  
  	/*
  	 * vb2 framework guarantee that we have at least 'min_queued_buffers'
-@@ -436,7 +644,7 @@ static int dcmipp_bytecap_start_streaming(struct vb2_queue *vq,
+@@ -438,7 +646,7 @@ static int dcmipp_bytecap_start_streaming(struct vb2_queue *vq,
  
  	/* Enable interruptions */
  	spin_lock(&vcap->vdev.v4l2_dev->lock);
@@ -459,7 +459,7 @@ index 2fb34cac89c6..f44c4ae7b83e 100644
  	spin_unlock(&vcap->vdev.v4l2_dev->lock);
  
  	vcap->state = DCMIPP_RUNNING;
-@@ -467,7 +675,7 @@ static void dcmipp_dump_status(struct dcmipp_bytecap_device *vcap)
+@@ -469,7 +677,7 @@ static void dcmipp_dump_status(struct dcmipp_bytecap_device *vcap)
  	struct device *dev = vcap->dev;
  
  	dev_dbg(dev, "[DCMIPP_PRSR]  =%#10.8x\n", reg_read(vcap, DCMIPP_PRSR));
@@ -468,7 +468,7 @@ index 2fb34cac89c6..f44c4ae7b83e 100644
  	dev_dbg(dev, "[DCMIPP_P0DCCNTR]=%#10.8x\n",
  		reg_read(vcap, DCMIPP_P0DCCNTR));
  	dev_dbg(dev, "[DCMIPP_CMSR1] =%#10.8x\n", reg_read(vcap, DCMIPP_CMSR1));
-@@ -494,25 +702,26 @@ static void dcmipp_bytecap_stop_streaming(struct vb2_queue *vq)
+@@ -496,25 +704,26 @@ static void dcmipp_bytecap_stop_streaming(struct vb2_queue *vq)
  
  	/* Disable interruptions */
  	spin_lock(&vcap->vdev.v4l2_dev->lock);
@@ -501,7 +501,7 @@ index 2fb34cac89c6..f44c4ae7b83e 100644
  
  	spin_lock_irq(&vcap->irqlock);
  
-@@ -525,7 +734,8 @@ static void dcmipp_bytecap_stop_streaming(struct vb2_queue *vq)
+@@ -527,7 +736,8 @@ static void dcmipp_bytecap_stop_streaming(struct vb2_queue *vq)
  
  	spin_unlock_irq(&vcap->irqlock);
  
@@ -511,7 +511,7 @@ index 2fb34cac89c6..f44c4ae7b83e 100644
  
  	pm_runtime_put(vcap->dev);
  
-@@ -541,7 +751,9 @@ static int dcmipp_bytecap_buf_prepare(struct vb2_buffer *vb)
+@@ -543,7 +753,9 @@ static int dcmipp_bytecap_buf_prepare(struct vb2_buffer *vb)
  	struct dcmipp_bytecap_device *vcap =  vb2_get_drv_priv(vb->vb2_queue);
  	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
  	struct dcmipp_buf *buf = container_of(vbuf, struct dcmipp_buf, vb);
@@ -521,7 +521,7 @@ index 2fb34cac89c6..f44c4ae7b83e 100644
  
  	size = vcap->format.sizeimage;
  
-@@ -557,6 +769,26 @@ static int dcmipp_bytecap_buf_prepare(struct vb2_buffer *vb)
+@@ -559,6 +771,26 @@ static int dcmipp_bytecap_buf_prepare(struct vb2_buffer *vb)
  		/* Get memory addresses */
  		buf->addr = vb2_dma_contig_plane_dma_addr(&buf->vb.vb2_buf, 0);
  		buf->size = vb2_plane_size(&buf->vb.vb2_buf, 0);
@@ -548,7 +548,7 @@ index 2fb34cac89c6..f44c4ae7b83e 100644
  		buf->prepared = true;
  
  		vb2_set_plane_payload(&buf->vb.vb2_buf, 0, buf->size);
-@@ -690,7 +922,7 @@ dcmipp_bytecap_set_next_frame_or_stop(struct dcmipp_bytecap_device *vcap)
+@@ -692,7 +924,7 @@ dcmipp_bytecap_set_next_frame_or_stop(struct dcmipp_bytecap_device *vcap)
  		 * for next frame). On-going frame capture will continue until
  		 * FRAME END but no further capture will be done.
  		 */
@@ -557,7 +557,7 @@ index 2fb34cac89c6..f44c4ae7b83e 100644
  
  		dev_dbg(vcap->dev, "Capture restart is deferred to next buffer queueing\n");
  		vcap->next = NULL;
-@@ -707,7 +939,13 @@ dcmipp_bytecap_set_next_frame_or_stop(struct dcmipp_bytecap_device *vcap)
+@@ -709,7 +941,13 @@ dcmipp_bytecap_set_next_frame_or_stop(struct dcmipp_bytecap_device *vcap)
  	 * This register is shadowed and will be taken into
  	 * account on next VSYNC (start of next frame)
  	 */
@@ -572,7 +572,7 @@ index 2fb34cac89c6..f44c4ae7b83e 100644
  	dev_dbg(vcap->dev, "Write [%d] %p phy=%pad\n",
  		vcap->next->vb.vb2_buf.index, vcap->next, &vcap->next->addr);
  }
-@@ -743,29 +981,39 @@ static irqreturn_t dcmipp_bytecap_irq_thread(int irq, void *arg)
+@@ -745,29 +983,39 @@ static irqreturn_t dcmipp_bytecap_irq_thread(int irq, void *arg)
  {
  	struct dcmipp_bytecap_device *vcap =
  			container_of(arg, struct dcmipp_bytecap_device, ved);
@@ -616,7 +616,7 @@ index 2fb34cac89c6..f44c4ae7b83e 100644
  		vcap->count.vsync++;
  		if (vcap->state == DCMIPP_WAIT_FOR_BUFFER) {
  			vcap->count.underrun++;
-@@ -797,7 +1045,7 @@ static irqreturn_t dcmipp_bytecap_irq_callback(int irq, void *arg)
+@@ -799,7 +1047,7 @@ static irqreturn_t dcmipp_bytecap_irq_callback(int irq, void *arg)
  	struct dcmipp_ent_device *ved = arg;
  
  	/* Store interrupt status register */
@@ -625,7 +625,7 @@ index 2fb34cac89c6..f44c4ae7b83e 100644
  	if (!vcap->cmsr2)
  		return IRQ_HANDLED;
  	vcap->count.it++;
-@@ -826,6 +1074,26 @@ static int dcmipp_bytecap_link_validate(struct media_link *link)
+@@ -828,6 +1076,26 @@ static int dcmipp_bytecap_link_validate(struct media_link *link)
  	if (ret < 0)
  		return 0;
  
@@ -652,7 +652,7 @@ index 2fb34cac89c6..f44c4ae7b83e 100644
  	if (source_fmt.format.width != vcap->format.width ||
  	    source_fmt.format.height != vcap->format.height) {
  		dev_err(vcap->dev, "Wrong width or height %ux%u (%ux%u expected)\n",
-@@ -834,15 +1102,13 @@ static int dcmipp_bytecap_link_validate(struct media_link *link)
+@@ -836,15 +1104,13 @@ static int dcmipp_bytecap_link_validate(struct media_link *link)
  		return -EINVAL;
  	}
  
@@ -672,7 +672,7 @@ index 2fb34cac89c6..f44c4ae7b83e 100644
  		dev_err(vcap->dev, "mbus code 0x%x do not match capture device format (0x%x)\n",
  			vcap->format.pixelformat, source_fmt.format.code);
  		return -EINVAL;
-@@ -855,6 +1121,18 @@ static const struct media_entity_operations dcmipp_bytecap_entity_ops = {
+@@ -857,6 +1123,18 @@ static const struct media_entity_operations dcmipp_bytecap_entity_ops = {
  	.link_validate = dcmipp_bytecap_link_validate,
  };
  
@@ -691,7 +691,7 @@ index 2fb34cac89c6..f44c4ae7b83e 100644
  struct dcmipp_ent_device *dcmipp_bytecap_ent_init(const char *entity_name,
  						  struct dcmipp_device *dcmipp)
  {
-@@ -870,6 +1148,23 @@ struct dcmipp_ent_device *dcmipp_bytecap_ent_init(const char *entity_name,
+@@ -872,6 +1150,23 @@ struct dcmipp_ent_device *dcmipp_bytecap_ent_init(const char *entity_name,
  	if (!vcap)
  		return ERR_PTR(-ENOMEM);
  

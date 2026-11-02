@@ -17,7 +17,7 @@ Change-Id: I6bdfd13c1a8919005e11c0217619ea8890fb2944
  1 file changed, 6 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index dab6d9f83128..2d9e9bbd2715 100644
+index d87a76fa04f7..d6a3f0644f48 100644
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
 @@ -4458,6 +4458,12 @@ static int _dwc2_hcd_resume(struct usb_hcd *hcd)

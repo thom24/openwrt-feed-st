@@ -48,7 +48,7 @@ index 7d3e641806f8..3cf39cd19c4d 100644
  		if (hsotg->lx_state == DWC2_L2) {
  			if (hsotg->in_ppd) {
 diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index a6c2b8de3908..61d24cbf8f08 100644
+index 8282de6df011..ee7551031a15 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
 @@ -4607,9 +4607,7 @@ static int dwc2_hsotg_udc_stop(struct usb_gadget *gadget)
@@ -61,7 +61,7 @@ index a6c2b8de3908..61d24cbf8f08 100644
  	}
  
  	/* all endpoints should be shutdown */
-@@ -5733,7 +5731,6 @@ void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
+@@ -5742,7 +5740,6 @@ void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
  	}
  
  	/* Change to L0 state */

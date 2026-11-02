@@ -22,10 +22,10 @@ Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
  create mode 100644 include/linux/tee_remoteproc.h
 
 diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
-index 48a0d3a69ed0..09eaa146c2b7 100644
+index eaa427e4e9ec..9307381bd74b 100644
 --- a/drivers/remoteproc/Kconfig
 +++ b/drivers/remoteproc/Kconfig
-@@ -378,6 +378,15 @@ config XLNX_R5_REMOTEPROC
+@@ -397,6 +397,15 @@ config XLNX_R5_REMOTEPROC
  
  	  It's safe to say N if not interested in using RPU r5f cores.
  
@@ -42,10 +42,10 @@ index 48a0d3a69ed0..09eaa146c2b7 100644
  
  endmenu
 diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
-index 1c7598b8475d..fabb887a52ea 100644
+index 08705ef62bce..c11f3cbde86b 100644
 --- a/drivers/remoteproc/Makefile
 +++ b/drivers/remoteproc/Makefile
-@@ -36,6 +36,7 @@ obj-$(CONFIG_RCAR_REMOTEPROC)		+= rcar_rproc.o
+@@ -37,6 +37,7 @@ obj-$(CONFIG_RCAR_REMOTEPROC)		+= rcar_rproc.o
  obj-$(CONFIG_ST_REMOTEPROC)		+= st_remoteproc.o
  obj-$(CONFIG_ST_SLIM_REMOTEPROC)	+= st_slim_rproc.o
  obj-$(CONFIG_STM32_RPROC)		+= stm32_rproc.o

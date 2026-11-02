@@ -17,7 +17,7 @@ Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
  1 file changed, 13 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/mmc/host/mmci.c b/drivers/mmc/host/mmci.c
-index e500051bd572..9bbdedc1ae84 100644
+index 416bdb184ed4..834a80b47e9e 100644
 --- a/drivers/mmc/host/mmci.c
 +++ b/drivers/mmc/host/mmci.c
 @@ -2053,19 +2053,23 @@ static int mmci_get_cd(struct mmc_host *mmc)

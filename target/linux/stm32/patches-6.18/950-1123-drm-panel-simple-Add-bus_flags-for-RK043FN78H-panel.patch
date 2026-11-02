@@ -16,10 +16,10 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  1 file changed, 2 insertions(+)
 
 diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
-index edd3ac7e70b6..decb1bb19c13 100644
+index 1a1525ef1cb8..7adb8b14f3f9 100644
 --- a/drivers/gpu/drm/panel/panel-simple.c
 +++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -4104,6 +4104,8 @@ static const struct panel_desc rocktech_rk043fn48h = {
+@@ -4129,6 +4129,8 @@ static const struct panel_desc rocktech_rk043fn48h = {
  		.width = 95,
  		.height = 54,
  	},

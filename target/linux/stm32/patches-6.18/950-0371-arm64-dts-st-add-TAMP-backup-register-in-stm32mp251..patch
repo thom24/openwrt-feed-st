@@ -18,7 +18,7 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  1 file changed, 30 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 88586c7935c3..428387fa7e70 100644
+index feaf4c789e5d..eb5cab1c0b33 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -2299,6 +2299,36 @@ rtc: rtc@46000000 {

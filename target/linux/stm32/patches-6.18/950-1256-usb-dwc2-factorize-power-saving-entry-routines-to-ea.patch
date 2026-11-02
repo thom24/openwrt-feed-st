@@ -220,10 +220,10 @@ index ef9bd4fd8cff..405fe99a34e9 100644
  			/*
  			 * Change to L2 (suspend) state before releasing
 diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 6a51a8d11645..590d7ebba876 100644
+index 96be9018bcbb..009d453f90e1 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -5605,7 +5605,7 @@ int dwc2_gadget_restore_critical_registers(struct dwc2_hsotg *hsotg,
+@@ -5613,7 +5613,7 @@ int dwc2_gadget_restore_critical_registers(struct dwc2_hsotg *hsotg,
   *
   * Return non-zero if failed to enter to hibernation.
   */
@@ -232,7 +232,7 @@ index 6a51a8d11645..590d7ebba876 100644
  {
  	u32 gpwrdn;
  	u32 gusbcfg;
-@@ -5807,7 +5807,7 @@ int dwc2_gadget_exit_hibernation(struct dwc2_hsotg *hsotg,
+@@ -5815,7 +5815,7 @@ int dwc2_gadget_exit_hibernation(struct dwc2_hsotg *hsotg,
   *
   * This function is for entering device mode partial power down.
   */
@@ -241,7 +241,7 @@ index 6a51a8d11645..590d7ebba876 100644
  {
  	u32 pcgcctl;
  	int ret = 0;
-@@ -5924,7 +5924,7 @@ int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+@@ -5932,7 +5932,7 @@ int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
   *
   * This function is for entering device mode clock gating.
   */
@@ -250,7 +250,7 @@ index 6a51a8d11645..590d7ebba876 100644
  {
  	u32 pcgctl;
  
-@@ -5985,3 +5985,51 @@ void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
+@@ -5993,3 +5993,51 @@ void dwc2_gadget_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
  	hsotg->lx_state = DWC2_L0;
  	hsotg->bus_suspended = false;
  }
@@ -303,7 +303,7 @@ index 6a51a8d11645..590d7ebba876 100644
 +	return 0;
 +}
 diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index 59eda815dc6e..31f577838ff8 100644
+index 234c7ce59bc3..91359125d715 100644
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
 @@ -3297,35 +3297,9 @@ int dwc2_port_suspend(struct dwc2_hsotg *hsotg, u16 windex)
@@ -400,7 +400,7 @@ index 59eda815dc6e..31f577838ff8 100644
  
  skip_power_saving:
  	hsotg->lx_state = DWC2_L2;
-@@ -5529,7 +5467,7 @@ int dwc2_host_restore_critical_registers(struct dwc2_hsotg *hsotg)
+@@ -5528,7 +5466,7 @@ int dwc2_host_restore_critical_registers(struct dwc2_hsotg *hsotg)
   *
   * @hsotg: Programming view of the DWC_otg controller
   */
@@ -409,7 +409,7 @@ index 59eda815dc6e..31f577838ff8 100644
  {
  	unsigned long flags;
  	int ret = 0;
-@@ -5787,7 +5725,7 @@ bool dwc2_host_can_poweroff_phy(struct dwc2_hsotg *dwc2)
+@@ -5786,7 +5724,7 @@ bool dwc2_host_can_poweroff_phy(struct dwc2_hsotg *dwc2)
   *
   * This function is for entering Host mode partial power down.
   */
@@ -418,7 +418,7 @@ index 59eda815dc6e..31f577838ff8 100644
  {
  	u32 pcgcctl;
  	u32 hprt0;
-@@ -5924,7 +5862,7 @@ int dwc2_host_exit_partial_power_down(struct dwc2_hsotg *hsotg,
+@@ -5923,7 +5861,7 @@ int dwc2_host_exit_partial_power_down(struct dwc2_hsotg *hsotg,
   *
   * This function is for entering Host mode clock gating.
   */
@@ -427,7 +427,7 @@ index 59eda815dc6e..31f577838ff8 100644
  {
  	u32 hprt0;
  	u32 pcgctl;
-@@ -6002,3 +5940,50 @@ void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
+@@ -6001,3 +5939,50 @@ void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wakeup)
  			  jiffies + msecs_to_jiffies(71));
  	}
  }

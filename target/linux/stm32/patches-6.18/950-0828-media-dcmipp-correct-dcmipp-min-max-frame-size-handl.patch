@@ -38,7 +38,7 @@ index 580896fe190c..df8ed7350c29 100644
  	if (fmt->field == V4L2_FIELD_ANY || fmt->field == V4L2_FIELD_ALTERNATE)
  		fmt->field = fmt_default.field;
 diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
-index dd133c2e3af3..fb82beee05a3 100644
+index 4e17a5103ba3..ca267c0b83d5 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-capture.c
 @@ -379,8 +379,12 @@ static int dcmipp_capture_try_fmt_vid_cap(struct file *file, void *priv,

@@ -15,7 +15,7 @@ Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
  3 files changed, 80 insertions(+)
 
 diff --git a/drivers/gpu/drm/drm_atomic_uapi.c b/drivers/gpu/drm/drm_atomic_uapi.c
-index 85dbdaa4a2e2..66634b360968 100644
+index 4fc5f9573184..7ac4dee7a16e 100644
 --- a/drivers/gpu/drm/drm_atomic_uapi.c
 +++ b/drivers/gpu/drm/drm_atomic_uapi.c
 @@ -750,6 +750,8 @@ static int drm_atomic_connector_set_property(struct drm_connector *connector,
@@ -37,7 +37,7 @@ index 85dbdaa4a2e2..66634b360968 100644
  		*val = state->hdr_output_metadata ?
  			state->hdr_output_metadata->base.id : 0;
 diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
-index 272d6254ea47..949eb67c0eea 100644
+index 0326b9adb5f1..7aa8f76c0284 100644
 --- a/drivers/gpu/drm/drm_connector.c
 +++ b/drivers/gpu/drm/drm_connector.c
 @@ -1212,6 +1212,12 @@ static const struct drm_prop_enum_list drm_scaling_mode_enum_list[] = {
@@ -117,7 +117,7 @@ index 272d6254ea47..949eb67c0eea 100644
   * drm_mode_create_aspect_ratio_property - create aspect ratio property
   * @dev: DRM device
 diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
-index 8f34f4b8183d..04655998ec88 100644
+index d5e6f4b832a7..c00a4bbd1c4c 100644
 --- a/include/drm/drm_connector.h
 +++ b/include/drm/drm_connector.h
 @@ -1094,6 +1094,12 @@ struct drm_connector_state {

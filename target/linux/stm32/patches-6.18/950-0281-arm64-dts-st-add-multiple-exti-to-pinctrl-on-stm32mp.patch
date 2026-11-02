@@ -12,7 +12,7 @@ Change-Id: I670aa8e0d0fc272db1531c7a368c7d8151a3083b
  1 file changed, 18 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index e13cfd3088b7..1be807f6b834 100644
+index 012b75690b6a..e4bb57b0b4c5 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -2067,6 +2067,15 @@ pinctrl: pinctrl@44240000 {

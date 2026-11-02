@@ -16,10 +16,10 @@ Change-Id: I6f9f5eb8aa31f7321812f4ec38c9f6134e744b97
  1 file changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 2b4a065aedd3..c3b9fbb1ccca 100644
+index 4676396630ce..020699c00105 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -7763,8 +7763,11 @@ int stmmac_suspend(struct device *dev)
+@@ -7871,8 +7871,11 @@ int stmmac_suspend(struct device *dev)
  	struct stmmac_priv *priv = netdev_priv(ndev);
  	u32 chan;
  
@@ -32,7 +32,7 @@ index 2b4a065aedd3..c3b9fbb1ccca 100644
  
  	mutex_lock(&priv->lock);
  
-@@ -7869,8 +7872,11 @@ int stmmac_resume(struct device *dev)
+@@ -7977,8 +7980,11 @@ int stmmac_resume(struct device *dev)
  			return ret;
  	}
  

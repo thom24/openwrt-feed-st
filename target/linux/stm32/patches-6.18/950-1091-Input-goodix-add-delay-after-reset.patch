@@ -17,10 +17,10 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  1 file changed, 3 insertions(+)
 
 diff --git a/drivers/input/touchscreen/goodix.c b/drivers/input/touchscreen/goodix.c
-index fcf0d19549ea..1b43e92e55d7 100644
+index c4bc4e601243..6eab7b14b82a 100644
 --- a/drivers/input/touchscreen/goodix.c
 +++ b/drivers/input/touchscreen/goodix.c
-@@ -1386,6 +1386,9 @@ static int goodix_ts_probe(struct i2c_client *client)
+@@ -1387,6 +1387,9 @@ static int goodix_ts_probe(struct i2c_client *client)
  		error = goodix_reset(ts);
  		if (error)
  			return error;

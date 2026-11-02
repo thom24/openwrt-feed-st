@@ -22,10 +22,10 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  1 file changed, 9 deletions(-)
 
 diff --git a/drivers/clk/stm32/clk-stm32mp25.c b/drivers/clk/stm32/clk-stm32mp25.c
-index 49bd6f859010..162fb4c63bb2 100644
+index f41efd66da7c..e6c7cb615f1d 100644
 --- a/drivers/clk/stm32/clk-stm32mp25.c
 +++ b/drivers/clk/stm32/clk-stm32mp25.c
-@@ -304,7 +304,6 @@ enum enum_gate_cfg {
+@@ -305,7 +305,6 @@ enum enum_gate_cfg {
  	GATE_MDF1,
  	GATE_MSI_KER,
  	GATE_OSPIIOM,
@@ -33,7 +33,7 @@ index 49bd6f859010..162fb4c63bb2 100644
  	GATE_PKA,
  	GATE_RNG,
  	GATE_RTCC3,
-@@ -455,7 +454,6 @@ static const struct stm32_gate_cfg stm32mp25_gates[GATE_NB] = {
+@@ -456,7 +455,6 @@ static const struct stm32_gate_cfg stm32mp25_gates[GATE_NB] = {
  	GATE_CFG(GATE_MCO2,		RCC_MCO2CFGR,		8,	0),
  	GATE_CFG(GATE_MDF1,		RCC_MDF1CFGR,		1,	0),
  	GATE_CFG(GATE_OSPIIOM,		RCC_OSPIIOMCFGR,	1,	0),
@@ -41,7 +41,7 @@ index 49bd6f859010..162fb4c63bb2 100644
  	GATE_CFG(GATE_PKA,		RCC_PKACFGR,		1,	0),
  	GATE_CFG(GATE_RTCC3,		RCC_C3CFGR,		26,	0),
  	GATE_CFG(GATE_RNG,		RCC_RNGCFGR,		1,	0),
-@@ -1161,12 +1159,6 @@ static struct clk_stm32_gate ck_icn_p_ospiiom = {
+@@ -1162,12 +1160,6 @@ static struct clk_stm32_gate ck_icn_p_ospiiom = {
  	.hw.init = CLK_HW_INIT_INDEX("ck_icn_p_ospiiom", ICN_LS_MCU, &clk_stm32_gate_ops, 0),
  };
  
@@ -54,7 +54,7 @@ index 49bd6f859010..162fb4c63bb2 100644
  /* PKA */
  static struct clk_stm32_gate ck_icn_p_pka = {
  	.gate_id = GATE_PKA,
-@@ -1822,7 +1814,6 @@ static int stm32mp25_check_security(struct device_node *np, void __iomem *base,
+@@ -1823,7 +1815,6 @@ static int stm32mp25_check_security(struct device_node *np, void __iomem *base,
  static const struct clock_config stm32mp25_clock_cfg[] = {
  	STM32_GATE_CFG(CK_BUS_ETH1,		ck_icn_p_eth1,		SEC_RIFSC(60)),
  	STM32_GATE_CFG(CK_BUS_ETH2,		ck_icn_p_eth2,		SEC_RIFSC(61)),

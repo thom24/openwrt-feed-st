@@ -22,7 +22,7 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 9a23fe43cf62..6a9077e72992 100644
+index ce3b6b42f893..3f4da07f6614 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
 @@ -75,7 +75,7 @@ arm-pmu {
