@@ -21,11 +21,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/pci/controller/dwc/pcie-stm32.c | 22 ++++++++++++++--------
  1 file changed, 14 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/pci/controller/dwc/pcie-stm32.c b/drivers/pci/controller/dwc/pcie-stm32.c
-index 2e7a959391ff..cc8fabdfe95d 100644
 --- a/drivers/pci/controller/dwc/pcie-stm32.c
 +++ b/drivers/pci/controller/dwc/pcie-stm32.c
-@@ -74,12 +74,20 @@ static int stm32_pcie_suspend_noirq(struct device *dev)
+@@ -74,12 +74,20 @@ static int stm32_pcie_suspend_noirq(stru
  	if (ret)
  		return ret;
  
@@ -48,7 +46,7 @@ index 2e7a959391ff..cc8fabdfe95d 100644
  
  	return pinctrl_pm_select_sleep_state(dev);
  }
-@@ -100,12 +108,10 @@ static int stm32_pcie_resume_noirq(struct device *dev)
+@@ -100,12 +108,10 @@ static int stm32_pcie_resume_noirq(struc
  		return ret;
  	}
  
@@ -65,6 +63,3 @@ index 2e7a959391ff..cc8fabdfe95d 100644
  	}
  
  	ret = clk_prepare_enable(stm32_pcie->clk);
--- 
-2.53.0
-

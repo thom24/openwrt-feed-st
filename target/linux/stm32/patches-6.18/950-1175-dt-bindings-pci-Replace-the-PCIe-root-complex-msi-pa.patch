@@ -25,8 +25,6 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  .../devicetree/bindings/pci/st,stm32-pcie-host.yaml          | 5 +----
  1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pci/st,stm32-pcie-host.yaml b/Documentation/devicetree/bindings/pci/st,stm32-pcie-host.yaml
-index 443bfe2cdc98..2ff6267715b9 100644
 --- a/Documentation/devicetree/bindings/pci/st,stm32-pcie-host.yaml
 +++ b/Documentation/devicetree/bindings/pci/st,stm32-pcie-host.yaml
 @@ -30,9 +30,6 @@ properties:
@@ -48,6 +46,3 @@ index 443bfe2cdc98..2ff6267715b9 100644
          access-controllers = <&rifsc 68>;
          power-domains = <&CLUSTER_PD>;
  
--- 
-2.53.0
-

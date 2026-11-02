@@ -24,11 +24,9 @@ Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
  include/linux/hwspinlock.h               |  4 ++--
  8 files changed, 33 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/hwspinlock/hwspinlock_core.c b/drivers/hwspinlock/hwspinlock_core.c
-index 8a98b586c9c8..17013a29ed63 100644
 --- a/drivers/hwspinlock/hwspinlock_core.c
 +++ b/drivers/hwspinlock/hwspinlock_core.c
-@@ -507,6 +507,7 @@ static struct hwspinlock *hwspin_lock_unregister_single(unsigned int id)
+@@ -507,6 +507,7 @@ out:
   * @ops: hwspinlock handlers for this device
   * @base_id: id of the first hardware spinlock in this bank
   * @num_locks: number of hwspinlocks provided by this device
@@ -36,7 +34,7 @@ index 8a98b586c9c8..17013a29ed63 100644
   *
   * This function should be called from the underlying platform-specific
   * implementation, to register a new hwspinlock device instance.
-@@ -516,10 +517,11 @@ static struct hwspinlock *hwspin_lock_unregister_single(unsigned int id)
+@@ -516,10 +517,11 @@ out:
   * Returns: %0 on success, or an appropriate error code on failure
   */
  int hwspin_lock_register(struct hwspinlock_device *bank, struct device *dev,
@@ -50,7 +48,7 @@ index 8a98b586c9c8..17013a29ed63 100644
  
  	if (!bank || !ops || !dev || !num_locks || !ops->trylock ||
  							!ops->unlock) {
-@@ -538,6 +540,14 @@ int hwspin_lock_register(struct hwspinlock_device *bank, struct device *dev,
+@@ -538,6 +540,14 @@ int hwspin_lock_register(struct hwspinlo
  		spin_lock_init(&hwlock->lock);
  		hwlock->bank = bank;
  
@@ -65,7 +63,7 @@ index 8a98b586c9c8..17013a29ed63 100644
  		ret = hwspin_lock_register_single(hwlock, base_id + i);
  		if (ret)
  			goto reg_failed;
-@@ -633,6 +643,7 @@ EXPORT_SYMBOL_GPL(devm_hwspin_lock_unregister);
+@@ -633,6 +643,7 @@ EXPORT_SYMBOL_GPL(devm_hwspin_lock_unreg
   * @ops: hwspinlock handlers for this device
   * @base_id: id of the first hardware spinlock in this bank
   * @num_locks: number of hwspinlocks provided by this device
@@ -73,7 +71,7 @@ index 8a98b586c9c8..17013a29ed63 100644
   *
   * This function should be called from the underlying platform-specific
   * implementation, to register a new hwspinlock device instance.
-@@ -644,7 +655,7 @@ EXPORT_SYMBOL_GPL(devm_hwspin_lock_unregister);
+@@ -644,7 +655,7 @@ EXPORT_SYMBOL_GPL(devm_hwspin_lock_unreg
  int devm_hwspin_lock_register(struct device *dev,
  			      struct hwspinlock_device *bank,
  			      const struct hwspinlock_ops *ops,
@@ -82,7 +80,7 @@ index 8a98b586c9c8..17013a29ed63 100644
  {
  	struct hwspinlock_device **ptr;
  	int ret;
-@@ -653,7 +664,7 @@ int devm_hwspin_lock_register(struct device *dev,
+@@ -653,7 +664,7 @@ int devm_hwspin_lock_register(struct dev
  	if (!ptr)
  		return -ENOMEM;
  
@@ -91,8 +89,6 @@ index 8a98b586c9c8..17013a29ed63 100644
  	if (!ret) {
  		*ptr = bank;
  		devres_add(dev, ptr);
-diff --git a/drivers/hwspinlock/hwspinlock_internal.h b/drivers/hwspinlock/hwspinlock_internal.h
-index f298fc0ee5ad..3c835d96bf86 100644
 --- a/drivers/hwspinlock/hwspinlock_internal.h
 +++ b/drivers/hwspinlock/hwspinlock_internal.h
 @@ -18,20 +18,23 @@ struct hwspinlock_device;
@@ -127,11 +123,9 @@ index f298fc0ee5ad..3c835d96bf86 100644
  };
  
  /**
-diff --git a/drivers/hwspinlock/omap_hwspinlock.c b/drivers/hwspinlock/omap_hwspinlock.c
-index d5114d393003..9f405f134b16 100644
 --- a/drivers/hwspinlock/omap_hwspinlock.c
 +++ b/drivers/hwspinlock/omap_hwspinlock.c
-@@ -122,7 +122,7 @@ static int omap_hwspinlock_probe(struct platform_device *pdev)
+@@ -122,7 +122,7 @@ static int omap_hwspinlock_probe(struct
  		bank->lock[i].priv = io_base + LOCK_BASE_OFFSET + sizeof(u32) * i;
  
  	return devm_hwspin_lock_register(&pdev->dev, bank, &omap_hwspinlock_ops,
@@ -140,11 +134,9 @@ index d5114d393003..9f405f134b16 100644
  }
  
  static const struct of_device_id omap_hwspinlock_of_match[] = {
-diff --git a/drivers/hwspinlock/qcom_hwspinlock.c b/drivers/hwspinlock/qcom_hwspinlock.c
-index 4b31ab2dc177..812e15dee9a0 100644
 --- a/drivers/hwspinlock/qcom_hwspinlock.c
 +++ b/drivers/hwspinlock/qcom_hwspinlock.c
-@@ -233,7 +233,7 @@ static int qcom_hwspinlock_probe(struct platform_device *pdev)
+@@ -233,7 +233,7 @@ static int qcom_hwspinlock_probe(struct
  	}
  
  	return devm_hwspin_lock_register(&pdev->dev, bank, &qcom_hwspinlock_ops,
@@ -153,11 +145,9 @@ index 4b31ab2dc177..812e15dee9a0 100644
  }
  
  static struct platform_driver qcom_hwspinlock_driver = {
-diff --git a/drivers/hwspinlock/sprd_hwspinlock.c b/drivers/hwspinlock/sprd_hwspinlock.c
-index 0d08efbdfb07..0b91bdd4303d 100644
 --- a/drivers/hwspinlock/sprd_hwspinlock.c
 +++ b/drivers/hwspinlock/sprd_hwspinlock.c
-@@ -132,7 +132,7 @@ static int sprd_hwspinlock_probe(struct platform_device *pdev)
+@@ -132,7 +132,7 @@ static int sprd_hwspinlock_probe(struct
  
  	return devm_hwspin_lock_register(&pdev->dev, &sprd_hwlock->bank,
  					 &sprd_hwspinlock_ops, 0,
@@ -166,11 +156,9 @@ index 0d08efbdfb07..0b91bdd4303d 100644
  }
  
  static const struct of_device_id sprd_hwspinlock_of_match[] = {
-diff --git a/drivers/hwspinlock/stm32_hwspinlock.c b/drivers/hwspinlock/stm32_hwspinlock.c
-index 1d75dc03f4ad..51e8e533ac31 100644
 --- a/drivers/hwspinlock/stm32_hwspinlock.c
 +++ b/drivers/hwspinlock/stm32_hwspinlock.c
-@@ -110,7 +110,7 @@ static int stm32_hwspinlock_probe(struct platform_device *pdev)
+@@ -110,7 +110,7 @@ static int stm32_hwspinlock_probe(struct
  		hw->bank.lock[i].priv = io_base + i * sizeof(u32);
  
  	ret = devm_hwspin_lock_register(dev, &hw->bank, &stm32_hwspinlock_ops,
@@ -179,11 +167,9 @@ index 1d75dc03f4ad..51e8e533ac31 100644
  
  	if (ret)
  		dev_err(dev, "Failed to register hwspinlock\n");
-diff --git a/drivers/hwspinlock/sun6i_hwspinlock.c b/drivers/hwspinlock/sun6i_hwspinlock.c
-index 8ff81cb5880a..a0c76bba3f05 100644
 --- a/drivers/hwspinlock/sun6i_hwspinlock.c
 +++ b/drivers/hwspinlock/sun6i_hwspinlock.c
-@@ -180,7 +180,7 @@ static int sun6i_hwspinlock_probe(struct platform_device *pdev)
+@@ -180,7 +180,7 @@ static int sun6i_hwspinlock_probe(struct
  	platform_set_drvdata(pdev, priv);
  
  	return devm_hwspin_lock_register(&pdev->dev, priv->bank, &sun6i_hwspinlock_ops,
@@ -192,8 +178,6 @@ index 8ff81cb5880a..a0c76bba3f05 100644
  
  bank_fail:
  	clk_disable_unprepare(priv->ahb_clk);
-diff --git a/include/linux/hwspinlock.h b/include/linux/hwspinlock.h
-index dffa1dff7289..094a6d0d39d6 100644
 --- a/include/linux/hwspinlock.h
 +++ b/include/linux/hwspinlock.h
 @@ -30,7 +30,7 @@ struct hwspinlock_ops;
@@ -205,7 +189,7 @@ index dffa1dff7289..094a6d0d39d6 100644
  int hwspin_lock_unregister(struct hwspinlock_device *bank);
  struct hwspinlock *hwspin_lock_request_specific(unsigned int id);
  int hwspin_lock_free(struct hwspinlock *hwlock);
-@@ -49,7 +49,7 @@ int devm_hwspin_lock_unregister(struct device *dev,
+@@ -49,7 +49,7 @@ int devm_hwspin_lock_unregister(struct d
  int devm_hwspin_lock_register(struct device *dev,
  			      struct hwspinlock_device *bank,
  			      const struct hwspinlock_ops *ops,
@@ -214,6 +198,3 @@ index dffa1dff7289..094a6d0d39d6 100644
  
  #else /* !CONFIG_HWSPINLOCK */
  
--- 
-2.53.0
-

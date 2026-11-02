@@ -49,11 +49,9 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  arch/arm/boot/dts/st/stm32mp15xx-dhcor-avenger96.dtsi       | 1 +
  7 files changed, 7 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp151c-plyaqm.dts b/arch/arm/boot/dts/st/stm32mp151c-plyaqm.dts
-index 5d219a448763..658f5f4ec212 100644
 --- a/arch/arm/boot/dts/st/stm32mp151c-plyaqm.dts
 +++ b/arch/arm/boot/dts/st/stm32mp151c-plyaqm.dts
-@@ -241,6 +241,7 @@ i2s1_port: port {
+@@ -241,6 +241,7 @@
  		i2s1_endpoint: endpoint {
  			dai-format = "i2s";
  			mclk-fs = <256>;
@@ -61,11 +59,9 @@ index 5d219a448763..658f5f4ec212 100644
  			remote-endpoint = <&codec_endpoint>;
  		};
  	};
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
-index f0d70b1b0424..d699e9b18d08 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
-@@ -616,6 +616,7 @@ sai2a_endpoint: endpoint {
+@@ -616,6 +616,7 @@
  				remote-endpoint = <&wm8994_tx_endpoint>;
  				dai-format = "i2s";
  				mclk-fs = <256>;
@@ -73,11 +69,9 @@ index f0d70b1b0424..d699e9b18d08 100644
  			};
  		};
  	};
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-phycore-stm32mp15-som.dtsi b/arch/arm/boot/dts/st/stm32mp157c-phycore-stm32mp15-som.dtsi
-index 370b2afbf15b..c363b6e2feac 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-phycore-stm32mp15-som.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp157c-phycore-stm32mp15-som.dtsi
-@@ -462,6 +462,7 @@ sai2a_port: port {
+@@ -462,6 +462,7 @@
  		sai2a_endpoint: endpoint {
  			remote-endpoint = <&tlv320_rx_endpoint>;
  			mclk-fs = <256>;
@@ -85,11 +79,9 @@ index 370b2afbf15b..c363b6e2feac 100644
  			dai-tdm-slot-num = <2>;
  			dai-tdm-slot-width = <16>;
  		};
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-index a09f0edb2c93..56aec6fa0787 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-@@ -617,6 +617,7 @@ sai2a_endpoint: endpoint {
+@@ -617,6 +617,7 @@
  				remote-endpoint = <&wm8994_tx_endpoint>;
  				dai-format = "i2s";
  				mclk-fs = <256>;
@@ -97,11 +89,9 @@ index a09f0edb2c93..56aec6fa0787 100644
  			};
  		};
  	};
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-index 67eeba0cc25c..f53fcff8c113 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-@@ -617,6 +617,7 @@ sai2a_endpoint: endpoint {
+@@ -617,6 +617,7 @@
  				remote-endpoint = <&wm8994_tx_endpoint>;
  				dai-format = "i2s";
  				mclk-fs = <256>;
@@ -109,11 +99,9 @@ index 67eeba0cc25c..f53fcff8c113 100644
  			};
  		};
  	};
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2.dtsi
-index 4be74ae3089c..92b0da293146 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcom-pdk2.dtsi
-@@ -235,6 +235,7 @@ sai2a_endpoint: endpoint {
+@@ -235,6 +235,7 @@
  				dai-tdm-slot-width = <16>;
  				frame-master;
  				mclk-fs = <256>;
@@ -121,11 +109,9 @@ index 4be74ae3089c..92b0da293146 100644
  			};
  		};
  	};
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dhcor-avenger96.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dhcor-avenger96.dtsi
-index e7e2203ab11a..7d6b5740a815 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dhcor-avenger96.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dhcor-avenger96.dtsi
-@@ -385,6 +385,7 @@ sai2a_endpoint: endpoint {
+@@ -385,6 +385,7 @@
  				remote-endpoint = <&adv7513_i2s0>;
  				dai-format = "i2s";
  				mclk-fs = <256>;
@@ -133,6 +119,3 @@ index e7e2203ab11a..7d6b5740a815 100644
  			};
  		};
  	};
--- 
-2.53.0
-

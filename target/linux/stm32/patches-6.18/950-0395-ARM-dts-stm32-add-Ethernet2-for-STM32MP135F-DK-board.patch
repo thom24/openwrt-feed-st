@@ -21,11 +21,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp135f-dk.dts | 25 +++++++++++++++++++++++++
  1 file changed, 25 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index f7bdb44367cb..620ef54f6715 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -19,6 +19,7 @@ / {
+@@ -19,6 +19,7 @@
  
  	aliases {
  		ethernet0 = &ethernet1;
@@ -33,7 +31,7 @@ index f7bdb44367cb..620ef54f6715 100644
  		serial0 = &uart4;
  		serial1 = &usart1;
  		serial2 = &uart8;
-@@ -232,6 +233,7 @@ &ethernet1 {
+@@ -232,6 +233,7 @@
  	pinctrl-1 = <&eth1_rmii_sleep_pins_a>;
  	pinctrl-names = "default", "sleep";
  	phy-mode = "rmii";
@@ -41,10 +39,11 @@ index f7bdb44367cb..620ef54f6715 100644
  	phy-handle = <&phy0_eth1>;
  
  	mdio {
-@@ -248,6 +250,29 @@ phy0_eth1: ethernet-phy@0 {
+@@ -247,6 +249,29 @@
+ 		};
  	};
  };
- 
++
 +&ethernet2 {
 +	status = "okay";
 +	pinctrl-0 = <&eth2_rmii_pins_a>;
@@ -67,10 +66,6 @@ index f7bdb44367cb..620ef54f6715 100644
 +		};
 +	};
 +};
-+
+ 
  &etzpc {
  	bootph-all;
- };
--- 
-2.53.0
-

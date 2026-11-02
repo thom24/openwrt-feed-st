@@ -28,11 +28,9 @@ Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp231.dtsi | 22 ++++++++++++++++++++++
  1 file changed, 22 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index 9ad107404a58..d84358681838 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -241,6 +241,28 @@ timer {
+@@ -241,6 +241,28 @@
  		arm,no-tick-in-suspend;
  	};
  
@@ -61,6 +59,3 @@ index 9ad107404a58..d84358681838 100644
  	soc@0 {
  		compatible = "simple-bus";
  		ranges = <0x0 0x0 0x0 0x80000000>;
--- 
-2.53.0
-

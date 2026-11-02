@@ -18,8 +18,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm/configs/stm32mp_defconfig            | 29 -------------------
  2 files changed, 52 deletions(-)
 
-diff --git a/arch/arm/configs/fragment-01-multiv7_cleanup.config b/arch/arm/configs/fragment-01-multiv7_cleanup.config
-index fa15aa46c6b2..c12a05a62423 100644
 --- a/arch/arm/configs/fragment-01-multiv7_cleanup.config
 +++ b/arch/arm/configs/fragment-01-multiv7_cleanup.config
 @@ -1,28 +1,5 @@
@@ -51,8 +49,6 @@ index fa15aa46c6b2..c12a05a62423 100644
  # CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
  # CONFIG_NET_VENDOR_3COM is not set
  # CONFIG_NET_VENDOR_8390 is not set
-diff --git a/arch/arm/configs/stm32mp_defconfig b/arch/arm/configs/stm32mp_defconfig
-index 6fbf7d8ec017..47a4257b5563 100644
 --- a/arch/arm/configs/stm32mp_defconfig
 +++ b/arch/arm/configs/stm32mp_defconfig
 @@ -618,10 +618,6 @@ CONFIG_VIDEO_ADV7604_CEC=y
@@ -118,6 +114,3 @@ index 6fbf7d8ec017..47a4257b5563 100644
  CONFIG_DRM_ASPEED_GFX=m
  CONFIG_FB=y
  CONFIG_FB_EFI=y
--- 
-2.53.0
-

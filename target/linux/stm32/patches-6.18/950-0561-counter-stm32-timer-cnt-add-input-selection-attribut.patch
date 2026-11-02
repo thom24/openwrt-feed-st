@@ -32,8 +32,6 @@ Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
  include/linux/mfd/stm32-timers.h  |   5 ++
  2 files changed, 109 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/counter/stm32-timer-cnt.c b/drivers/counter/stm32-timer-cnt.c
-index f40a48d3d069..bcdb05d36354 100644
 --- a/drivers/counter/stm32-timer-cnt.c
 +++ b/drivers/counter/stm32-timer-cnt.c
 @@ -37,6 +37,10 @@ struct stm32_timer_regs {
@@ -55,7 +53,7 @@ index f40a48d3d069..bcdb05d36354 100644
  };
  
  static const enum counter_function stm32_count_functions[] = {
-@@ -547,6 +552,81 @@ static struct counter_comp stm32_count_clock_ext[] = {
+@@ -547,6 +552,81 @@ static struct counter_comp stm32_count_c
  	COUNTER_COMP_FREQUENCY(stm32_count_clk_get_freq),
  };
  
@@ -137,7 +135,7 @@ index f40a48d3d069..bcdb05d36354 100644
  static struct counter_signal stm32_signals[] = {
  	/*
  	 * Need to declare all the signals as a static array, and keep the signals order here,
-@@ -559,11 +639,15 @@ static struct counter_signal stm32_signals[] = {
+@@ -559,11 +639,15 @@ static struct counter_signal stm32_signa
  	 */
  	{
  		.id = STM32_CH1_SIG,
@@ -155,7 +153,7 @@ index f40a48d3d069..bcdb05d36354 100644
  	},
  	{
  		.id = STM32_CLOCK_SIG,
-@@ -573,11 +657,15 @@ static struct counter_signal stm32_signals[] = {
+@@ -573,11 +657,15 @@ static struct counter_signal stm32_signa
  	},
  	{
  		.id = STM32_CH3_SIG,
@@ -173,7 +171,7 @@ index f40a48d3d069..bcdb05d36354 100644
  	},
  };
  
-@@ -743,6 +831,7 @@ static int stm32_timer_cnt_probe(struct platform_device *pdev)
+@@ -743,6 +831,7 @@ static int stm32_timer_cnt_probe(struct
  	priv->clk = ddata->clk;
  	priv->max_arr = ddata->max_arr;
  	priv->nr_irqs = ddata->nr_irqs;
@@ -181,7 +179,7 @@ index f40a48d3d069..bcdb05d36354 100644
  
  	ret = stm32_timer_cnt_probe_encoder(dev, priv);
  	if (ret)
-@@ -882,9 +971,18 @@ static const struct dev_pm_ops stm32_timer_cnt_pm_ops = {
+@@ -882,9 +971,18 @@ static const struct dev_pm_ops stm32_tim
  	RUNTIME_PM_OPS(stm32_timer_cnt_runtime_suspend, stm32_timer_cnt_runtime_resume, NULL)
  };
  
@@ -202,8 +200,6 @@ index f40a48d3d069..bcdb05d36354 100644
  	{},
  };
  MODULE_DEVICE_TABLE(of, stm32_timer_cnt_of_match);
-diff --git a/include/linux/mfd/stm32-timers.h b/include/linux/mfd/stm32-timers.h
-index 20ef06917a88..4358ca7569f2 100644
 --- a/include/linux/mfd/stm32-timers.h
 +++ b/include/linux/mfd/stm32-timers.h
 @@ -33,6 +33,7 @@
@@ -225,6 +221,3 @@ index 20ef06917a88..4358ca7569f2 100644
  #define TIM_HWCFGR1_NB_OF_CC	GENMASK(3, 0)				/* Capture/compare channels			*/
  #define TIM_HWCFGR1_NB_OF_DT	GENMASK(7, 4)				/* Complementary outputs & dead-time generators */
  #define TIM_HWCFGR2_CNT_WIDTH	GENMASK(15, 8)				/* Counter width				*/
--- 
-2.53.0
-

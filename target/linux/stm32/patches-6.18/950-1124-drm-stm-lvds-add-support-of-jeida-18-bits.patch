@@ -18,15 +18,12 @@ Tested-by: Yannick FERTRE <yannick.fertre@foss.st.com>
  drivers/gpu/drm/stm/lvds.c | 23 ++++++++++++++++++++---
  1 file changed, 20 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
-index f69f24fc2884..4ea9e20df09c 100644
 --- a/drivers/gpu/drm/stm/lvds.c
 +++ b/drivers/gpu/drm/stm/lvds.c
-@@ -312,6 +312,23 @@ static inline void lvds_clear(struct stm_lvds *lvds, u32 reg, u32 mask)
- 	lvds_write(lvds, reg, lvds_read(lvds, reg) & ~mask);
+@@ -313,6 +313,23 @@ static inline void lvds_clear(struct stm
  }
  
-+/*
+ /*
 + * Expected JEIDA-RGB666 data to be sent in LSB format
 + *	    bit6 ............................bit2
 + * CHAN0   {ONE, ONE, ZERO, ZERO, ZERO, ONE, ONE}
@@ -43,10 +40,11 @@ index f69f24fc2884..4ea9e20df09c 100644
 +	{ PIX_ZER, PIX_ZER, PIX_ZER, PIX_ZER, PIX_ZER, PIX_ZER, PIX_ZER }
 +};
 +
- /*
++/*
   * Expected JEIDA-RGB888 data to be sent in LSB format
   *	    bit6 ............................bit0
-@@ -805,9 +822,9 @@ static void lvds_config_data_mapping(struct stm_lvds *lvds)
+  * CHAN0   {ONE, ONE, ZERO, ZERO, ZERO, ONE, ONE}
+@@ -805,9 +822,9 @@ static void lvds_config_data_mapping(str
  	}
  
  	switch (info->bus_formats[0]) {
@@ -59,6 +57,3 @@ index f69f24fc2884..4ea9e20df09c 100644
  	case MEDIA_BUS_FMT_RGB888_1X7X4_SPWG: /* VESA-RGB888 */
  		bitmap = lvds_bitmap_vesa_rgb888;
  		break;
--- 
-2.53.0
-

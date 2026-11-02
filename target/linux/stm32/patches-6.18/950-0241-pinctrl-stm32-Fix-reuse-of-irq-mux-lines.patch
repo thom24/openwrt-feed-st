@@ -28,11 +28,9 @@ Change-Id: Ic25f4336742b004512df8b12eabe0a63e0b08683
  drivers/pinctrl/stm32/pinctrl-stm32.c | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
-index ceb9e19f2290..adf8f4d3851f 100644
 --- a/drivers/pinctrl/stm32/pinctrl-stm32.c
 +++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
-@@ -375,11 +375,16 @@ static int stm32_gpio_request(struct gpio_chip *chip, unsigned offset)
+@@ -375,11 +375,16 @@ static int stm32_gpio_request(struct gpi
  static void stm32_gpio_free(struct gpio_chip *chip, unsigned int offset)
  {
  	struct stm32_gpio_bank *bank = gpiochip_get_data(chip);
@@ -49,6 +47,3 @@ index ceb9e19f2290..adf8f4d3851f 100644
  }
  
  static int stm32_gpio_get(struct gpio_chip *chip, unsigned offset)
--- 
-2.53.0
-

@@ -22,11 +22,9 @@ Tested-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
  arch/arm/boot/dts/st/stm32mp135f-dk.dts | 9 +++------
  1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index 1cc5d9761a21..590cd146b500 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -366,13 +366,10 @@ mcp23017: pinctrl@21 {
+@@ -366,13 +366,10 @@
  	typec@53 {
  		compatible = "st,stm32g0-typec";
  		reg = <0x53>;
@@ -43,6 +41,3 @@ index 1cc5d9761a21..590cd146b500 100644
  		connector {
  			compatible = "usb-c-connector";
  			label = "USB-C";
--- 
-2.53.0
-

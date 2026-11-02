@@ -22,11 +22,9 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/364932
  drivers/input/touchscreen/goodix.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/input/touchscreen/goodix.c b/drivers/input/touchscreen/goodix.c
-index 927bf45b40ce..e02bfc8b90df 100644
 --- a/drivers/input/touchscreen/goodix.c
 +++ b/drivers/input/touchscreen/goodix.c
-@@ -191,7 +191,7 @@ int goodix_i2c_read(struct i2c_client *client, u16 reg, u8 *buf, int len)
+@@ -191,7 +191,7 @@ int goodix_i2c_read(struct i2c_client *c
  		ret = (ret == ARRAY_SIZE(msgs) ? 0 : -EIO);
  
  	if (ret)
@@ -35,7 +33,7 @@ index 927bf45b40ce..e02bfc8b90df 100644
  			len, reg, ret);
  	return ret;
  }
-@@ -230,7 +230,7 @@ int goodix_i2c_write(struct i2c_client *client, u16 reg, const u8 *buf, int len)
+@@ -230,7 +230,7 @@ int goodix_i2c_write(struct i2c_client *
  	kfree(addr_buf);
  
  	if (ret)
@@ -44,6 +42,3 @@ index 927bf45b40ce..e02bfc8b90df 100644
  			len, reg, ret);
  	return ret;
  }
--- 
-2.53.0
-

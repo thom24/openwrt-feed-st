@@ -18,15 +18,12 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi | 21 +++++++++++++++++++
  1 file changed, 21 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
-index ad51a2730671..52b26f50d705 100644
 --- a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
-@@ -317,6 +317,27 @@ pins {
- 		};
+@@ -318,6 +318,27 @@
  	};
  
-+	/omit-if-no-ref/
+ 	/omit-if-no-ref/
 +	i2s2_pins_b: i2s2-1 {
 +		pins {
 +			pinmux = <STM32_PINMUX('B', 2, AF2)>, /* I2S2_SDO */
@@ -47,9 +44,7 @@ index ad51a2730671..52b26f50d705 100644
 +		};
 +	};
 +
- 	/omit-if-no-ref/
++	/omit-if-no-ref/
  	mdf_cck0_pins_a: mdf-cck0-0 {
  		pins1 {
--- 
-2.53.0
-
+ 			pinmux = <STM32_PINMUX('A', 7, AF5)>; /* MDF1_CCK */

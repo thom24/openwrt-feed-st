@@ -48,8 +48,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/usb/dwc2/gadget.c | 22 +++++++++++++++++++++-
  2 files changed, 22 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index 4d067be48b36..b7056b8f8a22 100644
 --- a/drivers/usb/dwc2/core.h
 +++ b/drivers/usb/dwc2/core.h
 @@ -1223,6 +1223,7 @@ struct dwc2_hsotg {
@@ -60,11 +58,9 @@ index 4d067be48b36..b7056b8f8a22 100644
  	unsigned int remote_wakeup_allowed:1;
  	struct dwc2_hsotg_ep *eps_in[MAX_EPS_CHANNELS];
  	struct dwc2_hsotg_ep *eps_out[MAX_EPS_CHANNELS];
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index d3f3895a95c8..faf275e5aa50 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -3118,6 +3118,8 @@ static void dwc2_hsotg_epint(struct dwc2_hsotg *hsotg, unsigned int idx,
+@@ -3118,6 +3118,8 @@ static void dwc2_hsotg_epint(struct dwc2
  	if (ints & DXEPINT_SETUP) {  /* Setup or Timeout */
  		dev_dbg(hsotg->dev, "%s: Setup/Timeout\n",  __func__);
  
@@ -73,7 +69,7 @@ index d3f3895a95c8..faf275e5aa50 100644
  		if (using_dma(hsotg) && idx == 0) {
  			/*
  			 * this is the notification we've received a
-@@ -3164,6 +3166,17 @@ static void dwc2_hsotg_epint(struct dwc2_hsotg *hsotg, unsigned int idx,
+@@ -3164,6 +3166,17 @@ static void dwc2_hsotg_epint(struct dwc2
  		dev_dbg(hsotg->dev, "%s: BNA interrupt\n", __func__);
  		if (hs_ep->isochronous)
  			dwc2_gadget_handle_isoc_bna(hs_ep);
@@ -91,7 +87,7 @@ index d3f3895a95c8..faf275e5aa50 100644
  	}
  
  	if (dir_in && !hs_ep->isochronous) {
-@@ -3766,13 +3779,20 @@ static irqreturn_t dwc2_hsotg_irq(int irq, void *pw)
+@@ -3766,13 +3779,20 @@ irq_retry:
  
  		dwc2_writel(hsotg, GINTSTS_USBRST, GINTSTS);
  
@@ -113,6 +109,3 @@ index d3f3895a95c8..faf275e5aa50 100644
  			dwc2_hsotg_core_init_disconnected(hsotg, true);
  	}
  
--- 
-2.53.0
-

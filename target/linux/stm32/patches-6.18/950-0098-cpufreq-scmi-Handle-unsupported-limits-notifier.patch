@@ -21,11 +21,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/cpufreq/scmi-cpufreq.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-index c450cf9c881d..325a3c33ba99 100644
 --- a/drivers/cpufreq/scmi-cpufreq.c
 +++ b/drivers/cpufreq/scmi-cpufreq.c
-@@ -317,7 +317,7 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+@@ -317,7 +317,7 @@ static int scmi_cpufreq_init(struct cpuf
  							SCMI_EVENT_PERFORMANCE_LIMITS_CHANGED,
  							&priv->domain_id,
  							&priv->limit_notify_nb);
@@ -34,6 +32,3 @@ index c450cf9c881d..325a3c33ba99 100644
  		dev_warn(&sdev->dev,
  			 "failed to register for limits change notifier for domain %d\n",
  			 priv->domain_id);
--- 
-2.53.0
-

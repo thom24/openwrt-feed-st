@@ -22,8 +22,6 @@ Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
  drivers/usb/typec/mux/gpio-sbu-mux.c | 13 ++++++++++---
  1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/typec/mux/gpio-sbu-mux.c b/drivers/usb/typec/mux/gpio-sbu-mux.c
-index 1834f1a2dd9d..b1aa976aca24 100644
 --- a/drivers/usb/typec/mux/gpio-sbu-mux.c
 +++ b/drivers/usb/typec/mux/gpio-sbu-mux.c
 @@ -17,6 +17,7 @@ struct gpio_sbu_mux {
@@ -34,7 +32,7 @@ index 1834f1a2dd9d..b1aa976aca24 100644
  
  	struct mutex lock; /* protect enabled and swapped */
  	bool enabled;
-@@ -40,19 +41,24 @@ static int gpio_sbu_switch_set(struct typec_switch_dev *sw,
+@@ -40,19 +41,24 @@ static int gpio_sbu_switch_set(struct ty
  		enabled = false;
  		break;
  	case TYPEC_ORIENTATION_NORMAL:
@@ -62,7 +60,7 @@ index 1834f1a2dd9d..b1aa976aca24 100644
  	sbu_mux->enabled = enabled;
  	sbu_mux->swapped = swapped;
  
-@@ -120,6 +126,7 @@ static int gpio_sbu_mux_probe(struct platform_device *pdev)
+@@ -120,6 +126,7 @@ static int gpio_sbu_mux_probe(struct pla
  	sw_desc.fwnode = dev_fwnode(dev);
  	sw_desc.set = gpio_sbu_switch_set;
  
@@ -70,6 +68,3 @@ index 1834f1a2dd9d..b1aa976aca24 100644
  	sbu_mux->sw = typec_switch_register(dev, &sw_desc);
  	if (IS_ERR(sbu_mux->sw))
  		return dev_err_probe(dev, PTR_ERR(sbu_mux->sw),
--- 
-2.53.0
-

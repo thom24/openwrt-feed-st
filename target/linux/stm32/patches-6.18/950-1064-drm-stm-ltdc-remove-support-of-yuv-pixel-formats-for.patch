@@ -13,11 +13,9 @@ Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
  drivers/gpu/drm/stm/ltdc.c | 26 +++++++++++++++++---------
  1 file changed, 17 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-index 13c1b0f4ad3b..7f1f21422caa 100644
 --- a/drivers/gpu/drm/stm/ltdc.c
 +++ b/drivers/gpu/drm/stm/ltdc.c
-@@ -1942,15 +1942,23 @@ static struct drm_plane *ltdc_plane_create(struct drm_device *ddev,
+@@ -1942,15 +1942,23 @@ static struct drm_plane *ltdc_plane_crea
  			nb_fmt += ARRAY_SIZE(ltdc_drm_fmt_ycbcr_cp);
  		}
  
@@ -50,6 +48,3 @@ index 13c1b0f4ad3b..7f1f21422caa 100644
  		}
  	}
  
--- 
-2.53.0
-

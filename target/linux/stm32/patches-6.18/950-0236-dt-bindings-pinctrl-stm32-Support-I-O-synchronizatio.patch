@@ -21,8 +21,6 @@ Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
  .../bindings/pinctrl/st,stm32-pinctrl.yaml    | 74 +++++++++++++++++++
  1 file changed, 74 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
-index 27c0dd7a8df0..76d956b4a537 100644
 --- a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
 +++ b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
 @@ -220,12 +220,65 @@ patternProperties:
@@ -117,6 +115,3 @@ index 27c0dd7a8df0..76d956b4a537 100644
 +      };
 +
  ...
--- 
-2.53.0
-

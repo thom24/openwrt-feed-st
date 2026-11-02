@@ -17,8 +17,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
-index 974cf67a06ac..31f52906c2f8 100644
 --- a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
 +++ b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
 @@ -24,6 +24,7 @@ properties:
@@ -29,6 +27,3 @@ index 974cf67a06ac..31f52906c2f8 100644
                - st,stm32mp25-syscfg
            - const: syscon
        - items:
--- 
-2.53.0
-

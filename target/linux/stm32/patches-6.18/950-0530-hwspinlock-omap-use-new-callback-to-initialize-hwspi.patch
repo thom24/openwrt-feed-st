@@ -11,11 +11,9 @@ Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
  drivers/hwspinlock/omap_hwspinlock.c | 11 +++++++----
  1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hwspinlock/omap_hwspinlock.c b/drivers/hwspinlock/omap_hwspinlock.c
-index 9f405f134b16..1646a0fbf91e 100644
 --- a/drivers/hwspinlock/omap_hwspinlock.c
 +++ b/drivers/hwspinlock/omap_hwspinlock.c
-@@ -66,10 +66,16 @@ static void omap_hwspinlock_relax(struct hwspinlock *lock)
+@@ -66,10 +66,16 @@ static void omap_hwspinlock_relax(struct
  	ndelay(50);
  }
  
@@ -32,7 +30,7 @@ index 9f405f134b16..1646a0fbf91e 100644
  };
  
  static int omap_hwspinlock_probe(struct platform_device *pdev)
-@@ -118,11 +124,8 @@ static int omap_hwspinlock_probe(struct platform_device *pdev)
+@@ -118,11 +124,8 @@ static int omap_hwspinlock_probe(struct
  	if (!bank)
  		return -ENOMEM;
  
@@ -45,6 +43,3 @@ index 9f405f134b16..1646a0fbf91e 100644
  }
  
  static const struct of_device_id omap_hwspinlock_of_match[] = {
--- 
-2.53.0
-

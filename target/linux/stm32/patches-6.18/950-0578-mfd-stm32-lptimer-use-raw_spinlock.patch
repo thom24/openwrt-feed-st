@@ -25,11 +25,9 @@ Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
  drivers/mfd/stm32-lptimer.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/mfd/stm32-lptimer.c b/drivers/mfd/stm32-lptimer.c
-index 024206b6f11b..78eb237a9092 100644
 --- a/drivers/mfd/stm32-lptimer.c
 +++ b/drivers/mfd/stm32-lptimer.c
-@@ -20,6 +20,8 @@ static const struct regmap_config stm32_lptimer_regmap_cfg = {
+@@ -20,6 +20,8 @@ static const struct regmap_config stm32_
  	.val_bits = 32,
  	.reg_stride = sizeof(u32),
  	.max_register = STM32_LPTIM_MAX_REGISTER,
@@ -38,6 +36,3 @@ index 024206b6f11b..78eb237a9092 100644
  };
  
  static int stm32_lptimer_detect_encoder(struct stm32_lptimer *ddata)
--- 
-2.53.0
-

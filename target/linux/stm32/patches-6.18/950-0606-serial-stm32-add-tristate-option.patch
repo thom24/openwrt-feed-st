@@ -17,8 +17,6 @@ Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
  drivers/tty/serial/Kconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index 2b9c8b39d68f..72bb0693fd08 100644
 --- a/drivers/tty/serial/Kconfig
 +++ b/drivers/tty/serial/Kconfig
 @@ -1419,7 +1419,7 @@ config SERIAL_STM32
@@ -30,6 +28,3 @@ index 2b9c8b39d68f..72bb0693fd08 100644
  	depends on SERIAL_STM32
  	select SERIAL_CORE_CONSOLE
  	select SERIAL_EARLYCON
--- 
-2.53.0
-

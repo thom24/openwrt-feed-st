@@ -26,8 +26,6 @@ Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
  drivers/remoteproc/stm32_rproc.c | 125 ++++++++++++++++++++-----------
  1 file changed, 80 insertions(+), 45 deletions(-)
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index 2c00b43740b2..0db90005e908 100644
 --- a/drivers/remoteproc/stm32_rproc.c
 +++ b/drivers/remoteproc/stm32_rproc.c
 @@ -83,6 +83,7 @@ struct stm32_rproc_mem {
@@ -38,7 +36,7 @@ index 2c00b43740b2..0db90005e908 100644
  };
  
  struct stm32_mbox {
-@@ -1006,24 +1007,6 @@ static int stm32_rproc_get_m33_info(struct rproc *rproc)
+@@ -1006,24 +1007,6 @@ static int stm32_rproc_get_m33_info(stru
  
  	return 0;
  }
@@ -63,7 +61,7 @@ index 2c00b43740b2..0db90005e908 100644
  
  static int stm32_rproc_get_syscon(struct device_node *np, const char *prop,
  				  struct stm32_syscon *syscon)
-@@ -1047,33 +1030,14 @@ static int stm32_rproc_get_syscon(struct device_node *np, const char *prop,
+@@ -1047,33 +1030,14 @@ out:
  	return err;
  }
  
@@ -101,7 +99,7 @@ index 2c00b43740b2..0db90005e908 100644
  
  	ddata->rst = devm_reset_control_get_optional(dev, "mcu_rst");
  	if (!ddata->rst) {
-@@ -1087,6 +1051,9 @@ static int stm32_rproc_parse_dt(struct platform_device *pdev,
+@@ -1087,6 +1051,9 @@ static int stm32_rproc_parse_dt(struct p
  		ddata->rst = NULL;
  	}
  
@@ -111,7 +109,7 @@ index 2c00b43740b2..0db90005e908 100644
  	/*
  	 * Three ways to manage the hold boot
  	 * - using SCMI: the hold boot is managed as a reset
-@@ -1097,11 +1064,10 @@ static int stm32_rproc_parse_dt(struct platform_device *pdev,
+@@ -1097,11 +1064,10 @@ static int stm32_rproc_parse_dt(struct p
  	 * - default(no SCMI, no SMC): the hold boot is managed as a syscon register
  	 *    The DT "reset-mames" property is optional, "st,syscfg-holdboot" is required
  	 */
@@ -124,7 +122,7 @@ index 2c00b43740b2..0db90005e908 100644
  
  	if (!ddata->hold_boot_rst && IS_ENABLED(CONFIG_HAVE_ARM_SMCCC)) {
  		/* Manage the MCU_BOOT using SMC call */
-@@ -1118,7 +1084,76 @@ static int stm32_rproc_parse_dt(struct platform_device *pdev,
+@@ -1118,7 +1084,76 @@ static int stm32_rproc_parse_dt(struct p
  
  	if (!ddata->hold_boot_rst && !ddata->hold_boot_smc) {
  		/* Default: hold boot manage it through the syscon controller */
@@ -202,7 +200,7 @@ index 2c00b43740b2..0db90005e908 100644
  	}
  
  	err = stm32_rproc_get_syscon(np, "st,syscfg-pdds", &ddata->pdds);
-@@ -1244,7 +1279,7 @@ static int stm32_rproc_probe(struct platform_device *pdev)
+@@ -1244,7 +1279,7 @@ static int stm32_rproc_probe(struct plat
  	ddata->desc = desc;
  	ddata->trproc = trproc;
  
@@ -211,6 +209,3 @@ index 2c00b43740b2..0db90005e908 100644
  	if (ret)
  		goto free_rproc;
  
--- 
-2.53.0
-

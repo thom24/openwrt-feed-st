@@ -18,11 +18,9 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 26 +++++++++++++++++++++++
  1 file changed, 26 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index 39843e9c876a..2abcad6c1977 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -210,6 +210,32 @@ &gpioz {
+@@ -210,6 +210,32 @@
  	bootph-all;
  };
  
@@ -55,6 +53,3 @@ index 39843e9c876a..2abcad6c1977 100644
  &optee {
  	bootph-all;
  };
--- 
-2.53.0
-

@@ -26,11 +26,9 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/tty/serial/stm32-usart.c | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 6992cfc4fcde..14e784a4c5fb 100644
 --- a/drivers/tty/serial/stm32-usart.c
 +++ b/drivers/tty/serial/stm32-usart.c
-@@ -2481,6 +2481,8 @@ static int __maybe_unused stm32_usart_serial_suspend(struct device *dev)
+@@ -2481,6 +2481,8 @@ static int __maybe_unused stm32_usart_se
  
  
  	if (device_may_wakeup(dev) || device_wakeup_path(dev)) {
@@ -39,7 +37,7 @@ index 6992cfc4fcde..14e784a4c5fb 100644
  		ret = pm_runtime_force_suspend(dev);
  		if (ret)
  			return ret;
-@@ -2526,6 +2528,8 @@ static int __maybe_unused stm32_usart_serial_resume(struct device *dev)
+@@ -2526,6 +2528,8 @@ static int __maybe_unused stm32_usart_se
  		ret = pm_runtime_force_resume(dev);
  		if (ret)
  			return ret;
@@ -48,6 +46,3 @@ index 6992cfc4fcde..14e784a4c5fb 100644
  	}
  
  	ret = uart_resume_port(&stm32_usart_driver, port);
--- 
-2.53.0
-

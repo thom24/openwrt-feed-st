@@ -31,11 +31,9 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  drivers/pci/controller/dwc/pcie-stm32.c | 9 ++++++++-
  1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pci/controller/dwc/pcie-stm32.c b/drivers/pci/controller/dwc/pcie-stm32.c
-index 96a5fb893af4..1be196d50883 100644
 --- a/drivers/pci/controller/dwc/pcie-stm32.c
 +++ b/drivers/pci/controller/dwc/pcie-stm32.c
-@@ -112,7 +112,11 @@ static int stm32_pcie_resume_noirq(struct device *dev)
+@@ -112,7 +112,11 @@ static int stm32_pcie_resume_noirq(struc
  	stm32_pcie_deassert_perst(stm32_pcie);
  
  	ret = dw_pcie_resume_noirq(&stm32_pcie->pci);
@@ -48,7 +46,7 @@ index 96a5fb893af4..1be196d50883 100644
  		goto err_disable_clk;
  
  	pinctrl_pm_select_default_state(dev);
-@@ -299,6 +303,9 @@ static int stm32_pcie_probe(struct platform_device *pdev)
+@@ -299,6 +303,9 @@ static int stm32_pcie_probe(struct platf
  		goto err_disable_clk;
  	}
  
@@ -58,6 +56,3 @@ index 96a5fb893af4..1be196d50883 100644
  	ret = dw_pcie_host_init(&stm32_pcie->pci.pp);
  	if (ret)
  		goto err_disable_clk;
--- 
-2.53.0
-

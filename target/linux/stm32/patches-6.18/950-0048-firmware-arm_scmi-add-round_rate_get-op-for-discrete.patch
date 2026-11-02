@@ -21,11 +21,9 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  include/linux/scmi_protocol.h     |  2 +
  2 files changed, 64 insertions(+)
 
-diff --git a/drivers/firmware/arm_scmi/clock.c b/drivers/firmware/arm_scmi/clock.c
-index afa7981efe82..efc45ab69495 100644
 --- a/drivers/firmware/arm_scmi/clock.c
 +++ b/drivers/firmware/arm_scmi/clock.c
-@@ -626,6 +626,67 @@ static int scmi_clock_rate_set(const struct scmi_protocol_handle *ph,
+@@ -626,6 +626,67 @@ static int scmi_clock_rate_set(const str
  	return ret;
  }
  
@@ -93,7 +91,7 @@ index afa7981efe82..efc45ab69495 100644
  static int
  scmi_clock_config_set(const struct scmi_protocol_handle *ph, u32 clk_id,
  		      enum clk_state state,
-@@ -945,6 +1006,7 @@ static const struct scmi_clk_proto_ops clk_proto_ops = {
+@@ -945,6 +1006,7 @@ static const struct scmi_clk_proto_ops c
  	.config_oem_set = scmi_clock_config_oem_set,
  	.parent_set = scmi_clock_set_parent,
  	.parent_get = scmi_clock_get_parent,
@@ -101,8 +99,6 @@ index afa7981efe82..efc45ab69495 100644
  };
  
  static bool scmi_clk_notify_supported(const struct scmi_protocol_handle *ph,
-diff --git a/include/linux/scmi_protocol.h b/include/linux/scmi_protocol.h
-index d94dbd276489..c295f4073f19 100644
 --- a/include/linux/scmi_protocol.h
 +++ b/include/linux/scmi_protocol.h
 @@ -98,6 +98,7 @@ enum scmi_clock_oem_config {
@@ -121,6 +117,3 @@ index d94dbd276489..c295f4073f19 100644
  };
  
  struct scmi_perf_domain_info {
--- 
-2.53.0
-

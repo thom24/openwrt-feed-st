@@ -30,8 +30,6 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  3 files changed, 638 insertions(+)
  create mode 100644 drivers/usb/typec/tcpm/stm32_ucpd.c
 
-diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
-index 216dd1de4330..2538d1715e8e 100644
 --- a/drivers/usb/typec/tcpm/Kconfig
 +++ b/drivers/usb/typec/tcpm/Kconfig
 @@ -73,6 +73,18 @@ config TYPEC_ST_TCPP
@@ -53,8 +51,6 @@ index 216dd1de4330..2538d1715e8e 100644
  config TYPEC_WCOVE
  	tristate "Intel WhiskeyCove PMIC USB Type-C PHY driver"
  	depends on ACPI
-diff --git a/drivers/usb/typec/tcpm/Makefile b/drivers/usb/typec/tcpm/Makefile
-index 0ee6ff598f75..b1a6681622b0 100644
 --- a/drivers/usb/typec/tcpm/Makefile
 +++ b/drivers/usb/typec/tcpm/Makefile
 @@ -2,6 +2,7 @@
@@ -65,9 +61,6 @@ index 0ee6ff598f75..b1a6681622b0 100644
  obj-$(CONFIG_TYPEC_WCOVE)		+= typec_wcove.o
  typec_wcove-y				:= wcove.o
  obj-$(CONFIG_TYPEC_TCPCI)		+= tcpci.o
-diff --git a/drivers/usb/typec/tcpm/stm32_ucpd.c b/drivers/usb/typec/tcpm/stm32_ucpd.c
-new file mode 100644
-index 000000000000..4b1c4cb369b2
 --- /dev/null
 +++ b/drivers/usb/typec/tcpm/stm32_ucpd.c
 @@ -0,0 +1,625 @@
@@ -696,6 +689,3 @@ index 000000000000..4b1c4cb369b2
 +MODULE_DESCRIPTION("USB Type-C Power Delivery");
 +MODULE_AUTHOR("Christian Bruel <christian.bruel@foss.st.com>");
 +MODULE_LICENSE("GPL");
--- 
-2.53.0
-

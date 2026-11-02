@@ -23,8 +23,6 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  .../bindings/arm/arm,coresight-dynamic-replicator.yaml         | 3 +++
  2 files changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml
-index 0a6bc03ebe00..29abc1d8abe7 100644
 --- a/Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml
 +++ b/Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml
 @@ -60,6 +60,9 @@ properties:
@@ -37,8 +35,6 @@ index 0a6bc03ebe00..29abc1d8abe7 100644
  required:
    - compatible
    - reg
-diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-replicator.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-replicator.yaml
-index 17ea936b796f..2388ccd92e2e 100644
 --- a/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-replicator.yaml
 +++ b/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-replicator.yaml
 @@ -84,6 +84,9 @@ properties:
@@ -51,6 +47,3 @@ index 17ea936b796f..2388ccd92e2e 100644
  required:
    - compatible
    - reg
--- 
-2.53.0
-

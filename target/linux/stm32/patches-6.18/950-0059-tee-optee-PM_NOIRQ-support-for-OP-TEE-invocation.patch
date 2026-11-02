@@ -38,8 +38,6 @@ Reviewed-by: Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
  drivers/tee/optee/smc_abi.c       | 49 +++++++++++++++++++++++++++----
  3 files changed, 73 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
-index ed2f9bd7b959..344f40182a10 100644
 --- a/drivers/tee/optee/optee_private.h
 +++ b/drivers/tee/optee/optee_private.h
 @@ -251,6 +251,7 @@ struct optee_ops {
@@ -58,8 +56,6 @@ index ed2f9bd7b959..344f40182a10 100644
  };
  
  /**
-diff --git a/drivers/tee/optee/optee_smc.h b/drivers/tee/optee/optee_smc.h
-index d2cdaaa7fbe2..c4c4f2ce2a8e 100644
 --- a/drivers/tee/optee/optee_smc.h
 +++ b/drivers/tee/optee/optee_smc.h
 @@ -284,6 +284,9 @@ struct optee_smc_get_shm_config_result {
@@ -72,11 +68,10 @@ index d2cdaaa7fbe2..c4c4f2ce2a8e 100644
  #define OPTEE_SMC_FUNCID_EXCHANGE_CAPABILITIES	9
  #define OPTEE_SMC_EXCHANGE_CAPABILITIES \
  	OPTEE_SMC_FAST_CALL_VAL(OPTEE_SMC_FUNCID_EXCHANGE_CAPABILITIES)
-@@ -471,6 +474,30 @@ struct optee_smc_disable_shm_cache_result {
- #define OPTEE_SMC_SET_IT_NOTIF_MASK \
+@@ -472,6 +475,30 @@ struct optee_smc_disable_shm_cache_resul
  	OPTEE_SMC_FAST_CALL_VAL(OPTEE_SMC_FUNCID_SET_IT_NOTIF_MASK)
  
-+/*
+ /*
 + * OPTEE_SMC_CALL_WITH_ARG_NSEC_NOIRQ
 + * Equivaent to OPTEE_SMC_CALL_WITH_ARG but with foreign interrupts masked.
 + */
@@ -100,14 +95,13 @@ index d2cdaaa7fbe2..c4c4f2ce2a8e 100644
 +#define OPTEE_SMC_CALL_WITH_REGD_ARG_NSEC_NOIRQ \
 +	OPTEE_SMC_STD_CALL_VAL(OPTEE_SMC_FUNCID_CALL_WITH_REGD_ARG_NSEC_NOIRQ)
 +
- /*
++/*
   * Get protected memory config
   *
-diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
-index bbb4ad948ef4..16f17dfe877b 100644
+  * Returns the protected memory config.
 --- a/drivers/tee/optee/smc_abi.c
 +++ b/drivers/tee/optee/smc_abi.c
-@@ -926,7 +926,11 @@ static int optee_smc_do_call_with_arg(struct tee_context *ctx,
+@@ -926,7 +926,11 @@ static int optee_smc_do_call_with_arg(st
  	}
  
  	if  (rpc_arg && tee_shm_is_dynamic(shm)) {
@@ -120,7 +114,7 @@ index bbb4ad948ef4..16f17dfe877b 100644
  		reg_pair_from_64(&param.a1, &param.a2, (u_long)shm);
  		param.a3 = offs;
  	} else {
-@@ -936,10 +940,18 @@ static int optee_smc_do_call_with_arg(struct tee_context *ctx,
+@@ -936,10 +940,18 @@ static int optee_smc_do_call_with_arg(st
  		if (rc)
  			return rc;
  
@@ -143,7 +137,7 @@ index bbb4ad948ef4..16f17dfe877b 100644
  		reg_pair_from_64(&param.a1, &param.a2, parg);
  	}
  	/* Initialize waiter */
-@@ -1895,6 +1907,32 @@ static int optee_protmem_pool_init(struct optee *optee)
+@@ -1895,6 +1907,32 @@ static int optee_protmem_pool_init(struc
  	return rc;
  }
  
@@ -176,7 +170,7 @@ index bbb4ad948ef4..16f17dfe877b 100644
  static int optee_probe(struct platform_device *pdev)
  {
  	optee_invoke_fn *invoke_fn;
-@@ -2159,6 +2197,7 @@ static struct platform_driver optee_driver = {
+@@ -2159,6 +2197,7 @@ static struct platform_driver optee_driv
  	.driver = {
  		.name = "optee",
  		.of_match_table = optee_dt_match,
@@ -184,6 +178,3 @@ index bbb4ad948ef4..16f17dfe877b 100644
  	},
  };
  
--- 
-2.53.0
-

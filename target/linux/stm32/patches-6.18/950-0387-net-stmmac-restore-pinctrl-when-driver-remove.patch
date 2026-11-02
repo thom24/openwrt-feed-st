@@ -17,11 +17,9 @@ Reviewed-by: Jerome BESNARD <jerome.besnard@st.com>
  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 020699c00105..fa2a5c8fd5c5 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -7853,6 +7853,9 @@ void stmmac_dvr_remove(struct device *dev)
+@@ -7853,6 +7853,9 @@ void stmmac_dvr_remove(struct device *de
  	mutex_destroy(&priv->lock);
  	bitmap_free(priv->af_xdp_zc_qps);
  
@@ -31,6 +29,3 @@ index 020699c00105..fa2a5c8fd5c5 100644
  	pm_runtime_disable(dev);
  	pm_runtime_put_noidle(dev);
  }
--- 
-2.53.0
-

@@ -12,11 +12,9 @@ Change-Id: I540bb7b51bf1ee0f757f2bb2b1c30efcea2f56c1
  drivers/mailbox/stm32-ipcc.c | 9 ++++++++-
  1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mailbox/stm32-ipcc.c b/drivers/mailbox/stm32-ipcc.c
-index ef9e04f08619..d23c2a22b6e6 100644
 --- a/drivers/mailbox/stm32-ipcc.c
 +++ b/drivers/mailbox/stm32-ipcc.c
-@@ -375,7 +375,8 @@ static int stm32_ipcc_probe(struct platform_device *pdev)
+@@ -375,7 +375,8 @@ static int stm32_ipcc_probe(struct platf
  		}
  
  		ret = devm_request_threaded_irq(dev, ipcc->irqs[i], NULL,
@@ -26,7 +24,7 @@ index ef9e04f08619..d23c2a22b6e6 100644
  						dev_name(dev), ipcc);
  		if (ret) {
  			dev_err(dev, "failed to request irq %lu (%d)\n", i, ret);
-@@ -499,6 +500,9 @@ static int stm32_ipcc_suspend(struct device *dev)
+@@ -499,6 +500,9 @@ static int stm32_ipcc_suspend(struct dev
  	ipcc->xmr = readl_relaxed(ipcc->reg_proc + IPCC_XMR);
  	ipcc->xcr = readl_relaxed(ipcc->reg_proc + IPCC_XCR);
  
@@ -36,7 +34,7 @@ index ef9e04f08619..d23c2a22b6e6 100644
  	return 0;
  }
  
-@@ -509,6 +513,9 @@ static int stm32_ipcc_resume(struct device *dev)
+@@ -509,6 +513,9 @@ static int stm32_ipcc_resume(struct devi
  	writel_relaxed(ipcc->xmr, ipcc->reg_proc + IPCC_XMR);
  	writel_relaxed(ipcc->xcr, ipcc->reg_proc + IPCC_XCR);
  
@@ -46,6 +44,3 @@ index ef9e04f08619..d23c2a22b6e6 100644
  	return 0;
  }
  #endif
--- 
-2.53.0
-

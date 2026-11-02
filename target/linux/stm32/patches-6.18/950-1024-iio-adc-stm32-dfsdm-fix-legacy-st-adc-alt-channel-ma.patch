@@ -26,11 +26,9 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  drivers/iio/adc/stm32-dfsdm-adc.c | 17 ++++++++++++-----
  1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/iio/adc/stm32-dfsdm-adc.c b/drivers/iio/adc/stm32-dfsdm-adc.c
-index 9664b9bd75d4..79c0f42d18e8 100644
 --- a/drivers/iio/adc/stm32-dfsdm-adc.c
 +++ b/drivers/iio/adc/stm32-dfsdm-adc.c
-@@ -660,11 +660,18 @@ static int stm32_dfsdm_channel_parse_of(struct stm32_dfsdm *dfsdm,
+@@ -660,11 +660,18 @@ static int stm32_dfsdm_channel_parse_of(
  	}
  	df_ch->src = val;
  
@@ -54,6 +52,3 @@ index 9664b9bd75d4..79c0f42d18e8 100644
  
  	return 0;
  }
--- 
-2.53.0
-

@@ -17,11 +17,9 @@ Signed-off-by: Hans Verkuil <hverkuil+cisco@kernel.org>
  drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c | 6 ++++++
  3 files changed, 12 insertions(+)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
-index 67f0dcdab9cb..0abb36f7fe56 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
-@@ -67,6 +67,9 @@ static const struct dcmipp_bytecap_pix_map dcmipp_bytecap_pix_map_list[] = {
+@@ -67,6 +67,9 @@ static const struct dcmipp_bytecap_pix_m
  	PIXMAP_MBUS_PFMT(VYUY8_2X8, VYUY),
  	PIXMAP_MBUS_PFMT(VYUY8_1X16, VYUY),
  	PIXMAP_MBUS_PFMT(Y8_1X8, GREY),
@@ -31,11 +29,9 @@ index 67f0dcdab9cb..0abb36f7fe56 100644
  	PIXMAP_MBUS_PFMT(SBGGR8_1X8, SBGGR8),
  	PIXMAP_MBUS_PFMT(SGBRG8_1X8, SGBRG8),
  	PIXMAP_MBUS_PFMT(SGRBG8_1X8, SGRBG8),
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-index dde28ed288cd..f45a3027f8f3 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-@@ -60,6 +60,9 @@ static const struct dcmipp_byteproc_pix_map dcmipp_byteproc_pix_map_list[] = {
+@@ -60,6 +60,9 @@ static const struct dcmipp_byteproc_pix_
  	PIXMAP_MBUS_BPP(VYUY8_2X8, 2),
  	PIXMAP_MBUS_BPP(VYUY8_1X16, 2),
  	PIXMAP_MBUS_BPP(Y8_1X8, 1),
@@ -45,8 +41,6 @@ index dde28ed288cd..f45a3027f8f3 100644
  	PIXMAP_MBUS_BPP(SBGGR8_1X8, 1),
  	PIXMAP_MBUS_BPP(SGBRG8_1X8, 1),
  	PIXMAP_MBUS_BPP(SGRBG8_1X8, 1),
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
-index c44d664f6a0b..c4bc76909b1c 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
 @@ -25,6 +25,9 @@
@@ -59,7 +53,7 @@ index c44d664f6a0b..c4bc76909b1c 100644
  #define DCMIPP_PRCR_FORMAT_BYTE_STREAM	0x5a
  #define DCMIPP_PRCR_ESS			BIT(4)
  #define DCMIPP_PRCR_PCKPOL		BIT(5)
-@@ -89,6 +92,9 @@ static const struct dcmipp_inp_pix_map dcmipp_inp_pix_map_list[] = {
+@@ -89,6 +92,9 @@ static const struct dcmipp_inp_pix_map d
  	PIXMAP_SINK_SRC_PRCR_SWAP(VYUY8_1X16, VYUY8_1X16, YUV422, 0, MIPI_CSI2_DT_YUV422_8B),
  	/* GREY */
  	PIXMAP_SINK_SRC_PRCR_SWAP(Y8_1X8, Y8_1X8, G8, 0, MIPI_CSI2_DT_RAW8),
@@ -69,6 +63,3 @@ index c44d664f6a0b..c4bc76909b1c 100644
  	/* Raw Bayer */
  	PIXMAP_SINK_SRC_PRCR_SWAP(SBGGR8_1X8, SBGGR8_1X8, RAW8, 0, MIPI_CSI2_DT_RAW8),
  	PIXMAP_SINK_SRC_PRCR_SWAP(SGBRG8_1X8, SGBRG8_1X8, RAW8, 0, MIPI_CSI2_DT_RAW8),
--- 
-2.53.0
-

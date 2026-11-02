@@ -19,11 +19,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp135f-dk.dts | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index 10c5f7615184..27a2af89f672 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -98,6 +98,12 @@ led-blue {
+@@ -98,6 +98,12 @@
  			linux,default-trigger = "heartbeat";
  			default-state = "off";
  		};
@@ -36,6 +34,3 @@ index 10c5f7615184..27a2af89f672 100644
  	};
  
  	panel_backlight: panel-backlight {
--- 
-2.53.0
-

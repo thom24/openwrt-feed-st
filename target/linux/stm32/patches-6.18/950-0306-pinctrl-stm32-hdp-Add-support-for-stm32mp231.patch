@@ -24,8 +24,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/pinctrl/stm32/pinctrl-stm32-hdp.c | 6 +++++-
  1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32-hdp.c b/drivers/pinctrl/stm32/pinctrl-stm32-hdp.c
-index cce477e86ef9..3b75e0805c06 100644
 --- a/drivers/pinctrl/stm32/pinctrl-stm32-hdp.c
 +++ b/drivers/pinctrl/stm32/pinctrl-stm32-hdp.c
 @@ -1,6 +1,6 @@
@@ -36,17 +34,14 @@ index cce477e86ef9..3b75e0805c06 100644
   * Author: Clément Le Goffic <clement.legoffic@foss.st.com> for STMicroelectronics.
   */
  #include <linux/bits.h>
-@@ -597,6 +597,10 @@ static const struct of_device_id stm32_hdp_of_match[] = {
- 		.compatible = "st,stm32mp151-hdp",
+@@ -598,6 +598,10 @@ static const struct of_device_id stm32_h
  		.data = &func_name_mp15,
  	},
-+	{
+ 	{
 +		.compatible = "st,stm32mp231-hdp",
 +		.data = &func_name_mp25,
 +	},
- 	{
++	{
  		.compatible = "st,stm32mp251-hdp",
  		.data = &func_name_mp25,
--- 
-2.53.0
-
+ 	},

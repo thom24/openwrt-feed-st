@@ -17,11 +17,9 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/545757
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index 1af3ade1947b..80f1e6f2b423 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -90,6 +90,10 @@ &bsec {
+@@ -90,6 +90,10 @@
  	bootph-all;
  };
  
@@ -32,6 +30,3 @@ index 1af3ade1947b..80f1e6f2b423 100644
  &cs_cti0 {
  	status = "okay";
  };
--- 
-2.53.0
-

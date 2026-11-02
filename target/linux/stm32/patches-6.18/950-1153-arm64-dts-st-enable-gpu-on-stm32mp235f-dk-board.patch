@@ -14,11 +14,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-index 0a51c29c1cf1..f3eaa6a84f1d 100644
 --- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-@@ -358,6 +358,10 @@ &gpioz {
+@@ -358,6 +358,10 @@
  	bootph-all;
  };
  
@@ -29,6 +27,3 @@ index 0a51c29c1cf1..f3eaa6a84f1d 100644
  &hpdma {
  	memory-region = <&hpdma1_lli>;
  };
--- 
-2.53.0
-

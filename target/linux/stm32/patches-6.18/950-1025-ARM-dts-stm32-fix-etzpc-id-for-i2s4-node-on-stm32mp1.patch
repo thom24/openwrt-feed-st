@@ -18,11 +18,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp131.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index 88c2452b0172..db8e286f201b 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -1443,7 +1443,7 @@ i2s4: audio-controller@4c002000 {
+@@ -1443,7 +1443,7 @@
  				dmas = <&dmamux1 83 0x400 0x01>,
  				       <&dmamux1 84 0x400 0x01>;
  				dma-names = "rx", "tx";
@@ -31,6 +29,3 @@ index 88c2452b0172..db8e286f201b 100644
  				status = "disabled";
  			};
  
--- 
-2.53.0
-

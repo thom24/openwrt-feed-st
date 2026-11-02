@@ -18,8 +18,6 @@ Change-Id: I200eb396783fce0e7fc1c6b2724f1cc12760eb64
  drivers/rtc/rtc-stm32.c | 121 +++++++++++++++++++++++++++++++++-------
  1 file changed, 102 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/rtc/rtc-stm32.c b/drivers/rtc/rtc-stm32.c
-index e4f2aabf4ec4..822993a0464c 100644
 --- a/drivers/rtc/rtc-stm32.c
 +++ b/drivers/rtc/rtc-stm32.c
 @@ -131,6 +131,8 @@
@@ -41,7 +39,7 @@ index e4f2aabf4ec4..822993a0464c 100644
  };
  
  struct stm32_rtc_rif_resource {
-@@ -289,6 +292,95 @@ static int stm32_rtc_pinmux_action_alarm(struct pinctrl_dev *pctldev, unsigned i
+@@ -289,6 +292,95 @@ static int stm32_rtc_pinmux_action_alarm
  	return 0;
  }
  
@@ -137,7 +135,7 @@ index e4f2aabf4ec4..822993a0464c 100644
  static int stm32_rtc_pinmux_lsco_available(struct pinctrl_dev *pctldev, unsigned int pin)
  {
  	struct stm32_rtc *rtc = pinctrl_dev_get_drvdata(pctldev);
-@@ -324,10 +416,6 @@ static int stm32_rtc_pinmux_lsco_available(struct pinctrl_dev *pctldev, unsigned
+@@ -324,10 +416,6 @@ static int stm32_rtc_pinmux_lsco_availab
  static int stm32_rtc_pinmux_action_lsco(struct pinctrl_dev *pctldev, unsigned int pin)
  {
  	struct stm32_rtc *rtc = pinctrl_dev_get_drvdata(pctldev);
@@ -148,7 +146,7 @@ index e4f2aabf4ec4..822993a0464c 100644
  	int ret;
  
  	if (!rtc->data->has_lsco)
-@@ -337,21 +425,15 @@ static int stm32_rtc_pinmux_action_lsco(struct pinctrl_dev *pctldev, unsigned in
+@@ -337,21 +425,15 @@ static int stm32_rtc_pinmux_action_lsco(
  	if (ret)
  		return ret;
  
@@ -175,7 +173,7 @@ index e4f2aabf4ec4..822993a0464c 100644
  
  	return 0;
  }
-@@ -1174,6 +1256,10 @@ static int stm32_rtc_probe(struct platform_device *pdev)
+@@ -1174,6 +1256,10 @@ static int stm32_rtc_probe(struct platfo
  
  	stm32_rtc_clean_outs(rtc);
  
@@ -186,7 +184,7 @@ index e4f2aabf4ec4..822993a0464c 100644
  	ret = devm_pinctrl_register_and_init(&pdev->dev, &stm32_rtc_pdesc, rtc, &pctl);
  	if (ret)
  		return dev_err_probe(&pdev->dev, ret, "pinctrl register failed");
-@@ -1212,9 +1298,6 @@ static void stm32_rtc_remove(struct platform_device *pdev)
+@@ -1212,9 +1298,6 @@ static void stm32_rtc_remove(struct plat
  	const struct stm32_rtc_registers *regs = &rtc->data->regs;
  	unsigned int cr;
  
@@ -196,6 +194,3 @@ index e4f2aabf4ec4..822993a0464c 100644
  	/* Disable interrupts */
  	stm32_rtc_wpr_unlock(rtc);
  	cr = readl_relaxed(rtc->base + regs->cr);
--- 
-2.53.0
-

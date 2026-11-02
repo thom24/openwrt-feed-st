@@ -30,11 +30,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/usb/dwc2/hcd.c | 3 ---
  1 file changed, 3 deletions(-)
 
-diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index d9c7b62f78e1..c1d8d10ba2b5 100644
 --- a/drivers/usb/dwc2/hcd.c
 +++ b/drivers/usb/dwc2/hcd.c
-@@ -4484,9 +4484,6 @@ static int _dwc2_hcd_resume(struct usb_hcd *hcd)
+@@ -4484,9 +4484,6 @@ static int _dwc2_hcd_resume(struct usb_h
  		goto unlock;
  	}
  
@@ -44,6 +42,3 @@ index d9c7b62f78e1..c1d8d10ba2b5 100644
  	/*
  	 * Enable power if not already done.
  	 * This must not be spinlocked since duration
--- 
-2.53.0
-

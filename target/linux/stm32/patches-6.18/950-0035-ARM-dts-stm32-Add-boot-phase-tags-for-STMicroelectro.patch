@@ -20,11 +20,9 @@ Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
  arch/arm/boot/dts/st/stm32h750i-art-pi.dts | 69 ++++++++++++++++++++++
  4 files changed, 276 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32h743i-disco.dts b/arch/arm/boot/dts/st/stm32h743i-disco.dts
-index 8451a54a9a08..368035d96158 100644
 --- a/arch/arm/boot/dts/st/stm32h743i-disco.dts
 +++ b/arch/arm/boot/dts/st/stm32h743i-disco.dts
-@@ -73,6 +73,59 @@ v3v3: regulator-v3v3 {
+@@ -73,6 +73,59 @@
  
  &clk_hse {
  	clock-frequency = <25000000>;
@@ -84,7 +82,7 @@ index 8451a54a9a08..368035d96158 100644
  };
  
  &mac {
-@@ -92,6 +145,18 @@ phy0: ethernet-phy@0 {
+@@ -92,6 +145,18 @@
  	};
  };
  
@@ -103,7 +101,7 @@ index 8451a54a9a08..368035d96158 100644
  &sdmmc1 {
  	pinctrl-names = "default", "opendrain", "sleep";
  	pinctrl-0 = <&sdmmc1_b4_pins_a>;
-@@ -104,6 +169,10 @@ &sdmmc1 {
+@@ -104,6 +169,10 @@
  	status = "okay";
  };
  
@@ -114,11 +112,9 @@ index 8451a54a9a08..368035d96158 100644
  &usart2 {
  	pinctrl-0 = <&usart2_pins_a>;
  	pinctrl-names = "default";
-diff --git a/arch/arm/boot/dts/st/stm32h743i-eval.dts b/arch/arm/boot/dts/st/stm32h743i-eval.dts
-index 4b0ced27b80e..ec525411431a 100644
 --- a/arch/arm/boot/dts/st/stm32h743i-eval.dts
 +++ b/arch/arm/boot/dts/st/stm32h743i-eval.dts
-@@ -99,6 +99,59 @@ adc1: adc@0 {
+@@ -99,6 +99,59 @@
  
  &clk_hse {
  	clock-frequency = <25000000>;
@@ -178,7 +174,7 @@ index 4b0ced27b80e..ec525411431a 100644
  };
  
  &i2c1 {
-@@ -130,6 +183,18 @@ phy0: ethernet-phy@0 {
+@@ -130,6 +183,18 @@
  	};
  };
  
@@ -197,7 +193,7 @@ index 4b0ced27b80e..ec525411431a 100644
  &sdmmc1 {
  	pinctrl-names = "default", "opendrain", "sleep";
  	pinctrl-0 = <&sdmmc1_b4_pins_a &sdmmc1_dir_pins_a>;
-@@ -144,6 +209,10 @@ &sdmmc1 {
+@@ -144,6 +209,10 @@
  	status = "okay";
  };
  
@@ -208,11 +204,9 @@ index 4b0ced27b80e..ec525411431a 100644
  &usart1 {
  	pinctrl-0 = <&usart1_pins_a>;
  	pinctrl-names = "default";
-diff --git a/arch/arm/boot/dts/st/stm32h747i-disco.dts b/arch/arm/boot/dts/st/stm32h747i-disco.dts
-index 99f0255dae8e..a481326ad9e6 100644
 --- a/arch/arm/boot/dts/st/stm32h747i-disco.dts
 +++ b/arch/arm/boot/dts/st/stm32h747i-disco.dts
-@@ -91,6 +91,59 @@ button-5 {
+@@ -91,6 +91,59 @@
  
  &clk_hse {
  	clock-frequency = <25000000>;
@@ -272,7 +266,7 @@ index 99f0255dae8e..a481326ad9e6 100644
  };
  
  &mac {
-@@ -110,6 +163,18 @@ phy0: ethernet-phy@0 {
+@@ -110,6 +163,18 @@
  	};
  };
  
@@ -291,7 +285,7 @@ index 99f0255dae8e..a481326ad9e6 100644
  &sdmmc1 {
  	pinctrl-names = "default", "opendrain", "sleep";
  	pinctrl-0 = <&sdmmc1_b4_pins_a>;
-@@ -123,6 +188,10 @@ &sdmmc1 {
+@@ -123,6 +188,10 @@
  	status = "okay";
  };
  
@@ -302,11 +296,9 @@ index 99f0255dae8e..a481326ad9e6 100644
  &usart1 {
  	pinctrl-0 = <&usart1_pins_b>;
  	pinctrl-names = "default";
-diff --git a/arch/arm/boot/dts/st/stm32h750i-art-pi.dts b/arch/arm/boot/dts/st/stm32h750i-art-pi.dts
-index 56c53e262da7..8dddc70c37a1 100644
 --- a/arch/arm/boot/dts/st/stm32h750i-art-pi.dts
 +++ b/arch/arm/boot/dts/st/stm32h750i-art-pi.dts
-@@ -114,6 +114,15 @@ wlan_pwr: regulator-wlan {
+@@ -114,6 +114,15 @@
  
  &clk_hse {
  	clock-frequency = <25000000>;
@@ -322,7 +314,7 @@ index 56c53e262da7..8dddc70c37a1 100644
  };
  
  &dma1 {
-@@ -124,6 +133,50 @@ &dma2 {
+@@ -124,6 +133,50 @@
  	status = "okay";
  };
  
@@ -373,7 +365,7 @@ index 56c53e262da7..8dddc70c37a1 100644
  &mac {
  	status = "disabled";
  	pinctrl-0 = <&ethernet_rmii>;
-@@ -141,6 +194,18 @@ phy0: ethernet-phy@0 {
+@@ -141,6 +194,18 @@
  	};
  };
  
@@ -392,7 +384,7 @@ index 56c53e262da7..8dddc70c37a1 100644
  &sdmmc1 {
  	pinctrl-names = "default", "opendrain", "sleep";
  	pinctrl-0 = <&sdmmc1_b4_pins_a>;
-@@ -196,6 +261,10 @@ partition@0 {
+@@ -196,6 +261,10 @@
  	};
  };
  
@@ -403,6 +395,3 @@ index 56c53e262da7..8dddc70c37a1 100644
  &usart2 {
  	pinctrl-0 = <&usart2_pins_a>;
  	pinctrl-names = "default";
--- 
-2.53.0
-

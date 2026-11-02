@@ -11,11 +11,9 @@ Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 151 +++++++++++++++++++++++++
  1 file changed, 151 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index 78194e3fff46..f7a52c6c86e8 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -302,11 +302,162 @@ rcc: clock-controller@44200000 {
+@@ -302,11 +302,162 @@
  			access-controllers = <&rifsc 156>;
  		};
  
@@ -178,6 +176,3 @@ index 78194e3fff46..f7a52c6c86e8 100644
  		intc: interrupt-controller@4ac10000 {
  			compatible = "arm,gic-400";
  			reg = <0x4ac10000 0x0 0x1000>,
--- 
-2.53.0
-

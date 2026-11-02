@@ -16,8 +16,6 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml        | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
-index c24ac98bbb3d..a0742eed30e9 100644
 --- a/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
 +++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
 @@ -63,6 +63,9 @@ properties:
@@ -30,6 +28,3 @@ index c24ac98bbb3d..a0742eed30e9 100644
  required:
    - compatible
    - reg
--- 
-2.53.0
-

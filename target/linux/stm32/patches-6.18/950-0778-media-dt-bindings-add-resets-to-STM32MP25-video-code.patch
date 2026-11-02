@@ -18,8 +18,6 @@ Domain-Review: Philippe CORNU <philippe.cornu@foss.st.com>
  .../devicetree/bindings/media/st,stm32mp25-video-codec.yaml    | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml b/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml
-index d53d348d741c..fdc8325d5866 100644
 --- a/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml
 +++ b/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml
 @@ -30,6 +30,9 @@ properties:
@@ -32,6 +30,3 @@ index d53d348d741c..fdc8325d5866 100644
    access-controllers:
      minItems: 1
      maxItems: 2
--- 
-2.53.0
-

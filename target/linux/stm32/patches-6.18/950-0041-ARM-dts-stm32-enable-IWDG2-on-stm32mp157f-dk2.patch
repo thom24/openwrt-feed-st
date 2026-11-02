@@ -14,11 +14,9 @@ Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi b/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi
-index 5d29c2154b46..1991d642e089 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi
-@@ -70,7 +70,6 @@ hdmi-transmitter@39 {
+@@ -70,7 +70,6 @@
  
  &iwdg2 {
  	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
@@ -26,6 +24,3 @@ index 5d29c2154b46..1991d642e089 100644
  };
  
  &m4_rproc {
--- 
-2.53.0
-

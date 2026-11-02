@@ -17,11 +17,9 @@ Signed-off-by: Cheick Traore <cheick.traore-ext@st.com>
  drivers/iio/adc/stm32-adc.c      | 9 +++++++--
  3 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/iio/adc/stm32-adc-core.c b/drivers/iio/adc/stm32-adc-core.c
-index 137bdb1bad07..cba22cde60c9 100644
 --- a/drivers/iio/adc/stm32-adc-core.c
 +++ b/drivers/iio/adc/stm32-adc-core.c
-@@ -731,10 +731,6 @@ static int stm32_adc_probe_identification(struct platform_device *pdev,
+@@ -731,10 +731,6 @@ static int stm32_adc_probe_identificatio
  		 */
  		if (priv->nb_irqs > priv->nb_adc_max)
  			priv->nb_irqs = priv->nb_adc_max;
@@ -32,8 +30,6 @@ index 137bdb1bad07..cba22cde60c9 100644
  	}
  
  	val = readl_relaxed(priv->common.base + STM32MP1_ADC_VERR);
-diff --git a/drivers/iio/adc/stm32-adc-core.h b/drivers/iio/adc/stm32-adc-core.h
-index 766dc6489eb9..0f40450844e9 100644
 --- a/drivers/iio/adc/stm32-adc-core.h
 +++ b/drivers/iio/adc/stm32-adc-core.h
 @@ -290,7 +290,6 @@ enum stm32h7_adc_dmngt {
@@ -52,11 +48,9 @@ index 766dc6489eb9..0f40450844e9 100644
  };
  
  #endif
-diff --git a/drivers/iio/adc/stm32-adc.c b/drivers/iio/adc/stm32-adc.c
-index 6f65decdbf60..e50cc344054d 100644
 --- a/drivers/iio/adc/stm32-adc.c
 +++ b/drivers/iio/adc/stm32-adc.c
-@@ -2951,6 +2951,7 @@ static int stm32_adc_probe(struct platform_device *pdev)
+@@ -2951,6 +2951,7 @@ static int stm32_adc_probe(struct platfo
  	irqreturn_t (*handler)(int irq, void *p) = NULL;
  	struct stm32_adc *adc;
  	bool timestamping = false;
@@ -64,7 +58,7 @@ index 6f65decdbf60..e50cc344054d 100644
  	int ret;
  
  	indio_dev = devm_iio_device_alloc(&pdev->dev, sizeof(*adc));
-@@ -3003,9 +3004,13 @@ static int stm32_adc_probe(struct platform_device *pdev)
+@@ -3003,9 +3004,13 @@ static int stm32_adc_probe(struct platfo
  	if (ret < 0)
  		return ret;
  
@@ -80,6 +74,3 @@ index 6f65decdbf60..e50cc344054d 100644
  	if (!adc->trigs) {
  		dev_err(&pdev->dev, "Can't get trigger list\n");
  		return -EINVAL;
--- 
-2.53.0
-

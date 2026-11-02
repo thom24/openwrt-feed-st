@@ -25,11 +25,9 @@ Tested-by: Alain VOLMAT <alain.volmat@st.com>
  arch/arm/boot/dts/st/stm32mp135f-dk.dts | 12 ++++++++++++
  1 file changed, 12 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index eecdd1d347ba..070534e32a38 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -608,9 +608,21 @@ &spi5 {
+@@ -608,9 +608,21 @@
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&spi5_pins_a>;
  	pinctrl-1 = <&spi5_sleep_pins_a>;
@@ -51,6 +49,3 @@ index eecdd1d347ba..070534e32a38 100644
  &syscfg {
  	bootph-all;
  };
--- 
-2.53.0
-

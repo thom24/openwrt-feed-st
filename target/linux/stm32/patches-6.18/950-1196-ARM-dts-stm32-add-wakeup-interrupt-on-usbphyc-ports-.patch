@@ -24,11 +24,9 @@ Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
  arch/arm/boot/dts/st/stm32mp131.dtsi | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index db8e286f201b..139ef7485378 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -1946,11 +1946,13 @@ usbphyc: usbphyc@5a006000 {
+@@ -1946,11 +1946,13 @@
  				usbphyc_port0: usb-phy@0 {
  					#phy-cells = <0>;
  					reg = <0>;
@@ -42,6 +40,3 @@ index db8e286f201b..139ef7485378 100644
  				};
  			};
  		};
--- 
-2.53.0
-

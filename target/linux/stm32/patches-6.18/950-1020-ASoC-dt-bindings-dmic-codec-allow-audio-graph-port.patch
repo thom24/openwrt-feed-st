@@ -17,8 +17,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  Documentation/devicetree/bindings/sound/dmic-codec.yaml | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/sound/dmic-codec.yaml b/Documentation/devicetree/bindings/sound/dmic-codec.yaml
-index cc3c84dd4c26..83c23e029ea4 100644
 --- a/Documentation/devicetree/bindings/sound/dmic-codec.yaml
 +++ b/Documentation/devicetree/bindings/sound/dmic-codec.yaml
 @@ -39,6 +39,10 @@ properties:
@@ -32,6 +30,3 @@ index cc3c84dd4c26..83c23e029ea4 100644
  required:
    - compatible
  
--- 
-2.53.0
-

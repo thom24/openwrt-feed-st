@@ -19,11 +19,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/usb/dwc2/drd.c | 20 ++++++++++++++++++++
  1 file changed, 20 insertions(+)
 
-diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
-index 1f4b0986eed7..f7b2f6a8bd90 100644
 --- a/drivers/usb/dwc2/drd.c
 +++ b/drivers/usb/dwc2/drd.c
-@@ -58,6 +58,14 @@ static int dwc2_ovr_avalid(struct dwc2_hsotg *hsotg, bool valid)
+@@ -58,6 +58,14 @@ static int dwc2_ovr_avalid(struct dwc2_h
  		gotgctl &= ~(GOTGCTL_AVALOVAL | GOTGCTL_VBVALOVAL);
  	dwc2_writel(hsotg, gotgctl, GOTGCTL);
  
@@ -38,7 +36,7 @@ index 1f4b0986eed7..f7b2f6a8bd90 100644
  	return 0;
  }
  
-@@ -80,6 +88,18 @@ static int dwc2_ovr_bvalid(struct dwc2_hsotg *hsotg, bool valid)
+@@ -80,6 +88,18 @@ static int dwc2_ovr_bvalid(struct dwc2_h
  		gotgctl &= ~(GOTGCTL_BVALOVAL | GOTGCTL_VBVALOVAL);
  	dwc2_writel(hsotg, gotgctl, GOTGCTL);
  
@@ -57,6 +55,3 @@ index 1f4b0986eed7..f7b2f6a8bd90 100644
  	return 0;
  }
  
--- 
-2.53.0
-

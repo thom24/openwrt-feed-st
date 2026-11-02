@@ -29,11 +29,9 @@ Change-Id: If4050be1ef1aadf462e04a0153921b9824b00e0e
  drivers/tty/serial/stm32-usart.h |  12 ++
  2 files changed, 196 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index ad06b760cfca..4b5070b52f4a 100644
 --- a/drivers/tty/serial/stm32-usart.c
 +++ b/drivers/tty/serial/stm32-usart.c
-@@ -291,6 +291,160 @@ static int stm32_usart_init_rs485(struct uart_port *port,
+@@ -291,6 +291,160 @@ static int stm32_usart_init_rs485(struct
  	return uart_get_rs485_mode(port);
  }
  
@@ -194,7 +192,7 @@ index ad06b760cfca..4b5070b52f4a 100644
  static bool stm32_usart_rx_dma_started(struct stm32_port *stm32_port)
  {
  	return stm32_port->rx_ch ? stm32_port->rx_dma_busy : false;
-@@ -698,6 +852,9 @@ static void stm32_usart_transmit_chars_pio(struct uart_port *port)
+@@ -698,6 +852,9 @@ static void stm32_usart_transmit_chars_p
  	const struct stm32_usart_offsets *ofs = &stm32_port->info->ofs;
  	struct tty_port *tport = &port->state->port;
  
@@ -204,7 +202,7 @@ index ad06b760cfca..4b5070b52f4a 100644
  	while (1) {
  		unsigned char ch;
  
-@@ -847,11 +1004,12 @@ static irqreturn_t stm32_usart_interrupt(int irq, void *ptr)
+@@ -847,11 +1004,12 @@ static irqreturn_t stm32_usart_interrupt
  	struct tty_port *tport = &port->state->port;
  	struct stm32_port *stm32_port = to_stm32_port(port);
  	const struct stm32_usart_offsets *ofs = &stm32_port->info->ofs;
@@ -218,7 +216,7 @@ index ad06b760cfca..4b5070b52f4a 100644
  
  	if (!stm32_port->hw_flow_control &&
  	    port->rs485.flags & SER_RS485_ENABLED &&
-@@ -877,19 +1035,30 @@ static irqreturn_t stm32_usart_interrupt(int irq, void *ptr)
+@@ -877,19 +1035,30 @@ static irqreturn_t stm32_usart_interrupt
  		ret = IRQ_HANDLED;
  	}
  
@@ -262,7 +260,7 @@ index ad06b760cfca..4b5070b52f4a 100644
  		}
  	}
  
-@@ -1579,6 +1748,7 @@ static int stm32_usart_init_port(struct stm32_port *stm32port,
+@@ -1579,6 +1748,7 @@ static int stm32_usart_init_port(struct
  	port->irq = irq;
  	port->rs485_config = stm32_usart_config_rs485;
  	port->rs485_supported = stm32_rs485_supported;
@@ -270,8 +268,6 @@ index ad06b760cfca..4b5070b52f4a 100644
  
  	ret = stm32_usart_init_rs485(port, pdev);
  	if (ret)
-diff --git a/drivers/tty/serial/stm32-usart.h b/drivers/tty/serial/stm32-usart.h
-index af20258ccc7a..c1a4740a6a49 100644
 --- a/drivers/tty/serial/stm32-usart.h
 +++ b/drivers/tty/serial/stm32-usart.h
 @@ -24,6 +24,14 @@ struct stm32_usart_offsets {
@@ -321,6 +317,3 @@ index af20258ccc7a..c1a4740a6a49 100644
  };
  
  static struct stm32_port stm32_ports[STM32_MAX_PORTS];
--- 
-2.53.0
-

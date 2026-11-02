@@ -24,9 +24,6 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  1 file changed, 68 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/soc/st/st,stm32-hog.yaml
 
-diff --git a/Documentation/devicetree/bindings/soc/st/st,stm32-hog.yaml b/Documentation/devicetree/bindings/soc/st/st,stm32-hog.yaml
-new file mode 100644
-index 000000000000..f85bacdb0739
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/soc/st/st,stm32-hog.yaml
 @@ -0,0 +1,68 @@
@@ -98,6 +95,3 @@ index 000000000000..f85bacdb0739
 +        };
 +    };
 +...
--- 
-2.53.0
-

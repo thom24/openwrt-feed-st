@@ -23,9 +23,6 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/579226
  create mode 100644 Documentation/devicetree/bindings/net/ttt,acm-4.0.yaml
  create mode 100644 Documentation/devicetree/bindings/net/ttt,deip-sw.yaml
 
-diff --git a/Documentation/devicetree/bindings/net/st,stm32-deip.yaml b/Documentation/devicetree/bindings/net/st,stm32-deip.yaml
-new file mode 100644
-index 000000000000..703ea2df42d9
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/net/st,stm32-deip.yaml
 @@ -0,0 +1,58 @@
@@ -87,9 +84,6 @@ index 000000000000..703ea2df42d9
 +    };
 +
 +...
-diff --git a/Documentation/devicetree/bindings/net/ttt,acm-4.0.yaml b/Documentation/devicetree/bindings/net/ttt,acm-4.0.yaml
-new file mode 100644
-index 000000000000..5eeb4ac938f4
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/net/ttt,acm-4.0.yaml
 @@ -0,0 +1,63 @@
@@ -156,9 +150,6 @@ index 000000000000..5eeb4ac938f4
 +    };
 +
 +...
-diff --git a/Documentation/devicetree/bindings/net/ttt,deip-sw.yaml b/Documentation/devicetree/bindings/net/ttt,deip-sw.yaml
-new file mode 100644
-index 000000000000..c06eefc68745
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/net/ttt,deip-sw.yaml
 @@ -0,0 +1,56 @@
@@ -218,8 +209,6 @@ index 000000000000..c06eefc68745
 +    };
 +
 +...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ef0e4b29e123..a699b7b7c7aa 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
 @@ -24732,6 +24732,13 @@ S:	Orphan
@@ -236,6 +225,3 @@ index ef0e4b29e123..a699b7b7c7aa 100644
  SUN HAPPY MEAL ETHERNET DRIVER
  M:	Sean Anderson <seanga2@gmail.com>
  S:	Maintained
--- 
-2.53.0
-

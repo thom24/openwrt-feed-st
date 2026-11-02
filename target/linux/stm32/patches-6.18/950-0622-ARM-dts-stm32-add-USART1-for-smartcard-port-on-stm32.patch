@@ -21,11 +21,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp157f-ev1.dts         | 11 +++++++++++
  3 files changed, 33 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
-index 87f849e38e86..0f4e391472f7 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
-@@ -16,6 +16,7 @@ / {
+@@ -16,6 +16,7 @@
  
  	aliases {
  		serial1 = &usart3;
@@ -33,7 +31,7 @@ index 87f849e38e86..0f4e391472f7 100644
  		ethernet0 = &ethernet0;
  	};
  
-@@ -400,6 +401,16 @@ timer@11 {
+@@ -400,6 +401,16 @@
  	};
  };
  
@@ -50,11 +48,9 @@ index 87f849e38e86..0f4e391472f7 100644
  &usart3 {
  	pinctrl-names = "default", "sleep", "idle";
  	pinctrl-0 = <&usart3_pins_b>;
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-index eecdb164f5dd..ca53bd35f063 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-@@ -16,6 +16,7 @@ / {
+@@ -16,6 +16,7 @@
  
  	aliases {
  		serial1 = &usart3;
@@ -62,7 +58,7 @@ index eecdb164f5dd..ca53bd35f063 100644
  		ethernet0 = &ethernet0;
  	};
  
-@@ -401,6 +402,16 @@ timer@11 {
+@@ -401,6 +402,16 @@
  	};
  };
  
@@ -79,11 +75,9 @@ index eecdb164f5dd..ca53bd35f063 100644
  &usart3 {
  	pinctrl-names = "default", "sleep", "idle";
  	pinctrl-0 = <&usart3_pins_b>;
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-index 97d22b2e72bd..6e9e35087a01 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-@@ -16,6 +16,7 @@ / {
+@@ -16,6 +16,7 @@
  
  	aliases {
  		serial1 = &usart3;
@@ -91,7 +85,7 @@ index 97d22b2e72bd..6e9e35087a01 100644
  		ethernet0 = &ethernet0;
  	};
  
-@@ -401,6 +402,16 @@ timer@11 {
+@@ -401,6 +402,16 @@
  	};
  };
  
@@ -108,6 +102,3 @@ index 97d22b2e72bd..6e9e35087a01 100644
  &usart3 {
  	pinctrl-names = "default", "sleep", "idle";
  	pinctrl-0 = <&usart3_pins_b>;
--- 
-2.53.0
-

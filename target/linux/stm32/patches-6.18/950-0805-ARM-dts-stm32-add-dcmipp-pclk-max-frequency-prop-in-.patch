@@ -21,11 +21,9 @@ Reviewed-by: Hugues FRUCHET <hugues.fruchet@st.com>
  arch/arm/boot/dts/st/stm32mp135f-dk.dts | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index acfcf20be1dd..2d489579f8c8 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -224,6 +224,7 @@ dcmipp_0: endpoint {
+@@ -224,6 +224,7 @@
  			hsync-active = <0>;
  			vsync-active = <0>;
  			pclk-sample = <0>;
@@ -33,6 +31,3 @@ index acfcf20be1dd..2d489579f8c8 100644
  		};
  	};
  };
--- 
-2.53.0
-

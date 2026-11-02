@@ -33,11 +33,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/dma/stm32/stm32-dma3.c | 37 +++++++++++++++++++++++++++++-----
  1 file changed, 32 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
-index fa703294e0d8..cab8f4aceefd 100644
 --- a/drivers/dma/stm32/stm32-dma3.c
 +++ b/drivers/dma/stm32/stm32-dma3.c
-@@ -1194,9 +1194,28 @@ static int stm32_dma3_chan_get_curr_hwdesc(struct stm32_dma3_swdesc *swdesc, u32
+@@ -1194,9 +1194,28 @@ static int stm32_dma3_chan_get_curr_hwde
  	return -EINVAL;
  }
  
@@ -69,7 +67,7 @@ index fa703294e0d8..cab8f4aceefd 100644
  {
  	struct stm32_dma3_ddata *ddata = to_stm32_dma3_ddata(chan);
  	struct device *dev = chan2dev(chan);
-@@ -1924,8 +1943,16 @@ static enum dma_status stm32_dma3_tx_status(struct dma_chan *c, dma_cookie_t coo
+@@ -1924,8 +1943,16 @@ static enum dma_status stm32_dma3_tx_sta
  		swdesc = chan->swdesc;
  
  	/* Get residue/in_flight_bytes only if a transfer is currently running (swdesc != NULL) */
@@ -88,6 +86,3 @@ index fa703294e0d8..cab8f4aceefd 100644
  
  	spin_unlock_irqrestore(&chan->vchan.lock, flags);
  
--- 
-2.53.0
-

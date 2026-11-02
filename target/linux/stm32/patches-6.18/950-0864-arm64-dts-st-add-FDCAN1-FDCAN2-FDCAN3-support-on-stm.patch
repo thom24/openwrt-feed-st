@@ -21,11 +21,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp253.dtsi | 45 ++++++++++++++++++++++++++
  1 file changed, 45 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp253.dtsi b/arch/arm64/boot/dts/st/stm32mp253.dtsi
-index 976736ee37bf..a72bf9ef157f 100644
 --- a/arch/arm64/boot/dts/st/stm32mp253.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp253.dtsi
-@@ -96,6 +96,51 @@ &optee {
+@@ -96,6 +96,51 @@
  };
  
  &rifsc {
@@ -77,6 +75,3 @@ index 976736ee37bf..a72bf9ef157f 100644
  	ethernet2: ethernet@482d0000 {
  		compatible = "st,stm32mp25-dwmac", "snps,dwmac-5.20";
  		reg = <0x482d0000 0x4000>;
--- 
-2.53.0
-

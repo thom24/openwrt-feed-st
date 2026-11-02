@@ -22,11 +22,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
-index 0f4e391472f7..4835f86f654d 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
-@@ -341,8 +341,9 @@ &sdmmc3 {
+@@ -341,8 +341,9 @@
  };
  
  &spi1 {
@@ -37,6 +35,3 @@ index 0f4e391472f7..4835f86f654d 100644
  	status = "disabled";
  };
  
--- 
-2.53.0
-

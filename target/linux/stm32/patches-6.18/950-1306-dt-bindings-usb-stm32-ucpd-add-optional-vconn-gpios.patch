@@ -18,8 +18,6 @@ Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
  .../devicetree/bindings/usb/st,stm32-ucpd.yaml      | 13 +++++++++++++
  1 file changed, 13 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/st,stm32-ucpd.yaml b/Documentation/devicetree/bindings/usb/st,stm32-ucpd.yaml
-index f29302824d44..2d372bf72594 100644
 --- a/Documentation/devicetree/bindings/usb/st,stm32-ucpd.yaml
 +++ b/Documentation/devicetree/bindings/usb/st,stm32-ucpd.yaml
 @@ -63,6 +63,15 @@ properties:
@@ -56,6 +54,3 @@ index f29302824d44..2d372bf72594 100644
          st,tcpp = <&tcpp03>;
  
          connector {
--- 
-2.53.0
-

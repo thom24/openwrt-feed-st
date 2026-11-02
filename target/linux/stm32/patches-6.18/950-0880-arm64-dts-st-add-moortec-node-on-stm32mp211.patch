@@ -19,11 +19,9 @@ Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 12 ++++++++++++
  1 file changed, 12 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index d5a08b15a350..b83d74c3c272 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -1445,6 +1445,18 @@ risab5: risab@42130000 {
+@@ -1445,6 +1445,18 @@
  			st,mem-map = <0x0a040000 0x20000>;
  		};
  
@@ -42,6 +40,3 @@ index d5a08b15a350..b83d74c3c272 100644
  		hdp: pinctrl@44090000 {
  			compatible = "st,stm32mp211-hdp";
  			reg = <0x44090000 0x0 0x400>;
--- 
-2.53.0
-

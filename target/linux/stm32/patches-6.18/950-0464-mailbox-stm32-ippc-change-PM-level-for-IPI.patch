@@ -13,11 +13,9 @@ Change-Id: Ibd3cf3024c21d06bb99ac29b6fba8fe5cfa4c83c
  drivers/mailbox/stm32-ipcc.c | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/mailbox/stm32-ipcc.c b/drivers/mailbox/stm32-ipcc.c
-index 2c8e93a9e6eb..ef9e04f08619 100644
 --- a/drivers/mailbox/stm32-ipcc.c
 +++ b/drivers/mailbox/stm32-ipcc.c
-@@ -513,8 +513,9 @@ static int stm32_ipcc_resume(struct device *dev)
+@@ -513,8 +513,9 @@ static int stm32_ipcc_resume(struct devi
  }
  #endif
  
@@ -29,6 +27,3 @@ index 2c8e93a9e6eb..ef9e04f08619 100644
  
  static const struct of_device_id stm32_ipcc_of_match[] = {
  	{ .compatible = "st,stm32mp1-ipcc" },
--- 
-2.53.0
-

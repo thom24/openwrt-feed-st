@@ -19,11 +19,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp131.dtsi | 24 +++++++++++++++++++++++-
  1 file changed, 23 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index 750e2fd73a3e..4d926d87b5a9 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -806,7 +806,29 @@ rcc: rcc@50000000 {
+@@ -806,7 +806,29 @@
  				 <&scmi_clk CK_SCMI_HSI>,
  				 <&scmi_clk CK_SCMI_CSI>,
  				 <&scmi_clk CK_SCMI_LSE>,
@@ -54,6 +52,3 @@ index 750e2fd73a3e..4d926d87b5a9 100644
  		};
  
  		pwr_regulators: pwr@50001000 {
--- 
-2.53.0
-

@@ -15,11 +15,9 @@ Signed-off-by: Fabien Dessenne <fabien.dessenne@foss.st.com>
  include/uapi/linux/videodev2.h            |  2 ++
  4 files changed, 33 insertions(+)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-index 172d2c27a764..94e3d7931bab 100644
 --- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
 +++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-@@ -441,6 +441,9 @@ void v4l2_ctrl_type_op_log(const struct v4l2_ctrl *ctrl)
+@@ -441,6 +441,9 @@ void v4l2_ctrl_type_op_log(const struct
  			ptr.p_rect->left, ptr.p_rect->top,
  			ptr.p_rect->width, ptr.p_rect->height);
  		break;
@@ -29,7 +27,7 @@ index 172d2c27a764..94e3d7931bab 100644
  	default:
  		pr_cont("unknown type %d", ctrl->type);
  		break;
-@@ -1369,6 +1372,9 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
+@@ -1369,6 +1372,9 @@ static int std_validate_compound(const s
  	case V4L2_CTRL_TYPE_H264_ENCODE_RC:
  		return validate_h264_encode_rc(p);
  
@@ -39,7 +37,7 @@ index 172d2c27a764..94e3d7931bab 100644
  	default:
  		return -EINVAL;
  	}
-@@ -2075,6 +2081,9 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
+@@ -2075,6 +2081,9 @@ static struct v4l2_ctrl *v4l2_ctrl_new(s
  	case V4L2_CTRL_TYPE_AV1_FILM_GRAIN:
  		elem_size = sizeof(struct v4l2_ctrl_av1_film_grain);
  		break;
@@ -49,8 +47,6 @@ index 172d2c27a764..94e3d7931bab 100644
  	case V4L2_CTRL_TYPE_AREA:
  		elem_size = sizeof(struct v4l2_area);
  		break;
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-index f781f15ac0b6..5e9070d97cb9 100644
 --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
 +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
 @@ -1164,6 +1164,7 @@ const char *v4l2_ctrl_get_name(u32 id)
@@ -61,7 +57,7 @@ index f781f15ac0b6..5e9070d97cb9 100644
  
  	/* DV controls */
  	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
-@@ -1622,6 +1623,9 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+@@ -1622,6 +1623,9 @@ void v4l2_ctrl_fill(u32 id, const char *
  	case V4L2_CID_STATELESS_H264_ENCODE_RC:
  		*type = V4L2_CTRL_TYPE_H264_ENCODE_RC;
  		break;
@@ -71,8 +67,6 @@ index f781f15ac0b6..5e9070d97cb9 100644
  	default:
  		*type = V4L2_CTRL_TYPE_INTEGER;
  		break;
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 5ca125b708d3..863fadd7b059 100644
 --- a/include/uapi/linux/v4l2-controls.h
 +++ b/include/uapi/linux/v4l2-controls.h
 @@ -1239,6 +1239,24 @@ enum v4l2_jpeg_chroma_subsampling {
@@ -100,8 +94,6 @@ index 5ca125b708d3..863fadd7b059 100644
  /*  DV-class control IDs defined by V4L2 */
  #define V4L2_CID_DV_CLASS_BASE			(V4L2_CTRL_CLASS_DV | 0x900)
  #define V4L2_CID_DV_CLASS			(V4L2_CTRL_CLASS_DV | 1)
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index a89b656d6c2b..a1307d531e3e 100644
 --- a/include/uapi/linux/videodev2.h
 +++ b/include/uapi/linux/videodev2.h
 @@ -1994,6 +1994,8 @@ enum v4l2_ctrl_type {
@@ -113,6 +105,3 @@ index a89b656d6c2b..a1307d531e3e 100644
  };
  
  /*  Used in the VIDIOC_QUERYCTRL ioctl for querying controls */
--- 
-2.53.0
-

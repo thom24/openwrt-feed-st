@@ -36,11 +36,9 @@ Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
  drivers/base/core.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index d577c7d7aacd..046cb3e41a3c 100644
 --- a/drivers/base/core.c
 +++ b/drivers/base/core.c
-@@ -4670,6 +4670,7 @@ int device_move(struct device *dev, struct device *new_parent,
+@@ -4670,6 +4670,7 @@ int device_move(struct device *dev, stru
  	int error;
  	struct device *old_parent;
  	struct kobject *new_parent_kobj;
@@ -48,7 +46,7 @@ index d577c7d7aacd..046cb3e41a3c 100644
  
  	dev = get_device(dev);
  	if (!dev)
-@@ -4686,6 +4687,7 @@ int device_move(struct device *dev, struct device *new_parent,
+@@ -4686,6 +4687,7 @@ int device_move(struct device *dev, stru
  
  	pr_debug("device: '%s': %s: moving to '%s'\n", dev_name(dev),
  		 __func__, new_parent ? dev_name(new_parent) : "<NULL>");
@@ -56,7 +54,7 @@ index d577c7d7aacd..046cb3e41a3c 100644
  	error = kobject_move(&dev->kobj, new_parent_kobj);
  	if (error) {
  		cleanup_glue_dir(dev, new_parent_kobj);
-@@ -4722,6 +4724,7 @@ int device_move(struct device *dev, struct device *new_parent,
+@@ -4722,6 +4724,7 @@ int device_move(struct device *dev, stru
  			goto out;
  		}
  	}
@@ -64,6 +62,3 @@ index d577c7d7aacd..046cb3e41a3c 100644
  	switch (dpm_order) {
  	case DPM_ORDER_NONE:
  		break;
--- 
-2.53.0
-

@@ -15,8 +15,6 @@ Signed-off-by: Amit Mittal <amit.mittal@st.com>
  drivers/remoteproc/stm32_rproc.c | 102 +++++++++++++++++++++++++++++--
  1 file changed, 98 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index c09fdafc53f1..1c18f7900f22 100644
 --- a/drivers/remoteproc/stm32_rproc.c
 +++ b/drivers/remoteproc/stm32_rproc.c
 @@ -16,6 +16,8 @@
@@ -39,7 +37,7 @@ index c09fdafc53f1..1c18f7900f22 100644
  	int wdg_irq;
  	u32 nb_rmems;
  	struct stm32_rproc_mem *rmems;
-@@ -401,8 +407,17 @@ stm32_rproc_tee_elf_find_loaded_rsc_table(struct rproc *rproc,
+@@ -401,8 +407,17 @@ stm32_rproc_tee_elf_find_loaded_rsc_tabl
  static int stm32_rproc_tee_start(struct rproc *rproc)
  {
  	struct stm32_rproc *ddata = rproc->priv;
@@ -58,7 +56,7 @@ index c09fdafc53f1..1c18f7900f22 100644
  }
  
  static int stm32_rproc_tee_attach(struct rproc *rproc)
-@@ -418,6 +433,10 @@ static int stm32_rproc_tee_stop(struct rproc *rproc)
+@@ -418,6 +433,10 @@ static int stm32_rproc_tee_stop(struct r
  
  	stm32_rproc_request_shutdown(rproc);
  
@@ -69,7 +67,7 @@ index c09fdafc53f1..1c18f7900f22 100644
  	err = tee_rproc_stop(ddata->trproc);
  	if (err)
  		return err;
-@@ -705,17 +724,36 @@ static int stm32_rproc_start(struct rproc *rproc)
+@@ -705,17 +724,36 @@ static int stm32_rproc_start(struct rpro
  		}
  	}
  
@@ -108,7 +106,7 @@ index c09fdafc53f1..1c18f7900f22 100644
  	return stm32_rproc_set_hold_boot(rproc, true);
  }
  
-@@ -753,6 +791,10 @@ static int stm32_rproc_stop(struct rproc *rproc)
+@@ -753,6 +791,10 @@ static int stm32_rproc_stop(struct rproc
  		return err;
  	}
  
@@ -119,7 +117,7 @@ index c09fdafc53f1..1c18f7900f22 100644
  	return stm32_rproc_release(rproc);
  }
  
-@@ -1086,6 +1128,43 @@ static int stm32_rproc_parse_dt(struct platform_device *pdev,
+@@ -1086,6 +1128,43 @@ static int stm32_rproc_parse_dt(struct p
  	return 0;
  }
  
@@ -163,7 +161,7 @@ index c09fdafc53f1..1c18f7900f22 100644
  static int stm32_rproc_probe(struct platform_device *pdev)
  {
  	struct device *dev = &pdev->dev;
-@@ -1168,7 +1247,11 @@ static int stm32_rproc_probe(struct platform_device *pdev)
+@@ -1168,7 +1247,11 @@ static int stm32_rproc_probe(struct plat
  	if (ret)
  		goto free_mb;
  
@@ -176,7 +174,7 @@ index c09fdafc53f1..1c18f7900f22 100644
  
  free_mb:
  	stm32_rproc_free_mbox(rproc);
-@@ -1195,6 +1278,8 @@ static void stm32_rproc_remove(struct platform_device *pdev)
+@@ -1195,6 +1278,8 @@ static void stm32_rproc_remove(struct pl
  	if (atomic_read(&rproc->power) > 0)
  		rproc_shutdown(rproc);
  
@@ -185,7 +183,7 @@ index c09fdafc53f1..1c18f7900f22 100644
  	rproc_del(rproc);
  	stm32_rproc_free_mbox(rproc);
  
-@@ -1220,6 +1305,15 @@ static int stm32_rproc_suspend(struct device *dev)
+@@ -1220,6 +1305,15 @@ static int stm32_rproc_suspend(struct de
  	struct rproc *rproc = dev_get_drvdata(dev);
  	struct stm32_rproc *ddata = rproc->priv;
  
@@ -201,6 +199,3 @@ index c09fdafc53f1..1c18f7900f22 100644
  	if (device_may_wakeup(dev))
  		return enable_irq_wake(ddata->wdg_irq);
  
--- 
-2.53.0
-

@@ -19,11 +19,9 @@ Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
  include/linux/hwspinlock.h            |  2 ++
  7 files changed, 29 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/hwspinlock/hwspinlock_core.c b/drivers/hwspinlock/hwspinlock_core.c
-index a509b73da190..8a98b586c9c8 100644
 --- a/drivers/hwspinlock/hwspinlock_core.c
 +++ b/drivers/hwspinlock/hwspinlock_core.c
-@@ -888,5 +888,17 @@ struct hwspinlock *devm_hwspin_lock_request_specific(struct device *dev,
+@@ -888,5 +888,17 @@ struct hwspinlock *devm_hwspin_lock_requ
  }
  EXPORT_SYMBOL_GPL(devm_hwspin_lock_request_specific);
  
@@ -41,8 +39,6 @@ index a509b73da190..8a98b586c9c8 100644
 +
  MODULE_DESCRIPTION("Hardware spinlock interface");
  MODULE_AUTHOR("Ohad Ben-Cohen <ohad@wizery.com>");
-diff --git a/drivers/hwspinlock/omap_hwspinlock.c b/drivers/hwspinlock/omap_hwspinlock.c
-index 2d8de835bc24..d5114d393003 100644
 --- a/drivers/hwspinlock/omap_hwspinlock.c
 +++ b/drivers/hwspinlock/omap_hwspinlock.c
 @@ -37,7 +37,7 @@
@@ -54,7 +50,7 @@ index 2d8de835bc24..d5114d393003 100644
  
  	/* attempt to acquire the lock by reading its value */
  	return (SPINLOCK_NOTTAKEN == readl(lock_addr));
-@@ -45,7 +45,7 @@ static int omap_hwspinlock_trylock(struct hwspinlock *lock)
+@@ -45,7 +45,7 @@ static int omap_hwspinlock_trylock(struc
  
  static void omap_hwspinlock_unlock(struct hwspinlock *lock)
  {
@@ -63,8 +59,6 @@ index 2d8de835bc24..d5114d393003 100644
  
  	/* release the lock by writing 0 to it */
  	writel(SPINLOCK_NOTTAKEN, lock_addr);
-diff --git a/drivers/hwspinlock/qcom_hwspinlock.c b/drivers/hwspinlock/qcom_hwspinlock.c
-index 712003a4640c..4b31ab2dc177 100644
 --- a/drivers/hwspinlock/qcom_hwspinlock.c
 +++ b/drivers/hwspinlock/qcom_hwspinlock.c
 @@ -27,7 +27,7 @@ struct qcom_hwspinlock_of_data {
@@ -76,7 +70,7 @@ index 712003a4640c..4b31ab2dc177 100644
  	u32 lock_owner;
  	int ret;
  
-@@ -44,7 +44,7 @@ static int qcom_hwspinlock_trylock(struct hwspinlock *lock)
+@@ -44,7 +44,7 @@ static int qcom_hwspinlock_trylock(struc
  
  static void qcom_hwspinlock_unlock(struct hwspinlock *lock)
  {
@@ -85,7 +79,7 @@ index 712003a4640c..4b31ab2dc177 100644
  	u32 lock_owner;
  	int ret;
  
-@@ -66,13 +66,14 @@ static void qcom_hwspinlock_unlock(struct hwspinlock *lock)
+@@ -66,13 +66,14 @@ static void qcom_hwspinlock_unlock(struc
  
  static int qcom_hwspinlock_bust(struct hwspinlock *lock, unsigned int id)
  {
@@ -102,7 +96,7 @@ index 712003a4640c..4b31ab2dc177 100644
  		return ret;
  	}
  
-@@ -81,7 +82,7 @@ static int qcom_hwspinlock_bust(struct hwspinlock *lock, unsigned int id)
+@@ -81,7 +82,7 @@ static int qcom_hwspinlock_bust(struct h
  
  	ret = regmap_field_write(field, 0);
  	if (ret) {
@@ -111,8 +105,6 @@ index 712003a4640c..4b31ab2dc177 100644
  		return ret;
  	}
  
-diff --git a/drivers/hwspinlock/sprd_hwspinlock.c b/drivers/hwspinlock/sprd_hwspinlock.c
-index 22e2ffb91743..0d08efbdfb07 100644
 --- a/drivers/hwspinlock/sprd_hwspinlock.c
 +++ b/drivers/hwspinlock/sprd_hwspinlock.c
 @@ -40,8 +40,8 @@ struct sprd_hwspinlock_dev {
@@ -126,7 +118,7 @@ index 22e2ffb91743..0d08efbdfb07 100644
  	int user_id, lock_id;
  
  	if (!readl(addr))
-@@ -59,7 +59,7 @@ static int sprd_hwspinlock_trylock(struct hwspinlock *lock)
+@@ -59,7 +59,7 @@ static int sprd_hwspinlock_trylock(struc
  /* unlock the hardware spinlock */
  static void sprd_hwspinlock_unlock(struct hwspinlock *lock)
  {
@@ -135,8 +127,6 @@ index 22e2ffb91743..0d08efbdfb07 100644
  
  	writel(HWSPINLOCK_NOTTAKEN, lock_addr);
  }
-diff --git a/drivers/hwspinlock/stm32_hwspinlock.c b/drivers/hwspinlock/stm32_hwspinlock.c
-index bb5c7e5f7a80..1d75dc03f4ad 100644
 --- a/drivers/hwspinlock/stm32_hwspinlock.c
 +++ b/drivers/hwspinlock/stm32_hwspinlock.c
 @@ -27,7 +27,7 @@ struct stm32_hwspinlock {
@@ -148,7 +138,7 @@ index bb5c7e5f7a80..1d75dc03f4ad 100644
  	u32 status;
  
  	writel(STM32_MUTEX_LOCK_BIT | STM32_MUTEX_COREID, lock_addr);
-@@ -38,7 +38,7 @@ static int stm32_hwspinlock_trylock(struct hwspinlock *lock)
+@@ -38,7 +38,7 @@ static int stm32_hwspinlock_trylock(stru
  
  static void stm32_hwspinlock_unlock(struct hwspinlock *lock)
  {
@@ -157,11 +147,9 @@ index bb5c7e5f7a80..1d75dc03f4ad 100644
  
  	writel(STM32_MUTEX_COREID, lock_addr);
  }
-diff --git a/drivers/hwspinlock/sun6i_hwspinlock.c b/drivers/hwspinlock/sun6i_hwspinlock.c
-index c2d314588046..8ff81cb5880a 100644
 --- a/drivers/hwspinlock/sun6i_hwspinlock.c
 +++ b/drivers/hwspinlock/sun6i_hwspinlock.c
-@@ -62,14 +62,14 @@ static void sun6i_hwspinlock_debugfs_init(struct sun6i_hwspinlock_data *priv)
+@@ -62,14 +62,14 @@ static void sun6i_hwspinlock_debugfs_ini
  
  static int sun6i_hwspinlock_trylock(struct hwspinlock *lock)
  {
@@ -178,8 +166,6 @@ index c2d314588046..8ff81cb5880a 100644
  
  	writel(SPINLOCK_NOTTAKEN, lock_addr);
  }
-diff --git a/include/linux/hwspinlock.h b/include/linux/hwspinlock.h
-index 74b91244fe0e..dffa1dff7289 100644
 --- a/include/linux/hwspinlock.h
 +++ b/include/linux/hwspinlock.h
 @@ -27,6 +27,8 @@ struct hwspinlock_ops;
@@ -191,6 +177,3 @@ index 74b91244fe0e..dffa1dff7289 100644
  int hwspin_lock_register(struct hwspinlock_device *bank, struct device *dev,
  		const struct hwspinlock_ops *ops, int base_id, int num_locks);
  int hwspin_lock_unregister(struct hwspinlock_device *bank);
--- 
-2.53.0
-

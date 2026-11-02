@@ -22,11 +22,9 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  drivers/tty/serial/stm32-usart.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 7daf4f26ee4b..1d71cbb2c400 100644
 --- a/drivers/tty/serial/stm32-usart.c
 +++ b/drivers/tty/serial/stm32-usart.c
-@@ -1121,9 +1121,9 @@ static irqreturn_t stm32_usart_interrupt(int irq, void *ptr)
+@@ -1121,9 +1121,9 @@ static irqreturn_t stm32_usart_interrupt
  	if (stm32_usart_rx_dma_started(stm32_port) && !stm32_port->throttled) {
  		uart_port_lock(port);
  		size = stm32_usart_receive_chars(port, false);
@@ -37,7 +35,7 @@ index 7daf4f26ee4b..1d71cbb2c400 100644
  		ret = IRQ_HANDLED;
  	}
  
-@@ -2422,9 +2422,9 @@ static int __maybe_unused stm32_usart_serial_en_wakeup(struct uart_port *port,
+@@ -2422,9 +2422,9 @@ static int __maybe_unused stm32_usart_se
  			if (!stm32_usart_rx_dma_pause(stm32_port))
  				size += stm32_usart_receive_chars(port, true);
  			stm32_usart_rx_dma_terminate(stm32_port);
@@ -48,6 +46,3 @@ index 7daf4f26ee4b..1d71cbb2c400 100644
  
  			stm32_usart_clr_bits(port, ofs->cr3, USART_CR3_DMAR);
  		}
--- 
-2.53.0
-

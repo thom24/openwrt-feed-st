@@ -25,8 +25,6 @@ Reviewed-by: Loic PALLARDY <loic.pallardy@st.com>
  create mode 100644 drivers/soc/st/Makefile
  create mode 100644 drivers/soc/st/stm32_pm_domain.c
 
-diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
-index c9e689080ceb..1c9b05c50965 100644
 --- a/drivers/soc/Makefile
 +++ b/drivers/soc/Makefile
 @@ -30,6 +30,7 @@ obj-y				+= renesas/
@@ -37,8 +35,6 @@ index c9e689080ceb..1c9b05c50965 100644
  obj-y				+= sunxi/
  obj-$(CONFIG_ARCH_TEGRA)	+= tegra/
  obj-y				+= ti/
-diff --git a/drivers/soc/st/Kconfig b/drivers/soc/st/Kconfig
-index 5d9fb1adfddf..e51ad36ef6ac 100644
 --- a/drivers/soc/st/Kconfig
 +++ b/drivers/soc/st/Kconfig
 @@ -12,4 +12,15 @@ config STM32MP_PM_DOMAIN
@@ -57,16 +53,10 @@ index 5d9fb1adfddf..e51ad36ef6ac 100644
 +	  blocks. If unsure, say Y.
 +
  endif # ARCH_STM32 || COMPILE_TEST
-diff --git a/drivers/soc/st/Makefile b/drivers/soc/st/Makefile
-new file mode 100644
-index 000000000000..8d7f2919fe18
 --- /dev/null
 +++ b/drivers/soc/st/Makefile
 @@ -0,0 +1 @@
 +obj-$(CONFIG_STM32_PM_DOMAINS) += stm32_pm_domain.o
-diff --git a/drivers/soc/st/stm32_pm_domain.c b/drivers/soc/st/stm32_pm_domain.c
-new file mode 100644
-index 000000000000..f9e2b15a64e1
 --- /dev/null
 +++ b/drivers/soc/st/stm32_pm_domain.c
 @@ -0,0 +1,212 @@
@@ -282,6 +272,3 @@ index 000000000000..f9e2b15a64e1
 +	return platform_driver_register(&stm32_pm_domains_driver);
 +}
 +core_initcall(stm32_pm_domains_init);
--- 
-2.53.0
-

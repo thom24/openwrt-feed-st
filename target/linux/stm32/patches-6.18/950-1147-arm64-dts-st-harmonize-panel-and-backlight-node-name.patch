@@ -15,11 +15,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-index 86e83fbef698..a13ed0286d8b 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-@@ -110,7 +110,7 @@ memory@80000000 {
+@@ -110,7 +110,7 @@
  		reg = <0x0 0x80000000 0x1 0x0>;
  	};
  
@@ -28,7 +26,7 @@ index 86e83fbef698..a13ed0286d8b 100644
  		compatible = "edt,etml0700z9ndha", "panel-lvds";
  		enable-gpios = <&gpiog 15 GPIO_ACTIVE_HIGH>;
  		backlight = <&panel_lvds_backlight>;
-@@ -139,7 +139,7 @@ lvds_panel_in: endpoint {
+@@ -139,7 +139,7 @@
  		};
  	};
  
@@ -37,6 +35,3 @@ index 86e83fbef698..a13ed0286d8b 100644
  		compatible = "gpio-backlight";
  		gpios = <&gpioi 5 GPIO_ACTIVE_HIGH>;
  		default-on;
--- 
-2.53.0
-

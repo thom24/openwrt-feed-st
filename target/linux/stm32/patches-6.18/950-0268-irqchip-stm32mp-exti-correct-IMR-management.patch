@@ -23,11 +23,9 @@ Change-Id: I3e88a46ab846331cb47da0c9c02c0736b2214caf
  drivers/irqchip/irq-stm32mp-exti.c | 36 +++++++++++++++++++-----------
  1 file changed, 23 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/irqchip/irq-stm32mp-exti.c b/drivers/irqchip/irq-stm32mp-exti.c
-index 5c31030124da..60573f2b9c57 100644
 --- a/drivers/irqchip/irq-stm32mp-exti.c
 +++ b/drivers/irqchip/irq-stm32mp-exti.c
-@@ -283,12 +283,17 @@ static void stm32mp_chip_suspend(struct stm32mp_exti_chip_data *chip_data)
+@@ -283,12 +283,17 @@ static void stm32mp_chip_suspend(struct
  {
  	const struct stm32mp_exti_bank *bank = chip_data->reg_bank;
  	void __iomem *base = chip_data->host_data->base;
@@ -46,7 +44,7 @@ index 5c31030124da..60573f2b9c57 100644
  
  	/* wakeup for IRQ power domain for S2IDLE */
  	if (chip_data->wake_active)
-@@ -299,12 +304,17 @@ static void stm32mp_chip_resume(struct stm32mp_exti_chip_data *chip_data)
+@@ -299,12 +304,17 @@ static void stm32mp_chip_resume(struct s
  {
  	const struct stm32mp_exti_bank *bank = chip_data->reg_bank;
  	void __iomem *base = chip_data->host_data->base;
@@ -65,7 +63,7 @@ index 5c31030124da..60573f2b9c57 100644
  }
  
  /* directly set the target bit without reading first. */
-@@ -321,26 +331,28 @@ static inline u32 stm32mp_exti_set_bit(struct irq_data *d, u32 reg)
+@@ -321,26 +331,28 @@ static inline u32 stm32mp_exti_set_bit(s
  {
  	struct stm32mp_exti_chip_data *chip_data = irq_data_get_irq_chip_data(d);
  	void __iomem *base = chip_data->host_data->base;
@@ -100,7 +98,7 @@ index 5c31030124da..60573f2b9c57 100644
  }
  
  static void stm32mp_exti_eoi(struct irq_data *d)
-@@ -353,7 +365,7 @@ static void stm32mp_exti_eoi(struct irq_data *d)
+@@ -353,7 +365,7 @@ static void stm32mp_exti_eoi(struct irq_
  	stm32mp_exti_write_bit(d, bank->rpr_ofst);
  	stm32mp_exti_write_bit(d, bank->fpr_ofst);
  
@@ -109,7 +107,7 @@ index 5c31030124da..60573f2b9c57 100644
  
  	raw_spin_unlock(&chip_data->rlock);
  
-@@ -366,7 +378,7 @@ static void stm32mp_exti_mask(struct irq_data *d)
+@@ -366,7 +378,7 @@ static void stm32mp_exti_mask(struct irq
  	const struct stm32mp_exti_bank *bank = chip_data->reg_bank;
  
  	raw_spin_lock(&chip_data->rlock);
@@ -118,7 +116,7 @@ index 5c31030124da..60573f2b9c57 100644
  	raw_spin_unlock(&chip_data->rlock);
  
  	irq_chip_mask_parent(d);
-@@ -378,7 +390,7 @@ static void stm32mp_exti_unmask(struct irq_data *d)
+@@ -378,7 +390,7 @@ static void stm32mp_exti_unmask(struct i
  	const struct stm32mp_exti_bank *bank = chip_data->reg_bank;
  
  	raw_spin_lock(&chip_data->rlock);
@@ -127,7 +125,7 @@ index 5c31030124da..60573f2b9c57 100644
  	raw_spin_unlock(&chip_data->rlock);
  
  	irq_chip_unmask_parent(d);
-@@ -507,7 +519,6 @@ static struct irq_chip stm32mp_exti_chip = {
+@@ -507,7 +519,6 @@ static struct irq_chip stm32mp_exti_chip
  	.irq_retrigger		= stm32mp_exti_retrigger,
  	.irq_set_type		= stm32mp_exti_set_type,
  	.irq_set_wake		= stm32mp_exti_set_wake,
@@ -135,7 +133,7 @@ index 5c31030124da..60573f2b9c57 100644
  	.irq_set_affinity	= IS_ENABLED(CONFIG_SMP) ? irq_chip_set_affinity_parent : NULL,
  };
  
-@@ -522,7 +533,6 @@ static struct irq_chip stm32mp_exti_chip_direct = {
+@@ -522,7 +533,6 @@ static struct irq_chip stm32mp_exti_chip
  	.irq_retrigger		= irq_chip_retrigger_hierarchy,
  	.irq_set_type		= irq_chip_set_type_parent,
  	.irq_set_wake		= stm32mp_exti_set_wake,
@@ -143,6 +141,3 @@ index 5c31030124da..60573f2b9c57 100644
  	.irq_set_affinity	= IS_ENABLED(CONFIG_SMP) ? irq_chip_set_affinity_parent : NULL,
  };
  
--- 
-2.53.0
-

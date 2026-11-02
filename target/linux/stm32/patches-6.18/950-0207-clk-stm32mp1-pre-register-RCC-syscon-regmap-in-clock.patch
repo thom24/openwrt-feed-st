@@ -35,8 +35,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/clk/stm32/clk-stm32mp1.c | 50 ++++++++++++++++++++++++++++++++
  2 files changed, 51 insertions(+)
 
-diff --git a/drivers/clk/stm32/Kconfig b/drivers/clk/stm32/Kconfig
-index b697c28d6f88..4ba1513bdae5 100644
 --- a/drivers/clk/stm32/Kconfig
 +++ b/drivers/clk/stm32/Kconfig
 @@ -22,6 +22,7 @@ config COMMON_CLK_STM32MP157
@@ -47,8 +45,6 @@ index b697c28d6f88..4ba1513bdae5 100644
  	help
  	  Support for stm32mp15x SoC family clocks.
  
-diff --git a/drivers/clk/stm32/clk-stm32mp1.c b/drivers/clk/stm32/clk-stm32mp1.c
-index fee4449f117c..a9595dbd5c21 100644
 --- a/drivers/clk/stm32/clk-stm32mp1.c
 +++ b/drivers/clk/stm32/clk-stm32mp1.c
 @@ -10,10 +10,12 @@
@@ -73,7 +69,7 @@ index fee4449f117c..a9595dbd5c21 100644
  
  #define RCC_CLR	0x4
  
-@@ -2412,6 +2416,51 @@ static int stm32_rcc_init(struct device *dev, void __iomem *base,
+@@ -2412,6 +2416,51 @@ static int stm32_rcc_init(struct device
  
  static void stm32_clk_summary_debugfs_create(struct device *dev, void __iomem *base);
  
@@ -125,7 +121,7 @@ index fee4449f117c..a9595dbd5c21 100644
  static int stm32mp1_rcc_init(struct device *dev)
  {
  	void __iomem *base;
-@@ -2433,6 +2482,7 @@ static int stm32mp1_rcc_init(struct device *dev)
+@@ -2433,6 +2482,7 @@ out:
  
  		of_node_put(dev_of_node(dev));
  	} else {
@@ -133,6 +129,3 @@ index fee4449f117c..a9595dbd5c21 100644
  		stm32_clk_summary_debugfs_create(dev, base);
  	}
  
--- 
-2.53.0
-

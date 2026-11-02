@@ -22,8 +22,6 @@ Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
  create mode 100644 arch/arm/boot/dts/st/stm32mp157f-ed1.dts
  create mode 100644 arch/arm/boot/dts/st/stm32mp157f-ev1.dts
 
-diff --git a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
-index 8f4faaf8a607..c4aec9286ba9 100644
 --- a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
 +++ b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
 @@ -115,8 +115,6 @@ properties:
@@ -62,8 +60,6 @@ index 8f4faaf8a607..c4aec9286ba9 100644
            - const: st,stm32mp157
  
        - description: DH STM32MP1 SoM based Boards
-diff --git a/arch/arm/boot/dts/st/Makefile b/arch/arm/boot/dts/st/Makefile
-index 6e8e35d72938..73d3312a73f6 100644
 --- a/arch/arm/boot/dts/st/Makefile
 +++ b/arch/arm/boot/dts/st/Makefile
 @@ -72,7 +72,11 @@ dtb-$(CONFIG_ARCH_STM32) += \
@@ -79,9 +75,6 @@ index 6e8e35d72938..73d3312a73f6 100644
  dtb-$(CONFIG_ARCH_U8500) += \
  	ste-snowball.dtb \
  	ste-hrefprev60-stuib.dtb \
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
-new file mode 100644
-index 000000000000..3e9e1df74cea
 --- /dev/null
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
 @@ -0,0 +1,598 @@
@@ -683,9 +676,6 @@ index 000000000000..3e9e1df74cea
 +&usbphyc_port1 {
 +	phy-supply = <&vdd_usb>;
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-new file mode 100644
-index 000000000000..a63eb063b635
 --- /dev/null
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
 @@ -0,0 +1,461 @@
@@ -1150,9 +1140,6 @@ index 000000000000..a63eb063b635
 +	st,tune-hs-rx-offset = <2>;
 +	st,no-lsfs-sc;
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
-new file mode 100644
-index 000000000000..c65978a7f150
 --- /dev/null
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
 @@ -0,0 +1,605 @@
@@ -1761,9 +1748,6 @@ index 000000000000..c65978a7f150
 +&usbphyc_port1 {
 +	phy-supply = <&vdd_usb>;
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-new file mode 100644
-index 000000000000..ecbcb9729cc6
 --- /dev/null
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
 @@ -0,0 +1,461 @@
@@ -2228,6 +2212,3 @@ index 000000000000..ecbcb9729cc6
 +	st,tune-hs-rx-offset = <2>;
 +	st,no-lsfs-sc;
 +};
--- 
-2.53.0
-

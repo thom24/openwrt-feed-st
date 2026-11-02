@@ -19,11 +19,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-index 74edc5f42aeb..fe0790879a2f 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-@@ -341,6 +341,9 @@ &i2c2 {
+@@ -341,6 +341,9 @@
  	i2c-scl-falling-time-ns = <13>;
  	clock-frequency = <400000>;
  	status = "okay";
@@ -33,7 +31,7 @@ index 74edc5f42aeb..fe0790879a2f 100644
  
  	imx335: camera@1a {
  		compatible = "sony,imx335";
-@@ -379,6 +382,9 @@ &i2c8 {
+@@ -379,6 +382,9 @@
  	i2c-scl-falling-time-ns = <7>;
  	clock-frequency = <400000>;
  	status = "disabled";
@@ -43,6 +41,3 @@ index 74edc5f42aeb..fe0790879a2f 100644
  };
  
  /* use LPTIMER with tick broadcast for suspend mode */
--- 
-2.53.0
-

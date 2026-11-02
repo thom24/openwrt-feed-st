@@ -12,11 +12,9 @@ Change-Id: I300354ea62fd0b2b9413b81220beec1142bd6c7e
  drivers/rtc/rtc-stm32.c | 25 +++----------------------
  1 file changed, 3 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/rtc/rtc-stm32.c b/drivers/rtc/rtc-stm32.c
-index 1f5ca88764c8..7357fc0624fe 100644
 --- a/drivers/rtc/rtc-stm32.c
 +++ b/drivers/rtc/rtc-stm32.c
-@@ -1097,27 +1097,17 @@ static int stm32_rtc_probe(struct platform_device *pdev)
+@@ -1097,27 +1097,17 @@ static int stm32_rtc_probe(struct platfo
  
  	if (!rtc->data->has_pclk) {
  		rtc->pclk = NULL;
@@ -47,7 +45,7 @@ index 1f5ca88764c8..7357fc0624fe 100644
  	if (rtc->data->need_dbp)
  		regmap_update_bits(rtc->dbp, rtc->dbp_reg,
  				   rtc->dbp_mask, rtc->dbp_mask);
-@@ -1210,11 +1200,6 @@ static int stm32_rtc_probe(struct platform_device *pdev)
+@@ -1210,11 +1200,6 @@ static int stm32_rtc_probe(struct platfo
  	return 0;
  
  err:
@@ -59,7 +57,7 @@ index 1f5ca88764c8..7357fc0624fe 100644
  	if (rtc->data->need_dbp)
  		regmap_update_bits(rtc->dbp, rtc->dbp_reg, rtc->dbp_mask, 0);
  
-@@ -1237,10 +1222,6 @@ static void stm32_rtc_remove(struct platform_device *pdev)
+@@ -1237,10 +1222,6 @@ static void stm32_rtc_remove(struct plat
  	writel_relaxed(cr, rtc->base + regs->cr);
  	stm32_rtc_wpr_lock(rtc);
  
@@ -70,6 +68,3 @@ index 1f5ca88764c8..7357fc0624fe 100644
  	/* Enable backup domain write protection if needed */
  	if (rtc->data->need_dbp)
  		regmap_update_bits(rtc->dbp, rtc->dbp_reg, rtc->dbp_mask, 0);
--- 
-2.53.0
-

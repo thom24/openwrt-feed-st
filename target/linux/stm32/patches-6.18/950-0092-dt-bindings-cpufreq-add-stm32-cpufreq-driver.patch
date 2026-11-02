@@ -14,9 +14,6 @@ Change-Id: Ic9015350591b595fd67f916a438ffc42ca3ffcc4
  1 file changed, 61 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/cpufreq/stm32-cpufreq.txt
 
-diff --git a/Documentation/devicetree/bindings/cpufreq/stm32-cpufreq.txt b/Documentation/devicetree/bindings/cpufreq/stm32-cpufreq.txt
-new file mode 100644
-index 000000000000..7f03607c3c08
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/cpufreq/stm32-cpufreq.txt
 @@ -0,0 +1,61 @@
@@ -81,6 +78,3 @@ index 000000000000..7f03607c3c08
 +			opp-supported-hw = <0x2>;
 +		};
 +	};
--- 
-2.53.0
-

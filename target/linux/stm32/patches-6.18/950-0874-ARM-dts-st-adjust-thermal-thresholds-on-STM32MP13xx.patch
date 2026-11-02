@@ -32,8 +32,6 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  3 files changed, 55 insertions(+), 11 deletions(-)
  create mode 100644 arch/arm/boot/dts/st/stm32mp13xd.dtsi
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index 9b9712ee20c4..88c2452b0172 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
 @@ -8,6 +8,7 @@
@@ -44,7 +42,7 @@ index 9b9712ee20c4..88c2452b0172 100644
  
  / {
  	#address-cells = <1>;
-@@ -23,6 +24,7 @@ cpu0: cpu@0 {
+@@ -23,6 +24,7 @@
  			reg = <0>;
  			power-domains = <&scmi_perf 0>;
  			power-domain-names = "perf";
@@ -52,7 +50,7 @@ index 9b9712ee20c4..88c2452b0172 100644
  		};
  	};
  
-@@ -124,21 +126,12 @@ cpu_thermal: cpu-thermal {
+@@ -124,21 +126,12 @@
  			thermal-sensors = <&dts>;
  
  			trips {
@@ -76,9 +74,6 @@ index 9b9712ee20c4..88c2452b0172 100644
  		};
  	};
  
-diff --git a/arch/arm/boot/dts/st/stm32mp13xd.dtsi b/arch/arm/boot/dts/st/stm32mp13xd.dtsi
-new file mode 100644
-index 000000000000..c71e528b06e8
 --- /dev/null
 +++ b/arch/arm/boot/dts/st/stm32mp13xd.dtsi
 @@ -0,0 +1,28 @@
@@ -110,8 +105,6 @@ index 000000000000..c71e528b06e8
 +		};
 +	};
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp13xf.dtsi b/arch/arm/boot/dts/st/stm32mp13xf.dtsi
-index 015d214aa560..4cdfd99a9894 100644
 --- a/arch/arm/boot/dts/st/stm32mp13xf.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp13xf.dtsi
 @@ -4,6 +4,29 @@
@@ -144,6 +137,3 @@ index 015d214aa560..4cdfd99a9894 100644
  &etzpc {
  	cryp: crypto@54002000 {
  		compatible = "st,stm32mp1-cryp";
--- 
-2.53.0
-

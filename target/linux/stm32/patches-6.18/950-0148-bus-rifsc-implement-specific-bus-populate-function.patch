@@ -20,8 +20,6 @@ Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
  drivers/bus/stm32_rifsc.c | 76 ++++++++++++++++++++++++++++++++++++++-
  2 files changed, 82 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/bus/Kconfig b/drivers/bus/Kconfig
-index fe7600283e70..745b67eb49a1 100644
 --- a/drivers/bus/Kconfig
 +++ b/drivers/bus/Kconfig
 @@ -179,6 +179,13 @@ config STM32_FIREWALL
@@ -38,8 +36,6 @@ index fe7600283e70..745b67eb49a1 100644
  config SUN50I_DE2_BUS
  	bool "Allwinner A64 DE2 Bus Driver"
  	  default ARM64
-diff --git a/drivers/bus/stm32_rifsc.c b/drivers/bus/stm32_rifsc.c
-index 0b0e50fbac1c..7ddcf97957bc 100644
 --- a/drivers/bus/stm32_rifsc.c
 +++ b/drivers/bus/stm32_rifsc.c
 @@ -5,6 +5,7 @@
@@ -50,7 +46,7 @@ index 0b0e50fbac1c..7ddcf97957bc 100644
  #include <linux/debugfs.h>
  #include <linux/device.h>
  #include <linux/err.h>
-@@ -729,6 +730,79 @@ static void stm32_rifsc_release_access(struct stm32_firewall_controller *ctrl, u
+@@ -729,6 +730,79 @@ static void stm32_rifsc_release_access(s
  	stm32_rif_release_semaphore(ctrl, firewall_id);
  }
  
@@ -130,7 +126,7 @@ index 0b0e50fbac1c..7ddcf97957bc 100644
  static int stm32_rifsc_probe(struct platform_device *pdev)
  {
  	struct stm32_firewall_controller *rifsc_controller;
-@@ -778,7 +852,7 @@ static int stm32_rifsc_probe(struct platform_device *pdev)
+@@ -778,7 +852,7 @@ static int stm32_rifsc_probe(struct plat
  		return rc;
  	}
  
@@ -139,6 +135,3 @@ index 0b0e50fbac1c..7ddcf97957bc 100644
  	if (rc) {
  		dev_err(rifsc_controller->dev, "Couldn't populate RIFSC bus: %d",
  			rc);
--- 
-2.53.0
-

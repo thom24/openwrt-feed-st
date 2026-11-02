@@ -34,11 +34,9 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  drivers/media/platform/st/stm32/stm32-dcmi.c | 13 ++++++++-----
  1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
-index 388ffe85e56c..3046642ac842 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmi.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
-@@ -2035,8 +2035,10 @@ static int dcmi_probe(struct platform_device *pdev)
+@@ -2035,8 +2035,10 @@ static int dcmi_probe(struct platform_de
  	mdma_chan = dma_request_chan(&pdev->dev, "mdma_tx");
  	if (IS_ERR(mdma_chan)) {
  		ret = PTR_ERR(mdma_chan);
@@ -51,7 +49,7 @@ index 388ffe85e56c..3046642ac842 100644
  		mdma_chan = NULL;
  	}
  
-@@ -2208,12 +2210,13 @@ static int dcmi_probe(struct platform_device *pdev)
+@@ -2208,12 +2210,13 @@ err_device_unregister:
  err_media_device_cleanup:
  	media_device_cleanup(&dcmi->mdev);
  err_mdma_slave_config:
@@ -68,6 +66,3 @@ index 388ffe85e56c..3046642ac842 100644
  
  	return ret;
  }
--- 
-2.53.0
-

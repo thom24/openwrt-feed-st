@@ -37,8 +37,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  include/linux/arch_topology.h     |  1 +
  5 files changed, 35 insertions(+)
 
-diff --git a/arch/arm/include/asm/topology.h b/arch/arm/include/asm/topology.h
-index ad36b6570067..ebfaa2664706 100644
 --- a/arch/arm/include/asm/topology.h
 +++ b/arch/arm/include/asm/topology.h
 @@ -11,6 +11,7 @@
@@ -49,8 +47,6 @@ index ad36b6570067..ebfaa2664706 100644
  #define arch_scale_freq_capacity topology_get_freq_scale
  #define arch_scale_freq_invariant topology_scale_freq_invariant
  #define arch_scale_freq_ref topology_get_freq_ref
-diff --git a/arch/arm64/include/asm/topology.h b/arch/arm64/include/asm/topology.h
-index 341174bf9106..e60f45e39407 100644
 --- a/arch/arm64/include/asm/topology.h
 +++ b/arch/arm64/include/asm/topology.h
 @@ -22,6 +22,7 @@ void update_freq_counters_refs(void);
@@ -61,8 +57,6 @@ index 341174bf9106..e60f45e39407 100644
  #define arch_scale_freq_capacity topology_get_freq_scale
  #define arch_scale_freq_invariant topology_scale_freq_invariant
  #define arch_scale_freq_ref topology_get_freq_ref
-diff --git a/arch/riscv/include/asm/topology.h b/arch/riscv/include/asm/topology.h
-index fe1a8bf6902d..92a0347a9ea8 100644
 --- a/arch/riscv/include/asm/topology.h
 +++ b/arch/riscv/include/asm/topology.h
 @@ -11,6 +11,7 @@
@@ -73,8 +67,6 @@ index fe1a8bf6902d..92a0347a9ea8 100644
  #define arch_scale_freq_capacity	topology_get_freq_scale
  #define arch_scale_freq_invariant	topology_scale_freq_invariant
  #define arch_scale_freq_ref		topology_get_freq_ref
-diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index e1eff05bea4a..7af93c638d6a 100644
 --- a/drivers/base/arch_topology.c
 +++ b/drivers/base/arch_topology.c
 @@ -379,6 +379,33 @@ static cpumask_var_t cpus_to_visit;
@@ -111,7 +103,7 @@ index e1eff05bea4a..7af93c638d6a 100644
  static int
  init_cpu_capacity_callback(struct notifier_block *nb,
  			   unsigned long val,
-@@ -453,6 +480,10 @@ static void parsing_done_workfn(struct work_struct *work)
+@@ -453,6 +480,10 @@ static void parsing_done_workfn(struct w
  }
  
  #else
@@ -122,11 +114,9 @@ index e1eff05bea4a..7af93c638d6a 100644
  core_initcall(free_raw_capacity);
  #endif
  
-diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-index d72d6e5aa200..1b4af01d3f6d 100644
 --- a/include/linux/arch_topology.h
 +++ b/include/linux/arch_topology.h
-@@ -31,6 +31,7 @@ static inline unsigned long topology_get_freq_scale(int cpu)
+@@ -31,6 +31,7 @@ static inline unsigned long topology_get
  
  void topology_set_freq_scale(const struct cpumask *cpus, unsigned long cur_freq,
  			     unsigned long max_freq);
@@ -134,6 +124,3 @@ index d72d6e5aa200..1b4af01d3f6d 100644
  bool topology_scale_freq_invariant(void);
  
  enum scale_freq_source {
--- 
-2.53.0
-

@@ -20,11 +20,9 @@ Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts | 19 +++++++++++++++++++
  1 file changed, 19 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index 8fd351006975..7d3dbfa5b204 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -966,3 +966,22 @@ &usb2_phy2 {
+@@ -966,3 +966,22 @@
  	vdd33-supply = <&scmi_vdd3v3_usb>;
  	status = "okay";
  };
@@ -47,6 +45,3 @@ index 8fd351006975..7d3dbfa5b204 100644
 +		status = "disabled";
 +	};
 +};
--- 
-2.53.0
-

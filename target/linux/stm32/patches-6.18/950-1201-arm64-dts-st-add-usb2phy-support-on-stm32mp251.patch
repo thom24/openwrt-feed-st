@@ -29,11 +29,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp251.dtsi | 22 ++++++++++++++++++++++
  1 file changed, 22 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index a70ab208f4c5..89866b2a6d08 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -261,6 +261,28 @@ timer {
+@@ -261,6 +261,28 @@
  		arm,no-tick-in-suspend;
  	};
  
@@ -62,6 +60,3 @@ index a70ab208f4c5..89866b2a6d08 100644
  	soc@0 {
  		compatible = "simple-bus";
  		#address-cells = <1>;
--- 
-2.53.0
-

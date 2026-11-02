@@ -32,8 +32,6 @@ Change-Id: Ifdedc2458198a77379c67a7956ac6c58e049d771
  drivers/usb/dwc2/platform.c  |  3 ++-
  4 files changed, 40 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index f4aa974774b7..2169002bd597 100644
 --- a/drivers/usb/dwc2/core.h
 +++ b/drivers/usb/dwc2/core.h
 @@ -1110,6 +1110,7 @@ struct dwc2_hsotg {
@@ -44,11 +42,9 @@ index f4aa974774b7..2169002bd597 100644
  	struct timer_list wkp_timer;
  	enum dwc2_lx_state lx_state;
  	struct dwc2_gregs_backup gr_backup;
-diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
-index 405fe99a34e9..f3ef9cefbdbc 100644
 --- a/drivers/usb/dwc2/core_intr.c
 +++ b/drivers/usb/dwc2/core_intr.c
-@@ -557,6 +557,19 @@ static void dwc2_handle_usb_suspend_intr(struct dwc2_hsotg *hsotg)
+@@ -557,6 +557,19 @@ static void dwc2_handle_usb_suspend_intr
  		if (!dwc2_is_device_connected(hsotg)) {
  			dev_dbg(hsotg->dev,
  				"ignore suspend request before enumeration\n");
@@ -68,11 +64,9 @@ index 405fe99a34e9..f3ef9cefbdbc 100644
  			return;
  		}
  		if (dsts & DSTS_SUSPSTS) {
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 009d453f90e1..874f1312584b 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -3254,6 +3254,20 @@ static void dwc2_hsotg_epint(struct dwc2_hsotg *hsotg, unsigned int idx,
+@@ -3254,6 +3254,20 @@ static void dwc2_hsotg_epint(struct dwc2
  	}
  }
  
@@ -93,7 +87,7 @@ index 009d453f90e1..874f1312584b 100644
  /**
   * dwc2_hsotg_irq_enumdone - Handle EnumDone interrupt (enumeration done)
   * @hsotg: The device state.
-@@ -3703,9 +3717,14 @@ void dwc2_hsotg_core_disconnect(struct dwc2_hsotg *hsotg)
+@@ -3703,9 +3717,14 @@ void dwc2_hsotg_core_disconnect(struct d
  
  void dwc2_hsotg_core_connect(struct dwc2_hsotg *hsotg)
  {
@@ -110,7 +104,7 @@ index 009d453f90e1..874f1312584b 100644
  }
  
  /**
-@@ -3878,6 +3897,8 @@ static irqreturn_t dwc2_hsotg_irq(int irq, void *pw)
+@@ -3878,6 +3897,8 @@ irq_retry:
  	if (gintsts & GINTSTS_ENUMDONE) {
  		dwc2_writel(hsotg, GINTSTS_ENUMDONE, GINTSTS);
  
@@ -119,7 +113,7 @@ index 009d453f90e1..874f1312584b 100644
  		dwc2_hsotg_irq_enumdone(hsotg);
  	}
  
-@@ -5258,6 +5279,7 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
+@@ -5258,6 +5279,7 @@ int dwc2_gadget_init(struct dwc2_hsotg *
  		return -ENOMEM;
  	}
  	INIT_DELAYED_WORK(&hsotg->dw_gsetup, dwc2_gadget_setup_timeout);
@@ -127,11 +121,9 @@ index 009d453f90e1..874f1312584b 100644
  
  	/* setup endpoint information */
  
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index 821e607c8349..8b8481ba4a27 100644
 --- a/drivers/usb/dwc2/platform.c
 +++ b/drivers/usb/dwc2/platform.c
-@@ -975,6 +975,7 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+@@ -975,6 +975,7 @@ static int __maybe_unused dwc2_suspend(s
  
  	is_device_mode = dwc2_is_device_mode(dwc2);
  	if (is_device_mode) {
@@ -139,7 +131,7 @@ index 821e607c8349..8b8481ba4a27 100644
  		/*
  		 * Handle the case when bus has been suspended prior to platform suspend.
  		 * - When the lx_state is DWC2_L2, the HOST has suspended the bus. So the
-@@ -986,7 +987,7 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+@@ -986,7 +987,7 @@ static int __maybe_unused dwc2_suspend(s
  		 * suspended/disconnected. Then, temporarily exit the low power mode (clock
  		 * gating, ppd), so the gadget can be suspended and resumed later on.
  		 */
@@ -148,6 +140,3 @@ index 821e607c8349..8b8481ba4a27 100644
  			if (dwc2->in_ppd) {
  				ret = dwc2_exit_partial_power_down(dwc2, 0, true);
  				if (ret)
--- 
-2.53.0
-

@@ -22,11 +22,9 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  arch/arm64/boot/dts/st/stm32mp215f-dk-resmem.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk-resmem.dtsi b/arch/arm64/boot/dts/st/stm32mp215f-dk-resmem.dtsi
-index 6751508c4ade..733c73c4878f 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk-resmem.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk-resmem.dtsi
-@@ -152,7 +152,7 @@ ltdc_sec_layer: ltdc-sec-layer@ff800000 {
+@@ -152,7 +152,7 @@
  		linux,cma {
  			compatible = "shared-dma-pool";
  			reusable;
@@ -35,6 +33,3 @@ index 6751508c4ade..733c73c4878f 100644
  			size = <0x0 0x8000000>;
  			alignment = <0x0 0x2000>;
  			linux,cma-default;
--- 
-2.53.0
-

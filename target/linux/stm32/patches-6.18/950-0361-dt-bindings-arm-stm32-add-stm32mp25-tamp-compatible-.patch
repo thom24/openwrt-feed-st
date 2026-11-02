@@ -14,8 +14,6 @@ Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
  .../devicetree/bindings/arm/stm32/st,stm32-syscon.yaml   | 9 +++++++--
  1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
-index d893e183fee8..b7c55cecedcc 100644
 --- a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
 +++ b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
 @@ -26,7 +26,9 @@ properties:
@@ -41,6 +39,3 @@ index d893e183fee8..b7c55cecedcc 100644
      then:
        required:
          - '#address-cells'
--- 
-2.53.0
-

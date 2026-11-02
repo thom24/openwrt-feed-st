@@ -16,8 +16,6 @@ Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
  .../bindings/dma/stm32/st,stm32-dma3.yaml     | 64 ++++++++++++++++++-
  1 file changed, 61 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma3.yaml b/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma3.yaml
-index a9b14d156573..717966918166 100644
 --- a/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma3.yaml
 +++ b/Documentation/devicetree/bindings/dma/stm32/st,stm32-dma3.yaml
 @@ -25,9 +25,6 @@ description: |
@@ -117,6 +115,3 @@ index a9b14d156573..717966918166 100644
 +    };
 +
  ...
--- 
-2.53.0
-

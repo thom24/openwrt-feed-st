@@ -27,11 +27,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dts | 8 ++++----
  4 files changed, 16 insertions(+), 16 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157a-dk1-scmi.dts b/arch/arm/boot/dts/st/stm32mp157a-dk1-scmi.dts
-index 847b360f02fc..53e40e2f776b 100644
 --- a/arch/arm/boot/dts/st/stm32mp157a-dk1-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157a-dk1-scmi.dts
-@@ -51,10 +51,6 @@ &iwdg2 {
+@@ -51,10 +51,6 @@
  	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
  };
  
@@ -42,7 +40,7 @@ index 847b360f02fc..53e40e2f776b 100644
  &m4_rproc {
  	/delete-property/ st,syscfg-holdboot;
  	resets = <&scmi_reset RST_SCMI_MCU>,
-@@ -62,6 +58,10 @@ &m4_rproc {
+@@ -62,6 +58,10 @@
  	reset-names = "mcu_rst", "hold_boot";
  };
  
@@ -53,11 +51,9 @@ index 847b360f02fc..53e40e2f776b 100644
  &optee {
  	interrupt-parent = <&intc>;
  	interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dts
-index 43280289759d..0790ed426ebc 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-dk2-scmi.dts
-@@ -57,10 +57,6 @@ &iwdg2 {
+@@ -57,10 +57,6 @@
  	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
  };
  
@@ -68,7 +64,7 @@ index 43280289759d..0790ed426ebc 100644
  &m4_rproc {
  	/delete-property/ st,syscfg-holdboot;
  	resets = <&scmi_reset RST_SCMI_MCU>,
-@@ -68,6 +64,10 @@ &m4_rproc {
+@@ -68,6 +64,10 @@
  	reset-names = "mcu_rst", "hold_boot";
  };
  
@@ -79,11 +75,9 @@ index 43280289759d..0790ed426ebc 100644
  &optee {
  	interrupt-parent = <&intc>;
  	interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ed1-scmi.dts
-index 6f27d794d270..0a3894aff4ae 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ed1-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ed1-scmi.dts
-@@ -56,10 +56,6 @@ &iwdg2 {
+@@ -56,10 +56,6 @@
  	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
  };
  
@@ -94,7 +88,7 @@ index 6f27d794d270..0a3894aff4ae 100644
  &m4_rproc {
  	/delete-property/ st,syscfg-holdboot;
  	resets = <&scmi_reset RST_SCMI_MCU>,
-@@ -67,6 +63,10 @@ &m4_rproc {
+@@ -67,6 +63,10 @@
  	reset-names = "mcu_rst", "hold_boot";
  };
  
@@ -105,11 +99,9 @@ index 6f27d794d270..0a3894aff4ae 100644
  &optee {
  	interrupt-parent = <&intc>;
  	interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dts
-index 6ae391bffee5..c2b6efb1cbb7 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-scmi.dts
-@@ -61,10 +61,6 @@ &m_can1 {
+@@ -61,10 +61,6 @@
  	clocks = <&scmi_clk CK_SCMI_HSE>, <&rcc FDCAN_K>;
  };
  
@@ -120,7 +112,7 @@ index 6ae391bffee5..c2b6efb1cbb7 100644
  &m4_rproc {
  	/delete-property/ st,syscfg-holdboot;
  	resets = <&scmi_reset RST_SCMI_MCU>,
-@@ -72,6 +68,10 @@ &m4_rproc {
+@@ -72,6 +68,10 @@
  	reset-names = "mcu_rst", "hold_boot";
  };
  
@@ -131,6 +123,3 @@ index 6ae391bffee5..c2b6efb1cbb7 100644
  &optee {
  	interrupt-parent = <&intc>;
  	interrupts = <GIC_PPI 15 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
--- 
-2.53.0
-

@@ -15,8 +15,6 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/gpu/drm/panel/panel-lvds.c | 8 ++++++++
  1 file changed, 8 insertions(+)
 
-diff --git a/drivers/gpu/drm/panel/panel-lvds.c b/drivers/gpu/drm/panel/panel-lvds.c
-index 46b07f38559f..feec2690cb82 100644
 --- a/drivers/gpu/drm/panel/panel-lvds.c
 +++ b/drivers/gpu/drm/panel/panel-lvds.c
 @@ -8,6 +8,7 @@
@@ -27,7 +25,7 @@ index 46b07f38559f..feec2690cb82 100644
  #include <linux/gpio/consumer.h>
  #include <linux/module.h>
  #include <linux/of.h>
-@@ -76,6 +77,13 @@ static int panel_lvds_prepare(struct drm_panel *panel)
+@@ -76,6 +77,13 @@ static int panel_lvds_prepare(struct drm
  	if (lvds->enable_gpio)
  		gpiod_set_value_cansleep(lvds->enable_gpio, 1);
  
@@ -41,6 +39,3 @@ index 46b07f38559f..feec2690cb82 100644
  	return 0;
  }
  
--- 
-2.53.0
-

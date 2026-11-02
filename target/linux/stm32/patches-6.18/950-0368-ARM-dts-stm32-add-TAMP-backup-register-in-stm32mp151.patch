@@ -18,11 +18,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp151.dtsi | 82 ++++++++++++++++++++++++++++
  1 file changed, 82 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
-index bf962ae761d5..ca922f07a457 100644
 --- a/arch/arm/boot/dts/st/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
-@@ -2229,7 +2229,89 @@ i2c6: i2c@5c009000 {
+@@ -2229,7 +2229,89 @@
  
  		tamp: tamp@5c00a000 {
  			compatible = "st,stm32-tamp", "syscon", "simple-mfd";
@@ -112,6 +110,3 @@ index bf962ae761d5..ca922f07a457 100644
  		};
  	};
  
--- 
-2.53.0
-

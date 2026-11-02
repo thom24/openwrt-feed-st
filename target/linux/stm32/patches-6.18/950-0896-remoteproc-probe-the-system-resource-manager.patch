@@ -13,8 +13,6 @@ Change-Id: I0768405daa33c3658961ccf06252e207042f044a
  drivers/remoteproc/remoteproc_core.c | 8 ++++++++
  1 file changed, 8 insertions(+)
 
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index bbc781e41a1b..fa5435b37430 100644
 --- a/drivers/remoteproc/remoteproc_core.c
 +++ b/drivers/remoteproc/remoteproc_core.c
 @@ -37,6 +37,7 @@
@@ -46,6 +44,3 @@ index bbc781e41a1b..fa5435b37430 100644
  	/* Ensure that no readers of rproc_list are still active */
  	synchronize_rcu();
  
--- 
-2.53.0
-

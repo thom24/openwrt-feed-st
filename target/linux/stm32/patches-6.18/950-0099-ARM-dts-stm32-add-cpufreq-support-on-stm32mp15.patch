@@ -29,11 +29,9 @@ Domain-Review: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  9 files changed, 83 insertions(+), 3 deletions(-)
  create mode 100644 arch/arm/boot/dts/st/stm32mp15xd.dtsi
 
-diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
-index dd8319a0a3cf..ead2c0f0e69b 100644
 --- a/arch/arm/boot/dts/st/stm32mp151.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
-@@ -17,9 +17,34 @@ cpus {
+@@ -17,9 +17,34 @@
  
  		cpu0: cpu@0 {
  			compatible = "arm,cortex-a7";
@@ -69,7 +67,7 @@ index dd8319a0a3cf..ead2c0f0e69b 100644
  		};
  	};
  
-@@ -405,7 +430,8 @@ bsec: efuse@5c005000 {
+@@ -405,7 +430,8 @@
  			reg = <0x5c005000 0x400>;
  			#address-cells = <1>;
  			#size-cells = <1>;
@@ -79,11 +77,9 @@ index dd8319a0a3cf..ead2c0f0e69b 100644
  				reg = <0x4 0x1>;
  			};
  			vrefint: vrefin-cal@52 {
-diff --git a/arch/arm/boot/dts/st/stm32mp153.dtsi b/arch/arm/boot/dts/st/stm32mp153.dtsi
-index 92794b942ab2..483b8ac90e98 100644
 --- a/arch/arm/boot/dts/st/stm32mp153.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp153.dtsi
-@@ -10,9 +10,11 @@ / {
+@@ -10,9 +10,11 @@
  	cpus {
  		cpu1: cpu@1 {
  			compatible = "arm,cortex-a7";
@@ -96,11 +92,9 @@ index 92794b942ab2..483b8ac90e98 100644
  		};
  	};
  
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1.dts b/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
-index 51812d85139f..e05a7835969d 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
-@@ -156,6 +156,14 @@ &clk_lsi {
+@@ -156,6 +156,14 @@
  	bootph-all;
  };
  
@@ -115,8 +109,6 @@ index 51812d85139f..e05a7835969d 100644
  &crc1 {
  	status = "okay";
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-dk1.dts b/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
-index 0e28fc4b7996..f4b540997f63 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
 @@ -7,6 +7,7 @@
@@ -127,8 +119,6 @@ index 0e28fc4b7996..f4b540997f63 100644
  #include "stm32mp15-pinctrl.dtsi"
  #include "stm32mp15xxac-pinctrl.dtsi"
  #include "stm32mp15xx-dkx.dtsi"
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
-index 3e9e1df74cea..34a5dc1e1af2 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
 @@ -6,6 +6,7 @@
@@ -139,7 +129,7 @@ index 3e9e1df74cea..34a5dc1e1af2 100644
  #include "stm32mp15-pinctrl.dtsi"
  #include "stm32mp15xxaa-pinctrl.dtsi"
  #include "stm32mp15-scmi.dtsi"
-@@ -143,10 +144,12 @@ &bsec {
+@@ -143,10 +144,12 @@
  
  &cpu0 {
  	clocks = <&scmi_clk CK_SCMI_MPU>;
@@ -152,11 +142,9 @@ index 3e9e1df74cea..34a5dc1e1af2 100644
  };
  
  &crc1 {
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
-index c65978a7f150..8a44c0123cc9 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
-@@ -144,10 +144,12 @@ &bsec {
+@@ -144,10 +144,12 @@
  
  &cpu0 {
  	clocks = <&scmi_clk CK_SCMI_MPU>;
@@ -169,9 +157,6 @@ index c65978a7f150..8a44c0123cc9 100644
  };
  
  &crc1 {
-diff --git a/arch/arm/boot/dts/st/stm32mp15xd.dtsi b/arch/arm/boot/dts/st/stm32mp15xd.dtsi
-new file mode 100644
-index 000000000000..8ab122884e39
 --- /dev/null
 +++ b/arch/arm/boot/dts/st/stm32mp15xd.dtsi
 @@ -0,0 +1,28 @@
@@ -203,8 +188,6 @@ index 000000000000..8ab122884e39
 +		};
 +	};
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp15xf.dtsi b/arch/arm/boot/dts/st/stm32mp15xf.dtsi
-index ffa55d64bea3..24b2a0e7f272 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xf.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xf.dtsi
 @@ -4,6 +4,8 @@
@@ -216,11 +199,9 @@ index ffa55d64bea3..24b2a0e7f272 100644
  &etzpc {
  	cryp1: cryp@54001000 {
  		compatible = "st,stm32mp1-cryp";
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-index bb960279a2a7..5c1c365e28fd 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-@@ -160,6 +160,14 @@ &clk_lsi {
+@@ -160,6 +160,14 @@
  	bootph-all;
  };
  
@@ -235,6 +216,3 @@ index bb960279a2a7..5c1c365e28fd 100644
  &crc1 {
  	status = "okay";
  };
--- 
-2.53.0
-

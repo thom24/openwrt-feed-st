@@ -18,8 +18,6 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm64/configs/stm32mp_defconfig | 6 ------
  1 file changed, 6 deletions(-)
 
-diff --git a/arch/arm64/configs/stm32mp_defconfig b/arch/arm64/configs/stm32mp_defconfig
-index ab78f741900f..67e0be5be86e 100644
 --- a/arch/arm64/configs/stm32mp_defconfig
 +++ b/arch/arm64/configs/stm32mp_defconfig
 @@ -1692,12 +1692,6 @@ CONFIG_CRYPTO_SM3_ARM64_CE=m
@@ -35,6 +33,3 @@ index ab78f741900f..67e0be5be86e 100644
  CONFIG_CRYPTO_DEV_CCREE=m
  CONFIG_CRYPTO_DEV_HISI_SEC2=m
  CONFIG_CRYPTO_DEV_HISI_ZIP=m
--- 
-2.53.0
-

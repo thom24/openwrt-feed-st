@@ -18,11 +18,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm/boot/dts/st/stm32mp135f-dk.dts | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index 984f49d635bb..e10e7437c88b 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -67,6 +67,13 @@ button-user {
+@@ -67,6 +67,13 @@
  			linux,code = <BTN_1>;
  			gpios = <&gpioa 13 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
  		};
@@ -36,6 +34,3 @@ index 984f49d635bb..e10e7437c88b 100644
  	};
  
  	leds {
--- 
-2.53.0
-

@@ -33,11 +33,9 @@ Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
  drivers/pwm/pwm-stm32-lp.c | 17 ++++++-----------
  1 file changed, 6 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/pwm/pwm-stm32-lp.c b/drivers/pwm/pwm-stm32-lp.c
-index e5f7543a3001..c9c5da4975ca 100644
 --- a/drivers/pwm/pwm-stm32-lp.c
 +++ b/drivers/pwm/pwm-stm32-lp.c
-@@ -197,7 +197,7 @@ static int stm32_pwm_lp_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+@@ -197,7 +197,7 @@ static int stm32_pwm_lp_apply(struct pwm
  
  	ret = regmap_read(priv->regmap, STM32_LPTIM_CFGR, &cfgr);
  	if (ret)
@@ -46,17 +44,17 @@ index e5f7543a3001..c9c5da4975ca 100644
  
  	/*
  	 * When there are several channels, they share the same prescaler and reload value.
-@@ -206,17 +206,12 @@ static int stm32_pwm_lp_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+@@ -206,17 +206,12 @@ static int stm32_pwm_lp_apply(struct pwm
  	if (!stm32_pwm_lp_update_allowed(priv, pwm->hwpwm)) {
  		ret = regmap_read(priv->regmap, STM32_LPTIM_ARR, &arr);
  		if (ret)
 -			return ret;
--
++			goto err;
+ 
 -		if ((FIELD_GET(STM32_LPTIM_PRESC, cfgr) != presc) || (arr != prd - 1))
 -			return -EBUSY;
 -	}
-+			goto err;
- 
+-
 -	if (!cstate.enabled) {
 -		/* enable clock to drive PWM counter */
 -		ret = pm_runtime_resume_and_get(priv->dev);
@@ -69,6 +67,3 @@ index e5f7543a3001..c9c5da4975ca 100644
  	}
  
  	if ((FIELD_GET(STM32_LPTIM_PRESC, cfgr) != presc) ||
--- 
-2.53.0
-

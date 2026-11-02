@@ -20,11 +20,9 @@ Reviewed-by: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  arch/arm/boot/dts/st/stm32mp131.dtsi | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index 139ef7485378..143ebb80a8f3 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -1267,6 +1267,7 @@ usbh_ohci: usb@5800c000 {
+@@ -1267,6 +1267,7 @@
  			clocks = <&usbphyc>, <&rcc USBH>;
  			resets = <&rcc USBH_R>;
  			interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>;
@@ -32,7 +30,7 @@ index 139ef7485378..143ebb80a8f3 100644
  			status = "disabled";
  		};
  
-@@ -1277,6 +1278,7 @@ usbh_ehci: usb@5800d000 {
+@@ -1277,6 +1278,7 @@
  			resets = <&rcc USBH_R>;
  			interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
  			companion = <&usbh_ohci>;
@@ -40,6 +38,3 @@ index 139ef7485378..143ebb80a8f3 100644
  			status = "disabled";
  		};
  
--- 
-2.53.0
-

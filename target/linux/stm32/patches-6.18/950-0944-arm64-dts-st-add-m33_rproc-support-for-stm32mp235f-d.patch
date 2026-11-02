@@ -17,11 +17,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 15 +++++++++++++++
  1 file changed, 15 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-index 1dde54fd06bd..e5784adffd5a 100644
 --- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-@@ -90,6 +90,10 @@ wifi_pwrseq: wifi-pwrseq {
+@@ -90,6 +90,10 @@
  	};
  };
  
@@ -32,7 +30,7 @@ index 1dde54fd06bd..e5784adffd5a 100644
  &arm_wdt {
  	timeout-sec = <32>;
  	bootph-all;
-@@ -330,6 +334,17 @@ &ipcc1 {
+@@ -330,6 +334,17 @@
  	status = "okay";
  };
  
@@ -50,6 +48,3 @@ index 1dde54fd06bd..e5784adffd5a 100644
  &optee {
  	bootph-all;
  };
--- 
-2.53.0
-

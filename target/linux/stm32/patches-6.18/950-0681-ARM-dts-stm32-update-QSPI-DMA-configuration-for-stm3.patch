@@ -23,11 +23,9 @@ Reviewed-on: https://gerrit.st.com/c/mpu/oe/st/linux-stm32/+/556927
  arch/arm/boot/dts/st/stm32mp131.dtsi | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index ebde086199d0..00906e864e79 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -1869,8 +1869,8 @@ qspi: spi@58003000 {
+@@ -1869,8 +1869,8 @@
  				#address-cells = <1>;
  				#size-cells = <0>;
  				interrupts = <GIC_SPI 91 IRQ_TYPE_LEVEL_HIGH>;
@@ -38,6 +36,3 @@ index ebde086199d0..00906e864e79 100644
  				dma-names = "tx", "rx";
  				clocks = <&rcc QSPI_K>;
  				resets = <&rcc QSPI_R>;
--- 
-2.53.0
-

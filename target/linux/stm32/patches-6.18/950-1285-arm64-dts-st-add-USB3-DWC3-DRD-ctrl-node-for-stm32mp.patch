@@ -21,11 +21,9 @@ Reviewed-by: Christian BRUEL <christian.bruel@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp251.dtsi | 26 ++++++++++++++++++++++++++
  1 file changed, 26 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 767623e3a7a7..7f08a140e0dc 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -2348,6 +2348,32 @@ usbh_ehci: usb@482f0000 {
+@@ -2348,6 +2348,32 @@
  				};
  			};
  
@@ -58,6 +56,3 @@ index 767623e3a7a7..7f08a140e0dc 100644
  			pcie_ep: pcie-ep@48400000 {
  				compatible = "st,stm32mp25-pcie-ep";
  				reg = <0x48400000 0x100000>,
--- 
-2.53.0
-

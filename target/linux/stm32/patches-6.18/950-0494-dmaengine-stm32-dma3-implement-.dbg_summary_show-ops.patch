@@ -16,11 +16,9 @@ Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
  drivers/dma/stm32/stm32-dma3.c | 28 ++++++++++++++++++++++++++++
  1 file changed, 28 insertions(+)
 
-diff --git a/drivers/dma/stm32/stm32-dma3.c b/drivers/dma/stm32/stm32-dma3.c
-index 4815e9ce4fa5..d4b200b8131a 100644
 --- a/drivers/dma/stm32/stm32-dma3.c
 +++ b/drivers/dma/stm32/stm32-dma3.c
-@@ -355,6 +355,31 @@ static struct device *ddata2dev(struct stm32_dma3_ddata *ddata)
+@@ -355,6 +355,31 @@ static struct device *ddata2dev(struct s
  	return ddata->dma_dev.dev;
  }
  
@@ -52,7 +50,7 @@ index 4815e9ce4fa5..d4b200b8131a 100644
  static void stm32_dma3_chan_dump_reg(struct stm32_dma3_chan *chan)
  {
  	struct stm32_dma3_ddata *ddata = to_stm32_dma3_ddata(chan);
-@@ -2160,6 +2185,9 @@ static int stm32_dma3_probe(struct platform_device *pdev)
+@@ -2160,6 +2185,9 @@ static int stm32_dma3_probe(struct platf
  	dma_dev->device_synchronize = stm32_dma3_synchronize;
  	dma_dev->device_tx_status = stm32_dma3_tx_status;
  	dma_dev->device_issue_pending = stm32_dma3_issue_pending;
@@ -62,6 +60,3 @@ index 4815e9ce4fa5..d4b200b8131a 100644
  
  	/* if dma_channels is not modified, get it from hwcfgr1 */
  	if (of_property_read_u32(np, "dma-channels", &ddata->dma_channels)) {
--- 
-2.53.0
-

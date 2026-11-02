@@ -10,11 +10,9 @@ Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
  drivers/spi/spi-stm32-ospi.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
-index fb350e8a8ff4..92e7c02254d4 100644
 --- a/drivers/spi/spi-stm32-ospi.c
 +++ b/drivers/spi/spi-stm32-ospi.c
-@@ -851,7 +851,7 @@ static int stm32_ospi_send(struct spi_device *spi, const struct spi_mem_op *op)
+@@ -851,7 +851,7 @@ static int stm32_ospi_send(struct spi_de
  	u64 addr = op->addr.val;
  	unsigned int nbytes = op->data.nbytes;
  	int timeout, err = 0, err_poll_status = 0;
@@ -23,7 +21,7 @@ index fb350e8a8ff4..92e7c02254d4 100644
  
  	dev_dbg(common->dev, "cmd:%#x dtr:%d mode:%d.%d.%d.%d addr:%#llx len:%#x\n",
  		op->cmd.opcode, op->cmd.dtr, op->cmd.buswidth,
-@@ -1494,7 +1494,7 @@ static int stm32_ospi_setup(struct spi_device *spi)
+@@ -1494,7 +1494,7 @@ static int stm32_ospi_setup(struct spi_d
  	u32 clk_rate = common->clk_rate;
  	u32 bus_freq;
  	int ret;
@@ -32,6 +30,3 @@ index fb350e8a8ff4..92e7c02254d4 100644
  
  	if (ctrl->busy)
  		return -EBUSY;
--- 
-2.53.0
-

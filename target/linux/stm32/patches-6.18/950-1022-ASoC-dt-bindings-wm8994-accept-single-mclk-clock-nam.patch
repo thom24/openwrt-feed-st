@@ -27,8 +27,6 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  .../devicetree/bindings/sound/wlf,wm8994.yaml         | 11 ++++++++---
  1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/sound/wlf,wm8994.yaml b/Documentation/devicetree/bindings/sound/wlf,wm8994.yaml
-index ef13bd0e801d..d732a6fc0c53 100644
 --- a/Documentation/devicetree/bindings/sound/wlf,wm8994.yaml
 +++ b/Documentation/devicetree/bindings/sound/wlf,wm8994.yaml
 @@ -35,9 +35,14 @@ properties:
@@ -49,6 +47,3 @@ index ef13bd0e801d..d732a6fc0c53 100644
  
    gpio-controller: true
  
--- 
-2.53.0
-

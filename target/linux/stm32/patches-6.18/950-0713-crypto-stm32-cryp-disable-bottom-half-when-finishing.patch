@@ -18,11 +18,9 @@ Reviewed-by: Yann GAUTIER <yann.gautier@foss.st.com>
  drivers/crypto/stm32/stm32-cryp.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/crypto/stm32/stm32-cryp.c b/drivers/crypto/stm32/stm32-cryp.c
-index b0394ebbc0f2..52de3a530f5c 100644
 --- a/drivers/crypto/stm32/stm32-cryp.c
 +++ b/drivers/crypto/stm32/stm32-cryp.c
-@@ -1943,7 +1943,9 @@ static int stm32_cryp_aead_one_req(struct crypto_engine *engine, void *areq)
+@@ -1943,7 +1943,9 @@ static int stm32_cryp_aead_one_req(struc
  	if (!stm32_cryp_get_input_text_len(cryp) && !cryp->header_in &&
  	    !(cryp->flags & FLG_HEADER_DMA)) {
  		/* No input data to process: get tag and finish */
@@ -32,6 +30,3 @@ index b0394ebbc0f2..52de3a530f5c 100644
  		return 0;
  	}
  
--- 
-2.53.0
-

@@ -18,15 +18,12 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi | 45 +++++++++++++++++++
  1 file changed, 45 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
-index acfe40e98fba..f685ce6dff1e 100644
 --- a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
-@@ -514,6 +514,51 @@ pins {
- 		};
+@@ -515,6 +515,51 @@
  	};
  
-+	/omit-if-no-ref/
+ 	/omit-if-no-ref/
 +	sai1a_pins_a: sai1a-0 {
 +		pins1 {
 +			pinmux = <STM32_PINMUX('D', 9, AF3)>, /* SAI1_SD_A */
@@ -71,9 +68,7 @@ index acfe40e98fba..f685ce6dff1e 100644
 +		};
 +	};
 +
- 	/omit-if-no-ref/
++	/omit-if-no-ref/
  	sdmmc1_b4_pins_a: sdmmc1-b4-0 {
  		pins1 {
--- 
-2.53.0
-
+ 			pinmux = <STM32_PINMUX('E', 4, AF10)>, /* SDMMC1_D0 */

@@ -24,8 +24,6 @@ Domain-Review: Gatien CHEVALLIER <gatien.chevallier@st.com>
  Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml   | 2 +-
  4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/bus/allwinner,sun8i-a23-rsb.yaml b/Documentation/devicetree/bindings/bus/allwinner,sun8i-a23-rsb.yaml
-index 24c939f59091..cd5c2a532a92 100644
 --- a/Documentation/devicetree/bindings/bus/allwinner,sun8i-a23-rsb.yaml
 +++ b/Documentation/devicetree/bindings/bus/allwinner,sun8i-a23-rsb.yaml
 @@ -43,7 +43,7 @@ properties:
@@ -37,8 +35,6 @@ index 24c939f59091..cd5c2a532a92 100644
      type: object
      additionalProperties: true
      properties:
-diff --git a/Documentation/devicetree/bindings/bus/fsl,imx8qxp-pixel-link-msi-bus.yaml b/Documentation/devicetree/bindings/bus/fsl,imx8qxp-pixel-link-msi-bus.yaml
-index 4adbb7afa889..6645352c7f6b 100644
 --- a/Documentation/devicetree/bindings/bus/fsl,imx8qxp-pixel-link-msi-bus.yaml
 +++ b/Documentation/devicetree/bindings/bus/fsl,imx8qxp-pixel-link-msi-bus.yaml
 @@ -70,7 +70,7 @@ properties:
@@ -50,8 +46,6 @@ index 4adbb7afa889..6645352c7f6b 100644
      description: Devices attached to the bus
      type: object
  
-diff --git a/Documentation/devicetree/bindings/bus/st,stm32-etzpc.yaml b/Documentation/devicetree/bindings/bus/st,stm32-etzpc.yaml
-index d12b62a3a5a8..bf0af3424c9a 100644
 --- a/Documentation/devicetree/bindings/bus/st,stm32-etzpc.yaml
 +++ b/Documentation/devicetree/bindings/bus/st,stm32-etzpc.yaml
 @@ -44,7 +44,7 @@ properties:
@@ -63,8 +57,6 @@ index d12b62a3a5a8..bf0af3424c9a 100644
      description: Peripherals
      type: object
  
-diff --git a/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml b/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
-index c4832878da14..cbc3acf771f7 100644
 --- a/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
 +++ b/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
 @@ -71,7 +71,7 @@ properties:
@@ -76,6 +68,3 @@ index c4832878da14..cbc3acf771f7 100644
      description: Peripherals
      type: object
  
--- 
-2.53.0
-

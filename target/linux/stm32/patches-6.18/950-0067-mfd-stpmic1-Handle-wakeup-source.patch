@@ -11,11 +11,9 @@ Change-Id: I2727b36cad9f0fa5142ba9ba3619872d1585d5ff
  drivers/mfd/stpmic1.c | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/drivers/mfd/stpmic1.c b/drivers/mfd/stpmic1.c
-index 7c677b0344c6..2feb00ecef15 100644
 --- a/drivers/mfd/stpmic1.c
 +++ b/drivers/mfd/stpmic1.c
-@@ -202,6 +202,9 @@ static int stpmic1_suspend(struct device *dev)
+@@ -202,6 +202,9 @@ static int stpmic1_suspend(struct device
  
  	disable_irq(pmic_dev->irq);
  
@@ -25,7 +23,7 @@ index 7c677b0344c6..2feb00ecef15 100644
  	return 0;
  }
  
-@@ -215,6 +218,9 @@ static int stpmic1_resume(struct device *dev)
+@@ -215,6 +218,9 @@ static int stpmic1_resume(struct device
  	if (ret)
  		return ret;
  
@@ -35,6 +33,3 @@ index 7c677b0344c6..2feb00ecef15 100644
  	enable_irq(pmic_dev->irq);
  
  	return 0;
--- 
-2.53.0
-

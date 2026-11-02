@@ -20,11 +20,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi        | 4 ----
  4 files changed, 10 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
-index cc3bd6c513b4..4c8add531249 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ed1-no-scmi.dts
-@@ -498,10 +498,6 @@ &rcc {
+@@ -498,10 +498,6 @@
  	bootph-all;
  };
  
@@ -35,11 +33,9 @@ index cc3bd6c513b4..4c8add531249 100644
  &rtc {
  	status = "okay";
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
-index c01e99f827c0..612899b64d1a 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
-@@ -532,7 +532,6 @@ &rcc {
+@@ -532,7 +532,6 @@
  &rng1 {
  	clocks = <&scmi_clk CK_SCMI_RNG1>;
  	resets = <&scmi_reset RST_SCMI_RNG1>;
@@ -47,11 +43,9 @@ index c01e99f827c0..612899b64d1a 100644
  };
  
  &rtc {
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
-index e9bda619b010..654309983ead 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
-@@ -538,7 +538,6 @@ &rcc {
+@@ -538,7 +538,6 @@
  &rng1 {
  	clocks = <&scmi_clk CK_SCMI_RNG1>;
  	resets = <&scmi_reset RST_SCMI_RNG1>;
@@ -59,11 +53,9 @@ index e9bda619b010..654309983ead 100644
  };
  
  &rtc {
-diff --git a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-index 7b77bed0ec08..9db35dd19895 100644
 --- a/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi
-@@ -648,10 +648,6 @@ &rcc {
+@@ -648,10 +648,6 @@
  	bootph-all;
  };
  
@@ -74,6 +66,3 @@ index 7b77bed0ec08..9db35dd19895 100644
  &rtc {
  	status = "okay";
  };
--- 
-2.53.0
-

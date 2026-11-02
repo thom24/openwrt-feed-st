@@ -12,8 +12,6 @@ Signed-off-by: Amit Mittal <amit.mittal@st.com>
  .../bindings/remoteproc/st,stm32-rproc.yaml       | 15 +++++++++++++++
  1 file changed, 15 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
-index a46bea44e2bb..6a1e6872d49b 100644
 --- a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
 +++ b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
 @@ -169,6 +169,21 @@ properties:
@@ -38,6 +36,3 @@ index a46bea44e2bb..6a1e6872d49b 100644
  required:
    - compatible
    - reg
--- 
-2.53.0
-

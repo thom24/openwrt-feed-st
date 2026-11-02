@@ -20,11 +20,9 @@ Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
  .../boot/dts/st/stm32mp13xx-dhcor-som.dtsi    | 100 +++++++++++++++++
  4 files changed, 228 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index f1ef92b18728..87194fabb749 100644
 --- a/arch/arm/boot/dts/st/stm32mp131.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -30,7 +30,7 @@ arm-pmu {
+@@ -30,7 +30,7 @@
  	};
  
  	firmware {
@@ -33,7 +31,7 @@ index f1ef92b18728..87194fabb749 100644
  			method = "smc";
  			compatible = "linaro,optee-tz";
  			interrupt-parent = <&intc>;
-@@ -85,7 +85,7 @@ intc: interrupt-controller@a0021000 {
+@@ -85,7 +85,7 @@
  		      <0xa0022000 0x2000>;
  	};
  
@@ -42,11 +40,9 @@ index f1ef92b18728..87194fabb749 100644
  		compatible = "arm,psci-1.0";
  		method = "smc";
  	};
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts b/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts
-index 9902849ed040..526ab2e1a93c 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts
-@@ -350,6 +350,21 @@ timer@12 {
+@@ -350,6 +350,21 @@
  	};
  };
  
@@ -68,7 +64,7 @@ index 9902849ed040..526ab2e1a93c 100644
  &usart1 { /* Expansion connector: RX:pin33 TX:pin37 */
  	pinctrl-names = "default", "sleep", "idle";
  	pinctrl-0 = <&usart1_pins_b>;
-@@ -367,6 +382,10 @@ &usart2 { /* Expansion connector: RX:pin10 TX:pin8 RTS:pin11 CTS:pin36 */
+@@ -367,6 +382,10 @@
  	status = "okay";
  };
  
@@ -79,7 +75,7 @@ index 9902849ed040..526ab2e1a93c 100644
  &usbh_ehci {
  	phys = <&usbphyc_port0>;
  	status = "okay";
-@@ -432,6 +451,7 @@ connector {
+@@ -432,6 +451,7 @@
  
  /* LDO2 is expansion connector 3V3 supply on STM32MP13xx DHCOR DHSBC rev.200 */
  &vdd_ldo2 {
@@ -87,7 +83,7 @@ index 9902849ed040..526ab2e1a93c 100644
  	regulator-always-on;
  	regulator-boot-on;
  	regulator-min-microvolt = <3300000>;
-@@ -440,6 +460,7 @@ &vdd_ldo2 {
+@@ -440,6 +460,7 @@
  
  /* LDO5 is carrier board 3V3 supply on STM32MP13xx DHCOR DHSBC rev.200 */
  &vdd_sd {
@@ -95,11 +91,9 @@ index 9902849ed040..526ab2e1a93c 100644
  	regulator-always-on;
  	regulator-boot-on;
  	regulator-min-microvolt = <3300000>;
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index 9764a6bfa5b4..c17d6acdaf64 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -161,6 +161,10 @@ channel@12 {
+@@ -161,6 +161,10 @@
  	};
  };
  
@@ -110,7 +104,7 @@ index 9764a6bfa5b4..c17d6acdaf64 100644
  &crc1 {
  	status = "okay";
  };
-@@ -208,6 +212,46 @@ phy0_eth1: ethernet-phy@0 {
+@@ -208,6 +212,46 @@
  	};
  };
  
@@ -157,7 +151,7 @@ index 9764a6bfa5b4..c17d6acdaf64 100644
  &i2c1 {
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&i2c1_pins_a>;
-@@ -342,6 +386,7 @@ goodix: goodix-ts@5d {
+@@ -342,6 +386,7 @@
  
  &iwdg2 {
  	timeout-sec = <32>;
@@ -165,7 +159,7 @@ index 9764a6bfa5b4..c17d6acdaf64 100644
  	status = "okay";
  };
  
-@@ -349,6 +394,7 @@ &ltdc {
+@@ -349,6 +394,7 @@
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&ltdc_pins_a>;
  	pinctrl-1 = <&ltdc_sleep_pins_a>;
@@ -173,7 +167,7 @@ index 9764a6bfa5b4..c17d6acdaf64 100644
  	status = "okay";
  
  	port {
-@@ -358,6 +404,22 @@ ltdc_out_rgb: endpoint {
+@@ -358,6 +404,22 @@
  	};
  };
  
@@ -196,7 +190,7 @@ index 9764a6bfa5b4..c17d6acdaf64 100644
  &rtc {
  	pinctrl-names = "default";
  	pinctrl-0 = <&rtc_rsvd_pins_a>;
-@@ -369,6 +431,14 @@ rtc_lsco_pins_a: rtc-lsco-0 {
+@@ -369,6 +431,14 @@
  	};
  };
  
@@ -211,7 +205,7 @@ index 9764a6bfa5b4..c17d6acdaf64 100644
  &scmi_regu {
  	scmi_vdd_adc: regulator@10 {
  		reg = <VOLTD_SCMI_STPMIC1_LDO1>;
-@@ -392,6 +462,10 @@ scmi_v3v3_sw: regulator@19 {
+@@ -392,6 +462,10 @@
  	};
  };
  
@@ -222,7 +216,7 @@ index 9764a6bfa5b4..c17d6acdaf64 100644
  &sdmmc1 {
  	pinctrl-names = "default", "opendrain", "sleep";
  	pinctrl-0 = <&sdmmc1_b4_pins_a &sdmmc1_clk_pins_a>;
-@@ -402,9 +476,24 @@ &sdmmc1 {
+@@ -402,9 +476,24 @@
  	st,neg-edge;
  	bus-width = <4>;
  	vmmc-supply = <&scmi_vdd_sd>;
@@ -247,7 +241,7 @@ index 9764a6bfa5b4..c17d6acdaf64 100644
  /* Wifi */
  &sdmmc2 {
  	pinctrl-names = "default", "opendrain", "sleep";
-@@ -436,6 +525,10 @@ &spi5 {
+@@ -436,6 +525,10 @@
  	status = "disabled";
  };
  
@@ -258,7 +252,7 @@ index 9764a6bfa5b4..c17d6acdaf64 100644
  &timers3 {
  	/delete-property/dmas;
  	/delete-property/dma-names;
-@@ -517,9 +610,20 @@ &uart4 {
+@@ -517,9 +610,20 @@
  	pinctrl-2 = <&uart4_idle_pins_a>;
  	/delete-property/dmas;
  	/delete-property/dma-names;
@@ -279,7 +273,7 @@ index 9764a6bfa5b4..c17d6acdaf64 100644
  &uart8 {
  	pinctrl-names = "default", "sleep", "idle";
  	pinctrl-0 = <&uart8_pins_a>;
-@@ -583,6 +687,7 @@ usbotg_hs_ep: endpoint {
+@@ -583,6 +687,7 @@
  };
  
  &usbphyc {
@@ -287,11 +281,9 @@ index 9764a6bfa5b4..c17d6acdaf64 100644
  	status = "okay";
  };
  
-diff --git a/arch/arm/boot/dts/st/stm32mp13xx-dhcor-som.dtsi b/arch/arm/boot/dts/st/stm32mp13xx-dhcor-som.dtsi
-index 54ece71085c1..a50c4e55e183 100644
 --- a/arch/arm/boot/dts/st/stm32mp13xx-dhcor-som.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp13xx-dhcor-som.dtsi
-@@ -54,6 +54,46 @@ vin: vin {
+@@ -54,6 +54,46 @@
  	};
  };
  
@@ -338,7 +330,7 @@ index 54ece71085c1..a50c4e55e183 100644
  &i2c3 {
  	i2c-scl-rising-time-ns = <96>;
  	i2c-scl-falling-time-ns = <3>;
-@@ -216,9 +256,18 @@ eeprom0wl: eeprom@58 {
+@@ -216,9 +256,18 @@
  
  &iwdg2 {
  	timeout-sec = <32>;
@@ -357,7 +349,7 @@ index 54ece71085c1..a50c4e55e183 100644
  &qspi {
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&qspi_clk_pins_a
-@@ -229,6 +278,7 @@ &qspi_bk1_sleep_pins_a
+@@ -229,6 +278,7 @@
  		     &qspi_cs1_sleep_pins_a>;
  	#address-cells = <1>;
  	#size-cells = <0>;
@@ -365,7 +357,7 @@ index 54ece71085c1..a50c4e55e183 100644
  	status = "okay";
  
  	flash0: flash@0 {
-@@ -238,9 +288,35 @@ flash0: flash@0 {
+@@ -238,9 +288,35 @@
  		spi-max-frequency = <108000000>;
  		#address-cells = <1>;
  		#size-cells = <1>;
@@ -401,7 +393,7 @@ index 54ece71085c1..a50c4e55e183 100644
  /* SDIO WiFi */
  &sdmmc1 {
  	pinctrl-names = "default", "opendrain", "sleep";
-@@ -285,6 +361,10 @@ &sdmmc2 {
+@@ -285,6 +361,10 @@
  	status = "okay";
  };
  
@@ -412,7 +404,7 @@ index 54ece71085c1..a50c4e55e183 100644
  /* Console UART */
  &uart4 {
  	pinctrl-names = "default", "sleep", "idle";
-@@ -312,3 +392,23 @@ bluetooth {
+@@ -312,3 +392,23 @@
  		shutdown-gpios = <&gpioi 2 GPIO_ACTIVE_HIGH>;
  	};
  };
@@ -436,6 +428,3 @@ index 54ece71085c1..a50c4e55e183 100644
 +&vref_ddr {
 +	bootph-all;
 +};
--- 
-2.53.0
-

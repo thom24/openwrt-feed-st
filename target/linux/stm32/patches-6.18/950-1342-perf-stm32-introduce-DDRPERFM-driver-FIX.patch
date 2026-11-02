@@ -21,11 +21,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  drivers/perf/stm32_ddr_pmu.c | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/drivers/perf/stm32_ddr_pmu.c b/drivers/perf/stm32_ddr_pmu.c
-index 38328663d2c5..b3867fc2c1bc 100644
 --- a/drivers/perf/stm32_ddr_pmu.c
 +++ b/drivers/perf/stm32_ddr_pmu.c
-@@ -735,6 +735,10 @@ static int stm32_ddr_pmu_device_probe(struct platform_device *pdev)
+@@ -735,6 +735,10 @@ static int stm32_ddr_pmu_device_probe(st
  		if (ret)
  			return dev_err_probe(pmu->dev, ret, "Failed to get firewall\n");
  		ret = stm32_firewall_grant_access_by_id(&firewall, firewall.firewall_id);
@@ -36,6 +34,3 @@ index 38328663d2c5..b3867fc2c1bc 100644
  		if (ret)
  			return dev_err_probe(pmu->dev, ret, "Failed to grant access\n");
  	}
--- 
-2.53.0
-

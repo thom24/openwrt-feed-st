@@ -22,11 +22,9 @@ Reviewed-by: Antonio Maria BORNEO <antonio.borneo@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp211.dtsi | 20 ++++++++++++++++++++
  1 file changed, 20 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp211.dtsi b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-index e883319e3e21..78194e3fff46 100644
 --- a/arch/arm64/boot/dts/st/stm32mp211.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp211.dtsi
-@@ -201,6 +201,26 @@ usart2: serial@400e0000 {
+@@ -201,6 +201,26 @@
  				power-domains = <&d1_pd>;
  				status = "disabled";
  			};
@@ -53,6 +51,3 @@ index e883319e3e21..78194e3fff46 100644
  		};
  
  		rcc: clock-controller@44200000 {
--- 
-2.53.0
-

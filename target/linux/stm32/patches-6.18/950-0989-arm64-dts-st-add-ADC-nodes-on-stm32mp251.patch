@@ -22,11 +22,9 @@ Tested-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp251.dtsi | 115 +++++++++++++++++++++++++
  1 file changed, 115 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index e28c67a3cd00..ee1ca27fbb0c 100644
 --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -1785,6 +1785,121 @@ filter7: filter@404 {
+@@ -1785,6 +1785,121 @@
  				};
  			};
  
@@ -148,6 +146,3 @@ index e28c67a3cd00..ee1ca27fbb0c 100644
  			hash: hash@42010000 {
  				compatible = "st,stm32mp13-hash";
  				reg = <0x42010000 0x400>;
--- 
-2.53.0
-

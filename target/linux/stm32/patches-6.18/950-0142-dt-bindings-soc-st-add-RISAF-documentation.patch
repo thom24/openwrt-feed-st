@@ -15,9 +15,6 @@ Change-Id: I045e67dbd8b8e43d56b00c66503df91352f682cf
  2 files changed, 70 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/soc/st/st,stm32mp25-risaf.yaml
 
-diff --git a/Documentation/devicetree/bindings/soc/st/st,stm32mp25-risaf.yaml b/Documentation/devicetree/bindings/soc/st/st,stm32mp25-risaf.yaml
-new file mode 100644
-index 000000000000..e3bd855419ad
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/soc/st/st,stm32mp25-risaf.yaml
 @@ -0,0 +1,65 @@
@@ -86,11 +83,9 @@ index 000000000000..e3bd855419ad
 +          clocks = <&rcc CK_BUS_RISAF4>;
 +          st,mem-map = <0x0 0x80000000 0x1 0x00000000>;
 +        };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d4fa41fb387f..cceace59e63d 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -24698,6 +24698,11 @@ F:	Documentation/arch/arm/stm32/stm32-dma-mdma-chaining.rst
+@@ -24698,6 +24698,11 @@ F:	Documentation/arch/arm/stm32/stm32-dm
  F:	Documentation/devicetree/bindings/dma/stm32/
  F:	drivers/dma/stm32/
  
@@ -102,6 +97,3 @@ index d4fa41fb387f..cceace59e63d 100644
  STM32 TIMER/LPTIMER DRIVERS
  M:	Fabrice Gasnier <fabrice.gasnier@foss.st.com>
  S:	Maintained
--- 
-2.53.0
-

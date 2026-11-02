@@ -14,11 +14,9 @@ Change-Id: I2838f344870ba6688f92d198e17e33cadce54f8e
  drivers/media/i2c/imx335.c | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
-index c043df2f15fb..199838ff70f0 100644
 --- a/drivers/media/i2c/imx335.c
 +++ b/drivers/media/i2c/imx335.c
-@@ -1117,6 +1117,8 @@ static int imx335_power_on(struct device *dev)
+@@ -1117,6 +1117,8 @@ static int imx335_power_on(struct device
  		return ret;
  	}
  
@@ -27,7 +25,7 @@ index c043df2f15fb..199838ff70f0 100644
  	usleep_range(500, 550); /* Tlow */
  
  	gpiod_set_value_cansleep(imx335->reset_gpio, 0);
-@@ -1129,6 +1131,10 @@ static int imx335_power_on(struct device *dev)
+@@ -1129,6 +1131,10 @@ static int imx335_power_on(struct device
  
  	usleep_range(20, 22); /* T4 */
  
@@ -38,6 +36,3 @@ index c043df2f15fb..199838ff70f0 100644
  	return 0;
  
  error_reset:
--- 
-2.53.0
-

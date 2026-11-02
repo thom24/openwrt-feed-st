@@ -21,11 +21,9 @@ ACI: CIBUILD <MDG-smet-aci-builds@list.st.com>
  drivers/spi/spi-stm32.c | 41 ++++++++++++++++++++++-------------------
  1 file changed, 22 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index b0fb55400550..02d828c08dff 100644
 --- a/drivers/spi/spi-stm32.c
 +++ b/drivers/spi/spi-stm32.c
-@@ -2515,8 +2515,25 @@ static int stm32_spi_probe(struct platform_device *pdev)
+@@ -2515,8 +2515,25 @@ static int stm32_spi_probe(struct platfo
  	if (spi->dma_tx || spi->dma_rx)
  		ctrl->can_dma = stm32_spi_can_dma;
  
@@ -53,7 +51,7 @@ index b0fb55400550..02d828c08dff 100644
  		spi->sram_rx_buf_size = gen_pool_size(spi->sram_pool);
  		dev_info(&pdev->dev, "SRAM pool: %zu KiB for RX DMA/MDMA chaining\n",
  			 spi->sram_rx_buf_size / 1024);
-@@ -2526,21 +2543,6 @@ static int stm32_spi_probe(struct platform_device *pdev)
+@@ -2526,21 +2543,6 @@ static int stm32_spi_probe(struct platfo
  			ret = -ENOMEM;
  			dev_err(&pdev->dev, "failed to allocate SRAM buffer\n");
  			goto err_pool_free;
@@ -75,7 +73,7 @@ index b0fb55400550..02d828c08dff 100644
  		}
  	}
  
-@@ -2571,12 +2573,13 @@ static int stm32_spi_probe(struct platform_device *pdev)
+@@ -2571,12 +2573,13 @@ err_pm_disable:
  	pm_runtime_set_suspended(&pdev->dev);
  	pm_runtime_dont_use_autosuspend(&pdev->dev);
  
@@ -91,6 +89,3 @@ index b0fb55400550..02d828c08dff 100644
  	if (spi->dma_rx)
  		dma_release_channel(spi->dma_rx);
  err_dma_tx_release:
--- 
-2.53.0
-

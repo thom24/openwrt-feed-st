@@ -26,11 +26,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/phy/st/phy-stm32-usb2phy.c | 21 +++++++++++++++++++++
  1 file changed, 21 insertions(+)
 
-diff --git a/drivers/phy/st/phy-stm32-usb2phy.c b/drivers/phy/st/phy-stm32-usb2phy.c
-index 879e4b80728c..c24dfc5b6a8c 100644
 --- a/drivers/phy/st/phy-stm32-usb2phy.c
 +++ b/drivers/phy/st/phy-stm32-usb2phy.c
-@@ -779,6 +779,14 @@ static irqreturn_t stm32_usb2phy_irq_wakeup_handler(int irq, void *dev_id)
+@@ -779,6 +779,14 @@ static irqreturn_t stm32_usb2phy_irq_wak
  	return IRQ_HANDLED;
  }
  
@@ -45,7 +43,7 @@ index 879e4b80728c..c24dfc5b6a8c 100644
  static int stm32_usb2phy_probe(struct platform_device *pdev)
  {
  	struct stm32_usb2phy *phy_dev;
-@@ -871,6 +879,19 @@ static int stm32_usb2phy_probe(struct platform_device *pdev)
+@@ -871,6 +879,19 @@ static int stm32_usb2phy_probe(struct pl
  	if (ret)
  		return dev_err_probe(dev, ret, "can't set tuning parameters\n");
  
@@ -65,6 +63,3 @@ index 879e4b80728c..c24dfc5b6a8c 100644
  	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
  	if (IS_ERR(phy_provider))
  		return PTR_ERR(phy_provider);
--- 
-2.53.0
-

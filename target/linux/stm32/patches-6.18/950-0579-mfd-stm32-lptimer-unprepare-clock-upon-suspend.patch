@@ -17,11 +17,9 @@ Reviewed-by: Olivier MOYSAN <olivier.moysan@foss.st.com>
  drivers/mfd/stm32-lptimer.c | 29 ++++++++++++++++++++++++++++-
  1 file changed, 28 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mfd/stm32-lptimer.c b/drivers/mfd/stm32-lptimer.c
-index 78eb237a9092..13c72b149e32 100644
 --- a/drivers/mfd/stm32-lptimer.c
 +++ b/drivers/mfd/stm32-lptimer.c
-@@ -140,8 +140,35 @@ static int stm32_lptimer_runtime_resume(struct device *dev)
+@@ -140,8 +140,35 @@ static int stm32_lptimer_runtime_resume(
  	return clk_enable(priv->clk);
  }
  
@@ -58,6 +56,3 @@ index 78eb237a9092..13c72b149e32 100644
  	SET_RUNTIME_PM_OPS(stm32_lptimer_runtime_suspend, stm32_lptimer_runtime_resume, NULL)
  };
  
--- 
-2.53.0
-

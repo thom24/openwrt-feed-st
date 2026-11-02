@@ -23,8 +23,6 @@ Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
  3 files changed, 948 insertions(+), 1 deletion(-)
  create mode 100644 drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/Makefile b/drivers/media/platform/st/stm32/stm32-dcmipp/Makefile
-index a708534a51af..7178934bb116 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/Makefile
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/Makefile
 @@ -1,5 +1,5 @@
@@ -34,11 +32,9 @@ index a708534a51af..7178934bb116 100644
 +stm32-dcmipp-y += dcmipp-pixelcommon.o dcmipp-isp.o dcmipp-pixelproc.o
  
  obj-$(CONFIG_VIDEO_STM32_DCMIPP) += stm32-dcmipp.o
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
-index e04fde86550a..8f41473605aa 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
-@@ -285,5 +285,9 @@ void dcmipp_bytecap_ent_release(struct dcmipp_ent_device *ved);
+@@ -285,5 +285,9 @@ void dcmipp_bytecap_ent_release(struct d
  struct dcmipp_ent_device *dcmipp_isp_ent_init(const char *entity_name,
  					      struct dcmipp_device *dcmipp);
  void dcmipp_isp_ent_release(struct dcmipp_ent_device *ved);
@@ -48,9 +44,6 @@ index e04fde86550a..8f41473605aa 100644
 +void dcmipp_pixelproc_ent_release(struct dcmipp_ent_device *ved);
  
  #endif
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
-new file mode 100644
-index 000000000000..9ba8878dea51
 --- /dev/null
 +++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-pixelproc.c
 @@ -0,0 +1,943 @@
@@ -997,6 +990,3 @@ index 000000000000..9ba8878dea51
 +
 +	return ERR_PTR(ret);
 +}
--- 
-2.53.0
-

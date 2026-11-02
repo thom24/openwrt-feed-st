@@ -46,11 +46,9 @@ Change-Id: Ia6df19bf85769d29d5a3493044516e3fdcc3f497
  drivers/usb/dwc2/platform.c | 54 +++++++++++--------------------------
  3 files changed, 16 insertions(+), 41 deletions(-)
 
-diff --git a/drivers/usb/dwc2/core.c b/drivers/usb/dwc2/core.c
-index f375c5185bfe..368da20ae14d 100644
 --- a/drivers/usb/dwc2/core.c
 +++ b/drivers/usb/dwc2/core.c
-@@ -43,7 +43,6 @@ int dwc2_backup_global_registers(struct dwc2_hsotg *hsotg)
+@@ -43,7 +43,6 @@ int dwc2_backup_global_registers(struct
  	/* Backup global regs */
  	gr = &hsotg->gr_backup;
  
@@ -58,8 +56,6 @@ index f375c5185bfe..368da20ae14d 100644
  	gr->gotgctl = dwc2_readl(hsotg, GOTGCTL);
  	gr->gintmsk = dwc2_readl(hsotg, GINTMSK);
  	gr->gahbcfg = dwc2_readl(hsotg, GAHBCFG);
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index 34127b890b2a..265791fbe87f 100644
 --- a/drivers/usb/dwc2/core.h
 +++ b/drivers/usb/dwc2/core.h
 @@ -667,7 +667,6 @@ struct dwc2_hw_params {
@@ -78,11 +74,9 @@ index 34127b890b2a..265791fbe87f 100644
  	u32 gotgctl;
  	u32 gintmsk;
  	u32 gahbcfg;
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index ef0d73077034..643d67ce28ea 100644
 --- a/drivers/usb/dwc2/platform.c
 +++ b/drivers/usb/dwc2/platform.c
-@@ -692,14 +692,6 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+@@ -692,14 +692,6 @@ static int __maybe_unused dwc2_suspend(s
  		regulator_disable(dwc2->usb33d);
  	}
  
@@ -97,7 +91,7 @@ index ef0d73077034..643d67ce28ea 100644
  	if (dwc2->ll_hw_enabled &&
  	    (is_device_mode || dwc2_host_can_poweroff_phy(dwc2))) {
  		ret = __dwc2_lowlevel_hw_disable(dwc2);
-@@ -709,24 +701,6 @@ static int __maybe_unused dwc2_suspend(struct device *dev)
+@@ -709,24 +701,6 @@ static int __maybe_unused dwc2_suspend(s
  	return ret;
  }
  
@@ -122,7 +116,7 @@ index ef0d73077034..643d67ce28ea 100644
  static int __maybe_unused dwc2_resume(struct device *dev)
  {
  	struct dwc2_hsotg *dwc2 = dev_get_drvdata(dev);
-@@ -742,18 +716,6 @@ static int __maybe_unused dwc2_resume(struct device *dev)
+@@ -742,18 +716,6 @@ static int __maybe_unused dwc2_resume(st
  	}
  	dwc2->phy_off_for_suspend = false;
  
@@ -141,7 +135,7 @@ index ef0d73077034..643d67ce28ea 100644
  	if (dwc2->params.activate_stm_id_vb_detection) {
  		unsigned long flags;
  		u32 ggpio, gotgctl;
-@@ -786,6 +748,22 @@ static int __maybe_unused dwc2_resume(struct device *dev)
+@@ -786,6 +748,22 @@ static int __maybe_unused dwc2_resume(st
  		dwc2_drd_resume(dwc2);
  	}
  
@@ -164,6 +158,3 @@ index ef0d73077034..643d67ce28ea 100644
  	if (dwc2_is_device_mode(dwc2))
  		ret = dwc2_hsotg_resume(dwc2);
  
--- 
-2.53.0
-

@@ -18,11 +18,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 9 +++++----
  1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-index 941d4e7f2d07..7c03e269e6df 100644
 --- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-@@ -396,7 +396,7 @@ tcpp: typec@34 {
+@@ -396,7 +396,7 @@
  		reg = <0x34>;
  		enable-gpios = <&gpioa 3 GPIO_ACTIVE_HIGH>;
  		interrupt-parent = <&gpiog>;
@@ -31,7 +29,7 @@ index 941d4e7f2d07..7c03e269e6df 100644
  		pinctrl-names = "default";
  		pinctrl-0 = <&tcpp_flgn_pins_a>;
  		status = "okay";
-@@ -762,9 +762,10 @@ &ucpd {
+@@ -762,9 +762,10 @@
  	connector {
  		compatible = "usb-c-connector";
  		label = "USB-C";
@@ -45,6 +43,3 @@ index 941d4e7f2d07..7c03e269e6df 100644
  		pd-disable;
  		self-powered;
  		port {
--- 
-2.53.0
-

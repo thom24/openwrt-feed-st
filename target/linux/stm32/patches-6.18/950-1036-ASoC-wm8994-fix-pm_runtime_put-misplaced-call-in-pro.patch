@@ -37,11 +37,9 @@ Reviewed-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  sound/soc/codecs/wm8994.c | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/codecs/wm8994.c b/sound/soc/codecs/wm8994.c
-index 674b0a25a2cf..ce466d502b4d 100644
 --- a/sound/soc/codecs/wm8994.c
 +++ b/sound/soc/codecs/wm8994.c
-@@ -4434,8 +4434,6 @@ static int wm8994_component_probe(struct snd_soc_component *component)
+@@ -4434,8 +4434,6 @@ static int wm8994_component_probe(struct
  		wm8994->lrclk_shared[1] = 0;
  	}
  
@@ -50,7 +48,7 @@ index 674b0a25a2cf..ce466d502b4d 100644
  	/* Latch volume update bits */
  	for (i = 0; i < ARRAY_SIZE(wm8994_vu_bits); i++)
  		snd_soc_component_update_bits(component, wm8994_vu_bits[i].reg,
-@@ -4614,6 +4612,8 @@ static int wm8994_component_probe(struct snd_soc_component *component)
+@@ -4614,6 +4612,8 @@ static int wm8994_component_probe(struct
  		break;
  	}
  
@@ -59,7 +57,7 @@ index 674b0a25a2cf..ce466d502b4d 100644
  	return 0;
  
  err_irq:
-@@ -4632,6 +4632,7 @@ static int wm8994_component_probe(struct snd_soc_component *component)
+@@ -4632,6 +4632,7 @@ err_irq:
  	wm8994_free_irq(wm8994->wm8994, WM8994_IRQ_FIFOS_ERR, component);
  	wm8994_free_irq(wm8994->wm8994, WM8994_IRQ_TEMP_SHUT, component);
  	wm8994_free_irq(wm8994->wm8994, WM8994_IRQ_TEMP_WARN, component);
@@ -67,6 +65,3 @@ index 674b0a25a2cf..ce466d502b4d 100644
  
  	return ret;
  }
--- 
-2.53.0
-

@@ -16,11 +16,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 116 ++++++++++++++++++++-
  1 file changed, 112 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-index 60e3c0c09421..86e83fbef698 100644
 --- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-@@ -30,6 +30,16 @@ aliases {
+@@ -30,6 +30,16 @@
  
  	chosen {
  		stdout-path = "serial0:115200n8";
@@ -37,7 +35,7 @@ index 60e3c0c09421..86e83fbef698 100644
  	};
  
  	clock-hog {
-@@ -38,6 +48,12 @@ clock-hog {
+@@ -38,6 +48,12 @@
  	};
  
  	clocks {
@@ -50,7 +48,7 @@ index 60e3c0c09421..86e83fbef698 100644
  		clk_ext_camera: clk-ext-camera {
  			#clock-cells = <0>;
  			compatible = "fixed-clock";
-@@ -77,6 +93,18 @@ button-wake-up {
+@@ -77,6 +93,18 @@
  		};
  	};
  
@@ -69,7 +67,7 @@ index 60e3c0c09421..86e83fbef698 100644
  	memory@80000000 {
  		device_type = "memory";
  		reg = <0x0 0x80000000 0x1 0x0>;
-@@ -262,6 +290,31 @@ dcmipp_0: endpoint {
+@@ -262,6 +290,31 @@
  	};
  };
  
@@ -101,7 +99,7 @@ index 60e3c0c09421..86e83fbef698 100644
  &ethernet1 {
  	pinctrl-0 = <&eth1_rgmii_pins_a &eth1_mdio_pins_a>;
  	pinctrl-1 = <&eth1_rgmii_sleep_pins_a &eth1_mdio_sleep_pins_a>;
-@@ -407,12 +460,53 @@ imx335_ep: endpoint {
+@@ -407,12 +460,53 @@
  		};
  	};
  
@@ -156,7 +154,7 @@ index 60e3c0c09421..86e83fbef698 100644
  		status = "okay";
  	};
  };
-@@ -475,10 +569,21 @@ &lpuart1 {
+@@ -475,10 +569,21 @@
  };
  
  &ltdc {
@@ -180,7 +178,7 @@ index 60e3c0c09421..86e83fbef698 100644
  			remote-endpoint = <&lvds_in>;
  		};
  	};
-@@ -486,7 +591,10 @@ ltdc_ep0_out: endpoint {
+@@ -486,7 +591,10 @@
  
  &lvds {
  	bootph-all;
@@ -191,7 +189,7 @@ index 60e3c0c09421..86e83fbef698 100644
  	ports {
  		#address-cells = <1>;
  		#size-cells = <0>;
-@@ -494,7 +602,7 @@ ports {
+@@ -494,7 +602,7 @@
  		port@0 {
  			reg = <0>;
  			lvds_in: endpoint {
@@ -200,6 +198,3 @@ index 60e3c0c09421..86e83fbef698 100644
  			};
  		};
  
--- 
-2.53.0
-

@@ -17,8 +17,6 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  .../devicetree/bindings/regulator/st,stm32-vrefbuf.yaml        | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/regulator/st,stm32-vrefbuf.yaml b/Documentation/devicetree/bindings/regulator/st,stm32-vrefbuf.yaml
-index 6ceaffb45dc9..e1a053e43365 100644
 --- a/Documentation/devicetree/bindings/regulator/st,stm32-vrefbuf.yaml
 +++ b/Documentation/devicetree/bindings/regulator/st,stm32-vrefbuf.yaml
 @@ -34,6 +34,9 @@ properties:
@@ -31,6 +29,3 @@ index 6ceaffb45dc9..e1a053e43365 100644
  required:
    - compatible
    - reg
--- 
-2.53.0
-

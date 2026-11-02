@@ -22,8 +22,6 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 45 ++++++++++++++++++++
  2 files changed, 46 insertions(+)
 
-diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511.h b/drivers/gpu/drm/bridge/adv7511/adv7511.h
-index b2e36c669e14..329d72ab0715 100644
 --- a/drivers/gpu/drm/bridge/adv7511/adv7511.h
 +++ b/drivers/gpu/drm/bridge/adv7511/adv7511.h
 @@ -375,6 +375,7 @@ struct adv7511 {
@@ -34,8 +32,6 @@ index b2e36c669e14..329d72ab0715 100644
  
  	struct gpio_desc *gpio_pd;
  
-diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-index 431e89e7560c..2c8cff377549 100644
 --- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
 +++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
 @@ -8,6 +8,7 @@
@@ -46,7 +42,7 @@ index 431e89e7560c..2c8cff377549 100644
  #include <linux/module.h>
  #include <linux/of.h>
  #include <linux/slab.h>
-@@ -300,6 +301,7 @@ static void adv7511_set_link_config(struct adv7511 *adv7511,
+@@ -300,6 +301,7 @@ static void adv7511_set_link_config(stru
  	adv7511->hsync_polarity = config->hsync_polarity;
  	adv7511->vsync_polarity = config->vsync_polarity;
  	adv7511->rgb = config->input_colorspace == HDMI_COLORSPACE_RGB;
@@ -54,7 +50,7 @@ index 431e89e7560c..2c8cff377549 100644
  }
  
  static void __adv7511_power_on(struct adv7511 *adv7511)
-@@ -883,6 +885,47 @@ static int adv7511_bridge_attach(struct drm_bridge *bridge,
+@@ -883,6 +885,47 @@ static int adv7511_bridge_attach(struct
  	return ret;
  }
  
@@ -102,7 +98,7 @@ index 431e89e7560c..2c8cff377549 100644
  static enum drm_connector_status
  adv7511_bridge_detect(struct drm_bridge *bridge, struct drm_connector *connector)
  {
-@@ -988,6 +1031,7 @@ static int adv7511_bridge_hdmi_write_infoframe(struct drm_bridge *bridge,
+@@ -988,6 +1031,7 @@ static int adv7511_bridge_hdmi_write_inf
  static const struct drm_bridge_funcs adv7511_bridge_funcs = {
  	.mode_valid = adv7511_bridge_mode_valid,
  	.mode_fixup = adv7511_bridge_mode_fixup,
@@ -110,7 +106,7 @@ index 431e89e7560c..2c8cff377549 100644
  	.attach = adv7511_bridge_attach,
  	.detect = adv7511_bridge_detect,
  	.edid_read = adv7511_bridge_edid_read,
-@@ -1232,6 +1276,7 @@ static int adv7511_probe(struct i2c_client *i2c)
+@@ -1232,6 +1276,7 @@ static int adv7511_probe(struct i2c_clie
  	adv7511->powered = false;
  	adv7511->status = connector_status_disconnected;
  	adv7511->info = i2c_get_match_data(i2c);
@@ -118,6 +114,3 @@ index 431e89e7560c..2c8cff377549 100644
  
  	memset(&link_config, 0, sizeof(link_config));
  
--- 
-2.53.0
-

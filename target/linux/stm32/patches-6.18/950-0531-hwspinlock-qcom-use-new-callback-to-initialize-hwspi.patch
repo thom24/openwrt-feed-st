@@ -13,8 +13,6 @@ Acked-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
  drivers/hwspinlock/qcom_hwspinlock.c | 42 +++++++++++++++++-----------
  1 file changed, 26 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/hwspinlock/qcom_hwspinlock.c b/drivers/hwspinlock/qcom_hwspinlock.c
-index 812e15dee9a0..73b280988109 100644
 --- a/drivers/hwspinlock/qcom_hwspinlock.c
 +++ b/drivers/hwspinlock/qcom_hwspinlock.c
 @@ -25,6 +25,13 @@ struct qcom_hwspinlock_of_data {
@@ -31,7 +29,7 @@ index 812e15dee9a0..73b280988109 100644
  static int qcom_hwspinlock_trylock(struct hwspinlock *lock)
  {
  	struct regmap_field *field = hwspin_lock_get_priv(lock);
-@@ -89,10 +96,23 @@ static int qcom_hwspinlock_bust(struct hwspinlock *lock, unsigned int id)
+@@ -89,10 +96,23 @@ static int qcom_hwspinlock_bust(struct h
  	return 0;
  }
  
@@ -55,7 +53,7 @@ index 812e15dee9a0..73b280988109 100644
  };
  
  static const struct regmap_config sfpb_mutex_config = {
-@@ -202,16 +222,14 @@ static struct regmap *qcom_hwspinlock_probe_mmio(struct platform_device *pdev,
+@@ -202,16 +222,14 @@ static struct regmap *qcom_hwspinlock_pr
  
  static int qcom_hwspinlock_probe(struct platform_device *pdev)
  {
@@ -75,7 +73,7 @@ index 812e15dee9a0..73b280988109 100644
  
  	if (IS_ERR(regmap))
  		return PTR_ERR(regmap);
-@@ -221,19 +239,11 @@ static int qcom_hwspinlock_probe(struct platform_device *pdev)
+@@ -221,19 +239,11 @@ static int qcom_hwspinlock_probe(struct
  	if (!bank)
  		return -ENOMEM;
  
@@ -98,6 +96,3 @@ index 812e15dee9a0..73b280988109 100644
  }
  
  static struct platform_driver qcom_hwspinlock_driver = {
--- 
-2.53.0
-

@@ -19,11 +19,9 @@ Reviewed-by: Patrick DELAUNAY <patrick.delaunay@foss.st.com>
  drivers/pmdomain/st/stm32mp-pm-domain.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/pmdomain/st/stm32mp-pm-domain.c b/drivers/pmdomain/st/stm32mp-pm-domain.c
-index 820f5bf874de..f82c8a41d99f 100644
 --- a/drivers/pmdomain/st/stm32mp-pm-domain.c
 +++ b/drivers/pmdomain/st/stm32mp-pm-domain.c
-@@ -50,7 +50,7 @@ static int stm32mp_pm_domain_probe(struct platform_device *pdev)
+@@ -50,7 +50,7 @@ static int stm32mp_pm_domain_probe(struc
  	 * Domain based only on PM clk framework, no GENPD_FLAG_ACTIVE_WAKEUP
  	 * support, the wake-up is handled by power domain of interrupt driver
  	 */
@@ -32,6 +30,3 @@ index 820f5bf874de..f82c8a41d99f 100644
  
  	ret = pm_genpd_init(pd, NULL, false);
  	if (ret)
--- 
-2.53.0
-

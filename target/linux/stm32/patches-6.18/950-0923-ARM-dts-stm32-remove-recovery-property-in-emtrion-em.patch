@@ -21,11 +21,9 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  arch/arm/boot/dts/st/stm32mp157c-emstamp-argon.dtsi | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-emstamp-argon.dtsi b/arch/arm/boot/dts/st/stm32mp157c-emstamp-argon.dtsi
-index a3c61ce91aa9..f44143ea9c18 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-emstamp-argon.dtsi
 +++ b/arch/arm/boot/dts/st/stm32mp157c-emstamp-argon.dtsi
-@@ -368,7 +368,6 @@ &m4_rproc {
+@@ -368,7 +368,6 @@
  	interrupt-parent = <&exti>;
  	interrupts = <68 1>;
  	interrupt-names = "wdg";
@@ -33,6 +31,3 @@ index a3c61ce91aa9..f44143ea9c18 100644
  	status = "okay";
  };
  
--- 
-2.53.0
-

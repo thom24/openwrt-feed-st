@@ -17,8 +17,6 @@ Change-Id: I6b24645166ee1328864241e910bb9900b27ba604
  3 files changed, 346 insertions(+)
  create mode 100644 drivers/soc/st/stm32_risab.c
 
-diff --git a/drivers/soc/st/Kconfig b/drivers/soc/st/Kconfig
-index 790e7a551c5c..b7e9aa490d90 100644
 --- a/drivers/soc/st/Kconfig
 +++ b/drivers/soc/st/Kconfig
 @@ -23,6 +23,16 @@ config STM32_PM_DOMAINS
@@ -38,17 +36,12 @@ index 790e7a551c5c..b7e9aa490d90 100644
  config STM32_RISAF
  	tristate "STM32 RISAF"
  	depends on ARM64 && DEBUG_FS
-diff --git a/drivers/soc/st/Makefile b/drivers/soc/st/Makefile
-index ac8d969a6a40..6c71607f6c89 100644
 --- a/drivers/soc/st/Makefile
 +++ b/drivers/soc/st/Makefile
 @@ -1,2 +1,3 @@
  obj-$(CONFIG_STM32_PM_DOMAINS) += stm32_pm_domain.o
 +obj-$(CONFIG_STM32_RISAB) += stm32_risab.o
  obj-$(CONFIG_STM32_RISAF) += stm32_risaf.o
-diff --git a/drivers/soc/st/stm32_risab.c b/drivers/soc/st/stm32_risab.c
-new file mode 100644
-index 000000000000..5fb9ca6aff16
 --- /dev/null
 +++ b/drivers/soc/st/stm32_risab.c
 @@ -0,0 +1,335 @@
@@ -387,6 +380,3 @@ index 000000000000..5fb9ca6aff16
 +module_platform_driver(stm32_risab_driver);
 +MODULE_AUTHOR("Theo GOUREAU <theo.goureau@foss.st.com>");
 +MODULE_LICENSE("GPL");
--- 
-2.53.0
-

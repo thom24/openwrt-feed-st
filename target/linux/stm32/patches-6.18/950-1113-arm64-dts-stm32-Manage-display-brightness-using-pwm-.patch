@@ -23,15 +23,12 @@ Domain-Review: Fabrice GASNIER <fabrice.gasnier@foss.st.com>
  arch/arm64/boot/dts/st/stm32mp257f-dk.dts     | 10 ++++++++++
  2 files changed, 27 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
-index 52b26f50d705..b11f6bc6e321 100644
 --- a/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
-@@ -496,6 +496,23 @@ pins {
- 		};
+@@ -497,6 +497,23 @@
  	};
  
-+	/omit-if-no-ref/
+ 	/omit-if-no-ref/
 +	pwm3_ch2_pins_a: pwm3-ch2-0 {
 +		pins {
 +			pinmux = <STM32_PINMUX('I', 7, AF8)>; /* TIM3_CH2 */
@@ -48,14 +45,13 @@ index 52b26f50d705..b11f6bc6e321 100644
 +		};
 +	};
 +
- 	/omit-if-no-ref/
++	/omit-if-no-ref/
  	pwm3_pins_a: pwm3-0 {
  		pins {
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-index 07729d672f6a..4cf17da3ca45 100644
+ 			pinmux = <STM32_PINMUX('B', 15, AF7)>; /* TIM3_CH2 */
 --- a/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp257f-dk.dts
-@@ -676,6 +676,16 @@ &syscfg {
+@@ -676,6 +676,16 @@
  	bootph-all;
  };
  
@@ -72,6 +68,3 @@ index 07729d672f6a..4cf17da3ca45 100644
  /* Bluetooth */
  &usart1 {
  	pinctrl-names = "default", "sleep", "idle";
--- 
-2.53.0
-

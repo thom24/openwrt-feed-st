@@ -17,8 +17,6 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  .../bindings/pinctrl/st,stm32-hdp.yaml        | 34 +++++++++++++++++++
  1 file changed, 34 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/st,stm32-hdp.yaml b/Documentation/devicetree/bindings/pinctrl/st,stm32-hdp.yaml
-index 7103f3a84903..477cf14581d5 100644
 --- a/Documentation/devicetree/bindings/pinctrl/st,stm32-hdp.yaml
 +++ b/Documentation/devicetree/bindings/pinctrl/st,stm32-hdp.yaml
 @@ -19,6 +19,7 @@ properties:
@@ -29,13 +27,10 @@ index 7103f3a84903..477cf14581d5 100644
        - st,stm32mp231-hdp
        - st,stm32mp251-hdp
  
-@@ -126,6 +127,39 @@ allOf:
-                       ca7_standbywfi0, ca7_standbywfe0, ca7_dbgack0, bsec_out_fuse_ok,
-                       bsec_out_sec_spiden, eth_out_mac_speed_o0, gpu_dbg0, ddrctrl_csysreq_ddrc,
-                       ddrctrl_hpr_credit_cnt, dts_valobus1_4, dts_valobus2_4, gpoval7 ]
-+  - if:
-+      properties:
-+        compatible:
+@@ -129,6 +130,39 @@ allOf:
+   - if:
+       properties:
+         compatible:
 +          contains:
 +            const: st,stm32mp211-hdp
 +    then:
@@ -66,9 +61,9 @@ index 7103f3a84903..477cf14581d5 100644
 +                      cpu1_standby_wfe0, cpu1_halted0, bsec_out_spidenm, exti2_cpu1_wakeup,
 +                      ddrss_dfi_ctrlupd_req, ddrss_obsp3, d2_state_1, pll8_lock, usb_hdp_7,
 +                      cpu1_state_1, gpoval7]
-   - if:
-       properties:
-         compatible:
--- 
-2.53.0
-
++  - if:
++      properties:
++        compatible:
+           contains:
+             enum:
+               - st,stm32mp231-hdp

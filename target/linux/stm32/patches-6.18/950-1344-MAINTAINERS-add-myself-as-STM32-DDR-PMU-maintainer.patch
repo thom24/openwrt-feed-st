@@ -22,8 +22,6 @@ Domain-Review: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  MAINTAINERS | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e50b1e16f1ac..2e35d3af2711 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
 @@ -24350,6 +24350,13 @@ S:	Maintained
@@ -40,6 +38,3 @@ index e50b1e16f1ac..2e35d3af2711 100644
  ST STM32 FIREWALL
  M:	Gatien Chevallier <gatien.chevallier@foss.st.com>
  S:	Maintained
--- 
-2.53.0
-

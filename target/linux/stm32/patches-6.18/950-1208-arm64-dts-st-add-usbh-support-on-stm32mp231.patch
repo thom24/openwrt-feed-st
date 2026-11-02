@@ -24,11 +24,9 @@ ACI: CITOOLS <MDG-smet-aci-reviews@list.st.com>
  arch/arm64/boot/dts/st/stm32mp231.dtsi | 36 ++++++++++++++++++++++++++
  1 file changed, 36 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index d84358681838..ebe0d7c20628 100644
 --- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
 +++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -2021,6 +2021,42 @@ stmmac_axi_config_1: stmmac-axi-config {
+@@ -2021,6 +2021,42 @@
  					snps,wr_osr_lmt = <0x7>;
  				};
  			};
@@ -71,6 +69,3 @@ index d84358681838..ebe0d7c20628 100644
  		};
  
  		risaf1: risaf@420a0000 {
--- 
-2.53.0
-

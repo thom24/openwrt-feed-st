@@ -25,11 +25,9 @@ Tested-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp157f-ed1.dts | 25 ++++++++++
  8 files changed, 398 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157a-dk1.dts b/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
-index cdb4d7fac634..199a624c412d 100644
 --- a/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157a-dk1.dts
-@@ -39,6 +39,50 @@ &dsi {
+@@ -39,6 +39,50 @@
  	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
  };
  
@@ -80,7 +78,7 @@ index cdb4d7fac634..199a624c412d 100644
  &gpioz {
  	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
  };
-@@ -53,6 +97,11 @@ &i2c4 {
+@@ -53,6 +97,11 @@
  	resets = <&scmi_reset RST_SCMI_I2C4>;
  };
  
@@ -92,7 +90,7 @@ index cdb4d7fac634..199a624c412d 100644
  &iwdg1 {
  	/* IWDG1 is secure and managed through arm_wdt */
  	status = "disabled";
-@@ -101,3 +150,12 @@ &rtc {
+@@ -101,3 +150,12 @@
  &scmi {
  	bootph-some-ram;
  };
@@ -105,11 +103,9 @@ index cdb4d7fac634..199a624c412d 100644
 +&usart1 {
 +	clocks = <&scmi_clk CK_SCMI_USART1>;
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
-index 95581e94cbab..68eb6b3c612c 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-dk2.dts
-@@ -44,6 +44,50 @@ &dsi {
+@@ -44,6 +44,50 @@
  	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
  };
  
@@ -160,7 +156,7 @@ index 95581e94cbab..68eb6b3c612c 100644
  &gpioz {
  	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
  };
-@@ -58,6 +102,11 @@ &i2c4 {
+@@ -58,6 +102,11 @@
  	resets = <&scmi_reset RST_SCMI_I2C4>;
  };
  
@@ -172,7 +168,7 @@ index 95581e94cbab..68eb6b3c612c 100644
  &iwdg1 {
  	/* IWDG1 is secure and managed through arm_wdt */
  	status = "disabled";
-@@ -106,3 +155,12 @@ &rtc {
+@@ -106,3 +155,12 @@
  &scmi {
  	bootph-some-ram;
  };
@@ -185,11 +181,9 @@ index 95581e94cbab..68eb6b3c612c 100644
 +&usart1 {
 +	clocks = <&scmi_clk CK_SCMI_USART1>;
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ed1.dts b/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
-index be1868375d3c..bebae0f9f131 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ed1.dts
-@@ -44,6 +44,50 @@ &dsi {
+@@ -44,6 +44,50 @@
  	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
  };
  
@@ -240,7 +234,7 @@ index be1868375d3c..bebae0f9f131 100644
  &gpioz {
  	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
  };
-@@ -58,6 +102,11 @@ &i2c4 {
+@@ -58,6 +102,11 @@
  	resets = <&scmi_reset RST_SCMI_I2C4>;
  };
  
@@ -252,7 +246,7 @@ index be1868375d3c..bebae0f9f131 100644
  &iwdg1 {
  	/* IWDG1 is secure and managed through arm_wdt */
  	status = "disabled";
-@@ -106,3 +155,12 @@ &rtc {
+@@ -106,3 +155,12 @@
  &scmi {
  	bootph-some-ram;
  };
@@ -265,11 +259,9 @@ index be1868375d3c..bebae0f9f131 100644
 +&usart1 {
 +	clocks = <&scmi_clk CK_SCMI_USART1>;
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
-index 092c7b6bbdb3..16ccf45643fa 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
-@@ -44,6 +44,50 @@ &dsi {
+@@ -44,6 +44,50 @@
  	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
  };
  
@@ -320,7 +312,7 @@ index 092c7b6bbdb3..16ccf45643fa 100644
  &gpioz {
  	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
  };
-@@ -58,6 +102,11 @@ &i2c4 {
+@@ -58,6 +102,11 @@
  	resets = <&scmi_reset RST_SCMI_I2C4>;
  };
  
@@ -332,7 +324,7 @@ index 092c7b6bbdb3..16ccf45643fa 100644
  &iwdg1 {
  	/* IWDG1 is secure and managed through arm_wdt */
  	status = "disabled";
-@@ -110,3 +159,12 @@ &rtc {
+@@ -110,3 +159,12 @@
  &scmi {
  	bootph-some-ram;
  };
@@ -345,11 +337,9 @@ index 092c7b6bbdb3..16ccf45643fa 100644
 +&usart1 {
 +	clocks = <&scmi_clk CK_SCMI_USART1>;
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-dk1.dts b/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
-index 11b331314342..2f886fa3f327 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-dk1.dts
-@@ -51,6 +51,50 @@ &dsi {
+@@ -51,6 +51,50 @@
  	clocks = <&rcc DSI>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
  };
  
@@ -400,7 +390,7 @@ index 11b331314342..2f886fa3f327 100644
  &gpioz {
  	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
  };
-@@ -65,6 +109,11 @@ &i2c4 {
+@@ -65,6 +109,11 @@
  	resets = <&scmi_reset RST_SCMI_I2C4>;
  };
  
@@ -412,7 +402,7 @@ index 11b331314342..2f886fa3f327 100644
  &iwdg1 {
  	/* IWDG1 is secure and managed through arm_wdt */
  	status = "disabled";
-@@ -113,3 +162,12 @@ &rtc {
+@@ -113,3 +162,12 @@
  &scmi {
  	bootph-some-ram;
  };
@@ -425,11 +415,9 @@ index 11b331314342..2f886fa3f327 100644
 +&usart1 {
 +	clocks = <&scmi_clk CK_SCMI_USART1>;
 +};
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
-index 4e7aa43f306c..97d1ba1d5142 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ed1.dts
-@@ -189,46 +189,57 @@ &etzpc {
+@@ -189,46 +189,57 @@
  
  &gpioa {
  	bootph-all;
@@ -487,7 +475,7 @@ index 4e7aa43f306c..97d1ba1d5142 100644
  };
  
  &gpioz {
-@@ -407,6 +418,11 @@ pins {
+@@ -407,6 +418,11 @@
  	};
  };
  
@@ -499,7 +487,7 @@ index 4e7aa43f306c..97d1ba1d5142 100644
  &ipcc {
  	status = "okay";
  };
-@@ -563,6 +579,11 @@ pins {
+@@ -563,6 +579,11 @@
  	};
  };
  
@@ -511,7 +499,7 @@ index 4e7aa43f306c..97d1ba1d5142 100644
  &timers6 {
  	status = "okay";
  	/* spare dmas for other usage */
-@@ -594,6 +615,10 @@ pins2 {
+@@ -594,6 +615,10 @@
  	};
  };
  
@@ -522,11 +510,9 @@ index 4e7aa43f306c..97d1ba1d5142 100644
  &usbotg_hs {
  	vbus-supply = <&vbus_otg>;
  };
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
-index 67a1fdbeae00..87bf6b9d7d7b 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-dk2.dts
-@@ -87,6 +87,50 @@ &dsi_out {
+@@ -87,6 +87,50 @@
  	remote-endpoint = <&panel_in>;
  };
  
@@ -577,7 +563,7 @@ index 67a1fdbeae00..87bf6b9d7d7b 100644
  &gpioz {
  	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
  };
-@@ -118,6 +162,11 @@ &i2c4 {
+@@ -118,6 +162,11 @@
  	resets = <&scmi_reset RST_SCMI_I2C4>;
  };
  
@@ -589,7 +575,7 @@ index 67a1fdbeae00..87bf6b9d7d7b 100644
  &iwdg1 {
  	/* IWDG1 is secure and managed through arm_wdt */
  	status = "disabled";
-@@ -213,6 +262,15 @@ brcmf: wifi@1 {
+@@ -213,6 +262,15 @@
  	};
  };
  
@@ -605,11 +591,9 @@ index 67a1fdbeae00..87bf6b9d7d7b 100644
  /* Bluetooth */
  &usart2 {
  	pinctrl-names = "default", "sleep", "idle";
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
-index 57ee633cb229..0fc849a12d1a 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ed1.dts
-@@ -195,46 +195,57 @@ &etzpc {
+@@ -195,46 +195,57 @@
  
  &gpioa {
  	bootph-all;
@@ -667,7 +651,7 @@ index 57ee633cb229..0fc849a12d1a 100644
  };
  
  &gpioz {
-@@ -413,6 +424,11 @@ pins {
+@@ -413,6 +424,11 @@
  	};
  };
  
@@ -679,7 +663,7 @@ index 57ee633cb229..0fc849a12d1a 100644
  &ipcc {
  	status = "okay";
  };
-@@ -569,6 +585,11 @@ pins {
+@@ -569,6 +585,11 @@
  	};
  };
  
@@ -691,7 +675,7 @@ index 57ee633cb229..0fc849a12d1a 100644
  &timers6 {
  	status = "okay";
  	/* spare dmas for other usage */
-@@ -600,6 +621,10 @@ pins2 {
+@@ -600,6 +621,10 @@
  	};
  };
  
@@ -702,6 +686,3 @@ index 57ee633cb229..0fc849a12d1a 100644
  &usbotg_hs {
  	vbus-supply = <&vbus_otg>;
  };
--- 
-2.53.0
-

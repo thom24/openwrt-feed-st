@@ -13,11 +13,9 @@ Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
  drivers/spi/spi-stm32-ospi.c | 15 +++++++--------
  1 file changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
-index 06252df24474..689b9b343773 100644
 --- a/drivers/spi/spi-stm32-ospi.c
 +++ b/drivers/spi/spi-stm32-ospi.c
-@@ -1011,7 +1011,7 @@ static void stm32_ospi_remove(struct platform_device *pdev)
+@@ -1011,7 +1011,7 @@ static void stm32_ospi_remove(struct pla
  	pm_runtime_force_suspend(ospi->dev);
  }
  
@@ -26,7 +24,7 @@ index 06252df24474..689b9b343773 100644
  {
  	struct stm32_ospi *ospi = dev_get_drvdata(dev);
  
-@@ -1022,7 +1022,7 @@ static int __maybe_unused stm32_ospi_suspend(struct device *dev)
+@@ -1022,7 +1022,7 @@ static int __maybe_unused stm32_ospi_sus
  	return pm_runtime_force_suspend(ospi->dev);
  }
  
@@ -35,7 +33,7 @@ index 06252df24474..689b9b343773 100644
  {
  	struct stm32_ospi *ospi = dev_get_drvdata(dev);
  	void __iomem *regs_base = ospi->regs_base;
-@@ -1051,7 +1051,7 @@ static int __maybe_unused stm32_ospi_resume(struct device *dev)
+@@ -1051,7 +1051,7 @@ static int __maybe_unused stm32_ospi_res
  	return 0;
  }
  
@@ -44,7 +42,7 @@ index 06252df24474..689b9b343773 100644
  {
  	struct stm32_ospi *ospi = dev_get_drvdata(dev);
  
-@@ -1060,7 +1060,7 @@ static int __maybe_unused stm32_ospi_runtime_suspend(struct device *dev)
+@@ -1060,7 +1060,7 @@ static int __maybe_unused stm32_ospi_run
  	return 0;
  }
  
@@ -53,7 +51,7 @@ index 06252df24474..689b9b343773 100644
  {
  	struct stm32_ospi *ospi = dev_get_drvdata(dev);
  
-@@ -1068,9 +1068,8 @@ static int __maybe_unused stm32_ospi_runtime_resume(struct device *dev)
+@@ -1068,9 +1068,8 @@ static int __maybe_unused stm32_ospi_run
  }
  
  static const struct dev_pm_ops stm32_ospi_pm_ops = {
@@ -65,7 +63,7 @@ index 06252df24474..689b9b343773 100644
  };
  
  static const struct of_device_id stm32_ospi_of_match[] = {
-@@ -1084,7 +1083,7 @@ static struct platform_driver stm32_ospi_driver = {
+@@ -1084,7 +1083,7 @@ static struct platform_driver stm32_ospi
  	.remove	= stm32_ospi_remove,
  	.driver	= {
  		.name = "stm32-ospi",
@@ -74,6 +72,3 @@ index 06252df24474..689b9b343773 100644
  		.of_match_table = stm32_ospi_of_match,
  	},
  };
--- 
-2.53.0
-

@@ -21,11 +21,9 @@ Domain-Review: Yannick FERTRE <yannick.fertre@foss.st.com>
  arch/arm/boot/dts/st/stm32mp157f-ev1.dts      | 21 ++++++++++++++++++-
  3 files changed, 60 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
-index de65fa46bb48..58ec4f76ebad 100644
 --- a/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157c-ev1-no-scmi.dts
-@@ -331,7 +331,7 @@ &dsi {
+@@ -331,7 +331,7 @@
  	#size-cells = <0>;
  	status = "okay";
  
@@ -34,7 +32,7 @@ index de65fa46bb48..58ec4f76ebad 100644
  		compatible = "raydium,rm68200";
  		reg = <0>;
  		reset-gpios = <&gpiof 15 GPIO_ACTIVE_LOW>;
-@@ -488,12 +488,31 @@ stmfx_pinctrl: pinctrl {
+@@ -488,12 +488,31 @@
  			#interrupt-cells = <2>;
  			gpio-ranges = <&stmfx_pinctrl 0 0 24>;
  
@@ -66,11 +64,9 @@ index de65fa46bb48..58ec4f76ebad 100644
  };
  
  &i2c5 {
-diff --git a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-index b932a265c1c7..21f50353bbb6 100644
 --- a/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157d-ev1.dts
-@@ -331,7 +331,7 @@ &dsi {
+@@ -331,7 +331,7 @@
  	#size-cells = <0>;
  	status = "okay";
  
@@ -79,7 +75,7 @@ index b932a265c1c7..21f50353bbb6 100644
  		compatible = "raydium,rm68200";
  		reg = <0>;
  		reset-gpios = <&gpiof 15 GPIO_ACTIVE_LOW>;
-@@ -488,12 +488,31 @@ stmfx_pinctrl: pinctrl {
+@@ -488,12 +488,31 @@
  			#interrupt-cells = <2>;
  			gpio-ranges = <&stmfx_pinctrl 0 0 24>;
  
@@ -111,11 +107,9 @@ index b932a265c1c7..21f50353bbb6 100644
  };
  
  &i2c5 {
-diff --git a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-index f7ab1a5e90e1..51bb0e1eb09f 100644
 --- a/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
 +++ b/arch/arm/boot/dts/st/stm32mp157f-ev1.dts
-@@ -331,7 +331,7 @@ &dsi {
+@@ -331,7 +331,7 @@
  	#size-cells = <0>;
  	status = "okay";
  
@@ -124,7 +118,7 @@ index f7ab1a5e90e1..51bb0e1eb09f 100644
  		compatible = "raydium,rm68200";
  		reg = <0>;
  		reset-gpios = <&gpiof 15 GPIO_ACTIVE_LOW>;
-@@ -488,12 +488,31 @@ stmfx_pinctrl: pinctrl {
+@@ -488,12 +488,31 @@
  			#interrupt-cells = <2>;
  			gpio-ranges = <&stmfx_pinctrl 0 0 24>;
  
@@ -156,6 +150,3 @@ index f7ab1a5e90e1..51bb0e1eb09f 100644
  };
  
  &i2c5 {
--- 
-2.53.0
-

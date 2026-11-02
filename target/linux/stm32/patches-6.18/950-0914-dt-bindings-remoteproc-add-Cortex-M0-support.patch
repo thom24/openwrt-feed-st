@@ -12,9 +12,6 @@ Signed-off-by: Gwenael Treuveur <gwenael.treuveur@foss.st.com>
  1 file changed, 86 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/remoteproc/st,stm32-m0.yaml
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/st,stm32-m0.yaml b/Documentation/devicetree/bindings/remoteproc/st,stm32-m0.yaml
-new file mode 100644
-index 000000000000..d7e03f85d498
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/remoteproc/st,stm32-m0.yaml
 @@ -0,0 +1,86 @@
@@ -104,6 +101,3 @@ index 000000000000..d7e03f85d498
 +      reset-names = "mcu_rst";
 +    };
 +...
--- 
-2.53.0
-

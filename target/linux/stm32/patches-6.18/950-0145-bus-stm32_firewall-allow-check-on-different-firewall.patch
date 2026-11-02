@@ -13,11 +13,9 @@ Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
  drivers/bus/stm32_firewall.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/bus/stm32_firewall.c b/drivers/bus/stm32_firewall.c
-index 2fc9761dadec..2717754d811d 100644
 --- a/drivers/bus/stm32_firewall.c
 +++ b/drivers/bus/stm32_firewall.c
-@@ -274,7 +274,7 @@ int stm32_firewall_populate_bus(struct stm32_firewall_controller *firewall_contr
+@@ -274,7 +274,7 @@ int stm32_firewall_populate_bus(struct s
  		}
  
  		for (i = 0; i < len; i++) {
@@ -26,6 +24,3 @@ index 2fc9761dadec..2717754d811d 100644
  							      firewalls[i].firewall_id)) {
  				/*
  				 * Peripheral access not allowed or not defined.
--- 
-2.53.0
-

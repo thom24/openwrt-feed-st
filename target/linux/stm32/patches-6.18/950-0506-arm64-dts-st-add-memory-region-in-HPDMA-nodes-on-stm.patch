@@ -18,11 +18,9 @@ Reviewed-by: Alain VOLMAT <alain.volmat@st.com>
  arch/arm64/boot/dts/st/stm32mp215f-dk.dts | 15 +++++++++++++++
  1 file changed, 15 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-index f934cafc9de1..1b15fa98cb41 100644
 --- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-@@ -175,6 +175,21 @@ &gpioz {
+@@ -175,6 +175,21 @@
  	bootph-all;
  };
  
@@ -44,6 +42,3 @@ index f934cafc9de1..1b15fa98cb41 100644
  &i2c2 {
  	pinctrl-names = "default", "sleep";
  	pinctrl-0 = <&i2c2_pins_a>;
--- 
-2.53.0
-

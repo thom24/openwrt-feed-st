@@ -15,11 +15,9 @@ Reviewed-by: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
  arch/arm/boot/dts/st/stm32mp135f-dk.dts | 6 ------
  1 file changed, 6 deletions(-)
 
-diff --git a/arch/arm/boot/dts/st/stm32mp135f-dk.dts b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-index 27a2af89f672..ac91026968a6 100644
 --- a/arch/arm/boot/dts/st/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/st/stm32mp135f-dk.dts
-@@ -74,12 +74,6 @@ optee@dd000000 {
+@@ -74,12 +74,6 @@
  	gpio-keys {
  		compatible = "gpio-keys";
  
@@ -32,6 +30,3 @@ index 27a2af89f672..ac91026968a6 100644
  		button-wakeup {
  			label = "wake-up";
  			linux,code = <KEY_WAKEUP>;
--- 
-2.53.0
-

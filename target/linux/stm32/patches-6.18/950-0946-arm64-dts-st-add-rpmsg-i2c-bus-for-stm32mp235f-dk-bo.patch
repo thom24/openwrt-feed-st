@@ -17,11 +17,9 @@ Domain-Review: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
  arch/arm64/boot/dts/st/stm32mp235f-dk.dts | 9 +++++++++
  1 file changed, 9 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-index ac58a5062be5..40f60bc4989e 100644
 --- a/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
 +++ b/arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-@@ -352,6 +352,15 @@ intc_rpmsg: interrupt-controller@1 {
+@@ -352,6 +352,15 @@
  		#interrupt-cells = <1>;
  		interrupt-controller;
  	};
@@ -37,6 +35,3 @@ index ac58a5062be5..40f60bc4989e 100644
  };
  
  &optee {
--- 
-2.53.0
-
