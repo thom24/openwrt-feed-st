@@ -523,6 +523,18 @@ endef
 $(eval $(call KernelPackage,stm32-mdf-core))
 
 
+define KernelPackage/stm32-oom
+  SUBMENU:=$(OTHER_MENU)
+  TITLE:=STM32 Octo Memory Manager
+  DEPENDS:=+kmod-spi-stm32-ospi
+  KCONFIG:=CONFIG_STM32_OMM
+  FILES:=$(LINUX_DIR)/drivers/memory/stm32-oom.ko
+  AUTOLOAD:=$(call AutoProbe,stm32-oom)
+endef
+
+$(eval $(call KernelPackage,stm32-oom))
+
+
 define KernelPackage/stm32-rproc
   SUBMENU:=$(OTHER_MENU)
   TITLE:=STM32 remoteproc support
