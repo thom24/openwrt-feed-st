@@ -338,7 +338,7 @@ $(eval $(call KernelPackage,spi-stm32))
 define KernelPackage/spi-stm32-ospi
   SUBMENU=$(SPI_MENU)
   TITLE:=STM32 Octo SPI controller
-  DEPENDS:=@TARGET_stm32
+  DEPENDS:=@TARGET_stm32 +kmod-mtd-hyperbus
   KCONFIG:=CONFIG_SPI_STM32_OSPI \
 	   CONFIG_SPI=y \
 	   CONFIG_SPI_MASTER
