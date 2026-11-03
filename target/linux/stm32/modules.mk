@@ -671,6 +671,19 @@ endef
 $(eval $(call KernelPackage,typec-mux-ps883x))
 
 
+define KernelPackage/typec-mux-ptn36502
+  SUBMENU:=$(USB_MENU)
+  TITLE:=NXP PTN36502 Type-C redriver driver
+  # @!PACKAGE_kmod-drm because TYPEC_MUX_PTN36502 depends on DRM || DRM=n
+  DEPENDS:=@USB_SUPPORT +kmod-typec +kmod-i2c-core @!PACKAGE_kmod-drm
+  KCONFIG:=CONFIG_TYPEC_MUX_PTN36502
+  FILES:=$(LINUX_DIR)/drivers/usb/typec/mux/ptn36502.ko
+  AUTOLOAD:=$(call AutoProbe,ptn36502)
+endef
+
+$(eval $(call KernelPackage,typec-mux-ptn36502))
+
+
 define KernelPackage/usb-dwc3-stm32
   TITLE:=STM32 DWC3 support
   KCONFIG:=CONFIG_USB_DWC3_STM32
