@@ -17,6 +17,8 @@ Change-Id: Ia07f28c1f7337d233a8610c72edd5c4ef4746fde
  drivers/irqchip/irq-stm32mp-exti.c | 8 +++++---
  1 file changed, 5 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/irqchip/irq-stm32mp-exti.c b/drivers/irqchip/irq-stm32mp-exti.c
+index c73380e863e0..37228bf75b74 100644
 --- a/drivers/irqchip/irq-stm32mp-exti.c
 +++ b/drivers/irqchip/irq-stm32mp-exti.c
 @@ -86,6 +86,7 @@ struct stm32mp_exti_host_data {
@@ -27,7 +29,7 @@ Change-Id: Ia07f28c1f7337d233a8610c72edd5c4ef4746fde
  	DECLARE_BITMAP(gpio_mux_used, STM32MP_GPIO_IRQ_LINES);
  	u8 gpio_mux_pos[STM32MP_GPIO_IRQ_LINES];
  };
-@@ -618,13 +619,13 @@ static int stm32mp_exti_gpio_bank_alloc(
+@@ -618,13 +619,13 @@ static int stm32mp_exti_gpio_bank_alloc(struct irq_domain *dm, struct irq_fwspec
  		return -EBUSY;
  	}
  
@@ -35,7 +37,7 @@ Change-Id: Ia07f28c1f7337d233a8610c72edd5c4ef4746fde
 +	raw_spin_lock(&host_data->gpio_mux_lock);
  
  	if (hwlock) {
- 		ret = hwspin_lock_timeout_in_atomic(hwlock, HWSPNLCK_TIMEOUT);
+ 		ret = hwspin_lock_timeout_in_atomic(hwlock, HWSPNLCK_TIMEOUT_MS);
  		if (ret) {
  			pr_err("%s can't get hwspinlock (%d)\n", __func__, ret);
 -			raw_spin_unlock(&host_data->chips_data[0].rlock);
@@ -43,7 +45,7 @@ Change-Id: Ia07f28c1f7337d233a8610c72edd5c4ef4746fde
  			return ret;
  		}
  	}
-@@ -637,7 +638,7 @@ static int stm32mp_exti_gpio_bank_alloc(
+@@ -637,7 +638,7 @@ static int stm32mp_exti_gpio_bank_alloc(struct irq_domain *dm, struct irq_fwspec
  	if (hwlock)
  		hwspin_unlock_in_atomic(hwlock);
  
@@ -52,7 +54,7 @@ Change-Id: Ia07f28c1f7337d233a8610c72edd5c4ef4746fde
  
  	set_bit(hwirq, host_data->gpio_mux_used);
  	host_data->gpio_mux_pos[hwirq] = gpio_bank;
-@@ -830,6 +831,7 @@ static int stm32mp_exti_probe(struct pla
+@@ -830,6 +831,7 @@ static int stm32mp_exti_probe(struct platform_device *pdev)
  
  	dev_set_drvdata(dev, host_data);
  	host_data->dev = dev;
@@ -60,3 +62,6 @@ Change-Id: Ia07f28c1f7337d233a8610c72edd5c4ef4746fde
  
  	if (of_device_is_compatible(np, "syscon"))
  		host_data->has_syscon = true;
+-- 
+2.53.0
+
