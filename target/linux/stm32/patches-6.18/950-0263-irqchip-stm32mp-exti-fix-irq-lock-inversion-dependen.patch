@@ -35,7 +35,7 @@ Change-Id: Ia07f28c1f7337d233a8610c72edd5c4ef4746fde
 +	raw_spin_lock(&host_data->gpio_mux_lock);
  
  	if (hwlock) {
- 		ret = hwspin_lock_timeout_in_atomic(hwlock, HWSPNLCK_TIMEOUT);
+ 		ret = hwspin_lock_timeout_in_atomic(hwlock, HWSPNLCK_TIMEOUT_MS);
  		if (ret) {
  			pr_err("%s can't get hwspinlock (%d)\n", __func__, ret);
 -			raw_spin_unlock(&host_data->chips_data[0].rlock);

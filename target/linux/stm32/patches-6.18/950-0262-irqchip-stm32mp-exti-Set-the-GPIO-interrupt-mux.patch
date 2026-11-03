@@ -168,7 +168,7 @@ Change-Id: I1a2d066065a24ba249f882653274735575177c79
 +	raw_spin_lock(&host_data->chips_data[0].rlock);
 +
 +	if (hwlock) {
-+		ret = hwspin_lock_timeout_in_atomic(hwlock, HWSPNLCK_TIMEOUT);
++		ret = hwspin_lock_timeout_in_atomic(hwlock, HWSPNLCK_TIMEOUT_MS);
 +		if (ret) {
 +			pr_err("%s can't get hwspinlock (%d)\n", __func__, ret);
 +			raw_spin_unlock(&host_data->chips_data[0].rlock);
