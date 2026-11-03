@@ -69,8 +69,8 @@ define KernelPackage/mtd-hyperbus
   SUBMENU:=$(OTHER_MENU)
   TITLE:=HyberBus support
   KCONFIG:=CONFIG_MTD_HYPERBUS
-  FILES=$(LINUX_DIR)/drivers/mtd/hyperbus/hyperbus-core.ko
-  AUTOLOAD:=$(call AutoProbe, hyperbus-core)
+  FILES=$(LINUX_DIR)/drivers/mtd/hyperbus/hyperbus.ko
+  AUTOLOAD:=$(call AutoProbe, hyperbus)
 endef
 
 $(eval $(call KernelPackage,mtd-hyperbus))
