@@ -13,11 +13,9 @@ Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
  drivers/base/core.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 046cb3e41a3c..be22fede667c 100644
 --- a/drivers/base/core.c
 +++ b/drivers/base/core.c
-@@ -173,6 +173,7 @@ void fwnode_links_purge(struct fwnode_handle *fwnode)
+@@ -173,6 +173,7 @@ void fwnode_links_purge(struct fwnode_ha
  	fwnode_links_purge_suppliers(fwnode);
  	fwnode_links_purge_consumers(fwnode);
  }
@@ -25,6 +23,3 @@ index 046cb3e41a3c..be22fede667c 100644
  
  void fw_devlink_purge_absent_suppliers(struct fwnode_handle *fwnode)
  {
--- 
-2.53.0
-
