@@ -18,11 +18,9 @@ Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
  drivers/remoteproc/rproc_srm_core.c | 2 --
  1 file changed, 2 deletions(-)
 
-diff --git a/drivers/remoteproc/rproc_srm_core.c b/drivers/remoteproc/rproc_srm_core.c
-index 1935914b6b85..fe70308693bf 100644
 --- a/drivers/remoteproc/rproc_srm_core.c
 +++ b/drivers/remoteproc/rproc_srm_core.c
-@@ -241,8 +241,6 @@ static void rproc_srm_core_unprepare(struct rproc_subdev *subdev)
+@@ -241,8 +241,6 @@ static void rproc_srm_core_unprepare(str
   */
  static void rproc_srm_core_purge_fwnode_links(struct device *dev)
  {
@@ -31,6 +29,3 @@ index 1935914b6b85..fe70308693bf 100644
  	/* Links already picked up on the SRM core node itself. */
  	fwnode_links_purge(of_fwnode_handle(dev->of_node));
  
--- 
-2.53.0
-
