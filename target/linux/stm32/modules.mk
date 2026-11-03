@@ -696,6 +696,18 @@ endef
 $(eval $(call KernelPackage,typec-mux-tusb1046))
 
 
+define KernelPackage/typec-mux-wcd939x-usbss
+  SUBMENU:=$(USB_MENU)
+  TITLE:=Qualcomm WCD939x USBSS Analog Audio Switch driver
+  DEPENDS:=@USB_SUPPORT +kmod-typec +kmod-i2c-core
+  KCONFIG:=CONFIG_TYPEC_MUX_WCD939X_USBSS
+  FILES:=$(LINUX_DIR)/drivers/usb/typec/mux/wcd939x-usbss.ko
+  AUTOLOAD:=$(call AutoProbe,wcd939x-usbss)
+endef
+
+$(eval $(call KernelPackage,typec-mux-wcd939x-usbss))
+
+
 define KernelPackage/usb-dwc3-stm32
   TITLE:=STM32 DWC3 support
   KCONFIG:=CONFIG_USB_DWC3_STM32
