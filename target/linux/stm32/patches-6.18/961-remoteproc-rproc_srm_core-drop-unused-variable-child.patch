@@ -1,0 +1,36 @@
+From ce4ce9336cbbb2cedce8b9842a16552ce33e0d6e Mon Sep 17 00:00:00 2001
+From: Thomas Richard <thomas.richard@bootlin.com>
+Date: Tue, 3 Nov 2026 14:07:56 +0100
+Subject: [PATCH] remoteproc: rproc_srm_core: drop unused variable 'child'
+
+Fix compile issue introduced by 2637d8dcc4b95e49c488b59c387c51ba695c3f69.
+
+drivers/remoteproc/rproc_srm_core.c: In function 'rproc_srm_core_purge_fwnode_links':
+drivers/remoteproc/rproc_srm_core.c:244:29: error: unused variable 'child' [-Werror=unused-variable]
+  244 |         struct device_node *child;
+      |                             ^~~~~
+cc1: all warnings being treated as errors
+make[9]: *** [scripts/Makefile.build:287: drivers/remoteproc/rproc_srm_core.o] Error 1
+make[9]: *** Waiting for unfinished jobs....
+
+Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+---
+ drivers/remoteproc/rproc_srm_core.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/remoteproc/rproc_srm_core.c b/drivers/remoteproc/rproc_srm_core.c
+index 1935914b6b85..fe70308693bf 100644
+--- a/drivers/remoteproc/rproc_srm_core.c
++++ b/drivers/remoteproc/rproc_srm_core.c
+@@ -241,8 +241,6 @@ static void rproc_srm_core_unprepare(struct rproc_subdev *subdev)
+  */
+ static void rproc_srm_core_purge_fwnode_links(struct device *dev)
+ {
+-	struct device_node *child;
+-
+ 	/* Links already picked up on the SRM core node itself. */
+ 	fwnode_links_purge(of_fwnode_handle(dev->of_node));
+ 
+-- 
+2.53.0
+
