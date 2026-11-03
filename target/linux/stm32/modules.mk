@@ -684,6 +684,18 @@ endef
 $(eval $(call KernelPackage,typec-mux-ptn36502))
 
 
+define KernelPackage/typec-mux-tusb1046
+  SUBMENU:=$(USB_MENU)
+  TITLE:=TI TUSB1046 Type-C crosspoint switch driver
+  DEPENDS:=@USB_SUPPORT +kmod-typec +kmod-i2c-core
+  KCONFIG:=CONFIG_TYPEC_MUX_TUSB1046
+  FILES:=$(LINUX_DIR)/drivers/usb/typec/mux/tusb1046.ko
+  AUTOLOAD:=$(call AutoProbe,tusb1046)
+endef
+
+$(eval $(call KernelPackage,typec-mux-tusb1046))
+
+
 define KernelPackage/usb-dwc3-stm32
   TITLE:=STM32 DWC3 support
   KCONFIG:=CONFIG_USB_DWC3_STM32
