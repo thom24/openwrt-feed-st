@@ -1,0 +1,30 @@
+From d01981d7baf44af1c812b7089eaa6ae137c2d0d6 Mon Sep 17 00:00:00 2001
+From: Thomas Richard <thomas.richard@bootlin.com>
+Date: Tue, 3 Nov 2026 14:47:01 +0100
+Subject: [PATCH] drivers: core: export fwnode_links_purge
+
+Export fwnode_links_purge() to fix compile issue in some stm32 drivers when
+they are built as module
+
+ERROR: modpost: "fwnode_links_purge" [drivers/remoteproc/rproc_srm_core.ko] undefined!
+
+Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+---
+ drivers/base/core.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index 046cb3e41a3c..be22fede667c 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -173,6 +173,7 @@ void fwnode_links_purge(struct fwnode_handle *fwnode)
+ 	fwnode_links_purge_suppliers(fwnode);
+ 	fwnode_links_purge_consumers(fwnode);
+ }
++EXPORT_SYMBOL_GPL(fwnode_links_purge);
+ 
+ void fw_devlink_purge_absent_suppliers(struct fwnode_handle *fwnode)
+ {
+-- 
+2.53.0
+
