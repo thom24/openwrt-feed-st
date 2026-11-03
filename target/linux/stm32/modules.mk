@@ -646,6 +646,18 @@ endef
 $(eval $(call KernelPackage,typec-ucsi))
 
 
+define KernelPackage/typec-mux-it5205
+  SUBMENU:=$(USB_MENU)
+  TITLE:=ITE IT5205 Type-C USB Alt Mode Passive MUX driver
+  DEPENDS:=@USB_SUPPORT +kmod-typec +kmod-i2c-core
+  KCONFIG:=CONFIG_TYPEC_MUX_IT5205
+  FILES:=$(LINUX_DIR)/drivers/usb/typec/mux/it5205.ko
+  AUTOLOAD:=$(call AutoProbe,it5205)
+endef
+
+$(eval $(call KernelPackage,typec-mux-it5205))
+
+
 define KernelPackage/usb-dwc3-stm32
   TITLE:=STM32 DWC3 support
   KCONFIG:=CONFIG_USB_DWC3_STM32
