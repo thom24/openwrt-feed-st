@@ -1,0 +1,58 @@
+From add9063539b1e80fc7d1a7625b70a6d9d4516ffd Mon Sep 17 00:00:00 2001
+From: Thomas Richard <thomas.richard@bootlin.com>
+Date: Tue, 3 Nov 2026 11:42:04 +0100
+Subject: [PATCH] Revert "sched/rt: Print curr when RT throttling activated"
+
+This reverts commit a35616c70aa46cb0680e32d799a0a05619fc7525.
+
+Fix following compile issue:
+
+In file included from kernel/sched/build_policy.c:52:
+kernel/sched/rt.c: In function 'update_curr_rt':
+kernel/sched/rt.c:1000:69: error: 'curr' undeclared (first use in this function)
+ 1000 |                         exceeded = sched_rt_runtime_exceeded(rt_rq, curr);
+      |                                                                     ^~~~
+kernel/sched/rt.c:1000:69: note: each undeclared identifier is reported only once for each function it appears in
+  CC      lib/xz/xz_dec_syms.o
+make[8]: *** [scripts/Makefile.build:287: kernel/sched/build_policy.o] Error 1
+
+Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+---
+ kernel/sched/rt.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+index bdfbec86ac74..fc9737decfb7 100644
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -860,7 +860,7 @@ static int do_sched_rt_period_timer(struct rt_bandwidth *rt_b, int overrun)
+ 	return idle;
+ }
+ 
+-static int sched_rt_runtime_exceeded(struct rt_rq *rt_rq, struct task_struct *curr)
++static int sched_rt_runtime_exceeded(struct rt_rq *rt_rq)
+ {
+ 	u64 runtime = sched_rt_runtime(rt_rq);
+ 
+@@ -884,8 +884,7 @@ static int sched_rt_runtime_exceeded(struct rt_rq *rt_rq, struct task_struct *cu
+ 		 */
+ 		if (likely(rt_b->rt_runtime)) {
+ 			rt_rq->rt_throttled = 1;
+-			printk_deferred_once("sched: RT throttling activated (pid %d, comm %s)\n",
+-					     curr->pid, curr->comm);
++			printk_deferred_once("sched: RT throttling activated\n");
+ 		} else {
+ 			/*
+ 			 * In case we did anyway, make it go away,
+@@ -997,7 +996,7 @@ static void update_curr_rt(struct rq *rq)
+ 		if (sched_rt_runtime(rt_rq) != RUNTIME_INF) {
+ 			raw_spin_lock(&rt_rq->rt_runtime_lock);
+ 			rt_rq->rt_time += delta_exec;
+-			exceeded = sched_rt_runtime_exceeded(rt_rq, curr);
++			exceeded = sched_rt_runtime_exceeded(rt_rq);
+ 			if (exceeded)
+ 				resched_curr(rq);
+ 			raw_spin_unlock(&rt_rq->rt_runtime_lock);
+-- 
+2.53.0
+
