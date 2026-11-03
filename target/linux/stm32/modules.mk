@@ -658,6 +658,19 @@ endef
 $(eval $(call KernelPackage,typec-mux-it5205))
 
 
+define KernelPackage/typec-mux-ps883x
+  SUBMENU:=$(USB_MENU)
+  TITLE:=Parade PS883x Type-C retimer driver
+  # @!PACKAGE_kmod-drm because TYPEC_MUX_PS883X depends on DRM || DRM=n
+  DEPENDS:=@USB_SUPPORT +kmod-typec +kmod-i2c-core @!PACKAGE_kmod-drm
+  KCONFIG:=CONFIG_TYPEC_MUX_PS883X
+  FILES:=$(LINUX_DIR)/drivers/usb/typec/mux/ps883x.ko
+  AUTOLOAD:=$(call AutoProbe,ps883x)
+endef
+
+$(eval $(call KernelPackage,typec-mux-ps883x))
+
+
 define KernelPackage/usb-dwc3-stm32
   TITLE:=STM32 DWC3 support
   KCONFIG:=CONFIG_USB_DWC3_STM32
