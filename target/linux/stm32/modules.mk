@@ -65,6 +65,17 @@ endef
 $(eval $(call KernelPackage,drm-stm))
 
 
+define KernelPackage/mtd-hyperbus
+  SUBMENU:=$(OTHER_MENU)
+  TITLE:=HyberBus support
+  KCONFIG:=CONFIG_MTD_HYPERBUS
+  FILES=$(LINUX_DIR)/drivers/mtd/hyperbus/hyperbus-core.ko
+  AUTOLOAD:=$(call AutoProbe, hyperbus-core)
+endef
+
+$(eval $(call KernelPackage,mtd-hyperbus))
+
+
 define KernelPackage/industrialio-backend
   TITLE:=IIO Backend support
   KCONFIG=CONFIG_IIO_BACKEND
