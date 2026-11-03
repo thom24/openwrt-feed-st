@@ -696,6 +696,18 @@ endef
 $(eval $(call KernelPackage,typec-mux-tusb1046))
 
 
+define KernelPackage/typec-tbt-altmode
+  SUBMENU:=$(USB_MENU)
+  TITLE:=Thunderbolt3 Alternate Mode driver
+  DEPENDS:=@USB_SUPPORT +kmod-typec
+  KCONFIG:=CONFIG_TYPEC_TBT_ALTMODE
+  FILES:=$(LINUX_DIR)/drivers/usb/typec/altmodes/typec_thunderbolt.ko
+  AUTOLOAD:=$(call AutoProbe,typec_thunderbolt)
+endef
+
+$(eval $(call KernelPackage,typec-tbt-altmode))
+
+
 define KernelPackage/typec-mux-wcd939x-usbss
   SUBMENU:=$(USB_MENU)
   TITLE:=Qualcomm WCD939x USBSS Analog Audio Switch driver
