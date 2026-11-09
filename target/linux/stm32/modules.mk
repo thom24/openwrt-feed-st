@@ -537,16 +537,16 @@ endef
 $(eval $(call KernelPackage,stm32-mdf-core))
 
 
-define KernelPackage/stm32-oom
+define KernelPackage/stm32-omm
   SUBMENU:=$(OTHER_MENU)
   TITLE:=STM32 Octo Memory Manager
   DEPENDS:=+kmod-spi-stm32-ospi
   KCONFIG:=CONFIG_STM32_OMM
-  FILES:=$(LINUX_DIR)/drivers/memory/stm32-oom.ko
-  AUTOLOAD:=$(call AutoProbe,stm32-oom)
+  FILES:=$(LINUX_DIR)/drivers/memory/stm32_omm.ko
+  AUTOLOAD:=$(call AutoProbe,stm32-omm)
 endef
 
-$(eval $(call KernelPackage,stm32-oom))
+$(eval $(call KernelPackage,stm32-omm))
 
 
 define KernelPackage/stm32-rproc
