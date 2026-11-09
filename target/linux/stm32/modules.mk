@@ -688,7 +688,10 @@ define KernelPackage/typec-mux-ps883x
   SUBMENU:=$(USB_MENU)
   TITLE:=Parade PS883x Type-C retimer driver
   # @!PACKAGE_kmod-drm because TYPEC_MUX_PS883X depends on DRM || DRM=n
-  DEPENDS:=@USB_SUPPORT +kmod-typec +kmod-i2c-core @!PACKAGE_kmod-drm
+  DEPENDS:=@USB_SUPPORT \
+	   +kmod-typec \
+	   +kmod-i2c-core \
+	   @(!PACKAGE_kmod-drm=m&&!PACKAGE_kmod-drm)
   KCONFIG:=CONFIG_TYPEC_MUX_PS883X
   FILES:=$(LINUX_DIR)/drivers/usb/typec/mux/ps883x.ko
   AUTOLOAD:=$(call AutoProbe,ps883x)
