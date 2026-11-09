@@ -449,7 +449,10 @@ define KernelPackage/stm32-dcmipp
   KCONFIG:=CONFIG_VIDEO_STM32_DCMIPP
   FILES:=$(LINUX_DIR)/drivers/media/platform/st/stm32/stm32-dcmipp/stm32-dcmipp.ko
   AUTOLOAD:=$(call AutoProbe,stm32-dcmipp)
-  $(call AddDepends/video,@TARGET_stm32 +kmod-video-videobuf2 +kmod-video-dma-contig +kmod-video-fwnode)
+  $(call AddDepends/video,@TARGET_stm32 \
+	+kmod-video-vmalloc \
+	+kmod-video-dma-contig \
+	+kmod-video-fwnode)
 endef
 
 $(eval $(call KernelPackage,stm32-dcmipp))
