@@ -704,7 +704,10 @@ define KernelPackage/typec-mux-ptn36502
   SUBMENU:=$(USB_MENU)
   TITLE:=NXP PTN36502 Type-C redriver driver
   # @!PACKAGE_kmod-drm because TYPEC_MUX_PTN36502 depends on DRM || DRM=n
-  DEPENDS:=@USB_SUPPORT +kmod-typec +kmod-i2c-core @!PACKAGE_kmod-drm
+  DEPENDS:=@USB_SUPPORT \
+	   +kmod-typec \
+	   +kmod-i2c-core \
+	   @(!PACKAGE_kmod-drm=m&&!PACKAGE_kmod-drm)
   KCONFIG:=CONFIG_TYPEC_MUX_PTN36502
   FILES:=$(LINUX_DIR)/drivers/usb/typec/mux/ptn36502.ko
   AUTOLOAD:=$(call AutoProbe,ptn36502)
