@@ -7,7 +7,7 @@ BOARDNAME:=STM32MP1 boards
 ARCH:=arm
 CPU_TYPE:=cortex-a7
 CPU_SUBTYPE=neon-vfpv4
-FEATURES+=fpu
+FEATURES+=fpu usbgadget
 KERNEL_IMAGES:=zImage
 
 DEFAULT_PACKAGES += blockdev kmod-gpio-button-hotplug
