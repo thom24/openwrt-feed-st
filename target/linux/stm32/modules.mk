@@ -661,7 +661,7 @@ $(eval $(call KernelPackage,typec))
 define KernelPackage/typec-ucsi
   SUBMENU:=$(USB_MENU)
   TITLE:=USB Type-C Connector System Software Interface driver
-  DEPENDS:=@USB_SUPPORT +kmod-typec +kmod-usb-roles
+  DEPENDS:=@USB_SUPPORT +kmod-usb-common +kmod-typec +kmod-usb-roles
   KCONFIG:=CONFIG_TYPEC_UCSI \
 	   CONFIG_UCSI_CCG=n \
 	   CONFIG_UCSI_PMIC_GLINK=n
