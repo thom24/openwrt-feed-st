@@ -1,0 +1,43 @@
+From 3c76438de6f434aced25a4da8c046f9edab2ae84 Mon Sep 17 00:00:00 2001
+From: Thomas Richard <thomas.richard@bootlin.com>
+Date: Mon, 9 Nov 2026 11:09:09 +0100
+Subject: [PATCH] media: verisilicon: h1: fix compile issue for 32 bits
+ platforms
+
+Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+---
+ drivers/media/platform/verisilicon/hantro_g1_jpeg_dec.c | 2 +-
+ drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c  | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+--- a/drivers/media/platform/verisilicon/hantro_g1_jpeg_dec.c
++++ b/drivers/media/platform/verisilicon/hantro_g1_jpeg_dec.c
+@@ -265,7 +265,7 @@ int hantro_g1_jpeg_dec_run(struct hantro
+ 	if (header.frame.width != width ||
+ 	    MB_HEIGHT(header.frame.height) != MB_HEIGHT(height)) {
+ 		dev_err(vpu->dev,
+-			"Resolution mismatch: %dx%d (JPEG) versus %lux%lu (user)",
++			"Resolution mismatch: %dx%d (JPEG) versus %zux%zu (user)",
+ 			header.frame.width, header.frame.height, width, height);
+ 		hantro_end_prepare_run(ctx);
+ 		return -EINVAL;
+--- a/drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c
++++ b/drivers/media/platform/verisilicon/hantro_h1_vp8_enc.c
+@@ -1480,7 +1480,7 @@ void hantro_h1_vp8_enc_done(struct hantr
+ 	/* Guard against hardware header overflow */
+ 	if (ctrl_buf->hw_hdr_size > ctx->vp8_enc.estimated_hdr_size) {
+ 		dst_buf->flags |= V4L2_BUF_FLAG_ERROR;
+-		vpu_debug(0, "Header buffer overflow (%d > %lu)",
++		vpu_debug(0, "Header buffer overflow (%d > %zu)",
+ 			  ctrl_buf->hw_hdr_size, ctx->vp8_enc.estimated_hdr_size);
+ 		return;
+ 	}
+@@ -1488,7 +1488,7 @@ void hantro_h1_vp8_enc_done(struct hantr
+ 	/* Guard against DCT overflow */
+ 	if (ctrl_buf->dct_size > (dst_size - ctx->vp8_enc.estimated_hdr_size)) {
+ 		dst_buf->flags |= V4L2_BUF_FLAG_ERROR;
+-		vpu_debug(0, "DCT buffer overflow (%d > %lu), enlarge compressed buffer or decrease quality",
++		vpu_debug(0, "DCT buffer overflow (%d > %zu), enlarge compressed buffer or decrease quality",
+ 			  ctrl_buf->dct_size, dst_size - ctx->vp8_enc.estimated_hdr_size);
+ 		return;
+ 	}
