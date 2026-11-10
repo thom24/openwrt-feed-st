@@ -13,7 +13,7 @@ PKG_RELEASE:=1
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/STMicroelectronics/arm-trusted-firmware.git
 PKG_SOURCE_VERSION:=v$(PKG_VERSION)
-PKG_MIRROR_HASH:=1ed7261f280f586f3bb4ac173eb09fed4e367f029613a9070c773b24d12b5472
+PKG_MIRROR_HASH:=b19426e112b2e72dc6578f9c8f6ad3b7e3c4a1e183cd9bf01a84bea3d394757a
 
 PKG_MAINTAINER:=Thomas Richard <thomas.richard@bootlin.com>
 
