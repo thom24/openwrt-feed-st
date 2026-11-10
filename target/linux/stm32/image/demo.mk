@@ -3,7 +3,7 @@
 # Copyright (C) 2024 Bootlin
 #
 
-LUCI := uhttpd luci luci-ssl luci-theme-openwrt-2020 \
+LUCI := uhttpd luci luci-ssl luci-theme-footstrap \
 	luci-app-ledtrig-usbport
 
 TESTS := stress-ng iperf3
