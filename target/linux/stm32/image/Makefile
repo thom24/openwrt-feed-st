@@ -61,7 +61,8 @@ define Device/stm32mp2
   KERNEL_NAME := Image.gz
   KERNEL_IMG := Image.gz
   BOOTARGS += console=ttySTM0,115200n8 fw_devlink.sync_state=timeout
-  DEVICE_PACKAGES += kmod-usb-stm32-usbh
+  DEVICE_PACKAGES += kmod-usb-stm32-usbh \
+		     kmod-usb-dwc3-stm32
 endef
 
 STM32MP2_WIFI:= kmod-brcmfmac \
