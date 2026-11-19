@@ -16,7 +16,7 @@ ENVSIZE="$((${6} / 1024))"
 BOOTFSSIZE="${7}"
 ROOTFSSIZE="${8}"
 
-set $(ptgen -o "${OUTPUT}" -g -a 4 -l 2048 -G ${GUID} -N fsbla -p 2M -N fip -p 3M -N u-boot-env -p "${ENVSIZE}" -N boot -p${BOOTFSSIZE}M -N rootfs -p ${ROOTFSSIZE}M)
+set $(ptgen -o "${OUTPUT}" -g -a 4 -l 2048 -G ${GUID} -N fsbla -p 512k -N fip -p 4M -N u-boot-env -p "${ENVSIZE}" -N boot -p${BOOTFSSIZE}M -N rootfs -p ${ROOTFSSIZE}M)
 FSBLAOFFSET="$((${1} / 512))"
 FSBLASIZE="$((${2} / 512))"
 FIPOFFSET="$((${3} / 512))"
