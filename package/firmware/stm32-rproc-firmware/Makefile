@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=stm32-rproc-firmware
-PKG_VERSION:=1.3.0
+PKG_VERSION:=1.4.0
 PKG_RELEASE:=1
 
 PKG_MAINTAINER:=Thomas Richard <thomas.richard@bootlin.com>
@@ -26,8 +26,9 @@ define Package/stm32-rproc-firmware/description
 Firmware for the Cortex-M33 provided by the STM32CubeMP2 project
 (https://github.com/STMicroelectronics/STM32CubeMP2).
 This firmware images are not compiled within the OpenWrt environment. Instead,
-they are sourced from the STM32MPU Buildroot external tree Starter Package
-(https://github.com/bootlin/buildroot-external-st).
+they are sourced from the STM32MP2 OpenSTLinux Starter Package
+(https://www.st.com/en/embedded-software/stm32mp2starter.html).
+Package version 1.4.0 is the version used by ST BSPv7.0.
 endef
 
 define Package/stm32-rproc-firmware-stm32mp2-ucsi-stm32mp257f-dk
