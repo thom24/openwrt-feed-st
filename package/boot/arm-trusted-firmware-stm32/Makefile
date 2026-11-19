@@ -97,16 +97,6 @@ TFA_MAKE_FLAGS += \
 		$(MAKE_ARGS) \
 		all fip
 
-override define Build/Compile/Trusted-Firmware-A
-	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
-		CROSS_COMPILE=$(TARGET_CROSS) \
-		OPENSSL_DIR=$(STAGING_DIR_HOST) \
-		$(if $(DTC),DTC="$(DTC)") \
-		PLAT=$(PLAT) \
-		BUILD_STRING="OpenWrt $(PKG_VERSION_PREFIX)$(PKG_VERSION)-$(PKG_RELEASE) ($(VARIANT))" \
-		$(TFA_MAKE_FLAGS)
-endef
-
 define Package/trusted-firmware-a/install
 	$(INSTALL_DIR) $(STAGING_DIR_IMAGE)
 	$(CP) $(PKG_BUILD_DIR)/build/$(PLAT)/release/tf-a-$(BUILD_VARIANT).stm32 \
