@@ -39,7 +39,7 @@ define Device/Default
   IMAGE/sysupgrade.img.gz := boot-img-ext4 | sdcard-img | libdeflate-gzip | append-metadata
   KERNEL := kernel-bin
   DEVICE_DTS_DIR:= $(DTS_DIR)/st
-  ENV_SIZE := 0x200000
+  ENV_SIZE := 0x4000
   DEVICE_PACKAGES := kmod-usb2 \
 		     kmod-usb-storage \
 		     kmod-usb-ledtrig-usbport \
