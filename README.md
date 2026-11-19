@@ -68,7 +68,7 @@ master [d6a91d867b](https://github.com/openwrt/openwrt/commit/d6a91d867bb24c4fc9
 |RTC|yes|yes|yes|yes|yes|yes|
 |Hardware RNG (Optee)|yes|yes|yes|yes|yes|yes|
 |LED|yes|yes|yes|yes|yes|yes|
-|Button|no|yes (USER2)|yes (USER1/USER2)|yes (USER1/USER2)|yes|yes (USER1/USER2)|
+|Button|yes (USER1)|no|yes (USER1/USER2)|yes (USER1/USER2)|yes|yes (USER1/USER2)|
 |Wifi|yes|yes|x|yes|yes|x|
 |USB Type-A|yes|yes|yes|yes|yes|x|
 |Remote processors|no|no|yes (demo profile)|yes (demo profile)|yes (demo profile)|yes (demo profile)|
